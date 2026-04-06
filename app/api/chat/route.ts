@@ -7,6 +7,9 @@ import { SYSTEM_PROMPT } from "@/lib/prompts";
 import { loadEmbeddingChunks, vectorRetrieve } from "@/lib/vector-rag";
 import fs from "fs";
 import path from "path";
+import { cookies } from "next/headers";
+import db from "@/lib/db";
+import crypto from "crypto";
 
 export const runtime = "nodejs";
 
@@ -73,6 +76,30 @@ function logMasterQueryDatabase(query: string, context: any) {
   }
 }
 
+// Helper: get logged-in userId from session cookie
+async function getUserIdFromCookie(): Promise<string | null> {
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get("chat_session")?.value;
+    if (!token) return null;
+    const session = db.prepare("SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?").get(token, Date.now()) as any;
+    return session?.user_id ?? null;
+  } catch {
+    return null;
+  }
+}
+
+// Persist a single message to the database for a user
+function saveMessage(userId: string, role: string, content: string, source?: string) {
+  try {
+    const msgId = crypto.randomUUID();
+    db.prepare(`INSERT INTO messages (id, user_id, role, content, source, timestamp) VALUES (?, ?, ?, ?, ?, ?)`)
+      .run(msgId, userId, role, content, source ?? null, Date.now());
+  } catch (e) {
+    console.warn("Failed to save message to DB:", e);
+  }
+}
+
 export async function POST(req: Request) {
   let body: unknown;
   try {
@@ -84,6 +111,7 @@ export async function POST(req: Request) {
   const messages = (body as { messages?: ChatMessage[] }).messages;
   const localePref = (body as { locale?: "auto" | "ar" | "en" }).locale ?? "auto";
   const userContext = (body as { userContext?: any }).userContext;
+  const userId = await getUserIdFromCookie();
 
   if (!Array.isArray(messages) || messages.length === 0) {
     return NextResponse.json({ error: "messages[] is required." }, { status: 400 });
@@ -112,14 +140,21 @@ export async function POST(req: Request) {
   // Save the query to the master database for analytics
   logMasterQueryDatabase(latest, userContext);
 
+  // Persist user message to personal history DB
+  if (userId) {
+    saveMessage(userId, "user", latest);
+  }
+
   const locale = resolveLocale(latest, localePref);
 
   // 1. First Layer: FAQ Cache
   const faqHit = matchFaq(latest);
   if (faqHit && !userContext) {
+    const faqContent = faqAnswer(faqHit.entry, locale);
+    if (userId) saveMessage(userId, "assistant", faqContent, "faq");
     return NextResponse.json({
       role: "assistant" as const,
-      content: faqAnswer(faqHit.entry, locale),
+      content: faqContent,
       source: "faq" as const,
       faqId: faqHit.entry.id,
       stateLabel: "cache"
@@ -187,9 +222,11 @@ export async function POST(req: Request) {
     
     // Check for escalation tag (Double-check verification trigger)
     if (text && text.includes("[ESCALATE]")) {
+      const escalatedContent = text.replace("[ESCALATE]", "").trim();
+      if (userId) saveMessage(userId, "assistant", escalatedContent, "escalated");
       return NextResponse.json({
         role: "assistant" as const,
-        content: text.replace("[ESCALATE]", "").trim(),
+        content: escalatedContent,
         source: "escalated" as const,
         stateLabel: "escalation"
       });
@@ -206,10 +243,12 @@ export async function POST(req: Request) {
       );
     }
 
+    const finalSource = isMissingData ? "web" : "rag";
+    if (userId) saveMessage(userId, "assistant", text, finalSource);
     return NextResponse.json({
       role: "assistant" as const,
       content: text,
-      source: isMissingData ? "web" : "rag",
+      source: finalSource,
       stateLabel: isMissingData ? "web_search" : "local_db"
     });
   } catch (e) {
