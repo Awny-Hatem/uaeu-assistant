@@ -8,7 +8,7 @@ import { loadEmbeddingChunks, vectorRetrieve } from "@/lib/vector-rag";
 import fs from "fs";
 import path from "path";
 import { cookies } from "next/headers";
-import db from "@/lib/db";
+import { queryOne, execute } from "@/lib/db";
 import crypto from "crypto";
 
 export const runtime = "nodejs";
@@ -82,7 +82,7 @@ async function getUserIdFromCookie(): Promise<string | null> {
     const cookieStore = await cookies();
     const token = cookieStore.get("chat_session")?.value;
     if (!token) return null;
-    const session = db.prepare("SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?").get(token, Date.now()) as any;
+    const session = await queryOne<any>("SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?", [token, Date.now()]);
     return session?.user_id ?? null;
   } catch {
     return null;
@@ -90,11 +90,13 @@ async function getUserIdFromCookie(): Promise<string | null> {
 }
 
 // Persist a single message to the database for a user
-function saveMessage(userId: string, role: string, content: string, source?: string) {
+async function saveMessage(userId: string, role: string, content: string, source?: string) {
   try {
     const msgId = crypto.randomUUID();
-    db.prepare(`INSERT INTO messages (id, user_id, role, content, source, timestamp) VALUES (?, ?, ?, ?, ?, ?)`)
-      .run(msgId, userId, role, content, source ?? null, Date.now());
+    await execute(
+      `INSERT INTO messages (id, user_id, role, content, source, timestamp) VALUES (?, ?, ?, ?, ?, ?)`,
+      [msgId, userId, role, content, source ?? null, Date.now()]
+    );
   } catch (e) {
     console.warn("Failed to save message to DB:", e);
   }
@@ -142,7 +144,7 @@ export async function POST(req: Request) {
 
   // Persist user message to personal history DB
   if (userId) {
-    saveMessage(userId, "user", latest);
+    await saveMessage(userId, "user", latest);
   }
 
   const locale = resolveLocale(latest, localePref);
@@ -151,7 +153,7 @@ export async function POST(req: Request) {
   const faqHit = matchFaq(latest);
   if (faqHit && !userContext) {
     const faqContent = faqAnswer(faqHit.entry, locale);
-    if (userId) saveMessage(userId, "assistant", faqContent, "faq");
+    if (userId) await saveMessage(userId, "assistant", faqContent, "faq");
     return NextResponse.json({
       role: "assistant" as const,
       content: faqContent,
@@ -223,7 +225,7 @@ export async function POST(req: Request) {
     // Check for escalation tag (Double-check verification trigger)
     if (text && text.includes("[ESCALATE]")) {
       const escalatedContent = text.replace("[ESCALATE]", "").trim();
-      if (userId) saveMessage(userId, "assistant", escalatedContent, "escalated");
+      if (userId) await saveMessage(userId, "assistant", escalatedContent, "escalated");
       return NextResponse.json({
         role: "assistant" as const,
         content: escalatedContent,
@@ -244,7 +246,7 @@ export async function POST(req: Request) {
     }
 
     const finalSource = isMissingData ? "web" : "rag";
-    if (userId) saveMessage(userId, "assistant", text, finalSource);
+    if (userId) await saveMessage(userId, "assistant", text, finalSource);
     return NextResponse.json({
       role: "assistant" as const,
       content: text,

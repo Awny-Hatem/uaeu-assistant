@@ -21,6 +21,10 @@ type UiMessage = {
 type LocalePref = "auto" | "ar" | "en";
 type AuthUser = { id: string; username: string; studentType: string; major: string | null };
 
+// Anonymous visitors may send this many messages before being asked to sign in.
+const MESSAGE_GATE = 3;
+const ANON_COUNT_KEY = "uaeu_anon_count";
+
 function genId() {
   return `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
 }
@@ -44,6 +48,10 @@ export function UniversityChat() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
 
+  // Soft-gate state for anonymous visitors
+  const [gateOpen, setGateOpen] = useState(false);
+  const [anonCount, setAnonCount] = useState(0);
+
   const [locale, setLocale] = useState<LocalePref>("auto");
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<UiMessage[]>([]);
@@ -58,6 +66,12 @@ export function UniversityChat() {
 
   // ── On mount: check for existing session ─────────────────────────────────
   useEffect(() => {
+    // Restore how many free messages this visitor has already used.
+    try {
+      const stored = parseInt(localStorage.getItem(ANON_COUNT_KEY) || "0", 10);
+      if (!Number.isNaN(stored)) setAnonCount(stored);
+    } catch { /* localStorage unavailable — treat as fresh visitor */ }
+
     (async () => {
       try {
         const res = await fetch("/api/auth/session");
@@ -65,12 +79,25 @@ export function UniversityChat() {
         if (data.user) {
           setUser(data.user);
           await loadHistory(data.user);
+        } else {
+          setAnonWelcome();
         }
+      } catch {
+        setAnonWelcome();
       } finally {
         setAuthLoading(false);
       }
     })();
   }, []);
+
+  function setAnonWelcome() {
+    setMessages([{
+      id: genId(),
+      role: "assistant",
+      content:
+        "Hello! 👋 I'm the **UAEU Digital Assistant**. Ask me anything about admissions, programs, campus life, or university policies.\n\n*You can try a few questions as a guest — sign in later to save your conversation.*",
+    }]);
+  }
 
   // Close profile dropdown when clicking outside
   useEffect(() => {
@@ -113,16 +140,21 @@ export function UniversityChat() {
 
   // ── Auth Handlers ─────────────────────────────────────────────────────────
   async function handleAuth(loggedUser: AuthUser) {
+    // Reached here via the soft gate. Keep the visitor's existing conversation
+    // on screen so they continue seamlessly, just now as a signed-in user.
     setUser(loggedUser);
-    setMessages([]);
-    await loadHistory(loggedUser);
+    setGateOpen(false);
+    setAnonCount(0);
+    try { localStorage.removeItem(ANON_COUNT_KEY); } catch { /* ignore */ }
   }
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
-    setMessages([]);
     setProfileOpen(false);
+    setAnonCount(0);
+    try { localStorage.removeItem(ANON_COUNT_KEY); } catch { /* ignore */ }
+    setAnonWelcome();
   }
 
   // ── Send Message ──────────────────────────────────────────────────────────
@@ -130,12 +162,26 @@ export function UniversityChat() {
     const trimmed = input.trim();
     if (!trimmed || loading) return;
 
+    // Soft gate: an anonymous visitor gets MESSAGE_GATE free messages, then
+    // must sign in to continue. We block the attempt and open the auth modal.
+    if (!user && anonCount >= MESSAGE_GATE) {
+      setGateOpen(true);
+      return;
+    }
+
     const userMsg: UiMessage = { id: genId(), role: "user", content: trimmed };
     const nextThread = [...messages, userMsg];
     setInput("");
     setBanner(null);
     setMessages(nextThread);
     setLoading(true);
+
+    // Count this message against the visitor's free allowance.
+    if (!user) {
+      const next = anonCount + 1;
+      setAnonCount(next);
+      try { localStorage.setItem(ANON_COUNT_KEY, String(next)); } catch { /* ignore */ }
+    }
 
     const payload = {
       locale,
@@ -171,7 +217,7 @@ export function UniversityChat() {
     } finally {
       setLoading(false);
     }
-  }, [input, loading, locale, messages, user]);
+  }, [input, loading, locale, messages, user, anonCount]);
 
   // ── State: Loading auth check ─────────────────────────────────────────────
   if (authLoading) {
@@ -185,12 +231,13 @@ export function UniversityChat() {
     );
   }
 
-  // ── State: Not logged in → show AuthModal ─────────────────────────────────
-  if (!user) {
-    return <AuthModal onAuth={handleAuth} />;
-  }
+  // No login wall: anonymous visitors land straight in the chat. The AuthModal
+  // is shown as a blocking overlay only once the soft gate is reached.
+  const displayName = user?.username ?? "Guest";
+  const roleLabel = user?.studentType ?? "Visitor";
+  const remainingFree = Math.max(0, MESSAGE_GATE - anonCount);
 
-  // ── State: Logged In → show Chat UI ──────────────────────────────────────
+  // ── Chat UI (anonymous or signed-in) ─────────────────────────────────────
   return (
     <div className="flex w-full h-full text-zinc-900 dark:text-zinc-100 bg-white dark:bg-zinc-900">
 
@@ -213,8 +260,10 @@ export function UniversityChat() {
               <User size={18} className="text-[#E0182D]" />
             </div>
             <div className="min-w-0">
-              <p className="font-bold text-sm text-zinc-800 dark:text-zinc-100 truncate">{user.username}</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user.studentType}{user.major ? ` · ${user.major}` : ""}</p>
+              <p className="font-bold text-sm text-zinc-800 dark:text-zinc-100 truncate">{displayName}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">
+                {user ? `${user.studentType}${user.major ? ` · ${user.major}` : ""}` : "Guest preview"}
+              </p>
             </div>
           </div>
         </div>
@@ -226,10 +275,21 @@ export function UniversityChat() {
           <div className="space-y-3">
             <div className="rounded-xl bg-zinc-100 dark:bg-zinc-800/60 px-4 py-3">
               <p className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">Role</p>
-              <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{user.studentType}</p>
+              <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{roleLabel}</p>
             </div>
 
-            {user.major && (
+            {!user && (
+              <div className="rounded-xl bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900 px-4 py-3">
+                <p className="text-[10px] font-semibold text-amber-600 dark:text-amber-500 uppercase tracking-wider mb-1">Guest Preview</p>
+                <p className="text-sm font-semibold text-amber-700 dark:text-amber-300">
+                  {remainingFree > 0
+                    ? `${remainingFree} free message${remainingFree === 1 ? "" : "s"} left`
+                    : "Sign in to keep chatting"}
+                </p>
+              </div>
+            )}
+
+            {user?.major && (
               <div className="rounded-xl bg-zinc-100 dark:bg-zinc-800/60 px-4 py-3">
                 <p className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">Major</p>
                 <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{user.major}</p>
@@ -255,15 +315,25 @@ export function UniversityChat() {
           </p>
         </div>
 
-        {/* Logout Button */}
+        {/* Auth Button */}
         <div className="p-4 shrink-0 border-t border-zinc-100 dark:border-zinc-800">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-900 transition"
-          >
-            <LogOut size={13} />
-            Sign Out
-          </button>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-900 transition"
+            >
+              <LogOut size={13} />
+              Sign Out
+            </button>
+          ) : (
+            <button
+              onClick={() => setGateOpen(true)}
+              className="w-full flex items-center justify-center gap-2 rounded-xl bg-[#E0182D] hover:bg-red-700 px-4 py-2.5 text-xs font-bold text-white shadow-sm transition"
+            >
+              <User size={13} />
+              Sign In / Create Account
+            </button>
+          )}
         </div>
       </div>
 
@@ -279,7 +349,7 @@ export function UniversityChat() {
               className="flex items-center gap-2 rounded-xl px-3 py-2 bg-zinc-100 dark:bg-zinc-800 text-xs font-semibold text-zinc-600 dark:text-zinc-300"
             >
               <User size={14} className="text-[#E0182D]" />
-              {user.username}
+              {displayName}
               <ChevronDown size={12} />
             </button>
             <AnimatePresence>
@@ -291,16 +361,26 @@ export function UniversityChat() {
                   className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-lg overflow-hidden z-50"
                 >
                   <div className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
-                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">{user.username}</p>
-                    <p className="text-[10px] text-zinc-400">{user.studentType}</p>
+                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">{displayName}</p>
+                    <p className="text-[10px] text-zinc-400">{roleLabel}</p>
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-4 py-3 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition"
-                  >
-                    <LogOut size={13} />
-                    Sign Out
-                  </button>
+                  {user ? (
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition"
+                    >
+                      <LogOut size={13} />
+                      Sign Out
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { setProfileOpen(false); setGateOpen(true); }}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-xs font-semibold text-[#E0182D] hover:bg-rose-50 dark:hover:bg-rose-900/20 transition"
+                    >
+                      <User size={13} />
+                      Sign In / Create Account
+                    </button>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -428,7 +508,7 @@ export function UniversityChat() {
               className="min-h-[64px] max-h-[200px] w-full resize-none rounded-3xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.5)] px-6 py-4.5 pr-16 text-[1.05rem] font-medium text-zinc-900 dark:text-zinc-50 outline-none transition focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 placeholder-zinc-400 dark:placeholder-zinc-500"
               style={{ paddingTop: "1.1rem" }}
               rows={1}
-              placeholder={`Ask me anything about UAEU, ${user.username}…`}
+              placeholder={user ? `Ask me anything about UAEU, ${user.username}…` : "Ask me anything about UAEU…"}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(); } }}
@@ -447,6 +527,15 @@ export function UniversityChat() {
 
         <div className="h-32 shrink-0" />
       </div>
+
+      {/* Soft-gate overlay: shown after the visitor uses their free messages */}
+      {gateOpen && !user && (
+        <AuthModal
+          variant="overlay"
+          notice={`You've used your ${MESSAGE_GATE} free messages. Sign in or create a free account to keep chatting — your conversation stays right here.`}
+          onAuth={handleAuth}
+        />
+      )}
     </div>
   );
 }

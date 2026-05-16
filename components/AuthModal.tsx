@@ -16,9 +16,13 @@ const STUDENT_TYPES = [
 
 interface AuthModalProps {
   onAuth: (user: AuthUser) => void;
+  /** "page" = full-screen (legacy). "overlay" = blocking modal over the chat. */
+  variant?: "page" | "overlay";
+  /** Optional message shown above the form, e.g. the soft-gate explanation. */
+  notice?: string;
 }
 
-export function AuthModal({ onAuth }: AuthModalProps) {
+export function AuthModal({ onAuth, variant = "page", notice }: AuthModalProps) {
   const [mode, setMode] = useState<Mode>("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -65,8 +69,13 @@ export function AuthModal({ onAuth }: AuthModalProps) {
 
   const needsMajor = studentType === "Current Student" || studentType === "Applicant";
 
+  const wrapperClass =
+    variant === "overlay"
+      ? "fixed inset-0 z-50 flex flex-col items-center justify-center px-4 bg-zinc-900/60 backdrop-blur-sm"
+      : "min-h-screen w-full flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4";
+
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center bg-zinc-50 dark:bg-zinc-950 px-4">
+    <div className={wrapperClass}>
       {/* Background decoration */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-[600px] h-[600px] rounded-full bg-rose-50 dark:bg-rose-950/20 blur-[120px]" />
@@ -123,6 +132,13 @@ export function AuthModal({ onAuth }: AuthModalProps) {
 
           {/* Form Body */}
           <form onSubmit={handleSubmit} className="p-8 space-y-5">
+            {/* Soft-gate notice */}
+            {notice && (
+              <div className="bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-800 text-amber-800 dark:text-amber-200 text-sm font-medium rounded-xl px-4 py-3">
+                {notice}
+              </div>
+            )}
+
             {/* Error Banner */}
             <AnimatePresence>
               {error && (

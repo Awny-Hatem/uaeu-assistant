@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { queryOne } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export async function GET() {
@@ -11,13 +11,13 @@ export async function GET() {
       return NextResponse.json({ user: null });
     }
 
-    const session = db.prepare('SELECT user_id, expires_at FROM sessions WHERE token = ?').get(token) as any;
-    
+    const session = await queryOne<any>('SELECT user_id, expires_at FROM sessions WHERE token = ?', [token]);
+
     if (!session || session.expires_at < Date.now()) {
       return NextResponse.json({ user: null });
     }
 
-    const user = db.prepare('SELECT id, username, student_type, major FROM users WHERE id = ?').get(session.user_id) as any;
+    const user = await queryOne<any>('SELECT id, username, student_type, major FROM users WHERE id = ?', [session.user_id]);
 
     if (!user) {
       return NextResponse.json({ user: null });

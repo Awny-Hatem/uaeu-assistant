@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
-import db from '@/lib/db';
+import { queryOne, execute } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export async function POST(req: Request) {
@@ -12,7 +12,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const existingUser = db.prepare('SELECT id FROM users WHERE username = ?').get(username);
+    const existingUser = await queryOne('SELECT id FROM users WHERE username = ?', [username]);
     if (existingUser) {
       return NextResponse.json({ error: 'Username already exists' }, { status: 409 });
     }
@@ -20,20 +20,20 @@ export async function POST(req: Request) {
     const userId = crypto.randomUUID();
     const hash = await bcrypt.hash(password, 10);
 
-    db.prepare(`
-      INSERT INTO users (id, username, password_hash, student_type, major) 
-      VALUES (?, ?, ?, ?, ?)
-    `).run(userId, username, hash, studentType, major || null);
+    await execute(
+      'INSERT INTO users (id, username, password_hash, student_type, major) VALUES (?, ?, ?, ?, ?)',
+      [userId, username, hash, studentType, major || null]
+    );
 
     // Create session
     const sessionId = crypto.randomUUID();
     const token = crypto.randomBytes(32).toString('hex');
     const expiresAt = Date.now() + 1000 * 60 * 60 * 24 * 7; // 7 days
 
-    db.prepare(`
-      INSERT INTO sessions (id, user_id, token, expires_at)
-      VALUES (?, ?, ?, ?)
-    `).run(sessionId, userId, token, expiresAt);
+    await execute(
+      'INSERT INTO sessions (id, user_id, token, expires_at) VALUES (?, ?, ?, ?)',
+      [sessionId, userId, token, expiresAt]
+    );
 
     const cookieStore = await cookies();
     cookieStore.set('chat_session', token, {

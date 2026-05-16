@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { queryOne, queryAll } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export async function GET() {
@@ -11,12 +11,12 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const session = db.prepare('SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?').get(token, Date.now()) as any;
+    const session = await queryOne<any>('SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?', [token, Date.now()]);
     if (!session) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const messages = db.prepare('SELECT id, role, content, source FROM messages WHERE user_id = ? ORDER BY timestamp ASC').all(session.user_id) as any[];
+    const messages = await queryAll<any>('SELECT id, role, content, source FROM messages WHERE user_id = ? ORDER BY timestamp ASC', [session.user_id]);
 
     const uiMessages = messages.map(m => ({
       id: m.id,

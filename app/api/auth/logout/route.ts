@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { execute } from '@/lib/db';
 import { cookies } from 'next/headers';
 
 export async function POST() {
@@ -7,7 +7,7 @@ export async function POST() {
   const token = cookieStore.get('chat_session')?.value;
 
   if (token) {
-    db.prepare('DELETE FROM sessions WHERE token = ?').run(token);
+    await execute('DELETE FROM sessions WHERE token = ?', [token]);
     cookieStore.delete('chat_session');
   }
 

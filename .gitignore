@@ -37,6 +37,11 @@ yarn-error.log*
 # generated embeddings (run npm run ingest)
 /data/embeddings.json
 
+# local SQLite dev database (persistence is now libSQL/Turso over the network)
+/data/*.db
+/data/*.db-shm
+/data/*.db-wal
+
 # vercel
 .vercel
 
