@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Eye, EyeOff, UserCircle2, GraduationCap, LogIn, UserPlus } from "lucide-react";
+import { Eye, EyeOff, UserCircle2, GraduationCap, LogIn, UserPlus, X } from "lucide-react";
 
 type AuthUser = { id: string; username: string; studentType: string; major: string | null };
 type Mode = "login" | "signup";
@@ -16,9 +16,10 @@ const STUDENT_TYPES = [
 
 interface AuthModalProps {
   onAuth: (user: AuthUser) => void;
+  onClose?: () => void;
 }
 
-export function AuthModal({ onAuth }: AuthModalProps) {
+export function AuthModal({ onAuth, onClose }: AuthModalProps) {
   const [mode, setMode] = useState<Mode>("login");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -83,6 +84,15 @@ export function AuthModal({ onAuth }: AuthModalProps) {
         <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-xl shadow-zinc-200/60 dark:shadow-black/40 border border-zinc-100 dark:border-zinc-800 overflow-hidden">
           {/* Header */}
           <div className="relative bg-gradient-to-br from-stone-900 via-zinc-800 to-zinc-900 p-8 pb-10 flex flex-col items-center gap-4">
+            {onClose && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="absolute top-4 right-4 text-zinc-400 hover:text-white transition bg-transparent p-1 rounded-full hover:bg-zinc-800"
+              >
+                <X size={20} />
+              </button>
+            )}
             <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxjaXJjbGUgY3g9IjIwIiBjeT0iMjAiIHI9IjEiIGZpbGw9IndoaXRlIi8+PC9nPjwvc3ZnPg==')] pointer-events-none" />
             <img
               src="/Logo.png"

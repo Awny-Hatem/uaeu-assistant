@@ -6,7 +6,7 @@ import remarkGfm from "remark-gfm";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Send, UserCircle, Bot, HeadphonesIcon, Globe, LibraryBig,
-  Search, LogOut, User, ChevronDown
+  Search, LogOut, User, ChevronDown, LogIn
 } from "lucide-react";
 import { AuthModal } from "@/components/AuthModal";
 
@@ -43,6 +43,7 @@ function useLoadingText(isLoading: boolean) {
 export function UniversityChat() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const [locale, setLocale] = useState<LocalePref>("auto");
   const [input, setInput] = useState("");
@@ -65,6 +66,8 @@ export function UniversityChat() {
         if (data.user) {
           setUser(data.user);
           await loadHistory(data.user);
+        } else {
+          setWelcomeMessage({ id: "guest", username: "Guest", studentType: "Visitor", major: null });
         }
       } finally {
         setAuthLoading(false);
@@ -121,7 +124,7 @@ export function UniversityChat() {
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });
     setUser(null);
-    setMessages([]);
+    setWelcomeMessage({ id: "guest", username: "Guest", studentType: "Visitor", major: null });
     setProfileOpen(false);
   }
 
@@ -185,9 +188,9 @@ export function UniversityChat() {
     );
   }
 
-  // ── State: Not logged in → show AuthModal ─────────────────────────────────
-  if (!user) {
-    return <AuthModal onAuth={handleAuth} />;
+  // ── State: AuthModal ──────────────────────────────────────────────────────
+  if (showAuthModal) {
+    return <AuthModal onAuth={(u) => { setShowAuthModal(false); handleAuth(u); }} onClose={() => setShowAuthModal(false)} />;
   }
 
   // ── State: Logged In → show Chat UI ──────────────────────────────────────
@@ -213,8 +216,8 @@ export function UniversityChat() {
               <User size={18} className="text-[#E0182D]" />
             </div>
             <div className="min-w-0">
-              <p className="font-bold text-sm text-zinc-800 dark:text-zinc-100 truncate">{user.username}</p>
-              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user.studentType}{user.major ? ` · ${user.major}` : ""}</p>
+              <p className="font-bold text-sm text-zinc-800 dark:text-zinc-100 truncate">{user ? user.username : "Guest"}</p>
+              <p className="text-xs text-zinc-500 dark:text-zinc-400 truncate">{user ? `${user.studentType}${user.major ? ` · ${user.major}` : ""}` : "Visitor"}</p>
             </div>
           </div>
         </div>
@@ -226,10 +229,10 @@ export function UniversityChat() {
           <div className="space-y-3">
             <div className="rounded-xl bg-zinc-100 dark:bg-zinc-800/60 px-4 py-3">
               <p className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">Role</p>
-              <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{user.studentType}</p>
+              <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{user ? user.studentType : "Visitor"}</p>
             </div>
 
-            {user.major && (
+            {user?.major && (
               <div className="rounded-xl bg-zinc-100 dark:bg-zinc-800/60 px-4 py-3">
                 <p className="text-[10px] font-semibold text-zinc-400 dark:text-zinc-500 uppercase tracking-wider mb-1">Major</p>
                 <p className="text-sm font-semibold text-zinc-700 dark:text-zinc-200">{user.major}</p>
@@ -255,15 +258,25 @@ export function UniversityChat() {
           </p>
         </div>
 
-        {/* Logout Button */}
+        {/* Logout / Login Button */}
         <div className="p-4 shrink-0 border-t border-zinc-100 dark:border-zinc-800">
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-900 transition"
-          >
-            <LogOut size={13} />
-            Sign Out
-          </button>
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center justify-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-rose-600 dark:hover:text-rose-400 hover:border-rose-200 dark:hover:border-rose-900 transition"
+            >
+              <LogOut size={13} />
+              Sign Out
+            </button>
+          ) : (
+            <button
+              onClick={() => setShowAuthModal(true)}
+              className="w-full flex items-center justify-center gap-2 rounded-xl border border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 hover:border-blue-200 dark:hover:border-blue-900 transition"
+            >
+              <LogIn size={13} />
+              Sign In
+            </button>
+          )}
         </div>
       </div>
 
@@ -279,7 +292,7 @@ export function UniversityChat() {
               className="flex items-center gap-2 rounded-xl px-3 py-2 bg-zinc-100 dark:bg-zinc-800 text-xs font-semibold text-zinc-600 dark:text-zinc-300"
             >
               <User size={14} className="text-[#E0182D]" />
-              {user.username}
+              {user ? user.username : "Guest"}
               <ChevronDown size={12} />
             </button>
             <AnimatePresence>
@@ -291,16 +304,26 @@ export function UniversityChat() {
                   className="absolute right-0 top-full mt-2 w-48 rounded-2xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-700 shadow-lg overflow-hidden z-50"
                 >
                   <div className="px-4 py-3 border-b border-zinc-100 dark:border-zinc-800">
-                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">{user.username}</p>
-                    <p className="text-[10px] text-zinc-400">{user.studentType}</p>
+                    <p className="text-xs font-semibold text-zinc-800 dark:text-zinc-100">{user ? user.username : "Guest"}</p>
+                    <p className="text-[10px] text-zinc-400">{user ? user.studentType : "Visitor"}</p>
                   </div>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-2 px-4 py-3 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition"
-                  >
-                    <LogOut size={13} />
-                    Sign Out
-                  </button>
+                  {user ? (
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-xs font-semibold text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-900/20 transition"
+                    >
+                      <LogOut size={13} />
+                      Sign Out
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => { setProfileOpen(false); setShowAuthModal(true); }}
+                      className="w-full flex items-center gap-2 px-4 py-3 text-xs font-semibold text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition"
+                    >
+                      <LogIn size={13} />
+                      Sign In
+                    </button>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>
@@ -428,7 +451,7 @@ export function UniversityChat() {
               className="min-h-[64px] max-h-[200px] w-full resize-none rounded-3xl border border-zinc-200 dark:border-zinc-700 bg-white dark:bg-zinc-800 shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)] dark:shadow-[0_4px_20px_-2px_rgba(0,0,0,0.5)] px-6 py-4.5 pr-16 text-[1.05rem] font-medium text-zinc-900 dark:text-zinc-50 outline-none transition focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 placeholder-zinc-400 dark:placeholder-zinc-500"
               style={{ paddingTop: "1.1rem" }}
               rows={1}
-              placeholder={`Ask me anything about UAEU, ${user.username}…`}
+              placeholder={`Ask me anything about UAEU, ${user ? user.username : 'Guest'}…`}
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); void send(); } }}
