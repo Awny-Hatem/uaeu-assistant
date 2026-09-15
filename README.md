@@ -110,9 +110,10 @@ OPENAI_API_KEY=your-openai-api-key
 # CHATBOT_DB_PATH=./data/chatbot.db
 # SERVER_CHAT_HISTORY=enabled
 # ADMIN_ANALYTICS_TOKEN=your-long-random-admin-token
+# AUTH_COOKIE_SECRET=your-long-random-cookie-signing-secret
 ```
 
-`OPENAI_API_KEY` is the primary chat provider. Gemini is optional for fallback chat and embedding ingest. Live Gemini embedding search is opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`, which is useful only when the Gemini key has available quota. Server-side raw chat history is disabled unless `SERVER_CHAT_HISTORY=enabled`. Local development stores SQLite in `data/chatbot.db`; Vercel uses temporary `/tmp` storage because the bundled project directory is read-only.
+`OPENAI_API_KEY` is the primary chat provider. Gemini is optional for fallback chat and embedding ingest. Live Gemini embedding search is opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`, which is useful only when the Gemini key has available quota. `AUTH_COOKIE_SECRET` signs device-local auth cookies for deployments that do not have durable database storage. Server-side raw chat history is disabled unless `SERVER_CHAT_HISTORY=enabled`. Local development stores SQLite in `data/chatbot.db`; Vercel uses temporary `/tmp` storage because the bundled project directory is read-only.
 
 ## Local Setup
 
@@ -132,7 +133,7 @@ Open http://localhost:3000 for the chat. The aggregate analytics page at http://
 - `.env.local` is ignored by git.
 - Guest and account conversation history use browser storage by default.
 - Auth and chat API routes validate JSON content type, limit request size, apply basic rate limits, and reject cross-origin browser posts.
-- Sessions use HTTP-only, same-site cookies.
+- Sessions and device-local account fallback use signed, HTTP-only, same-site cookies.
 - Security headers are configured in `next.config.ts`, including CSP, clickjacking protection, `nosniff`, referrer policy, and permissions policy.
 - Analytics stores aggregate fields only: source, topic, locale, guide ID, escalation reason, and timestamp.
 - The analytics dashboard is locked by `ADMIN_ANALYTICS_TOKEN`; leave it unset to keep the page closed.
@@ -144,7 +145,7 @@ Open http://localhost:3000 for the chat. The aggregate analytics page at http://
 - The public UAEU service page confirms the student document service area, but exact authenticated portal steps still need official verification.
 - The local knowledge base is intentionally small and must be expanded with approved UAEU content.
 - The analytics page is a token-locked prototype dashboard, not a production admin system.
-- The public Vercel demo uses temporary serverless SQLite storage for prototype account tests. Use PostgreSQL, Azure SQL, Supabase, Neon, or UAEU-managed storage before relying on persistent production accounts.
+- The public Vercel demo uses signed device-local cookies for prototype account continuity and temporary serverless SQLite only as a best-effort store. Use PostgreSQL, Azure SQL, Supabase, Neon, or UAEU-managed storage before relying on persistent production accounts across devices.
 - Current rate limiting is in-memory per server instance. Use a shared store such as Redis or a managed edge rate limiter before high-traffic production use.
 
 ## Future UAEU Integration

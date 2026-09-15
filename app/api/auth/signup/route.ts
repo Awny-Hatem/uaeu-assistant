@@ -4,7 +4,15 @@ import db from '@/lib/db';
 import { cookies } from 'next/headers';
 import { getUniversityAffiliation, normalizeEmail } from '@/lib/access';
 import { jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from '@/lib/request-security';
-import { SESSION_MAX_AGE_MS, SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
+import {
+  encodeSessionCookie,
+  LOCAL_ACCOUNTS_COOKIE_NAME,
+  localAccountsCookieOptions,
+  type LocalAccountRecord,
+  SESSION_COOKIE_NAME,
+  sessionCookieOptions,
+  upsertLocalAccountCookie,
+} from '@/lib/session-cookie';
 
 type SignupBody = {
   username?: unknown;
@@ -89,28 +97,40 @@ export async function POST(req: Request) {
       VALUES (?, ?, ?, ?, ?, ?, ?)
     `).run(userId, normalizedUsername, normalizedEmail, hash, selectedStudentType, cleanMajor || null, affiliation);
 
-    const sessionId = crypto.randomUUID();
-    const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = Date.now() + SESSION_MAX_AGE_MS;
-
-    db.prepare(`
-      INSERT INTO sessions (id, user_id, token, expires_at)
-      VALUES (?, ?, ?, ?)
-    `).run(sessionId, userId, token, expiresAt);
-
     const cookieStore = await cookies();
-    cookieStore.set(SESSION_COOKIE_NAME, token, sessionCookieOptions());
+    const user = {
+      id: userId,
+      username: normalizedUsername,
+      email: normalizedEmail,
+      studentType: selectedStudentType,
+      major: cleanMajor || null,
+      universityAffiliation: affiliation,
+    };
+    const sessionValue = encodeSessionCookie(user);
+    const localAccount: LocalAccountRecord = {
+      ...user,
+      passwordHash: hash,
+      createdAt: Date.now(),
+    };
+    const accountCookie = upsertLocalAccountCookie(
+      cookieStore.get(LOCAL_ACCOUNTS_COOKIE_NAME)?.value,
+      localAccount,
+    );
+
+    if (!sessionValue || !accountCookie) {
+      return jsonNoStore({ error: 'Auth signing is not configured.' }, { status: 500 });
+    }
+
+    cookieStore.set(SESSION_COOKIE_NAME, sessionValue, sessionCookieOptions());
+    cookieStore.set(
+      LOCAL_ACCOUNTS_COOKIE_NAME,
+      accountCookie,
+      localAccountsCookieOptions(),
+    );
 
     return jsonNoStore({
       success: true,
-      user: {
-        id: userId,
-        username: normalizedUsername,
-        email: normalizedEmail,
-        studentType: selectedStudentType,
-        major: cleanMajor || null,
-        universityAffiliation: affiliation,
-      }
+      user,
     });
 
   } catch (error) {

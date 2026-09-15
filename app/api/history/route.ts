@@ -1,7 +1,7 @@
 import db from '@/lib/db';
 import { cookies } from 'next/headers';
 import { jsonNoStore } from '@/lib/request-security';
-import { SESSION_COOKIE_NAME } from '@/lib/session-cookie';
+import { decodeSessionCookie, SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 
 function serverChatHistoryEnabled(): boolean {
   return process.env.SERVER_CHAT_HISTORY?.trim().toLowerCase() === 'enabled';
@@ -31,12 +31,15 @@ export async function GET() {
       return jsonNoStore({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    const signedUser = decodeSessionCookie(token);
+    const signedUserId = signedUser?.id;
     const session = db.prepare('SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?').get(token, Date.now()) as SessionRow | undefined;
-    if (!session) {
+    const userId = signedUserId ?? session?.user_id;
+    if (!userId) {
       return jsonNoStore({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const messages = db.prepare('SELECT id, role, content, source FROM messages WHERE user_id = ? ORDER BY timestamp ASC').all(session.user_id) as MessageRow[];
+    const messages = db.prepare('SELECT id, role, content, source FROM messages WHERE user_id = ? ORDER BY timestamp ASC').all(userId) as MessageRow[];
 
     const uiMessages = messages.map(m => ({
       id: m.id,
@@ -48,7 +51,7 @@ export async function GET() {
     return jsonNoStore({ messages: uiMessages });
 
   } catch (error) {
-    console.error('History fetch error:', error);
+    console.error('History fetch error:', error instanceof Error ? error.message : 'Unknown error');
     return jsonNoStore({ error: 'Internal server error' }, { status: 500 });
   }
 }

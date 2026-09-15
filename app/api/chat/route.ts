@@ -10,7 +10,7 @@ import { lexicalRetrieve } from "@/lib/knowledge-files";
 import { resolveLocale } from "@/lib/language";
 import { SYSTEM_PROMPT } from "@/lib/prompts";
 import { jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from "@/lib/request-security";
-import { SESSION_COOKIE_NAME } from "@/lib/session-cookie";
+import { decodeSessionCookie, SESSION_COOKIE_NAME } from "@/lib/session-cookie";
 import type { AssistantSource, Citation, EscalationReason, ServiceGuide, UniversityCommunication } from "@/lib/prototype-types";
 import { findServiceGuide, guideIntro } from "@/lib/service-guides";
 import { loadEmbeddingChunks, vectorRetrieve } from "@/lib/vector-rag";
@@ -121,6 +121,8 @@ async function getUserIdFromCookie(): Promise<string | null> {
     const cookieStore = await cookies();
     const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
     if (!token) return null;
+    const signedUser = decodeSessionCookie(token);
+    if (signedUser) return signedUser.id;
     const session = db
       .prepare("SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?")
       .get(token, Date.now()) as SessionRow | undefined;

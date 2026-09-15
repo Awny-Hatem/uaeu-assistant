@@ -2,7 +2,7 @@ import db from '@/lib/db';
 import { cookies } from 'next/headers';
 import { getUniversityAffiliation } from '@/lib/access';
 import { jsonNoStore } from '@/lib/request-security';
-import { SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
+import { decodeSessionCookie, SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
 
 type SessionRow = {
   user_id: string;
@@ -27,8 +27,13 @@ export async function GET() {
       return jsonNoStore({ user: null });
     }
 
+    const signedUser = decodeSessionCookie(token);
+    if (signedUser) {
+      return jsonNoStore({ user: signedUser });
+    }
+
     const session = db.prepare('SELECT user_id, expires_at FROM sessions WHERE token = ?').get(token) as SessionRow | undefined;
-    
+
     if (!session || session.expires_at < Date.now()) {
       if (session?.expires_at && session.expires_at < Date.now()) {
         db.prepare('DELETE FROM sessions WHERE token = ?').run(token);

@@ -1,10 +1,19 @@
-import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import db from '@/lib/db';
 import { cookies } from 'next/headers';
 import { getUniversityAffiliation, normalizeEmail } from '@/lib/access';
 import { jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from '@/lib/request-security';
-import { SESSION_MAX_AGE_MS, SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
+import {
+  encodeSessionCookie,
+  findLocalAccount,
+  LOCAL_ACCOUNTS_COOKIE_NAME,
+  localAccountsCookieOptions,
+  type LocalAccountRecord,
+  SESSION_COOKIE_NAME,
+  type SessionCookieUser,
+  sessionCookieOptions,
+  upsertLocalAccountCookie,
+} from '@/lib/session-cookie';
 
 type LoginBody = {
   username?: unknown;
@@ -48,48 +57,78 @@ export async function POST(req: Request) {
       return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
     }
 
+    const cookieStore = await cookies();
+    const localAccountsCookie = cookieStore.get(LOCAL_ACCOUNTS_COOKIE_NAME)?.value;
     const user = db.prepare(`
       SELECT id, username, email, password_hash, student_type, major, university_affiliation
       FROM users
       WHERE username = ?
       OR (email IS NOT NULL AND email = ?)
     `).get(identifier, normalizedEmail) as UserRow | undefined;
-    if (!user) {
-      return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
-    }
 
-    const match = await bcrypt.compare(password, user.password_hash);
-    if (!match) {
-      return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
-    }
+    let responseUser: SessionCookieUser | null = null;
+    let localAccount: LocalAccountRecord | null = null;
 
-    const sessionId = crypto.randomUUID();
-    const token = crypto.randomBytes(32).toString('hex');
-    const expiresAt = Date.now() + SESSION_MAX_AGE_MS;
+    if (user) {
+      const match = await bcrypt.compare(password, user.password_hash);
+      if (!match) {
+        return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
+      }
 
-    // Clear old sessions
-    db.prepare('DELETE FROM sessions WHERE user_id = ?').run(user.id);
-
-    db.prepare(`
-      INSERT INTO sessions (id, user_id, token, expires_at)
-      VALUES (?, ?, ?, ?)
-    `).run(sessionId, user.id, token, expiresAt);
-
-    const cookieStore = await cookies();
-    cookieStore.set(SESSION_COOKIE_NAME, token, sessionCookieOptions());
-
-    const universityAffiliation = user.university_affiliation || getUniversityAffiliation(user.email);
-
-    return jsonNoStore({
-      success: true,
-      user: {
+      responseUser = {
         id: user.id,
         username: user.username,
         email: user.email,
         studentType: user.student_type,
         major: user.major,
-        universityAffiliation,
+        universityAffiliation: user.university_affiliation || getUniversityAffiliation(user.email),
+      };
+      localAccount = {
+        ...responseUser,
+        passwordHash: user.password_hash,
+        createdAt: Date.now(),
+      };
+    } else {
+      localAccount = findLocalAccount(localAccountsCookie, identifier, normalizedEmail);
+      if (!localAccount) {
+        return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
       }
+
+      const match = await bcrypt.compare(password, localAccount.passwordHash);
+      if (!match) {
+        return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
+      }
+
+      responseUser = {
+        id: localAccount.id,
+        username: localAccount.username,
+        email: localAccount.email,
+        studentType: localAccount.studentType,
+        major: localAccount.major,
+        universityAffiliation: localAccount.universityAffiliation,
+      };
+    }
+
+    const sessionValue = encodeSessionCookie(responseUser);
+    const accountCookie = upsertLocalAccountCookie(
+      localAccountsCookie,
+      localAccount,
+    );
+
+    if (!sessionValue || !accountCookie) {
+      return jsonNoStore({ error: 'Auth signing is not configured.' }, { status: 500 });
+    }
+
+    cookieStore.set(SESSION_COOKIE_NAME, sessionValue, sessionCookieOptions());
+    cookieStore.set(
+      LOCAL_ACCOUNTS_COOKIE_NAME,
+      accountCookie,
+      localAccountsCookieOptions(),
+    );
+
+    return jsonNoStore({
+      success: true,
+      user: responseUser,
     });
 
   } catch (error) {
