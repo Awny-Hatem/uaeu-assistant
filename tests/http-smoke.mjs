@@ -1,7 +1,45 @@
 const baseUrl = process.argv[2] || "http://localhost:3000";
+const cookieJar = new Map();
+
+function splitSetCookie(header) {
+  if (!header) return [];
+  return header.split(/,(?=\s*[^;,=]+=[^;,]*)/g).map((value) => value.trim());
+}
+
+function storeCookies(response) {
+  const cookies =
+    typeof response.headers.getSetCookie === "function"
+      ? response.headers.getSetCookie()
+      : splitSetCookie(response.headers.get("set-cookie"));
+
+  for (const cookie of cookies) {
+    const pair = cookie.split(";")[0];
+    const separator = pair.indexOf("=");
+    if (separator === -1) continue;
+
+    const name = pair.slice(0, separator);
+    const value = pair.slice(separator + 1);
+    if (!value) {
+      cookieJar.delete(name);
+    } else {
+      cookieJar.set(name, value);
+    }
+  }
+}
+
+function cookieHeader() {
+  return [...cookieJar.entries()].map(([name, value]) => `${name}=${value}`).join("; ");
+}
 
 async function request(path, options = {}) {
-  const response = await fetch(`${baseUrl}${path}`, options);
+  const headers = new Headers(options.headers || {});
+  const cookies = cookieHeader();
+  if (cookies && !headers.has("Cookie")) {
+    headers.set("Cookie", cookies);
+  }
+
+  const response = await fetch(`${baseUrl}${path}`, { ...options, headers });
+  storeCookies(response);
   const text = await response.text();
   let data = {};
   try {
@@ -11,10 +49,6 @@ async function request(path, options = {}) {
   }
 
   return { response, data };
-}
-
-function cookieFrom(response) {
-  return response.headers.get("set-cookie")?.split(";")[0] || "";
 }
 
 function assert(condition, message) {
@@ -64,12 +98,11 @@ assert(signup.data.user?.username === username, "Signup returned wrong user");
 assert(signup.data.user?.universityAffiliation === "uaeu", "Signup did not detect UAEU affiliation");
 console.log("PASS Signup over HTTP");
 
-const signupCookie = cookieFrom(signup.response);
-assert(signupCookie, "Signup did not return a session cookie");
+assert(cookieJar.has("chat_session"), "Signup did not return a session cookie");
+assert(cookieJar.has("chat_local_accounts"), "Signup did not return a local account cookie");
 
 const logout = await request("/api/auth/logout", {
   method: "POST",
-  headers: { Cookie: signupCookie },
 });
 assert(logout.response.status === 200, `Logout status ${logout.response.status}`);
 console.log("PASS Logout over HTTP");
@@ -84,12 +117,9 @@ assert(login.response.status === 200, `Login status ${login.response.status}`);
 assert(login.data.user?.username === username, "Login returned wrong user");
 console.log("PASS Login over HTTP");
 
-const loginCookie = cookieFrom(login.response);
-assert(loginCookie, "Login did not return a session cookie");
+assert(cookieJar.has("chat_session"), "Login did not return a session cookie");
 
-const session = await request("/api/auth/session", {
-  headers: { Cookie: loginCookie },
-});
+const session = await request("/api/auth/session");
 assert(session.response.status === 200, `Session status ${session.response.status}`);
 assert(session.data.user?.username === username, "Session did not return signed-in user");
 assert(session.data.user?.universityAffiliation === "uaeu", "Session lost affiliation");
