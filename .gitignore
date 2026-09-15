@@ -37,6 +37,18 @@ yarn-error.log*
 # generated embeddings (run npm run ingest)
 /data/embeddings.json
 
+# local prototype runtime data
+/data/*.db
+/data/*.db-*
+/data/*.log
+
+# legacy local debug artifacts
+/convert.js
+/list.mjs
+/results.txt
+/test.mjs
+/test_auth_api.mjs
+
 # vercel
 .vercel
 

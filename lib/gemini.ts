@@ -1,5 +1,4 @@
 import { GoogleGenAI } from "@google/genai";
-import { NextRequest } from "next/server";
 
 export function getGemini(): GoogleGenAI | null {
   const geminiKey = process.env.GEMINI_API_KEY?.trim();

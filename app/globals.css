@@ -1,8 +1,11 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  color-scheme: light;
 }
 
 @theme inline {
@@ -13,14 +16,53 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
+}
+
+.markdown-body > *:first-child {
+  margin-top: 0;
+}
+
+.markdown-body > *:last-child {
+  margin-bottom: 0;
+}
+
+.markdown-body p {
+  margin: 0.35rem 0;
+}
+
+.markdown-body ul,
+.markdown-body ol {
+  margin: 0.45rem 0;
+  padding-left: 1.25rem;
+}
+
+.markdown-body ul {
+  list-style: disc;
+}
+
+.markdown-body ol {
+  list-style: decimal;
+}
+
+.markdown-body li {
+  margin: 0.2rem 0;
+}
+
+.markdown-body strong {
+  font-weight: 750;
+}
+
+.markdown-body a {
+  color: #e0182d;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+[dir="rtl"] .markdown-body ul,
+[dir="rtl"] .markdown-body ol {
+  padding-left: 0;
+  padding-right: 1.25rem;
 }

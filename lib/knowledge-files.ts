@@ -7,8 +7,9 @@ export function loadKnowledgeMarkdown(): { filename: string; content: string }[]
   if (!fs.existsSync(KNOWLEDGE_DIR)) return [];
   const names = fs
     .readdirSync(KNOWLEDGE_DIR)
-    .filter((f) => f.endsWith(".md"))
+    .filter((file) => file.endsWith(".md"))
     .sort();
+
   return names.map((filename) => ({
     filename,
     content: fs.readFileSync(path.join(KNOWLEDGE_DIR, filename), "utf-8"),
@@ -17,7 +18,7 @@ export function loadKnowledgeMarkdown(): { filename: string; content: string }[]
 
 export function splitIntoSections(md: string): string[] {
   const parts = md.split(/\n(?=## )/);
-  return parts.map((p) => p.trim()).filter(Boolean);
+  return parts.map((part) => part.trim()).filter(Boolean);
 }
 
 const STOP = new Set([
@@ -84,7 +85,7 @@ const STOP = new Set([
   "used",
   "student",
   "university",
-  // Arabic common particles (very small list; Arabic keyword matching still works via substring in FAQ)
+  // Arabic common particles; Arabic keyword matching still works via substring in FAQ.
   "في",
   "من",
   "على",
@@ -95,14 +96,7 @@ const STOP = new Set([
   "كيف",
   "أنا",
   "أريد",
-  "أريد",
 ]);
-
-function tokens(text: string): string[] {
-  return normalizeForLexical(text)
-    .split(/\s+/)
-    .filter((t) => t.length > 1 && !STOP.has(t));
-}
 
 function normalizeForLexical(text: string): string {
   return text
@@ -112,6 +106,12 @@ function normalizeForLexical(text: string): string {
     .replace(/[^\p{L}\p{N}\s]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function tokens(text: string): string[] {
+  return normalizeForLexical(text)
+    .split(/\s+/)
+    .filter((token) => token.length > 1 && !STOP.has(token));
 }
 
 export function lexicalRetrieve(
@@ -126,16 +126,18 @@ export function lexicalRetrieve(
 
   for (const { filename, content } of docs) {
     for (const section of splitIntoSections(content)) {
-      const st = new Set(tokens(section));
+      const sectionTokens = new Set(tokens(section));
       let score = 0;
-      for (const t of qTokens) {
-        if (st.has(t)) score += 1;
+
+      for (const token of qTokens) {
+        if (sectionTokens.has(token)) score += 1;
       }
-      // light boost for substring match of full query (helps Arabic phrases)
-      const nq = normalizeForLexical(query);
-      if (nq.length >= 3 && normalizeForLexical(section).includes(nq)) {
+
+      const normalizedQuery = normalizeForLexical(query);
+      if (normalizedQuery.length >= 3 && normalizeForLexical(section).includes(normalizedQuery)) {
         score += 3;
       }
+
       if (score > 0) {
         scored.push({ text: section, score, source: filename });
       }
@@ -145,6 +147,7 @@ export function lexicalRetrieve(
   scored.sort((a, b) => b.score - a.score);
   const out: { text: string; score: number; source: string }[] = [];
   const seen = new Set<string>();
+
   for (const row of scored) {
     const key = row.text.slice(0, 120);
     if (seen.has(key)) continue;
@@ -152,5 +155,6 @@ export function lexicalRetrieve(
     out.push(row);
     if (out.length >= topK) break;
   }
+
   return out;
 }

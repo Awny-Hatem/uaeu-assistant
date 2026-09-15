@@ -7,14 +7,17 @@
       "phone",
       "email",
       "support",
+      "service desk",
+      "live chat",
+      "working hours",
       "ساعات",
-      "اتصل",
+      "تواصل",
       "هاتف",
       "بريد",
       "دعم"
     ],
-    "answer_en": "**Answer**\nFor official contact options and current office hours, use the university’s main contact page so you reach the right department.\n\n**Steps**\n1. Open the UAEU website contact or directory section.\n2. Choose your audience (student, applicant, visitor) and the relevant office.\n\n**Important notes**\n- This assistant cannot place calls or send emails for you.\n- Replace this FAQ entry with your verified contact block when you have the official text.\n\n**Source**\nUAEU official website (to be linked from your approved content pack).",
-    "answer_ar": "**الإجابة**\nلمعرفة وسائل التواصل الرسمية وساعات العمل الحالية، يُفضّل استخدام صفحة التواصل أو الدليل في الموقع الرسمي للجامعة حتى تصل إلى الجهة المناسبة.\n\n**خطوات مقترحة**\n1. افتح قسم التواصل أو الدليل في موقع الجامعة.\n2. اختر فئتك (طالب، مقدّم طلب، زائر) ثم الجهة المختصة.\n\n**ملاحظات مهمة**\n- المساعد لا يمكنه الاتصال أو إرسال بريد نيابةً عنك.\n- استبدل هذا السجل بنص التواصل المعتمد لديك عند جاهزيته.\n\n**المصدر**\nالموقع الرسمي لجامعة الإمارات (يُربط لاحقًا بحزمة المحتوى المعتمدة)."
+    "answer_en": "**Contact UAEU**\n- Use the official UAEU contact page for current phone, email, location, working-hours, service desk, and live chat options.\n\n**Best Next Step**\n- Choose the department or service type on the official page so your question reaches the right team.",
+    "answer_ar": "**التواصل مع الجامعة**\n- استخدم صفحة التواصل الرسمية لجامعة الإمارات لمعرفة الهاتف والبريد وساعات العمل وخدمة الدعم والمحادثة المباشرة.\n\n**الخطوة الأنسب**\n- اختر القسم أو نوع الخدمة من الصفحة الرسمية حتى يصل سؤالك إلى الجهة المناسبة."
   },
   {
     "id": "where-official-info",
@@ -24,13 +27,71 @@
       "document",
       "policy",
       "verified",
+      "source",
+      "مصدر",
       "رسمي",
       "موقع",
       "سياسة",
       "وثيقة",
       "معتمد"
     ],
-    "answer_en": "**Answer**\nThis assistant is designed to use **approved UAEU documents and official web content** loaded into its knowledge base (RAG) and curated FAQs.\n\n**Important notes**\n- Answers are not authoritative if the underlying documents are missing or outdated.\n- Always verify critical decisions (admissions, graduation, visas, fees) with a human advisor and the live official site.\n\n**Source**\nProject configuration: RAG + FAQ layers (replace corpus with your official exports).",
-    "answer_ar": "**الإجابة**\nصُمّم هذا المساعد ليعتمد على **وثائق الجامعة المعتمدة** ومحتوى الموقع الرسمي المُحمَّل في قاعدة المعرفة (RAG) وأسئلة شائعة مُدارة.\n\n**ملاحظات مهمة**\n- الإجابة ليست معتمدة إذا كانت الوثائق ناقصة أو غير محدثة.\n- يُفضّل التحقق من القرارات الحساسة (القبول، التخرج، التأشيرة، الرسوم) مع مستشار بشري ومن الموقع الرسمي المباشر.\n\n**المصدر**\nإعداد المشروع: طبقة RAG + الأسئلة الشائعة (استبدل المحتوى بصادراتكم الرسمية)."
+    "answer_en": "**How This Prototype Uses Sources**\n- The assistant uses curated FAQ answers, local knowledge files, and guided service data that should be refreshed from official UAEU pages.\n\n**Important Note**\n- For critical decisions such as admissions, fees, visas, graduation, or legal documents, always verify with the official page or a UAEU advisor.",
+    "answer_ar": "**كيف يستخدم هذا النموذج المصادر**\n- يعتمد المساعد على أسئلة شائعة منسقة وملفات معرفة محلية وبيانات إرشادية يجب تحديثها من صفحات جامعة الإمارات الرسمية.\n\n**ملاحظة مهمة**\n- في القرارات الحساسة مثل القبول والرسوم والتأشيرات والتخرج والوثائق الرسمية، تحقق دائما من الصفحة الرسمية أو من مستشار في الجامعة."
+  },
+  {
+    "id": "academic-calendar",
+    "keywords": [
+      "academic calendar",
+      "calendar",
+      "deadline",
+      "exam",
+      "registration date",
+      "add drop",
+      "semester dates",
+      "تقويم",
+      "موعد",
+      "اختبار",
+      "امتحان",
+      "تسجيل"
+    ],
+    "answer_en": "**Academic Dates**\n- Use the official UAEU academic calendar for semester dates, registration periods, exams, holidays, and deadline checks.\n\n**Best Next Step**\n- Confirm the term and student category before acting on any date.",
+    "answer_ar": "**المواعيد الأكاديمية**\n- استخدم التقويم الأكاديمي الرسمي لجامعة الإمارات للتحقق من مواعيد الفصول والتسجيل والاختبارات والإجازات والمواعيد النهائية.\n\n**الخطوة الأنسب**\n- تأكد من الفصل الدراسي وفئة الطالب قبل الاعتماد على أي موعد."
+  },
+  {
+    "id": "library",
+    "keywords": [
+      "library",
+      "librarian",
+      "e-resources",
+      "database",
+      "research help",
+      "ask a librarian",
+      "مكتبة",
+      "مصادر",
+      "بحث",
+      "قواعد بيانات"
+    ],
+    "answer_en": "**Library Help**\n- UAEU service navigation includes library services such as e-resources and Ask a Librarian support.\n\n**Best Next Step**\n- Use the official library or service page for access instructions, current availability, and support channels.",
+    "answer_ar": "**خدمات المكتبة**\n- تتضمن خدمات جامعة الإمارات خدمات المكتبة مثل المصادر الإلكترونية وخدمة سؤال أمين المكتبة.\n\n**الخطوة الأنسب**\n- استخدم صفحة المكتبة أو الخدمات الرسمية لمعرفة طريقة الوصول والتوفر الحالي وقنوات الدعم."
+  },
+  {
+    "id": "student-documents",
+    "keywords": [
+      "student document",
+      "documents",
+      "to whom it may concern",
+      "certificate",
+      "letter",
+      "transcript",
+      "enrolled student",
+      "continuing student",
+      "وثيقة",
+      "شهادة",
+      "خطاب",
+      "إفادة",
+      "لمن يهمه الأمر"
+    ],
+    "answer_en": "**Student Documents**\n- UAEU service navigation includes document services for enrolled or continuing students.\n\n**Best Next Step**\n- Open the official service page and sign in only through the official UAEU portal to choose the exact document type.",
+    "answer_ar": "**وثائق الطلاب**\n- تتضمن خدمات جامعة الإمارات خدمات وثائق للطلاب المسجلين أو المستمرين.\n\n**الخطوة الأنسب**\n- افتح صفحة الخدمة الرسمية وسجل الدخول فقط من خلال بوابة جامعة الإمارات الرسمية لاختيار نوع الوثيقة المناسب."
   }
 ]

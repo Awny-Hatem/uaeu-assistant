@@ -19,9 +19,9 @@ const notoArabic = Noto_Sans_Arabic({
 });
 
 export const metadata: Metadata = {
-  title: "UAEU Assistant",
+  title: "UAEU Assistant Prototype",
   description:
-    "University assistant preview: FAQ, document retrieval, and grounded responses.",
+    "Student-services assistant prototype with guest mode, local history, citations, and guided UAEU service workflows.",
 };
 
 export default function RootLayout({

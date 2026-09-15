@@ -1,17 +1,26 @@
-# Admissions — placeholder section
+# Admissions Content Placeholder
 
-Source title: Template — not official policy
+Source title: Template only, not official admissions policy
+Last reviewed: 2026-09-15
 
-## Undergraduate admissions (example structure only)
+## Admissions Status
 
-**Do not use this text for real advising.** Replace with verified UAEU admissions content.
+This file does not contain verified UAEU admissions requirements. It exists to show where approved admissions content should be added after it is collected from official UAEU pages or approved documents.
 
-When you replace this file:
+## Safe Answering Rule
 
-- Include exact requirement names as published
-- Add effective dates or academic year
-- Link to the official admissions page
+For admissions questions, the assistant may explain that requirements can vary by program, applicant type, nationality, term, and academic year. It must not invent required documents, minimum scores, fees, deadlines, or transfer-credit rules.
 
-## Transfer students (example structure only)
+## Content To Add Later
 
-Transfer rules differ by college and program. The assistant must only quote your verified transfer policy text once it is added here.
+When the project team updates this file, include:
+
+- The exact official source title and URL.
+- The academic year or effective date.
+- Requirements by applicant type and program level.
+- Required documents and submission channel.
+- Deadline and fee information only when copied from a verified official source.
+
+## Escalation
+
+If a student asks for an admissions decision, eligibility confirmation, scholarship decision, fee amount, or deadline that is not present in verified source text, the assistant should suggest the official admissions page or a human admissions advisor.

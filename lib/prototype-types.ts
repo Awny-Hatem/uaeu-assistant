@@ -1,0 +1,53 @@
+export type AssistantSource =
+  | "faq"
+  | "rag"
+  | "web"
+  | "guide"
+  | "error"
+  | "escalated";
+
+export type EscalationReason =
+  | "low_confidence"
+  | "sensitive_policy"
+  | "requires_authorization"
+  | "technical_support"
+  | "student_requested_person";
+
+export type Citation = {
+  title: string;
+  url?: string;
+  document?: string;
+  lastVerified?: string;
+};
+
+export type GuideStep = {
+  title: string;
+  instruction: string;
+  note?: string;
+  url?: string;
+};
+
+export type ServiceGuide = {
+  id: string;
+  title: string;
+  titleAr?: string;
+  description: string;
+  officialUrl: string;
+  lastVerified: string;
+  audience: string[];
+  keywords: string[];
+  requiresVerification?: boolean;
+  verificationNote?: string;
+  steps: GuideStep[];
+};
+
+export type UniversityCommunication = {
+  id: string;
+  title: string;
+  description: string;
+  url: string;
+  category: "deadline" | "event" | "service" | "opportunity" | "announcement";
+  keywords: string[];
+  lastVerified: string;
+  requiresVerification?: boolean;
+};
