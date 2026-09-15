@@ -59,7 +59,7 @@ function assert(condition, message) {
 
 const stamp = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
 const username = `codex_http_${stamp}`;
-const email = `${username}@uea.ac.ae`;
+const email = `${username}@uaeu.ac.ae`;
 const password = "TestPass123!";
 const arabicDocumentQuestion =
   "\u0627\u0628\u0627 \u0634\u0647\u0627\u062f\u0629 \u0644\u0645\u0646 \u064a\u0647\u0645\u0647 \u0627\u0644\u0623\u0645\u0631";

@@ -1,7 +1,7 @@
 export type UniversityAffiliation = "uaeu" | "general";
 export type QuotaPlan = "guest" | "standard" | "uaeu";
 
-const UAEU_EMAIL_DOMAINS = ["@uaeu.ac.ae", "@uea.ac.ae"];
+const UAEU_EMAIL_DOMAINS = ["@uaeu.ac.ae"];
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 function readPositiveInt(value: string | undefined, fallback: number): number {

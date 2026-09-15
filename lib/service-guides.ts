@@ -74,7 +74,7 @@ export function findServiceGuide(query: string): ServiceGuide | null {
 
 export function guideIntro(guide: ServiceGuide): string {
   const verification = guide.requiresVerification
-    ? "\n\n**Verification Note**\n- Portal labels and requirements can change, so confirm the final step on the official UAEU service page."
+    ? `\n\n**Verification Note**\n- ${guide.verificationNote || "Portal labels and requirements can change, so confirm the final step on the official UAEU service page."}`
     : "";
 
   return `**${guide.title}**\n- ${guide.description}\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.${verification}`;

@@ -81,6 +81,7 @@ async function main() {
       name: "UAEU email receives UAEU quota plan",
       run: () => {
         assert.equal(isUniversityEmail("student@uaeu.ac.ae"), true);
+        assert.equal(isUniversityEmail("student@example.edu"), false);
         assert.equal(getQuotaPlan({ email: "student@uaeu.ac.ae" }), "uaeu");
         assert.equal(getQuotaLimit("uaeu") > getQuotaLimit("standard"), true);
       },
@@ -157,6 +158,8 @@ async function main() {
         assert.ok(guide);
         assert.equal(guide.steps.length >= 5, true);
         assert.equal(Boolean(guide.officialUrl), true);
+        assert.equal(guide.requiresVerification, true);
+        assert.match(guide.verificationNote ?? "", /post-login portal menu path/);
       },
     },
     {

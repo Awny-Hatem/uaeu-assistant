@@ -30,7 +30,7 @@ Local demo: http://localhost:3000 after running `npm run dev`.
 - **Escalate:** Sensitive, low-confidence, or human-requested cases route users to official contact options.
 - **Discover:** Relevant official links such as academic calendar, events, and service navigation can appear beside answers.
 - **Guest mode:** Visitors can ask 10 questions before sign-in is required.
-- **UAEU account boost:** Accounts using `@uaeu.ac.ae` or `@uea.ac.ae` receive the extended local allowance.
+- **UAEU account boost:** Accounts using `@uaeu.ac.ae` receive the extended local allowance.
 - **Local history:** Guest and signed-in conversations stay in browser `localStorage` by default.
 
 ## Architecture

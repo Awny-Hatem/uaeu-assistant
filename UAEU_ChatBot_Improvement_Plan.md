@@ -7,7 +7,7 @@ This plan folds in the pasted upgrade brief and separates what is implemented no
 - OpenAI support added as the primary AI provider, with Gemini kept as optional fallback and embedding support.
 - `.env.example` now documents OpenAI, Gemini, quotas, and the server-history opt-in flag.
 - Guest mode opens immediately, allows 10 local questions, and shows the login wall only after the allowance is used.
-- Anyone can create an account; `@uaeu.ac.ae` and `@uea.ac.ae` accounts receive the extended local allowance.
+- Anyone can create an account; `@uaeu.ac.ae` accounts receive the extended local allowance.
 - Guest and signed-in conversation history now stays in browser storage by default.
 - Raw query log files are no longer the default analytics mechanism.
 - Chat API returns structured citations instead of asking the model to invent source labels.
