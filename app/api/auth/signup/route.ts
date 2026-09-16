@@ -5,6 +5,7 @@ import { cookies } from 'next/headers';
 import { getUniversityAffiliation, normalizeEmail } from '@/lib/access';
 import { jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from '@/lib/request-security';
 import {
+  authCookieSecretConfigured,
   encodeSessionCookie,
   LOCAL_ACCOUNTS_COOKIE_NAME,
   localAccountsCookieOptions,
@@ -51,6 +52,13 @@ export async function POST(req: Request) {
 
   const parsed = await readJsonRequest<SignupBody>(req, { maxBytes: 16 * 1024 });
   if (!parsed.ok) return parsed.response;
+
+  // Do not create an account that cannot receive a usable encrypted session.
+  // This check must happen before hashing or inserting the user so a corrected
+  // configuration can be retried without leaving an orphaned account behind.
+  if (!authCookieSecretConfigured()) {
+    return jsonNoStore({ error: 'Authentication is not configured.' }, { status: 503 });
+  }
 
   try {
     const { username, email, password, studentType, major } = parsed.data;
@@ -118,7 +126,7 @@ export async function POST(req: Request) {
     );
 
     if (!sessionValue || !accountCookie) {
-      return jsonNoStore({ error: 'Auth signing is not configured.' }, { status: 500 });
+      return jsonNoStore({ error: 'Auth cookie encryption is not configured.' }, { status: 500 });
     }
 
     cookieStore.set(SESSION_COOKIE_NAME, sessionValue, sessionCookieOptions());

@@ -116,7 +116,7 @@ export async function POST(req: Request) {
     );
 
     if (!sessionValue || !accountCookie) {
-      return jsonNoStore({ error: 'Auth signing is not configured.' }, { status: 500 });
+      return jsonNoStore({ error: 'Auth cookie encryption is not configured.' }, { status: 500 });
     }
 
     cookieStore.set(SESSION_COOKIE_NAME, sessionValue, sessionCookieOptions());

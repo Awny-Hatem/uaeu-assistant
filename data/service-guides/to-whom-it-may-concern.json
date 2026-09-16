@@ -1,9 +1,11 @@
 {
   "id": "to-whom-it-may-concern",
   "title": "To Whom It May Concern Letter / Student Document Request",
-  "description": "Use this guide when an enrolled or continuing student needs the official UAEU continuing-student documents service for a letter or student document request.",
-  "officialUrl": "https://www.uaeu.ac.ae/ar/eservices/details.shtml?serviceId=92",
-  "lastVerified": "2026-09-15",
+  "titleAr": "طلب شهادة لمن يهمه الأمر / وثائق الطالب",
+  "description": "Enrolled UAEU students can request a To Whom It May Concern letter through the Current Students Documents service in the UAEU portal or mobile app. The official service lists it as free, normally processed in 10 minutes, and valid for three months.",
+  "descriptionAr": "يمكن للطلبة المسجلين في جامعة الإمارات طلب رسالة إلى من يهمه الأمر عبر خدمة وثائق الطلبة الحاليين في بوابة الجامعة أو تطبيق الهاتف. الخدمة مجانية، ومدة الإنجاز المعتادة 10 دقائق، وتظل الرسالة صالحة لمدة ثلاثة أشهر.",
+  "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+  "lastVerified": "2026-09-16",
   "audience": ["current-student", "continuing-student"],
   "keywords": [
     "to whom it may concern",
@@ -30,39 +32,49 @@
     "أبغى شهادة",
     "اريد شهادة"
   ],
-  "requiresVerification": true,
-  "verificationNote": "The public UAEU service URL points to the continuing-student documents service. Manual verification is still required for the exact post-login portal menu path, the exact To Whom It May Concern or certificate option label, required form fields, any fee or processing-time text, delivery options, submit button wording, and final confirmation/reference wording.",
+  "excludeKeywords": [
+    "alumni",
+    "alumnus",
+    "graduated",
+    "graduate transcript",
+    "recommendation letter",
+    "reference letter",
+    "letter grade",
+    "visa document",
+    "visa documents"
+  ],
+  "requiresVerification": false,
   "steps": [
     {
-      "title": "Open the official UAEU service page",
-      "instruction": "Start from the UAEU continuing-student documents service page.",
-      "url": "https://www.uaeu.ac.ae/ar/eservices/details.shtml?serviceId=92",
-      "note": "This is the only current service URL found in the repository for this guide; manually recheck it if UAEU changes its services page."
+      "title": "Open the Current Students Documents service",
+      "titleAr": "افتح خدمة وثائق الطلبة الحاليين",
+      "instruction": "Open the official UAEU service page, then use the UAEU portal or mobile application to start the request.",
+      "instructionAr": "افتح صفحة الخدمة الرسمية لجامعة الإمارات، ثم استخدم بوابة الجامعة أو تطبيق الهاتف لبدء الطلب.",
+      "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
     },
     {
-      "title": "Sign in through the official UAEU portal",
-      "instruction": "Use your UAEU account only on the official portal when the service redirects you to sign in.",
-      "note": "Manual verification needed: the exact sign-in screen, redirect wording, and first post-login page label."
+      "title": "Sign in with your UAEU account",
+      "titleAr": "سجّل الدخول بحساب جامعة الإمارات",
+      "instruction": "Authenticate only on an official UAEU portal or in the official mobile application. The service is for enrolled students.",
+      "instructionAr": "سجّل الدخول فقط عبر بوابة رسمية لجامعة الإمارات أو تطبيقها الرسمي. هذه الخدمة مخصصة للطلبة المسجلين."
     },
     {
-      "title": "Find the continuing-student documents area",
-      "instruction": "After sign-in, follow the official portal wording for continuing-student documents or student document requests.",
-      "note": "Manual verification needed: the exact menu names and navigation path shown after login."
+      "title": "Choose the document request",
+      "titleAr": "اختر طلب الوثيقة",
+      "instruction": "Select the Current Students Documents service and choose the To Whom It May Concern letter option.",
+      "instructionAr": "اختر خدمة وثائق الطلبة الحاليين، ثم اختر رسالة إلى من يهمه الأمر."
     },
     {
-      "title": "Select the needed document type",
-      "instruction": "Choose the To Whom It May Concern, certificate, or letter option only if that wording appears in the official portal.",
-      "note": "Manual verification needed: the exact current option label for this document type."
+      "title": "Review and submit",
+      "titleAr": "راجع الطلب وأرسله",
+      "instruction": "Review the request details and submit them through the official portal or app. The service is listed as free.",
+      "instructionAr": "راجع تفاصيل الطلب ثم أرسله عبر البوابة أو التطبيق الرسمي. الخدمة مدرجة بوصفها مجانية."
     },
     {
-      "title": "Complete and review the official form",
-      "instruction": "Enter only the details requested by the portal and review the information before submitting.",
-      "note": "Manual verification needed: required fields, fees, processing time, language choices, delivery choices, and submit button wording."
-    },
-    {
-      "title": "Save the official confirmation",
-      "instruction": "After submitting on the official portal, keep the confirmation or reference details if the portal provides them.",
-      "note": "Manual verification needed: final confirmation text and reference-number format."
+      "title": "Receive and check the letter",
+      "titleAr": "استلم الرسالة وتحقق منها",
+      "instruction": "UAEU says the document is sent by email and normally takes about 10 minutes. Check the details when it arrives; a To Whom It May Concern letter is valid for three months.",
+      "instructionAr": "توضح جامعة الإمارات أن الوثيقة تُرسل بالبريد الإلكتروني وتستغرق عادةً نحو 10 دقائق. تحقق من بياناتها عند وصولها؛ وتظل رسالة إلى من يهمه الأمر صالحة لمدة ثلاثة أشهر."
     }
   ]
 }

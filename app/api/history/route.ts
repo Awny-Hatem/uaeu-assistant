@@ -1,6 +1,6 @@
 import db from '@/lib/db';
 import { cookies } from 'next/headers';
-import { jsonNoStore } from '@/lib/request-security';
+import { jsonNoStore, sameOriginGuard } from '@/lib/request-security';
 import { decodeSessionCookie, SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 
 function serverChatHistoryEnabled(): boolean {
@@ -52,6 +52,34 @@ export async function GET() {
 
   } catch (error) {
     console.error('History fetch error:', error instanceof Error ? error.message : 'Unknown error');
+    return jsonNoStore({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: Request) {
+  const originError = sameOriginGuard(req);
+  if (originError) return originError;
+
+  if (!serverChatHistoryEnabled()) {
+    return jsonNoStore({ cleared: true });
+  }
+
+  try {
+    const cookieStore = await cookies();
+    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+    if (!token) return jsonNoStore({ error: 'Unauthorized' }, { status: 401 });
+
+    const signedUserId = decodeSessionCookie(token)?.id;
+    const session = db.prepare(
+      'SELECT user_id FROM sessions WHERE token = ? AND expires_at > ?',
+    ).get(token, Date.now()) as SessionRow | undefined;
+    const userId = signedUserId ?? session?.user_id;
+    if (!userId) return jsonNoStore({ error: 'Unauthorized' }, { status: 401 });
+
+    db.prepare('DELETE FROM messages WHERE user_id = ?').run(userId);
+    return jsonNoStore({ cleared: true });
+  } catch (error) {
+    console.error('History deletion error:', error instanceof Error ? error.message : 'Unknown error');
     return jsonNoStore({ error: 'Internal server error' }, { status: 500 });
   }
 }

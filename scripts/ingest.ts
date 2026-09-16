@@ -4,8 +4,12 @@
  */
 import fs from "fs";
 import path from "path";
-import { embedQuery } from "../lib/vector-rag";
-import { loadKnowledgeMarkdown, splitIntoSections } from "../lib/knowledge-files";
+import { embedDocument } from "../lib/vector-rag";
+import {
+  knowledgeFingerprint,
+  loadKnowledgeMarkdown,
+  splitIntoSections,
+} from "../lib/knowledge-files";
 import { embeddingModel, getGemini } from "../lib/gemini";
 
 function loadEnvFile(file: string) {
@@ -45,9 +49,25 @@ function chunkText(text: string, maxChars: number): string[] {
       if (p.length <= maxChars) {
         buf = p;
       } else {
-        for (let i = 0; i < p.length; i += maxChars) {
-          out.push(p.slice(i, i + maxChars));
+        const words = p.split(/\s+/).filter(Boolean);
+        let window: string[] = [];
+        for (const word of words) {
+          const candidate = [...window, word].join(" ");
+          if (candidate.length <= maxChars || window.length === 0) {
+            window.push(word);
+            continue;
+          }
+
+          out.push(window.join(" "));
+          const overlap: string[] = [];
+          let overlapLength = 0;
+          for (let i = window.length - 1; i >= 0 && overlapLength < 120; i--) {
+            overlap.unshift(window[i]);
+            overlapLength += window[i].length + 1;
+          }
+          window = [...overlap, word];
         }
+        if (window.length) out.push(window.join(" "));
         buf = "";
       }
     }
@@ -79,16 +99,18 @@ async function main() {
   const rows: Row[] = [];
   let n = 0;
 
-  for (const { filename, content } of docs) {
-    const sections = splitIntoSections(content);
+  for (const { filename, content, title } of docs) {
+    const sections = splitIntoSections(content).map(
+      (section) => `# ${title}\n${section}`,
+    );
     const pieces =
       sections.length > 0
         ? sections.flatMap((s) => chunkText(s, 900))
-        : chunkText(content, 900);
+        : chunkText(`# ${title}\n${content}`, 900);
 
     for (const text of pieces) {
       const id = `${filename}#${n++}`;
-      const embedding = await embedQuery(client, model, text);
+      const embedding = await embedDocument(client, model, text);
       rows.push({ id, source: filename, text, embedding });
       process.stdout.write(".");
     }
@@ -96,7 +118,16 @@ async function main() {
 
   const outPath = path.join(process.cwd(), "data", "embeddings.json");
   fs.mkdirSync(path.dirname(outPath), { recursive: true });
-  fs.writeFileSync(outPath, JSON.stringify({ chunks: rows }));
+  fs.writeFileSync(
+    outPath,
+    JSON.stringify({
+      schemaVersion: 1,
+      model,
+      knowledgeFingerprint: knowledgeFingerprint(),
+      generatedAt: new Date().toISOString(),
+      chunks: rows,
+    }),
+  );
   console.log(`\nWrote ${rows.length} chunks to ${outPath}`);
 }
 

@@ -67,7 +67,7 @@ Use this project as your course. The goal is not to memorize Next.js; the goal i
 
 ## Week 4: Data Files
 
-**Read:** `data/faq.json`, `data/service-guides/to-whom-it-may-concern.json`
+**Read:** `data/verified-answers/academic.json`, `data/verified-answers/student-services.json`, and `data/service-guides/to-whom-it-may-concern.json`
 
 **Learn:**
 - Not everything belongs in code.
@@ -94,7 +94,7 @@ Use this project as your course. The goal is not to memorize Next.js; the goal i
 **Do:**
 1. Ask: "What is the prototype privacy model?"
 2. Confirm it returns `source: rag` in the test.
-3. Add one sentence to `data/knowledge/00-overview.md`.
+3. Add one source-backed sentence to an approved file in `data/knowledge/`, preserving its official `sourceUrl` and `lastVerified` front matter.
 4. Ask a new question that retrieves that sentence.
 
 **Your explanation prompt:** "RAG is useful because..."

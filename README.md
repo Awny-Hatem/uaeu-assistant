@@ -25,7 +25,7 @@ Local demo: http://localhost:3000 after running `npm run dev`.
 
 ## Main Capabilities
 
-- **Ask:** FAQ and RAG-based answers for UAEU student-service questions.
+- **Ask:** Deterministic, source-linked answers for common UAEU questions, with grounded RAG for supported paraphrases.
 - **Guide:** Structured guided workflow for student document requests, including To Whom It May Concern letters.
 - **Escalate:** Sensitive, low-confidence, or human-requested cases route users to official contact options.
 - **Discover:** Relevant official links such as academic calendar, events, and service navigation can appear beside answers.
@@ -50,28 +50,30 @@ components/
   ServiceGuide.tsx          Citations, communications, guided workflow UI
 
 lib/
-  ai-provider.ts            OpenAI primary provider, Gemini fallback, mock tests
-  faq.ts                    Keyword FAQ matching
-  knowledge-files.ts        Markdown retrieval fallback
-  vector-rag.ts             Optional Gemini embedding retrieval
+  ai-provider.ts            Explicit OpenAI/Gemini selection, timeout, mock tests
+  faq.ts                    Verified-answer loading and scored intent matching
+  knowledge-files.ts        Approved-source validation and lexical retrieval
+  vector-rag.ts             Fingerprinted optional Gemini embedding retrieval
   service-guides.ts         Structured guide loading and matching
   analytics.ts              Privacy-safe aggregate analytics
   access.ts                 Quota and UAEU email classification
 
 data/
-  faq.json                  Curated bilingual FAQ answers
-  knowledge/*.md            Local RAG source text
+  verified-answers/*.json   Curated bilingual answers with direct citations
+  evals/*.json              Pinned question-and-answer regression cases
+  knowledge/*.md            Approved, source-linked RAG excerpts
   service-guides/*.json     Guided service definitions
   communications.json       Official links surfaced beside answers
 ```
 
 ## Retrieval Flow
 
-1. Match curated FAQ answers first.
-2. Match guided service workflows when the question maps to a known service.
-3. Retrieve local UAEU knowledge by vector search when embeddings exist, then lexical fallback.
-4. Ask the configured AI provider to answer only from retrieved context.
-5. Escalate instead of guessing when evidence is missing or the topic is sensitive.
+1. Resolve the response language and carry the subject of short follow-up questions forward.
+2. Handle urgent safety language and explicit human-support requests before ordinary routing.
+3. Match a narrowly-scoped guided service or a verified deterministic answer.
+4. Retrieve only approved UAEU knowledge, using a compatible fingerprinted vector index when available and strict lexical retrieval otherwise.
+5. Ask the configured AI provider to answer only from the retrieved excerpts.
+6. Escalate instead of guessing when direct evidence is missing.
 
 The model does not invent citation names. The backend returns structured citations like:
 
@@ -79,7 +81,7 @@ The model does not invent citation names. The backend returns structured citatio
 {
   "content": "...",
   "source": "rag",
-  "citations": [{ "title": "...", "url": "...", "lastVerified": "2026-09-15" }]
+  "citations": [{ "title": "...", "url": "...", "lastVerified": "2026-09-16" }]
 }
 ```
 
@@ -89,7 +91,7 @@ Guides are stored as data, not hard-coded React text. The first implemented guid
 
 - To Whom It May Concern Letter / Student Document Request
 
-Each guide includes an official link, last verified date, keywords, and step-by-step instructions. Exact portal labels are marked as requiring verification when authenticated UAEU portal access is needed.
+Each guide includes an official link, last-verified date, audience, narrowly scoped trigger phrases, exclusions, and step-by-step instructions.
 
 Future UAEU integration could expose stable UI markers such as `data-help-id="document-request"` inside official portals. An embedded assistant could then highlight the relevant page area, but this prototype does not bypass portal security or inspect authenticated pages.
 
@@ -101,7 +103,9 @@ Create `.env.local` from `.env.example`:
 OPENAI_API_KEY=your-openai-api-key
 # AI_PROVIDER=openai
 # OPENAI_CHAT_MODEL=gpt-4.1-mini
+# AI_PROVIDER_TIMEOUT_MS=20000
 # GEMINI_API_KEY=your-gemini-api-key
+# AI_PROVIDER_FALLBACK=enabled
 # GEMINI_EMBEDDING_SEARCH=enabled
 # NEXT_PUBLIC_GUEST_QUESTION_LIMIT=10
 # NEXT_PUBLIC_STANDARD_ACCOUNT_QUESTION_LIMIT=50
@@ -110,10 +114,12 @@ OPENAI_API_KEY=your-openai-api-key
 # CHATBOT_DB_PATH=./data/chatbot.db
 # SERVER_CHAT_HISTORY=enabled
 # ADMIN_ANALYTICS_TOKEN=your-long-random-admin-token
-# AUTH_COOKIE_SECRET=your-long-random-cookie-signing-secret
+# AUTH_COOKIE_SECRET=replace-with-a-unique-random-secret
 ```
 
-`OPENAI_API_KEY` is the primary chat provider. Gemini is optional for fallback chat and embedding ingest. Live Gemini embedding search is opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`, which is useful only when the Gemini key has available quota. `AUTH_COOKIE_SECRET` signs device-local auth cookies for deployments that do not have durable database storage. Server-side raw chat history is disabled unless `SERVER_CHAT_HISTORY=enabled`. Local development stores SQLite in `data/chatbot.db`; Vercel uses temporary `/tmp` storage because the bundled project directory is read-only.
+Set `AI_PROVIDER=openai` or `AI_PROVIDER=gemini` explicitly in deployment. A missing key for that selected provider is an error; it does not silently switch vendors. Cross-provider fallback is disabled unless `AI_PROVIDER_FALLBACK=enabled`; enabling it means the retained conversation context may be sent to the second configured vendor after the first fails. Provider calls default to a 20-second timeout and can be changed with `AI_PROVIDER_TIMEOUT_MS`.
+
+Live Gemini embedding search is separately opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`. `AUTH_COOKIE_SECRET` is required for account/session features, must be a dedicated random value of at least 32 characters, and seals device-local auth cookies with authenticated encryption. Generate a different secret for every environment (for example, `openssl rand -base64 48`) and never commit it. Server-side raw chat history is disabled unless `SERVER_CHAT_HISTORY=enabled`. Local development stores SQLite in `data/chatbot.db`; Vercel uses temporary `/tmp` storage because the bundled project directory is read-only.
 
 ## Local Setup
 
@@ -121,6 +127,7 @@ OPENAI_API_KEY=your-openai-api-key
 npm install
 npm run dev
 npm test
+npm run eval:common
 npm run lint
 npm run build
 ```
@@ -132,21 +139,32 @@ Open http://localhost:3000 for the chat. The aggregate analytics page at http://
 - Store real keys only in `.env.local` or deployment secrets.
 - `.env.local` is ignored by git.
 - Guest and account conversation history use browser storage by default.
+- The UI stores at most 80 messages in that browser, warns against pasting sensitive records, and provides a Clear Conversation control. If server history is explicitly enabled, the same control deletes it.
 - Auth and chat API routes validate JSON content type, limit request size, apply basic rate limits, and reject cross-origin browser posts.
-- Sessions and device-local account fallback use signed, HTTP-only, same-site cookies.
+- Sessions and device-local account fallback use purpose-bound AES-256-GCM sealed, HTTP-only, same-site cookies with strict payload validation; a dedicated `AUTH_COOKIE_SECRET` is mandatory. Deploying this version intentionally invalidates older local auth cookies, so existing local users must sign in again.
+- Cross-provider AI fallback is off by default so a failed provider does not silently forward chat context to another vendor.
 - Security headers are configured in `next.config.ts`, including CSP, clickjacking protection, `nosniff`, referrer policy, and permissions policy.
 - Analytics stores aggregate fields only: source, topic, locale, guide ID, escalation reason, and timestamp.
 - The analytics dashboard is locked by `ADMIN_ANALYTICS_TOKEN`; leave it unset to keep the page closed.
 - Prototype auth is not a replacement for UAEU SSO.
 - Production should use UAEU identity, managed infrastructure, server-side abuse controls, and a formal privacy policy.
 
+## Content Quality And Evaluation
+
+- Every deterministic answer has a stable ID, response disposition, direct official citation, and verification date.
+- `data/evals/common-questions.json` pins exactly 100 representative questions, including Arabic and multi-turn follow-ups.
+- `npm run eval:common` calls the real chat route with the mock model and validates routing, answer IDs, citations, required facts, language, and safe dispositions.
+- `npm run eval:alignment` adds independent paraphrase, typo, Arabic, ambiguity, safety, and context-isolation cases; generic fallback copy fails this gate.
+- Knowledge Markdown is excluded unless its front matter says `status: approved` and contains a direct official UAEU URL plus an ISO verification date.
+- Generated embeddings are accepted only when their schema, model, dimensions, and source fingerprint match the current approved corpus.
+
 ## Current Limitations
 
-- The public UAEU service page confirms the student document service area, but exact authenticated portal steps still need official verification.
-- The local knowledge base is intentionally small and must be expanded with approved UAEU content.
+- The 100 canonical questions are a regression baseline, not proof that every possible student question is covered. The independent alignment suite exercises paraphrases and adversarial wording; unsupported or ambiguous requests receive a focused clarification instead of a guessed answer.
 - The analytics page is a token-locked prototype dashboard, not a production admin system.
-- The public Vercel demo uses signed device-local cookies for prototype account continuity and temporary serverless SQLite only as a best-effort store. Use PostgreSQL, Azure SQL, Supabase, Neon, or UAEU-managed storage before relying on persistent production accounts across devices.
+- The public Vercel demo uses encrypted device-local cookies for prototype account continuity and temporary serverless SQLite only as a best-effort store. Use UAEU SSO plus PostgreSQL, Azure SQL, Supabase, Neon, or UAEU-managed storage before relying on persistent production accounts across devices.
 - Current rate limiting is in-memory per server instance. Use a shared store such as Redis or a managed edge rate limiter before high-traffic production use.
+- Source content still needs an institutional owner and a scheduled review workflow before production use.
 
 ## Future UAEU Integration
 

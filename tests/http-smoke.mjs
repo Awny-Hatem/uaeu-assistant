@@ -100,6 +100,23 @@ console.log("PASS Signup over HTTP");
 
 assert(cookieJar.has("chat_session"), "Signup did not return a session cookie");
 assert(cookieJar.has("chat_local_accounts"), "Signup did not return a local account cookie");
+assert(cookieJar.get("chat_session")?.startsWith("sealed3."), "Session cookie is not encrypted");
+assert(
+  cookieJar.get("chat_local_accounts")?.startsWith("sealed3."),
+  "Local account cookie is not encrypted",
+);
+console.log("PASS Auth cookies use authenticated encryption");
+
+const swappedCookieSession = await request("/api/auth/session", {
+  headers: { Cookie: `chat_session=${cookieJar.get("chat_local_accounts")}` },
+});
+assert(swappedCookieSession.response.status === 200, "Swapped-cookie session request failed");
+assert(swappedCookieSession.data.user === null, "Local-account cookie was accepted as a session");
+assert(
+  !JSON.stringify(swappedCookieSession.data).includes("passwordHash"),
+  "Swapped cookie exposed a password hash",
+);
+console.log("PASS Auth cookie purposes cannot be substituted");
 
 const logout = await request("/api/auth/logout", {
   method: "POST",
@@ -124,5 +141,17 @@ assert(session.response.status === 200, `Session status ${session.response.statu
 assert(session.data.user?.username === username, "Session did not return signed-in user");
 assert(session.data.user?.universityAffiliation === "uaeu", "Session lost affiliation");
 console.log("PASS Session over HTTP");
+
+const clearHistory = await request("/api/history", { method: "DELETE" });
+assert(clearHistory.response.status === 200, `History delete status ${clearHistory.response.status}`);
+assert(clearHistory.data.cleared === true, "History delete did not confirm clearing");
+console.log("PASS Conversation history deletion over HTTP");
+
+const health = await request("/api/health");
+assert(health.response.status === 200, `Health status ${health.response.status}`);
+assert(health.data.ok === true, `Health not ready: ${JSON.stringify(health.data)}`);
+assert(health.data.knowledge?.answerPacks?.complete === true, "Answer packs are incomplete");
+assert(health.data.auth?.dedicatedSecretConfigured === true, "Auth secret is not configured");
+console.log("PASS Health completeness over HTTP");
 
 console.log(`SMOKE_ACCOUNT=${username}`);

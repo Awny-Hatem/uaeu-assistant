@@ -18,14 +18,17 @@ This plan folds in the pasted upgrade brief and separates what is implemented no
 - Prototype analytics dashboard added at `/admin/analytics` using aggregate, non-identifying events.
 - README and system report rewritten to avoid unsupported official-product claims.
 - Automated tests added for FAQ, Arabic, mixed language, RAG, citations, escalation, invalid input, and guided services.
+- Added a 100-question regression set with 98 deterministic official-source answers, one verified guide, and one explicit human handoff.
+- Replaced placeholder content with approved, source-linked admissions, course, calendar, document, and housing excerpts.
+- Added multi-turn subject resolution, stricter intent matching, stale-index rejection, and provider fallback.
 - Live Vercel deployment verified for health, Arabic guide answer, signup, logout, login, and session restoration.
 
 ## Next High-Value Product Improvements
 
-1. **Verified Content Pack**
-   - Replace placeholder admissions content with approved UAEU pages or PDFs.
-   - Add verified content for registration, fees, housing, visas, library, counseling, career services, and IT support.
-   - Add `lastVerified` and source-owner fields to every content item.
+1. **Verified Content Governance**
+   - Assign a UAEU content owner to each answer category and approve the current source-backed baseline.
+   - Schedule review of volatile dates, fees, eligibility rules, contacts, and portal paths.
+   - Add owner, effective-from, expiry, and review-status metadata to every content item.
 
 2. **More Guided Services**
    - Add transcript request, enrollment certificate, vehicle access permit, academic advising, and library help guides only after the current process is verified.
@@ -35,7 +38,7 @@ This plan folds in the pasted upgrade brief and separates what is implemented no
 3. **Content Review Workflow**
    - Add thumbs-up/thumbs-down feedback under answers.
    - Create an admin queue for unclear/outdated/wrong responses.
-   - Let reviewers promote corrected answers into `faq.json` or knowledge files.
+   - Let reviewers promote corrected answers into `data/verified-answers/*.json` or approved knowledge files.
 
 4. **Better Analytics Without PII**
    - Track broad question topics, answer source, unresolved category, language, and guide usage.
@@ -51,7 +54,7 @@ This plan folds in the pasted upgrade brief and separates what is implemented no
    - Add an allowlisted crawler for official UAEU domains.
    - Add PDF/document ingestion for approved handbooks and policies.
    - Rebuild embeddings automatically when source content changes.
-   - Add evaluations with real student questions and expected citations.
+   - Expand the existing 100-case evaluation with anonymized real student paraphrases and citation-entailment review.
 
 7. **Student Utility Features**
    - Save local bookmarks for useful answers.
@@ -67,10 +70,10 @@ This plan folds in the pasted upgrade brief and separates what is implemented no
 
 ## Manual UAEU Information Still Needed
 
-- Official English and Arabic text for admissions requirements.
-- Current contact-routing map by department or service.
-- Verified process steps for authenticated student document services.
-- Current fee, deadline, graduation, visa, and registration policies.
+- Formal content-owner approval of the English and Arabic answer packs.
+- A current contact-routing map by department or service.
+- Authenticated-portal screenshots or stable help IDs for processes that cannot be verified publicly.
+- A recurring owner-approved feed for volatile fee, deadline, graduation, visa, and registration policy changes.
 - Permission to use UAEU branding in any public deployment.
 - Production decision on identity, retention, hosting, and data governance.
 

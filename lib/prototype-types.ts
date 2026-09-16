@@ -1,4 +1,5 @@
 export type AssistantSource =
+  | "conversation"
   | "faq"
   | "rag"
   | "web"
@@ -22,8 +23,11 @@ export type Citation = {
 
 export type GuideStep = {
   title: string;
+  titleAr?: string;
   instruction: string;
+  instructionAr?: string;
   note?: string;
+  noteAr?: string;
   url?: string;
 };
 
@@ -32,12 +36,15 @@ export type ServiceGuide = {
   title: string;
   titleAr?: string;
   description: string;
+  descriptionAr?: string;
   officialUrl: string;
   lastVerified: string;
   audience: string[];
   keywords: string[];
+  excludeKeywords?: string[];
   requiresVerification?: boolean;
   verificationNote?: string;
+  verificationNoteAr?: string;
   steps: GuideStep[];
 };
 

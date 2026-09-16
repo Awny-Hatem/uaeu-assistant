@@ -17,6 +17,17 @@ type Bucket = {
 
 const buckets = new Map<string, Bucket>();
 const encoder = new TextEncoder();
+const MAX_RATE_LIMIT_BUCKETS = 10_000;
+let requestsUntilBucketSweep = 256;
+
+function pruneExpiredBuckets(now: number, force = false): void {
+  requestsUntilBucketSweep -= 1;
+  if (!force && requestsUntilBucketSweep > 0) return;
+  requestsUntilBucketSweep = 256;
+  for (const [key, bucket] of buckets) {
+    if (bucket.resetAt <= now) buckets.delete(key);
+  }
+}
 
 function noStore(response: NextResponse): NextResponse {
   response.headers.set("Cache-Control", "no-store, max-age=0");
@@ -148,6 +159,16 @@ export function rateLimitGuard(
   const bucket = buckets.get(key);
 
   if (!bucket || bucket.resetAt <= now) {
+    if (bucket) buckets.delete(key);
+    pruneExpiredBuckets(now, buckets.size >= MAX_RATE_LIMIT_BUCKETS);
+    if (!buckets.has(key) && buckets.size >= MAX_RATE_LIMIT_BUCKETS) {
+      const response = jsonNoStore(
+        { error: "Too many requests. Please wait a moment and try again." },
+        { status: 429 },
+      );
+      response.headers.set("Retry-After", "60");
+      return response;
+    }
     buckets.set(key, { count: 1, resetAt: now + options.windowMs });
     return null;
   }

@@ -7,6 +7,9 @@
     "build": "next build",
     "test": "tsx tests/prototype-checks.ts",
     "test:http": "node tests/http-smoke.mjs",
+    "eval:alignment": "tsx scripts/evaluate-answer-alignment.ts",
+    "eval:sources": "tsx scripts/check-source-urls.ts",
+    "eval:common": "tsx scripts/evaluate-common-questions.ts",
     "start": "next start",
     "lint": "eslint",
     "ingest": "npx tsx scripts/ingest.ts"

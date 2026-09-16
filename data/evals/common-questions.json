@@ -1,0 +1,1022 @@
+[
+  {
+    "id": "A01",
+    "category": "admissions",
+    "question": "How do I apply to UAEU as a first-year undergraduate?",
+    "expectedAnswerId": "admissions-apply-undergraduate",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["apply", "undergraduate"],
+    "minCitations": 1
+  },
+  {
+    "id": "A02",
+    "category": "admissions",
+    "question": "What are the admission requirements for UAE national students?",
+    "expectedAnswerId": "admissions-requirements-uae-national",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["requirements", "UAE national"],
+    "minCitations": 1
+  },
+  {
+    "id": "A03",
+    "category": "admissions",
+    "question": "What are the admission requirements for international students?",
+    "expectedAnswerId": "admissions-requirements-international",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["requirements", "international"],
+    "minCitations": 1
+  },
+  {
+    "id": "A04",
+    "category": "admissions",
+    "question": "Which documents do I need for my undergraduate application?",
+    "expectedAnswerId": "admissions-documents-undergraduate",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["documents", "application"],
+    "minCitations": 1
+  },
+  {
+    "id": "A05",
+    "category": "admissions",
+    "question": "What is the application deadline?",
+    "messages": [
+      { "role": "user", "content": "I want to apply for Fall 2027." },
+      { "role": "assistant", "content": "I can help you find the official application dates." },
+      { "role": "user", "content": "What is the application deadline?" }
+    ],
+    "expectedAnswerId": "admissions-application-deadline",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["Fall 2027", "deadline"],
+    "minCitations": 1
+  },
+  {
+    "id": "A06",
+    "category": "admissions",
+    "question": "How can I check my application status?",
+    "expectedAnswerId": "admissions-application-status",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["application", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "A07",
+    "category": "admissions",
+    "question": "What minimum high-school average do I need for Computer Science?",
+    "expectedAnswerId": "admissions-minimum-average-computer-science",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["Computer Science", "average"],
+    "minCitations": 1
+  },
+  {
+    "id": "A08",
+    "category": "admissions",
+    "question": "Do I need IELTS, TOEFL, or EmSAT for admission?",
+    "expectedAnswerId": "admissions-language-tests",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["IELTS", "admission"],
+    "minCitations": 1
+  },
+  {
+    "id": "A09",
+    "category": "admissions",
+    "question": "How do I transfer to UAEU from another university?",
+    "expectedAnswerId": "admissions-transfer-application",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["transfer", "apply"],
+    "minCitations": 1
+  },
+  {
+    "id": "A10",
+    "category": "admissions",
+    "question": "How many transfer credits will UAEU accept?",
+    "expectedAnswerId": "admissions-transfer-credits",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["transfer", "credits"],
+    "minCitations": 1
+  },
+  {
+    "id": "A11",
+    "category": "admissions",
+    "question": "How do I apply for a master's or PhD program?",
+    "expectedAnswerId": "admissions-graduate-application",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["graduate", "apply"],
+    "minCitations": 1
+  },
+  {
+    "id": "A12",
+    "category": "admissions",
+    "question": "ما البرامج المتاحة للطلبة الجدد في جامعة الإمارات؟",
+    "expectedAnswerId": "admissions-programs-new-students",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["البرامج", "الطلبة"],
+    "minCitations": 1
+  },
+  {
+    "id": "R01",
+    "category": "registration",
+    "question": "When does course registration open for next semester?",
+    "expectedAnswerId": "registration-opening-date",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["registration", "semester"],
+    "minCitations": 1
+  },
+  {
+    "id": "R02",
+    "category": "registration",
+    "question": "How do I register for a course in the student portal?",
+    "expectedAnswerId": "course-registration-portal",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["course", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "R03",
+    "category": "registration",
+    "question": "What can I do if a course section is full?",
+    "expectedAnswerId": "course-section-full",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["section", "full"],
+    "minCitations": 1
+  },
+  {
+    "id": "R04",
+    "category": "registration",
+    "question": "How do I add or drop a course?",
+    "expectedAnswerId": "course-add-drop",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["add", "drop"],
+    "minCitations": 1
+  },
+  {
+    "id": "R05",
+    "category": "registration",
+    "question": "How do I withdraw from a course after add/drop?",
+    "expectedAnswerId": "course-withdrawal",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["withdraw", "course"],
+    "minCitations": 1
+  },
+  {
+    "id": "R06",
+    "category": "courses",
+    "question": "What are the prerequisites for this course?",
+    "messages": [
+      { "role": "user", "content": "How can I take Data Structures in my Computer Science major?" },
+      { "role": "assistant", "content": "I can help you check the course requirements." },
+      { "role": "user", "content": "What are the prerequisites for this course?" }
+    ],
+    "expectedAnswerId": "course-prerequisites-data-structures",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["Data Structures", "prerequisite"],
+    "minCitations": 1
+  },
+  {
+    "id": "R07",
+    "category": "registration",
+    "question": "Can I request a prerequisite override?",
+    "expectedAnswerId": "prerequisite-override",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["prerequisite", "override"],
+    "minCitations": 1
+  },
+  {
+    "id": "R08",
+    "category": "registration",
+    "question": "Why do I have a registration hold, and how do I clear it?",
+    "expectedAnswerId": "registration-hold",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["hold", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "R09",
+    "category": "registration",
+    "question": "What is the minimum and maximum credit load per semester?",
+    "expectedAnswerId": "semester-credit-load",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["credit", "semester"],
+    "minCitations": 1
+  },
+  {
+    "id": "R10",
+    "category": "programs",
+    "question": "How can I change my major?",
+    "expectedAnswerId": "change-major",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["change", "major"],
+    "minCitations": 1
+  },
+  {
+    "id": "R11",
+    "category": "programs",
+    "question": "كيف أضيف تخصصاً فرعياً (minor)؟",
+    "expectedAnswerId": "declare-minor",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["تخصصاً فرعياً"],
+    "minCitations": 1
+  },
+  {
+    "id": "R12",
+    "category": "advising",
+    "question": "How can I contact my academic advisor?",
+    "expectedAnswerId": "academic-advisor-contact",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["academic advisor", "contact"],
+    "minCitations": 1
+  },
+  {
+    "id": "R13",
+    "category": "courses",
+    "question": "Will Data Structures be offered next semester?",
+    "expectedAnswerId": "course-offering-data-structures",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["Data Structures", "semester"],
+    "minCitations": 1
+  },
+  {
+    "id": "R14",
+    "category": "registration",
+    "question": "عندي تعارض في جدول المحاضرات، ماذا أفعل؟",
+    "expectedAnswerId": "class-schedule-conflict",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["تعارض", "الجدول"],
+    "minCitations": 1
+  },
+  {
+    "id": "C01",
+    "category": "calendar",
+    "question": "When does the next semester start?",
+    "expectedAnswerId": "semester-start-date",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["semester", "start"],
+    "minCitations": 1
+  },
+  {
+    "id": "C02",
+    "category": "exams",
+    "question": "Where can I find my final exam schedule?",
+    "expectedAnswerId": "final-exam-schedule",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["exam", "schedule"],
+    "minCitations": 1
+  },
+  {
+    "id": "C03",
+    "category": "exams",
+    "question": "What should I do if two final exams conflict?",
+    "expectedAnswerId": "final-exam-conflict",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["exam", "conflict"],
+    "minCitations": 1
+  },
+  {
+    "id": "C04",
+    "category": "exams",
+    "question": "I missed an exam because I was ill; what should I do?",
+    "expectedAnswerId": "missed-exam-medical",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["missed", "exam"],
+    "minCitations": 1
+  },
+  {
+    "id": "C05",
+    "category": "academics",
+    "question": "How is GPA calculated and what grading scale does UAEU use?",
+    "expectedAnswerId": "grading-scale-gpa",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["GPA", "grading"],
+    "minCitations": 1
+  },
+  {
+    "id": "C06",
+    "category": "academics",
+    "question": "أين أستطيع رؤية درجاتي النهائية؟",
+    "expectedAnswerId": "final-grades-view",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["الدرجات", "البوابة"],
+    "minCitations": 1
+  },
+  {
+    "id": "C07",
+    "category": "academics",
+    "question": "How do I appeal a course grade?",
+    "expectedAnswerId": "grade-appeal",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["appeal", "grade"],
+    "minCitations": 1
+  },
+  {
+    "id": "C08",
+    "category": "academics",
+    "question": "What does academic probation mean, and how can I return to good standing?",
+    "expectedAnswerId": "academic-probation",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["probation", "good standing"],
+    "minCitations": 1
+  },
+  {
+    "id": "C09",
+    "category": "academics",
+    "question": "What is the class attendance and absence policy?",
+    "expectedAnswerId": "attendance-policy",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["attendance", "policy"],
+    "minCitations": 1
+  },
+  {
+    "id": "C10",
+    "category": "calendar",
+    "question": "أين أجد مواعيد الإجازات الرسمية والامتحانات؟",
+    "expectedAnswerId": "holidays-and-exams-calendar",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["التقويم", "الامتحانات"],
+    "minCitations": 1
+  },
+  {
+    "id": "D01",
+    "category": "documents",
+    "question": "How do I request a To Whom It May Concern letter?",
+    "expectedAnswerId": "to-whom-it-may-concern",
+    "expectedSource": "guide",
+    "expectedDisposition": "guide",
+    "requiredTerms": ["To Whom It May Concern", "official UAEU"],
+    "minCitations": 1
+  },
+  {
+    "id": "D02",
+    "category": "documents",
+    "question": "How do I order an official transcript?",
+    "expectedAnswerId": "official-transcript-current-student",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["official transcript"],
+    "minCitations": 1
+  },
+  {
+    "id": "D03",
+    "category": "documents",
+    "question": "How can I get an enrollment certificate?",
+    "expectedAnswerId": "enrollment-certificate",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["enrollment certificate"],
+    "minCitations": 1
+  },
+  {
+    "id": "D04",
+    "category": "documents",
+    "question": "هل يمكنني طلب كشف الدرجات بالعربية أو الإنجليزية؟",
+    "expectedAnswerId": "transcript-language-options",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["كشف الدرجات", "اللغة"],
+    "minCitations": 1
+  },
+  {
+    "id": "D05",
+    "category": "documents",
+    "question": "How long does it take?",
+    "messages": [
+      { "role": "user", "content": "I need an enrollment certificate." },
+      { "role": "assistant", "content": "I can explain the official student document process." },
+      { "role": "user", "content": "How long does it take?" }
+    ],
+    "expectedAnswerId": "student-document-processing-time",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["enrollment certificate", "processing"],
+    "minCitations": 1
+  },
+  {
+    "id": "D06",
+    "category": "documents",
+    "question": "How do I get a UAEU document attested or verified?",
+    "expectedAnswerId": "document-attestation-verification",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["document", "verification"],
+    "minCitations": 1
+  },
+  {
+    "id": "D07",
+    "category": "graduation",
+    "question": "What are the graduation requirements for my program?",
+    "expectedAnswerId": "graduation-requirements-program",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["graduation", "program"],
+    "minCitations": 1
+  },
+  {
+    "id": "D08",
+    "category": "graduation",
+    "question": "How do I apply for graduation?",
+    "expectedAnswerId": "graduation-application",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["apply", "graduation"],
+    "minCitations": 1
+  },
+  {
+    "id": "D09",
+    "category": "graduation",
+    "question": "How can I check whether I have been cleared to graduate?",
+    "expectedAnswerId": "graduation-clearance-status",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["clearance", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "D10",
+    "category": "graduation",
+    "question": "When and where is the graduation ceremony?",
+    "expectedAnswerId": "graduation-ceremony-details",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["graduation ceremony"],
+    "minCitations": 1
+  },
+  {
+    "id": "D11",
+    "category": "graduation",
+    "question": "How do I collect my degree certificate after graduation?",
+    "expectedAnswerId": "degree-certificate-collection",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["degree certificate", "collect"],
+    "minCitations": 1
+  },
+  {
+    "id": "D12",
+    "category": "documents",
+    "question": "فقدت شهادتي الجامعية، كيف أطلب نسخة بدل فاقد؟",
+    "expectedAnswerId": "replacement-degree-certificate",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["بدل فاقد", "الشهادة"],
+    "minCitations": 1
+  },
+  {
+    "id": "F01",
+    "category": "fees",
+    "question": "How much is tuition for my program?",
+    "expectedAnswerId": "tuition-program-cost",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["tuition", "program"],
+    "minCitations": 1
+  },
+  {
+    "id": "F02",
+    "category": "fees",
+    "question": "When is the tuition payment deadline?",
+    "expectedAnswerId": "tuition-payment-deadline",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["payment", "deadline"],
+    "minCitations": 1
+  },
+  {
+    "id": "F03",
+    "category": "fees",
+    "question": "What payment methods does UAEU accept?",
+    "expectedAnswerId": "tuition-payment-methods",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["payment", "method"],
+    "minCitations": 1
+  },
+  {
+    "id": "F04",
+    "category": "fees",
+    "question": "Where can I download a receipt for my payment?",
+    "expectedAnswerId": "payment-receipt-download",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["receipt", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "F05",
+    "category": "fees",
+    "question": "Can I get a refund if I drop or withdraw from a course?",
+    "expectedAnswerId": "course-refund-policy",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["refund", "withdraw"],
+    "minCitations": 1
+  },
+  {
+    "id": "F06",
+    "category": "scholarships",
+    "question": "ما المنح الدراسية المتاحة لطلبة جامعة الإمارات؟",
+    "expectedAnswerId": "scholarships-available",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["المنح", "الطلبة"],
+    "minCitations": 1
+  },
+  {
+    "id": "F07",
+    "category": "scholarships",
+    "question": "Am I eligible?",
+    "messages": [
+      { "role": "user", "content": "I am interested in the scholarship you just described." },
+      { "role": "assistant", "content": "Eligibility depends on the official criteria for that scholarship." },
+      { "role": "user", "content": "Am I eligible?" }
+    ],
+    "expectedAnswerId": "scholarship-eligibility",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["scholarship", "eligibility"],
+    "minCitations": 1
+  },
+  {
+    "id": "F08",
+    "category": "scholarships",
+    "question": "How can I check the status of my scholarship application?",
+    "expectedAnswerId": "scholarship-application-status",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["scholarship", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "F09",
+    "category": "financial-aid",
+    "question": "Is emergency financial assistance available?",
+    "expectedAnswerId": "emergency-financial-assistance",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["financial assistance"],
+    "minCitations": 1
+  },
+  {
+    "id": "F10",
+    "category": "fees",
+    "question": "كيف أعرف المبلغ المتبقي عليّ في حساب الطالب؟",
+    "expectedAnswerId": "student-account-balance",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["الرصيد", "البوابة"],
+    "minCitations": 1
+  },
+  {
+    "id": "I01",
+    "category": "it",
+    "question": "How do I reset my UAEU account password?",
+    "expectedAnswerId": "account-password-reset",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["password", "reset"],
+    "minCitations": 1
+  },
+  {
+    "id": "I02",
+    "category": "it",
+    "question": "Why can't I sign in to the student portal?",
+    "expectedAnswerId": "student-portal-sign-in",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["sign in", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "I03",
+    "category": "it",
+    "question": "I changed my phone; how do I reset multi-factor authentication?",
+    "expectedAnswerId": "multi-factor-authentication-reset",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["multi-factor authentication", "reset"],
+    "minCitations": 1
+  },
+  {
+    "id": "I04",
+    "category": "it",
+    "question": "How do I connect my laptop or phone to campus Wi-Fi?",
+    "expectedAnswerId": "campus-wifi-connection",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["Wi-Fi", "campus"],
+    "minCitations": 1
+  },
+  {
+    "id": "I05",
+    "category": "it",
+    "question": "كيف أدخل إلى البريد الإلكتروني الجامعي؟",
+    "expectedAnswerId": "student-email-access",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["البريد الإلكتروني"],
+    "minCitations": 1
+  },
+  {
+    "id": "I06",
+    "category": "it",
+    "question": "Banner or the learning management system is not working; where do I report it?",
+    "expectedAnswerId": "academic-systems-support",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["technical support", "report"],
+    "minCitations": 1
+  },
+  {
+    "id": "I07",
+    "category": "it",
+    "question": "Can students download Microsoft Office or other university software?",
+    "expectedAnswerId": "student-software-access",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["software", "students"],
+    "minCitations": 1
+  },
+  {
+    "id": "I08",
+    "category": "it-safety",
+    "question": "تلقيت رسالة بريد مشبوهة، كيف أبلغ عنها؟",
+    "expectedAnswerId": "phishing-report",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["رسالة", "الإبلاغ"],
+    "minCitations": 1
+  },
+  {
+    "id": "L01",
+    "category": "library",
+    "question": "What are the UAEU library opening hours?",
+    "expectedAnswerId": "library-opening-hours",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["library", "hours"],
+    "minCitations": 1
+  },
+  {
+    "id": "L02",
+    "category": "library",
+    "question": "How many books can I borrow and for how long?",
+    "expectedAnswerId": "library-borrowing-limits",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["borrow", "books"],
+    "minCitations": 1
+  },
+  {
+    "id": "L03",
+    "category": "library",
+    "question": "كيف أجدد استعارة كتاب من المكتبة عبر الإنترنت؟",
+    "expectedAnswerId": "library-book-renewal",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["تجديد", "الكتاب"],
+    "minCitations": 1
+  },
+  {
+    "id": "L04",
+    "category": "library",
+    "question": "How can I access library databases from off campus?",
+    "expectedAnswerId": "library-databases-remote-access",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["databases", "off campus"],
+    "minCitations": 1
+  },
+  {
+    "id": "L05",
+    "category": "library",
+    "question": "How do I reserve a group study room?",
+    "expectedAnswerId": "library-study-room-reservation",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["study room", "reserve"],
+    "minCitations": 1
+  },
+  {
+    "id": "L06",
+    "category": "campus-services",
+    "question": "Where can I print, scan, or photocopy on campus?",
+    "expectedAnswerId": "campus-print-scan-copy",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["print", "campus"],
+    "minCitations": 1
+  },
+  {
+    "id": "L07",
+    "category": "library",
+    "question": "كيف أتواصل مع أمين مكتبة لمساعدتي في البحث؟",
+    "expectedAnswerId": "librarian-research-help",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["أمين مكتبة", "البحث"],
+    "minCitations": 1
+  },
+  {
+    "id": "P01",
+    "category": "housing",
+    "question": "How do I apply for student housing?",
+    "expectedAnswerId": "student-housing-application",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["housing", "apply"],
+    "minCitations": 1
+  },
+  {
+    "id": "P02",
+    "category": "housing",
+    "question": "How much does university housing cost?",
+    "expectedAnswerId": "student-housing-cost",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["housing", "cost"],
+    "minCitations": 1
+  },
+  {
+    "id": "P03",
+    "category": "housing",
+    "question": "How can I check my room assignment or housing application status?",
+    "expectedAnswerId": "housing-application-status",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["housing", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "P04",
+    "category": "housing",
+    "question": "When can I move into student housing?",
+    "expectedAnswerId": "housing-move-in-date",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["housing", "move-in"],
+    "minCitations": 1
+  },
+  {
+    "id": "P05",
+    "category": "transport",
+    "question": "أين أجد جدول حافلات الجامعة؟",
+    "expectedAnswerId": "campus-shuttle-schedule",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["الحافلات", "الجدول"],
+    "minCitations": 1
+  },
+  {
+    "id": "P06",
+    "category": "transport",
+    "question": "How do I apply for a campus parking or vehicle permit?",
+    "expectedAnswerId": "vehicle-parking-permit",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["vehicle permit", "campus"],
+    "minCitations": 1
+  },
+  {
+    "id": "P07",
+    "category": "campus-services",
+    "question": "Where is lost and found, and how do I report a lost item?",
+    "expectedAnswerId": "lost-and-found",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["lost and found", "report"],
+    "minCitations": 1
+  },
+  {
+    "id": "P08",
+    "category": "dining",
+    "question": "What dining options and meal plans are available on campus?",
+    "expectedAnswerId": "campus-dining-options",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["dining", "campus"],
+    "minCitations": 1
+  },
+  {
+    "id": "P09",
+    "category": "student-life",
+    "question": "How can I join a student club or start a new club?",
+    "expectedAnswerId": "student-clubs",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["student club"],
+    "minCitations": 1
+  },
+  {
+    "id": "P10",
+    "category": "recreation",
+    "question": "What sports facilities can students use?",
+    "expectedAnswerId": "sports-facilities",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["sports", "facilities"],
+    "minCitations": 1
+  },
+  {
+    "id": "P11",
+    "category": "events",
+    "question": "ما الفعاليات وورش العمل القادمة في الجامعة؟",
+    "expectedAnswerId": "university-events-workshops",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["الفعاليات", "ورش العمل"],
+    "minCitations": 1
+  },
+  {
+    "id": "W01",
+    "category": "health",
+    "question": "How do I book an appointment at the campus health clinic?",
+    "expectedAnswerId": "health-clinic-appointment",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["health clinic", "appointment"],
+    "minCitations": 1
+  },
+  {
+    "id": "W02",
+    "category": "safety",
+    "question": "What should I do in a medical emergency on campus?",
+    "expectedAnswerId": "campus-medical-emergency",
+    "expectedSource": "faq",
+    "expectedDisposition": "urgent",
+    "requiredTerms": ["emergency", "immediately"],
+    "minCitations": 1
+  },
+  {
+    "id": "W03",
+    "category": "wellbeing",
+    "question": "كيف أحجز موعداً سرياً مع الإرشاد النفسي؟",
+    "expectedAnswerId": "counseling-appointment",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["الإرشاد النفسي", "موعد"],
+    "minCitations": 1
+  },
+  {
+    "id": "W04",
+    "category": "safety",
+    "question": "I am in immediate emotional crisis and might hurt myself. What should I do?",
+    "expectedAnswerId": "mental-health-crisis",
+    "expectedSource": "faq",
+    "expectedDisposition": "urgent",
+    "requiredTerms": ["immediate", "emergency"],
+    "minCitations": 1
+  },
+  {
+    "id": "W05",
+    "category": "accessibility",
+    "question": "How do I request disability or accessibility accommodations?",
+    "expectedAnswerId": "accessibility-accommodations",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["accessibility", "accommodations"],
+    "minCitations": 1
+  },
+  {
+    "id": "W06",
+    "category": "safety",
+    "question": "How can I report harassment or make a formal complaint?",
+    "expectedAnswerId": "harassment-formal-complaint",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["harassment", "complaint"],
+    "minCitations": 1
+  },
+  {
+    "id": "W07",
+    "category": "safety",
+    "question": "ما رقم أمن الجامعة وكيف أبلغ عن حالة طارئة؟",
+    "expectedAnswerId": "campus-security-emergency",
+    "expectedSource": "faq",
+    "expectedDisposition": "urgent",
+    "requiredTerms": ["أمن الجامعة", "الطوارئ"],
+    "minCitations": 1
+  },
+  {
+    "id": "V01",
+    "category": "international",
+    "question": "How do international students apply for a student visa?",
+    "expectedAnswerId": "student-visa-application",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["student visa", "international"],
+    "minCitations": 1
+  },
+  {
+    "id": "V02",
+    "category": "international",
+    "question": "How do I renew my student visa before it expires?",
+    "expectedAnswerId": "student-visa-renewal",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["student visa", "renew"],
+    "minCitations": 1
+  },
+  {
+    "id": "V03",
+    "category": "international",
+    "question": "ما المستندات المطلوبة لتجديد تأشيرة الطالب؟",
+    "expectedAnswerId": "visa-renewal-documents",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["المستندات", "التأشيرة"],
+    "minCitations": 1
+  },
+  {
+    "id": "V04",
+    "category": "international",
+    "question": "How can I check my visa application or renewal status?",
+    "expectedAnswerId": "visa-status",
+    "expectedSource": "faq",
+    "expectedDisposition": "portal",
+    "requiredTerms": ["visa", "portal"],
+    "minCitations": 1
+  },
+  {
+    "id": "V05",
+    "category": "international",
+    "question": "هل يحصل الطلبة الدوليون على تأمين صحي؟",
+    "expectedAnswerId": "international-student-health-insurance",
+    "expectedSource": "faq",
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["الطلبة الدوليون", "التأمين الصحي"],
+    "minCitations": 1
+  },
+  {
+    "id": "K01",
+    "category": "careers",
+    "question": "Can the career center review my CV or help me prepare for an interview?",
+    "expectedAnswerId": "career-cv-interview-support",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["career", "CV"],
+    "minCitations": 1
+  },
+  {
+    "id": "K02",
+    "category": "careers",
+    "question": "أين أجد فرص التدريب والعمل للطلبة؟",
+    "expectedAnswerId": "internships-student-jobs",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["التدريب", "العمل"],
+    "minCitations": 1
+  },
+  {
+    "id": "K03",
+    "category": "alumni",
+    "question": "I am an alumnus; how can I request an official transcript?",
+    "expectedAnswerId": "alumni-official-transcript",
+    "expectedSource": "faq",
+    "expectedDisposition": "answer",
+    "requiredTerms": ["alumni", "official transcript"],
+    "minCitations": 1
+  },
+  {
+    "id": "K04",
+    "category": "contact-routing",
+    "question": "I am not sure which UAEU office handles my issue. How can I reach the right person?",
+    "expectedAnswerId": "contact-router",
+    "expectedSource": "escalated",
+    "expectedDisposition": "handoff",
+    "requiredTerms": ["Human Support", "official UAEU contact"],
+    "minCitations": 1
+  }
+]

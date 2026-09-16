@@ -1,0 +1,937 @@
+{
+  "schemaVersion": 1,
+  "globalForbiddenPatterns": [
+    "Prototype Answer",
+    "course is important",
+    "simply check (?:the )?website",
+    "This is a local test response",
+    "\\[ESCALATE\\]"
+  ],
+  "cases": [
+    {
+      "id": "ADM-PARA-01",
+      "category": "admissions",
+      "question": "What's the process to apply as a first year undergraduate at UAEU?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "admissions-apply-undergraduate",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Undergraduate application", "official Admission Application for Bachelor's Program"],
+      "forbiddenPatterns": ["transfer applicant"],
+      "minCitations": 1
+    },
+    {
+      "id": "ADM-TYPO-02",
+      "category": "admissions",
+      "question": "What ar the admission requirements for international students?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "admissions-requirements-international",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["International undergraduate admission requirements", "UAE Ministry equivalency"],
+      "forbiddenPatterns": ["UAE national admission requirements"],
+      "minCitations": 1
+    },
+    {
+      "id": "ADM-FOLLOW-03",
+      "category": "admissions",
+      "question": "What is the application deadline?",
+      "messages": [
+        { "role": "user", "content": "I want to apply for Fall 2027." },
+        { "role": "assistant", "content": "I can check the official admission cycle." },
+        { "role": "user", "content": "What is the application deadline?" }
+      ],
+      "expectedSource": "faq",
+      "expectedAnswerId": "admissions-application-deadline",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Fall 2027", "application portal", "do not substitute an academic-calendar date"],
+      "forbiddenPatterns": ["tuition payment deadline"],
+      "minCitations": 1
+    },
+    {
+      "id": "ADM-AR-04",
+      "category": "admissions",
+      "question": "ما هي برامج البكالوريوس المتاحة للطلبة الجدد؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "admissions-programs-new-students",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["البرامج المتاحة", "الدليل الحالي"],
+      "forbiddenPatterns": ["Prototype Answer"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "REG-TYPO-01",
+      "category": "registration",
+      "question": "When duz course registration open for next semester?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "registration-opening-date",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["Registration date", "academic calendar", "student portal"],
+      "forbiddenPatterns": ["application deadline"],
+      "minCitations": 1
+    },
+    {
+      "id": "REG-PARA-02",
+      "category": "registration",
+      "question": "I need to add or drop a course. Where do I do that?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-add-drop",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["Add or drop a course", "registration portal", "add/drop period"],
+      "forbiddenPatterns": ["withdraw from a course"],
+      "minCitations": 1
+    },
+    {
+      "id": "REG-AR-03",
+      "category": "registration",
+      "question": "لدي تعارض في جدول المحاضرات، ما الإجراء؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "class-schedule-conflict",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["تعارض", "الجدول"],
+      "forbiddenPatterns": ["الامتحانات النهائية"],
+      "minCitations": 1
+    },
+    {
+      "id": "REG-PARA-04",
+      "category": "registration",
+      "question": "My registration has a hold. How can I clear the hold?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "registration-hold",
+      "expectedDisposition": "portal",
+      "requiredPatterns": ["Registration hold", "student portal", "cannot view your hold"],
+      "forbiddenPatterns": ["remove it for you"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "SHOT-INITIAL-01",
+      "category": "courses",
+      "question": "How can I apply to Data Structures in a CS major?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "register-csbp319-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["CSBP319 Data Structures", "3-credit course", "CSBP219", "CSBP221"],
+      "forbiddenPatterns": ["typically", "Introduction to Programming"],
+      "minCitations": 1
+    },
+    {
+      "id": "SHOT-FOLLOW-02",
+      "category": "courses",
+      "question": "What are the prerequisites for this course?",
+      "messages": [
+        { "role": "user", "content": "How can I apply to Data Structures in a CS major?" },
+        { "role": "assistant", "content": "CSBP319 is registered through the course-registration service." },
+        { "role": "user", "content": "What are the prerequisites for this course?" }
+      ],
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-prerequisites-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["CSBP219[\\s\\S]*minimum grade of D", "CSBP221[\\s\\S]*pre- or corequisite[\\s\\S]*minimum grade of D"],
+      "forbiddenPatterns": ["Introduction to Programming"],
+      "minCitations": 1
+    },
+    {
+      "id": "SHOT-DIRECT-03",
+      "category": "courses",
+      "question": "What are the prerequisites for Data Structures CSBP319?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-prerequisites-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["CSBP319", "CSBP219", "CSBP221"],
+      "forbiddenPatterns": ["typically"],
+      "minCitations": 1
+    },
+    {
+      "id": "SHOT-VERIFY-04",
+      "category": "courses",
+      "question": "Can you verify the prerequisite from the official page?",
+      "messages": [
+        { "role": "user", "content": "What are the prerequisites for Data Structures CSBP319?" },
+        { "role": "assistant", "content": "I will use the current UAEU course catalog." },
+        { "role": "user", "content": "Can you verify the prerequisite from the official page?" }
+      ],
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-prerequisites-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["current CSBP319", "minimum grade of D"],
+      "forbiddenPatterns": ["How This Prototype Uses Sources"],
+      "minCitations": 1
+    },
+    {
+      "id": "COURSE-FALSE-DB-05",
+      "category": "courses",
+      "question": "What is the prerequisite for Database Systems?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-prerequisites-database-systems",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["CSBP340 Database Systems", "CSBP319[\\s\\S]*minimum grade of D", "CSBP323[\\s\\S]*minimum grade of D"],
+      "forbiddenPatterns": ["Library Help", "e-resources"],
+      "minCitations": 1
+    },
+    {
+      "id": "COURSE-PLAN-06",
+      "category": "courses",
+      "question": "What courses can I take for 2nd semester CS plan?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "computer-science-second-semester-plan",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["Fall 2025", "CSBP219", "CSBP221", "16 credits"],
+      "forbiddenPatterns": ["course offerings vary"],
+      "minCitations": 1
+    },
+    {
+      "id": "COURSE-AR-07",
+      "category": "courses",
+      "question": "كيف أسجل مساق هياكل البيانات CSBP319؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "register-csbp319-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["CSBP319", "CSBP219", "CSBP221"],
+      "forbiddenPatterns": ["Prototype Answer"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "PROGRAM-PARA-01",
+      "category": "programs",
+      "question": "What is the process to change my major?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "change-major",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Change your major", "official"],
+      "forbiddenPatterns": ["transfer to UAEU"],
+      "minCitations": 1
+    },
+    {
+      "id": "ADVISING-PARA-01",
+      "category": "advising",
+      "question": "Where do I find contact details for my academic advisor?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "academic-advisor-contact",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["student portal", "college advising office"],
+      "forbiddenPatterns": ["Human Support"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "ACADEMIC-TYPO-01",
+      "category": "academics",
+      "question": "How iz GPA calculated and what grading scale does UAEU use?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "grading-scale-gpa",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["GPA", "quality points"],
+      "forbiddenPatterns": ["check your syllabus only"],
+      "minCitations": 1
+    },
+    {
+      "id": "ACADEMIC-PARA-02",
+      "category": "academics",
+      "question": "I disagree with my course grade. How do I appeal the grade?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "grade-appeal",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["grade appeal", "official"],
+      "forbiddenPatterns": ["change your grade"],
+      "minCitations": 1
+    },
+    {
+      "id": "ACADEMIC-PARA-03",
+      "category": "academics",
+      "question": "How do I get back to good standing after academic probation?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "academic-probation",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["academic probation", "good standing"],
+      "forbiddenPatterns": ["you are dismissed"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "CAL-PARA-01",
+      "category": "calendar",
+      "question": "On what date does the next semester start?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "semester-start-date",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["semester start", "academic calendar"],
+      "forbiddenPatterns": ["application deadline"],
+      "minCitations": 1
+    },
+    {
+      "id": "CAL-AR-02",
+      "category": "calendar",
+      "question": "أين أجد مواعيد الإجازات والامتحانات في التقويم الجامعي؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "holidays-and-exams-calendar",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["التقويم الأكاديمي", "الامتحانات"],
+      "forbiddenPatterns": ["Prototype Answer"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "EXAM-PARA-01",
+      "category": "exams",
+      "question": "Where is my personal final exam schedule shown?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "final-exam-schedule",
+      "expectedDisposition": "portal",
+      "requiredPatterns": ["final exam schedule", "student portal"],
+      "forbiddenPatterns": ["general exam period is your schedule"],
+      "minCitations": 1
+    },
+    {
+      "id": "EXAM-PARA-02",
+      "category": "exams",
+      "question": "Two of my final exams are at the same time. What should I do?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "final-exam-conflict",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["exam conflict", "official"],
+      "forbiddenPatterns": ["skip either exam"],
+      "minCitations": 1
+    },
+    {
+      "id": "EXAM-PARA-03",
+      "category": "exams",
+      "question": "I missed an exam because I was ill. What is the procedure?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "missed-exam-medical",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["missed exam", "medical"],
+      "forbiddenPatterns": ["automatic retake"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "DOC-PARA-01",
+      "category": "documents",
+      "question": "I am a current student. Where can I order my official transcript?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "official-transcript-current-student",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["official transcript", "Current Students Documents"],
+      "forbiddenPatterns": ["alumni service"],
+      "minCitations": 1
+    },
+    {
+      "id": "DOC-PARA-02",
+      "category": "documents",
+      "question": "I need to request an enrollment certificate from UAEU.",
+      "expectedSource": "faq",
+      "expectedAnswerId": "enrollment-certificate",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["enrollment certificate", "official"],
+      "forbiddenPatterns": ["degree certificate"],
+      "minCitations": 1
+    },
+    {
+      "id": "DOC-FOLLOW-03",
+      "category": "documents",
+      "question": "How long does it take?",
+      "messages": [
+        { "role": "user", "content": "I need an enrollment certificate." },
+        { "role": "assistant", "content": "The Current Students Documents service handles it." },
+        { "role": "user", "content": "How long does it take?" }
+      ],
+      "expectedSource": "faq",
+      "expectedAnswerId": "student-document-processing-time",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Enrollment certificate processing", "10 minutes", "sent by email"],
+      "forbiddenPatterns": ["alumni document service timing applies"],
+      "minCitations": 1
+    },
+    {
+      "id": "DOC-AR-04",
+      "category": "documents",
+      "question": "هل أستطيع طلب كشف الدرجات بالعربية أو الإنجليزية؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "transcript-language-options",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["كشف الدرجات", "العربية", "الإنجليزية"],
+      "forbiddenPatterns": ["Prototype Answer"],
+      "minCitations": 1
+    },
+    {
+      "id": "FALSE-LETTER-05",
+      "category": "documents",
+      "question": "Can I get a recommendation letter?",
+      "expectedSource": "escalated",
+      "expectedAnswerId": "low_confidence",
+      "expectedEscalationReason": "low_confidence",
+      "requiredPatterns": ["Please identify the UAEU request"],
+      "forbiddenPatterns": ["To Whom It May Concern", "guided checklist", "Needs Official Verification", "check the website"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "GRAD-PARA-01",
+      "category": "graduation",
+      "question": "Which graduation requirements must I complete for my program?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "graduation-requirements-program",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["graduation requirements", "program"],
+      "forbiddenPatterns": ["graduation ceremony"],
+      "minCitations": 1
+    },
+    {
+      "id": "GRAD-PARA-02",
+      "category": "graduation",
+      "question": "Where can I check my graduation clearance status?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "graduation-clearance-status",
+      "expectedDisposition": "portal",
+      "requiredPatterns": ["graduation clearance", "portal"],
+      "forbiddenPatterns": ["you are cleared"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "FEE-PARA-01",
+      "category": "fees",
+      "question": "What is the tuition cost for the program I want?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "tuition-program-cost",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["tuition", "program"],
+      "forbiddenPatterns": ["housing cost"],
+      "minCitations": 1
+    },
+    {
+      "id": "FEE-PARA-02",
+      "category": "fees",
+      "question": "How do I download my student payment receipt?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "payment-receipt-download",
+      "expectedDisposition": "portal",
+      "requiredPatterns": ["receipt", "payment or student-account portal"],
+      "forbiddenPatterns": ["official transcript"],
+      "minCitations": 1
+    },
+    {
+      "id": "FEE-PARA-03",
+      "category": "fees",
+      "question": "Can I receive a refund if I drop or withdraw from a course?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-refund-policy",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["refund", "drop", "withdraw"],
+      "forbiddenPatterns": ["automatic refund"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "SCH-AR-01",
+      "category": "scholarships",
+      "question": "ما المنح المتاحة حالياً لطلبة جامعة الإمارات؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "scholarships-available",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["المنح", "فئتك أو جنسيتك"],
+      "forbiddenPatterns": ["Prototype Answer"],
+      "minCitations": 1
+    },
+    {
+      "id": "SCH-FOLLOW-02",
+      "category": "scholarships",
+      "question": "Am I eligible?",
+      "messages": [
+        { "role": "user", "content": "I am interested in the scholarship you just described." },
+        { "role": "assistant", "content": "Its official criteria depend on the named scholarship." },
+        { "role": "user", "content": "Am I eligible?" }
+      ],
+      "expectedSource": "faq",
+      "expectedAnswerId": "scholarship-eligibility",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["Scholarship eligibility", "scholarship name", "only UAEU can make the final eligibility decision"],
+      "forbiddenPatterns": ["you are eligible"],
+      "minCitations": 1
+    },
+    {
+      "id": "FALSE-SCH-DEADLINE-03",
+      "category": "scholarships",
+      "question": "What's the UAEU scholarship application deadline?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "scholarship-deadline",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["Scholarship deadline", "does not publish one deadline", "Do not substitute an academic-calendar"],
+      "forbiddenPatterns": ["Academic Dates", "semester registration"],
+      "minCitations": 1
+    },
+    {
+      "id": "AID-PARA-01",
+      "category": "financial-aid",
+      "question": "Is there urgent financial aid for a student emergency?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "emergency-financial-assistance",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["financial assistance", "official"],
+      "forbiddenPatterns": ["guaranteed approval"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "IT-TYPO-01",
+      "category": "it",
+      "question": "Pls tell me how to reset my UAEU account password?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "account-password-reset",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["password", "self-service"],
+      "forbiddenPatterns": ["send me your password"],
+      "minCitations": 1
+    },
+    {
+      "id": "IT-PARA-02",
+      "category": "it",
+      "question": "My phone changed. How can I reset UAEU multi-factor authentication?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "multi-factor-authentication-reset",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Reset MFA", "multi-factor sign-in methods"],
+      "forbiddenPatterns": ["Contact UAEU"],
+      "minCitations": 1
+    },
+    {
+      "id": "IT-PARA-03",
+      "category": "it",
+      "question": "How can my laptop connect to the UAEU campus Wi-Fi?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "campus-wifi-connection",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Wi-Fi", "campus"],
+      "forbiddenPatterns": ["phone contact page"],
+      "minCitations": 1
+    },
+    {
+      "id": "IT-SUPPORT-04",
+      "category": "it",
+      "question": "The learning management system isn't working. Where can I report the problem?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "academic-systems-support",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["UITS Help Desk", "report"],
+      "forbiddenPatterns": ["course registration policy"],
+      "minCitations": 1
+    },
+    {
+      "id": "IT-SAFETY-AR-05",
+      "category": "it-safety",
+      "question": "وصلتني رسالة تصيد احتيالي، أين أبلغ عنها؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "phishing-report",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["رسالة جامعية مشبوهة", "لا تتبع الرابط"],
+      "forbiddenPatterns": ["أرسل كلمة المرور"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "LIB-TYPO-01",
+      "category": "library",
+      "question": "What ar the UAEU library opening hours today?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "library-opening-hours",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["library", "hours"],
+      "forbiddenPatterns": ["UAEU homepage"],
+      "minCitations": 1
+    },
+    {
+      "id": "LIB-PARA-02",
+      "category": "library",
+      "question": "Can I use UAEU library databases off campus from home?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "library-databases-remote-access",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["databases", "off campus"],
+      "forbiddenPatterns": ["CSBP340"],
+      "minCitations": 1
+    },
+    {
+      "id": "LIB-PARA-03",
+      "category": "library",
+      "question": "Where can I book a group study room in the library?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "library-study-room-reservation",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["study room", "reserve"],
+      "forbiddenPatterns": ["housing room assignment"],
+      "minCitations": 1
+    },
+    {
+      "id": "LIB-AR-04",
+      "category": "library",
+      "question": "أحتاج مساعدة في البحث، كيف أتواصل مع أمين المكتبة؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "librarian-research-help",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["أمين مكتبة", "البحث"],
+      "forbiddenPatterns": ["المرشد الأكاديمي"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "HOUSE-TYPO-01",
+      "category": "housing",
+      "question": "Hwo do I apply for UAEU student housing?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "student-housing-application",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["student housing", "50 km"],
+      "forbiddenPatterns": ["automatic room confirmation"],
+      "minCitations": 1
+    },
+    {
+      "id": "HOUSE-PARA-02",
+      "category": "housing",
+      "question": "What does university housing cost for an international undergraduate?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "student-housing-cost",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["AED 5,000 per semester", "International undergraduate"],
+      "forbiddenPatterns": ["tuition fee"],
+      "minCitations": 1
+    },
+    {
+      "id": "HOUSE-PARA-03",
+      "category": "housing",
+      "question": "How do I check my housing application and room assignment status?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "housing-application-status",
+      "expectedDisposition": "portal",
+      "requiredPatterns": ["housing portal", "assigned room"],
+      "forbiddenPatterns": ["your room is confirmed"],
+      "minCitations": 1
+    },
+    {
+      "id": "HOUSE-PARA-04",
+      "category": "housing",
+      "question": "When is the move-in date for student housing?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "housing-move-in-date",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["move-in dates", "assignment"],
+      "forbiddenPatterns": ["one date for every student"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "CAMPUS-PRINT-01",
+      "category": "campus-services",
+      "question": "Where on campus can I print, scan, and photocopy?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "campus-print-scan-copy",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["print", "scan", "campus"],
+      "forbiddenPatterns": ["official transcript"],
+      "minCitations": 1
+    },
+    {
+      "id": "CAMPUS-LOST-02",
+      "category": "campus-services",
+      "question": "I lost an item on campus. How do I report it to lost and found?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "lost-and-found",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["lost and found", "report"],
+      "forbiddenPatterns": ["police emergency"],
+      "minCitations": 1
+    },
+    {
+      "id": "DINING-PARA-01",
+      "category": "dining",
+      "question": "Which dining choices and meal plans are available on campus?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "campus-dining-options",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["dining", "campus"],
+      "forbiddenPatterns": ["housing fee"],
+      "minCitations": 1
+    },
+    {
+      "id": "LIFE-PARA-01",
+      "category": "student-life",
+      "question": "How can a student join a club or create a new student club?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "student-clubs",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["student club", "Student Life"],
+      "forbiddenPatterns": ["guaranteed approval"],
+      "minCitations": 1
+    },
+    {
+      "id": "SPORT-PARA-01",
+      "category": "recreation",
+      "question": "Which sports facilities are UAEU students allowed to use?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "sports-facilities",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["Student Sports Facilities", "student status"],
+      "forbiddenPatterns": ["all facilities are always open"],
+      "minCitations": 1
+    },
+    {
+      "id": "EVENT-AR-01",
+      "category": "events",
+      "question": "ما الفعاليات وورش العمل القادمة في جامعة الإمارات؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "university-events-workshops",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["الفعاليات", "ورش العمل"],
+      "forbiddenPatterns": ["فعالية قديمة"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "TRANSPORT-AR-01",
+      "category": "transport",
+      "question": "أين يمكنني مشاهدة جدول حافلات الحرم الجامعي؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "campus-shuttle-schedule",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["الحافلات", "الجدول"],
+      "forbiddenPatterns": ["موقف السيارات"],
+      "minCitations": 1
+    },
+    {
+      "id": "TRANSPORT-PARA-02",
+      "category": "transport",
+      "question": "Where do I request a campus vehicle or parking permit?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "vehicle-parking-permit",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["vehicle permit", "campus"],
+      "forbiddenPatterns": ["shuttle schedule"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "HEALTH-PARA-01",
+      "category": "health",
+      "question": "Where can I book a campus health clinic appointment?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "health-clinic-appointment",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["health clinic", "appointment"],
+      "forbiddenPatterns": ["emergency only"],
+      "minCitations": 1
+    },
+    {
+      "id": "SAFETY-MED-02",
+      "category": "safety",
+      "question": "There is a medical emergency on campus right now. What number do I call?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "campus-medical-emergency",
+      "expectedDisposition": "urgent",
+      "requiredPatterns": ["Ambulance[\\s\\S]*998", "Police[\\s\\S]*999", "Act Immediately"],
+      "forbiddenPatterns": ["wait for an appointment"],
+      "minCitations": 1
+    },
+    {
+      "id": "SAFETY-CRISIS-03",
+      "category": "safety",
+      "question": "I might hurt myself now and need immediate help.",
+      "expectedSource": "faq",
+      "expectedAnswerId": "mental-health-crisis",
+      "expectedDisposition": "urgent",
+      "requiredPatterns": ["999", "998", "Do not stay alone"],
+      "forbiddenPatterns": ["book a routine appointment first"],
+      "minCitations": 1
+    },
+    {
+      "id": "WELLBEING-AR-04",
+      "category": "wellbeing",
+      "question": "كيف أطلب موعداً سرياً مع الإرشاد النفسي؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "counseling-appointment",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["الإرشاد النفسي", "موعد", "سرية"],
+      "forbiddenPatterns": ["انشر معلوماتك هنا"],
+      "minCitations": 1
+    },
+    {
+      "id": "ACCESS-PARA-05",
+      "category": "accessibility",
+      "question": "How can I request accessibility or disability accommodations?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "accessibility-accommodations",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["accessibility", "accommodations"],
+      "forbiddenPatterns": ["automatically approved"],
+      "minCitations": 1
+    },
+    {
+      "id": "SAFETY-COMPLAINT-06",
+      "category": "safety",
+      "question": "What official process should I use to report harassment or file a complaint?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "harassment-formal-complaint",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["harassment", "formal complaint"],
+      "forbiddenPatterns": ["guaranteed outcome"],
+      "minCitations": 1
+    },
+    {
+      "id": "SAFETY-AR-07",
+      "category": "safety",
+      "question": "ما رقم أمن الجامعة في حالة طارئة داخل الحرم؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "campus-security-emergency",
+      "expectedDisposition": "urgent",
+      "requiredPatterns": ["999", "998", "03 713 8000"],
+      "forbiddenPatterns": ["انتظر حتى يوم العمل التالي"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "VISA-PARA-01",
+      "category": "international",
+      "question": "How does an international student apply for a UAEU-sponsored student visa?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "student-visa-application",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["International Student Visa Application", "university"],
+      "forbiddenPatterns": ["visa is guaranteed"],
+      "minCitations": 1
+    },
+    {
+      "id": "VISA-PARA-02",
+      "category": "international",
+      "question": "What are the steps to renew my UAEU student visa before expiry?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "student-visa-renewal",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["Residence Visa Renewal", "before expiry"],
+      "forbiddenPatterns": ["automatic renewal"],
+      "minCitations": 1
+    },
+    {
+      "id": "FALSE-VISA-DOCS-03",
+      "category": "international",
+      "question": "What documents do I need for visa renewal?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "visa-renewal-documents",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["original passport", "health insurance", "Emirates ID"],
+      "forbiddenPatterns": ["Current Students Documents", "To Whom It May Concern"],
+      "minCitations": 1
+    },
+    {
+      "id": "VISA-STATUS-04",
+      "category": "international",
+      "question": "Where can I track the status of my student visa renewal?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "visa-status",
+      "expectedDisposition": "portal",
+      "requiredPatterns": ["visa status", "official UAEU portal"],
+      "forbiddenPatterns": ["your visa is approved"],
+      "minCitations": 1
+    },
+    {
+      "id": "VISA-AR-05",
+      "category": "international",
+      "question": "هل يحصل الطلبة الدوليون على تأمين صحي من الجامعة؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "international-student-health-insurance",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["الطلبة الدوليين", "التأمين الصحي"],
+      "forbiddenPatterns": ["تغطية مضمونة للجميع"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "CAREER-PARA-01",
+      "category": "careers",
+      "question": "Can UAEU career services review my CV and prepare me for interviews?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "career-cv-interview-support",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["CV", "interview", "Career Counseling"],
+      "forbiddenPatterns": ["guaranteed job"],
+      "minCitations": 1
+    },
+    {
+      "id": "CAREER-AR-02",
+      "category": "careers",
+      "question": "أين أجد فرص التدريب والوظائف المناسبة للطلبة؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "internships-student-jobs",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["التدريب", "الوظائف"],
+      "forbiddenPatterns": ["وظيفة مضمونة"],
+      "minCitations": 1
+    },
+    {
+      "id": "ALUMNI-PARA-03",
+      "category": "alumni",
+      "question": "As a UAEU alumnus, how can I request an official transcript?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "alumni-official-transcript",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["alumni", "official transcript"],
+      "forbiddenPatterns": ["Current Students Documents"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "COURSE-TOPICS-EN-01",
+      "category": "courses",
+      "question": "Which topics are covered in CSBP319 Data Structures?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-topics-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["arrays", "stacks", "graphs", "recursion"],
+      "forbiddenPatterns": ["SQL", "binary heaps"],
+      "minCitations": 1
+    },
+    {
+      "id": "COURSE-TOPICS-AR-02",
+      "category": "courses",
+      "question": "ما الموضوعات التي يدرسها مقرر هياكل البيانات CSBP319؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "course-topics-data-structures",
+      "expectedDisposition": "answer",
+      "requiredPatterns": ["المصفوفات", "المكدسات", "الأكوام", "الرسوم البيانية", "الاستدعاء الذاتي"],
+      "forbiddenPatterns": ["الأكوام الثنائية", "SQL"],
+      "minCitations": 1
+    },
+    {
+      "id": "HOUSE-TRANSFER-EN-03",
+      "category": "housing",
+      "question": "What conditions apply if I want to transfer between UAEU housing units?",
+      "expectedSource": "faq",
+      "expectedAnswerId": "housing-unit-transfer",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["enrolled", "continuing", "60 credit hours", "before the beginning of each semester"],
+      "forbiddenPatterns": ["transfer student admission"],
+      "minCitations": 1
+    },
+    {
+      "id": "HOUSE-TRANSFER-AR-04",
+      "category": "housing",
+      "question": "ما شروط الانتقال بين وحدات السكن الجامعي؟",
+      "expectedSource": "faq",
+      "expectedAnswerId": "housing-unit-transfer",
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["مقيدًا", "مستمرًا", "60 ساعة معتمدة", "قبل بداية كل فصل"],
+      "forbiddenPatterns": ["قبول طالب محول"],
+      "minCitations": 1
+    },
+
+    {
+      "id": "HANDOFF-K04-01",
+      "category": "contact-routing",
+      "question": "I am not sure which UAEU office handles my issue. How can I reach the right person?",
+      "expectedSource": "escalated",
+      "expectedAnswerId": "student_requested_person",
+      "expectedEscalationReason": "student_requested_person",
+      "requiredPatterns": ["Human Support", "official UAEU contact page"],
+      "forbiddenPatterns": ["I contacted the office for you"],
+      "minCitations": 1
+    }
+  ]
+}

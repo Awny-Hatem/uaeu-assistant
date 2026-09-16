@@ -1,0 +1,920 @@
+{
+  "schemaVersion": 1,
+  "entries": [
+    {
+      "id": "account-password-reset",
+      "category": "it",
+      "questions": ["How do I reset my UAEU account password?"],
+      "matchPhrases": ["reset my UAEU password", "forgot UAEU password", "UAEU password reset", "إعادة تعيين كلمة مرور حساب جامعة الإمارات"],
+      "excludePhrases": ["portal is down", "multi-factor authentication"],
+      "answer_en": "**Reset Your UAEU Password**\n1. Open UAEU Password Self-Service and choose **I Forget My Password**; use **Change My Password** only when you still know the current password.\n2. Complete the identity-verification prompts and set the new password.\n3. If verification fails or the account remains locked, contact the UITS Help Desk at **+971 3 713 6111** or **Helpdesk@uaeu.ac.ae**. Never send the Help Desk your password or verification code.",
+      "answer_ar": "**إعادة تعيين كلمة مرور جامعة الإمارات**\n1. افتح خدمة كلمة المرور الذاتية واختر **I Forget My Password**؛ واستخدم **Change My Password** فقط إذا كنت تعرف كلمة المرور الحالية.\n2. أكمل خطوات التحقق من الهوية ثم عيّن كلمة المرور الجديدة.\n3. إذا فشل التحقق أو بقي الحساب مقفلاً، فاتصل بمكتب مساعدة تقنية المعلومات على **+971 3 713 6111** أو **Helpdesk@uaeu.ac.ae**. لا ترسل كلمة المرور أو رمز التحقق إلى موظف الدعم.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Password Self-Service",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-portal-sign-in",
+      "category": "it",
+      "questions": ["Why can't I sign in to the student portal?"],
+      "matchPhrases": ["cannot sign in to the student portal", "student portal login problem", "portal sign-in error", "تعذر الدخول إلى بوابة الطالب"],
+      "excludePhrases": ["application status", "visa status", "housing status"],
+      "answer_en": "**Troubleshoot Student Portal Sign In**\n- Sign in only at **my.uaeu.ac.ae**. UAEU's login guidance says the username is entered in lowercase and the password is case-sensitive. Complete any multi-factor prompt shown by the official sign-in page.\n- If the password is forgotten, use Password Self-Service and choose **I Forget My Password**. If self-service succeeds but the portal still fails, record the exact error, URL, and time and call UITS on **+971 3 713 6111** or email **Helpdesk@uaeu.ac.ae**.\n- The specific cause depends on the error. Share its wording—not your password or authentication code—to distinguish an account lock, MFA problem, or service outage.",
+      "answer_ar": "**معالجة تعذر الدخول إلى بوابة الطلبة**\n- سجل الدخول فقط عبر **my.uaeu.ac.ae**. توضح إرشادات الدخول في الجامعة أن اسم المستخدم يكتب بحروف صغيرة وأن كلمة المرور حساسة لحالة الأحرف، ثم أكمل التحقق متعدد العوامل إن ظهر في الصفحة الرسمية.\n- إذا نسيت كلمة المرور، فاستخدم الخدمة الذاتية واختر **I Forget My Password**. وإذا نجحت الخدمة وبقيت البوابة لا تعمل، فسجل نص الخطأ والرابط والوقت واتصل بالدعم على **+971 3 713 6111** أو **Helpdesk@uaeu.ac.ae**.\n- يعتمد السبب المحدد على رسالة الخطأ؛ شارك نصها فقط، ولا تشارك كلمة المرور أو رمز التحقق، لتمييز قفل الحساب عن مشكلة التحقق أو تعطل الخدمة.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Student Portal",
+          "url": "https://my.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Banner Login Guidance",
+          "url": "https://ssb.uaeu.ac.ae/prod/twbkwbis.P_ValLogin",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "multi-factor-authentication-reset",
+      "category": "it",
+      "questions": ["I changed my phone; how do I reset multi-factor authentication?"],
+      "matchPhrases": ["reset multi-factor authentication", "changed phone MFA", "new phone authentication reset", "إعادة ضبط التحقق متعدد العوامل بعد تغيير الهاتف"],
+      "excludePhrases": ["reset password only"],
+      "answer_en": "**Reset MFA / Multi-Factor Authentication After Changing Phones**\nUAEU's public IT pages do not publish a self-service lost-phone reset sequence. Ask UITS to clear or re-register your **multi-factor sign-in methods**: call **+971 3 713 6111** or email **Helpdesk@uaeu.ac.ae**, state that the old phone is unavailable, and include your university ID and the exact sign-in error—never an authentication code. If an existing verified method still works, use only the multi-factor authentication options shown on the official UAEU sign-in page.",
+      "answer_ar": "**إعادة ضبط التحقق متعدد العوامل بعد تغيير الهاتف**\nلا تنشر صفحات تقنية المعلومات العامة إجراءً ذاتياً لإعادة الضبط عند فقد الهاتف القديم. اطلب من دعم تقنية المعلومات مسح وسائل التحقق أو إعادة تسجيلها بالاتصال على **+971 3 713 6111** أو البريد **Helpdesk@uaeu.ac.ae**، واذكر أن الهاتف القديم غير متاح ورقمك الجامعي ونص الخطأ، من دون إرسال أي رمز تحقق. وإذا بقيت لديك وسيلة موثقة تعمل، فاستخدم فقط خيارات الأمان في صفحة الدخول الرسمية.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Contact Us",
+          "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "campus-wifi-connection",
+      "category": "it",
+      "questions": ["How do I connect my laptop or phone to campus Wi-Fi?"],
+      "matchPhrases": ["connect to campus Wi-Fi", "UAEU Wi-Fi setup", "campus wireless connection", "الاتصال بشبكة واي فاي في الحرم الجامعي"],
+      "excludePhrases": ["housing internet bill"],
+      "answer_en": "**Connect A Device To Campus Wi-Fi**\nUAEU confirms wireless access is available in colleges and the library, but its current public IT page does **not** publish a current SSID or device profile. On campus, select only the secured university network presented for UAEU users and authenticate through the official UAEU prompt; do not rely on an old saved network name or enter credentials into a look-alike hotspot. For the exact profile for Windows, macOS, iOS, or Android, contact UITS at **+971 3 713 6111** or **Helpdesk@uaeu.ac.ae**.",
+      "answer_ar": "**توصيل جهاز بشبكة الحرم اللاسلكية**\nتؤكد الجامعة توفر الاتصال اللاسلكي في الكليات والمكتبة، لكن صفحة تقنية المعلومات العامة الحالية **لا تنشر** اسم الشبكة أو ملف إعداد الأجهزة الحالي. داخل الحرم اختر فقط الشبكة الآمنة المعروضة لمستخدمي الجامعة وسجل الدخول عبر مطالبة الجامعة الرسمية؛ ولا تعتمد اسماً قديماً محفوظاً أو تدخل بياناتك في نقطة اتصال مشابهة. للحصول على الإعداد المحدد لنظام Windows أو macOS أو iOS أو Android اتصل على **+971 3 713 6111** أو **Helpdesk@uaeu.ac.ae**.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-email-access",
+      "category": "it",
+      "questions": ["كيف أدخل إلى البريد الإلكتروني الجامعي؟"],
+      "matchPhrases": ["الدخول إلى البريد الإلكتروني الجامعي", "فتح بريد جامعة الإمارات", "UAEU student email access"],
+      "excludePhrases": ["رسالة بريد مشبوهة", "phishing email"],
+      "answer_en": "**Access UAEU Student Email**\n- For web access, sign in at **my.uaeu.ac.ae** and open the university email service with your UAEU account and any MFA prompt.\n- On iPhone or iPad, UAEU's setup guide says to add the account using your full UAEU email address; if manual settings are required, use server **outlook.office365.com**, leave Domain blank, and use the full email address as Username.\n- If authentication fails, send the exact error—not your password—to **Helpdesk@uaeu.ac.ae** or call **+971 3 713 6111**.",
+      "answer_ar": "**الدخول إلى البريد الإلكتروني الجامعي**\n- للدخول عبر الويب، سجّل الدخول إلى **my.uaeu.ac.ae** وافتح خدمة البريد بحساب الجامعة وأكمل التحقق متعدد العوامل إن ظهر.\n- على iPhone أو iPad، يوضح دليل الجامعة إضافة الحساب بعنوان البريد الجامعي الكامل؛ وعند الإعداد اليدوي استخدم الخادم **outlook.office365.com** واترك خانة Domain فارغة واكتب عنوان البريد الكامل في Username.\n- إذا فشل الدخول، أرسل نص الخطأ فقط إلى **Helpdesk@uaeu.ac.ae** أو اتصل على **+971 3 713 6111**، ولا ترسل كلمة المرور.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Student Portal",
+          "url": "https://my.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU iOS Mail Setup Guide",
+          "url": "https://www.uaeu.ac.ae/en/admission/orientation/set-up-uaeu-email-in-the-ios-mail-app.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "academic-systems-support",
+      "category": "it",
+      "questions": ["Banner or the learning management system is not working; where do I report it?"],
+      "matchPhrases": ["Banner is not working", "Banner support", "contact technical support", "contact support about password", "password support", "UITS help desk", "UITS help desk phone number", "learning management system not working", "report academic system problem", "تعطل نظام بانر أو نظام إدارة التعلم"],
+      "excludePhrases": ["Banner grade appeal", "course registration policy"],
+      "answer_en": "**Report A Banner Or Learning-System Failure**\nContact UAEU **technical support** through the UITS Help Desk at **+971 3 713 6111** or **Helpdesk@uaeu.ac.ae**. Give the system name, course and section or CRN where relevant, page URL, date/time, device/browser, and the exact error. Attach a screenshot only after hiding grades, student IDs, and other personal data. Also say whether classmates have the same issue; that lets UITS separate an outage from an account-specific fault. Never include your password.",
+      "answer_ar": "**الإبلاغ عن تعطل Banner أو نظام التعلم**\nتواصل مع مكتب مساعدة تقنية المعلومات على **+971 3 713 6111** أو **Helpdesk@uaeu.ac.ae**. اذكر اسم النظام والمساق والشعبة أو CRN عند الحاجة ورابط الصفحة والتاريخ والوقت والجهاز أو المتصفح ونص الخطأ. أرفق لقطة بعد إخفاء الدرجات والرقم الجامعي والبيانات الشخصية، واذكر هل تظهر المشكلة لزملائك أيضاً لتمييز التعطل العام عن مشكلة الحساب. لا ترسل كلمة المرور.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Contact Us",
+          "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-software-access",
+      "category": "it",
+      "questions": ["Can students download Microsoft Office or other university software?"],
+      "matchPhrases": ["student software access", "download Microsoft Office as a student", "university licensed software", "تحميل برامج الجامعة للطلاب"],
+      "excludePhrases": ["software engineering course"],
+      "answer_en": "**University Software Access For Students**\nUAEU has an official Software Portal at **store.uaeu.ac.ae**; published UAEU material describes delivery of licensed applications such as MATLAB, Minitab, and Adobe software through the portal. The current public IT page does not publish a guaranteed Microsoft Office entitlement, product list, or device limit for all students. Sign in with your UAEU account and use only the applications assigned to it. If Office or a required course application is absent, contact **Helpdesk@uaeu.ac.ae** or **+971 3 713 6111** with the product and course name.",
+      "answer_ar": "**الوصول إلى برامج الجامعة**\nلدى الجامعة بوابة برامج رسمية على **store.uaeu.ac.ae**، وتصف مواد الجامعة المنشورة توفير تطبيقات مرخصة مثل MATLAB وMinitab وبرامج Adobe عبرها. ولا تنشر صفحة تقنية المعلومات العامة الحالية استحقاقاً مضموناً لـ Microsoft Office أو قائمة منتجات أو حداً للأجهزة لكل طالب. سجل الدخول بحساب الجامعة واستخدم البرامج المخصصة له فقط. وإذا لم يظهر Office أو برنامج مطلوب لمساقك، فتواصل عبر **Helpdesk@uaeu.ac.ae** أو **+971 3 713 6111** واذكر اسم البرنامج والمساق.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Software Portal",
+          "url": "https://store.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Software Portal Publication",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/docs/publications/flipbooks/newsletter_issue16/files/assets/basic-html/page-12.html",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "phishing-report",
+      "category": "it-safety",
+      "questions": ["تلقيت رسالة بريد مشبوهة، كيف أبلغ عنها؟"],
+      "matchPhrases": ["الإبلاغ عن رسالة بريد مشبوهة", "رسالة تصيد احتيالي", "وصلتني رسالة تصيد احتيالي أين أبلغ عنها", "report phishing email"],
+      "excludePhrases": ["الدخول إلى البريد الإلكتروني", "email access"],
+      "answer_en": "**Report A Suspicious UAEU Email**\n- Do not reply, open its attachment, follow its link, or approve an MFA prompt. Preserve the original message and report it to the UITS Help Desk at **Helpdesk@uaeu.ac.ae** or **+971 3 713 6111**; include the sender, subject, and received time without sending credentials.\n- If you already entered a password, use UAEU Password Self-Service immediately, then tell UITS that credentials may have been exposed. If you approved an unexpected MFA prompt, call UITS immediately so the account can be secured.",
+      "answer_ar": "**الإبلاغ عن رسالة جامعية مشبوهة**\n- لا ترد ولا تفتح المرفق ولا تتبع الرابط ولا توافق على طلب تحقق متعدد العوامل. احتفظ بالرسالة الأصلية وأبلغ مكتب المساعدة على **Helpdesk@uaeu.ac.ae** أو **+971 3 713 6111**، واذكر المرسل والعنوان ووقت الاستلام من دون إرسال بيانات الدخول.\n- إذا أدخلت كلمة المرور، فاستخدم خدمة كلمة المرور الذاتية فوراً ثم أخبر الدعم باحتمال كشف البيانات. وإذا وافقت على طلب تحقق غير متوقع، فاتصل بالدعم فوراً لتأمين الحساب.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Email Security Best Practices",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/docs/publications/newsletter_issue12.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "library-opening-hours",
+      "category": "library",
+      "questions": ["What are the UAEU library opening hours?"],
+      "matchPhrases": ["UAEU library opening hours", "when is the library open", "library hours", "library hours today", "ساعات عمل مكتبة جامعة الإمارات"],
+      "excludePhrases": ["health clinic opening hours"],
+      "answer_en": "**Library Hours Are Published By Branch And Period**\nUAEU does not publish one permanent schedule: its library service says hours change for the regular semester, summer, Ramadan, and breaks. The exact hours **depend on the branch and visit date**, so confirm them on the live Library Hours page. The Main Library is in the Crescent Building; for confirmation, the student handbook lists **+971 3 713 4684** and **+971 3 713 6862**. The National Medical Library is at CMHS on Tawam Campus and lists **+971 3 713 7201 / 7208**.",
+      "answer_ar": "**ساعات المكتبة منشورة حسب الفرع والفترة**\nلا تنشر الجامعة جدولاً واحداً دائماً؛ إذ توضح خدمة المكتبة أن الساعات تختلف في الفصل العادي والصيف ورمضان والإجازات. استخدم صفحة ساعات المكتبة المباشرة لتاريخ الزيارة. تقع المكتبة الرئيسية في مبنى الهلال، ويورد دليل الطلبة للتأكيد الرقمين **+971 3 713 4684** و**+971 3 713 6862**. وتقع المكتبة الطبية الوطنية في كلية الطب بحرم توام على **+971 3 713 7201 / 7208**.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Library Hours",
+          "url": "https://www.uaeu.ac.ae/en/library/libraryhours.shtml",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Information Services and Library FAQ",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=98",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "library-borrowing-limits",
+      "category": "library",
+      "questions": ["How many books can I borrow and for how long?"],
+      "matchPhrases": ["library borrowing limits", "how many books can I borrow", "book loan period", "عدد الكتب المسموح باستعارتها من المكتبة"],
+      "excludePhrases": ["borrow a laptop", "ebook download limit"],
+      "answer_en": "**Published Borrowing Limits**\n- Undergraduate and master's students: **10 general books for 30 days**, with up to **2 renewals of 30 days** each; Emirates books are **10 items for 14 days**, with up to 2 renewals of 14 days.\n- PhD students are listed with faculty: **20 general books for 120 days**, with up to 2 renewals of 120 days; Emirates books are 20 items for 14 days.\nYour exact limit **depends on your user category and item type**. A hold, recall, course-reserve request, fines, or a changed user category can prevent renewal, so confirm the due date in your live library account for each item.",
+      "answer_ar": "**حدود الاستعارة المنشورة**\n- طلبة البكالوريوس والماجستير: **10 كتب عامة لمدة 30 يوماً** مع **تجديدين لمدة 30 يوماً** لكل منهما؛ وكتب الإمارات 10 مواد لمدة 14 يوماً مع تجديدين لمدة 14 يوماً.\n- طلبة الدكتوراه مدرجون مع أعضاء هيئة التدريس: **20 كتاباً عاماً لمدة 120 يوماً** مع تجديدين لمدة 120 يوماً؛ وكتب الإمارات 20 مادة لمدة 14 يوماً.\nقد يمنع الحجز أو الاستدعاء أو الاحتياطي الدراسي أو الغرامات أو تغير فئة المستخدم التجديد، لذلك يكون تاريخ الإرجاع الظاهر في حساب المكتبة هو المعتمد لكل مادة.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Libraries Access and Lending Procedures",
+          "url": "https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "library-book-renewal",
+      "category": "library",
+      "questions": ["كيف أجدد استعارة كتاب من المكتبة عبر الإنترنت؟"],
+      "matchPhrases": ["تجديد استعارة كتاب", "تجديد الكتاب عبر الإنترنت", "renew a library book online"],
+      "excludePhrases": ["تجديد تأشيرة", "renew visa"],
+      "answer_en": "**Renew A Library Book Online**\n1. Sign in to the UAEU library account with your ID and PIN, open **Lending Services / current loans**, and select **Renew**. The service is published as available 24/7.\n2. Confirm that a new due date appears; without a new date, the renewal is not complete.\nIf online renewal fails, email **circ_lib@uaeu.ac.ae**, phone a Loans Desk (**03 713 4684** or **03 713 4678**), or use a lending desk/self-check machine. Renewal is blocked when another user has a hold, the item is on course reserve, the renewal limit is reached, or fines are outstanding.",
+      "answer_ar": "**تجديد الكتاب من المكتبة عبر الإنترنت**\n1. سجل الدخول إلى حساب المكتبة بالبطاقة والرقم السري، وافتح **Lending Services / الاستعارات الحالية**، واختر **الكتاب** ثم **Renew**؛ والخدمة الإلكترونية منشورة على أنها متاحة على مدار الساعة.\n2. تأكد من ظهور تاريخ إرجاع جديد؛ من دون التاريخ الجديد لم يكتمل التجديد.\nإذا فشل التجديد، راسل **circ_lib@uaeu.ac.ae** أو اتصل بمكتب الإعارة على **03 713 4684** أو **03 713 4678** أو استخدم مكتب الإعارة أو جهاز الخدمة الذاتية. يمنع التجديد عند وجود حجز أو احتياطي دراسي أو بلوغ حد التجديد أو وجود غرامات.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Library Lending Services",
+          "url": "https://www.uaeu.ac.ae/en/library/borrowing.shtml",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Libraries Access and Lending Procedures",
+          "url": "https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Information Services and Library FAQ",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=98",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "library-databases-remote-access",
+      "category": "library",
+      "questions": ["How can I access library databases from off campus?"],
+      "matchPhrases": ["access library databases off campus", "remote access to UAEU databases", "library e-resources from home", "الوصول إلى قواعد بيانات المكتبة من خارج الحرم"],
+      "excludePhrases": ["database course", "computer database class"],
+      "answer_en": "**Access Library Databases Off Campus**\n1. Start at the UAEU Library or official E-resources service, search for the title or keyword, apply filters such as Article, Book, or Full Text, and open the result from there.\n2. At the UAEU authentication prompt, enter your email username **without `@uaeu.ac.ae`** and your password. Remote access requires an active UAEU account and remains subject to each database licence.\n3. If sign-in works but the resource is blocked, email the database name, URL, and error to **digital.library@uaeu.ac.ae**.",
+      "answer_ar": "**الوصول إلى قواعد بيانات المكتبة من خارج الحرم**\n1. ابدأ من مكتبة جامعة الإمارات أو خدمة المصادر الإلكترونية الرسمية، وابحث بالعنوان أو الكلمة ثم استخدم مرشحات مثل مقال أو كتاب أو النص الكامل وافتح النتيجة من هناك.\n2. عند مطالبة الدخول، اكتب اسم مستخدم البريد **من دون `@uaeu.ac.ae`** ثم كلمة المرور. يتطلب الوصول عن بعد حساباً جامعياً نشطاً ويخضع لترخيص كل قاعدة.\n3. إذا نجح الدخول وبقي المورد محجوباً، فأرسل اسم القاعدة والرابط ونص الخطأ إلى **digital.library@uaeu.ac.ae**.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU E-resources Access and Tools",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=99",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "library-study-room-reservation",
+      "category": "library",
+      "questions": ["How do I reserve a group study room?"],
+      "matchPhrases": ["reserve a group study room", "library room reservation", "book a study room", "book a group study room in the library", "حجز غرفة دراسة جماعية في المكتبة"],
+      "excludePhrases": ["housing room assignment", "classroom booking"],
+      "answer_en": "**Reserve A Group Study Room**\nUse the official UAEU Library Room Reservation page, authenticate when prompted, and submit an available room/time. The public page does not expose a stable list of room capacities, booking limits, or check-in rules, so the options and rules shown in the live reservation form are authoritative. If the form is unavailable, call the Main Library at **+971 3 713 4684** or **+971 3 713 6862** rather than assuming a room is reserved.",
+      "answer_ar": "**حجز غرفة دراسة جماعية**\nاستخدم صفحة حجز غرف مكتبة جامعة الإمارات الرسمية، وسجل الدخول عند الطلب ثم أرسل حجز الغرفة والوقت المتاحين. لا تعرض الصفحة العامة قائمة ثابتة لسعات الغرف أو حدود الحجز أو قواعد الحضور، لذلك تكون الخيارات والقواعد في نموذج الحجز المباشر هي المعتمدة. وإذا تعطل النموذج فاتصل بالمكتبة الرئيسية على **+971 3 713 4684** أو **+971 3 713 6862**، ولا تفترض أن الغرفة محجوزة من دون تأكيد.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Library Room Reservation",
+          "url": "https://www.uaeu.ac.ae/en/library/roomreservation.shtml",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "campus-print-scan-copy",
+      "category": "campus-services",
+      "questions": ["Where can I print, scan, or photocopy on campus?"],
+      "matchPhrases": ["print scan or photocopy on campus", "campus printing location", "library printer scanner photocopier", "الطباعة والمسح الضوئي في الحرم الجامعي"],
+      "excludePhrases": ["print official transcript", "copy degree certificate"],
+      "answer_en": "**Where To Print Or Scan On Campus**\nUAEU's student handbook confirms that printers and scanners are available in **college computer laboratories and the library**; use the official campus map to locate those facilities. The specific device, quota, and price **depend on the location**, and the current public source does not publish a complete photocopier list or universal rate. Confirm the Main Library's current print/copy arrangement at **+971 3 713 4684** or **+971 3 713 6862** before travelling. Collect confidential pages immediately and sign out of shared equipment.",
+      "answer_ar": "**أماكن الطباعة والمسح في الحرم**\nيؤكد دليل الطلبة توفر الطابعات والماسحات في **مختبرات الحاسوب بالكليات وفي المكتبة**؛ استخدم خريطة الحرم الرسمية لتحديد الموقع. ولا ينشر المصدر العام الحالي قائمة كاملة لآلات التصوير أو حصة الطباعة أو السعر. لمعرفة ترتيب الطباعة والتصوير الحالي في المكتبة الرئيسية اتصل على **+971 3 713 4684** أو **+971 3 713 6862** قبل التوجه. استلم الصفحات السرية فوراً وسجل الخروج من الجهاز المشترك.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Library",
+          "url": "https://www.uaeu.ac.ae/en/library/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Campus Map",
+          "url": "https://map.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "librarian-research-help",
+      "category": "library",
+      "questions": ["كيف أتواصل مع أمين مكتبة لمساعدتي في البحث؟"],
+      "matchPhrases": ["أتواصل مع أمين مكتبة", "مساعدة أمين المكتبة في البحث", "أحتاج مساعدة في البحث كيف أتواصل مع أمين المكتبة", "ask a librarian research help"],
+      "excludePhrases": ["academic advisor", "مرشد أكاديمي"],
+      "answer_en": "**Ask A Librarian**\nOpen UAEU's **Information Services (Ask-a-Librarian)** form, enter the specific research question and the sources or date range needed, and submit it; the published process says the librarian replies by email. The service is free, has no stated eligibility condition or required document, and lists a one-hour delivery target. Include what you already searched, but never send a password or redistribute licensed full text.",
+      "answer_ar": "**طلب مساعدة أمين مكتبة في البحث**\nافتح نموذج **خدمات المعلومات (اسأل أمين مكتبة)**، واكتب سؤال البحث المحدد ونوع المصادر أو الفترة المطلوبة ثم أرسل النموذج؛ وينص الإجراء المنشور على أن أمين مكتبة يجيب بالبريد الإلكتروني. الخدمة مجانية ولا تذكر شرط أهلية أو مستنداً مطلوباً، وتعرض زمناً مستهدفاً قدره ساعة. اذكر ما بحثت عنه، ولا ترسل كلمة مرور أو تعيد توزيع نص مرخص.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Information Services — Ask a Librarian",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=98",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "library-request-processing-time",
+      "category": "library",
+      "questions": ["How long does a library request take?"],
+      "matchPhrases": ["library request processing time", "how long does a library request take", "مدة إنجاز طلب المكتبة"],
+      "answer_en": "**Library Request Times Depend On The Service**\nThere is no single processing time for every library request. UAEU's **Ask-a-Librarian** information service lists a **one-hour delivery target** and says the reply is sent by email. A study-room request instead depends on the room and time shown as available in the live reservation system. Tell me whether you mean research help, a room, borrowing, or another library service and I can give the applicable verified procedure.",
+      "answer_ar": "**مدة طلب المكتبة تعتمد على نوع الخدمة**\nلا توجد مدة إنجاز واحدة لجميع طلبات المكتبة. تعرض خدمة **اسأل أمين مكتبة** للمعلومات مدة مستهدفة قدرها **ساعة واحدة** وتذكر أن الرد يصل بالبريد الإلكتروني. أما طلب غرفة الدراسة فيعتمد على الغرفة والوقت المتاحين في نظام الحجز المباشر. حدد ما إذا كنت تقصد مساعدة بحثية أو غرفة أو استعارة أو خدمة مكتبية أخرى لأعطيك الإجراء الموثق المناسب.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Information Services — Ask a Librarian",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=98",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Library Room Reservation",
+          "url": "https://www.uaeu.ac.ae/en/library/roomreservation.shtml",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-housing-application",
+      "category": "housing",
+      "questions": ["How do I apply for student housing?"],
+      "matchPhrases": ["apply for student housing", "apply for housing online", "eligible for student housing", "student housing eligibility", "housing application deadline", "housing application processing time", "how long does the housing application take", "how long does a UAEU housing application take", "UAEU housing application", "request a room assignment", "التقديم على السكن الطلابي في جامعة الإمارات"],
+      "excludePhrases": ["housing cost", "room reservation library"],
+      "answer_en": "**Apply For Student Housing**\n- Open the official Rooms Assignment Service and sign in with UAE Pass or your UAEU username and password. The live procedure is to pay any applicable housing fee, select an available building and room, and wait for the assignment confirmation by email.\n- For a new-student room application, the published conditions require you to be enrolled at UAEU and to live more than 50 km outside Al Ain. International students who are not on scholarship must pay the applicable fee before entering the housing unit.\n- The catalog lists **Service Completion Duration: 5 minutes** and **Service Delivery Time: Immediate**. Those are the electronic service's published processing labels; they do not guarantee that a room will be available or assigned.\n- The service publishes **no universal application deadline**. Use the live portal opening and your term-specific housing notice because eligibility and availability can change; submitting a request is not itself a room confirmation.",
+      "answer_ar": "**التقديم على السكن الطلابي**\n- افتح خدمة توزيع الغرف الرسمية وسجل الدخول بالهوية الرقمية UAE Pass أو باسم المستخدم وكلمة مرور الجامعة. الإجراء المنشور هو دفع رسوم السكن إن انطبقت، واختيار مبنى وغرفة متاحين، ثم انتظار تأكيد التخصيص بالبريد الإلكتروني.\n- يشترط طلب الغرفة للطالب الجديد وفق الشروط المنشورة أن يكون مقيداً في الجامعة وأن يكون سكنه خارج مدينة العين بأكثر من 50 كم. ويجب على الطالب الدولي غير المبتعث دفع الرسم المطبق قبل دخول الوحدة السكنية.\n- يعرض الدليل **مدة إكمال الخدمة: 5 دقائق** و**وقت تقديم الخدمة: فوري**. هذان وصفان منشوران لمعالجة الخدمة الإلكترونية ولا يضمنان توفر غرفة أو تخصيصها.\n- لا تنشر الخدمة موعدًا نهائيًا موحدًا لكل طلبات السكن. اعتمد على فتح الخدمة المباشر وإشعار السكن الخاص بالفصل لأن الأهلية والتوفر يتغيران؛ ولا يعني تقديم الطلب وحده تأكيد الغرفة.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Rooms Assignment Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "housing-unit-transfer",
+      "category": "housing",
+      "questions": ["What are the conditions for transferring between UAEU housing units?"],
+      "matchPhrases": ["transfer between housing units", "housing unit transfer conditions", "conditions apply want transfer between UAEU housing units", "change my UAEU housing room", "شروط الانتقال بين وحدات السكن الجامعي", "التحويل بين وحدات السكن"],
+      "excludePhrases": ["transfer to UAEU", "housing application for new student"],
+      "answer_en": "**Transfer Between UAEU Housing Units**\n- The published conditions require a **current student** to be enrolled and continuing at UAEU and to have completed at least **60 credit hours**.\n- The transfer service opens **before the beginning of each semester**; use the live Rooms Assignment Service when that transfer option is open.\n- For a request based on a private room or other housing transfer supported by a medical report, the report must be recent, issued by a government hospital or approved specialist, and no more than **one month old**. The specialized Medical Committee meets every Thursday, and the service says the outcome is sent within **two working days after the committee meeting**.\n- Approval still depends on the applicable conditions and room availability; submitting the request does not itself confirm a transfer.",
+      "answer_ar": "**الانتقال بين وحدات السكن في جامعة الإمارات**\n- تشترط القواعد المنشورة أن يكون مقدم الطلب **طالبًا حاليًا مقيدًا ومستمرًا في الجامعة** وأن يكون قد أكمل ما لا يقل عن **60 ساعة معتمدة**.\n- يفتح طلب الانتقال **قبل بداية كل فصل دراسي**؛ استخدم خدمة توزيع الغرف المباشرة عند ظهور خيار الانتقال.\n- إذا كان الطلب لغرفة خاصة أو لانتقال مدعوم بتقرير طبي، فيجب أن يكون التقرير حديثًا وصادرًا عن مستشفى حكومي أو طبيب اختصاصي معتمد وألا يزيد عمره على **شهر واحد**. تجتمع اللجنة الطبية المختصة كل يوم خميس، وتذكر الخدمة أن النتيجة تصل خلال **يومي عمل بعد اجتماع اللجنة**.\n- تظل الموافقة خاضعة للشروط المطبقة وتوفر الغرف، ولا يعني إرسال الطلب تأكيد الانتقال.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Rooms Assignment Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-housing-cost",
+      "category": "housing",
+      "questions": ["How much does university housing cost?"],
+      "matchPhrases": ["university housing cost", "international undergraduate housing cost", "UAEU housing fees", "housing application fee", "housing payment methods", "student residence price", "رسوم السكن الطلابي في جامعة الإمارات"],
+      "excludePhrases": ["tuition cost", "off-campus rent"],
+      "answer_en": "**Published University Housing Cost And Fees**\nThe current Rooms Assignment Service lists these fees for students who are not in the applicable scholarship-funded category:\n- International undergraduate: **AED 5,000 per semester**.\n- Postgraduate: **AED 5,600 per semester**.\n- Summer semester for international undergraduate and postgraduate students: **AED 1,575**.\n\nThe service does not list a separate housing application fee; it lists the applicable housing charges above. Your actual cost depends on your program and scholarship or funding category, and a room is also subject to eligibility and availability. Confirm the live service and your assignment notice before paying; the fees are paid **electronically** before entering housing and are not payable in cash or installments.",
+      "answer_ar": "**رسوم السكن الجامعي المنشورة**\nتعرض خدمة توزيع الغرف الحالية الرسوم الآتية للطلبة غير المشمولين بفئة المنح الممولة المعنية:\n- الطالب الدولي في البكالوريوس: **5,000 درهم لكل فصل**.\n- طالب الدراسات العليا: **5,600 درهم لكل فصل**.\n- الفصل الصيفي للطلبة الدوليين في البكالوريوس والدراسات العليا: **1,575 درهماً**.\n\nلا تدرج الخدمة **رسمًا منفصلًا لتقديم طلب السكن**، بل تدرج رسوم السكن المطبقة أعلاه. يعتمد الرسم الفعلي على البرنامج وفئة المنحة أو التمويل، كما تخضع الغرفة للأهلية والتوفر. تحقق من الخدمة المباشرة وإشعار التخصيص قبل الدفع؛ فالرسوم تدفع **إلكترونياً** قبل دخول السكن ولا تقبل نقداً أو بالتقسيط.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Rooms Assignment Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "housing-application-status",
+      "category": "housing",
+      "questions": ["How can I check my room assignment or housing application status?"],
+      "matchPhrases": ["check housing application status", "room assignment status", "housing portal status", "متابعة طلب السكن وتخصيص الغرفة"],
+      "excludePhrases": ["application admission status", "study room reservation"],
+      "answer_en": "**Check Your Assigned Room In The Housing Portal**\nOpen the UAEU **housing portal** and review your Rooms Assignment request, then check your UAEU email—including spam—for the **assignment confirmation**. The published service says students sign in with UAE Pass or UAEU credentials, pay any applicable fee, select a building and room, and receive confirmation by email; it does not describe a separate public status tracker. Do not treat a selected room as your **assigned room** until that confirmation arrives. If neither the portal nor email contains a result, call **800 8238** with your student ID and submission details.",
+      "answer_ar": "**متابعة تخصيص السكن**\nتنص خدمة توزيع الغرف على الدخول إلى البوابة بالهوية الرقمية أو حساب الجامعة، ودفع الرسم إن انطبق، واختيار المبنى والغرفة، ثم استلام **تأكيد التخصيص بالبريد الإلكتروني**. ولا تصف الخدمة متتبع حالة عاماً منفصلاً. افحص سجل الطلب في البوابة وبريد الجامعة، بما في ذلك الرسائل غير المرغوبة. إذا لم يظهر تأكيد فاتصل على **800 8238** مع رقمك الجامعي وبيانات التقديم؛ ولا تعتبر اختيار الغرفة وحده تخصيصاً مؤكداً.",
+      "disposition": "portal",
+      "citations": [
+        {
+          "title": "UAEU Rooms Assignment Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Student Portal",
+          "url": "https://my.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "housing-move-in-date",
+      "category": "housing",
+      "questions": ["When can I move into student housing?"],
+      "matchPhrases": ["student housing move-in date", "when can I move into housing", "residence check-in date", "موعد الانتقال إلى السكن الطلابي"],
+      "excludePhrases": ["housing application date"],
+      "answer_en": "**Use The Move-In Date In Your Student Housing Notice**\nThe current Rooms Assignment service publishes no universal housing **move-in dates**; it says the room assignment is confirmed by email. Your permitted move-in date and check-in instructions therefore come from that term-specific assignment or Residential Life notice. If the confirmation has no date, contact Residential Life at **+971 3 713 5416** or **residential.life@uaeu.ac.ae** before travelling and ask what ID or check-in document to bring.",
+      "answer_ar": "**انتقل إلى السكن في التاريخ الوارد في إشعار التخصيص فقط**\nلا تنشر خدمة توزيع الغرف الحالية تاريخاً عاماً للانتقال؛ بل تنص على إرسال تأكيد الغرفة بالبريد الإلكتروني. لذلك يكون تاريخ الدخول المسموح وتعليماته في إشعار التخصيص أو السكن الطلابي الخاص بذلك الفصل. إذا خلا التأكيد من التاريخ، فاتصل بالسكن الطلابي على **+971 3 713 5416** أو **residential.life@uaeu.ac.ae** قبل السفر واسأل عن الهوية أو مستند الدخول المطلوب.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Rooms Assignment Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "campus-shuttle-schedule",
+      "category": "transport",
+      "questions": ["أين أجد جدول حافلات الجامعة؟"],
+      "matchPhrases": ["جدول حافلات الجامعة", "مواعيد الحافلات في جامعة الإمارات", "أين يمكنني مشاهدة جدول حافلات الحرم الجامعي", "campus shuttle schedule", "campus shuttle buses"],
+      "excludePhrases": ["public bus schedule", "parking permit"],
+      "answer_en": "**Where To Get The Shuttle Timetable**\nUAEU's student handbook confirms that air-conditioned shuttle buses run regularly during the day between **all off-campus hostels and the main campus**, but the public source does not publish route-by-route departure times. The specific timetable depends on the hostel and term. Ask Residential Life for the current schedule at **+971 3 713 5416** or **residential.life@uaeu.ac.ae**; include your hostel, destination, and travel day.",
+      "answer_ar": "**مكان الحصول على جدول الحافلات**\nيؤكد دليل الطلبة أن حافلات مكيفة تعمل بانتظام نهاراً بين **جميع المساكن خارج الحرم والحرم الرئيسي**، لكن المصدر العام لا ينشر أوقات الانطلاق لكل مسار. يعتمد الجدول المحدد على السكن والفصل. اطلب الجدول الحالي من السكن الطلابي على **+971 3 713 5416** أو **residential.life@uaeu.ac.ae**، واذكر السكن والوجهة ويوم الرحلة.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Student Portal",
+          "url": "https://my.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "vehicle-parking-permit",
+      "category": "transport",
+      "questions": ["How do I apply for a campus parking or vehicle permit?"],
+      "matchPhrases": ["apply for a campus vehicle permit", "UAEU parking permit", "campus car permit", "التقديم على تصريح مركبة لدخول الحرم"],
+      "excludePhrases": ["visitor parking directions", "driving license"],
+      "answer_en": "**Campus Vehicle Permit**\nThe published campus **vehicle permit** is a proactive service for **admitted female students from Al Ain**; it does not use a conventional application form. Eligible students receive an activation notification and then download the authorized mobile application. The service lists no required documents or fee and describes delivery as immediate. If you are not in that audience or received no activation, call **800 8238**; the public service page does not identify another student-parking permit route.",
+      "answer_ar": "**تصريح دخول المركبة إلى الحرم**\nالتصريح المنشور **خدمة استباقية لطالبات العين المقبولات**، ولا يصف نموذج تقديم تقليدياً. تتلقى الطالبة المؤهلة إشعار تفعيل ثم تنزل تطبيق الهاتف المعتمد. وتذكر الخدمة عدم وجود مستندات أو رسوم وأن الإنجاز فوري. إذا لم تكوني ضمن هذه الفئة أو لم يصلك التفعيل فاتصلي على **800 8238**؛ فالصفحة العامة لا تحدد مسار تصريح طلابي آخر.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU University Campus Vehicle Access Permit",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "lost-and-found",
+      "category": "campus-services",
+      "questions": ["Where is lost and found, and how do I report a lost item?"],
+      "matchPhrases": ["lost and found", "report a lost item on campus", "found an item at UAEU", "الإبلاغ عن غرض مفقود في الجامعة"],
+      "excludePhrases": ["lost student ID replacement", "lost password"],
+      "answer_en": "**Contact UAEU Lost And Found**\nTo report a lost item, contact UAEU **Lost and Found**, run by the General Campus Supervision Office: call **+971 3 713 5416**, email **Lost&found@uaeu.ac.ae**, or visit **Building C5, Room 0007, ground floor, Female Campus**. Give the date, approximate location, item description, and your contact details. Whether an item has been recovered **depends on the current log**, so ask staff to confirm a match; keep a unique serial number or proof of ownership private for claim verification.",
+      "answer_ar": "**الإبلاغ لدى المفقودات في الجامعة**\nيدير مكتب الإشراف العام على الحرم خدمة المفقودات. اتصل على **+971 3 713 5416** أو راسل **Lost&found@uaeu.ac.ae** أو راجع **مبنى C5، الغرفة 0007، الطابق الأرضي، حرم الطالبات**. اذكر التاريخ والمكان التقريبي ووصف الغرض وبيانات الاتصال. يعتمد العثور على الغرض على السجل الحالي؛ فاطلب من الموظفين تأكيد أي تطابق، واحتفظ بالرقم التسلسلي أو إثبات الملكية سراً للتحقق من المطالبة.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "campus-dining-options",
+      "category": "dining",
+      "questions": ["What dining options and meal plans are available on campus?"],
+      "matchPhrases": ["campus dining options", "UAEU meal plans", "restaurants on campus", "خيارات الطعام والمطاعم في الحرم الجامعي"],
+      "excludePhrases": ["nutrition degree program", "food service course"],
+      "answer_en": "**Campus Dining And Hostel Restaurants**\nUAEU's student handbook confirms restaurants and cafés across campus; students living in the hostels can enter the hostel restaurant with their **student ID card**. It also identifies grocery and stationery/retail shops and directs students to **map.uaeu.ac.ae** to locate them. A specific meal entitlement or arrangement **depends on housing status**, and the public source does not publish a university-wide meal-plan price or enrollment process. Confirm the current hostel arrangement with Residential Life at **+971 3 713 5416** or **residential.life@uaeu.ac.ae**.",
+      "answer_ar": "**مطاعم الحرم ومطاعم السكن**\nيؤكد دليل الطلبة وجود مطاعم ومقاهٍ في الحرم، وأن المقيمين في السكن يستطيعون دخول مطعم السكن باستخدام **البطاقة الجامعية**. كما يذكر متاجر بقالة وقرطاسية وتجزئة ويوجه إلى **map.uaeu.ac.ae** لتحديدها. يعتمد استحقاق الوجبات أو ترتيبها على حالة السكن، ولا ينشر المصدر العام سعراً موحداً لخطة وجبات أو إجراء اشتراك عاماً. لتأكيد الترتيب الحالي اتصل بالسكن الطلابي على **+971 3 713 5416** أو **residential.life@uaeu.ac.ae**.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Campus Map",
+          "url": "https://map.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-clubs",
+      "category": "student-life",
+      "questions": ["How can I join a student club or start a new club?"],
+      "matchPhrases": ["join a student club", "start a new student club", "student clubs", "UAEU clubs and societies", "الانضمام إلى ناد طلابي أو تأسيس ناد جديد"],
+      "excludePhrases": ["sports club facility membership"],
+      "answer_en": "**Join Or Start A Student Club**\n- To join an existing club, request the current clubs list from the Student Life Department through the Student Happiness Center (**800 8238**, **dss.office@uaeu.ac.ae**, E1/CIT building).\n- To start a club or society, obtain Student Life approval and follow its Policy Manual. The published requirements say the proposing student must have a **GPA above 2.0** and **no disciplinary sanctions**. Approved clubs must have a clear purpose, leadership structure, and staff/faculty adviser; only approved clubs may seek university funding, equipment, or facilities.",
+      "answer_ar": "**الانضمام إلى نادٍ طلابي أو تأسيسه**\n- للانضمام إلى نادٍ قائم، اطلب قائمة الأندية الحالية من قسم الحياة الطلابية عبر مركز إسعاد الطلبة على **800 8238** أو **dss.office@uaeu.ac.ae** في مبنى E1/كلية تقنية المعلومات.\n- لتأسيس نادٍ أو جمعية، احصل على موافقة الحياة الطلابية واتبع دليل سياساتها. تشترط القواعد المنشورة أن يكون المعدل **أعلى من 2.0** وألا توجد **عقوبات تأديبية**. ويجب أن يكون للنادي المعتمد غرض وهيكل قيادة ومشرف من الموظفين أو أعضاء هيئة التدريس؛ والأندية المعتمدة وحدها تطلب التمويل أو المعدات أو المرافق.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "sports-facilities",
+      "category": "recreation",
+      "questions": ["What sports facilities can students use?"],
+      "matchPhrases": ["sports facilities for students", "UAEU fitness facilities", "student recreation facilities", "المرافق الرياضية المتاحة لطلاب الجامعة"],
+      "excludePhrases": ["sports scholarship", "sports science program"],
+      "answer_en": "**Student Sports Facilities**\nUAEU's student sports facilities include health/fitness clubs, swimming pools, indoor and outdoor courts, multipurpose halls, and exercise halls. Published activities include football, volleyball, basketball, handball, badminton, tennis, table tennis, squash, boxing, kickboxing, swimming, and fitness courses. Use **map.uaeu.ac.ae** with the filter **Sports Complex**. Access or booking depends on current student status, the facility, and its schedule; confirm current hours or eligibility at **+971 3 713 6659** for female students, **+971 3 713 4847** for male students, or **fitnesscenter@uaeu.ac.ae**.",
+      "answer_ar": "**المرافق الرياضية المتاحة للطلبة**\nتذكر الجامعة أندية الصحة واللياقة والمسابح والملاعب الداخلية والخارجية والقاعات متعددة الاستخدامات وصالات التمرين، مع أنشطة تشمل كرة القدم والطائرة والسلة واليد والريشة والتنس وتنس الطاولة والاسكواش والملاكمة والكيك بوكسينغ والسباحة ودورات اللياقة. استخدم **map.uaeu.ac.ae** ومرشح **Sports Complex**. يعتمد الدخول أو الحجز على حالة الطالب والمرفق وجدوله؛ ولتأكيد الساعات والأهلية تتصل الطالبات على **+971 3 713 6659** والطلاب على **+971 3 713 4847** أو يراسلون **fitnesscenter@uaeu.ac.ae**.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Campus Map",
+          "url": "https://map.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "university-events-workshops",
+      "category": "events",
+      "questions": ["ما الفعاليات وورش العمل القادمة في الجامعة؟"],
+      "matchPhrases": ["الفعاليات وورش العمل القادمة", "فعاليات جامعة الإمارات", "upcoming UAEU events and workshops", "university events"],
+      "excludePhrases": ["course timetable", "جدول المحاضرات"],
+      "answer_en": "**Upcoming Events And Workshops**\n- Use UAEU's official Events page for current university events and workshops, then open the individual listing to confirm date, time, venue, audience, and whether registration is required.\n- Event details can change, so recheck the listing shortly before attending.",
+      "answer_ar": "**الفعاليات وورش العمل القادمة**\n- استخدم صفحة الفعاليات الرسمية لجامعة الإمارات للاطلاع على الفعاليات وورش العمل الحالية، ثم افتح الإعلان الفردي لتأكيد التاريخ والوقت والمكان والجمهور ومتطلب التسجيل.\n- قد تتغير التفاصيل، لذا أعد التحقق من الإعلان قبل الحضور بوقت قصير.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Events",
+          "url": "https://www.uaeu.ac.ae/en/media-center/events/",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "health-clinic-appointment",
+      "category": "health",
+      "questions": ["How do I book an appointment at the campus health clinic?"],
+      "matchPhrases": ["book a campus health clinic appointment", "student health appointment", "UAEU clinic booking", "حجز موعد في عيادة الجامعة"],
+      "excludePhrases": ["counseling appointment", "medical emergency"],
+      "answer_en": "**Campus Health Clinic Appointment**\nThe current medical-care service does not offer a published online booking sequence; its stated procedure is to **visit the nearest medical clinic**, with a valid medical-insurance card listed as a condition. For a scheduled appointment, call the UAEU service line on **800 8238** first. The student handbook also lists **health.services@uaeu.ac.ae**; its main-campus clinics are G2 Room 1009 for male students and B3 Room 1004 for female students. For an emergency, do not wait for an appointment—call UAE Ambulance on **998**.",
+      "answer_ar": "**موعد العيادة الصحية في الحرم**\nلا تنشر خدمة الرعاية الطبية الحالية تسلسلاً إلكترونياً للحجز؛ والإجراء المذكور هو **زيارة أقرب عيادة طبية** مع إدراج بطاقة تأمين طبي سارية ضمن الشروط. للحصول على موعد محدد اتصل أولاً بخط الجامعة **800 8238**. ويورد دليل الطلبة أيضاً البريد **health.services@uaeu.ac.ae**؛ والعيادتان الرئيسيتان هما G2 الغرفة 1009 للطلاب وB3 الغرفة 1004 للطالبات. في الطوارئ لا تنتظر الموعد واتصل بالإسعاف على **998**.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Provide Medical Care Service for Students",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=115",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "campus-medical-emergency",
+      "category": "safety",
+      "questions": ["What should I do in a medical emergency on campus?"],
+      "matchPhrases": ["medical emergency on campus", "medical emergency on campus right now what number do I call", "call an ambulance at UAEU", "campus medical crisis", "حالة طبية طارئة داخل الحرم الجامعي"],
+      "excludePhrases": ["book clinic appointment", "medical insurance renewal"],
+      "answer_en": "**Medical Emergency — Act Immediately**\n- Call UAE Ambulance on **998** immediately; if there is an immediate security threat, call UAE Police on **999**.\n- State your exact campus building, room or landmark, what happened, and whether the person is conscious and breathing, then follow the emergency operator's instructions.\n- Ask someone nearby to guide responders, and do not move the person unless the operator tells you to or the location is dangerous.",
+      "answer_ar": "**طوارئ طبية — تصرف فوراً**\n- اتصل فوراً بالإسعاف في دولة الإمارات على **998**، وإذا كان هناك خطر أمني مباشر فاتصل بالشرطة على **999**.\n- اذكر مبنى الحرم والغرفة أو أقرب معلم وما حدث وما إذا كان الشخص واعياً ويتنفس، ثم اتبع تعليمات موظف الطوارئ.\n- اطلب من شخص قريب إرشاد المستجيبين، ولا تحرك المصاب إلا بتوجيه منهم أو إذا كان المكان خطراً.",
+      "disposition": "urgent",
+      "citations": [
+        {
+          "title": "UAE Government — Handling Emergencies",
+          "url": "https://u.ae/en/information-and-services/justice-safety-and-the-law/Safety",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Provide Medical Care Service for Students",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=115",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "counseling-appointment",
+      "category": "wellbeing",
+      "questions": ["كيف أحجز موعداً سرياً مع الإرشاد النفسي؟"],
+      "matchPhrases": ["حجز موعد مع الإرشاد النفسي", "موعد سري للاستشارة النفسية", "confidential counseling appointment"],
+      "excludePhrases": ["immediate emotional crisis", "أؤذي نفسي"],
+      "answer_en": "**Book Confidential Counseling**\nUAEU's Counseling and Wellbeing service accepts appointment requests through its booking system, by walk-in, or by email; open **Start Service** on the official page, or call **800 8238** if the booking link is not exposed. It is free for UAEU students and lists no required document. The first step is an assessment; individual counseling is usually **6–8 sessions of 45–60 minutes**. Records are confidential and are not added to the academic record; the published exceptions include danger to self/others and child sexual abuse. If harm is immediate, call Police **999** or Ambulance **998** now.",
+      "answer_ar": "**حجز إرشاد نفسي سري**\nتقبل خدمة الإرشاد النفسي والرفاه طلب الموعد عبر نظام الحجز أو الزيارة المباشرة أو البريد؛ افتح **Start Service** في الصفحة الرسمية، أو اتصل على **800 8238** إذا لم يظهر رابط الحجز. الخدمة مجانية لطلبة الجامعة ولا تذكر مستنداً مطلوباً. تبدأ بتقييم، وتكون الجلسات الفردية عادة **6 إلى 8 جلسات مدة كل منها 45 إلى 60 دقيقة**. السجلات سرية ولا تضاف إلى السجل الأكاديمي، والاستثناءات المنشورة تشمل خطر الطالب على نفسه أو غيره والاعتداء الجنسي على طفل. إذا كان الخطر فورياً فاتصل بالشرطة **999** أو الإسعاف **998** الآن.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Counseling and Wellbeing",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=116",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "mental-health-crisis",
+      "category": "safety",
+      "questions": ["I am in immediate emotional crisis and might hurt myself. What should I do?"],
+      "matchPhrases": ["might hurt myself", "might hurt myself now and need immediate help", "immediate emotional crisis", "immediate self-harm danger", "أزمة نفسية فورية وخطر إيذاء النفس"],
+      "excludePhrases": ["book routine counseling appointment"],
+      "answer_en": "**Immediate Emergency Help**\n- If you might hurt yourself now, call UAE Police on **999** or Ambulance on **998** immediately, or go to the nearest emergency department.\n- Do not stay alone: move away from anything you could use to hurt yourself and ask a trusted person to stay with you until emergency help arrives.\n- After the immediate danger is addressed, UAEU Counseling and Wellbeing can provide follow-up support; it is not a substitute for emergency response.",
+      "answer_ar": "**مساعدة فورية في حالة طارئة**\n- إذا كنت تفكر في إيذاء نفسك الآن، فاتصل فوراً بشرطة دولة الإمارات على **999** أو بالإسعاف على **998**، أو توجّه إلى أقرب قسم طوارئ.\n- لا تبقَ وحدك، وابتعد عن أي وسيلة قد تسبب الأذى واطلب من شخص تثق به أن يبقى معك حتى تصل المساعدة.\n- بعد معالجة الخطر المباشر، يمكن لخدمة الإرشاد النفسي والرفاه تقديم دعم لاحق، لكنها ليست بديلاً عن الاستجابة الطارئة.",
+      "disposition": "urgent",
+      "citations": [
+        {
+          "title": "UAE Government — Handling Emergencies",
+          "url": "https://u.ae/en/information-and-services/justice-safety-and-the-law/Safety",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Counseling and Wellbeing",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=116",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "accessibility-accommodations",
+      "category": "accessibility",
+      "questions": ["How do I request disability or accessibility accommodations?"],
+      "matchPhrases": ["request accessibility accommodations", "disability accommodations at UAEU", "students of determination support", "طلب ترتيبات إتاحة للطلاب أصحاب الهمم"],
+      "excludePhrases": ["accessible parking permit only"],
+      "answer_en": "**Request Accessibility Accommodations**\nContact the Students of Determination Services Center for a consultation and needs review so it can create an individual welfare/educational-support plan and coordinate with the relevant units. Call **+971 3 713 4264**, **+971 3 713 6686**, or **+971 3 713 6693**; email **sod@uaeu.ac.ae**; or visit **Building C5, ground floor, Rooms 0014/0012** on the female campus. The published hours are **7:30 a.m.–3:00 p.m., Sunday–Thursday**. State any imminent class or exam date and ask which current evidence applies to your requested accommodation.",
+      "answer_ar": "**طلب ترتيبات الإتاحة**\nتواصل مع مركز خدمات الطلبة أصحاب الهمم للحصول على استشارة ومراجعة للاحتياج ووضع خطة فردية للدعم التعليمي والشخصي والتنسيق مع الجهات المعنية. اتصل على **+971 3 713 4264** أو **+971 3 713 6686** أو **+971 3 713 6693**، أو راسل **sod@uaeu.ac.ae**، أو راجع **مبنى C5، الطابق الأرضي، الغرفتين 0014/0012** في حرم الطالبات. الساعات المنشورة **7:30 صباحاً إلى 3:00 مساءً، الأحد إلى الخميس**. اذكر تاريخ أي محاضرة أو اختبار قريب واسأل عن الإثبات الحالي المطلوب لترتيبك.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Students of Determination Services FAQ",
+          "url": "https://www.uaeu.ac.ae/en/student-services/special-needs/faq-booklet.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "harassment-formal-complaint",
+      "category": "safety",
+      "questions": ["How can I report harassment or make a formal complaint?"],
+      "matchPhrases": ["report harassment", "make a formal complaint", "official process report harassment file complaint", "student complaint about harassment", "الإبلاغ عن التحرش وتقديم شكوى رسمية"],
+      "excludePhrases": ["appeal a course grade", "library complaint"],
+      "answer_en": "**Submit A Formal Harassment Complaint**\nTo make a **formal complaint** about harassment, use UAEU's **Message Us** form, choose the applicable feedback type and customer category, label the subject **Formal harassment complaint**, and request a case/reference number and the responsible review office. UAEU's public contact page does not expose a harassment-specific form. You can also call **800 8238**, internationally **+971 3 701 7111**, or email **servicedesk@uaeu.ac.ae** for routing. Preserve dates, messages, locations, names, and witnesses; do not post evidence publicly. If anyone is in immediate danger, call UAE Police **999** first.",
+      "answer_ar": "**تقديم شكوى تحرش رسمية**\nلتقديم شكوى رسمية عن التحرش، استخدم نموذج **Message Us**، واختر نوع الملاحظة وفئة المتعامل المناسبين، واكتب في العنوان **شكوى تحرش رسمية** واطلب رقم قضية أو مرجع واسم جهة المراجعة المسؤولة؛ فصفحة التواصل العامة لا تعرض نموذجاً مخصصاً للتحرش. ويمكن الاتصال على **800 8238** أو دولياً **+971 3 701 7111** أو البريد **servicedesk@uaeu.ac.ae** للتوجيه. احتفظ بالتواريخ والرسائل والمواقع والأسماء والشهود ولا تنشر الأدلة علناً. إذا كان هناك خطر فوري فاتصل بالشرطة **999** أولاً.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Contact Us and Official Service Routing",
+          "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "campus-security-emergency",
+      "category": "safety",
+      "questions": ["ما رقم أمن الجامعة وكيف أبلغ عن حالة طارئة؟"],
+      "matchPhrases": ["رقم أمن الجامعة", "الإبلاغ عن حالة طارئة في الحرم", "ما رقم أمن الجامعة في حالة طارئة داخل الحرم", "campus security emergency number"],
+      "excludePhrases": ["lost and found", "شكوى غير طارئة"],
+      "answer_en": "**Campus Emergency — Call Immediately**\n- For an immediate security emergency, call UAE Police on **999**; for a medical emergency, call UAE Ambulance on **998**.\n- UAEU's published safety manual lists Campus Security or Service Desk as **03 713 8000**, but national emergency numbers take priority when life or safety is at risk.\n- Give the campus building, room or landmark, describe the threat, and follow the operator's instructions.",
+      "answer_ar": "**طوارئ أمن الجامعة — اتصل فوراً**\n- في حالة تهدد أمن الجامعة أو السلامة فوراً، اتصل بشرطة دولة الإمارات على **999**، وللطوارئ الطبية اتصل بالإسعاف على **998**.\n- يورد دليل السلامة المنشور لجامعة الإمارات رقم أمن الجامعة أو مكتب الخدمة **03 713 8000**، لكن أرقام الطوارئ الوطنية لها الأولوية عند وجود خطر على الحياة أو السلامة.\n- اذكر مبنى الحرم والغرفة أو أقرب معلم، واشرح حالة الطوارئ واتبع تعليمات موظف الاستجابة.",
+      "disposition": "urgent",
+      "citations": [
+        {
+          "title": "UAE Government — Handling Emergencies",
+          "url": "https://u.ae/en/information-and-services/justice-safety-and-the-law/Safety",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU College of Engineering Safety Manual",
+          "url": "https://www.uaeu.ac.ae/en/eng/pdf/safetymanual2021.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-visa-application",
+      "category": "international",
+      "questions": ["How do international students apply for a student visa?"],
+      "matchPhrases": ["international student visa application", "apply for a student visa", "eligible for a UAEU student visa", "student visa eligibility", "visa application deadline", "UAEU sponsored student visa", "التقديم على تأشيرة طالب بكفالة الجامعة"],
+      "excludePhrases": ["renew my student visa", "visa application status", "tourist visa"],
+      "answer_en": "**International Student Visa Application**\nThis **student visa** service is for an enrolled international student sponsored by the university; admission alone does not guarantee UAEU sponsorship or immigration approval. Sign in to the UAEU portal or mobile app, select **Obtain residence visa and necessary documents for international students**, choose the service type, complete the live form, and submit. The catalog lists the UAEU service as free with a published seven-day delivery time, subject to the applicable UAE rules and approvals. It does not publish a separate fixed application deadline; act on the term-specific instructions from International Student Services and do not wait until travel or an existing status is about to expire. Eligibility **depends on UAEU sponsorship and the specific immigration case**; confirm a missing option, deadline, or sponsorship question at **03 713 6693** or **iso.office@uaeu.ac.ae**.",
+      "answer_ar": "**طلب إقامة طالب بكفالة جامعة الإمارات**\nالخدمة مخصصة **للطالب الدولي المقيد الذي تكون كفالته على الجامعة**؛ ولا يضمن القبول وحده الكفالة أو موافقة الهجرة. سجل الدخول إلى بوابة الجامعة أو تطبيق الهاتف، واختر **الحصول على تأشيرة الإقامة والمستندات اللازمة للطلبة الدوليين**، ثم نوع الخدمة، وأكمل النموذج المباشر وأرسله. يعرض الدليل خدمة الجامعة مجانية ومدة إنجاز منشورة سبعة أيام، مع خضوعها لقوانين الدولة والموافقات. ولا ينشر الدليل **موعدًا نهائيًا ثابتًا منفصلًا للتقديم**؛ اتبع تعليمات مكتب خدمات الطلبة الدوليين الخاصة بالفصل ولا تنتظر حتى يقترب السفر أو انتهاء الوضع الحالي. للتحقق من الأهلية أو الموعد أو فقدان النموذج اتصل على **03 713 6693** أو **iso.office@uaeu.ac.ae**.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Student Visa Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=109",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "student-visa-renewal",
+      "category": "international",
+      "questions": ["How do I renew my student visa before it expires?"],
+      "matchPhrases": ["renew my student visa", "renew visa online", "visa renewal requirements", "how long does visa renewal take", "student visa renewal before expiry", "steps renew UAEU student visa before expiry", "extend UAEU student visa", "تجديد تأشيرة الطالب بكفالة الجامعة"],
+      "excludePhrases": ["apply for first student visa", "visa renewal status", "passport renewal"],
+      "answer_en": "**Renew A UAEU-Sponsored Student Visa**\nYou may renew while continuing your studies if the residence is sponsored by UAEU. Before expiry, sign in to the portal or mobile app, open the international-student residence service, choose **Residence Visa Renewal**, attach the live form's documents, and submit. The current service FAQ specifically names a **recent photograph with a white background**. The catalog lists the university service as free and seven days, but immigration processing and case-specific steps can vary. Keep the reference; if the option is absent, call **03 713 6693** or email **iso.office@uaeu.ac.ae**.",
+      "answer_ar": "**تجديد إقامة الطالب المكفول من الجامعة**\nيمكن التجديد أثناء الاستمرار في الدراسة إذا كانت الإقامة على كفالة الجامعة. قبل الانتهاء سجل الدخول إلى البوابة أو تطبيق الهاتف، وافتح خدمة إقامة الطلبة الدوليين، واختر **تجديد تأشيرة الإقامة**، وأرفق مستندات النموذج المباشر ثم أرسل الطلب. تذكر الأسئلة الشائعة الحالية تحديداً **صورة حديثة بخلفية بيضاء**. يعرض الدليل خدمة الجامعة مجانية وسبعة أيام، لكن معاملة الهجرة والخطوات الفردية قد تختلف. احتفظ بالمرجع، وإذا غاب الخيار فاتصل على **03 713 6693** أو **iso.office@uaeu.ac.ae**.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Student Visa Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=109",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU International Students FAQ",
+          "url": "https://www.uaeu.ac.ae/ar/student-services/iso/faq-booklet.pdf",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "visa-renewal-documents",
+      "category": "international",
+      "questions": ["ما المستندات المطلوبة لتجديد تأشيرة الطالب؟"],
+      "matchPhrases": ["المستندات المطلوبة لتجديد تأشيرة الطالب", "وثائق تجديد التأشيرة", "student visa renewal documents"],
+      "excludePhrases": ["حالة طلب التأشيرة", "إصدار تأشيرة جديدة", "تجديد جواز السفر"],
+      "answer_en": "**Student Visa Renewal Documents**\nThe current service page explicitly names a **recent photograph with a white background**, but its public required-documents field is duplicated and does not provide a reliable complete checklist. UAEU's published International Students FAQ additionally lists the original passport, personal photo, current enrollment/continuation certificate, preventive-medicine blood-test result, valid health insurance copy, valid Emirates ID copy, and payment receipt.\n\nThe specific checklist depends on the immigration case, so the documents shown in your live renewal form are final. Before handing over originals, confirm any discrepancy with the International Student Services Office at **03 713 6693** or **iso.office@uaeu.ac.ae**.",
+      "answer_ar": "**المستندات المطلوبة لتجديد التأشيرة**\nتذكر صفحة الخدمة الحالية صراحة **صورة حديثة بخلفية بيضاء**، لكن خانة المستندات العامة فيها مكررة ولا تعرض قائمة كاملة موثوقة. وتضيف الأسئلة الشائعة المنشورة لمكتب الطلبة الدوليين: أصل جواز السفر، وصورة شخصية، وشهادة قيد أو استمرارية دراسة حديثة، ونتيجة فحص الدم من الطب الوقائي، وصورة تأمين صحي ساري، وصورة هوية إماراتية سارية، وإيصال الدفع.\n\nتختلف القائمة المحددة بحسب حالة الهجرة، لذلك تكون المستندات الظاهرة في نموذج التجديد المباشر هي النهائية. تأكد من أي اختلاف قبل تسليم الأصول عبر **03 713 6693** أو **iso.office@uaeu.ac.ae**.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU International Students FAQ",
+          "url": "https://www.uaeu.ac.ae/ar/student-services/iso/faq-booklet.pdf",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Student Visa Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=109",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "visa-status",
+      "category": "international",
+      "questions": ["How can I check my visa application or renewal status?"],
+      "matchPhrases": ["check visa application status", "student visa renewal status", "track UAEU visa request", "متابعة حالة طلب التأشيرة أو التجديد"],
+      "excludePhrases": ["apply for a student visa", "visa renewal documents", "transcript status"],
+      "answer_en": "**Check Visa Status In The Official UAEU Portal**\nSign in to the official UAEU portal or mobile app, reopen **Obtain residence visa and necessary documents for international students**, and inspect the submitted request if the portal displays it. The public service page does not document a separate external visa status tracker. If the portal shows no usable status, call the International Student Services Office at **03 713 6693** or email **iso.office@uaeu.ac.ae** with your university ID and submission reference; provide passport data only through the secure official channel. The office or portal response is authoritative for your case.",
+      "answer_ar": "**متابعة طلب التأشيرة أو التجديد**\nسجل الدخول إلى بوابة الجامعة أو تطبيق الهاتف، وأعد فتح خدمة **الحصول على تأشيرة الإقامة والمستندات اللازمة للطلبة الدوليين**، وافحص الطلب المرسل إذا عرضته البوابة. لا توثق صفحة الخدمة العامة متتبعاً خارجياً منفصلاً. إذا لم تعرض البوابة حالة مفيدة، فاتصل بمكتب خدمات الطلبة الدوليين على **03 713 6693** أو **iso.office@uaeu.ac.ae** مع رقمك الجامعي ومرجع الطلب، ولا ترسل بيانات الجواز إلا عبر القناة الرسمية الآمنة. يكون رد المكتب أو البوابة هو المعتمد لحالتك.",
+      "disposition": "portal",
+      "citations": [
+        {
+          "title": "UAEU Student Portal",
+          "url": "https://my.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Student Visa Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=109",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "international-student-health-insurance",
+      "category": "international",
+      "questions": ["هل يحصل الطلبة الدوليون على تأمين صحي؟"],
+      "matchPhrases": ["الطلبة الدوليون على تأمين صحي", "التأمين الصحي للطالب الدولي", "international student health insurance"],
+      "excludePhrases": ["موعد العيادة", "تجديد التأشيرة فقط", "travel insurance"],
+      "answer_en": "**Health Insurance For International Students**\nEligible international students on **UAEU-sponsored residence** are included in the health-card service. For Daman, the published conditions require the student to be enrolled and sponsored by UAEU and to have a valid visa, passport, and photo; insurance is therefore not automatic for every international student. Apply through the portal or UAEU app: complete the health-card form, attach what the live form requests, and submit. The catalog lists the service as **free**, with **five-day** delivery; it says renewal occurs each May while UAEU sponsorship and enrollment continue. If UAEU does not sponsor your residence, confirm your requirement at **03 713 6693** or **iso.office@uaeu.ac.ae**.",
+      "answer_ar": "**التأمين الصحي للطلبة الدوليين**\nالطلبة الدوليون المؤهلون على **إقامة بكفالة الجامعة** مشمولون بخدمة البطاقة الصحية. وتشترط تغطية ضمان المنشورة أن يكون الطالب مقيداً ومكفولاً من الجامعة ولديه تأشيرة وجواز ساريان وصورة؛ لذلك لا يصدر التأمين تلقائياً لكل طالب دولي. قدم عبر البوابة أو تطبيق الجامعة: عبّئ النموذج وأرفق ما يطلبه النموذج المباشر ثم أرسله. يعرض الدليل الخدمة **مجانية** ومدة إنجاز **خمسة أيام**، ويذكر التجديد في مايو من كل سنة مع استمرار الكفالة والقيد. إذا كنت من **الطلبة الدوليين** ولم تكن إقامتك على كفالة الجامعة، فتأكد من متطلباتك عبر **03 713 6693** أو **iso.office@uaeu.ac.ae**.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Health Card Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?culture=ar&serviceId=114",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "career-cv-interview-support",
+      "category": "careers",
+      "questions": ["Can the career center review my CV or help me prepare for an interview?"],
+      "matchPhrases": ["career center review my CV", "help prepare for an interview", "CV and interview support", "مراجعة السيرة الذاتية والاستعداد للمقابلة"],
+      "excludePhrases": ["apply for a university job", "internship vacancy list", "alumni transcript"],
+      "answer_en": "**Request CV And Interview Support**\nUAEU's career service covers individual/group counseling, career readiness and guidance, employability skills, workshops, and career assessments. Its public page does not promise a named CV-review or mock-interview package, so request those specific needs in the form. Sign in to the portal or UAEU app, complete the Career Counseling form, and submit it; the team evaluates the request and schedules an appointment. The service is free for enrolled students and lists no required document. Bring your CV and target job/internship description; call **800 8238** if the form is unavailable.",
+      "answer_ar": "**طلب دعم السيرة الذاتية والمقابلة**\nتشمل خدمة الإرشاد المهني في الجامعة الإرشاد الفردي والجماعي والجاهزية المهنية والمهارات الوظيفية والورش والتقييمات. ولا تعد الصفحة العامة بخدمة مسماة لمراجعة السيرة الذاتية أو المقابلة التجريبية، لذلك اكتب هذين الطلبين تحديداً في النموذج. سجل الدخول إلى البوابة أو تطبيق الجامعة، وعبّئ نموذج الإرشاد المهني وأرسله؛ يقيّم الفريق الطلب ثم يحدد موعداً. الخدمة مجانية للطلبة المقيدين ولا تذكر مستنداً مطلوباً. أحضر سيرتك ووصف الوظيفة أو التدريب، واتصل على **800 8238** إذا تعطل النموذج.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Career Counseling Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=104",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "internships-student-jobs",
+      "category": "careers",
+      "questions": ["أين أجد فرص التدريب والعمل للطلبة؟"],
+      "matchPhrases": ["فرص التدريب والعمل للطلبة", "وظائف وتدريب للطلاب", "student internships and jobs", "offering internships"],
+      "excludePhrases": ["موعد الإرشاد المهني", "وظائف الخريجين فقط", "السجل الأكاديمي"],
+      "answer_en": "**Where Students Find Internships And Work Leads**\n- For internships, use UAEU's **Internship System** under **Interns and Students**; it also has separate roles for the field supervisor, academic adviser, and coordinators. Your college or program determines eligibility, academic credit, approval, and deadlines.\n- For work while still enrolled, the public catalog does not provide a dedicated student-job application page. Submit a Career Counseling request for current placement or on-campus work leads. **Job Navigator is described by UAEU as a portal for graduates**, with Jobs Directory, Build Your Profile, and Track Your Applications, so do not assume every listing is open to current students.\nVerify the employer, eligibility, deadline, and whether the opportunity carries academic credit before applying.",
+      "answer_ar": "**أين يجد الطلبة فرص التدريب والعمل**\n- لفرص **التدريب** استخدم **نظام التدريب** الرسمي تحت **Interns and Students**؛ وله أدوار منفصلة للمشرف الميداني والمرشد الأكاديمي والمنسقين. وتحدد الكلية أو البرنامج الأهلية والساعات والاعتماد والمواعيد.\n- لفرص **العمل** أثناء القيد، لا يعرض الدليل العام صفحة تقديم مخصصة لوظائف الطلبة. قدم طلب إرشاد مهني للحصول على فرص التوظيف أو العمل داخل الحرم الحالية. وتصف الجامعة **Job Navigator بأنه للخريجين** ويضم دليل الوظائف وبناء الملف وتتبع الطلبات، فلا تفترض أن كل إعلان متاح للطالب الحالي.\nتحقق من جهة العمل والأهلية والموعد واحتساب الساعات قبل التقديم.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Internship System",
+          "url": "https://internship.uaeu.ac.ae/index.jsp",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Career Counseling Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=104",
+          "lastVerified": "2026-09-16"
+        },
+        {
+          "title": "UAEU Job Navigator",
+          "url": "https://jobnavigator.uaeu.ac.ae/index.jsp",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    },
+    {
+      "id": "alumni-official-transcript",
+      "category": "alumni",
+      "questions": ["I am an alumnus; how can I request an official transcript?"],
+      "matchPhrases": ["alumnus request official transcript", "alumni official transcript", "graduate academic transcript request", "طلب كشف درجات رسمي للخريج"],
+      "excludePhrases": ["current student unofficial transcript", "high school transcript", "admission transcript upload"],
+      "answer_en": "**Request An Alumni Official Transcript**\n1. Sign in to the UAEU portal or app with UAE Pass or your UAEU email and select **Extracting Graduate's Students Documents**.\n2. Select your degree, **official transcript**, digital or printed format, and delivery method; pay only if requesting the printed version, then submit.\nThe current catalog says digital documents are **free** and normally delivered in **3 hours**; a printed transcript costs **AED 30** and the listed delivery time is **3 days**. No supporting document is listed. Keep the request reference and call **800 8238** if your graduate record is not available.",
+      "answer_ar": "**طلب كشف درجات رسمي للخريج**\n1. سجل الدخول إلى بوابة الجامعة أو التطبيق بالهوية الرقمية أو بريد الجامعة، واختر **Extracting Graduate's Students Documents**.\n2. اختر الدرجة و**كشف الدرجات الرسمي** والصيغة الرقمية أو المطبوعة وطريقة التسليم، وادفع فقط إذا اخترت النسخة المطبوعة ثم أرسل الطلب.\nيعرض الدليل الحالي الوثائق الرقمية **مجاناً** ومدة إنجاز **3 ساعات**، وكشف الدرجات المطبوع بسعر **30 درهماً** ومدة **3 أيام**. لا يدرج مستنداً داعماً. احتفظ بالمرجع واتصل على **800 8238** إذا لم يظهر سجل الخريج.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Alumni Student Documents Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122",
+          "lastVerified": "2026-09-16"
+        }
+      ]
+    }
+  ]
+}

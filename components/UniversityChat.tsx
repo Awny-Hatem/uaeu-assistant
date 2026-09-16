@@ -21,6 +21,7 @@ import {
   Search,
   Send,
   ShieldCheck,
+  Trash2,
   User,
   UserCircle,
   UserPlus,
@@ -54,6 +55,8 @@ type UiMessage = {
   escalationReason?: EscalationReason;
   provider?: string;
   model?: string;
+  faqId?: string;
+  disposition?: "answer" | "clarify" | "portal" | "handoff" | "urgent";
 };
 type LocalePref = "auto" | "ar" | "en";
 type AuthUser = {
@@ -81,6 +84,8 @@ type ChatApiResponse = {
   escalationReason?: EscalationReason;
   provider?: string;
   model?: string;
+  faqId?: string;
+  disposition?: "answer" | "clarify" | "portal" | "handoff" | "urgent";
   error?: string;
 };
 
@@ -121,9 +126,22 @@ function todayKey() {
 
 function safeMarkdownUrl(url: string): string {
   try {
-    const parsed = new URL(url, "https://uaeu.local");
-    if (parsed.protocol === "http:" || parsed.protocol === "https:" || parsed.protocol === "mailto:") {
-      return url;
+    const parsed = new URL(url);
+    if (parsed.protocol === "mailto:") {
+      return parsed.pathname.toLowerCase().endsWith("@uaeu.ac.ae") ? url : "";
+    }
+    if (parsed.protocol === "https:") {
+      const host = parsed.hostname.toLowerCase();
+      const official =
+        host === "uaeu.ac.ae" ||
+        host.endsWith(".uaeu.ac.ae") ||
+        host === "u.ae" ||
+        host.endsWith(".u.ae") ||
+        host === "moe.gov.ae" ||
+        host.endsWith(".moe.gov.ae") ||
+        host === "mohesr.gov.ae" ||
+        host.endsWith(".mohesr.gov.ae");
+      return official ? url : "";
     }
   } catch {
     return "";
@@ -134,6 +152,7 @@ function safeMarkdownUrl(url: string): string {
 
 function isAssistantSource(value: unknown): value is AssistantSource {
   return (
+    value === "conversation" ||
     value === "faq" ||
     value === "rag" ||
     value === "web" ||
@@ -172,6 +191,8 @@ function sanitizeStoredMessages(rawMessages: unknown): UiMessage[] {
         escalationReason: message.escalationReason,
         provider: message.provider,
         model: message.model,
+        faqId: message.faqId,
+        disposition: message.disposition,
       },
     ];
   });
@@ -243,6 +264,20 @@ function writeAccountMessages(userId: string, messages: UiMessage[]) {
   }
 }
 
+function clearAccountMessages(userId: string) {
+  if (typeof window === "undefined") return;
+  try {
+    const parsed = JSON.parse(localStorage.getItem(ACCOUNT_MESSAGES_KEY) || "{}") as Record<
+      string,
+      unknown
+    >;
+    delete parsed[userId];
+    localStorage.setItem(ACCOUNT_MESSAGES_KEY, JSON.stringify(parsed));
+  } catch {
+    // Clearing local history is best effort when storage is unavailable.
+  }
+}
+
 function readAccountUsage(userId: string): number {
   if (typeof window === "undefined") return 0;
 
@@ -281,11 +316,12 @@ function planName(plan: QuotaPlan) {
 }
 
 function sourceLabel(source: AssistantSource) {
-  if (source === "faq") return "FAQ answer";
+  if (source === "conversation") return "Conversation";
+  if (source === "faq") return "Official-source answer";
   if (source === "rag") return "Verified document search";
   if (source === "web") return "External grounding";
   if (source === "guide") return "Guided service";
-  if (source === "escalated") return "Official verification needed";
+  if (source === "escalated") return "Clarification or staff help";
   return "System notice";
 }
 
@@ -472,6 +508,24 @@ export function UniversityChat() {
     loadGuestConversation();
   }
 
+  async function handleClearConversation() {
+    setMessages([]);
+    setInput("");
+    setActiveGuide(null);
+    if (user) {
+      clearAccountMessages(user.id);
+      try {
+        await fetch("/api/history", { method: "DELETE" });
+      } catch {
+        // Server history is optional; the browser copy is already cleared.
+      }
+    } else {
+      writeGuestState([], guestQuestionsUsed);
+    }
+    setBanner("Conversation history cleared from this browser.");
+    setProfileOpen(false);
+  }
+
   const incrementUsage = useCallback(() => {
     if (user) {
       setAccountQuestionsUsed((current) => {
@@ -579,6 +633,8 @@ export function UniversityChat() {
             escalationReason: data.escalationReason,
             provider: data.provider,
             model: data.model,
+            faqId: data.faqId,
+            disposition: data.disposition,
           },
         ]);
         incrementUsage();
@@ -697,6 +753,16 @@ export function UniversityChat() {
         </div>
 
         <div className="border-t border-zinc-200 p-4 dark:border-zinc-800">
+          {hasUserMessages && (
+            <button
+              type="button"
+              onClick={() => void handleClearConversation()}
+              className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+            >
+              <Trash2 size={15} />
+              Clear Conversation
+            </button>
+          )}
           {user ? (
             <button
               type="button"
@@ -769,6 +835,16 @@ export function UniversityChat() {
                       {quotaRemaining} of {quotaLimit} questions left
                     </p>
                   </div>
+                  {hasUserMessages && (
+                    <button
+                      type="button"
+                      onClick={() => void handleClearConversation()}
+                      className="flex w-full items-center gap-2 border-b border-zinc-100 px-4 py-3 text-xs font-bold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                    >
+                      <Trash2 size={13} />
+                      Clear Conversation
+                    </button>
+                  )}
                   {user ? (
                     <button
                       type="button"
@@ -970,6 +1046,7 @@ export function UniversityChat() {
               <textarea
                 ref={inputRef}
                 className="max-h-40 min-h-[58px] w-full resize-none rounded-2xl border border-zinc-200 bg-white px-5 py-4 pr-16 text-[1rem] font-medium text-zinc-900 shadow-sm outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 disabled:bg-zinc-50 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:disabled:bg-zinc-900/60"
+                maxLength={6000}
                 rows={1}
                 placeholder={
                   quotaBlocked
@@ -1006,7 +1083,8 @@ export function UniversityChat() {
               </button>
             </div>
             <p className="mt-2 text-center text-[11px] font-medium text-zinc-400 dark:text-zinc-600">
-              Prototype answers are guidance only; use official UAEU pages for final decisions.
+              Up to 80 messages stay in this browser until cleared. Do not paste passwords,
+              IDs, medical records, visa files, or case evidence.
             </p>
           </div>
         </footer>

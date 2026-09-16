@@ -1,57 +1,8 @@
 import type { Citation, ServiceGuide } from "@/lib/prototype-types";
+import type { FaqEntry } from "@/lib/faq";
+import { loadKnowledgeMarkdown } from "@/lib/knowledge-files";
 
-const VERIFIED_ON = "2026-09-15";
-
-const FAQ_CITATIONS: Record<string, Citation[]> = {
-  "hours-contact": [
-    {
-      title: "UAEU Contact Us",
-      url: "https://www.uaeu.ac.ae/en/contact/index.shtml",
-      lastVerified: VERIFIED_ON,
-    },
-  ],
-  "where-official-info": [
-    {
-      title: "UAEU Official Website",
-      url: "https://www.uaeu.ac.ae/",
-      lastVerified: VERIFIED_ON,
-    },
-  ],
-  "academic-calendar": [
-    {
-      title: "UAEU Academic Calendar",
-      url: "https://www.uaeu.ac.ae/ar/calendar/",
-      lastVerified: VERIFIED_ON,
-    },
-  ],
-  library: [
-    {
-      title: "UAEU Library Services",
-      url: "https://www.uaeu.ac.ae/",
-      lastVerified: VERIFIED_ON,
-    },
-  ],
-  "student-documents": [
-    {
-      title: "UAEU Enrolled Students Documents Service",
-      url: "https://www.uaeu.ac.ae/ar/eservices/details.shtml?serviceId=92",
-      lastVerified: VERIFIED_ON,
-    },
-  ],
-};
-
-const KNOWLEDGE_CITATIONS: Record<string, Citation> = {
-  "00-overview.md": {
-    title: "UAEU Assistant Prototype Knowledge Overview",
-    document: "data/knowledge/00-overview.md",
-    lastVerified: VERIFIED_ON,
-  },
-  "01-admissions-placeholder.md": {
-    title: "Admissions Content Placeholder",
-    document: "data/knowledge/01-admissions-placeholder.md",
-    lastVerified: "Requires UAEU content-owner verification",
-  },
-};
+const VERIFIED_ON = "2026-09-16";
 
 export const CONTACT_CITATION: Citation = {
   title: "UAEU Contact Us",
@@ -59,8 +10,31 @@ export const CONTACT_CITATION: Citation = {
   lastVerified: VERIFIED_ON,
 };
 
-export function citationsForFaq(faqId: string): Citation[] {
-  return FAQ_CITATIONS[faqId] ?? [CONTACT_CITATION];
+function isApprovedOfficialUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:") return false;
+    const host = url.hostname.toLowerCase();
+    return (
+      host === "uaeu.ac.ae" ||
+      host.endsWith(".uaeu.ac.ae") ||
+      host === "mohesr.gov.ae" ||
+      host.endsWith(".mohesr.gov.ae") ||
+      host === "moe.gov.ae" ||
+      host.endsWith(".moe.gov.ae") ||
+      host === "u.ae" ||
+      host.endsWith(".u.ae")
+    );
+  } catch {
+    return false;
+  }
+}
+
+export function citationsForFaq(entry: Pick<FaqEntry, "citations">): Citation[] {
+  const approved = entry.citations.filter(
+    (citation) => citation.url && isApprovedOfficialUrl(citation.url),
+  );
+  return approved.length ? uniqueCitations(approved) : [CONTACT_CITATION];
 }
 
 export function citationForGuide(guide: ServiceGuide): Citation {
@@ -72,17 +46,51 @@ export function citationForGuide(guide: ServiceGuide): Citation {
 }
 
 export function citationsFromRows(
-  rows: { source: string }[],
+  rows: { source: string; score?: number }[],
+  query = "",
 ): Citation[] {
+  const approvedDocuments = new Map(
+    loadKnowledgeMarkdown().map((document) => [document.filename, document]),
+  );
+  const topScore = Math.max(0, ...rows.map((row) => row.score ?? 0));
+  const identifiers = new Set(
+    query
+      .toLowerCase()
+      .match(/\b(?=[a-z\d-]*[a-z])(?=[a-z\d-]*\d)[a-z\d-]{4,}\b/g) ?? [],
+  );
+  const bestScoreBySource = new Map<string, number>();
+  for (const row of rows) {
+    bestScoreBySource.set(
+      row.source,
+      Math.max(bestScoreBySource.get(row.source) ?? 0, row.score ?? 0),
+    );
+  }
+
+  const relevantSources = new Set(
+    [...bestScoreBySource].flatMap(([source, score]) => {
+      const document = approvedDocuments.get(source);
+      if (!document) return [];
+      const title = document.title.toLowerCase();
+      const titleNamesRequestedIdentifier = [...identifiers].some((identifier) =>
+        title.includes(identifier),
+      );
+      const nearTop = topScore === 0 || score >= topScore * 0.75;
+      return nearTop || titleNamesRequestedIdentifier ? [source] : [];
+    }),
+  );
+
   return uniqueCitations(
-    rows.map((row) => {
-      const known = KNOWLEDGE_CITATIONS[row.source];
-      if (known) return known;
-      return {
-        title: row.source,
-        document: `data/knowledge/${row.source}`,
-        lastVerified: "Requires verification",
-      };
+    rows.flatMap((row) => {
+      if (!relevantSources.has(row.source)) return [];
+      const document = approvedDocuments.get(row.source);
+      if (!document) return [];
+      return [
+        {
+          title: document.title,
+          url: document.sourceUrl,
+          lastVerified: document.lastVerified,
+        },
+      ];
     }),
   );
 }

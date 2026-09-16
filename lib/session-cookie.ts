@@ -6,10 +6,15 @@ export const LOCAL_ACCOUNTS_COOKIE_NAME = "chat_local_accounts";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 export const SESSION_MAX_AGE_MS = SESSION_MAX_AGE_SECONDS * 1000;
 export const LOCAL_ACCOUNTS_MAX_AGE_SECONDS = 60 * 60 * 24 * 365;
+export const LOCAL_ACCOUNTS_MAX_AGE_MS = LOCAL_ACCOUNTS_MAX_AGE_SECONDS * 1000;
 
-const SIGNED_SESSION_PREFIX = "local";
-const SIGNATURE_BYTES = 32;
+const SEALED_COOKIE_PREFIX = "sealed3";
+const IV_BYTES = 12;
 const MAX_LOCAL_ACCOUNTS = 5;
+const MAX_ENCRYPTED_COOKIE_VALUE_BYTES = 3_800;
+const MAX_ACCEPTED_COOKIE_VALUE_BYTES = 4_096;
+
+type CookiePurpose = "session" | "local-accounts";
 
 export type SessionCookieUser = {
   id: string;
@@ -25,10 +30,11 @@ export type LocalAccountRecord = SessionCookieUser & {
   createdAt: number;
 };
 
-type SignedEnvelope<T> = {
+type SealedEnvelope<T> = {
   data: T;
   expiresAt?: number;
-  v: 1;
+  purpose: CookiePurpose;
+  v: 3;
 };
 
 export function sessionCookieOptions(maxAge = SESSION_MAX_AGE_SECONDS) {
@@ -54,73 +60,179 @@ export function localAccountsCookieOptions(maxAge = LOCAL_ACCOUNTS_MAX_AGE_SECON
 function cookieSecret(): string | null {
   const explicit = process.env.AUTH_COOKIE_SECRET?.trim();
   if (explicit && explicit.length >= 32) return explicit;
+  return null;
+}
 
-  const providerSecret =
-    process.env.OPENAI_API_KEY?.trim() || process.env.GEMINI_API_KEY?.trim();
-  if (!providerSecret) return null;
-
-  return crypto
-    .createHash("sha256")
-    .update(`uaeu-assistant-local-auth:${providerSecret}`)
-    .digest("hex");
+export function authCookieSecretConfigured(): boolean {
+  return Boolean(cookieSecret());
 }
 
 function base64Url(input: string | Buffer): string {
   return Buffer.from(input).toString("base64url");
 }
 
-function signPayload(payload: string, secret: string): string {
-  return crypto.createHmac("sha256", secret).update(payload).digest("base64url");
+function encryptionKey(secret: string): Buffer {
+  return crypto.createHash("sha256").update(secret).digest();
 }
 
-function signaturesMatch(a: string, b: string): boolean {
-  try {
-    const left = Buffer.from(a, "base64url");
-    const right = Buffer.from(b, "base64url");
-    if (left.length !== SIGNATURE_BYTES || right.length !== SIGNATURE_BYTES) return false;
-    return crypto.timingSafeEqual(left, right);
-  } catch {
+function cookieAad(purpose: CookiePurpose): Buffer {
+  return Buffer.from(`${SEALED_COOKIE_PREFIX}:${purpose}`);
+}
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function hasExactKeys(value: Record<string, unknown>, expected: readonly string[]): boolean {
+  const keys = Object.keys(value);
+  return keys.length === expected.length && keys.every((key) => expected.includes(key));
+}
+
+function isNullableBoundedString(value: unknown, maxLength: number): boolean {
+  return value === null || (typeof value === "string" && value.length <= maxLength);
+}
+
+function isSessionCookieUser(value: unknown): value is SessionCookieUser {
+  if (!isRecord(value)) return false;
+  if (
+    !hasExactKeys(value, [
+      "id",
+      "username",
+      "email",
+      "studentType",
+      "major",
+      "universityAffiliation",
+    ])
+  ) {
     return false;
   }
+
+  return (
+    typeof value.id === "string" &&
+    value.id.length > 0 &&
+    value.id.length <= 128 &&
+    typeof value.username === "string" &&
+    value.username.length >= 3 &&
+    value.username.length <= 32 &&
+    isNullableBoundedString(value.email, 254) &&
+    typeof value.studentType === "string" &&
+    value.studentType.length > 0 &&
+    value.studentType.length <= 40 &&
+    isNullableBoundedString(value.major, 80) &&
+    (value.universityAffiliation === "uaeu" || value.universityAffiliation === "general")
+  );
 }
 
-function encodeSigned<T>(data: T, expiresAt?: number): string | null {
+function isLocalAccountRecord(value: unknown): value is LocalAccountRecord {
+  if (!isRecord(value)) return false;
+  if (
+    !hasExactKeys(value, [
+      "id",
+      "username",
+      "email",
+      "studentType",
+      "major",
+      "universityAffiliation",
+      "passwordHash",
+      "createdAt",
+    ])
+  ) {
+    return false;
+  }
+
+  const sessionShape = {
+    id: value.id,
+    username: value.username,
+    email: value.email,
+    studentType: value.studentType,
+    major: value.major,
+    universityAffiliation: value.universityAffiliation,
+  };
+  return (
+    isSessionCookieUser(sessionShape) &&
+    typeof value.passwordHash === "string" &&
+    value.passwordHash.length >= 20 &&
+    value.passwordHash.length <= 200 &&
+    typeof value.createdAt === "number" &&
+    Number.isFinite(value.createdAt) &&
+    value.createdAt > 0
+  );
+}
+
+function encodeSealed<T>(purpose: CookiePurpose, data: T, expiresAt?: number): string | null {
   const secret = cookieSecret();
   if (!secret) return null;
 
-  const payload = base64Url(JSON.stringify({ data, expiresAt, v: 1 } satisfies SignedEnvelope<T>));
-  return `${SIGNED_SESSION_PREFIX}.${payload}.${signPayload(payload, secret)}`;
+  const iv = crypto.randomBytes(IV_BYTES);
+  const cipher = crypto.createCipheriv("aes-256-gcm", encryptionKey(secret), iv);
+  cipher.setAAD(cookieAad(purpose));
+  const plaintext = JSON.stringify({ data, expiresAt, purpose, v: 3 } satisfies SealedEnvelope<T>);
+  const encrypted = Buffer.concat([cipher.update(plaintext, "utf8"), cipher.final()]);
+  const tag = cipher.getAuthTag();
+  return [SEALED_COOKIE_PREFIX, base64Url(iv), base64Url(encrypted), base64Url(tag)].join(".");
 }
 
-function decodeSigned<T>(value?: string | null): T | null {
+function decodeSealed(value: string | null | undefined, purpose: CookiePurpose): unknown | null {
   const secret = cookieSecret();
-  if (!secret || !value?.startsWith(`${SIGNED_SESSION_PREFIX}.`)) return null;
-
-  const [, payload, signature] = value.split(".");
-  if (!payload || !signature) return null;
-
-  const expected = signPayload(payload, secret);
-  if (!signaturesMatch(signature, expected)) return null;
+  if (
+    !secret ||
+    !value?.startsWith(`${SEALED_COOKIE_PREFIX}.`) ||
+    Buffer.byteLength(value, "utf8") > MAX_ACCEPTED_COOKIE_VALUE_BYTES
+  ) {
+    return null;
+  }
 
   try {
-    const envelope = JSON.parse(
-      Buffer.from(payload, "base64url").toString("utf8"),
-    ) as Partial<SignedEnvelope<T>>;
+    const parts = value.split(".");
+    if (parts.length !== 4) return null;
+    const [, encodedIv, encodedCiphertext, encodedTag] = parts;
+    if (!encodedIv || !encodedCiphertext || !encodedTag) return null;
+    const iv = Buffer.from(encodedIv, "base64url");
+    const tag = Buffer.from(encodedTag, "base64url");
+    if (iv.length !== IV_BYTES || tag.length !== 16) return null;
 
-    if (envelope.v !== 1 || !("data" in envelope)) return null;
-    if (envelope.expiresAt && envelope.expiresAt <= Date.now()) return null;
-    return envelope.data as T;
+    const decipher = crypto.createDecipheriv("aes-256-gcm", encryptionKey(secret), iv);
+    decipher.setAAD(cookieAad(purpose));
+    decipher.setAuthTag(tag);
+    const plaintext = Buffer.concat([
+      decipher.update(Buffer.from(encodedCiphertext, "base64url")),
+      decipher.final(),
+    ]).toString("utf8");
+    const envelope = JSON.parse(plaintext) as unknown;
+
+    if (!isRecord(envelope)) return null;
+    const envelopeKeys = Object.keys(envelope);
+    if (
+      !("data" in envelope) ||
+      !("purpose" in envelope) ||
+      !("v" in envelope) ||
+      envelopeKeys.some((key) => !["data", "expiresAt", "purpose", "v"].includes(key))
+    ) {
+      return null;
+    }
+    if (envelope.v !== 3 || envelope.purpose !== purpose) return null;
+    if (
+      envelope.expiresAt !== undefined &&
+      (typeof envelope.expiresAt !== "number" ||
+        !Number.isFinite(envelope.expiresAt) ||
+        envelope.expiresAt <= Date.now())
+    ) {
+      return null;
+    }
+    return envelope.data;
   } catch {
     return null;
   }
 }
 
 export function encodeSessionCookie(user: SessionCookieUser): string | null {
-  return encodeSigned(user, Date.now() + SESSION_MAX_AGE_MS);
+  if (!isSessionCookieUser(user)) return null;
+  return encodeSealed("session", user, Date.now() + SESSION_MAX_AGE_MS);
 }
 
 export function decodeSessionCookie(value?: string | null): SessionCookieUser | null {
-  return decodeSigned<SessionCookieUser>(value);
+  const user = decodeSealed(value, "session");
+  return isSessionCookieUser(user) ? user : null;
 }
 
 export function encodeLocalAccountsCookie(accounts: LocalAccountRecord[]): string | null {
@@ -131,12 +243,33 @@ export function encodeLocalAccountsCookie(accounts: LocalAccountRecord[]): strin
       email: account.email?.trim().toLowerCase() || null,
       username: account.username.trim(),
     }));
-  return encodeSigned(limited);
+
+  while (limited.length) {
+    if (!limited.every(isLocalAccountRecord)) return null;
+    const encoded = encodeSealed(
+      "local-accounts",
+      limited,
+      Date.now() + LOCAL_ACCOUNTS_MAX_AGE_MS,
+    );
+    if (!encoded || Buffer.byteLength(encoded, "utf8") <= MAX_ENCRYPTED_COOKIE_VALUE_BYTES) {
+      return encoded;
+    }
+    limited.shift();
+  }
+  return encodeSealed(
+    "local-accounts",
+    [],
+    Date.now() + LOCAL_ACCOUNTS_MAX_AGE_MS,
+  );
 }
 
 export function decodeLocalAccountsCookie(value?: string | null): LocalAccountRecord[] {
-  const accounts = decodeSigned<LocalAccountRecord[]>(value);
-  return Array.isArray(accounts) ? accounts : [];
+  const accounts = decodeSealed(value, "local-accounts");
+  return Array.isArray(accounts) &&
+    accounts.length <= MAX_LOCAL_ACCOUNTS &&
+    accounts.every(isLocalAccountRecord)
+    ? accounts
+    : [];
 }
 
 export function upsertLocalAccountCookie(

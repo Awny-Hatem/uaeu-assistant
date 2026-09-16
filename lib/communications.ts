@@ -13,6 +13,10 @@ function normalize(text: string): string {
     .trim();
 }
 
+function containsPhrase(query: string, phrase: string): boolean {
+  return Boolean(phrase && ` ${query} `.includes(` ${phrase} `));
+}
+
 export function matchCommunications(
   query: string,
   limit = 2,
@@ -25,7 +29,7 @@ export function matchCommunications(
       let score = 0;
       for (const keyword of item.keywords) {
         const normalizedKeyword = normalize(keyword);
-        if (normalizedKeyword && normalizedQuery.includes(normalizedKeyword)) {
+        if (containsPhrase(normalizedQuery, normalizedKeyword)) {
           score += Math.max(2, normalizedKeyword.length);
         }
       }

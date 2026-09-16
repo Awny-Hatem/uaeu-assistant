@@ -45,6 +45,17 @@ function readKey(name: string): string | null {
   return value ? value : null;
 }
 
+function providerTimeoutMs(): number {
+  const configured = Number.parseInt(process.env.AI_PROVIDER_TIMEOUT_MS ?? "", 10);
+  return Number.isFinite(configured)
+    ? Math.min(120_000, Math.max(1_000, configured))
+    : 20_000;
+}
+
+export function crossProviderFallbackEnabled(): boolean {
+  return process.env.AI_PROVIDER_FALLBACK?.trim().toLowerCase() === "enabled";
+}
+
 export function openAiModel(): string {
   return process.env.OPENAI_CHAT_MODEL?.trim() || "gpt-4.1-mini";
 }
@@ -55,8 +66,9 @@ export function configuredProviderName(): ProviderName | "none" {
   const hasGemini = Boolean(readKey("GEMINI_API_KEY"));
 
   if (preference === "mock") return "mock";
-  if (preference === "gemini" && hasGemini) return "gemini";
-  if (preference === "openai" && hasOpenAi) return "openai";
+  if (preference === "gemini") return hasGemini ? "gemini" : "none";
+  if (preference === "openai") return hasOpenAi ? "openai" : "none";
+  if (preference) return "none";
   if (hasOpenAi) return "openai";
   if (hasGemini) return "gemini";
   return "none";
@@ -68,6 +80,7 @@ export function providerHealthSnapshot() {
     provider,
     openaiConfigured: Boolean(readKey("OPENAI_API_KEY")),
     geminiConfigured: Boolean(readKey("GEMINI_API_KEY")),
+    crossProviderFallback: crossProviderFallbackEnabled(),
     model:
       provider === "openai"
         ? openAiModel()
@@ -77,16 +90,6 @@ export function providerHealthSnapshot() {
             ? "mock-local"
             : null,
   };
-}
-
-function transcript(messages: ProviderChatMessage[]): string {
-  return messages
-    .filter((message) => message.role !== "system")
-    .map((message) => {
-      const role = message.role === "assistant" ? "Assistant" : "Student";
-      return `${role}: ${message.content}`;
-    })
-    .join("\n\n");
 }
 
 function extractOpenAiText(payload: Record<string, unknown>): string {
@@ -133,19 +136,40 @@ async function generateWithOpenAi(args: GenerateArgs): Promise<ProviderResult> {
   }
 
   const model = openAiModel();
-  const response = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model,
-      instructions: args.system,
-      input: transcript(args.messages),
-      max_output_tokens: Number(process.env.OPENAI_MAX_OUTPUT_TOKENS || 900),
-    }),
-  });
+  let response: Response;
+  try {
+    response = await fetch("https://api.openai.com/v1/responses", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${key}`,
+        "Content-Type": "application/json",
+      },
+      signal: AbortSignal.timeout(providerTimeoutMs()),
+      body: JSON.stringify({
+        model,
+        instructions: args.system,
+        input: args.messages
+          .filter((message) => message.role !== "system")
+          .map((message) => ({
+            role: message.role,
+            content: message.content,
+          })),
+        max_output_tokens: Number(process.env.OPENAI_MAX_OUTPUT_TOKENS || 900),
+        store: false,
+        temperature: 0.1,
+      }),
+    });
+  } catch (error) {
+    const timedOut = error instanceof Error && /abort|timeout/i.test(`${error.name} ${error.message}`);
+    throw new AiProviderError({
+      status: timedOut ? 504 : 502,
+      providerStatus: timedOut ? "OPENAI_TIMEOUT" : "OPENAI_NETWORK_ERROR",
+      publicMessage: timedOut
+        ? "OpenAI did not respond before the configured timeout. Please try again."
+        : "OpenAI could not be reached. Please try again.",
+      cause: error,
+    });
+  }
 
   const raw = await response.text();
   let data: Record<string, unknown> = {};
@@ -239,8 +263,28 @@ export async function generateAssistantResponse(
   const provider = configuredProviderName();
 
   if (provider === "mock") return generateMock();
-  if (provider === "openai") return generateWithOpenAi(args);
-  if (provider === "gemini") return generateWithGemini(args);
+  if (provider === "openai") {
+    try {
+      return await generateWithOpenAi(args);
+    } catch (error) {
+      if (crossProviderFallbackEnabled() && readKey("GEMINI_API_KEY")) {
+        console.warn("OpenAI generation failed; using the explicitly enabled Gemini fallback.");
+        return generateWithGemini(args);
+      }
+      throw error;
+    }
+  }
+  if (provider === "gemini") {
+    try {
+      return await generateWithGemini(args);
+    } catch (error) {
+      if (crossProviderFallbackEnabled() && readKey("OPENAI_API_KEY")) {
+        console.warn("Gemini generation failed; using the explicitly enabled OpenAI fallback.");
+        return generateWithOpenAi(args);
+      }
+      throw error;
+    }
+  }
 
   throw new AiProviderError({
     status: 503,
