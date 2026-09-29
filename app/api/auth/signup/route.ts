@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import db from '@/lib/db';
 import { cookies } from 'next/headers';
 import { getUniversityAffiliation, normalizeEmail } from '@/lib/access';
+import { isObjectBody, passwordError } from '@/lib/auth-validation';
+import { registerSession } from '@/lib/auth-session';
+import { runtimeContract } from '@/lib/runtime-contract';
 import { jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from '@/lib/request-security';
 import {
   authCookieSecretConfigured,
@@ -30,19 +33,10 @@ function cleanString(value: unknown, maxLength: number): string {
   return typeof value === 'string' ? value.trim().slice(0, maxLength) : '';
 }
 
-function validatePassword(password: unknown): string | null {
-  if (typeof password !== 'string') return 'Password is required.';
-  if (password.length < 8) return 'Password must be at least 8 characters.';
-  if (password.length > 128) return 'Password must be 128 characters or fewer.';
-  if (!/[a-z]/i.test(password) || !/[0-9]/.test(password)) {
-    return 'Password must include at least one letter and one number.';
-  }
-  return null;
-}
-
 export async function POST(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
+  if (!runtimeContract().allowed) return jsonNoStore({ error: 'Account access is unavailable in this deployment configuration.' }, { status: 503 });
 
   const limited = rateLimitGuard(req, 'auth:signup', {
     limit: 8,
@@ -52,6 +46,7 @@ export async function POST(req: Request) {
 
   const parsed = await readJsonRequest<SignupBody>(req, { maxBytes: 16 * 1024 });
   if (!parsed.ok) return parsed.response;
+  if (!isObjectBody(parsed.data)) return jsonNoStore({ error: 'Expected a JSON object.' }, { status: 400 });
 
   // Do not create an account that cannot receive a usable encrypted session.
   // This check must happen before hashing or inserting the user so a corrected
@@ -62,7 +57,7 @@ export async function POST(req: Request) {
 
   try {
     const { username, email, password, studentType, major } = parsed.data;
-    const normalizedUsername = cleanString(username, 32);
+    const normalizedUsername = typeof username === 'string' ? username.trim() : '';
     const normalizedEmail = normalizeEmail(email);
     const selectedStudentType = cleanString(studentType, 40);
     const cleanMajor = cleanString(major, 80);
@@ -79,9 +74,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const passwordError = validatePassword(password);
-    if (passwordError) {
-      return jsonNoStore({ error: passwordError }, { status: 400 });
+    const invalidPassword = passwordError(password);
+    if (invalidPassword) {
+      return jsonNoStore({ error: invalidPassword }, { status: 400 });
     }
 
     if (!STUDENT_TYPES.has(selectedStudentType)) {
@@ -129,12 +124,13 @@ export async function POST(req: Request) {
       return jsonNoStore({ error: 'Auth cookie encryption is not configured.' }, { status: 500 });
     }
 
+    registerSession(user, sessionValue);
     cookieStore.set(SESSION_COOKIE_NAME, sessionValue, sessionCookieOptions());
-    cookieStore.set(
-      LOCAL_ACCOUNTS_COOKIE_NAME,
-      accountCookie,
-      localAccountsCookieOptions(),
-    );
+    if (runtimeContract().durableStore) {
+      cookieStore.set(LOCAL_ACCOUNTS_COOKIE_NAME, '', localAccountsCookieOptions(0));
+    } else {
+      cookieStore.set(LOCAL_ACCOUNTS_COOKIE_NAME, accountCookie, localAccountsCookieOptions());
+    }
 
     return jsonNoStore({
       success: true,

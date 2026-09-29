@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "diagnosticType": "single-request-provider-availability-check",
+  "recordedAtUtc": "2026-09-29T17:02:09Z",
+  "timestampNote": "UTC recording time after the diagnostic; the request start time was not separately captured.",
+  "provider": "openai",
+  "configuredModel": "gpt-4.1-mini",
+  "endpoint": "https://api.openai.com/v1/responses",
+  "requestCount": 1,
+  "automaticRetries": 0,
+  "httpStatus": 429,
+  "sanitizedErrorCode": "credit_balance_exhausted",
+  "returnedSafeRateLimitHeaderNames": [],
+  "retainedRateLimitHeaders": {},
+  "requestedMaxOutputTokens": 16,
+  "store": false,
+  "interpretation": "The diagnostic explicitly identified exhausted prepaid credits. No rate-limit capacity was inferred because no safe rate-limit or Retry-After headers were returned. Retries cannot restore credits; the provider account owner must resolve this externally.",
+  "limitations": [
+    "This is a separate minimal diagnostic, not an answer-quality or acceptance evaluation.",
+    "Earlier round-6 records only exposed OPENAI_429, so this later diagnostic does not retroactively prove the subtype of each earlier failure.",
+    "Raw response bodies, private provider identifiers, credentials, prompt text and full payloads are intentionally not retained."
+  ],
+  "officialReferences": [
+    "https://developers.openai.com/api/docs/guides/error-codes",
+    "https://developers.openai.com/api/docs/guides/rate-limits"
+  ]
+}

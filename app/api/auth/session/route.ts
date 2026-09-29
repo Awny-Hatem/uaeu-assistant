@@ -1,69 +1,15 @@
-import db from '@/lib/db';
 import { cookies } from 'next/headers';
-import { getUniversityAffiliation } from '@/lib/access';
+import { authenticatedSessionUser } from '@/lib/auth-session';
 import { jsonNoStore } from '@/lib/request-security';
-import { decodeSessionCookie, SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
-
-type SessionRow = {
-  user_id: string;
-  expires_at: number;
-};
-
-type UserRow = {
-  id: string;
-  username: string;
-  email: string | null;
-  student_type: string;
-  major: string | null;
-  university_affiliation: 'uaeu' | 'general' | null;
-};
+import { runtimeContract } from '@/lib/runtime-contract';
+import { SESSION_COOKIE_NAME } from '@/lib/session-cookie';
 
 export async function GET() {
+  if (!runtimeContract().allowed) return jsonNoStore({ error: 'This deployment is not ready for account access.' }, { status: 503 });
   try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-
-    if (!token) {
-      return jsonNoStore({ user: null });
-    }
-
-    const signedUser = decodeSessionCookie(token);
-    if (signedUser) {
-      return jsonNoStore({ user: signedUser });
-    }
-
-    const session = db.prepare('SELECT user_id, expires_at FROM sessions WHERE token = ?').get(token) as SessionRow | undefined;
-
-    if (!session || session.expires_at < Date.now()) {
-      if (session?.expires_at && session.expires_at < Date.now()) {
-        db.prepare('DELETE FROM sessions WHERE token = ?').run(token);
-        cookieStore.set(SESSION_COOKIE_NAME, '', sessionCookieOptions(0));
-      }
-      return jsonNoStore({ user: null });
-    }
-
-    const user = db.prepare(`
-      SELECT id, username, email, student_type, major, university_affiliation
-      FROM users
-      WHERE id = ?
-    `).get(session.user_id) as UserRow | undefined;
-
-    if (!user) {
-      return jsonNoStore({ user: null });
-    }
-
-    return jsonNoStore({
-      user: {
-        id: user.id,
-        username: user.username,
-        email: user.email,
-        studentType: user.student_type,
-        major: user.major,
-        universityAffiliation: user.university_affiliation || getUniversityAffiliation(user.email),
-      }
-    });
-
+    const token = (await cookies()).get(SESSION_COOKIE_NAME)?.value;
+    return jsonNoStore({ user: authenticatedSessionUser(token), accountMode: runtimeContract().sessionMode });
   } catch {
-    return jsonNoStore({ user: null });
+    return jsonNoStore({ error: 'Unable to check session. Try again.' }, { status: 503 });
   }
 }

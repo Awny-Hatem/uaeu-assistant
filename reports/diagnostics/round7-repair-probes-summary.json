@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "kind": "bounded-real-provider-repair-diagnostic-summary",
+  "date": "2026-09-29",
+  "scope": "Three direct POST route invocations with an in-memory database; not the production HTTP endpoint, not a full release acceptance run. One earlier command failed at local TypeScript parsing before any provider request. No fixture questions or captured round-7 responses were changed.",
+  "cases": [
+    {
+      "questions": ["How do I submit an application for a bachelor degree?", "I am an international applicant, not a UAE national."],
+      "status": 200,
+      "elapsedMs": 6164,
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "responseMode": "canonical",
+      "faqId": "admissions-requirements-international",
+      "content": "**International undergraduate admission requirements**\n- The current general requirements include a Grade 12 certificate or accredited equivalent, UAE Ministry equivalency for certificates outside the Ministry curriculum, age 35 or younger when applying, no previous academic or disciplinary dismissal **from any other educational institution**, not merely from UAEU, and medical fitness for the program. Apply through UAEU's official application site during an announced period.\n- The general English threshold is 90% in Grade 12 English on the Ministry certificate, or IELTS Academic 5.5, TOEFL ITP 525, or TOEFL iBT 70. College tables add overall-average and subject requirements; for example, the College of Computing and Artificial Intelligence currently lists a 90% high-school average or equivalent.\n- International admission is competitive and meeting minimum requirements does not guarantee a place. Specify your curriculum and intended program so the applicable college criteria can be confirmed.",
+      "citations": ["https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml"],
+      "observed": "Returns the complete international undergraduate requirements record, with its international admissions citation; does not repeat the already answered applicant-category question."
+    },
+    {
+      "questions": ["What is the starting date of the Spring 2031 semester?"],
+      "status": 200,
+      "elapsedMs": 2544,
+      "clarificationReason": "missing_official_evidence",
+      "content": "I do not have a verified start date for Spring 2031 in the available official evidence. The term and year are clear; I will not substitute a date from another academic year.",
+      "citations": [],
+      "observed": "Preserves the known subject, term and year and gives a source-limited information gap. Provider metadata was absent from this response; that does not imply no selector call occurred."
+    },
+    {
+      "questions": ["Must I file an application to graduate, or will completing my degree be enough?"],
+      "status": 200,
+      "elapsedMs": 3922,
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "responseMode": "canonical",
+      "faqId": "graduation-application",
+      "content": "**Apply for undergraduate graduation**\nThe cited procedure is for undergraduates outside the College of Medicine and Health Sciences; it does not establish medical or postgraduate graduation rules.\n- AE-06 requires submitting the degree application to your **College Advising Unit and the Admission and Registration Deanship by the term's last day to drop without failure**. The calendar labels that day **18 September 2026 for Fall** and **5 February 2027 for Spring**. **Combining this procedure with those calendar dates** gives the scoped application deadlines; the calendar does not separately label them as graduation-application dates.\n- Before submission, review your degree requirements and expected-completion term. Keep a copy or acknowledgment of the application from the receiving office. For a submitted application's status, ask the College Advising Unit or Admission and Registration with your request reference; the published procedure does not establish a specific private tracking screen.\n- The college confirms requirements and Registration certifies the award; an application alone is not graduation approval, and this assistant cannot see your personal application record.",
+      "citations": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf", "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"],
+      "observed": "Returns the complete scoped undergraduate graduation-application procedure and both AE06/calendar citations, not an admission-application answer."
+    }
+  ]
+}

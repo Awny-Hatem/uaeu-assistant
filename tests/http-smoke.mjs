@@ -74,12 +74,16 @@ const arabic = await request("/api/chat", {
 });
 
 assert(arabic.response.status === 200, `Arabic chat status ${arabic.response.status}`);
-assert(arabic.data.source === "guide", `Arabic chat source ${arabic.data.source}`);
-assert(
-  arabic.data.guide?.id === "to-whom-it-may-concern",
-  `Arabic guide id ${arabic.data.guide?.id}`,
-);
-console.log("PASS Arabic guide request over HTTP");
+assert(/[\u0600-\u06ff]/u.test(arabic.data.content || ""), "Arabic request lost its response language");
+if (arabic.data.source === "guide") {
+  assert(arabic.data.guide?.id === "to-whom-it-may-concern", `Arabic guide id ${arabic.data.guide?.id}`);
+} else {
+  assert(arabic.data.source === "faq" && arabic.data.responseMode === "canonical", `Arabic document route ${arabic.data.source}`);
+  for (const fact of ["TWIMC", "وثائق الطلبة الحاليين", "My Requests", "مجانية"]) assert(arabic.data.content.includes(fact), `Arabic document procedure is missing ${fact}`);
+  assert(arabic.data.citations?.some(source => source.url?.includes("serviceId=92")), "Missing current-student service source");
+  assert(arabic.data.citations?.some(source => source.url?.endsWith("current-students-docs.pdf")), "Missing document-guide procedure source");
+}
+console.log("PASS Arabic document procedure over HTTP");
 
 const signup = await request("/api/auth/signup", {
   method: "POST",
@@ -95,8 +99,8 @@ const signup = await request("/api/auth/signup", {
 
 assert(signup.response.status === 200, `Signup status ${signup.response.status}`);
 assert(signup.data.user?.username === username, "Signup returned wrong user");
-assert(signup.data.user?.universityAffiliation === "uaeu", "Signup did not detect UAEU affiliation");
-console.log("PASS Signup over HTTP");
+assert(signup.data.user?.universityAffiliation === "uaeu", "Signup did not preserve the self-reported university email category");
+console.log("PASS Signup over HTTP (email category is self-reported, not verified membership)");
 
 assert(cookieJar.has("chat_session"), "Signup did not return a session cookie");
 assert(cookieJar.has("chat_local_accounts"), "Signup did not return a local account cookie");
@@ -120,6 +124,7 @@ console.log("PASS Auth cookie purposes cannot be substituted");
 
 const logout = await request("/api/auth/logout", {
   method: "POST",
+  headers: { 'x-chat-account-id': signup.data.user.id },
 });
 assert(logout.response.status === 200, `Logout status ${logout.response.status}`);
 console.log("PASS Logout over HTTP");
@@ -139,10 +144,10 @@ assert(cookieJar.has("chat_session"), "Login did not return a session cookie");
 const session = await request("/api/auth/session");
 assert(session.response.status === 200, `Session status ${session.response.status}`);
 assert(session.data.user?.username === username, "Session did not return signed-in user");
-assert(session.data.user?.universityAffiliation === "uaeu", "Session lost affiliation");
+assert(session.data.user?.universityAffiliation === "uaeu", "Session lost the self-reported email category");
 console.log("PASS Session over HTTP");
 
-const clearHistory = await request("/api/history", { method: "DELETE" });
+const clearHistory = await request("/api/history", { method: "DELETE", headers: { 'x-chat-account-id': session.data.user.id } });
 assert(clearHistory.response.status === 200, `History delete status ${clearHistory.response.status}`);
 assert(clearHistory.data.cleared === true, "History delete did not confirm clearing");
 console.log("PASS Conversation history deletion over HTTP");
@@ -152,6 +157,11 @@ assert(health.response.status === 200, `Health status ${health.response.status}`
 assert(health.data.ok === true, `Health not ready: ${JSON.stringify(health.data)}`);
 assert(health.data.knowledge?.answerPacks?.complete === true, "Answer packs are incomplete");
 assert(health.data.auth?.dedicatedSecretConfigured === true, "Auth secret is not configured");
+assert(health.data.deployment?.identity === "self-reported-unverified", "Health must not claim managed or verified identity");
+assert(health.data.deployment?.productionReady === false, "Prototype must not claim production readiness");
+assert(health.data.deployment?.quotas === "browser-local", "Health must disclose prototype quota enforcement");
+assert(health.data.deployment?.rateLimits === "instance-local", "Health must disclose instance-local rate limits");
 console.log("PASS Health completeness over HTTP");
+console.log("PASS Prototype identity and enforcement limits are disclosed");
 
 console.log(`SMOKE_ACCOUNT=${username}`);

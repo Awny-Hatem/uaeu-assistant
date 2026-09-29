@@ -2,7 +2,9 @@
 status: approved
 title: UAEU Student Housing Application Service
 sourceUrl: https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106
-lastVerified: 2026-09-16
+lastVerified: 2026-09-29
+subjects: housing
+degreeLevel: undergraduate
 ---
 # Student housing
 
@@ -14,10 +16,9 @@ The service catalog states that a new student generally must be enrolled and liv
 
 For a transfer supported by a medical report, the report must be issued by a government hospital or approved specialist and be no more than one month old. The specialized Medical Committee meets every Thursday, and the service says students are notified within two working days after that meeting. Exact eligibility still depends on student category, availability, and the live service rules.
 
-## Listed charges for international students without a housing scholarship
+## Listed international undergraduate charges
 
 - Undergraduate housing: **AED 5,000 per semester**.
-- Postgraduate housing: **AED 5,600 per semester**.
-- Summer housing: **AED 1,575**.
+- International undergraduate summer housing: **AED 1,575**.
 
-Students should confirm the amount shown for their own category before payment because eligibility, room availability, and charges can change.
+These amounts must not be extended to postgraduate or exchange students. The current service does not list a postgraduate price. Students should confirm the amount shown for their own funding category before payment because eligibility, room availability, and charges can change.

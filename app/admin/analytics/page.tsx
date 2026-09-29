@@ -111,7 +111,7 @@ export default async function AnalyticsPage() {
           <div className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
             <ShieldCheck className="text-[#E0182D]" size={22} />
             <p className="mt-4 text-3xl font-bold">0</p>
-            <p className="mt-1 text-sm font-medium text-zinc-500">Raw queries stored</p>
+            <p className="mt-1 text-sm font-medium text-zinc-500">Raw queries in analytics</p>
           </div>
           <div className="rounded-lg border border-zinc-200 bg-white p-5 shadow-sm">
             <UserRoundCheck className="text-[#E0182D]" size={22} />

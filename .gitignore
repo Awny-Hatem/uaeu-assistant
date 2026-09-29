@@ -12,6 +12,8 @@
 
 # testing
 /coverage
+/test-results/
+/playwright-report/
 
 # next.js
 /.next/
@@ -55,3 +57,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Private provider diagnostics contain account identifiers; preserve locally only.
+/reports/independent/isolated-gpt41-comparison-20260929.json
+/reports/independent/isolated-gpt41-comparison-followup-20260929.json

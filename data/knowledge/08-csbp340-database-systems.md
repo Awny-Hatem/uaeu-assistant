@@ -2,7 +2,11 @@
 status: approved
 title: UAEU Course Catalog — CSBP340 Database Systems
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP340
-lastVerified: 2026-09-16
+lastVerified: 2026-09-29
+courseCodes: CSBP340
+subjects: database-systems
+degreeLevel: undergraduate
+sourceSection: Database Systems (CSBP340), prerequisites
 ---
 # CSBP340 Database Systems
 

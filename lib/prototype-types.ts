@@ -19,6 +19,37 @@ export type Citation = {
   url?: string;
   document?: string;
   lastVerified?: string;
+  evidenceText?: string;
+  sourceSection?: string;
+  sourceVersion?: string;
+};
+
+export const GROUNDING_REASON_CODES = [
+  "unsupported_critical_token", "unsupported_detail", "scope_drift", "contradiction",
+  "invalid_verification_contract", "verification_unavailable",
+] as const;
+
+export type AnswerGrounding = {
+  status: "checked" | "rejected";
+  rewriteCount: 0 | 1;
+  reasonCodes: (typeof GROUNDING_REASON_CODES[number])[];
+};
+
+export type AnswerMetadata = {
+  responseMode?: "canonical" | "grounded_generation";
+  citations?: Citation[];
+  communications?: UniversityCommunication[];
+  guide?: ServiceGuide;
+  escalationReason?: EscalationReason;
+  provider?: string;
+  model?: string;
+  faqId?: string;
+  topic?: string;
+  evidenceIds?: string[];
+  claims?: { text: string; evidenceIds: string[] }[];
+  grounding?: AnswerGrounding;
+  clarificationReason?: string;
+  disposition?: "answer" | "clarify" | "portal" | "handoff" | "urgent";
 };
 
 export type GuideStep = {

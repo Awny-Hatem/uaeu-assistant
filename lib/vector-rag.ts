@@ -1,7 +1,9 @@
 import fs from "fs";
 import path from "path";
 import { GoogleGenAI } from "@google/genai";
-import { knowledgeFingerprint } from "@/lib/knowledge-files";
+import { evidenceIsRelevant, knowledgeFingerprint, loadKnowledgeMarkdown, type EvidenceRow } from "@/lib/knowledge-files";
+import { normalizeCourseCodes } from "@/lib/query-understanding";
+import { providerRequestSignal } from "@/lib/ai-provider";
 
 const EMB_PATH = path.join(process.cwd(), "data", "embeddings.json");
 
@@ -80,15 +82,16 @@ export async function embedQuery(
   client: GoogleGenAI,
   model: string,
   query: string,
+  deadlineAt?: number,
 ): Promise<number[]> {
   const res = await client.models.embedContent({
     model: model,
-    contents: query,
-    config: { taskType: "RETRIEVAL_QUERY" },
+    contents: normalizeCourseCodes(query),
+    config: { taskType: "RETRIEVAL_QUERY", abortSignal: providerRequestSignal(deadlineAt) },
   });
   
   const v = res.embeddings?.[0]?.values;
-  if (!v) throw new Error("Gemini embedding missing vector");
+  if (!v?.length || !v.every(Number.isFinite)) throw new Error("Gemini embedding missing or invalid vector");
   return v;
 }
 
@@ -103,7 +106,7 @@ export async function embedDocument(
     config: { taskType: "RETRIEVAL_DOCUMENT" },
   });
   const values = res.embeddings?.[0]?.values;
-  if (!values) throw new Error("Gemini embedding missing vector");
+  if (!values?.length || !values.every(Number.isFinite)) throw new Error("Gemini embedding missing or invalid vector");
   return values;
 }
 
@@ -112,17 +115,19 @@ export async function vectorRetrieve(
   embeddingModel: string,
   query: string,
   topK: number,
-): Promise<{ text: string; source: string; score: number }[]> {
+  deadlineAt?: number,
+): Promise<EvidenceRow[]> {
   const chunks = loadEmbeddingChunks(embeddingModel);
   if (!chunks?.length) return [];
 
-  const qv = await embedQuery(client, embeddingModel, query);
+  const qv = await embedQuery(client, embeddingModel, query, deadlineAt);
+  const documents = new Map(loadKnowledgeMarkdown().map((document) => [document.filename, document]));
   const ranked = chunks
-    .map((c) => ({
-      text: c.text,
-      source: c.source,
-      score: cosine(qv, c.embedding),
-    }))
+    .flatMap((c) => {
+      const document = documents.get(c.source);
+      if (!document || !evidenceIsRelevant(query, c.text, document.title, document.scope)) return [];
+      return [{ text: c.text, source: c.source, score: cosine(qv, c.embedding), title: document.title, scope: document.scope }];
+    })
     .sort((a, b) => b.score - a.score)
     .slice(0, topK);
   return ranked.filter((r) => r.score > 0.65);

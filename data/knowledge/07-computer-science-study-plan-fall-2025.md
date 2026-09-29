@@ -3,6 +3,9 @@ status: approved
 title: UAEU BSc Computer Science Study Plan — Fall 2025 Cohort
 sourceUrl: https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf
 lastVerified: 2026-09-16
+subjects: computer-science
+degreeLevel: undergraduate
+sourceSection: Fall 2025 model plan, Year 1 Semester 2
 ---
 # BSc Computer Science model plan — Fall 2025 cohort
 
@@ -19,4 +22,4 @@ The model semester totals 16 credit hours:
 - CSBP221 Programming Lab II — 1 credit; CSBP219 is listed as a corequisite.
 - MATH140 Linear Algebra — 3 credits.
 
-Students must confirm prerequisites, placement, their assigned cohort plan, section availability, and any personal registration holds in the live portal before registering.
+This is the Fall 2025 model sequence, not a universal prerequisite rule. In particular, the plan's CSBP221 concurrent-placement notation differs from the current CSBP221 catalog record. Do not infer current CSBP221 eligibility from this model sequence alone. Students need the registration rule attached to their assigned cohort, completed prerequisites and current term offerings; unresolved source differences require the college's determination.

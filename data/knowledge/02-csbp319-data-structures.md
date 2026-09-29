@@ -2,7 +2,11 @@
 status: approved
 title: UAEU Course Catalog — CSBP319 Data Structures
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319
-lastVerified: 2026-09-16
+lastVerified: 2026-09-29
+courseCodes: CSBP319
+subjects: data-structures
+degreeLevel: undergraduate
+sourceSection: Data Structures (CSBP319), prerequisites
 ---
 # CSBP319 Data Structures
 

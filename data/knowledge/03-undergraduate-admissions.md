@@ -1,10 +1,15 @@
 ---
 status: approved
-title: UAEU Undergraduate Admissions for Current Secondary-School Students
+title: UAEU Undergraduate Admissions — UAE Nationals and Children of Emirati Mothers
 sourceUrl: https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml
 lastVerified: 2026-09-16
+applicantCategory: national
+degreeLevel: undergraduate
+subjects: admissions
 ---
-# Undergraduate admissions
+# Undergraduate admissions — UAE nationals and children of Emirati mothers
+
+These requirements apply to UAE nationals and children of Emirati mothers. They must not be applied to international applicants or children of UAEU employees; those categories have a separate admissions page and different English thresholds. When the applicant category is unknown, establish it before using this record.
 
 Applications are submitted during the announced application period through the official Ministry of Higher Education and Scientific Research admission portal linked by UAEU. Admission is competitive; meeting minimum conditions does not guarantee an offer.
 

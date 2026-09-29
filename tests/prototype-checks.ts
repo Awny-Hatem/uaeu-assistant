@@ -4,6 +4,7 @@ process.env.AI_PROVIDER = "mock";
 process.env.SERVER_CHAT_HISTORY = "";
 process.env.GEMINI_EMBEDDING_SEARCH = "";
 process.env.CHATBOT_DB_PATH = ":memory:";
+process.env.TRUST_PROXY_HEADERS = "enabled"; // Isolated synthetic request identities in this test process only.
 process.env.AUTH_COOKIE_SECRET = "test-only-auth-cookie-secret-with-at-least-32-characters";
 
 type ChatResult = {
@@ -28,8 +29,9 @@ async function main() {
   const { default: db } = await import("../lib/db");
   const { getQuotaLimit, getQuotaPlan, isUniversityEmail } = await import("../lib/access");
   const { providerHealthSnapshot } = await import("../lib/ai-provider");
-  const { faqHealthSnapshot, loadFaqEntries, matchFaq, normalizeAnswerText } = await import("../lib/faq");
-  const { lexicalRetrieve } = await import("../lib/knowledge-files");
+  const { faqHealthSnapshot, faqScope, loadFaqEntries, matchFaq, normalizeAnswerText } = await import("../lib/faq");
+  const { lexicalRetrieve, retrieveVerifiedEvidence } = await import("../lib/knowledge-files");
+  const { resolveConversation, understandQuery } = await import("../lib/query-understanding");
   const { loadServiceGuides } = await import("../lib/service-guides");
   const { loadEmbeddingChunks } = await import("../lib/vector-rag");
   const { finalizeProviderResponse } = await import("../lib/provider-response");
@@ -137,12 +139,12 @@ async function main() {
       },
     },
     {
-      name: "UAEU email receives UAEU quota plan",
+      name: "a self-entered UAEU email is not verified institutional identity",
       run: () => {
         assert.equal(isUniversityEmail("student@uaeu.ac.ae"), true);
         assert.equal(isUniversityEmail("student@example.edu"), false);
-        assert.equal(getQuotaPlan({ email: "student@uaeu.ac.ae" }), "uaeu");
-        assert.equal(getQuotaLimit("uaeu") > getQuotaLimit("standard"), true);
+        assert.equal(getQuotaPlan({ email: "student@uaeu.ac.ae" }), "standard");
+        assert.equal(getQuotaPlan({ email: "student@example.edu" }), "standard");
       },
     },
     {
@@ -268,10 +270,12 @@ async function main() {
     {
       name: "verified answer-pack health requires complete fresh packs",
       run: () => {
-        const health = faqHealthSnapshot(Date.parse("2026-09-16T12:00:00Z"));
+        const now = Date.now();
+        const health = faqHealthSnapshot(now);
         assert.equal(health.complete, true);
         assert.equal(health.packs.length, 2);
-        assert.ok(health.packs.every((pack) => pack.latestVerification === "2026-09-16"));
+        assert.ok(health.packs.every((pack) => pack.latestVerification && Date.parse(pack.latestVerification) <= now));
+        assert.equal(faqHealthSnapshot(now + 181 * 24 * 60 * 60 * 1000).complete, false);
       },
     },
     {
@@ -296,11 +300,13 @@ async function main() {
             checked += 1;
           }
         }
-        assert.equal(checked, 303);
+        const eligible = loadFaqEntries().filter(entry => !contextOnly.has(normalizeAnswerText(entry.questions[0])));
+        assert.equal(checked, eligible.length * 3);
+        assert.ok(checked >= 303);
       },
     },
     {
-      name: "every verified answer has a reachable Arabic route and Arabic response",
+      name: "Arabic canonical answers are reachable; explicit-year procedural requests use scoped generation",
       run: async () => {
         const arabicText = /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/;
         for (const entry of loadFaqEntries()) {
@@ -317,6 +323,14 @@ async function main() {
             locale: "auto",
             messages: [{ role: "user", content: arabicQuery }],
           });
+          if (faqScope(entry).temporalCoverage === "procedural" && understandQuery(arabicQuery).years.length > 0) {
+            assert.equal(result.data.source, "rag");
+            assert.equal(result.data.provider, "mock");
+            assert.ok(retrieveVerifiedEvidence(arabicQuery).some((row) => row.source === `answer:${entry.id}` && row.scope?.temporalCoverage === "procedural"));
+            // Language/grounding of generated prose requires the separate live
+            // provider evaluation, not a deterministic English orchestration mock.
+            continue;
+          }
           assert.equal(
             result.data.faqId,
             entry.id,
@@ -394,9 +408,9 @@ async function main() {
         } as const;
         const result = await postJson({ locale: "auto", messages: [firstQuestion] });
         assertFaq(result, "register-csbp319-data-structures", "answer");
-        assert.match(result.data.content ?? "", /3-credit course/i);
-        assert.match(result.data.content ?? "", /CSBP219[\s\S]*minimum grade of D/i);
-        assert.match(result.data.content ?? "", /CSBP221[\s\S]*prerequisite or corequisite/i);
+        assert.match(result.data.content ?? "", /3(?:-credit course| credits)/i);
+        assert.match(result.data.content ?? "", /CSBP219[\s\S]*(?:minimum grade of D|at least D)/i);
+        assert.match(result.data.content ?? "", /CSBP221[\s\S]*(?:prerequisite or corequisite|before or alongside)/i);
         assertOfficialCitation(result, /CSBP319/i);
 
         const prerequisiteQuestion = {
@@ -489,12 +503,12 @@ async function main() {
           ],
         });
         assertFaq(result, "scholarship-eligibility", "clarify");
-        assert.match(result.data.content ?? "", /scholarship eligibility/i);
+        assert.match(result.data.content ?? "", /eligibility.*Chancellor|scholarship eligibility/i);
         assert.match(result.data.content ?? "", /scholarship name/i);
       },
     },
     {
-      name: "A05 contextual follow-up keeps Fall 2027 as the admissions cycle",
+      name: "A05 future admissions follow-up retains its cycle without substituting a dated calendar",
       run: async () => {
         const result = await postJson({
           locale: "auto",
@@ -507,10 +521,22 @@ async function main() {
             { role: "user", content: "What is the application deadline?" },
           ],
         });
-        assertFaq(result, "admissions-application-deadline", "answer");
-        assert.match(result.data.content ?? "", /Fall 2027/i);
-        assert.match(result.data.content ?? "", /application portal/i);
-        assertOfficialCitation(result, /serviceId=89|elluciancrmrecruit/i);
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "rag");
+        const resolution = resolveConversation([
+          { role: "user", content: "I want to apply for Fall 2027." },
+          { role: "user", content: "What is the application deadline?" },
+        ], "What is the application deadline?");
+        assert.equal(resolution.subject?.key, "admissions");
+        assert.match(resolution.query, /2027/);
+        assert.match(resolution.query, /fall/i);
+        const evidence = retrieveVerifiedEvidence(resolution.query);
+        assert.ok(evidence.length > 0);
+        assert.ok(evidence.every((row) => row.source === "answer:admissions-application-deadline" && row.scope?.temporalCoverage === "procedural"));
+        assert.ok(evidence.every((row) => /cannot give a verified deadline/.test(row.text)));
+        // Mock generation cannot validate final prose. The independent real-provider
+        // suite checks the grounded answer; this test checks context/evidence only.
+        assert.deepEqual(result.data.citations, []);
       },
     },
     {
@@ -526,8 +552,9 @@ async function main() {
           ],
         });
         assertFaq(result, "admissions-programs-new-students", "answer");
-        assert.match(result.data.content ?? "", /البرامج المتاحة/);
-        assert.match(result.data.content ?? "", /دليل البرامج الحالي/);
+        assert.match(result.data.content ?? "", /55[\s\S]*تسع كليات/);
+        assert.match(result.data.content ?? "", /54 درجة بكالوريوس[\s\S]*دكتور في الطب/);
+        assert.match(result.data.content ?? "", /ليست قائمة البرامج المفتوحة لطلبك الآن/);
       },
     },
     {
@@ -695,7 +722,7 @@ async function main() {
         assert.equal(result.data.source, "escalated");
         assert.equal(result.data.stateLabel, "human_handoff");
         assert.equal(result.data.escalationReason, "student_requested_person");
-        assert.match(result.data.content ?? "", /Human Support/);
+        assert.match(result.data.content ?? "", /8008238/);
         assertOfficialCitation(result, /contact/i);
       },
     },
@@ -736,8 +763,9 @@ async function main() {
           ],
         });
         assertFaq(result, "visa-renewal-documents", "clarify");
-        assert.match(result.data.content ?? "", /original passport/i);
-        assert.match(result.data.content ?? "", /health insurance/i);
+        assert.match(result.data.content ?? "", /recent photograph with a white background/i);
+        assert.match(result.data.content ?? "", /does not establish a reliable complete renewal checklist/i);
+        assert.ok(result.data.citations?.every((citation) => !citation.url?.includes("faq-booklet.pdf")));
         assert.notEqual(result.data.faqId, "admissions-documents-undergraduate");
         assert.notEqual(result.data.guide?.id, "to-whom-it-may-concern");
       },
@@ -759,16 +787,16 @@ async function main() {
       name: "qualified status, fee, deadline, and duration questions receive substantive scoped answers",
       run: async () => {
         const cases = [
-          ["What is the housing application deadline?", "student-housing-application", /no universal application deadline/i],
-          ["What is the graduate application deadline?", "admissions-graduate-application", /no single graduate deadline/i],
+          ["What is the housing application deadline?", "student-housing-application", /not specify an application deadline[\s\S]*does not establish that no deadline exists/i],
+          ["What is the graduate application deadline?", "admissions-graduate-application", /deadlines depend on the degree, program and intake[\s\S]*does not establish a later intake.s closing date/i],
           ["What is the visa application deadline?", "student-visa-application", /does not publish a separate fixed application deadline/i],
-          ["How can I check my graduation application status?", "graduation-application", /current portal record and confirmation/i],
-          ["What payment methods can I use for housing?", "student-housing-cost", /paid \*\*electronically\*\*[\s\S]*not payable in cash or installments/i],
+          ["How can I check my graduation application status?", "graduation-application", /College Advising Unit or Admission and Registration[\s\S]*request reference[\s\S]*does not establish a specific private tracking screen/i],
+          ["What payment methods can I use for housing?", "student-housing-cost", /payment before entering[\s\S]*cash and installments are not accepted/i],
           ["What is the housing application fee?", "student-housing-cost", /does not list a separate housing application fee/i],
           ["How long does visa renewal take?", "student-visa-renewal", /seven days/i],
           ["How long does the housing application take?", "student-housing-application", /5 minutes[\s\S]*Immediate[\s\S]*do not guarantee/i],
-          ["How long does undergraduate admission take?", "admissions-apply-undergraduate", /12 days[\s\S]*not a guaranteed admission-decision date/i],
-          ["How long does a library request take?", "library-request-processing-time", /no single processing time[\s\S]*one-hour delivery target/i],
+          ["How long does undergraduate admission take?", "admissions-apply-undergraduate", /12-day service delivery target[\s\S]*not an intake deadline or guaranteed admission decision/i],
+          ["How long does a library request take?", "library-request-processing-time", /one-hour delivery target[\s\S]*not a guarantee or a universal library turnaround/i],
         ] as const;
 
         for (const [content, answerId, pattern] of cases) {
@@ -830,7 +858,7 @@ async function main() {
             prior: "How do I apply for student housing?",
             followUp: "What is the application deadline?",
             answerId: "student-housing-application",
-            pattern: /no universal application deadline/i,
+            pattern: /not specify an application deadline[\s\S]*does not establish that no deadline exists/i,
           },
           {
             prior: "How do I apply for student housing?",
@@ -973,7 +1001,7 @@ async function main() {
         );
         const context = rows.map((row) => row.text).join("\n");
         assert.match(context, /more than 50 kilometres outside Al Ain/i);
-        assert.match(context, /AED 5,600 per semester/i);
+        assert.match(context, /does not provide (?:housing for graduate students|graduate housing)/i);
       },
     },
     {

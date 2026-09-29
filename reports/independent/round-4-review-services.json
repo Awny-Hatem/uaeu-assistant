@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "runSha256": "61e7274621cc22d89b4cd96755e9aeedd9106669bf4ecaf7db290f7924eeeb10",
+  "reviewScope": "Q056-Q080; complete round-4 captured answers, histories, source-specific claims, citations and grounding metadata",
+  "reviewBasis": "Fresh assessment against official pages rechecked on 2026-09-29, complete relevant official policy-PDF sections, and previously visually checked handbook/lending tables. The published 2018 policies are not certified as unsuperseded. A checked model verdict is not treated as proof. No raw captured response was changed; this file remains bound to round4 despite subsequent repairs.",
+  "reviews": {
+    "Q056": {
+      "status": "needs-fix",
+      "note": "The explicit chat-cannot-submit boundary is now correct, and service92 supports the enrolled-student route, free service and ten-minute target. The generated claim also states university-email delivery but cites only service92, whose visible text and mapped excerpt do not establish that delivery channel. The linked2026 guide supports email delivery and must support that separate claim. This is attribution overreach, not a false portal-submission claim.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92", "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"]
+    },
+    "Q057": {
+      "status": "verified",
+      "note": "The alumni service supports the document/format/delivery selection, digital-free/three-hour target and printed-attestation AED25/three-day target. The receiving-authority check appropriately distinguishes UAEU attestation from possible external legalization without inventing additional requirements.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"]
+    },
+    "Q058": {
+      "status": "needs-fix",
+      "note": "Actual HTTP502 grounding_rejected after one rewrite, with unsupported_detail reason. No graduation-application answer reaches the user despite relevant AE06 evidence. Withholding a rejected draft is safer than exposing it, but is not a satisfactory answer or proof that the official procedure is unavailable. The response now reports a source-check failure honestly rather than calling it only a provider outage.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf", "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"]
+    },
+    "Q059": {
+      "status": "needs-fix",
+      "note": "Actual HTTP502 grounding_rejected after one rewrite, with unsupported_critical_token reason. The universal October31 rumor remains unanswered. The appropriate undergraduate procedural rule and term-specific calendar exist; diagnose the failed generated claim separately without rewriting this recorded outcome.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf", "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"]
+    },
+    "Q060": {
+      "status": "needs-fix",
+      "note": "The personal timetable route, My Requests and university-email delivery are factually supported collectively by service92 and the2026 guide. However, claim1 assigns the letter's course/class/final-exam contents to E1S3=service92, which only lists document types; those details are in E1S4=the guide. Claim2 uses the guide correctly. The physically isolated checker still accepted a demonstrable wrong-source detail; split or correctly attribute claim1.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92", "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"]
+    },
+    "Q061": {
+      "status": "verified",
+      "note": "AE03 supports the College Advising Unit route, distinction between simultaneous exams and a three-or-more same-day overload, common-exam exception and CMHS exclusion. Practical advice to preserve the written decision does not promise automatic rescheduling.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"]
+    },
+    "Q062": {
+      "status": "verified",
+      "note": "Limits the answer to a final undergraduate examination outside CMHS. AE04 section5 supports medical substantiation within one month, possible I grade, Dean acceptance and the general next-regular-semester limit; rejected reasons produce zero/F and unremoved I becomes failing. The special graduating/third-probation first-week deadline should be supplied if that context is given.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"]
+    },
+    "Q063": {
+      "status": "needs-fix",
+      "note": "Thresholds and the CMHS scope are correct, but the answer says third probation OR dismissal. AE05 section2(e) states third probation AND dismissal, subject to section2(f)'s specific >=1.8CGPA/graduation-within-one-year extra-semester exception. The alternative phrasing obscures a material consequence. The stored single-source fallback also uses an ambiguous English slash and explicit Arabic OR; clarify both stored source support and generated wording.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/5_academic_standing_enrollment_eligibility_and_progress-en.pdf"]
+    },
+    "Q064": {
+      "status": "verified",
+      "note": "AE04 section6 supports compulsory-course repeat, elective repeat/substitution, removal of successful-repeat failing grades from GPA without transcript erasure, and earned-passing-grade-or-C cap after multiple failures. The undergraduate/non-CMHS scope is retained.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"]
+    },
+    "Q065": {
+      "status": "verified",
+      "note": "The instructor/Chair/Dean appeal sequence, one-week initial limit, three-member committee excluding the instructor, two-working-week recommendation and sixth-week final-decision limit match AE04 section10. The CMHS exclusion remains explicit.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"]
+    },
+    "Q066": {
+      "status": "verified",
+      "note": "Now supplies the college advising staff as a practical way to identify the assigned advisor while distinguishing that from the verified portal course-update procedure. It avoids inventing a name-display screen or claiming personal-record access. The published8008238 assistance channel and07:00-15:00 coordination hours would improve convenience, but the stated contact step is useful and supported.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=123"]
+    },
+    "Q067": {
+      "status": "verified",
+      "note": "The new-room enrollment/distance condition, sign-in/payment/room-selection/email-confirmation process and international advance-payment/no-installment information match service106. No unsupported deadline, automatic availability or fee amount is added.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"]
+    },
+    "Q068": {
+      "status": "needs-fix",
+      "note": "The admission-versus-housing distinction and separate application conditions are correct. The final clause attaches 'does not guarantee availability' to receiving assignment confirmation, rather than to the published service-time targets as in the source summary. Service106 does not establish that an already-confirmed assignment fails to establish a room. Keep the admission/availability qualification without changing the meaning of confirmation.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"]
+    },
+    "Q069": {
+      "status": "verified",
+      "note": "Correctly preserves service117's admitted female Al-Ain audience, proactive notification and approved-app procedure, no conventional application/documents/fee and immediate delivery. It does not imply this is an exhaustive statement of every student's parking options.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"]
+    },
+    "Q070": {
+      "status": "safe-limitation",
+      "note": "No parking warning threshold is invented and no irrelevant citation is attached. Available parking access evidence does not establish a suspension threshold. Empty claims with checked metadata mean no university claim was asserted, not that the missing threshold was verified. The clarify disposition remains less precise than an explicit evidence-gap label.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"]
+    },
+    "Q071": {
+      "status": "verified",
+      "note": "The published2023 handbook supports daytime air-conditioned off-campus-hostel/main-campus shuttles and the Residential Life contact. No timetable or fare is fabricated. This verifies the handbook description, not today's live operating schedule.",
+      "evidence": ["https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf"]
+    },
+    "Q072": {
+      "status": "verified",
+      "note": "Campus restaurants/cafes and student-ID access to hostel dining match the handbook. The response does not invent current menus, hours, pricing or meal-plan enrollment.",
+      "evidence": ["https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf"]
+    },
+    "Q073": {
+      "status": "needs-fix",
+      "note": "Actual HTTP502 grounding_rejected after one rewrite, with unsupported_detail reason. The Wi-Fi assistance question receives no useful contact, although official UITS support information is available and successfully answers Q075. Diagnose whether the rejected draft added unsupported Wi-Fi details or the checker overrejected; this raw record alone cannot reveal that draft.",
+      "evidence": ["https://www.uaeu.ac.ae/en/vc/doit/", "https://www.uaeu.ac.ae/ar/vc/doit/contact-us.shtml", "https://jobnavigator.uaeu.ac.ae/login.jsp"]
+    },
+    "Q074": {
+      "status": "verified",
+      "note": "The2025 guide supports Sign In then Blackboard Learning; orientation supports the platform description; password self-service supports the account-help paragraph. Each displayed claim is now assigned to the corresponding source. No personal course entitlement or unsafe credential disclosure is asserted.",
+      "evidence": ["https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf", "https://www.uaeu.ac.ae/en/admission/orientation/", "https://selfservice.uaeu.ac.ae/"]
+    },
+    "Q075": {
+      "status": "verified",
+      "note": "Directly gives the correct UITS phone and email. The official Job Navigator contact block independently corroborates both. A readable direct contact-page citation is easier to inspect than the JavaScript-dependent self-service source, but the contact facts are supported.",
+      "evidence": ["https://selfservice.uaeu.ac.ae/", "https://www.uaeu.ac.ae/ar/vc/doit/contact-us.shtml", "https://jobnavigator.uaeu.ac.ae/login.jsp"]
+    },
+    "Q076": {
+      "status": "verified",
+      "note": "Matches the visually checked lending table's undergraduate/general10books/30days/two30-day-renewals and Emirates10books/14days/two14-day-renewals distinctions.",
+      "evidence": ["https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf"]
+    },
+    "Q077": {
+      "status": "verified",
+      "note": "The documented online renewal route is Quick Links then My Library Account, available24/7. The response answers the question without borrowing self-check PIN instructions or promising every renewal will succeed. Holds/reserves/max-renewals/fines exceptions would be useful additional detail.",
+      "evidence": ["https://www.uaeu.ac.ae/en/library/borrowing.shtml"]
+    },
+    "Q078": {
+      "status": "verified",
+      "note": "Service99 supports the search/filter/open workflow, active-account requirement, username without the email domain and digital.library support address. The answer preserves database license restrictions and does not suggest bypassing authentication.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=99"]
+    },
+    "Q079": {
+      "status": "verified",
+      "note": "The negative is correctly restricted to what the published Access and Lending Procedures state; they do not establish a2.5GPA gate for entry or service access. It does not assert a university-wide exhaustive absence. The disposition is now answer rather than an unexplained clarification.",
+      "evidence": ["https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf", "https://www.uaeu.ac.ae/en/library/borrowing.shtml"]
+    },
+    "Q080": {
+      "status": "needs-fix",
+      "note": "Booking channels, free service and academic-record exclusion are supported. But 'ensuring confidentiality' again omits the source's danger/child-abuse disclosure exceptions, material to this explicitly confidential-service question. It also strengthens 'not a verified direct booking line' into categorical 'not a direct booking line' for8008238. Preserve the actual consent exceptions and assistance-only evidentiary scope, without inventing a universal confidentiality guarantee or a categorical phone limitation.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=116"]
+    }
+  }
+}

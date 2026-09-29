@@ -1,6 +1,6 @@
-import db from '@/lib/db';
+import { authenticatedSessionUser, revokeSession } from '@/lib/auth-session';
 import { cookies } from 'next/headers';
-import { jsonNoStore, rateLimitGuard, sameOriginGuard } from '@/lib/request-security';
+import { accountOwnershipGuard, jsonNoStore, rateLimitGuard, sameOriginGuard } from '@/lib/request-security';
 import { SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
 
 export async function POST(req: Request) {
@@ -15,9 +15,12 @@ export async function POST(req: Request) {
 
   const cookieStore = await cookies();
   const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
+  const user = authenticatedSessionUser(token);
+  const ownershipError = accountOwnershipGuard(req, user?.id ?? null);
+  if (ownershipError) return ownershipError;
 
   if (token) {
-    db.prepare('DELETE FROM sessions WHERE token = ?').run(token);
+    revokeSession(token);
     cookieStore.set(SESSION_COOKIE_NAME, '', sessionCookieOptions(0));
   }
 

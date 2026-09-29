@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { checkSourceBody } from "./source-response-checks";
 
 const DATA_ROOT = path.join(process.cwd(), "data");
 const APPROVED_HOSTS = ["uaeu.ac.ae", "u.ae", "moe.gov.ae", "mohesr.gov.ae"];
@@ -28,8 +29,15 @@ async function checkUrl(value: string): Promise<string | null> {
       signal: AbortSignal.timeout(20_000),
       headers: { "User-Agent": "UAEU-Chatbot-Source-Check/1.0" },
     });
-    await response.body?.cancel();
-    return response.ok ? null : `HTTP ${response.status}`;
+    if (!isApproved(new URL(response.url))) {
+      await response.body?.cancel();
+      return "redirected outside the approved official HTTPS hosts";
+    }
+    if (!response.ok) {
+      await response.body?.cancel();
+      return `HTTP ${response.status}`;
+    }
+    return await checkSourceBody(response, url);
   } catch (error) {
     return error instanceof Error ? error.message : "request failed";
   }
@@ -40,7 +48,7 @@ async function main() {
   for (const filename of filesUnder(DATA_ROOT)) {
     if (!/\.(?:json|md)$/i.test(filename)) continue;
     const content = fs.readFileSync(filename, "utf8");
-    for (const match of content.matchAll(/https:\/\/[^\s"')\]>]+/g)) {
+    for (const match of content.matchAll(/https:\/\/[^\s"'`)\]>]+/g)) {
       urls.add(match[0].replace(/[.,;:]+$/, ""));
     }
   }
@@ -60,6 +68,7 @@ async function main() {
   await Promise.all(workers);
 
   console.log(`Checked ${ordered.length} unique official source URLs.`);
+  console.log("Availability/redirect/PDF-signature/soft-404 checks only: these do not certify factual support or policy applicability.");
   console.log(`Passed: ${ordered.length - failures.length}`);
   console.log(`Failed: ${failures.length}`);
   for (const failure of failures) console.log(`- ${failure.url}: ${failure.reason}`);

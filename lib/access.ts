@@ -48,9 +48,8 @@ export function getQuotaPlan(user?: {
   universityAffiliation?: UniversityAffiliation | null;
 } | null): QuotaPlan {
   if (!user) return "guest";
-  if (user.universityAffiliation === "uaeu" || isUniversityEmail(user.email)) {
-    return "uaeu";
-  }
+  // An email suffix is self-reported; it is not proof of university membership.
+  // A future verified identity integration may grant a distinct institutional plan.
   return "standard";
 }
 

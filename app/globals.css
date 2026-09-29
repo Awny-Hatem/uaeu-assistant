@@ -36,7 +36,7 @@ body {
 .markdown-body ul,
 .markdown-body ol {
   margin: 0.45rem 0;
-  padding-left: 1.25rem;
+  padding-inline-start: 1.25rem;
 }
 
 .markdown-body ul {
@@ -61,8 +61,16 @@ body {
   text-underline-offset: 3px;
 }
 
-[dir="rtl"] .markdown-body ul,
-[dir="rtl"] .markdown-body ol {
-  padding-left: 0;
-  padding-right: 1.25rem;
+.markdown-body {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+dialog::backdrop {
+  background: rgb(24 24 27 / 45%);
+}
+
+:focus-visible {
+  outline: 2px solid #e0182d;
+  outline-offset: 3px;
 }

@@ -30,7 +30,8 @@ db.exec(`
     password_hash TEXT NOT NULL,
     student_type TEXT,
     major TEXT,
-    university_affiliation TEXT NOT NULL DEFAULT 'general'
+    university_affiliation TEXT NOT NULL DEFAULT 'general',
+    history_generation INTEGER NOT NULL DEFAULT 0
   );
 
   CREATE TABLE IF NOT EXISTS sessions (
@@ -47,8 +48,14 @@ db.exec(`
     role TEXT NOT NULL,
     content TEXT NOT NULL,
     source TEXT,
+    metadata_json TEXT,
     timestamp INTEGER NOT NULL,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+  );
+
+  CREATE TABLE IF NOT EXISTS session_revocations (
+    token_hash TEXT PRIMARY KEY,
+    expires_at INTEGER NOT NULL
   );
 
   CREATE TABLE IF NOT EXISTS analytics_events (
@@ -88,6 +95,16 @@ addUserColumnIfMissing(
   "university_affiliation",
   "ALTER TABLE users ADD COLUMN university_affiliation TEXT NOT NULL DEFAULT 'general'",
 );
+addUserColumnIfMissing("history_generation", "ALTER TABLE users ADD COLUMN history_generation INTEGER NOT NULL DEFAULT 0");
+
+const messageColumns = db.prepare('PRAGMA table_info(messages)').all() as { name: string }[];
+if (!messageColumns.some((column) => column.name === 'metadata_json')) {
+  try {
+    db.exec('ALTER TABLE messages ADD COLUMN metadata_json TEXT');
+  } catch (error) {
+    if (!(error instanceof Error) || !/duplicate column name/i.test(error.message)) throw error;
+  }
+}
 
 db.exec(`
   CREATE UNIQUE INDEX IF NOT EXISTS users_email_unique
@@ -96,6 +113,9 @@ db.exec(`
 
   CREATE INDEX IF NOT EXISTS analytics_events_timestamp_idx
   ON analytics_events(timestamp);
+
+  CREATE INDEX IF NOT EXISTS messages_user_timestamp_idx ON messages(user_id, timestamp);
+  CREATE INDEX IF NOT EXISTS sessions_expiry_idx ON sessions(expires_at);
 `);
 
 export default db;

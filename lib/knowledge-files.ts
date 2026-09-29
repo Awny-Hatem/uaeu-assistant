@@ -1,6 +1,9 @@
 import crypto from "crypto";
 import fs from "fs";
 import path from "path";
+import { faqScope, faqScopeAllows, loadFaqEntries } from "@/lib/faq";
+import type { Citation } from "@/lib/prototype-types";
+import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope, type FactIntent } from "@/lib/query-understanding";
 
 const KNOWLEDGE_DIR = path.join(process.cwd(), "data", "knowledge");
 
@@ -10,6 +13,7 @@ export type KnowledgeDocument = {
   title: string;
   sourceUrl: string;
   lastVerified: string;
+  scope?: EvidenceScope;
 };
 
 type Frontmatter = Record<string, string>;
@@ -30,10 +34,11 @@ function officialUaeuUrl(value: string): boolean {
 function validIsoDate(value: string): boolean {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
   const date = new Date(`${value}T00:00:00.000Z`);
-  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value;
+  return !Number.isNaN(date.getTime()) && date.toISOString().slice(0, 10) === value &&
+    date.getTime() <= Date.now() + 86_400_000 && Date.now() - date.getTime() <= 180 * 86_400_000;
 }
 
-function parseApprovedDocument(
+export function parseApprovedDocument(
   filename: string,
   raw: string,
 ): KnowledgeDocument | null {
@@ -54,12 +59,17 @@ function parseApprovedDocument(
     !metadata.title ||
     !metadata.sourceurl ||
     !officialUaeuUrl(metadata.sourceurl) ||
-    !validIsoDate(metadata.lastverified ?? "")
+    !validIsoDate(metadata.lastverified ?? "") ||
+    (metadata.applicantcategory !== undefined && !["national", "international"].includes(metadata.applicantcategory)) ||
+    (metadata.degreelevel !== undefined && !["undergraduate", "postgraduate"].includes(metadata.degreelevel)) ||
+    (metadata.temporalcoverage !== undefined && !["procedural", "dated"].includes(metadata.temporalcoverage))
   ) {
     return null;
   }
 
-  const content = match[2].trim();
+  // Git checkouts may use CRLF on Windows and LF in deployment. They represent
+  // identical evidence; normalize before retrieval and content fingerprinting.
+  const content = match[2].replace(/\r\n?/g, "\n").trim();
   if (!content) return null;
   return {
     filename,
@@ -67,6 +77,14 @@ function parseApprovedDocument(
     title: metadata.title,
     sourceUrl: metadata.sourceurl,
     lastVerified: metadata.lastverified,
+    scope: {
+      courseCodes: metadata.coursecodes?.split(",").map((code) => code.trim().toUpperCase()),
+      subjects: metadata.subjects?.split(",").map((subject) => subject.trim()),
+      years: metadata.academicyears?.split(",").map(Number).filter(Number.isFinite),
+      degreeLevel: metadata.degreelevel === "undergraduate" || metadata.degreelevel === "postgraduate" ? metadata.degreelevel : undefined,
+      applicantCategory: metadata.applicantcategory as EvidenceScope["applicantCategory"],
+      temporalCoverage: metadata.temporalcoverage as EvidenceScope["temporalCoverage"],
+    },
   };
 }
 
@@ -89,7 +107,7 @@ export function knowledgeFingerprint(): string {
   for (const document of loadKnowledgeMarkdown()) {
     hash.update(document.filename);
     hash.update("\0");
-    hash.update(document.content);
+    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, scope: document.scope }));
     hash.update("\0");
   }
   return hash.digest("hex");
@@ -198,19 +216,13 @@ const STOP = new Set([
 ]);
 
 function normalizeForLexical(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return normalizeQuery(text);
 }
 
 function tokens(text: string): string[] {
   return normalizeForLexical(text)
     .split(/\s+/)
-    .filter((token) => token.length > 1 && !STOP.has(token))
+    .filter((token) => token.length > 1)
     .map((token) => {
       if (!/^[a-z]+$/.test(token) || token.length <= 3) return token;
       if (token.endsWith("ies") && token.length > 4) return `${token.slice(0, -3)}y`;
@@ -224,20 +236,70 @@ function tokens(text: string): string[] {
         return token.slice(0, -1);
       }
       return token;
-    });
+    }).filter((token) => !STOP.has(token) && !["uaeu", "university", "follow", "up", "question", "requested", "fact"].includes(token));
+}
+
+export type EvidenceRow = {
+  text: string;
+  score: number;
+  source: string;
+  citations?: Citation[];
+  scope?: EvidenceScope;
+  title?: string;
+};
+
+const FACT_EVIDENCE: Partial<Record<FactIntent, RegExp>> = {
+  prerequisites: /prerequisite|corequisite|متطلب.*(?:سابق|متزامن)/iu,
+  fees: /\b(?:fee|fees|tuition|charge|cost|aed|free|no charge|price|payment)\b|رسوم|تكلفة|مجاني/iu,
+  duration: /\b(?:minutes?|hours?|days?|weeks?|processing|delivery)\b|دقائق|ساعات|ايام|مدة|دقيق[ةه]|ساع[ةه]/iu,
+  gpa: /\b(?:gpa|cgpa|grade.point.average)\b|معدل.*تراكمي/iu,
+  deadline: /\b(?:deadlines?|last (?:day|date|add|drop|withdraw)|closing|close|due dates?|application period|announced period)\b|اخر موعد|موعد نهائي|فتر[ةه] التقديم/iu,
+  eligibility: /\b(?:eligible|eligibility|criteria|requirements?|prerequisites?|enrolled|condition)\b|مؤهل|اهلي[ةه]|شروط|مقيد/iu,
+  status: /\b(?:status|track|portal|record|confirmation)\b|حال[ةه]|متابع[ةه]|بواب[ةه]/iu,
+  hours: /\b(?:hours?|open|closed|monday|tuesday|schedule)\b|دوام|ساعات|مفتوح|مغلق/iu,
+  start: /\b(?:begin|start|commence|first day)\b|بداي[ةه]|يبدا/iu,
+};
+
+export function hasRequestedFactEvidence(query: string, text: string): boolean {
+  const intent = understandQuery(query).intents;
+  return intent.filter((item) => FACT_EVIDENCE[item]).every((item) => FACT_EVIDENCE[item]!.test(normalizeQuery(text)));
+}
+
+export function evidenceIsRelevant(query: string, text: string, identity: string, scope: EvidenceScope = {}): boolean {
+  const wanted = understandQuery(query);
+  const own = understandQuery(identity);
+  if (!scopeAllows(query, text, scope)) return false;
+  const ownCodes = scope.courseCodes?.length ? scope.courseCodes : own.codes;
+  if (wanted.codes.length) {
+    if (ownCodes.length && !wanted.codes.some((code) => ownCodes.includes(code))) return false;
+    if (!wanted.codes.some((code) => courseCodes(text).includes(code))) return false;
+  }
+  const subjects = scope.subjects?.length ? scope.subjects : own.subjects;
+  const primary = wanted.subjects.filter((subject) => !["calendar", "registration", "graduation", "admissions"].includes(subject));
+  const relevantSubjects = primary.length ? primary : wanted.subjects;
+  if (!wanted.codes.length && relevantSubjects.length && !relevantSubjects.some((subject) => subjects.includes(subject))) return false;
+  // Explicit policy relationships must be evidenced together, not by separate unrelated words.
+  for (const concept of ["violation", "suspension", "gpa", "professor", "library"]) {
+    if (new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(query) && !new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(text)) return false;
+  }
+  if (wanted.intents.includes("deadline")) {
+    const domain = wanted.subjects.filter((subject) => ["admissions", "graduation", "tuition", "scholarship", "visa", "housing"].includes(subject));
+    if (domain.length && !domain.some((subject) => subjects.includes(subject))) return false;
+  }
+  return true;
 }
 
 export function lexicalRetrieve(
   query: string,
   topK: number,
-): { text: string; score: number; source: string }[] {
+): EvidenceRow[] {
   const qTokens = new Set(tokens(query));
   if (qTokens.size === 0) return [];
 
   const docs = loadKnowledgeMarkdown();
-  const scored: { text: string; score: number; source: string }[] = [];
+  const scored: EvidenceRow[] = [];
 
-  for (const { filename, content, title } of docs) {
+  for (const { filename, content, title, scope } of docs) {
     const titleTokens = tokens(title);
     for (const section of splitIntoSections(content)) {
       // Repeat the document title for every section when scoring. Markdown sections
@@ -245,6 +307,7 @@ export function lexicalRetrieve(
       // may be titled only "Eligibility and documents"). Without the title, natural
       // compound questions can miss an otherwise exact official excerpt.
       const contextualSection = `# ${title}\n${section}`;
+      if (!evidenceIsRelevant(query, contextualSection, title, scope)) continue;
       const sectionTokens = new Set([...titleTokens, ...tokens(section)]);
       let matches = 0;
 
@@ -266,13 +329,13 @@ export function lexicalRetrieve(
       const score = matches * 2 + coverage * 4 + (exactPhrase ? 4 : 0) + (hasExactIdentifier ? 5 : 0);
 
       if (score > 0) {
-        scored.push({ text: contextualSection, score, source: filename });
+        scored.push({ text: contextualSection, score, source: filename, scope, title });
       }
     }
   }
 
   scored.sort((a, b) => b.score - a.score);
-  const out: { text: string; score: number; source: string }[] = [];
+  const out: EvidenceRow[] = [];
   const seen = new Set<string>();
 
   for (const row of scored) {
@@ -284,4 +347,31 @@ export function lexicalRetrieve(
   }
 
   return out;
+}
+
+/** Verified answer bodies are evidence too, with exactly their own source citations. */
+export function retrieveVerifiedEvidence(query: string, topK = 5): EvidenceRow[] {
+  const qTokens = new Set(tokens(query));
+  const meaning = understandQuery(query);
+  const rows: EvidenceRow[] = [...lexicalRetrieve(query, topK * 2)];
+  for (const entry of loadFaqEntries()) {
+    if (!faqScopeAllows(query, entry)) continue;
+    const title = entry.answer_en.split("\n")[0].replace(/\*\*/g, "");
+    const identity = `${title}\n${entry.questions.join(" ")}\n${(entry.matchPhrases ?? []).join(" ")}`;
+    const scope = faqScope(entry);
+    const text = `${entry.answer_en}\n\n${entry.answer_ar ?? ""}`;
+    if (!evidenceIsRelevant(query, text, identity, scope) || !hasRequestedFactEvidence(query, text)) continue;
+    const contentTokens = new Set(tokens(`${identity}\n${text}`));
+    const matched = [...qTokens].filter((token) => contentTokens.has(token));
+    const topicMatch = meaning.subjects.some((subject) => understandQuery(identity).subjects.includes(subject));
+    const codeMatch = meaning.codes.some((code) => scope.courseCodes?.includes(code));
+    const coverage = matched.length / Math.max(1, qTokens.size);
+    if (!codeMatch && (matched.length < 2 || coverage < (topicMatch ? 0.2 : 0.65))) continue;
+    rows.push({ text, title, scope, source: `answer:${entry.id}`, score: matched.length * 2 + (codeMatch ? 8 : 0) + 4, citations: entry.citations });
+  }
+  rows.sort((a, b) => b.score - a.score);
+  // The fact guard runs on the assembled relevant evidence so a compound request can
+  // use multiple sections; unrelated records cannot supply the missing relationship.
+  const selected = rows.slice(0, topK);
+  return hasRequestedFactEvidence(query, selected.map((row) => row.text).join("\n")) ? selected : [];
 }

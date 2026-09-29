@@ -6,8 +6,8 @@
     "expectedAnswerId": "admissions-apply-undergraduate",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["apply", "undergraduate"],
-    "minCitations": 1
+    "requiredTerms": ["undergraduate", "UAE nationals", "Ministry", "International", "Only if your category", "not established for the separate"],
+    "minCitations": 3
   },
   {
     "id": "A02",
@@ -49,10 +49,11 @@
       { "role": "user", "content": "What is the application deadline?" }
     ],
     "expectedAnswerId": "admissions-application-deadline",
-    "expectedSource": "faq",
+    "expectedSource": "rag",
     "expectedDisposition": "answer",
     "requiredTerms": ["Fall 2027", "deadline"],
-    "minCitations": 1
+    "minCitations": 0,
+    "evidenceOnly": { "source": "answer:admissions-application-deadline", "queryTerms": ["fall", "2027", "admission"] }
   },
   {
     "id": "A06",
@@ -91,7 +92,7 @@
     "expectedAnswerId": "admissions-transfer-application",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["transfer", "apply"],
+    "requiredTerms": ["transfer", "admission route", "12 credits", "Medicine"],
     "minCitations": 1
   },
   {
@@ -121,7 +122,7 @@
     "expectedAnswerId": "admissions-programs-new-students",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["البرامج", "الطلبة"],
+    "requiredTerms": ["55", "54", "تسع كليات", "أمن المعلومات", "الطب البيطري", "ليست قائمة البرامج المفتوحة"],
     "minCitations": 1
   },
   {
@@ -141,7 +142,7 @@
     "expectedAnswerId": "course-registration-portal",
     "expectedSource": "faq",
     "expectedDisposition": "portal",
-    "requiredTerms": ["course", "portal"],
+    "requiredTerms": ["course", "MyUAEU", "Plans", "View Sections", "Submit", "Registered"],
     "minCitations": 1
   },
   {
@@ -206,8 +207,8 @@
     "expectedAnswerId": "registration-hold",
     "expectedSource": "faq",
     "expectedDisposition": "portal",
-    "requiredTerms": ["hold", "portal"],
-    "minCitations": 1
+    "requiredTerms": ["hold", "MyUAEU", "Prepare for Registration", "academic, administrative or financial", "cannot see your personal hold"],
+    "minCitations": 2
   },
   {
     "id": "R09",
@@ -246,7 +247,7 @@
     "expectedAnswerId": "academic-advisor-contact",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["academic advisor", "contact"],
+    "requiredTerms": ["academic advising", "contact", "college advising staff", "800 8238"],
     "minCitations": 1
   },
   {
@@ -326,8 +327,8 @@
     "expectedAnswerId": "final-grades-view",
     "expectedSource": "faq",
     "expectedDisposition": "portal",
-    "requiredTerms": ["الدرجات", "البوابة"],
-    "minCitations": 1
+    "requiredTerms": ["الدرجات", "بوابة الجامعة", "وثائق الطلبة الحاليين", "My Requests"],
+    "minCitations": 2
   },
   {
     "id": "C07",
@@ -396,8 +397,8 @@
     "expectedAnswerId": "enrollment-certificate",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["enrollment certificate"],
-    "minCitations": 1
+    "requiredTerms": ["TWIMC", "current enrollment", "Current Students Documents", "ten-minute"],
+    "minCitations": 2
   },
   {
     "id": "D04",
@@ -596,8 +597,8 @@
     "expectedAnswerId": "student-account-balance",
     "expectedSource": "faq",
     "expectedDisposition": "portal",
-    "requiredTerms": ["الرصيد", "البوابة"],
-    "minCitations": 1
+    "requiredTerms": ["الرصيد", "بوابة الجامعة", "Student Account Letter", "My Requests"],
+    "minCitations": 2
   },
   {
     "id": "I01",
@@ -706,7 +707,7 @@
     "expectedAnswerId": "library-book-renewal",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["تجديد", "الكتاب"],
+    "requiredTerms": ["تجديد", "كتاب", "My Library Account", "circ_lib@uaeu.ac.ae"],
     "minCitations": 1
   },
   {
@@ -725,7 +726,7 @@
     "question": "How do I reserve a group study room?",
     "expectedAnswerId": "library-study-room-reservation",
     "expectedSource": "faq",
-    "expectedDisposition": "answer",
+    "expectedDisposition": "clarify",
     "requiredTerms": ["study room", "reserve"],
     "minCitations": 1
   },
@@ -766,7 +767,7 @@
     "expectedAnswerId": "student-housing-cost",
     "expectedSource": "faq",
     "expectedDisposition": "clarify",
-    "requiredTerms": ["housing", "cost"],
+    "requiredTerms": ["housing", "fees", "5,000", "1,575"],
     "minCitations": 1
   },
   {
@@ -856,7 +857,7 @@
     "expectedAnswerId": "university-events-workshops",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["الفعاليات", "ورش العمل"],
+    "requiredTerms": ["فعاليات", "ورش العمل"],
     "minCitations": 1
   },
   {
@@ -956,7 +957,7 @@
     "expectedAnswerId": "visa-renewal-documents",
     "expectedSource": "faq",
     "expectedDisposition": "clarify",
-    "requiredTerms": ["المستندات", "التأشيرة"],
+    "requiredTerms": ["المستندات", "إقامة", "صورة حديثة بخلفية بيضاء", "iso.office@uaeu.ac.ae"],
     "minCitations": 1
   },
   {
@@ -1016,7 +1017,7 @@
     "expectedAnswerId": "contact-router",
     "expectedSource": "escalated",
     "expectedDisposition": "handoff",
-    "requiredTerms": ["Human Support", "official UAEU contact"],
+    "requiredTerms": ["UAEU Contact Center", "8008238", "cannot transfer"],
     "minCitations": 1
   }
 ]

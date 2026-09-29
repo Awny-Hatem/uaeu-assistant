@@ -34,29 +34,21 @@ import {
   GuidePreview,
 } from "@/components/ServiceGuide";
 import { getQuotaLimit, getQuotaPlan, type QuotaPlan } from "@/lib/access";
+import { boundOutgoingMessages, ConversationOwnership, dailyUsage, sanitizeAnswerMetadata, uaeDateKey } from "@/lib/chat-contract";
+import { textLanguage, uiCopy } from "@/lib/ui-copy";
 import type {
+  AnswerMetadata,
   AssistantSource,
-  Citation,
-  EscalationReason,
   ServiceGuide,
-  UniversityCommunication,
 } from "@/lib/prototype-types";
 
 type Role = "user" | "assistant";
-type UiMessage = {
+type UiMessage = AnswerMetadata & {
   id: string;
   role: Role;
   content: string;
   escalated?: boolean;
   source?: AssistantSource;
-  citations?: Citation[];
-  communications?: UniversityCommunication[];
-  guide?: ServiceGuide;
-  escalationReason?: EscalationReason;
-  provider?: string;
-  model?: string;
-  faqId?: string;
-  disposition?: "answer" | "clarify" | "portal" | "handoff" | "urgent";
 };
 type LocalePref = "auto" | "ar" | "en";
 type AuthUser = {
@@ -75,23 +67,25 @@ type AuthPrompt = {
   title: string;
   subtitle: string;
 };
-type ChatApiResponse = {
+type ChatApiResponse = AnswerMetadata & {
   content?: string;
   source?: AssistantSource;
-  citations?: Citation[];
-  communications?: UniversityCommunication[];
-  guide?: ServiceGuide;
-  escalationReason?: EscalationReason;
-  provider?: string;
-  model?: string;
-  faqId?: string;
-  disposition?: "answer" | "clarify" | "portal" | "handoff" | "urgent";
   error?: string;
+  code?: string;
 };
+
+function isAuthUser(value: unknown): value is AuthUser {
+  if (!value || typeof value !== 'object') return false;
+  const candidate = value as Partial<AuthUser>;
+  return typeof candidate.id === 'string' && candidate.id.length > 0 &&
+    typeof candidate.username === 'string' && typeof candidate.studentType === 'string' &&
+    (candidate.major === null || typeof candidate.major === 'string');
+}
 
 const GUEST_STATE_KEY = "uaeu-chatbot-guest-v4";
 const ACCOUNT_USAGE_KEY = "uaeu-chatbot-account-usage-v1";
 const ACCOUNT_MESSAGES_KEY = "uaeu-chatbot-account-messages-v1";
+const LANGUAGE_KEY = "uaeu-chatbot-language-v1";
 
 const SUGGESTIONS = [
   {
@@ -121,7 +115,7 @@ function genId() {
 }
 
 function todayKey() {
-  return new Date().toISOString().slice(0, 10);
+  return uaeDateKey();
 }
 
 function safeMarkdownUrl(url: string): string {
@@ -165,7 +159,7 @@ function isAssistantSource(value: unknown): value is AssistantSource {
 function sanitizeStoredMessages(rawMessages: unknown): UiMessage[] {
   if (!Array.isArray(rawMessages)) return [];
 
-  return rawMessages.flatMap((raw) => {
+  return rawMessages.slice(-80).flatMap((raw) => {
     if (!raw || typeof raw !== "object") return [];
     const message = raw as Partial<UiMessage>;
     if (
@@ -183,16 +177,7 @@ function sanitizeStoredMessages(rawMessages: unknown): UiMessage[] {
         content: message.content,
         escalated: Boolean(message.escalated),
         source: isAssistantSource(message.source) ? message.source : undefined,
-        citations: Array.isArray(message.citations) ? message.citations : undefined,
-        communications: Array.isArray(message.communications)
-          ? message.communications
-          : undefined,
-        guide: message.guide,
-        escalationReason: message.escalationReason,
-        provider: message.provider,
-        model: message.model,
-        faqId: message.faqId,
-        disposition: message.disposition,
+        ...sanitizeAnswerMetadata(message),
       },
     ];
   });
@@ -241,12 +226,19 @@ function readAccountMessages(userId: string): UiMessage[] {
   try {
     const parsed = JSON.parse(localStorage.getItem(ACCOUNT_MESSAGES_KEY) || "{}") as Record<
       string,
-      { messages?: unknown }
+      { messages?: unknown; cleared?: boolean }
     >;
     return sanitizeStoredMessages(parsed[userId]?.messages);
   } catch {
     return [];
   }
+}
+
+function hasClearedAccountHistory(userId: string): boolean {
+  try {
+    const records = JSON.parse(localStorage.getItem(ACCOUNT_MESSAGES_KEY) || "{}");
+    return records[userId]?.cleared === true;
+  } catch { return false; }
 }
 
 function writeAccountMessages(userId: string, messages: UiMessage[]) {
@@ -255,9 +247,9 @@ function writeAccountMessages(userId: string, messages: UiMessage[]) {
   try {
     const parsed = JSON.parse(localStorage.getItem(ACCOUNT_MESSAGES_KEY) || "{}") as Record<
       string,
-      { messages?: UiMessage[]; updatedAt?: number }
+      { messages?: UiMessage[]; updatedAt?: number; cleared?: boolean }
     >;
-    parsed[userId] = { messages: messages.slice(-80), updatedAt: Date.now() };
+    parsed[userId] = { messages: messages.slice(-80), updatedAt: Date.now(), cleared: messages.length === 0 && parsed[userId]?.cleared === true };
     localStorage.setItem(ACCOUNT_MESSAGES_KEY, JSON.stringify(parsed));
   } catch {
     // Local account history is best effort.
@@ -271,7 +263,7 @@ function clearAccountMessages(userId: string) {
       string,
       unknown
     >;
-    delete parsed[userId];
+    parsed[userId] = { messages: [], cleared: true };
     localStorage.setItem(ACCOUNT_MESSAGES_KEY, JSON.stringify(parsed));
   } catch {
     // Clearing local history is best effort when storage is unavailable.
@@ -287,8 +279,7 @@ function readAccountUsage(userId: string): number {
       { date?: string; used?: unknown }
     >;
     const record = parsed[userId];
-    if (!record || record.date !== todayKey()) return 0;
-    return Number.isFinite(record.used) ? Math.max(0, Number(record.used)) : 0;
+    return dailyUsage(record);
   } catch {
     return 0;
   }
@@ -309,20 +300,14 @@ function writeAccountUsage(userId: string, used: number) {
   }
 }
 
-function planName(plan: QuotaPlan) {
-  if (plan === "uaeu") return "UAEU account";
-  if (plan === "standard") return "Standard account";
-  return "Visitor access";
+function planName(plan: QuotaPlan, language: "en" | "ar") {
+  return plan === "guest" ? uiCopy[language].visitorAccess : uiCopy[language].account;
 }
 
-function sourceLabel(source: AssistantSource) {
-  if (source === "conversation") return "Conversation";
-  if (source === "faq") return "Official-source answer";
-  if (source === "rag") return "Verified document search";
-  if (source === "web") return "External grounding";
-  if (source === "guide") return "Guided service";
-  if (source === "escalated") return "Clarification or staff help";
-  return "System notice";
+function sourceLabel(source: AssistantSource, disposition: UiMessage["disposition"], language: "en" | "ar") {
+  const copy = uiCopy[language];
+  if (source === "escalated") return disposition === "urgent" ? copy.urgent : disposition === "handoff" ? copy.handoff : copy.clarify;
+  return copy[source];
 }
 
 function sourceIcon(source: AssistantSource) {
@@ -345,7 +330,10 @@ export function UniversityChat() {
       "Create an account with any email, or use a UAEU email for extended local access.",
   });
 
-  const [locale, setLocale] = useState<LocalePref>("auto");
+  const [locale, setLocale] = useState<LocalePref>(() => {
+    try { const value = localStorage.getItem(LANGUAGE_KEY); return value === "en" || value === "ar" ? value : "auto"; }
+    catch { return "auto"; }
+  });
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -355,6 +343,22 @@ export function UniversityChat() {
   const [accountQuestionsUsed, setAccountQuestionsUsed] = useState(0);
   const [activeGuide, setActiveGuide] = useState<ServiceGuide | null>(null);
   const guestHydratedRef = useRef(false);
+  const historyOwnerRef = useRef<string | null>(null);
+  const ownershipRef = useRef(new ConversationOwnership());
+  const authTransitionRef = useRef<symbol | null>(null);
+  const [authTransition, setAuthTransition] = useState(false);
+  const [sessionUncertain, setSessionUncertain] = useState(false);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [deletionPending, setDeletionPending] = useState(false);
+  const usageDateRef = useRef(todayKey());
+  const accountUsageRef = useRef({ userId: "", date: todayKey(), used: 0 });
+  const latestUserText = [...messages].reverse().find((message) => message.role === "user")?.content;
+  const uiLocale = locale === "auto" ? (latestUserText ? textLanguage(latestUserText) : "en") : locale;
+  const copy = uiCopy[uiLocale];
+
+  useEffect(() => {
+    try { localStorage.setItem(LANGUAGE_KEY, locale); } catch { /* Optional preference storage. */ }
+  }, [locale]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -372,12 +376,13 @@ export function UniversityChat() {
     (
       mode: AuthMode,
       locked = false,
-      title = "Sign in to continue",
-      subtitle = "Create an account with any email, or use a UAEU email for extended local access.",
+      title = copy.signInTitle,
+      subtitle = copy.accountNotice,
     ) => {
+      if (authTransitionRef.current) return;
       setAuthPrompt({ open: true, locked, mode, title, subtitle });
     },
-    [],
+    [copy],
   );
 
   const closeAuthPrompt = useCallback(() => {
@@ -394,44 +399,127 @@ export function UniversityChat() {
   }, []);
 
   const loadAccountConversation = useCallback(async (loggedUser: AuthUser) => {
-    const localMessages = readAccountMessages(loggedUser.id);
-    if (localMessages.length) {
-      setMessages(localMessages);
-      return;
-    }
-
+    const request = ownershipRef.current.begin();
+    let identityChanged = false;
+    historyOwnerRef.current = null;
+    setHistoryLoading(true);
+    setMessages([]);
     try {
-      const res = await fetch("/api/history");
+      const localMessages = readAccountMessages(loggedUser.id);
+      if (localMessages.length || hasClearedAccountHistory(loggedUser.id)) {
+        if (request.isCurrent()) {
+          historyOwnerRef.current = loggedUser.id;
+          setMessages(localMessages);
+        }
+        return true;
+      }
+      const res = await fetch("/api/history", {
+        headers: { 'x-chat-account-id': loggedUser.id },
+        cache: 'no-store', signal: AbortSignal.any([request.signal, AbortSignal.timeout(10_000)]),
+      });
+      if (res.status === 409) {
+        identityChanged = true;
+        return false;
+      }
       if (res.ok) {
         const data = (await res.json()) as { messages?: unknown };
-        const serverMessages = sanitizeStoredMessages(data.messages);
-        if (serverMessages.length) {
-          setMessages(serverMessages);
-          return;
+        if (request.isCurrent()) {
+          historyOwnerRef.current = loggedUser.id;
+          setMessages(sanitizeStoredMessages(data.messages));
         }
       }
     } catch {
       // Server history is optional; local history is the default.
+    } finally {
+      if (request.isCurrent() && !identityChanged) {
+        historyOwnerRef.current = loggedUser.id;
+        setHistoryLoading(false);
+      }
+      request.finish();
     }
-
-    setMessages([]);
+    return true;
   }, []);
+
+  const reconcileAccount = useCallback(async () => {
+    const transition = Symbol('session-reconciliation');
+    authTransitionRef.current = transition;
+    setAuthTransition(true);
+    setSessionUncertain(false);
+    ownershipRef.current.invalidate();
+    historyOwnerRef.current = null;
+    guestHydratedRef.current = false;
+    setLoading(false);
+    setHistoryLoading(false);
+    setMessages([]);
+    setInput('');
+    setActiveGuide(null);
+    setProfileOpen(false);
+    setDeletionPending(false);
+    const request = ownershipRef.current.begin();
+    try {
+      const res = await fetch('/api/auth/session', {
+        cache: 'no-store', signal: AbortSignal.any([request.signal, AbortSignal.timeout(10_000)]),
+      });
+      if (!res.ok) throw new Error('Session unavailable');
+      const data = await res.json() as { user?: unknown };
+      if (data.user !== null && !isAuthUser(data.user)) throw new Error('Invalid session response');
+      if (!request.isCurrent()) return;
+      setUser(data.user);
+      if (data.user) {
+        setAccountQuestionsUsed(readAccountUsage(data.user.id));
+        if (!await loadAccountConversation(data.user)) throw new Error('Session changed again');
+      } else {
+        loadGuestConversation();
+      }
+      if (authTransitionRef.current !== transition || !request.isCurrent()) return;
+      setBanner(uiLocale === 'ar'
+        ? 'تغير الحساب. تم تحميل محادثة الحساب الحالي دون نقل المحادثة السابقة. أعد كتابة سؤالك إذا رغبت.'
+        : 'Your account changed. The current account conversation is loaded without transferring the previous conversation. Re-enter your question if needed.');
+      authTransitionRef.current = null;
+      setAuthTransition(false);
+    } catch {
+      if (authTransitionRef.current === transition && request.isCurrent()) {
+        setSessionUncertain(true);
+        setBanner(uiLocale === 'ar'
+          ? 'تعذر التأكد من الحساب الحالي. تم إيقاف المحادثة مؤقتاً لحماية سجلّك. أعد التحقق من حالة تسجيل الدخول.'
+          : 'The current account could not be confirmed. Chat is paused to protect your history. Check sign-in status again.');
+      }
+    } finally {
+      request.finish();
+    }
+  }, [loadAccountConversation, loadGuestConversation, uiLocale]);
+
+  // The mount effect uses a stable indirection so language changes do not reload
+  // sessions or overwrite a conversation already in progress.
+  const reconcileAccountRef = useRef(reconcileAccount);
+  useEffect(() => { reconcileAccountRef.current = reconcileAccount; }, [reconcileAccount]);
 
   useEffect(() => {
     let mounted = true;
+    const ownership = ownershipRef.current;
+    const controller = new AbortController();
 
     (async () => {
       try {
-        const res = await fetch("/api/auth/session");
-        const data = (await res.json()) as { user?: AuthUser | null };
+        const res = await fetch("/api/auth/session", {
+          cache: 'no-store', signal: AbortSignal.any([controller.signal, AbortSignal.timeout(10_000)]),
+        });
+        if (!res.ok) throw new Error("Session unavailable");
+        const data = (await res.json()) as { user?: unknown };
+        if (data.user !== null && !isAuthUser(data.user)) throw new Error('Invalid session response');
         if (!mounted) return;
 
         if (data.user) {
           setUser(data.user);
           setAccountQuestionsUsed(readAccountUsage(data.user.id));
-          await loadAccountConversation(data.user);
+          if (!await loadAccountConversation(data.user)) await reconcileAccountRef.current();
         } else {
           loadGuestConversation();
+        }
+      } catch {
+        if (mounted) {
+          loadGuestConversation();
+          setBanner(uiCopy.en.sessionFailed);
         }
       } finally {
         if (mounted) setAuthLoading(false);
@@ -440,6 +528,8 @@ export function UniversityChat() {
 
     return () => {
       mounted = false;
+      controller.abort();
+      ownership.invalidate();
     };
   }, [loadAccountConversation, loadGuestConversation]);
 
@@ -450,10 +540,10 @@ export function UniversityChat() {
   }, [authLoading, guestQuestionsUsed, messages, user]);
 
   useEffect(() => {
-    if (!authLoading && user) {
+    if (!authLoading && !historyLoading && user && historyOwnerRef.current === user.id) {
       writeAccountMessages(user.id, messages);
     }
-  }, [authLoading, messages, user]);
+  }, [authLoading, historyLoading, messages, user]);
 
   useEffect(() => {
     if (user) {
@@ -464,15 +554,21 @@ export function UniversityChat() {
   }, [user]);
 
   useEffect(() => {
-    if (!authLoading && !user && quotaBlocked && guestHydratedRef.current) {
-      openAuthPrompt(
-        "login",
-        true,
-        "Question allowance used",
-        "Sign in or create an account to keep asking. UAEU emails receive extended local access.",
-      );
+    function refreshUsage() {
+      usageDateRef.current = todayKey();
+      if (user) setAccountQuestionsUsed(readAccountUsage(user.id));
     }
-  }, [authLoading, openAuthPrompt, quotaBlocked, user]);
+    const timer = window.setInterval(refreshUsage, 30_000);
+    window.addEventListener("focus", refreshUsage);
+    window.addEventListener("storage", refreshUsage);
+    document.addEventListener("visibilitychange", refreshUsage);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener("focus", refreshUsage);
+      window.removeEventListener("storage", refreshUsage);
+      document.removeEventListener("visibilitychange", refreshUsage);
+    };
+  }, [user]);
 
   useEffect(() => {
     function handleClick(event: MouseEvent) {
@@ -490,49 +586,107 @@ export function UniversityChat() {
   }, [messages, loading]);
 
   async function handleAuth(loggedUser: AuthUser) {
+    const transition = Symbol("account-change");
+    authTransitionRef.current = transition;
+    setAuthTransition(true);
+    setSessionUncertain(false);
+    ownershipRef.current.invalidate();
+    setLoading(false);
+    setDeletionPending(false);
     setUser(loggedUser);
     setAccountQuestionsUsed(readAccountUsage(loggedUser.id));
     setAuthPrompt((current) => ({ ...current, open: false, locked: false }));
     setBanner(null);
     setInput("");
     setActiveGuide(null);
-    await loadAccountConversation(loggedUser);
+    try {
+      if (!await loadAccountConversation(loggedUser)) await reconcileAccount();
+    } finally {
+      if (authTransitionRef.current === transition) {
+        authTransitionRef.current = null;
+        setAuthTransition(false);
+      }
+    }
   }
 
   async function handleLogout() {
-    await fetch("/api/auth/logout", { method: "POST" });
-    setUser(null);
-    setProfileOpen(false);
-    setActiveGuide(null);
-    setBanner("Signed out. Visitor access is available on this device.");
-    loadGuestConversation();
+    if (authTransitionRef.current) return;
+    const transition = Symbol("logout");
+    authTransitionRef.current = transition;
+    setAuthTransition(true);
+    ownershipRef.current.invalidate();
+    setLoading(false);
+    const request = ownershipRef.current.begin();
+    try {
+      const result = await fetch("/api/auth/logout", {
+        method: "POST", headers: { 'x-chat-account-id': user?.id ?? 'guest' }, signal: request.signal,
+      });
+      if (result.status === 409 && request.isCurrent()) { await reconcileAccount(); return; }
+      if (!result.ok) throw new Error("Logout failed");
+      if (!request.isCurrent()) return;
+      // Switching owners is a second boundary. Even a request started while
+      // sign-out was pending must never append into the guest conversation.
+      ownershipRef.current.invalidate();
+      historyOwnerRef.current = null;
+      setHistoryLoading(false);
+      setUser(null);
+      setProfileOpen(false);
+      setActiveGuide(null);
+      setDeletionPending(false);
+      setBanner(copy.signedOut);
+      loadGuestConversation();
+    } catch {
+      if (request.isCurrent()) setBanner(copy.logoutFailed);
+    } finally {
+      request.finish();
+      if (authTransitionRef.current === transition) {
+        authTransitionRef.current = null;
+        setAuthTransition(false);
+      }
+    }
   }
 
   async function handleClearConversation() {
+    if (authTransitionRef.current) return;
+    ownershipRef.current.invalidate();
+    setLoading(false);
+    setHistoryLoading(false);
+    const request = ownershipRef.current.begin();
     setMessages([]);
     setInput("");
     setActiveGuide(null);
     if (user) {
       clearAccountMessages(user.id);
       try {
-        await fetch("/api/history", { method: "DELETE" });
+        const result = await fetch("/api/history", {
+          method: "DELETE", headers: { 'x-chat-account-id': user.id }, signal: request.signal,
+        });
+        if (result.status === 409 && request.isCurrent()) { await reconcileAccount(); return; }
+        if (!result.ok) throw new Error("Delete failed");
+        if (request.isCurrent()) { setDeletionPending(false); setBanner(copy.cleared); }
       } catch {
-        // Server history is optional; the browser copy is already cleared.
+        if (request.isCurrent()) { setDeletionPending(true); setBanner(copy.clearFailed); }
       }
     } else {
       writeGuestState([], guestQuestionsUsed);
+      setBanner(copy.cleared);
     }
-    setBanner("Conversation history cleared from this browser.");
-    setProfileOpen(false);
+    if (request.isCurrent()) setProfileOpen(false);
+    request.finish();
   }
 
   const incrementUsage = useCallback(() => {
     if (user) {
-      setAccountQuestionsUsed((current) => {
-        const next = current + 1;
-        writeAccountUsage(user.id, next);
-        return next;
-      });
+      const date = todayKey();
+      const memory = accountUsageRef.current;
+      const remembered = memory.userId === user.id && memory.date === date ? memory.used : 0;
+      const next = Math.max(remembered, readAccountUsage(user.id)) + 1;
+      accountUsageRef.current = { userId: user.id, date, used: next };
+      usageDateRef.current = date;
+      // Event side effects must not run inside a React updater: Strict Mode
+      // intentionally calls updater functions more than once.
+      writeAccountUsage(user.id, next);
+      setAccountQuestionsUsed(next);
       return;
     }
 
@@ -546,18 +700,20 @@ export function UniversityChat() {
 
   const send = useCallback(async () => {
     const trimmed = input.trim();
-    if (!trimmed || loading) return;
+    if (!trimmed || loading || historyLoading || authTransitionRef.current) return;
 
-    if (quotaBlocked) {
+    const currentUsage = user ? readAccountUsage(user.id) : guestQuestionsUsed;
+    if (user) setAccountQuestionsUsed(currentUsage);
+    if (currentUsage >= quotaLimit) {
       if (!user) {
         openAuthPrompt(
           "login",
-          true,
-          "Question allowance used",
-          "Sign in or create an account to keep asking. UAEU emails receive extended local access.",
+          false,
+          copy.allowanceTitle,
+          copy.allowanceNotice,
         );
       } else {
-        setBanner("You have used today's local question allowance for this account.");
+        setBanner(copy.dailyLimit);
       }
       return;
     }
@@ -568,6 +724,7 @@ export function UniversityChat() {
     setBanner(null);
     setMessages(nextThread);
     setLoading(true);
+    const request = ownershipRef.current.begin();
 
     const payload: {
       locale: LocalePref;
@@ -579,7 +736,7 @@ export function UniversityChat() {
       messages: { role: Role; content: string }[];
     } = {
       locale,
-      messages: nextThread.map(({ role, content }) => ({ role, content })),
+      messages: boundOutgoingMessages(nextThread.map(({ role, content }) => ({ role, content }))),
     };
 
     if (user) {
@@ -593,16 +750,24 @@ export function UniversityChat() {
     try {
       const res = await fetch("/api/chat", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", 'x-chat-account-id': user?.id ?? 'guest' },
+        credentials: user ? 'same-origin' : 'omit',
         body: JSON.stringify(payload),
+        signal: request.signal,
       });
       const data = (await res.json().catch(() => ({}))) as ChatApiResponse;
+      if (!request.isCurrent()) return;
+
+      if (res.status === 409 && data.code === 'account_changed') {
+        await reconcileAccount();
+        return;
+      }
 
       if (!res.ok) {
         const error =
           data.content ||
           data.error ||
-          "The assistant could not reach the AI provider. Please try again later.";
+          copy.requestError;
         setBanner(error);
         setMessages((current) => [
           ...current,
@@ -625,39 +790,38 @@ export function UniversityChat() {
             id: genId(),
             role: "assistant",
             content: data.content ?? "",
-            escalated: source === "escalated",
+            escalated: data.disposition === "handoff" || data.disposition === "urgent",
             source,
-            citations: data.citations,
-            communications: data.communications,
-            guide: data.guide,
-            escalationReason: data.escalationReason,
-            provider: data.provider,
-            model: data.model,
-            faqId: data.faqId,
-            disposition: data.disposition,
+            ...sanitizeAnswerMetadata(data),
           },
         ]);
         incrementUsage();
       }
     } catch {
-      const error = "Network error. Check your connection and try again.";
+      if (!request.isCurrent()) return;
+      const error = copy.networkError;
       setBanner(error);
       setMessages((current) => [
         ...current,
         { id: genId(), role: "assistant", content: error, source: "error" },
       ]);
     } finally {
-      setLoading(false);
+      if (request.isCurrent()) setLoading(false);
+      request.finish();
     }
   }, [
     input,
     loading,
+    historyLoading,
     locale,
     messages,
     incrementUsage,
     openAuthPrompt,
-    quotaBlocked,
+    guestQuestionsUsed,
+    quotaLimit,
+    copy,
     user,
+    reconcileAccount,
   ]);
 
   if (authLoading) {
@@ -673,20 +837,20 @@ export function UniversityChat() {
             priority
           />
           <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
-            Checking session...
+            {copy.checkingSession}
           </p>
         </div>
       </div>
     );
   }
 
-  const profileTitle = user?.username ?? "Visitor";
+  const profileTitle = user?.username ?? copy.visitor;
   const profileSubtitle = user
     ? [user.studentType, user.major].filter(Boolean).join(" / ")
-    : "Local browser session";
+    : copy.browserSession;
 
   return (
-    <div className="flex h-full w-full bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
+    <div lang={uiLocale} dir={uiLocale === "ar" ? "rtl" : "ltr"} className="flex h-full w-full bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
       <aside className="hidden h-full w-72 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-950 md:flex lg:w-80">
         <div className="border-b border-zinc-200 px-7 py-7 dark:border-zinc-800">
           <Image
@@ -710,7 +874,7 @@ export function UniversityChat() {
                   {profileTitle}
                 </p>
                 <p className="mt-0.5 truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                  {profileSubtitle || planName(plan)}
+                  {profileSubtitle || planName(plan, uiLocale)}
                 </p>
               </div>
             </div>
@@ -718,10 +882,10 @@ export function UniversityChat() {
             <div className="mt-4 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/70">
               <div className="flex items-center justify-between gap-3">
                 <p className="text-xs font-bold text-zinc-700 dark:text-zinc-200">
-                  {planName(plan)}
+                  {planName(plan, uiLocale)}
                 </p>
                 <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
-                  {quotaRemaining} left
+                  {quotaRemaining} {copy.left}
                 </p>
               </div>
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
@@ -731,46 +895,52 @@ export function UniversityChat() {
                 />
               </div>
               <p className="mt-2 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
-                {quotaUsed} of {quotaLimit} questions used
+                {quotaUsed} {copy.of} {quotaLimit} {copy.used}
               </p>
             </div>
           </div>
 
           <div className="mt-5 space-y-3">
-            <label className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              Language
+            <label htmlFor="desktop-language" className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+              {copy.language}
             </label>
             <select
+              id="desktop-language"
+              data-testid="desktop-language"
               value={locale}
               onChange={(event) => setLocale(event.target.value as LocalePref)}
               className="w-full appearance-none rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 outline-none transition focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
             >
-              <option value="auto">Auto-detect</option>
-              <option value="en">English</option>
-              <option value="ar">Arabic</option>
+              <option value="auto">{copy.auto}</option>
+              <option value="en">{copy.english}</option>
+              <option value="ar">{copy.arabic}</option>
             </select>
           </div>
         </div>
 
         <div className="border-t border-zinc-200 p-4 dark:border-zinc-800">
-          {hasUserMessages && (
+          {(hasUserMessages || deletionPending) && (
             <button
               type="button"
               onClick={() => void handleClearConversation()}
+              data-testid="clear-conversation"
+              disabled={authTransition}
               className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
             >
               <Trash2 size={15} />
-              Clear Conversation
+              {copy.clear}
             </button>
           )}
           {user ? (
             <button
               type="button"
               onClick={handleLogout}
+              data-testid="sign-out"
+              disabled={authTransition}
               className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-rose-900 dark:hover:text-rose-400"
             >
               <LogOut size={15} />
-              Sign Out
+              {copy.signOut}
             </button>
           ) : (
             <div className="grid grid-cols-2 gap-2">
@@ -780,7 +950,7 @@ export function UniversityChat() {
                 className="flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm font-bold text-zinc-700 transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
               >
                 <LogIn size={14} />
-                Sign In
+                {copy.signIn}
               </button>
               <button
                 type="button"
@@ -788,7 +958,7 @@ export function UniversityChat() {
                 className="flex items-center justify-center gap-2 rounded-lg bg-[#E0182D] px-3 py-2.5 text-sm font-bold text-white transition hover:bg-red-700"
               >
                 <UserPlus size={14} />
-                Create
+                {copy.create}
               </button>
             </div>
           )}
@@ -805,10 +975,23 @@ export function UniversityChat() {
             className="h-9 w-auto object-contain"
             priority
           />
+          <select
+            data-testid="mobile-language"
+            aria-label={copy.language}
+            value={locale}
+            onChange={(event) => setLocale(event.target.value as LocalePref)}
+            className="mx-2 max-w-28 rounded-lg border border-zinc-200 bg-white px-2 py-2 text-xs dark:bg-zinc-900"
+          >
+            <option value="auto">{copy.auto}</option>
+            <option value="en">{copy.english}</option>
+            <option value="ar">{copy.arabic}</option>
+          </select>
           <div className="relative" ref={profileRef}>
             <button
               type="button"
               onClick={() => setProfileOpen((open) => !open)}
+              aria-expanded={profileOpen}
+              aria-controls="mobile-profile-menu"
               className="flex max-w-[190px] items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-bold text-zinc-700 shadow-sm dark:bg-zinc-800 dark:text-zinc-200"
             >
               {plan === "uaeu" ? (
@@ -822,6 +1005,7 @@ export function UniversityChat() {
             <AnimatePresence>
               {profileOpen && (
                 <motion.div
+                  id="mobile-profile-menu"
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
@@ -832,27 +1016,29 @@ export function UniversityChat() {
                       {profileTitle}
                     </p>
                     <p className="mt-1 text-[11px] text-zinc-500">
-                      {quotaRemaining} of {quotaLimit} questions left
+                      {quotaRemaining} {copy.of} {quotaLimit} {copy.remaining}
                     </p>
                   </div>
-                  {hasUserMessages && (
+                  {(hasUserMessages || deletionPending) && (
                     <button
                       type="button"
                       onClick={() => void handleClearConversation()}
+                      disabled={authTransition}
                       className="flex w-full items-center gap-2 border-b border-zinc-100 px-4 py-3 text-xs font-bold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800"
                     >
                       <Trash2 size={13} />
-                      Clear Conversation
+                      {copy.clear}
                     </button>
                   )}
                   {user ? (
                     <button
                       type="button"
                       onClick={handleLogout}
+                      disabled={authTransition}
                       className="flex w-full items-center gap-2 px-4 py-3 text-xs font-bold text-rose-600 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20"
                     >
                       <LogOut size={13} />
-                      Sign Out
+                      {copy.signOut}
                     </button>
                   ) : (
                     <div className="grid grid-cols-2 gap-2 p-3">
@@ -861,14 +1047,14 @@ export function UniversityChat() {
                         onClick={() => openAuthPrompt("login")}
                         className="rounded-lg border border-zinc-200 px-3 py-2 text-xs font-bold text-zinc-700 dark:border-zinc-700 dark:text-zinc-200"
                       >
-                        Sign In
+                        {copy.signIn}
                       </button>
                       <button
                         type="button"
                         onClick={() => openAuthPrompt("signup")}
                         className="rounded-lg bg-[#E0182D] px-3 py-2 text-xs font-bold text-white"
                       >
-                        Create
+                        {copy.create}
                       </button>
                     </div>
                   )}
@@ -880,16 +1066,22 @@ export function UniversityChat() {
 
         {banner && (
           <motion.div
+            role="status"
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             className="border-b border-rose-200 bg-rose-50 px-4 py-3 text-center text-sm font-semibold text-rose-900 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-100"
           >
             {banner}
+            {sessionUncertain && (
+              <button type="button" onClick={() => void reconcileAccount()} className="mx-3 rounded border border-current px-3 py-1 underline">
+                {uiLocale === 'ar' ? 'إعادة التحقق من تسجيل الدخول' : 'Check sign-in status'}
+              </button>
+            )}
           </motion.div>
         )}
 
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-          <div className="min-h-0 flex-1 overflow-y-auto px-4 py-8 sm:px-8 lg:px-14">
+          <div role="log" aria-label={uiLocale === "ar" ? "المحادثة" : "Conversation"} aria-live="polite" aria-relevant="additions" className="min-h-0 flex-1 overflow-y-auto px-4 py-8 sm:px-8 lg:px-14">
             <AnimatePresence initial={false}>
               {messages.map((message) => (
                 <motion.div
@@ -926,7 +1118,8 @@ export function UniversityChat() {
                           ? "rounded-tr-md bg-zinc-950 font-medium text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-950"
                           : "rounded-tl-md bg-zinc-50 text-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
                       }`}
-                      dir="auto"
+                      dir={textLanguage(message.content) === "ar" ? "rtl" : "ltr"}
+                      lang={textLanguage(message.content)}
                     >
                       {message.role === "assistant" ? (
                         <div className="markdown-body">
@@ -942,7 +1135,7 @@ export function UniversityChat() {
                     {message.source && (
                       <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-600">
                         {sourceIcon(message.source)}
-                        {sourceLabel(message.source)}
+                        {sourceLabel(message.source, message.disposition, textLanguage(message.content))}
                         {message.provider && message.model && (
                           <span className="normal-case tracking-normal text-zinc-300 dark:text-zinc-700">
                             {message.provider} / {message.model}
@@ -954,12 +1147,12 @@ export function UniversityChat() {
                     <CitationList citations={message.citations} />
 
                     {message.guide && (
-                      <GuidePreview guide={message.guide} onStart={setActiveGuide} />
+                      <GuidePreview guide={message.guide} onStart={setActiveGuide} language={textLanguage(message.content)} />
                     )}
 
                     <CommunicationList communications={message.communications} />
 
-                    {message.escalated && (
+                    {message.disposition === "handoff" && (
                       <motion.div
                         initial={{ opacity: 0, scale: 0.96 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -972,7 +1165,7 @@ export function UniversityChat() {
                           className="inline-flex items-center gap-2 rounded-lg bg-[#E0182D] px-5 py-3 text-sm font-bold text-white shadow-md transition hover:bg-red-700"
                         >
                           <HeadphonesIcon size={16} />
-                          Open UAEU contact page
+                          {copy.contact}
                         </a>
                       </motion.div>
                     )}
@@ -984,10 +1177,10 @@ export function UniversityChat() {
             {!hasUserMessages && (
               <div className="mx-auto mb-8 w-full max-w-4xl pt-6">
                 <h1 className="text-2xl font-bold tracking-normal text-zinc-950 sm:text-3xl">
-                  What can I help you with?
+                  {copy.heading}
                 </h1>
                 <div className="mt-5 grid gap-2 sm:grid-cols-2">
-                  {SUGGESTIONS.map(({ label, prompt, icon: Icon }) => (
+                  {SUGGESTIONS.map(({ label, prompt, icon: Icon }, index) => (
                     <button
                       key={label}
                       type="button"
@@ -995,14 +1188,14 @@ export function UniversityChat() {
                       className="flex min-h-[56px] items-center gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 text-left text-sm font-bold text-zinc-700 shadow-sm transition hover:border-[#E0182D]/40 hover:bg-rose-50/40 hover:text-[#E0182D]"
                     >
                       <Icon size={17} className="shrink-0 text-[#E0182D]" />
-                      <span className="min-w-0 truncate">{label}</span>
+                      <span className="min-w-0 truncate">{[copy.studentDocuments, copy.academicDates, copy.library, copy.staff][index]}</span>
                     </button>
                   ))}
                 </div>
               </div>
             )}
 
-            {loading && (
+            {(loading || historyLoading) && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1013,7 +1206,7 @@ export function UniversityChat() {
                 </div>
                 <div className="flex items-center py-2">
                   <p className="text-sm font-semibold tracking-wide text-zinc-500 dark:text-zinc-400">
-                    Checking verified UAEU sources...
+                    {historyLoading ? copy.historyLoading : copy.checkingSources}
                   </p>
                 </div>
               </motion.div>
@@ -1022,7 +1215,7 @@ export function UniversityChat() {
           </div>
 
           {activeGuide && (
-            <GuidedServicePanel guide={activeGuide} onClose={() => setActiveGuide(null)} />
+            <GuidedServicePanel key={activeGuide.id} guide={activeGuide} language={uiLocale} onClose={() => setActiveGuide(null)} />
           )}
         </div>
 
@@ -1030,47 +1223,51 @@ export function UniversityChat() {
           <div className="mx-auto max-w-4xl">
             {!user && quotaRemaining <= 2 && (
               <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-100">
-                <span>{quotaRemaining} questions remaining</span>
+                <span>{quotaRemaining} {copy.remaining}</span>
                 <button
                   type="button"
                   onClick={() => openAuthPrompt("signup")}
                   className="inline-flex items-center gap-1.5 rounded-md bg-amber-900 px-2.5 py-1.5 text-white transition hover:bg-amber-800 dark:bg-amber-100 dark:text-amber-950"
                 >
                   <GraduationCap size={13} />
-                  Create account
+                  {copy.create}
                 </button>
               </div>
             )}
 
             <div className="relative">
+              <label className="sr-only" htmlFor="chat-question">{copy.askLabel}</label>
               <textarea
+                id="chat-question"
+                data-testid="chat-input"
                 ref={inputRef}
                 className="max-h-40 min-h-[58px] w-full resize-none rounded-2xl border border-zinc-200 bg-white px-5 py-4 pr-16 text-[1rem] font-medium text-zinc-900 shadow-sm outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 disabled:bg-zinc-50 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:disabled:bg-zinc-900/60"
                 maxLength={6000}
                 rows={1}
                 placeholder={
                   quotaBlocked
-                    ? "Sign in to continue"
+                    ? user ? copy.dailyLimit : copy.signInTitle
                     : user
-                      ? `Ask UAEU, ${user.username}`
-                      : `Ask a UAEU question (${quotaRemaining} left)`
+                      ? `${copy.askLabel}, ${user.username}`
+                      : `${copy.askLabel} (${quotaRemaining} ${copy.left})`
                 }
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 onKeyDown={(event) => {
-                  if (event.key === "Enter" && !event.shiftKey) {
+                  if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
                     event.preventDefault();
                     void send();
                   }
                 }}
-                disabled={loading || quotaBlocked}
+                disabled={loading || historyLoading || authTransition || quotaBlocked}
               />
               <button
                 type="button"
                 onClick={() => void send()}
-                disabled={loading || !input.trim() || quotaBlocked}
+                disabled={loading || historyLoading || authTransition || !input.trim() || quotaBlocked}
                 className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white shadow-md transition hover:bg-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:shadow-none dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white dark:disabled:bg-zinc-800 dark:disabled:text-zinc-600"
-                aria-label="Send message"
+                aria-label={copy.send}
+                data-testid="send-message"
               >
                 <Send
                   size={16}
@@ -1082,9 +1279,14 @@ export function UniversityChat() {
                 />
               </button>
             </div>
+            {loading && (
+              <button type="button" data-testid="stop-response" className="mt-2 rounded-lg border px-3 py-1 text-sm" onClick={() => {
+                ownershipRef.current.invalidate();
+                setLoading(false);
+              }}>{copy.cancel}</button>
+            )}
             <p className="mt-2 text-center text-[11px] font-medium text-zinc-400 dark:text-zinc-600">
-              Up to 80 messages stay in this browser until cleared. Do not paste passwords,
-              IDs, medical records, visa files, or case evidence.
+              {copy.historyNotice}
             </p>
           </div>
         </footer>
@@ -1093,8 +1295,9 @@ export function UniversityChat() {
       <AnimatePresence>
         {authPrompt.open && (
           <AuthModal
+            language={uiLocale}
             onAuth={handleAuth}
-            onClose={authPrompt.locked ? undefined : closeAuthPrompt}
+            onClose={closeAuthPrompt}
             initialMode={authPrompt.mode}
             title={authPrompt.title}
             subtitle={authPrompt.subtitle}

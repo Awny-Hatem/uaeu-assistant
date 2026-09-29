@@ -19,23 +19,27 @@ type CountRow = {
 const TOPICS = [
   {
     label: "student_documents",
-    keywords: ["document", "letter", "certificate", "transcript", "to whom", "service request"],
+    keywords: ["document", "letter", "certificate", "transcript", "to whom", "service request", "شهادة", "الشهادة", "وثيقة", "وثائق", "كشف درجات", "إفادة"],
   },
   {
     label: "admissions",
-    keywords: ["admission", "apply", "application", "requirements", "transfer", "undergraduate"],
+    keywords: ["admission", "apply", "application", "requirements", "transfer", "undergraduate", "القبول", "قبول", "التقديم", "البكالوريوس", "التحويل"],
   },
   {
     label: "deadlines",
-    keywords: ["calendar", "deadline", "exam", "registration", "add drop", "date"],
+    keywords: ["calendar", "deadline", "exam", "registration", "add drop", "date", "موعد", "الموعد", "التقويم", "الامتحانات", "التسجيل"],
   },
   {
     label: "support",
-    keywords: ["contact", "phone", "email", "support", "service desk", "helpdesk"],
+    keywords: ["contact", "phone", "email", "support", "service desk", "helpdesk", "التواصل", "الدعم", "هاتف", "موظف", "مرشد"],
   },
   {
     label: "campus_services",
-    keywords: ["library", "counseling", "medical", "housing", "visa", "transport", "vehicle"],
+    keywords: ["library", "counseling", "medical", "housing", "visa", "transport", "vehicle", "السكن", "سكن", "المكتبة", "التأشيرة", "النقل", "طبي", "الطبية"],
+  },
+  {
+    label: "courses",
+    keywords: ["course", "courses", "prerequisite", "prerequisites", "مقرر", "المقرر", "مساق", "المساق", "متطلبات سابقة"],
   },
 ];
 
@@ -52,10 +56,11 @@ function normalize(text: string): string {
 export function classifyTopic(query: string): string {
   const normalized = normalize(query);
   for (const topic of TOPICS) {
-    if (topic.keywords.some((keyword) => normalized.includes(normalize(keyword)))) {
+    if (topic.keywords.some((keyword) => ` ${normalized} `.includes(` ${normalize(keyword)} `))) {
       return topic.label;
     }
   }
+  if (/\b[a-z]{3,5}[\s-]?\d{3}\b/i.test(query)) return "courses";
   return "general";
 }
 

@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { validateEvidenceOnly, type EvidenceOnlyExpectation } from "./evaluation-evidence-checks";
 
 type Message = {
   role: "user" | "assistant";
@@ -25,6 +26,7 @@ type EvalCase = {
   expectedDisposition: ExpectedDisposition;
   requiredTerms?: string[];
   minCitations: number;
+  evidenceOnly?: EvidenceOnlyExpectation;
 };
 
 type ChatPayload = {
@@ -152,7 +154,7 @@ function validateDisposition(
       break;
     case "clarify":
       if (
-        !/\b(confirm|depend|depends|depending|specific|specify|varies|vary|which)\b|تأكد|يعتمد|تختلف|حدد|اختر/iu.test(
+        !/\b(confirm|depend|depends|depending|specific|specify|varies|vary|which|approval|approved|subject to|at least|up to|does not establish|not a live|not yet been provided)\b|تأكد|يعتمد|تختلف|حدد|اختر|لا يثبت/iu.test(
           content,
         )
       ) {
@@ -160,7 +162,7 @@ function validateDisposition(
       }
       break;
     case "portal":
-      if (!/\bportal\b|بوابة/iu.test(content)) {
+      if (!/\b(?:portal|MyUAEU)\b|بوابة/iu.test(content)) {
         errors.push("expected portal instructions");
       }
       break;
@@ -188,6 +190,10 @@ function validatePayload(testCase: EvalCase, status: number, payload: ChatPayloa
 
   if (payload.source !== testCase.expectedSource) {
     errors.push(`expected source ${testCase.expectedSource}, received ${payload.source ?? "none"}`);
+  }
+
+  if (testCase.evidenceOnly) {
+    return [...errors, ...validateEvidenceOnly(testCase.messages ?? [{ role: "user", content: testCase.question }], testCase.question, testCase.evidenceOnly)];
   }
 
   const actualAnswerId = payload.answerId ?? payload.faqId ?? payload.guide?.id;
@@ -270,6 +276,7 @@ async function main(): Promise<void> {
   process.env.GEMINI_EMBEDDING_SEARCH = "";
   process.env.SERVER_CHAT_HISTORY = "";
   process.env.CHATBOT_DB_PATH = ":memory:";
+  process.env.TRUST_PROXY_HEADERS = "enabled"; // Synthetic per-case identities; never a deployment setting.
 
   const { POST } = await import("../app/api/chat/route");
   const results: CaseResult[] = [];
@@ -304,6 +311,7 @@ async function main(): Promise<void> {
   }
 
   console.log(`Evaluated ${results.length} common UAEU questions.`);
+  console.log(`Mock route regressions only; ${cases.filter(c => c.evidenceOnly).length} generated-answer case(s) validate scoped evidence, not generated prose.`);
   console.log(`Passed: ${results.length - failures.length}`);
   console.log(`Failed: ${failures.length}`);
   console.log(

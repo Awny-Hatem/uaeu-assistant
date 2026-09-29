@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "reviewer": "independent academic-content reviewer",
+  "date": "2026-09-29",
+  "methodology": "Ten synthetic semantic cases executed directly against the configured OpenAI verifySourceClaims function, not the HTTP chat endpoint. No application/data/fixture edits. Source summaries are exact frozen current academic evidenceText; single-source records use their reviewed English body, matching sourceEvidence fallback. Each synthetic row had scope={}, source answer:synthetic-applicability, a single assigned citation E1S1 and the source text below. Initial S07–S10 probes accidentally omitted the single-source body in the probe setup; those invalid trials are excluded and the corrected reruns are recorded here. Actual provider judgments are diagnostics, not a formal entailment guarantee or an end-to-end pass score.",
+  "cases": [
+    {
+      "id": "S01",
+      "requestedQuery": "Which application steps apply before I choose my undergraduate applicant category?",
+      "claim": "To apply for any undergraduate degree, submit your application and pay AED 210 including 5% VAT.",
+      "source": {
+        "recordId": "admissions-apply-undergraduate",
+        "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89",
+        "text": "Applicability: this source describes the named paid bachelor's application service, not a universal route for all undergraduate applicants. It does not establish a UAE-national/Emirati-mother application fee or replace the category-specific admission pages. Within this service, users create/sign into the linked system, submit an application, pay AED 210 including 5% VAT, upload a photo, passport and Emirates ID, and receive email updates. The published service delivery target is 12 days, not an intake deadline or guaranteed admission decision. Establish the applicant's route before applying these service-specific steps or charges."
+      },
+      "expectedValid": false,
+      "actualValid": false,
+      "status": "unsupported_detail",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S02",
+      "requestedQuery": "Which application steps apply before I choose my undergraduate applicant category?",
+      "claim": "The named paid bachelor application service charges AED 210 including 5% VAT where that service applies; its listing does not establish the charge for the separate national or Emirati-mother route.",
+      "source": {
+        "recordId": "admissions-apply-undergraduate",
+        "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89",
+        "text": "Applicability: this source describes the named paid bachelor's application service, not a universal route for all undergraduate applicants. It does not establish a UAE-national/Emirati-mother application fee or replace the category-specific admission pages. Within this service, users create/sign into the linked system, submit an application, pay AED 210 including 5% VAT, upload a photo, passport and Emirates ID, and receive email updates. The published service delivery target is 12 days, not an intake deadline or guaranteed admission decision. Establish the applicant's route before applying these service-specific steps or charges."
+      },
+      "expectedValid": true,
+      "actualValid": true,
+      "status": "supported",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S03",
+      "requestedQuery": "Who must authorize a 21-credit undergraduate load?",
+      "claim": "All undergraduate students outside Medicine and Health Sciences need Dean or Assistant Dean approval for any load above 19 credits.",
+      "source": {
+        "recordId": "semester-credit-load",
+        "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+        "text": "Undergraduate credit load — excluding Medicine and Health Sciences\n- Regular-semester normal load: 12–19 credits. Academic probation maximum: 13.\n- After completing Foundation and with good academic standing, up to 22 credits is permitted under either published route: 22 or fewer credits remain for the degree, or at least 36 credits earned with CGPA 3.6 or above.\n- In other circumstances, more than 19 credits requires the Dean or Assistant Dean of the student's college. The two qualifying routes above are distinct from this exception-approval route.\n- Below 12 credits requires an exception: fewer than 12 remain, Foundation/proficiency requirements are unfinished, or Dean/Assistant Dean approval in another circumstance.\n- Summer standard maximum 6, honors/expected graduates up to 9, probation up to 4. These published undergraduate rules are not a graduate-program limit."
+      },
+      "expectedValid": false,
+      "actualValid": true,
+      "status": "supported",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S04",
+      "requestedQuery": "What are the possible ways an undergraduate outside Medicine can exceed the standard maximum?",
+      "claim": "After Foundation and in good standing, a student outside Medicine and Health Sciences may take up to 22 credits if 22 or fewer remain, or if at least 36 credits have been earned with CGPA at least 3.6. In other circumstances, exceeding 19 credits requires Dean or Assistant Dean approval.",
+      "source": {
+        "recordId": "semester-credit-load",
+        "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+        "text": "Undergraduate credit load — excluding Medicine and Health Sciences\n- Regular-semester normal load: 12–19 credits. Academic probation maximum: 13.\n- After completing Foundation and with good academic standing, up to 22 credits is permitted under either published route: 22 or fewer credits remain for the degree, or at least 36 credits earned with CGPA 3.6 or above.\n- In other circumstances, more than 19 credits requires the Dean or Assistant Dean of the student's college. The two qualifying routes above are distinct from this exception-approval route.\n- Below 12 credits requires an exception: fewer than 12 remain, Foundation/proficiency requirements are unfinished, or Dean/Assistant Dean approval in another circumstance.\n- Summer standard maximum 6, honors/expected graduates up to 9, probation up to 4. These published undergraduate rules are not a graduate-program limit."
+      },
+      "expectedValid": true,
+      "actualValid": true,
+      "status": "supported",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S05",
+      "requestedQuery": "Compare the English requirements for national and international applicants.",
+      "claim": "For UAE nationals, IELTS 5.0 is lower than the IELTS requirement for international applicants.",
+      "source": {
+        "recordId": "admissions-apply-undergraduate",
+        "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+        "text": "For UAE nationals and children of Emirati mothers, the admissions page directs applications through the Ministry portal in announced periods. General English alternatives: Grade 12 English 80%, IELTS Academic 5.0, TOEFL ITP 500 or iBT 61. Computing/AI criteria list English, mathematics and either physics or computer science at 80% or specified equivalents. These are category-specific criteria, not international-applicant rules or guaranteed admission."
+      },
+      "expectedValid": false,
+      "actualValid": false,
+      "status": "unsupported_detail",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S06",
+      "requestedQuery": "Compare the English requirements for national and international applicants.",
+      "claim": "For UAE nationals and children of Emirati mothers, the general English alternatives include IELTS Academic 5.0, TOEFL ITP 500 or TOEFL iBT 61.",
+      "source": {
+        "recordId": "admissions-apply-undergraduate",
+        "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+        "text": "For UAE nationals and children of Emirati mothers, the admissions page directs applications through the Ministry portal in announced periods. General English alternatives: Grade 12 English 80%, IELTS Academic 5.0, TOEFL ITP 500 or iBT 61. Computing/AI criteria list English, mathematics and either physics or computer science at 80% or specified equivalents. These are category-specific criteria, not international-applicant rules or guaranteed admission."
+      },
+      "expectedValid": true,
+      "actualValid": false,
+      "status": "unsupported_detail",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S07",
+      "requestedQuery": "I completed CSBP119 but have not passed CSBP219. Can I enroll in CSBP319?",
+      "claim": "CSBP319 requires CSBP219 with at least D and CSBP221 as a prerequisite or corequisite with at least D. If CSBP219 has not been passed with D or better, that prerequisite is not yet met.",
+      "source": {
+        "recordId": "course-prerequisites-data-structures",
+        "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+        "text": "**Data Structures prerequisite**\n- For the current CSBP319 Data Structures catalog record, CSBP219 Object Oriented Programming is a prerequisite with a minimum grade of D.\n- CSBP221 Programming Lab II is a pre- or corequisite with a minimum grade of D, meaning it must be completed previously or taken as permitted alongside CSBP319.\n- Course rules can differ for legacy course codes, programs, and cohorts, so verify CSBP319 in your live degree audit and registration portal before enrolling."
+      },
+      "expectedValid": true,
+      "actualValid": true,
+      "status": "supported",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S08",
+      "requestedQuery": "I completed CSBP119 but have not passed CSBP219. Can I enroll in CSBP319?",
+      "claim": "Your record confirms that you passed CSBP119 and are eligible to enroll in CSBP319.",
+      "source": {
+        "recordId": "course-prerequisites-data-structures",
+        "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+        "text": "**Data Structures prerequisite**\n- For the current CSBP319 Data Structures catalog record, CSBP219 Object Oriented Programming is a prerequisite with a minimum grade of D.\n- CSBP221 Programming Lab II is a pre- or corequisite with a minimum grade of D, meaning it must be completed previously or taken as permitted alongside CSBP319.\n- Course rules can differ for legacy course codes, programs, and cohorts, so verify CSBP319 in your live degree audit and registration portal before enrolling."
+      },
+      "expectedValid": false,
+      "actualValid": false,
+      "status": "unsupported_detail",
+      "deterministicRejected": true
+    },
+    {
+      "id": "S09",
+      "requestedQuery": "Are both prerequisite courses necessary for ISEC421?",
+      "claim": "ISEC421 is a 2-credit course requiring either STAT210 or ITBP301 with at least D, so passing one is sufficient.",
+      "source": {
+        "recordId": "course-prerequisites-risk-analysis",
+        "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC421",
+        "text": "**ISEC421 Risk Analysis and Management**\n- Complete **both STAT210 Probability and Statistics and ITBP301 Security Principles & Practice**, with a **minimum grade of D in each**.\n- These are two prerequisites, not alternatives. ISEC421 carries **2 credit hours**.\n- The course covers information-security risk assessment and mitigation. Cohort equivalencies and your completed prerequisites must be checked against your own academic record."
+      },
+      "expectedValid": false,
+      "actualValid": false,
+      "status": "contradiction",
+      "deterministicRejected": false
+    },
+    {
+      "id": "S10",
+      "requestedQuery": "I have not yet passed CSBP219. Does this affect CSBP319 registration?",
+      "claim": "According to the prerequisite rule, if your statement that CSBP219 is not yet passed is accurate, you have not yet met the CSBP219 requirement for CSBP319.",
+      "source": {
+        "recordId": "course-prerequisites-data-structures",
+        "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+        "text": "**Data Structures prerequisite**\n- For the current CSBP319 Data Structures catalog record, CSBP219 Object Oriented Programming is a prerequisite with a minimum grade of D.\n- CSBP221 Programming Lab II is a pre- or corequisite with a minimum grade of D, meaning it must be completed previously or taken as permitted alongside CSBP319.\n- Course rules can differ for legacy course codes, programs, and cohorts, so verify CSBP319 in your live degree audit and registration portal before enrolling."
+      },
+      "expectedValid": true,
+      "actualValid": true,
+      "status": "supported",
+      "deterministicRejected": false
+    }
+  ],
+  "repeats": [
+    {
+      "case": "S03",
+      "sameInputSecondRun": {
+        "actualValid": true,
+        "status": "supported"
+      }
+    },
+    {
+      "case": "S06",
+      "sameInputSecondRun": {
+        "actualValid": false,
+        "status": "unsupported_detail"
+      }
+    }
+  ],
+  "isolation": [
+    {
+      "case": "S06",
+      "change": "Only requestedQuery changed to 'What English test alternatives apply to UAE national applicants?'; exact same claim and source.",
+      "actualValid": true,
+      "status": "supported"
+    },
+    {
+      "case": "S06",
+      "change": "Comparison query retained; claim changed to exact complete source list: 'For UAE nationals and children of Emirati mothers, the general English alternatives are Grade 12 English 80%, IELTS Academic 5.0, TOEFL ITP 500 or iBT 61.'",
+      "actualValid": false,
+      "status": "unsupported_detail"
+    }
+  ],
+  "findings": [
+    {
+      "priority": "high",
+      "finding": "Universal credit-load approval claim is falsely supported despite explicit alternative 22-credit routes.",
+      "code": "lib/claim-verifier.ts:49",
+      "action": "Evaluate universal quantifiers against all source exceptions. Distinguish an exceptional approval branch from every route above a threshold; add a source-conditional regression."
+    },
+    {
+      "priority": "medium",
+      "finding": "Requested multi-category scope contaminates per-claim support: a correctly scoped national component is rejected unless the request is national-only.",
+      "code": "lib/claim-verifier.ts:53",
+      "action": "Treat requestedScope as context, not a demand that every atomic claim cover every category. A correctly sourced narrow component of a comparison is valid; answer-level coverage is a separate check."
+    },
+    {
+      "priority": "boundary",
+      "finding": "Source-claim support does not measure whether the answer addresses the requested question, and verifier failures still end in a generic unavailable response after two rejected drafts.",
+      "code": "app/api/chat/route.ts:914",
+      "action": "Keep independent answer-utility review; consider a reviewed source-specific deterministic fallback that preserves scope without relabeling an outage as factual success."
+    }
+  ]
+}

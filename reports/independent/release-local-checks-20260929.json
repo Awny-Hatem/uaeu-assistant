@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-29",
+  "classification": "local-engineering-verification-not-live-factual-acceptance",
+  "applicationSourceSha256": "c1755ed143803b4e7804e51a43d2cb3d69161e0fbcea54648b9df1429365a374",
+  "sourceHashUnchangedAcrossBuildAndFullOfflineSuite": true,
+  "contentFingerprint": "ad61f1c419e35210499f51108cc152296f2c870848c1f5ea0d4df3d5c07d3a15",
+  "gitHeadBeforeRelease": "b490f55f4a66090dee59fca901dcbd24919da005",
+  "mockServer": {
+    "url": "http://127.0.0.1:3224",
+    "provider": "mock",
+    "model": "mock-local",
+    "deploymentMode": "prototype",
+    "database": ":memory:",
+    "serverHistory": "disabled",
+    "authSecret": "ephemeral generated value, not retained",
+    "stoppedAfterChecks": true
+  },
+  "commands": [
+    { "command": "npm run build", "exitCode": 0 },
+    { "command": "npm run lint", "exitCode": 0 },
+    { "command": "npx tsc --noEmit --incremental false", "exitCode": 0 },
+    { "command": "npm run test:offline", "exitCode": 0, "realProviderCalls": 0 },
+    { "command": "npm run test:browser", "passed": 23, "failed": 0, "skipped": 0, "flaky": 0, "durationSeconds": 34.3, "apiTraffic": "mocked" },
+    { "command": "node tests/http-smoke.mjs http://127.0.0.1:3224", "passed": 10, "failed": 0, "account": "synthetic in-memory only", "provider": "mock" },
+    { "command": "npm run eval:sources", "passed": 77, "failed": 0, "meaning": "availability, redirects, PDF signatures and soft404 checks, not factual support or policy applicability" }
+  ],
+  "offlineCheckCounts": {
+    "pipelineRouteCalls": 25,
+    "independentScopeCases": 16,
+    "admissionCalendarVariants": 32,
+    "semanticFaultCases": 30,
+    "canonicalCases": 26,
+    "academicContentCases": 15,
+    "serviceContentCases": 14,
+    "knowledgePortabilityAssertions": 6,
+    "sourceEvidenceCases": 18,
+    "claimVerifierCases": 23,
+    "uiSecurityCases": 20,
+    "accountOwnershipCases": 52,
+    "sourceResponseCases": 9,
+    "providerDeadlineCases": 12,
+    "providerRetryCases": 21,
+    "reportIntegrityCases": 12,
+    "commonMockCases": 100,
+    "alignmentMockCases": 80
+  },
+  "acceptanceBoundary": "These engineering checks do not assign factual scores. The separate unchanged real-provider run and its hash-bound assessments establish the tested answer-quality result.",
+  "publicationBoundary": "Fresh Git-based cloud build only; local traced Next.js artifacts may include ignored runtime files. Existing user docs, private credentials, databases, logs and private provider diagnostics are excluded."
+}

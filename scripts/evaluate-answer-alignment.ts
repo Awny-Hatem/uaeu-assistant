@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { validateEvidenceOnly, type EvidenceOnlyExpectation } from "./evaluation-evidence-checks";
 
 type Message = {
   role: "user" | "assistant";
@@ -11,13 +12,14 @@ type AlignmentCase = {
   category: string;
   question: string;
   messages?: Message[];
-  expectedSource: "faq" | "guide" | "escalated";
+  expectedSource: "faq" | "guide" | "escalated" | "rag";
   expectedAnswerId: string;
   expectedDisposition?: "answer" | "clarify" | "portal" | "urgent";
   expectedEscalationReason?: string;
   requiredPatterns: string[];
   forbiddenPatterns: string[];
   minCitations: number;
+  evidenceOnly?: EvidenceOnlyExpectation;
 };
 
 type AlignmentFixture = {
@@ -150,8 +152,11 @@ function loadFixture(): AlignmentFixture {
     if (!Array.isArray(testCase.forbiddenPatterns) || !testCase.forbiddenPatterns.length) {
       throw new Error(`${testCase.id} needs at least one forbidden answer pattern.`);
     }
-    if (!Number.isInteger(testCase.minCitations) || testCase.minCitations < 1) {
-      throw new Error(`${testCase.id} must require at least one citation.`);
+    if (!Number.isInteger(testCase.minCitations) || testCase.minCitations < 0) {
+      throw new Error(`${testCase.id} has an invalid citation minimum.`);
+    }
+    if (!testCase.evidenceOnly && ["faq", "guide"].includes(testCase.expectedSource) && testCase.minCitations < 1) {
+      throw new Error(`${testCase.id} must cite its substantive university facts.`);
     }
     if (testCase.messages) {
       const latestUser = [...testCase.messages]
@@ -193,6 +198,10 @@ function validateCase(
   }
   if (payload.source !== testCase.expectedSource) {
     errors.push(`expected source ${testCase.expectedSource}, received ${payload.source ?? "none"}`);
+  }
+
+  if (testCase.evidenceOnly) {
+    return [...errors, ...validateEvidenceOnly(testCase.messages ?? [{ role: "user", content: testCase.question }], testCase.question, testCase.evidenceOnly)];
   }
 
   const actualAnswerId =
@@ -286,6 +295,7 @@ async function main(): Promise<void> {
   process.env.GEMINI_EMBEDDING_SEARCH = "";
   process.env.SERVER_CHAT_HISTORY = "";
   process.env.CHATBOT_DB_PATH = ":memory:";
+  process.env.TRUST_PROXY_HEADERS = "enabled"; // Synthetic per-case identities; never a deployment setting.
 
   const { POST } = await import("../app/api/chat/route");
   const results: AlignmentResult[] = [];
@@ -320,6 +330,7 @@ async function main(): Promise<void> {
   });
 
   console.log(`Evaluated ${results.length} alignment cases across ${categories.size} categories.`);
+  console.log(`Mock route regressions only; ${fixture.cases.filter(c => c.evidenceOnly).length} generated-answer case(s) validate scoped evidence, not generated prose.`);
   console.log(`Passed: ${results.length - failures.length}`);
   console.log(`Failed: ${failures.length}`);
   console.log(

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "runFile": "post-repair-round-8.json",
+  "rawSha256": "b2bf111c9138805af824ddefd301480fd82d243f13a54117c238758753c9c365",
+  "capturedTurns": 22,
+  "completed": false,
+  "classification": "interrupted-diagnostic-not-acceptance",
+  "reason": "The concurrent offline regression suite failed tests/pipeline-regressions.ts line102: the broad inferred calendar subject excluded course-add-drop evidence for the last date for adding classes in Fall2026. Capture and isolated servers were stopped before source edits. The 22 raw responses remain unchanged; no full-run factual score is assigned.",
+  "sourceSha256": "8eacc663ec0b93b20a5d16f12efce28de8b786540567d5f82a934fa37e22c79d",
+  "otherChecks": {
+    "productionBuild": "passed",
+    "lint": "passed",
+    "typescript": "passed",
+    "browserMocked": "23 passed",
+    "httpMockProvider": "10 passed"
+  },
+  "nextAction": "Narrow calendar inference, rerun engineering checks and execute the unchanged 100-question fixture under a new immutable run label."
+}

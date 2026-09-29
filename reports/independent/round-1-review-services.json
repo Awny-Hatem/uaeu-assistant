@@ -1,0 +1,133 @@
+{
+  "schemaVersion": 1,
+  "runSha256": "d9e19cbdd2c5e07024c09a517563492df25f9fc9a03fc92e767b02ea39e730b2",
+  "reviewScope": "Q056-Q080; actual full responses, request histories, structured metadata and citations",
+  "reviewBasis": "Independent official-page checks on 2026-09-29, downloaded official policy PDFs and visually checked lending/handbook pages. Policy support refers to the published versions, not certification that no later institutional revision exists. No actual response was edited.",
+  "reviews": {
+    "Q056": {
+      "status": "verified",
+      "note": "Answers the chat-versus-submission boundary and supplies the enrolled-student service, free fee, ten-minute delivery and three-month letter validity. The 2026 service guide confirms university-email delivery and the checklist steps.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92", "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"]
+    },
+    "Q057": {
+      "status": "needs-fix",
+      "note": "Retrieval/generation failure: asks the user to provide the very attestation process requested. This is not a useful clarification. Explain the university-issued alumni document/attestation service, distinguish it from external legalization, and ask only the destination or required attestation type if needed.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"]
+    },
+    "Q058": {
+      "status": "needs-fix",
+      "note": "Stored wording and generation scope issue: the offices and deadline match AE-06 section 4, but the answer states them universally. It must identify the non-CMHS undergraduate procedure; the user supplied neither degree nor college. The stored scope field alone is insufficient if omitted from the answer.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf"]
+    },
+    "Q059": {
+      "status": "needs-fix",
+      "note": "Stored wording and generation scope issue: the dates are supported and asking the term is useful, but an undergraduate, non-CMHS application rule is presented as universal. Explicitly reject the October 31 generalization and preserve the degree/college scope.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf", "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"]
+    },
+    "Q060": {
+      "status": "needs-fix",
+      "note": "Stored-content defect reproduced by generation: the portal-only claim is too strong and gives no navigation. UAEU publishes an exam-schedule page; its 2026 guide also identifies the Student Official Schedule Letter as containing registered courses and the final-exam schedule.",
+      "evidence": ["https://www.uaeu.ac.ae/en/dvcsae/registration/registration_and_exam_schedule.shtml", "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf", "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"]
+    },
+    "Q061": {
+      "status": "verified",
+      "note": "Gives a practical same-time conflict response without promising rescheduling. Correctly separates that conflict from the published three-exams-per-day overload rule and its common-exam and CMHS limitations.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"]
+    },
+    "Q062": {
+      "status": "needs-fix",
+      "note": "Stored and generated scope defects: AE-04 section 5 concerns missed FINAL examinations, but the stored answer also says only exam. Generation additionally drops the stored CMHS exclusion. Distinguish finals from midterms and identify undergraduate/non-CMHS scope before applying the deadlines.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"]
+    },
+    "Q063": {
+      "status": "needs-fix",
+      "note": "Generation scope drift: the 2.00 threshold, 21-credit trigger and 13-credit load are supported. The stored answer contains the CMHS exclusion, but the generated response drops it. Preserve the exception when presenting this consequential undergraduate standing rule.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/5_academic_standing_enrollment_eligibility_and_progress-en.pdf"]
+    },
+    "Q064": {
+      "status": "needs-fix",
+      "note": "Coverage/retrieval failure: rephrases the question instead of answering. AE-04 section 6 directly covers compulsory/elective repeats, exclusion of failed grades from GPA after passing, transcript visibility, and the cap after repeated failures. Add properly scoped source-backed coverage.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"]
+    },
+    "Q065": {
+      "status": "verified",
+      "note": "The instructor-to-chair-to-Dean sequence, initial one-week window, three-member committee excluding the instructor and subsequent review deadlines match published AE-04 section 10. The answer preserves the CMHS exclusion.",
+      "evidence": ["https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"]
+    },
+    "Q066": {
+      "status": "needs-fix",
+      "note": "Routing failure: the academic-adviser subject is explicit, yet the response asks for a service name. Existing academic-advisor-contact content provides the advising route and fallback; use it without pretending to know the personal assignment.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=123"]
+    },
+    "Q067": {
+      "status": "needs-fix",
+      "note": "Stored-content and generation defects: the stored FAQ adds a scholarship fee carveout absent service 106. Generation also expands a source-limited missing-deadline statement into a universal claim. Keep only supported payment conditions and qualify missing information to the source reviewed.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"]
+    },
+    "Q068": {
+      "status": "verified",
+      "note": "Correctly avoids treating admission as a room assignment and explains the separate selection, applicable payment and email-confirmation process. It does not invent personal availability or approval.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"]
+    },
+    "Q069": {
+      "status": "verified",
+      "note": "Accurately scopes the published proactive permit to admitted female students from Al Ain, including notification, approved app, no supporting documents and no fee. Other users are directed for assistance without an invented application route.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"]
+    },
+    "Q070": {
+      "status": "safe-limitation",
+      "note": "Does not invent a warning threshold or borrow an unrelated academic rule. The available parking service page contains no suspension threshold. This is an unresolved information need, not a verified substantive answer; disposition should be a limitation rather than a user clarification.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"]
+    },
+    "Q071": {
+      "status": "needs-fix",
+      "note": "Routing failure: ignores a clear bus-service question despite existing shuttle coverage. The 2023 handbook describes hostel-to-campus shuttles and Residential Life contact; answer that limited scope and ask route/time only if needed, identifying the handbook's age.",
+      "evidence": ["https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf"]
+    },
+    "Q072": {
+      "status": "needs-fix",
+      "note": "Generation scope drift: dining and hostel-ID access are supported. Stored content limits missing meal-plan details to its public source, but generation expands this to not publicly published anywhere. Keep the absence claim scoped to the available evidence.",
+      "evidence": ["https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf"]
+    },
+    "Q073": {
+      "status": "verified",
+      "note": "Provides the directly relevant UITS helpdesk phone and email without requesting credentials. Both contacts match the official password self-service support information and IT contact page.",
+      "evidence": ["https://selfservice.uaeu.ac.ae/", "https://uaeu.ac.ae/ar/vc/doit/contact-us.shtml"]
+    },
+    "Q074": {
+      "status": "needs-fix",
+      "note": "Routing/coverage failure: ignores explicitly named Blackboard. Official orientation material describes it; the new-student guide gives website Sign In then Blackboard Learning. Add supported access coverage instead of asking the user to identify an already named system.",
+      "evidence": ["https://www.uaeu.ac.ae/en/admission/orientation/", "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf"]
+    },
+    "Q075": {
+      "status": "needs-fix",
+      "note": "Subject-resolution failure: claims no subject is clear despite explicit IT support. Existing academic-systems-support content and official UITS sources contain both requested contacts; this is not a legitimate clarification.",
+      "evidence": ["https://selfservice.uaeu.ac.ae/", "https://uaeu.ac.ae/ar/vc/doit/contact-us.shtml"]
+    },
+    "Q076": {
+      "status": "verified",
+      "note": "Borrowing quantities, periods and renewal counts match the visually checked LD-02 tables, which the current lending page still links. This is a substantive answer for the stated undergraduate category; its clarify disposition is unnecessarily misleading metadata, not a missing-user-information need.",
+      "evidence": ["https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf", "https://www.uaeu.ac.ae/en/library/borrowing.shtml"]
+    },
+    "Q077": {
+      "status": "needs-fix",
+      "note": "Stored-content defect reproduced by generation: online renewal and contacts are supported, but old ID/PIN and exact current-loans instructions are presented as the current UI. The current page specifies Quick Links then My Library Account and associates PIN details with self-check. Update the route without inventing authenticated UI.",
+      "evidence": ["https://www.uaeu.ac.ae/en/library/borrowing.shtml", "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=98", "https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf"]
+    },
+    "Q078": {
+      "status": "verified",
+      "note": "The search/filter/open sequence, active-account requirement, username without the email suffix and digital-library support address match service 99. The response preserves publisher-license limits and does not imply anonymous remote access.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=99", "https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf"]
+    },
+    "Q079": {
+      "status": "needs-fix",
+      "note": "Intent/retrieval failure: does not endorse the myth but misreads the fact-check as a requested library GPA requirement. Published access policy supports university-community access and contains no stated GPA restriction; use that evidence for a scoped correction.",
+      "evidence": ["https://www.uaeu.ac.ae/en/library/pdf/2_access_lending-en.pdf", "https://www.uaeu.ac.ae/en/library/borrowing.shtml"]
+    },
+    "Q080": {
+      "status": "needs-fix",
+      "note": "Ambiguous stored wording plus generation drift: the response attaches safety-disclosure exceptions to academic-record inclusion. Separate confidential records, no academic-record entry, and limited disclosures explicitly. Generation also turns the stored assistance fallback into a direct booking claim for 800 8238; that capability is not established.",
+      "evidence": ["https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=116"]
+    }
+  }
+}

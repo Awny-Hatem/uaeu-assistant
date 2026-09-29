@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import type { Locale } from "@/lib/language";
 import type { Citation } from "@/lib/prototype-types";
+import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope } from "@/lib/query-understanding";
 
 export type AnswerDisposition =
   | "answer"
@@ -20,6 +21,7 @@ export type FaqEntry = {
   answer_ar?: string;
   disposition?: AnswerDisposition;
   citations: Citation[];
+  scope?: EvidenceScope;
 };
 
 type AnswerFile = {
@@ -166,13 +168,7 @@ const CONTEXT_ONLY_QUESTIONS = new Set([
 let answerCache: FaqEntry[] | null = null;
 
 export function normalizeAnswerText(value: string): string {
-  return value
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return normalizeQuery(value);
 }
 
 function contentTokens(value: string): string[] {
@@ -279,9 +275,32 @@ function isCitation(value: unknown): value is Citation {
     typeof citation.title === "string" &&
       citation.title.trim() &&
       validVerificationDate(citation.lastVerified) &&
-      ((typeof citation.url === "string" && citation.url.trim()) ||
-        (typeof citation.document === "string" && citation.document.trim())),
+      typeof citation.url === "string" && approvedSourceUrl(citation.url) &&
+      ["evidenceText", "sourceSection", "sourceVersion"].every((key) => {
+        const field = citation[key as keyof Citation];
+        return field === undefined || (typeof field === "string" && field.trim().length > 0 && field.length <= (key === "evidenceText" ? 12000 : 2000));
+      }),
   );
+}
+
+function approvedSourceUrl(value: string): boolean {
+  try {
+    const url = new URL(value);
+    return url.protocol === "https:" && ["uaeu.ac.ae", "u.ae", "mohesr.gov.ae", "moe.gov.ae"].some((host) => url.hostname === host || url.hostname.endsWith(`.${host}`));
+  } catch { return false; }
+}
+
+function validScope(scope: unknown): boolean {
+  if (scope === undefined) return true;
+  if (!scope || typeof scope !== "object" || Array.isArray(scope)) return false;
+  const value = scope as EvidenceScope;
+  return [value.courseCodes, value.subjects, value.terms].every((items) => items === undefined || (Array.isArray(items) && items.every((item) => typeof item === "string" && item.trim()))) &&
+    (value.years === undefined || (Array.isArray(value.years) && value.years.every((year) => Number.isInteger(year) && year >= 1900 && year <= 2200))) &&
+    (value.applicantCategory === undefined || ["national", "international"].includes(value.applicantCategory)) &&
+    (value.categoryIndependent === undefined || (typeof value.categoryIndependent === "boolean" && (!value.categoryIndependent || value.applicantCategory === undefined))) &&
+    (value.degreeLevel === undefined || ["undergraduate", "postgraduate"].includes(value.degreeLevel)) &&
+    (value.temporalCoverage === undefined || ["procedural", "dated"].includes(value.temporalCoverage)) &&
+    [value.effectiveFrom, value.effectiveTo].every((date) => date === undefined || (typeof date === "string" && /^\d{4}-\d{2}-\d{2}$/.test(date) && Number.isFinite(Date.parse(date))));
 }
 
 function isAnswerEntry(value: unknown): value is FaqEntry {
@@ -309,6 +328,7 @@ function isAnswerEntry(value: unknown): value is FaqEntry {
         ["answer", "clarify", "portal", "handoff", "urgent"].includes(entry.disposition)) &&
       Array.isArray(entry.citations) &&
       entry.citations.length > 0 &&
+      validScope(entry.scope) &&
       entry.citations.every(isCitation),
   );
 }
@@ -370,7 +390,8 @@ export function faqHealthSnapshot(now = Date.now()) {
     try {
       const parsed = JSON.parse(fs.readFileSync(filePath, "utf8")) as Partial<AnswerFile>;
       const rawEntries = Array.isArray(parsed.entries) ? parsed.entries : [];
-      const validEntries = rawEntries.filter(isAnswerEntry);
+      const validEntries = rawEntries.filter((entry) => isAnswerEntry(entry) &&
+        entry.citations.every((citation) => validVerificationDate(citation.lastVerified, now)));
       const verificationTimes = validEntries.flatMap((entry) =>
         entry.citations.flatMap((citation) => {
           const value = citation.lastVerified;
@@ -471,6 +492,7 @@ function phraseScore(
 }
 
 function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): number {
+  if (!faqScopeAllows(query, entry)) return 0;
   if (entry.excludePhrases?.some((phrase) => containsPhrase(query, phrase))) {
     return 0;
   }
@@ -489,6 +511,71 @@ function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): n
     );
   }
   return score;
+}
+
+export function faqScope(entry: FaqEntry): EvidenceScope {
+  const identity = `${entry.answer_en.split("\n")[0]} ${entry.questions.join(" ")}`;
+  const identityMeaning = understandQuery(identity);
+  // Questions can compare an included and an excluded population. They cannot
+  // establish an exclusive degree-level scope for the answer itself.
+  const headingMeaning = understandQuery(entry.answer_en.split("\n")[0]);
+  const namedCodes = courseCodes([...entry.questions, ...(entry.matchPhrases ?? [])].join(" "));
+  const ownCodes = entry.citations.flatMap((citation) => {
+    try { const code = new URL(citation.url ?? "").searchParams.get("id"); return code ? courseCodes(code) : []; }
+    catch { return []; }
+  });
+  return {
+    // The reviewed category is an explicit ownership signal. A policy titled
+    // "semester credit load" remains registration evidence even without the
+    // literal word registration in its example questions.
+    ...(["admissions", "registration", "calendar", "graduation", "housing", "library"].includes(entry.category) ? { subjects: [entry.category, ...identityMeaning.subjects] } : {}),
+    ...(identityMeaning.years.length ? { years: identityMeaning.years } : {}),
+    ...(headingMeaning.degreeLevel ? { degreeLevel: headingMeaning.degreeLevel } : {}),
+    ...(ownCodes.length || namedCodes.length ? { courseCodes: [...new Set(ownCodes.length ? ownCodes : namedCodes)] } : {}),
+    ...(entry.id === "admissions-requirements-international" ? { applicantCategory: "international" as const } : {}),
+    ...(entry.id === "admissions-requirements-uae-national" ? { applicantCategory: "national" as const } : {}),
+    ...(entry.id === "graduation-requirements-program" ? { degreeLevel: "undergraduate" as const } : {}),
+    ...(entry.id === "admissions-graduate-application" ? { degreeLevel: "postgraduate" as const } : {}),
+    ...entry.scope,
+  };
+}
+
+export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
+  if (entry.citations.some((citation) => !citation.lastVerified || Date.now() - Date.parse(citation.lastVerified) > CITATION_FRESHNESS_MS)) return false;
+  const scope = faqScope(entry);
+  const meaning = understandQuery(query);
+  if (meaning.codes.length && scope.courseCodes?.length && !meaning.codes.every((code) => scope.courseCodes!.includes(code))) return false;
+  if (!scopeAllows(query, `${entry.answer_en}\n${entry.answer_ar ?? ""}`, scope)) return false;
+  // University-wide calendar facts are not admission/payment/scholarship schedules.
+  if (meaning.intents.includes("deadline")) {
+    const questionTopics = understandQuery([...entry.questions, ...(entry.matchPhrases ?? [])].join(" ")).subjects;
+    const specific = meaning.subjects.filter((subject) => ["admissions", "graduation", "scholarship", "visa", "housing", "tuition"].includes(subject));
+    if (specific.length && !specific.some((subject) => questionTopics.includes(subject))) return false;
+  }
+  return true;
+}
+
+/** Identify a code/name contradiction without silently substituting the familiar title. */
+export function courseIdentityConflict(query: string): { supplied: string; named: string; title: string } | null {
+  const codes = courseCodes(query);
+  if (codes.length !== 1) return null;
+  const normalized = normalizeQuery(query);
+  for (const entry of loadFaqEntries()) {
+    for (const citation of entry.citations) {
+      const titleCodes = courseCodes(citation.title);
+      if (titleCodes.length !== 1 || titleCodes[0] === codes[0]) continue;
+      const title = citation.title.slice(citation.title.toUpperCase().indexOf(titleCodes[0]) + titleCodes[0].length).replace(/^\W+/u, "").trim();
+      const name = normalizeQuery(title);
+      if (name.length > 5 && ` ${normalized} `.includes(` ${name} `)) {
+        const codeAt = normalized.indexOf(codes[0].toLowerCase());
+        const nameAt = normalized.indexOf(name);
+        const between = normalized.slice(Math.min(codeAt, nameAt), Math.max(codeAt, nameAt));
+        if (/\b(?:require|requires|before|after|instead|versus|compare|compared|equivalent|prerequisite)\b|يتطلب|قبل|بعد|مقارنة/u.test(between)) continue;
+        return { supplied: codes[0], named: titleCodes[0], title };
+      }
+    }
+  }
+  return null;
 }
 
 export function matchFaq(

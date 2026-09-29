@@ -2,6 +2,9 @@ import bcrypt from 'bcryptjs';
 import db from '@/lib/db';
 import { cookies } from 'next/headers';
 import { getUniversityAffiliation, normalizeEmail } from '@/lib/access';
+import { isObjectBody } from '@/lib/auth-validation';
+import { registerSession } from '@/lib/auth-session';
+import { runtimeContract } from '@/lib/runtime-contract';
 import { jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from '@/lib/request-security';
 import {
   encodeSessionCookie,
@@ -33,9 +36,13 @@ type UserRow = {
 export async function POST(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
+  if (!runtimeContract().allowed) return jsonNoStore({ error: 'Account access is unavailable in this deployment configuration.' }, { status: 503 });
+  const addressLimit = rateLimitGuard(req, 'auth:login:address', { limit: 30, windowMs: 60 * 1000 });
+  if (addressLimit) return addressLimit;
 
   const parsed = await readJsonRequest<LoginBody>(req, { maxBytes: 8 * 1024 });
   if (!parsed.ok) return parsed.response;
+  if (!isObjectBody(parsed.data)) return jsonNoStore({ error: 'Expected a JSON object.' }, { status: 400 });
 
   try {
     const { username, password } = parsed.data;
@@ -53,7 +60,7 @@ export async function POST(req: Request) {
       return jsonNoStore({ error: 'Missing credentials' }, { status: 400 });
     }
 
-    if (password.length > 128) {
+    if (new TextEncoder().encode(password).byteLength > 72) {
       return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
     }
 
@@ -89,6 +96,7 @@ export async function POST(req: Request) {
         createdAt: Date.now(),
       };
     } else {
+      if (runtimeContract().durableStore) return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
       localAccount = findLocalAccount(localAccountsCookie, identifier, normalizedEmail);
       if (!localAccount) {
         return jsonNoStore({ error: 'Invalid username or password' }, { status: 401 });
@@ -119,12 +127,13 @@ export async function POST(req: Request) {
       return jsonNoStore({ error: 'Auth cookie encryption is not configured.' }, { status: 500 });
     }
 
+    registerSession(responseUser, sessionValue);
     cookieStore.set(SESSION_COOKIE_NAME, sessionValue, sessionCookieOptions());
-    cookieStore.set(
-      LOCAL_ACCOUNTS_COOKIE_NAME,
-      accountCookie,
-      localAccountsCookieOptions(),
-    );
+    if (runtimeContract().durableStore) {
+      cookieStore.set(LOCAL_ACCOUNTS_COOKIE_NAME, '', localAccountsCookieOptions(0));
+    } else {
+      cookieStore.set(LOCAL_ACCOUNTS_COOKIE_NAME, accountCookie, localAccountsCookieOptions());
+    }
 
     return jsonNoStore({
       success: true,

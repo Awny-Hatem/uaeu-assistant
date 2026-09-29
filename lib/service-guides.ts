@@ -2,30 +2,37 @@ import fs from "fs";
 import path from "path";
 import type { Locale } from "@/lib/language";
 import type { ServiceGuide } from "@/lib/prototype-types";
+import { normalizeQuery } from "@/lib/query-understanding";
 
 const SERVICE_GUIDE_DIR = path.join(process.cwd(), "data", "service-guides");
 
 function normalize(text: string): string {
-  return text
-    .toLowerCase()
-    .normalize("NFKD")
-    .replace(/\p{M}/gu, "")
-    .replace(/[^\p{L}\p{N}\s]/gu, " ")
-    .replace(/\s+/g, " ")
-    .trim();
+  return normalizeQuery(text);
 }
+
+function officialUrl(value: unknown): boolean {
+  if (typeof value !== "string") return false;
+  try { const url = new URL(value); return url.protocol === "https:" && (url.hostname === "uaeu.ac.ae" || url.hostname.endsWith(".uaeu.ac.ae")); }
+  catch { return false; }
+}
+
+function nonEmpty(value: unknown): value is string { return typeof value === "string" && Boolean(value.trim()); }
 
 function looksLikeGuide(value: unknown): value is ServiceGuide {
   if (!value || typeof value !== "object") return false;
   const maybe = value as Partial<ServiceGuide>;
   return Boolean(
-    maybe.id &&
-      maybe.title &&
-      maybe.description &&
-      maybe.officialUrl &&
-      maybe.lastVerified &&
+    nonEmpty(maybe.id) &&
+      nonEmpty(maybe.title) &&
+      nonEmpty(maybe.description) &&
+      officialUrl(maybe.officialUrl) &&
+      typeof maybe.lastVerified === "string" && /^\d{4}-\d{2}-\d{2}$/.test(maybe.lastVerified) &&
+      Date.parse(maybe.lastVerified) <= Date.now() + 86_400_000 && Date.now() - Date.parse(maybe.lastVerified) <= 180 * 86_400_000 &&
       Array.isArray(maybe.keywords) &&
-      Array.isArray(maybe.steps),
+      maybe.keywords.every(nonEmpty) &&
+      (maybe.excludeKeywords === undefined || (Array.isArray(maybe.excludeKeywords) && maybe.excludeKeywords.every(nonEmpty))) &&
+      Array.isArray(maybe.audience) && maybe.audience.every(nonEmpty) &&
+      Array.isArray(maybe.steps) && maybe.steps.length > 0 && maybe.steps.every((step) => step && nonEmpty(step.title) && nonEmpty(step.instruction) && (step.url === undefined || officialUrl(step.url))),
   );
 }
 

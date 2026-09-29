@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "runSha256": "0f8775181d898ba94af655219365d77528ff20e658c40603bb435eedfb1ec242",
+  "reviewer": "independent academic/content review agent",
+  "scope": "Q001–Q055",
+  "reviewedAt": "2026-09-29",
+  "methodology": "Fresh manual review of every actual question, relevant conversation context, complete returned answer and citation bundle in completed post-repair-round-6.json. Compared material claims with the official catalog, service pages, published policies, visually reviewed study plans and guides documented in content-source-review.md; reviewed metadata alone is not proof. Canonical record-level citation bundles are assessed as bundles, not unclaimed sentence-level mappings. User-specific or unpublished future facts are not invented. HTTP/model/selection failures are needs-fix, not safe source limitations. The medical numeric graduation GPA remains an explicitly separate coverage gap.",
+  "reviews": {
+    "Q001": {
+      "status": "verified",
+      "note": "The answer states both catalog conditions: CSBP219 prerequisite at minimum D and CSBP221 pre-/corequisite at minimum D. It does not require the lab to have been completed in a previous term or promise registration eligibility.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ]
+    },
+    "Q002": {
+      "status": "verified",
+      "note": "The follow-up correctly switches to CSBP411 Machine Learning, whose published prerequisite is CSBP301 at minimum D and whose credit value is three. Catalog content supports the brief subject description; cohort equivalency/live availability is not promised.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP411"
+      ]
+    },
+    "Q003": {
+      "status": "verified",
+      "note": "The minimum-grade follow-up retains CSBP411 rather than reverting to CSBP319 and directly supplies minimum D in CSBP301, as the course catalog requires.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP411"
+      ]
+    },
+    "Q004": {
+      "status": "verified",
+      "note": "The explicit reference to the first mentioned course resolves back to CSBP319 and includes both the CSBP219 prerequisite and CSBP221 pre-/corequisite with D minimum grades.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ]
+    },
+    "Q005": {
+      "status": "verified",
+      "note": "The answer gives the current-student document route, language selection and submission, then distinguishes the free ten-minute service target from the separate alumni route. The 2026 guide supports university-email delivery.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ]
+    },
+    "Q006": {
+      "status": "verified",
+      "note": "The cost follow-up correctly preserves the currently enrolled transcript subject and says the service is free, without substituting alumni printing charges.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ]
+    },
+    "Q007": {
+      "status": "verified",
+      "note": "The Arabic response gives the alumni certificate request flow, degree and format/delivery selection, free digital document with 3-hour target and AED25 printed certificate with 3-day target. These are supported by service 122; it does not misroute an alumnus to enrolled-student documents.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+      ]
+    },
+    "Q008": {
+      "status": "verified",
+      "note": "Arabic follow-up keeps the degree-certificate subject and explains printed format, AED25 and 3-day target versus digital free / 3 hours. Replacement-copy wording is broader than the question but explicitly does not invent a separate lost-document menu.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+      ]
+    },
+    "Q009": {
+      "status": "verified",
+      "note": "For the unspecified applicant, gives separate national Ministry and international/UAEU routes, confines AED210/documents/12-day target to the named paid service, and asks the category/intake needed for specific advice. Does not universally charge nationals.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89"
+      ]
+    },
+    "Q010": {
+      "status": "needs-fix",
+      "note": "Clarification loop: user answers the prior category question with international/not-national, but response repeats the identical category overview and asks which applicant category applies again. It does not progress to the available international requirements. The cited facts are scoped, but context use and answer completeness fail.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89"
+      ]
+    },
+    "Q011": {
+      "status": "verified",
+      "note": "The actual answer correctly scopes the housing charges to international undergraduate residents: AED 5,000 per semester and AED 1,575 for summer, payable before entering, with no fee exemption, cash or installments. It separately notes that graduate housing is not provided, without presenting the obsolete graduate rate as an offer.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ]
+    },
+    "Q012": {
+      "status": "verified",
+      "note": "The follow-up preserves the international undergraduate housing subject and states the verified summer charge of AED 1,575, retaining the payment and eligibility scope rather than confusing it with tuition.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ]
+    },
+    "Q013": {
+      "status": "needs-fix",
+      "note": "HTTP 503 returned only a temporary answer-service error, with no weekday hours or citations. The official Main Library source and a reviewed stored record establish Monday–Thursday 07:30–15:00 and Friday 07:30–12:00; this is an unanswered service failure, not an unavailable institutional fact.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/library/libraryhours.shtml"
+      ]
+    },
+    "Q014": {
+      "status": "needs-fix",
+      "note": "After the preceding provider error, the answer asks the user to identify a service even though the conversation's preceding user prompt clearly names the Main Library. It fails to resolve the Friday follow-up and omits the source-supported 07:30–12:00 hours.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/library/libraryhours.shtml"
+      ]
+    },
+    "Q015": {
+      "status": "verified",
+      "note": "Gives the general undergraduate CGPA 2.00 minimum plus 120 credits, approved degree structure and no outstanding Incomplete, explicitly excluding CMHS and preserving program/cohort differences. The program finder is navigation, not an individual degree-audit claim.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/6_degree_completion_and_graduation-en.pdf",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate-programs.shtml"
+      ]
+    },
+    "Q016": {
+      "status": "safe-limitation",
+      "note": "Correctly says AE-06 exclusion does not prove a different medical GPA. Provides supported current MD 233-credit/six-year/three-phase/FIE facts, but explicitly cannot verify a numeric graduation CGPA from these sources. This is a genuine remaining program-rule gap, not full numeric coverage or a claim that 2.00 cannot apply.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/doctor-of-medicine.shtml"
+      ]
+    },
+    "Q017": {
+      "status": "verified",
+      "note": "Correct password-reset route and UITS phone/email from Password Self-Service, distinguishing forgotten-password from known-password change. Privacy caution does not invent an MFA-reset workflow.",
+      "evidence": [
+        "https://selfservice.uaeu.ac.ae/"
+      ]
+    },
+    "Q018": {
+      "status": "verified",
+      "note": "Successfully changes topic from account password to enrollment proof and directly recommends TWIMC. Service 92 and guide together support free/no-documents/10-minute target, three-month validity, My Requests/email and the separate schedule-letter purpose.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ]
+    },
+    "Q019": {
+      "status": "verified",
+      "note": "The timing follow-up retains enrollment-letter context, gives 10-minute normal delivery and free/email terms, and does not substitute password-reset timing or alumni document fees. Three-month TWIMC validity remains sourced.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ]
+    },
+    "Q020": {
+      "status": "verified",
+      "note": "Responds to acknowledgment without unrelated retrieval, repeated policy claims or invented next actions.",
+      "evidence": []
+    },
+    "Q021": {
+      "status": "verified",
+      "note": "Normalizes CSBP219 correctly and gives CSBP119 Algorithms and Problem Solving minimum D, three credits and catalog course scope. It separates the published prerequisite from seat or individual eligibility confirmation.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    "Q022": {
+      "status": "verified",
+      "note": "The answer accurately states both ISEC421 prerequisites, STAT210 and ITBP301, with minimum D in each, explicitly preserves AND rather than OR, and gives two credit hours. It does not claim the student's prerequisites are completed.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC421"
+      ]
+    },
+    "Q023": {
+      "status": "appropriate-clarification",
+      "note": "Flags the supplied CSBP999/code versus Data Structures/CSBP319 title conflict and asks which course is intended; no fabricated CSBP999 prerequisite or silent substitution.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ]
+    },
+    "Q024": {
+      "status": "verified",
+      "note": "The response correctly distinguishes the current catalog's CSBP319 OR CSBP323 minimum-D alternatives from the Fall 2025 CS plan's CSBP319 sequence. The CSBP323 title is correctly Data Structures and Algorithms and CSBP340 is three credits.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP340",
+        "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+      ]
+    },
+    "Q025": {
+      "status": "verified",
+      "note": "The full CSBP319 answer explicitly permits the CSBP221 lab as a pre- or corequisite while retaining CSBP219 as a prerequisite, both minimum D. It answers same-semester lab enrollment without treating the programming prerequisite as concurrent.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ]
+    },
+    "Q026": {
+      "status": "verified",
+      "note": "The response's 120-credit breakdown, named required security courses/labs, elective choices and 6-credit final ITBP496 internship match the program catalog. It cites the separate cohort-plan source for older 130-credit models and keeps personal planning conditional.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml",
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf"
+      ]
+    },
+    "Q027": {
+      "status": "verified",
+      "note": "The actual response distinguishes the 120-credit Fall-entry model for 2025–2026 onward from older 130-credit cohorts. The newer model ends with ITBP496 (6 credits), with no concurrent courses; the preceding taught semester totals 13 credits. It requests cohort, completed courses and intended term before claiming a personalized final-semester schedule.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml",
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf"
+      ]
+    },
+    "Q028": {
+      "status": "verified",
+      "note": "The six Year 1 Semester 2 courses and 16-credit total match the Fall 2025 Computer Science plan. The prerequisites/corequisite are correctly stated, and the answer makes the cohort-specific scope explicit instead of claiming this is every student's assigned schedule.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+      ]
+    },
+    "Q029": {
+      "status": "verified",
+      "note": "The answer supplies the controlling CSBP319 rule: CSBP219 must be completed with minimum D, with CSBP221 as a minimum-D pre-/corequisite. This directly establishes why CSBP119 alone is insufficient without falsely certifying the student's record or allowing concurrent CSBP219.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ]
+    },
+    "Q030": {
+      "status": "verified",
+      "note": "Accurately discloses no access to a private academic record and distinguishes published requirements plus user-provided information from verified personal registration/graduation eligibility.",
+      "evidence": []
+    },
+    "Q031": {
+      "status": "verified",
+      "note": "Useful registration sequence contains term, Plans/View Sections/Add/Submit and Registered confirmation, plus Active & Locked plan and cleared restrictions. The added drop route and named 2026/2027 deadlines are supported and do not conflate add with drop cutoffs.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+        "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml"
+      ]
+    },
+    "Q032": {
+      "status": "verified",
+      "note": "Provides the documented CLOSED SECTION override request and no-seat-guarantee caveat, college enrollment-ceiling responsibility, non-CMHS undergraduate scope and Submit/Registered confirmation. The bundle supports the request versus actual registration distinction.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ]
+    },
+    "Q033": {
+      "status": "verified",
+      "note": "Actionable first step is the documented Prepare for Registration screen, with displayed holds and blocking notification. It then directs the shown restriction to its responsible unit, not a guessed debt, and preserves the assistant's lack of personal access.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ]
+    },
+    "Q034": {
+      "status": "needs-fix",
+      "note": "The actual answer gives only a generic request to identify a service/course, although the user clearly asks about dropping versus withdrawing. Reviewed AE-03 and registration procedure evidence can answer the distinction and relevant timing; no facts or citations are supplied.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf"
+      ]
+    },
+    "Q035": {
+      "status": "needs-fix",
+      "note": "False source gap: normal-semester credit-load question receives only 'could not verify the requested apply for registration' without citations. AE-03 and the existing reviewed semester-credit-load record establish normal 12–19 credits, scope and exceptions. The question is answerable; this is avoidable routing/selection/fact-gate failure.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ]
+    },
+    "Q036": {
+      "status": "verified",
+      "note": "The probation-specific 13-credit limit is correctly scoped, with CGPA 2.00, 21-credit first-notice condition, third probation AND dismissal, and 1.80 plus graduation-within-year exception. Fourth notice/dismissal is now explicitly failure in the granted extra semester; summer and course-evaluation distinctions remain.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/5_academic_standing_enrollment_eligibility_and_progress-en.pdf"
+      ]
+    },
+    "Q037": {
+      "status": "needs-fix",
+      "note": "The response asks the user to identify a service instead of answering credit-load approval. AE-03 establishes the Dean or Assistant Dean approval route for loads above 19 outside the defined up-to-22 routes; the answer should preserve those exceptions rather than omit the available rule.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ]
+    },
+    "Q038": {
+      "status": "verified",
+      "note": "The answer scopes AE-03 to non-CMHS undergraduates, gives the College Advising Unit, one-month timing, department review and Dean/designee decision, and distinguishes dated internal-college-transfer windows from ordinary major changes. It does not invent a processing time.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+        "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"
+      ]
+    },
+    "Q039": {
+      "status": "verified",
+      "note": "Separates Fall 2026 last-add 28 August from last-withdraw/drop-without-failure 18 September; start 17 August and Spring 2027 counterparts are explicitly term-labelled. Added registration and financial-procedure statements retain appropriate sources.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml"
+      ]
+    },
+    "Q040": {
+      "status": "safe-limitation",
+      "note": "Refuses to invent the requested Spring 2028 start date instead of reusing 2027 or 2026. The inspected published calendar does not establish 2028; wording is generic but this specific missing fact is genuine.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"
+      ]
+    },
+    "Q041": {
+      "status": "appropriate-clarification",
+      "note": "The answer retains the already supplied Fall 2026 intake and asks only for the missing applicant category. Service 89 does not establish a fixed closing date for that intake, and the answer does not substitute its processing target for an application deadline.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89"
+      ]
+    },
+    "Q042": {
+      "status": "verified",
+      "note": "The response selects the national/Emirati-mother requirements rather than international thresholds. Qualification/equivalency, age, National Service, dismissal, fitness and competitive admission conditions match that source, as do the 80%/IELTS5.0/ITP500/iBT61 general English alternatives.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml"
+      ]
+    },
+    "Q043": {
+      "status": "verified",
+      "note": "Now directly states UAE MOE equivalency is required for non-MOE-curriculum high-school certificates, shared across both applicant-category sources. It distinguishes accredited qualification AND applicable equivalency, asks curriculum only if needed and does not claim approval of the user's certificate.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ]
+    },
+    "Q044": {
+      "status": "verified",
+      "note": "Distinguishes HCT/Zayed transfer good-standing/English/capacity criteria from the additional 12-credits-or-two-semesters condition for other approved institutions. Preserves undergraduate non-CMHS scope and separates admission from credit recognition.",
+      "evidence": [
+        "https://uaeu.ac.ae/en/about/policies/pdf/admission/2_undergraduate_admissions-en.pdf",
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89"
+      ]
+    },
+    "Q045": {
+      "status": "verified",
+      "note": "States transfer is limited/evaluated rather than automatic: 25% ceiling, 75% plus senior-major residency, minimum C-, prior approval for outside study after enrollment, transferred grades excluded from CGPA and quarter-credit conversion. Both policy sources and non-CMHS scope are retained.",
+      "evidence": [
+        "https://uaeu.ac.ae/en/about/policies/pdf/admission/2_undergraduate_admissions-en.pdf",
+        "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/6_degree_completion_and_graduation-en.pdf"
+      ]
+    },
+    "Q046": {
+      "status": "verified",
+      "note": "States related bachelor's GPA 3.0/4.0 for the general master's baseline, separate conditional GPA routes from 2.5 and program-specific higher standards; correctly distinguishes admission requirements from a guaranteed place. Its added graduate facts retain their source scope.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+        "https://www.uaeu.ac.ae/en/cgs/2026-admission-cycle-1-.pdf"
+      ]
+    },
+    "Q047": {
+      "status": "verified",
+      "note": "Contains the complete source-backed PhD checklist, including both degrees/transcripts, recognition as required, Arabic proficiency for Arabic-medium PhD, two references, CV, passport for all plus applicable ID/family book and photo. The broader master's/PhD criteria and historical 2025–26 cycle caveat remain correctly scoped.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+        "https://www.uaeu.ac.ae/en/cgs/2026-admission-cycle-1-.pdf"
+      ]
+    },
+    "Q048": {
+      "status": "verified",
+      "note": "Explicitly rejects automatic qualification from IELTS 5.5 and includes conditional 6.0-by-first-semester, initial 6-credit and first 9-credit GPA 3.0 terms plus program/language differences. No minimum is represented as admission guarantee.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+        "https://www.uaeu.ac.ae/en/cgs/2026-admission-cycle-1-.pdf"
+      ]
+    },
+    "Q049": {
+      "status": "verified",
+      "note": "Applies AED 2,661/credit to the listed international undergraduate 2026–27-onward entrant cohort, with accurate totals and earlier-cohort distinction. Graduate rates are separately program-specific and marked published only through 2025–26, not assumed current.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-international-students-undergraduate-students.shtml",
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-doctor.shtml"
+      ]
+    },
+    "Q050": {
+      "status": "verified",
+      "note": "The answer gives the electronic E-Services payment route and supported methods, correctly excludes cash/personal bank transfers and states the 0.68% customer transaction fee as changeable. It does not claim that paying establishes installment approval.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/payment-methods.shtml"
+      ]
+    },
+    "Q051": {
+      "status": "verified",
+      "note": "The response gives installment eligibility and the exact E-Services application path, limits plans to fall/spring, distinguishes approval from payment, and accurately marks the August/early-September 2026 dates as past as of the review date. The September 30, October 30 and November 30 remaining installments are term-scoped.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/payment-guideline.shtml"
+      ]
+    },
+    "Q052": {
+      "status": "verified",
+      "note": "The response provides the eServices aid request process and current Financial Aid contacts. It explicitly labels the 2023 handbook's four-week Zakat window historical rather than open now, and separately scopes income thresholds/once-per-study/one-day-after-approval conditions to device aid, not universal cash assistance.",
+      "evidence": [
+        "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=112",
+        "https://www.uaeu.ac.ae/en/student-services/financial-aid/contact.shtml"
+      ]
+    },
+    "Q053": {
+      "status": "verified",
+      "note": "Accurate five Chancellor award tiers and tuition-only benefits for new international/employee-child entrants from 2025–26; seat limitation, non-guarantee and earlier-cohort/other-funding boundaries are explicit.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+      ]
+    },
+    "Q054": {
+      "status": "verified",
+      "note": "The response now selects the governing scholarship coverage record. It states that the five Chancellor undergraduate awards for new international/employee-child entrants from 2025–2026 cover specified tuition discounts, excluding housing and the application fee. It distinguishes a housing-fee exemption from an external sponsor paying that fee and asks for the award name/year for other scholarships.",
+      "evidence": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml",
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"
+      ]
+    },
+    "Q055": {
+      "status": "verified",
+      "note": "Correctly uses the distinct alumni document service with degree/transcript/format/delivery selection, digital free / 3 hours and printed AED 30 / 3 days, no listed supporting document and assistance contact. It does not substitute current-student 10-minute service terms.",
+      "evidence": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+      ]
+    }
+  }
+}

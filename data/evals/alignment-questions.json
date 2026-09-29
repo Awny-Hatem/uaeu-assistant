@@ -15,7 +15,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "admissions-apply-undergraduate",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["Undergraduate application", "official Admission Application for Bachelor's Program"],
+      "requiredPatterns": ["Undergraduate application", "UAE nationals", "Ministry", "International", "Only if your category", "not established for the separate"],
       "forbiddenPatterns": ["transfer applicant"],
       "minCitations": 1
     },
@@ -39,12 +39,13 @@
         { "role": "assistant", "content": "I can check the official admission cycle." },
         { "role": "user", "content": "What is the application deadline?" }
       ],
-      "expectedSource": "faq",
+      "expectedSource": "rag",
       "expectedAnswerId": "admissions-application-deadline",
       "expectedDisposition": "answer",
       "requiredPatterns": ["Fall 2027", "application portal", "do not substitute an academic-calendar date"],
       "forbiddenPatterns": ["tuition payment deadline"],
-      "minCitations": 1
+      "minCitations": 0,
+      "evidenceOnly": { "source": "answer:admissions-application-deadline", "queryTerms": ["fall", "2027", "admission"] }
     },
     {
       "id": "ADM-AR-04",
@@ -53,7 +54,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "admissions-programs-new-students",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["البرامج المتاحة", "الدليل الحالي"],
+      "requiredPatterns": ["55", "54", "الدرجات", "القانون", "علوم الفضاء", "استُبعدت 12"],
       "forbiddenPatterns": ["Prototype Answer"],
       "minCitations": 1
     },
@@ -76,8 +77,8 @@
       "expectedSource": "faq",
       "expectedAnswerId": "course-add-drop",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["Add or drop a course", "registration portal", "add/drop period"],
-      "forbiddenPatterns": ["withdraw from a course"],
+      "requiredPatterns": ["Add or drop a course", "Register for Classes", "Plans", "Submit", "Drop-Web", "different deadlines"],
+      "forbiddenPatterns": ["Add alone completes registration"],
       "minCitations": 1
     },
     {
@@ -98,7 +99,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "registration-hold",
       "expectedDisposition": "portal",
-      "requiredPatterns": ["Registration hold", "student portal", "cannot view your hold"],
+      "requiredPatterns": ["Registration hold", "MyUAEU", "Prepare for Registration", "academic, administrative or financial", "cannot (?:see|view) your (?:personal )?hold"],
       "forbiddenPatterns": ["remove it for you"],
       "minCitations": 1
     },
@@ -110,7 +111,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "register-csbp319-data-structures",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["CSBP319 Data Structures", "3-credit course", "CSBP219", "CSBP221"],
+      "requiredPatterns": ["CSBP319 Data Structures", "3[- ]credits?", "CSBP219", "CSBP221", "Plans", "Submit", "Registered"],
       "forbiddenPatterns": ["typically", "Introduction to Programming"],
       "minCitations": 1
     },
@@ -198,7 +199,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "change-major",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["Change your major", "official"],
+      "requiredPatterns": ["Change your undergraduate major", "official", "excluding Medicine"],
       "forbiddenPatterns": ["transfer to UAEU"],
       "minCitations": 1
     },
@@ -209,7 +210,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "academic-advisor-contact",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["student portal", "college advising office"],
+      "requiredPatterns": ["UAEU portal/app", "college advising (?:staff|office)", "800\\s?8238", "does not establish|do not establish"],
       "forbiddenPatterns": ["Human Support"],
       "minCitations": 1
     },
@@ -278,7 +279,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "final-exam-schedule",
       "expectedDisposition": "portal",
-      "requiredPatterns": ["final exam schedule", "student portal"],
+      "requiredPatterns": ["final[- ]exam schedule", "student portal", "Student Official Schedule Letter"],
       "forbiddenPatterns": ["general exam period is your schedule"],
       "minCitations": 1
     },
@@ -323,9 +324,9 @@
       "expectedSource": "faq",
       "expectedAnswerId": "enrollment-certificate",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["enrollment certificate", "official"],
+      "requiredPatterns": ["Official proof of enrollment", "TWIMC", "Current Students Documents", "ten-minute"],
       "forbiddenPatterns": ["degree certificate"],
-      "minCitations": 1
+      "minCitations": 2
     },
     {
       "id": "DOC-FOLLOW-03",
@@ -361,9 +362,9 @@
       "expectedSource": "escalated",
       "expectedAnswerId": "low_confidence",
       "expectedEscalationReason": "low_confidence",
-      "requiredPatterns": ["Please identify the UAEU request"],
+      "requiredPatterns": ["recommendation letter|reference letter"],
       "forbiddenPatterns": ["To Whom It May Concern", "guided checklist", "Needs Official Verification", "check the website"],
-      "minCitations": 1
+      "minCitations": 0
     },
 
     {
@@ -407,9 +408,9 @@
       "expectedSource": "faq",
       "expectedAnswerId": "payment-receipt-download",
       "expectedDisposition": "portal",
-      "requiredPatterns": ["receipt", "payment or student-account portal"],
+      "requiredPatterns": ["receipt", "Student Account Letter", "Current Students Documents", "not necessarily the receipt", "do not establish a particular"],
       "forbiddenPatterns": ["official transcript"],
-      "minCitations": 1
+      "minCitations": 3
     },
     {
       "id": "FEE-PARA-03",
@@ -446,7 +447,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "scholarship-eligibility",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["Scholarship eligibility", "scholarship name", "only UAEU can make the final eligibility decision"],
+      "requiredPatterns": ["Eligibility.*Chancellor", "scholarship name", "only UAEU can make the final eligibility decision"],
       "forbiddenPatterns": ["you are eligible"],
       "minCitations": 1
     },
@@ -457,7 +458,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "scholarship-deadline",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["Scholarship deadline", "does not publish one deadline", "Do not substitute an academic-calendar"],
+      "requiredPatterns": ["Scholarship deadline", "application-month windows, not a single day-of-month deadline", "Do not substitute an academic-calendar", "May, June, and July", "September, October, and November"],
       "forbiddenPatterns": ["Academic Dates", "semester registration"],
       "minCitations": 1
     },
@@ -557,7 +558,7 @@
       "question": "Where can I book a group study room in the library?",
       "expectedSource": "faq",
       "expectedAnswerId": "library-study-room-reservation",
-      "expectedDisposition": "answer",
+      "expectedDisposition": "clarify",
       "requiredPatterns": ["study room", "reserve"],
       "forbiddenPatterns": ["housing room assignment"],
       "minCitations": 1
@@ -614,9 +615,9 @@
       "expectedSource": "faq",
       "expectedAnswerId": "housing-move-in-date",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["move-in dates", "assignment"],
+      "requiredPatterns": ["move-in date", "assignment", "does not establish that the email includes", "2023 student handbook"],
       "forbiddenPatterns": ["one date for every student"],
-      "minCitations": 1
+      "minCitations": 2
     },
 
     {
@@ -670,9 +671,9 @@
       "expectedSource": "faq",
       "expectedAnswerId": "sports-facilities",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["Student Sports Facilities", "student status"],
+      "requiredPatterns": ["Student Sports Facilities", "2023 student handbook", "Sports Complex", "does not establish current opening or booking schedules", "fitnesscenter@uaeu.ac.ae"],
       "forbiddenPatterns": ["all facilities are always open"],
-      "minCitations": 1
+      "minCitations": 2
     },
     {
       "id": "EVENT-AR-01",
@@ -681,7 +682,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "university-events-workshops",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["الفعاليات", "ورش العمل"],
+      "requiredPatterns": ["فعاليات", "ورش العمل"],
       "forbiddenPatterns": ["فعالية قديمة"],
       "minCitations": 1
     },
@@ -816,7 +817,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "visa-renewal-documents",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["original passport", "health insurance", "Emirates ID"],
+      "requiredPatterns": ["recent photograph with a white background", "verified complete checklist", "iso.office@uaeu.ac.ae"],
       "forbiddenPatterns": ["Current Students Documents", "To Whom It May Concern"],
       "minCitations": 1
     },
@@ -929,7 +930,7 @@
       "expectedSource": "escalated",
       "expectedAnswerId": "student_requested_person",
       "expectedEscalationReason": "student_requested_person",
-      "requiredPatterns": ["Human Support", "official UAEU contact page"],
+      "requiredPatterns": ["UAEU Contact Center", "800\\s?8238", "cannot transfer a call or submit"],
       "forbiddenPatterns": ["I contacted the office for you"],
       "minCitations": 1
     }

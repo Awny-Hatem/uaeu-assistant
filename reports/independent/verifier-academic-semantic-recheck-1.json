@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "methodology": "Post-change direct configured-provider recheck. Exact S03–S06 inputs and frozen source snapshots from verifier-academic-semantic-probes.json; added the pipeline owner's partial-prerequisite false-rejection input using the full bilingual single-source fallback. No HTTP chat endpoint, application, data, fixture or prior diagnostic edits. The original failures remain preserved. This diagnostic tests support judgments, not full answer utility or release readiness.",
+  "startedAt": "2026-09-29T15:28:13.469Z",
+  "model": "gpt-4.1-mini",
+  "verifierSha256": "993be3c25d23861d272eca15c03fcd60bd0fcff7c5084a7320de56fc533ed17f",
+  "sourceEvidenceSha256": "23ec5af299bfac490faa04ac88e9d81bcc7f1c6431539a276a6e740ecae90b63",
+  "cases": [
+    {
+      "id": "P01-partial-prerequisite",
+      "requestedQuery": "Which prerequisite comes before CSBP319?",
+      "claim": "CSBP319 Data Structures requires CSBP219 Object Oriented Programming as a prerequisite with a minimum grade of D, so you must complete CSBP219 before taking CSBP319.",
+      "source": {
+        "recordId": "course-prerequisites-data-structures",
+        "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+        "text": "**Data Structures prerequisite**\n- For the current CSBP319 Data Structures catalog record, CSBP219 Object Oriented Programming is a prerequisite with a minimum grade of D.\n- CSBP221 Programming Lab II is a pre- or corequisite with a minimum grade of D, meaning it must be completed previously or taken as permitted alongside CSBP319.\n- Course rules can differ for legacy course codes, programs, and cohorts, so verify CSBP319 in your live degree audit and registration portal before enrolling.\n\n**متطلبات مقرر هياكل البيانات**\n- وفق السجل الحالي للمقرر **CSBP319 هياكل البيانات**، يُعد **CSBP219 البرمجة كائنية التوجه** متطلبًا سابقًا بحد أدنى للتقدير **D**.\n- ويُعد **CSBP221 مختبر البرمجة 2** متطلبًا سابقًا أو متزامنًا بحد أدنى للتقدير **D**، أي يجب إكماله مسبقًا أو أخذه مع CSBP319 عندما يكون ذلك مسموحًا.\n- قد تختلف القواعد لرموز المقررات القديمة والبرامج والدفعات، لذا تحقّق من CSBP319 في تدقيق الدرجة المباشر وبوابة التسجيل قبل التسجيل فيه."
+      },
+      "expectedValid": true,
+      "actualValid": false,
+      "status": "unsupported_detail",
+      "reasonCodes": [
+        "unsupported_detail"
+      ],
+      "deterministic": []
+    },
+    {
+      "id": "S03",
+      "requestedQuery": "Who must authorize a 21-credit undergraduate load?",
+      "claim": "All undergraduate students outside Medicine and Health Sciences need Dean or Assistant Dean approval for any load above 19 credits.",
+      "source": {
+        "recordId": "semester-credit-load",
+        "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+        "text": "Undergraduate credit load — excluding Medicine and Health Sciences\n- Regular-semester normal load: 12–19 credits. Academic probation maximum: 13.\n- After completing Foundation and with good academic standing, up to 22 credits is permitted under either published route: 22 or fewer credits remain for the degree, or at least 36 credits earned with CGPA 3.6 or above.\n- In other circumstances, more than 19 credits requires the Dean or Assistant Dean of the student's college. The two qualifying routes above are distinct from this exception-approval route.\n- Below 12 credits requires an exception: fewer than 12 remain, Foundation/proficiency requirements are unfinished, or Dean/Assistant Dean approval in another circumstance.\n- Summer standard maximum 6, honors/expected graduates up to 9, probation up to 4. These published undergraduate rules are not a graduate-program limit."
+      },
+      "expectedValid": false,
+      "actualValid": true,
+      "status": "supported",
+      "reasonCodes": [],
+      "deterministic": []
+    },
+    {
+      "id": "S04",
+      "requestedQuery": "What are the possible ways an undergraduate outside Medicine can exceed the standard maximum?",
+      "claim": "After Foundation and in good standing, a student outside Medicine and Health Sciences may take up to 22 credits if 22 or fewer remain, or if at least 36 credits have been earned with CGPA at least 3.6. In other circumstances, exceeding 19 credits requires Dean or Assistant Dean approval.",
+      "source": {
+        "recordId": "semester-credit-load",
+        "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+        "text": "Undergraduate credit load — excluding Medicine and Health Sciences\n- Regular-semester normal load: 12–19 credits. Academic probation maximum: 13.\n- After completing Foundation and with good academic standing, up to 22 credits is permitted under either published route: 22 or fewer credits remain for the degree, or at least 36 credits earned with CGPA 3.6 or above.\n- In other circumstances, more than 19 credits requires the Dean or Assistant Dean of the student's college. The two qualifying routes above are distinct from this exception-approval route.\n- Below 12 credits requires an exception: fewer than 12 remain, Foundation/proficiency requirements are unfinished, or Dean/Assistant Dean approval in another circumstance.\n- Summer standard maximum 6, honors/expected graduates up to 9, probation up to 4. These published undergraduate rules are not a graduate-program limit."
+      },
+      "expectedValid": true,
+      "actualValid": true,
+      "status": "supported",
+      "reasonCodes": [],
+      "deterministic": []
+    },
+    {
+      "id": "S05",
+      "requestedQuery": "Compare the English requirements for national and international applicants.",
+      "claim": "For UAE nationals, IELTS 5.0 is lower than the IELTS requirement for international applicants.",
+      "source": {
+        "recordId": "admissions-apply-undergraduate",
+        "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+        "text": "For UAE nationals and children of Emirati mothers, the admissions page directs applications through the Ministry portal in announced periods. General English alternatives: Grade 12 English 80%, IELTS Academic 5.0, TOEFL ITP 500 or iBT 61. Computing/AI criteria list English, mathematics and either physics or computer science at 80% or specified equivalents. These are category-specific criteria, not international-applicant rules or guaranteed admission."
+      },
+      "expectedValid": false,
+      "actualValid": false,
+      "status": "unsupported_detail",
+      "reasonCodes": [
+        "unsupported_detail"
+      ],
+      "deterministic": []
+    },
+    {
+      "id": "S06",
+      "requestedQuery": "Compare the English requirements for national and international applicants.",
+      "claim": "For UAE nationals and children of Emirati mothers, the general English alternatives include IELTS Academic 5.0, TOEFL ITP 500 or TOEFL iBT 61.",
+      "source": {
+        "recordId": "admissions-apply-undergraduate",
+        "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-admissions-current-student.shtml",
+        "text": "For UAE nationals and children of Emirati mothers, the admissions page directs applications through the Ministry portal in announced periods. General English alternatives: Grade 12 English 80%, IELTS Academic 5.0, TOEFL ITP 500 or iBT 61. Computing/AI criteria list English, mathematics and either physics or computer science at 80% or specified equivalents. These are category-specific criteria, not international-applicant rules or guaranteed admission."
+      },
+      "expectedValid": true,
+      "actualValid": true,
+      "status": "supported",
+      "reasonCodes": [],
+      "deterministic": []
+    }
+  ],
+  "finishedAt": "2026-09-29T15:28:16.882Z"
+}

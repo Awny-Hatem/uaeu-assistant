@@ -1,6 +1,8 @@
 import type { Citation, ServiceGuide } from "@/lib/prototype-types";
 import type { FaqEntry } from "@/lib/faq";
-import { loadKnowledgeMarkdown } from "@/lib/knowledge-files";
+import { evidenceIsRelevant, loadKnowledgeMarkdown } from "@/lib/knowledge-files";
+import { normalizeCourseCodes } from "@/lib/query-understanding";
+import type { EvidenceScope } from "@/lib/query-understanding";
 
 const VERIFIED_ON = "2026-09-16";
 
@@ -34,7 +36,7 @@ export function citationsForFaq(entry: Pick<FaqEntry, "citations">): Citation[] 
   const approved = entry.citations.filter(
     (citation) => citation.url && isApprovedOfficialUrl(citation.url),
   );
-  return approved.length ? uniqueCitations(approved) : [CONTACT_CITATION];
+  return uniqueCitations(approved);
 }
 
 export function citationForGuide(guide: ServiceGuide): Citation {
@@ -46,7 +48,7 @@ export function citationForGuide(guide: ServiceGuide): Citation {
 }
 
 export function citationsFromRows(
-  rows: { source: string; score?: number }[],
+  rows: { source: string; score?: number; text?: string; title?: string; citations?: Citation[]; scope?: EvidenceScope }[],
   query = "",
 ): Citation[] {
   const approvedDocuments = new Map(
@@ -54,7 +56,7 @@ export function citationsFromRows(
   );
   const topScore = Math.max(0, ...rows.map((row) => row.score ?? 0));
   const identifiers = new Set(
-    query
+    normalizeCourseCodes(query)
       .toLowerCase()
       .match(/\b(?=[a-z\d-]*[a-z])(?=[a-z\d-]*\d)[a-z\d-]{4,}\b/g) ?? [],
   );
@@ -81,9 +83,14 @@ export function citationsFromRows(
 
   return uniqueCitations(
     rows.flatMap((row) => {
+      if (row.citations) {
+        if (query && row.text && !evidenceIsRelevant(query, row.text, row.title ?? row.text.split("\n")[0], row.scope)) return [];
+        return row.citations.filter((citation) => citation.url && isApprovedOfficialUrl(citation.url));
+      }
       if (!relevantSources.has(row.source)) return [];
       const document = approvedDocuments.get(row.source);
       if (!document) return [];
+      if (query && row.text && !evidenceIsRelevant(query, row.text, document.title, document.scope)) return [];
       return [
         {
           title: document.title,

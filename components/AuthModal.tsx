@@ -1,6 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { passwordError } from "@/lib/auth-validation";
+import { uiCopy, type UiLocale } from "@/lib/ui-copy";
 import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -24,6 +26,14 @@ type AuthUser = {
 };
 type Mode = "login" | "signup";
 
+function isAuthUser(value: unknown): value is AuthUser {
+  if (!value || typeof value !== "object") return false;
+  const user = value as Partial<AuthUser>;
+  return typeof user.id === "string" && user.id.length > 0 &&
+    typeof user.username === "string" && typeof user.studentType === "string" &&
+    (user.major === null || typeof user.major === "string");
+}
+
 const STUDENT_TYPES = [
   { value: "Visitor", label: "Visitor / Parent" },
   { value: "Applicant", label: "Prospective Applicant" },
@@ -32,11 +42,12 @@ const STUDENT_TYPES = [
 ];
 
 interface AuthModalProps {
-  onAuth: (user: AuthUser) => void;
+  onAuth: (user: AuthUser) => void | Promise<void>;
   onClose?: () => void;
   initialMode?: Mode;
   title?: string;
   subtitle?: string;
+  language?: UiLocale;
 }
 
 export function AuthModal({
@@ -44,8 +55,24 @@ export function AuthModal({
   onClose,
   initialMode = "login",
   title = "Sign in to continue",
-  subtitle = "Create an account with any email, or use a UAEU email for extended local access.",
+  subtitle = "Create a prototype account with any email. University affiliation is not verified.",
+  language = "en",
 }: AuthModalProps) {
+  const copy = uiCopy[language];
+  const ar = language === "ar";
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const requestRef = useRef<AbortController | null>(null);
+  const uncertainRef = useRef(false);
+  useEffect(() => {
+    const previous = document.activeElement as HTMLElement | null;
+    const dialog = dialogRef.current;
+    if (dialog && !dialog.open) dialog.showModal();
+    return () => {
+      requestRef.current?.abort();
+      dialog?.close();
+      previous?.focus();
+    };
+  }, []);
   const [mode, setMode] = useState<Mode>(initialMode);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -55,6 +82,52 @@ export function AuthModal({
   const [major, setMajor] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [sessionUncertain, setSessionUncertain] = useState(false);
+  const closeBlocked = loading || sessionUncertain;
+
+  function requestClose() {
+    // Aborting a POST cannot undo an already received Set-Cookie header. Keep
+    // ownership coherent until the response or a session recheck has settled.
+    if (!requestRef.current && !uncertainRef.current) onClose?.();
+  }
+
+  function unresolvedSession() {
+    uncertainRef.current = true;
+    setSessionUncertain(true);
+    setError(ar
+      ? "تعذر تأكيد حالة الحساب. تحقق من حالة الدخول قبل متابعة المحادثة، أو أعد تحميل الصفحة."
+      : "Your account status could not be confirmed. Check sign-in status before continuing, or reload this page.");
+  }
+
+  async function reconcileSession(controller: AbortController) {
+    const res = await fetch("/api/auth/session", {
+      cache: "no-store",
+      signal: AbortSignal.any([controller.signal, AbortSignal.timeout(10_000)]),
+    });
+    const data: unknown = await res.json();
+    if (!res.ok || !data || typeof data !== "object" || !("user" in data) ||
+      (data.user !== null && !isAuthUser(data.user))) throw new Error("Session unavailable");
+    if (controller.signal.aborted) return;
+    uncertainRef.current = false;
+    setSessionUncertain(false);
+    if (data.user) await onAuth(data.user);
+    else setError(copy.networkError);
+  }
+
+  async function retrySessionCheck() {
+    if (requestRef.current) return;
+    const controller = new AbortController();
+    requestRef.current = controller;
+    setLoading(true);
+    try {
+      await reconcileSession(controller);
+    } catch {
+      if (!controller.signal.aborted) unresolvedSession();
+    } finally {
+      if (requestRef.current === controller) requestRef.current = null;
+      if (!controller.signal.aborted) setLoading(false);
+    }
+  }
 
   useEffect(() => {
     setMode(initialMode);
@@ -62,8 +135,17 @@ export function AuthModal({
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    // Ref guard is synchronous; duplicate submit events can precede the React
+    // render that disables the submit button.
+    if (requestRef.current || uncertainRef.current) return;
     setError(null);
+    if (mode === "signup" && passwordError(password)) {
+      setError(ar ? "استخدم 8 أحرف على الأقل تتضمن حرفاً إنجليزياً ورقماً، وبحد أقصى 72 بايت UTF-8." : passwordError(password));
+      return;
+    }
     setLoading(true);
+    const controller = new AbortController();
+    requestRef.current = controller;
 
     const endpoint = mode === "login" ? "/api/auth/login" : "/api/auth/signup";
     const payload =
@@ -76,20 +158,31 @@ export function AuthModal({
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
+        signal: AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        setError(data.error || "Something went wrong");
+        setError(ar
+          ? res.status === 401 ? "اسم المستخدم أو كلمة المرور غير صحيحة." : res.status === 409 ? "اسم المستخدم أو البريد الإلكتروني غير متاح." : res.status === 429 ? "طلبات كثيرة. انتظر دقيقة وحاول مجدداً." : res.status >= 500 ? "خدمة الحساب غير متاحة مؤقتاً. حاول لاحقاً." : "تحقق من بيانات الحساب. اسم المستخدم من 3 إلى 32 حرفاً إنجليزياً أو رقماً أو . أو _ أو -."
+          : data.error || "Something went wrong");
         return;
       }
 
-      onAuth(data.user);
+      if (!isAuthUser(data.user)) throw new Error("Invalid account response");
+      if (!controller.signal.aborted) await onAuth(data.user);
     } catch {
-      setError("Network error. Please try again.");
+      if (!controller.signal.aborted) {
+        try {
+          await reconcileSession(controller);
+        } catch {
+          if (!controller.signal.aborted) unresolvedSession();
+        }
+      }
     } finally {
-      setLoading(false);
+      if (requestRef.current === controller) requestRef.current = null;
+      if (!controller.signal.aborted) setLoading(false);
     }
   }
 
@@ -100,7 +193,7 @@ export function AuthModal({
     studentType === "Current Student" || studentType === "Applicant";
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center overflow-y-auto overscroll-contain bg-white/85 px-4 py-4 backdrop-blur-md sm:py-6 dark:bg-zinc-950/85">
+    <dialog ref={dialogRef} aria-labelledby="auth-title" aria-describedby="auth-description" lang={language} dir={ar ? "rtl" : "ltr"} onCancel={(event) => { event.preventDefault(); requestClose(); }} className="fixed inset-0 z-50 m-0 hidden h-full max-h-none w-full max-w-none items-start justify-center overflow-y-auto overscroll-contain bg-white/85 px-4 py-4 backdrop-blur-md open:flex sm:py-6 dark:bg-zinc-950/85">
       <motion.div
         initial={{ opacity: 0, y: 18, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -112,9 +205,11 @@ export function AuthModal({
             {onClose && (
               <button
                 type="button"
-                onClick={onClose}
+                onClick={requestClose}
+                disabled={closeBlocked}
                 className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-950 dark:hover:bg-white/10 dark:hover:text-white"
-                aria-label="Close sign in"
+                aria-label={ar ? "إغلاق تسجيل الدخول" : "Close sign in"}
+                data-testid="auth-close"
               >
                 <X size={16} />
               </button>
@@ -126,8 +221,8 @@ export function AuthModal({
               height={56}
               className="h-auto w-44 object-contain sm:w-52"
             />
-            <h1 className="mt-4 text-xl font-bold tracking-tight">{title}</h1>
-            <p className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+            <h1 id="auth-title" className="mt-4 text-xl font-bold tracking-tight">{title}</h1>
+            <p id="auth-description" className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
               {subtitle}
             </p>
           </div>
@@ -135,6 +230,8 @@ export function AuthModal({
           <div className="grid shrink-0 grid-cols-2 border-b border-zinc-100 dark:border-zinc-800">
             <button
               type="button"
+              aria-pressed={mode === "login"}
+              disabled={closeBlocked}
               onClick={() => {
                 setMode("login");
                 setError(null);
@@ -146,10 +243,12 @@ export function AuthModal({
               }`}
             >
               <LogIn size={15} />
-              Sign In
+              {copy.signIn}
             </button>
             <button
               type="button"
+              aria-pressed={mode === "signup"}
+              disabled={closeBlocked}
               onClick={() => {
                 setMode("signup");
                 setError(null);
@@ -161,7 +260,7 @@ export function AuthModal({
               }`}
             >
               <UserPlus size={15} />
-              Create Account
+              {copy.create}
             </button>
           </div>
 
@@ -174,16 +273,21 @@ export function AuthModal({
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden"
                 >
-                  <div className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300">
+                  <div role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300">
                     {error}
+                    {sessionUncertain && (
+                      <button type="button" disabled={loading} onClick={() => void retrySessionCheck()} className="mt-2 block rounded-lg border border-current px-3 py-2 font-semibold disabled:opacity-50">
+                        {ar ? "تحقق من حالة الدخول" : "Check sign-in status"}
+                      </button>
+                    )}
                   </div>
                 </motion.div>
               )}
             </AnimatePresence>
 
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                {mode === "login" ? "Username or email" : "Username"}
+              <label htmlFor="auth-username" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                {mode === "login" ? ar ? "اسم المستخدم أو البريد الإلكتروني" : "Username or email" : ar ? "اسم المستخدم" : "Username"}
               </label>
               <div className="relative">
                 <UserCircle2
@@ -191,10 +295,11 @@ export function AuthModal({
                   className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"
                 />
                 <input
+                  id="auth-username"
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  placeholder={mode === "login" ? "name or email@uaeu.ac.ae" : "Choose a username"}
+                  placeholder={mode === "login" ? "name or email@example.com" : ar ? "اختر اسم مستخدم" : "Choose a username"}
                   required
                   minLength={mode === "signup" ? 3 : undefined}
                   maxLength={mode === "signup" ? 32 : 254}
@@ -214,8 +319,8 @@ export function AuthModal({
                   className="overflow-hidden"
                 >
                   <div className="space-y-2">
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      Email
+                    <label htmlFor="auth-email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      {ar ? "البريد الإلكتروني" : "Email"}
                     </label>
                     <div className="relative">
                       <Mail
@@ -223,10 +328,11 @@ export function AuthModal({
                         className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"
                       />
                       <input
+                        id="auth-email"
                         type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        placeholder="email@uaeu.ac.ae"
+                        placeholder="email@example.com"
                         required
                         maxLength={254}
                         autoComplete="email"
@@ -239,18 +345,19 @@ export function AuthModal({
             </AnimatePresence>
 
             <div className="space-y-2">
-              <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Password
+              <label htmlFor="auth-password" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                {ar ? "كلمة المرور" : "Password"}
               </label>
               <div className="relative">
                 <input
+                  id="auth-password"
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Enter your password"
+                  placeholder={ar ? "أدخل كلمة المرور" : "Enter your password"}
                   required
                   minLength={mode === "signup" ? 8 : undefined}
-                  maxLength={128}
+                  maxLength={72}
                   autoComplete={mode === "login" ? "current-password" : "new-password"}
                   className={`${inputClass} pr-12`}
                 />
@@ -258,14 +365,15 @@ export function AuthModal({
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 transition hover:text-zinc-600 dark:hover:text-zinc-200"
-                  aria-label={showPassword ? "Hide password" : "Show password"}
+                  aria-label={showPassword ? ar ? "إخفاء كلمة المرور" : "Hide password" : ar ? "إظهار كلمة المرور" : "Show password"}
+                  aria-pressed={showPassword}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
               {mode === "signup" && (
                 <p className="text-xs font-medium leading-5 text-zinc-500 dark:text-zinc-400">
-                  Use at least 8 characters with a letter and a number.
+                  {ar ? "8 أحرف على الأقل مع حرف إنجليزي ورقم؛ الحد الأقصى 72 بايت UTF-8." : "Use at least 8 characters with a letter and a number; maximum 72 UTF-8 bytes."}
                 </p>
               )}
             </div>
@@ -280,14 +388,15 @@ export function AuthModal({
                 >
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        Profile
-                      </label>
-                      <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                        {STUDENT_TYPES.map((type) => (
+                      <p id="auth-profile-label" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        {ar ? "نوع المستخدم" : "Profile"}
+                      </p>
+                      <div role="group" aria-labelledby="auth-profile-label" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                        {STUDENT_TYPES.map((type, index) => (
                           <button
                             key={type.value}
                             type="button"
+                            aria-pressed={studentType === type.value}
                             onClick={() => setStudentType(type.value)}
                             className={`rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition ${
                               studentType === type.value
@@ -295,7 +404,7 @@ export function AuthModal({
                                 : "border-zinc-200 text-zinc-600 hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500"
                             }`}
                           >
-                            {type.label}
+                            {ar ? ["زائر / ولي أمر", "متقدم للدراسة", "طالب حالي في الجامعة", "خريج"][index] : type.label}
                           </button>
                         ))}
                       </div>
@@ -310,8 +419,8 @@ export function AuthModal({
                           className="overflow-hidden"
                         >
                           <div className="space-y-2">
-                            <label className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                              College / Major
+                            <label htmlFor="auth-major" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                              {ar ? "الكلية / التخصص" : "College / Major"}
                             </label>
                             <div className="relative">
                               <GraduationCap
@@ -319,10 +428,11 @@ export function AuthModal({
                                 className="absolute left-3.5 top-1/2 -translate-y-1/2 text-zinc-400"
                               />
                               <input
+                                id="auth-major"
                                 type="text"
                                 value={major}
                                 onChange={(e) => setMajor(e.target.value)}
-                                placeholder="IT, Medicine, Law..."
+                                placeholder={ar ? "تقنية المعلومات، الطب، القانون…" : "IT, Medicine, Law..."}
                                 maxLength={80}
                                 className={`${inputClass} pl-10`}
                               />
@@ -338,23 +448,23 @@ export function AuthModal({
 
             <button
               type="submit"
-              disabled={loading}
+              disabled={closeBlocked}
               className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E0182D] px-4 py-3.5 text-sm font-bold text-white shadow-md shadow-rose-200 transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 dark:shadow-rose-900/30"
             >
               {loading ? (
                 <span className="animate-pulse">
-                  {mode === "login" ? "Signing in..." : "Creating account..."}
+                  {mode === "login" ? ar ? "جارٍ تسجيل الدخول…" : "Signing in..." : ar ? "جارٍ إنشاء الحساب…" : "Creating account..."}
                 </span>
               ) : (
                 <>
                   {mode === "login" ? <LogIn size={16} /> : <UserPlus size={16} />}
-                  {mode === "login" ? "Sign In" : "Create Account"}
+                  {mode === "login" ? copy.signIn : copy.create}
                 </>
               )}
             </button>
           </form>
         </div>
       </motion.div>
-    </div>
+    </dialog>
   );
 }

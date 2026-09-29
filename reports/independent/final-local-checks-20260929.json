@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "date": "2026-09-29",
+  "classification": "local-engineering-verification-not-live-factual-acceptance",
+  "applicationSourceSha256": "740e199c249bc0228936190efb3a19fba9ae6015e87430a9c1be175d49f8f84a",
+  "sourceHashUnchangedAcrossBuildAndFinalOfflineSuite": true,
+  "contentFingerprint": "ad61f1c419e35210499f51108cc152296f2c870848c1f5ea0d4df3d5c07d3a15",
+  "gitHead": "b490f55f4a66090dee59fca901dcbd24919da005",
+  "workingTree": "uncommitted repairs; no staging, commit or push",
+  "localServerConfiguration": {
+    "provider": "mock",
+    "model": "mock-local",
+    "deploymentMode": "prototype",
+    "database": ":memory:",
+    "serverHistory": "disabled",
+    "authSecret": "generated ephemeral value; not retained in this report"
+  },
+  "commands": [
+    { "command": "npm run build", "exitCode": 0 },
+    { "command": "npm run lint", "exitCode": 0 },
+    { "command": "npx tsc --noEmit --incremental false", "exitCode": 0 },
+    { "command": "npm run test:offline", "exitCode": 0, "realProviderCalls": 0 },
+    { "command": "npm run test:browser", "passed": 23, "failed": 0, "skipped": 0, "flaky": 0, "apiTraffic": "mocked" },
+    { "command": "node tests/http-smoke.mjs http://127.0.0.1:3219", "passed": 10, "failed": 0, "account": "synthetic in-memory only", "provider": "mock" },
+    { "command": "npm run eval:sources", "passed": 77, "failed": 0, "meaning": "availability/redirect/PDF-signature/soft-404 only; not factual verification" },
+    { "command": "node scripts/check-evaluation-report.mjs reports/independent/post-repair-round-6.html", "exitCode": 0, "sections": 100, "viewportWidths": [1280, 390], "horizontalOverflow": false, "visualInspection": "mobile summary and Arabic response rendering inspected" }
+  ],
+  "selectedOfflineCheckCounts": {
+    "pipelineRouteCalls": 25,
+    "independentScopeCases": 16,
+    "semanticFaultCases": 30,
+    "canonicalCases": 26,
+    "academicContentCases": 15,
+    "serviceContentCases": 14,
+    "knowledgePortabilityAssertions": 6,
+    "sourceEvidenceCases": 18,
+    "claimVerifierCases": 23,
+    "uiSecurityCases": 20,
+    "accountOwnershipCases": 52,
+    "sourceResponseCases": 9,
+    "providerDeadlineCases": 12,
+    "providerRetryCases": 21,
+    "reportIntegrityCases": 12,
+    "commonMockCases": 100,
+    "alignmentMockCases": 80
+  },
+  "latestLiveRun": {
+    "label": "post-repair-round-6",
+    "rawSha256": "0f8775181d898ba94af655219365d77528ff20e658c40603bb435eedfb1ec242",
+    "fixtureSha256": "b47023decd00a3c51739ff3f17fb7a97fdcca35f92f6578e943e009b742ac3cc",
+    "sourceSha256": "da92aec395473bc4e33fbbcd049322b1906e5a6d4a0e61bd8cff6bdf9233c812",
+    "reviewFile": "post-repair-round-6-reviews-v2.json",
+    "verified": 85,
+    "appropriateClarification": 2,
+    "safeLimitation": 3,
+    "needsFix": 10,
+    "releasePassed": false
+  },
+  "finalLiveVerification": "not run after latest fixes: credit_balance_exhausted confirmed by separate minimal diagnostic",
+  "releaseStatus": "blocked; not pushed"
+}

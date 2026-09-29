@@ -41,6 +41,21 @@ export function jsonNoStore(
   return noStore(NextResponse.json(body, init));
 }
 
+// A consistency assertion, not authentication: the validated cookie remains the
+// authority. Reject stale tabs before they can attribute one account's context
+// or history operation to another account (or silently downgrade to a guest).
+export function accountOwnershipGuard(req: Request, actualUserId: string | null): NextResponse | null {
+  const expected = req.headers.get('x-chat-account-id');
+  const matches = actualUserId
+    ? expected === actualUserId
+    : expected === null || expected === 'guest';
+  if (matches) return null;
+  return jsonNoStore({
+    error: 'Your account changed. Check your current sign-in status before continuing.',
+    code: 'account_changed',
+  }, { status: 409 });
+}
+
 function isJsonContentType(contentType: string): boolean {
   return /^application\/(?:[\w.+-]+\+)?json\b/i.test(contentType);
 }
@@ -78,7 +93,22 @@ export async function readJsonRequest<T>(
 
   let raw = "";
   try {
-    raw = await req.text();
+    const reader = req.body?.getReader();
+    const decoder = new TextDecoder();
+    let bytes = 0;
+    if (reader) {
+      while (true) {
+        const part = await reader.read();
+        if (part.done) break;
+        bytes += part.value.byteLength;
+        if (bytes > maxBytes) {
+          await reader.cancel();
+          return { ok: false, response: jsonNoStore({ error: "Request body is too large." }, { status: 413 }) };
+        }
+        raw += decoder.decode(part.value, { stream: true });
+      }
+      raw += decoder.decode();
+    }
   } catch {
     return {
       ok: false,
@@ -141,6 +171,8 @@ export function sameOriginGuard(req: Request): NextResponse | null {
 }
 
 function clientAddress(req: Request): string {
+  // Forwarded addresses are trusted only when a controlled proxy replaces them.
+  if (process.env.TRUST_PROXY_HEADERS !== "enabled" && process.env.VERCEL !== "1") return "local";
   return (
     req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
     req.headers.get("x-real-ip")?.trim() ||
