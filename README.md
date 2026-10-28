@@ -56,6 +56,7 @@ lib/
   semantic-routing.ts       Same-provider closed-catalog query interpretation
   source-evidence.ts        Per-source facts and bounded claim consistency checks
   knowledge-files.ts        Approved-source validation and lexical retrieval
+  curriculum-retrieval.ts    Cohort-aware extractive lookup for approved major/course records
   vector-rag.ts             Fingerprinted optional Gemini embedding retrieval
   service-guides.ts         Structured guide loading and matching
   analytics.ts              Privacy-safe aggregate analytics
@@ -73,8 +74,8 @@ data/
 
 1. Resolve the response language and carry the subject of short follow-up questions forward.
 2. Handle urgent safety language and explicit human-support requests before ordinary routing.
-3. Match a narrowly-scoped guided service or a verified deterministic answer.
-4. For paraphrases and follow-ups, use the configured provider's compact-catalog selection as a recall hint. The original context-resolved user request remains authoritative; a model rewrite cannot discard its requested fact or change its scope.
+3. For English major, study-plan, credit-breakdown, elective, and selected course-rule questions, extract the matching section from an approved `curriculum: true` Markdown record. No model supplies these facts; the answer carries that record's official citation. If no matching section exists, continue through ordinary routing.
+4. Match a narrowly-scoped guided service or a verified deterministic answer. For paraphrases and follow-ups, use the configured provider's compact-catalog selection as a recall hint. The original context-resolved user request remains authoritative; a model rewrite cannot discard its requested fact or change its scope.
 5. For nondirect answers, make one final relevance selection over at most six eligible full approved answers. Check identity, category, year and requested-fact applicability, then render the chosen localized text without model rewriting. Supporting candidates are not automatically included. If no eligible canonical answer is selected, retrieve only approved source-specific evidence. Generated claims pass deterministic and isolated per-claim model checks with at most one rewrite; rejected claims are withheld. A provider outage is reported as an availability problem, not as evidence that university policy is missing.
 6. Clarify missing user scope or explain a specific evidence gap when the requested fact is unavailable. Do not invent a date, charge, rule, personal status or booking.
 

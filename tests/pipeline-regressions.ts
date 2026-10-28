@@ -6,6 +6,7 @@ process.env.GEMINI_EMBEDDING_SEARCH = "";
 process.env.SERVER_CHAT_HISTORY = "";
 process.env.CHATBOT_DEPLOYMENT_MODE = "prototype";
 process.env.CHATBOT_DURABLE_STORAGE = "";
+process.env.TRUST_PROXY_HEADERS = "enabled";
 
 async function main() {
   const { POST } = await import("../app/api/chat/route");
@@ -89,6 +90,37 @@ async function main() {
     assert.ok(!retrieveVerifiedEvidence(query, 20).some((row) => row.source === "03-undergraduate-admissions.md"), query);
   }
   assert.ok(lexicalRetrieve("What IELTS score does a UAE national undergraduate applicant need?", 20).some((row) => row.source === "03-undergraduate-admissions.md"));
+
+  // New knowledge records are split into independently retrievable sections.
+  // These checks guard against content being present on disk but failing the
+  // lexical fallback that is used when embeddings are unavailable or stale.
+  const knowledgeGapQueries = [
+    ["How much notice is required for a UAEU Library Companion?", "20-library-companion-people-of-determination.md"],
+    ["Can I scan two chapters from the same book in one day?", "21-library-scan-service-copyright-limits.md"],
+    ["I lost my UAEU student ID card. Which office do I report it to?", "22-student-id-card-loss-and-replacement.md"],
+    ["Can I use the library purchase request form for a textbook?", "23-library-resource-purchase-request.md"],
+    ["How many LIWA Tipasa items can a UAEU student borrow?", "24-liwa-tipasa-interlibrary-loan.md"],
+    ["Can UAEU alumni access electronic library resources?", "25-alumni-library-electronic-resources.md"],
+    ["هل يمكنني طلب مرافق في المكتبة لأصحاب الهمم قبل 48 ساعة؟", "20-library-companion-people-of-determination.md"],
+  ] as const;
+  for (const [query, source] of knowledgeGapQueries) {
+    assert.ok(lexicalRetrieve(query, 20).some((row) => row.source === source), `${query} should retrieve ${source}`);
+  }
+  for (const [query, answerId, expectedFact] of [
+    ["At UAEU, how far in advance must I request a Library Companion, and what are its Friday hours?", "library-companion-people-of-determination", "48 hours"],
+    ["What is the UAEU Library's copyright limit for an online scan request? Include the item rule and percentage limit.", "library-online-scan-copyright-limit", "10%"],
+    ["I lost my UAEU student ID card. Which office must I report it to, and is the replacement free or paid?", "lost-student-id-card-replacement", "Admission and Registration Deanship"],
+    ["A book is unavailable in UAEU Library but exists as a printed LIWA item. What should I do before submitting a purchase request?", "library-resource-purchase-liwa-route", "Tipasa"],
+    ["Through LIWA Tipasa, how many items may a UAEU student borrow, for how long, and how many renewals are allowed?", "liwa-tipasa-interlibrary-loan-limits", "one month"],
+    ["Can UAEU alumni use electronic academic library resources with their university account?", "alumni-electronic-library-resources", "university account"],
+    ["هل يمكنني طلب مرافق في مكتبة جامعة الإمارات لأصحاب الهمم؟ وما مهلة تقديم الطلب وساعات يوم الجمعة؟", "library-companion-people-of-determination", "48 ساعة"],
+  ] as const) {
+    const answer = await ask(query);
+    assert.equal(answer.source, "faq", query);
+    assert.equal(answer.faqId, answerId, query);
+    assert.ok(answer.content.includes(expectedFact), query);
+    assert.ok(answer.citations?.some((citation: { url?: string }) => citation.url?.includes("uaeu.ac.ae")), query);
+  }
 
   const gpa = retrieveVerifiedEvidence("What is the minimum GPA required to graduate from UAEU?");
   assert.ok(gpa.some((row) => row.source === "answer:graduation-requirements-program"));

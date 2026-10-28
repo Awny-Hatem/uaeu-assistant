@@ -53,6 +53,8 @@ const SUBJECTS = [
   ["wifi", "campus wifi", /\b(?:wi fi|wifi|wireless)\b|واي فاي|الشبك[ةه] اللاسلكي[ةه]/u],
   ["faculty", "faculty teaching assignment", /\b(?:professor|faculty member|lecturer|instructor .*teach)\b|الاستاذ|الدكتور.*يدرس/u],
   ["information-security", "Information Security study plan", /\binformation security\b|امن المعلومات/u],
+  ["information-technology", "Information Technology study plan", /\binformation technology\b|\bit (?:major|degree|study plan|student)\b|تقني[ةه] المعلومات/u],
+  ["mechanical-engineering", "Mechanical Engineering study plan", /\bmechanical engineering\b|الهندس[ةه] الميكانيكي[ةه]/u],
   ["computer-science", "Computer Science study plan", /\bcomputer science\b|\bcs (?:major|student|courses)|علوم (?:الحاسوب|الكمبيوتر)/u],
   ["counseling", "counseling", /\bcounsel(?:l)?ing\b|ارشاد نفسي|الارشاد النفسي/u],
   ["medical", "medical services", /\b(?:medical|health clinic)\b|العياد[ةه]|خدمات صحي[ةه]/u],

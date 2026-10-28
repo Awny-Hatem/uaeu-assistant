@@ -1025,6 +1025,29 @@ async function main() {
       },
     },
     {
+      name: "course citations prefer a specific record while preserving a plan-only fallback",
+      run: () => {
+        const query = "How many credit hours is CSBP319?";
+        const planRow = {
+          source: "16-information-technology-study-plan.md",
+          score: 100,
+          text: "CSBP319 Data Structures is a three-credit required college course in Information Technology.",
+        };
+        const courseRow = {
+          source: "02-csbp319-data-structures.md",
+          score: 10,
+          text: "CSBP319 Data Structures is a three-credit course.",
+        };
+        const specific = citationsFromRows([planRow, courseRow], query);
+        assert.equal(specific.length, 1);
+        assert.match(specific[0]?.url ?? "", /CSBP319/i);
+
+        const planOnly = citationsFromRows([planRow], query);
+        assert.equal(planOnly.length, 1);
+        assert.match(planOnly[0]?.url ?? "", /bachelor-of-science-in-information-technology/);
+      },
+    },
+    {
       name: "an escalation-only provider reply always becomes visible scoped text",
       run: () => {
         const result = finalizeProviderResponse(

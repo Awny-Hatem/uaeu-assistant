@@ -23,6 +23,7 @@ import { canonicalCandidateIds, evidenceForSemanticRoute, requestedCourseTargets
 import { preserveEvidenceQualifications } from "@/lib/answer-qualifiers";
 import { sourceEvidence, sourceEvidenceContext, sourceClaimViolations, type SourceEvidence } from "@/lib/source-evidence";
 import { verifySourceClaims } from "@/lib/claim-verifier";
+import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -817,6 +818,22 @@ export async function POST(req: Request) {
     const payload: AssistantPayload = { role: "assistant", source: "escalated", stateLabel: "clarify_course_identity", disposition: "clarify", escalationReason: "low_confidence", clarificationReason: "conflicting_course_identity",
       content: locale === "ar" ? `ذكرت الرمز **${conflict.supplied}** والاسم **${conflict.title}**، لكن السجل المتاح لهذا الاسم هو **${conflict.named}**. أيهما تقصد؟`
         : `You supplied **${conflict.supplied}** and **${conflict.title}**, but the available catalog record for that title is **${conflict.named}**. Which course do you mean?`,
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  const curriculum = locale === "en" ? retrieveCurriculumAnswer(routingQuery) : null;
+  if (curriculum) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: curriculum.content,
+      source: "rag",
+      stateLabel: "curriculum_extract",
+      disposition: "answer",
+      citations: [curriculum.citation],
+      evidenceIds: [curriculum.evidenceId],
+      topic: resolution.subject?.key,
+      communications,
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);

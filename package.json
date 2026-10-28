@@ -8,7 +8,7 @@
     "test": "tsx tests/prototype-checks.ts",
     "test:http": "node tests/http-smoke.mjs",
     "test:browser": "playwright test",
-    "test:pipeline": "tsx tests/pipeline-regressions.ts && tsx tests/independent-scope-regressions.ts && tsx tests/admission-calendar-regressions.ts",
+    "test:pipeline": "tsx tests/pipeline-regressions.ts && tsx tests/independent-scope-regressions.ts && tsx tests/admission-calendar-regressions.ts && tsx tests/curriculum-retrieval.ts",
     "test:semantic": "tsx tests/semantic-fault-checks.ts",
     "test:canonical": "tsx tests/canonical-rendering-checks.ts",
     "test:content": "tsx tests/academic-content-checks.ts && tsx tests/service-content-checks.ts && tsx tests/knowledge-portability-checks.ts",

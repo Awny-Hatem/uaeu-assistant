@@ -296,7 +296,7 @@ async function main() {
     assert.equal(health.readiness.generation, false);
     assert.equal(health.build.revision, "test-build-revision");
     assert.match(health.knowledge.contentFingerprint, /^[a-f0-9]{64}$/);
-    assert.equal(health.knowledge.retrieval.activePath, "lexical");
+    assert.equal(health.knowledge.retrieval.activePath, "curriculum-extract-then-lexical");
     assert.equal(health.knowledge.retrieval.embedding, "disabled");
     assert.equal(health.deployment.productionReady, false);
     delete process.env.AI_PROVIDER;

@@ -13,6 +13,7 @@ export type KnowledgeDocument = {
   title: string;
   sourceUrl: string;
   lastVerified: string;
+  curriculum?: boolean;
   scope?: EvidenceScope;
 };
 
@@ -77,6 +78,7 @@ export function parseApprovedDocument(
     title: metadata.title,
     sourceUrl: metadata.sourceurl,
     lastVerified: metadata.lastverified,
+    curriculum: metadata.curriculum === "true",
     scope: {
       courseCodes: metadata.coursecodes?.split(",").map((code) => code.trim().toUpperCase()),
       subjects: metadata.subjects?.split(",").map((subject) => subject.trim()),
@@ -107,7 +109,7 @@ export function knowledgeFingerprint(): string {
   for (const document of loadKnowledgeMarkdown()) {
     hash.update(document.filename);
     hash.update("\0");
-    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, scope: document.scope }));
+    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, curriculum: document.curriculum, scope: document.scope }));
     hash.update("\0");
   }
   return hash.digest("hex");

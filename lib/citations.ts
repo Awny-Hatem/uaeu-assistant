@@ -68,6 +68,11 @@ export function citationsFromRows(
     );
   }
 
+  const hasIdentifierMatch = [...bestScoreBySource.keys()].some((source) => {
+    const document = approvedDocuments.get(source);
+    return document && [...identifiers].some((identifier) => document.title.toLowerCase().includes(identifier));
+  });
+
   const relevantSources = new Set(
     [...bestScoreBySource].flatMap(([source, score]) => {
       const document = approvedDocuments.get(source);
@@ -76,6 +81,9 @@ export function citationsFromRows(
       const titleNamesRequestedIdentifier = [...identifiers].some((identifier) =>
         title.includes(identifier),
       );
+      if (identifiers.size > 0 && hasIdentifierMatch) {
+        return titleNamesRequestedIdentifier ? [source] : [];
+      }
       const nearTop = topScore === 0 || score >= topScore * 0.75;
       return nearTop || titleNamesRequestedIdentifier ? [source] : [];
     }),
