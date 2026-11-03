@@ -107,6 +107,35 @@ function readKey(name: string): string | null {
   return value ? value : null;
 }
 
+type OpenAiKey = {
+  value: string;
+  role: "primary" | "backup";
+};
+
+/**
+ * `openai_key` is the rotating primary key. The established
+ * `OPENAI_API_KEY` remains a hot backup so an exhausted or revoked primary
+ * does not take the chat service down. Keep both values in deployment secrets
+ * (or .env.local for local development), never in source control.
+ */
+function openAiKeys(): OpenAiKey[] {
+  const primary = readKey("openai_key");
+  const backup = readKey("OPENAI_API_KEY");
+  const keys: OpenAiKey[] = [];
+  if (primary) keys.push({ value: primary, role: "primary" });
+  // Avoid a needless duplicate request if a deployment temporarily sets both
+  // variable names to the same secret.
+  if (backup && backup !== primary) keys.push({ value: backup, role: "backup" });
+  return keys;
+}
+
+function shouldFailOverOpenAiKey(error: unknown): boolean {
+  // Quota and authentication failures cannot be repaired by retrying the same
+  // key. The OpenAI error-code contract provides these stable classifications.
+  return error instanceof AiProviderError &&
+    (error.providerStatus === "OPENAI_QUOTA_EXHAUSTED" || error.providerStatus === "OPENAI_AUTH_ERROR");
+}
+
 function providerTimeoutMs(): number {
   const configured = Number.parseInt(process.env.AI_PROVIDER_TIMEOUT_MS ?? "", 10);
   return Number.isFinite(configured)
@@ -151,7 +180,7 @@ export function openAiModel(): string {
 
 export function configuredProviderName(): ProviderName | "none" {
   const preference = process.env.AI_PROVIDER?.trim().toLowerCase();
-  const hasOpenAi = Boolean(readKey("OPENAI_API_KEY"));
+  const hasOpenAi = openAiKeys().length > 0;
   const hasGemini = Boolean(readKey("GEMINI_API_KEY"));
 
   if (preference === "mock") return "mock";
@@ -167,7 +196,9 @@ export function providerHealthSnapshot() {
   const provider = configuredProviderName();
   return {
     provider,
-    openaiConfigured: Boolean(readKey("OPENAI_API_KEY")),
+    openaiConfigured: openAiKeys().length > 0,
+    openaiPrimaryConfigured: Boolean(readKey("openai_key")),
+    openaiBackupConfigured: Boolean(readKey("OPENAI_API_KEY")),
     geminiConfigured: Boolean(readKey("GEMINI_API_KEY")),
     crossProviderFallback: crossProviderFallbackEnabled(),
     model:
@@ -214,16 +245,7 @@ function publicProviderMessage(status: number, provider: string, message: string
   return `${provider} request failed. Please try again or check the provider configuration.`;
 }
 
-async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderResult> {
-  const key = readKey("OPENAI_API_KEY");
-  if (!key) {
-    throw new AiProviderError({
-      status: 503,
-      providerStatus: "OPENAI_KEY_MISSING",
-      publicMessage: "OPENAI_API_KEY is not configured.",
-    });
-  }
-
+async function generateWithOpenAiAttempt(args: GenerateArgs, key: string): Promise<ProviderResult> {
   const model = openAiModel();
   let response: Response;
   let raw: string;
@@ -291,11 +313,11 @@ async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderRe
   return providerResult(text, "openai", model, args.evidenceIds);
 }
 
-async function generateWithOpenAi(args: GenerateArgs): Promise<ProviderResult> {
+async function generateWithOpenAiKey(args: GenerateArgs, key: string): Promise<ProviderResult> {
   const deadlineAt = args.deadlineAt ?? Date.now() + providerTimeoutMs();
   for (let retry = 0; ; retry += 1) {
     try {
-      return await generateWithOpenAiAttempt({ ...args, deadlineAt });
+      return await generateWithOpenAiAttempt({ ...args, deadlineAt }, key);
     } catch (error) {
       if (!(error instanceof AiProviderError) || !error.retryable || retry >= MAX_OPENAI_RETRIES) throw error;
       const baseWait = error.retryAfterMs ?? 500 * 2 ** retry;
@@ -307,6 +329,26 @@ async function generateWithOpenAi(args: GenerateArgs): Promise<ProviderResult> {
       // The next attempt rechecks the original absolute deadline. A delayed
       // timer/event loop cannot restart the answer's budget.
     }
+  }
+}
+
+async function generateWithOpenAi(args: GenerateArgs): Promise<ProviderResult> {
+  const [primary, backup] = openAiKeys();
+  if (!primary) {
+    throw new AiProviderError({
+      status: 503,
+      providerStatus: "OPENAI_KEY_MISSING",
+      publicMessage: "Neither openai_key nor OPENAI_API_KEY is configured.",
+    });
+  }
+
+  try {
+    return await generateWithOpenAiKey(args, primary.value);
+  } catch (error) {
+    if (!backup || !shouldFailOverOpenAiKey(error)) throw error;
+    assertAnswerDeadline(args.deadlineAt);
+    console.warn(`OpenAI ${primary.role} key cannot serve this request; using the backup key.`);
+    return generateWithOpenAiKey(args, backup.value);
   }
 }
 
@@ -394,7 +436,7 @@ export async function generateAssistantResponse(
       return await generateWithGemini(args);
     } catch (error) {
       if (args.deadlineAt !== undefined && (!Number.isFinite(args.deadlineAt) || Date.now() >= args.deadlineAt)) throw error;
-      if (crossProviderFallbackEnabled() && readKey("OPENAI_API_KEY")) {
+      if (crossProviderFallbackEnabled() && openAiKeys().length > 0) {
         console.warn("Gemini generation failed; using the explicitly enabled OpenAI fallback.");
         return generateWithOpenAi(args);
       }
@@ -406,7 +448,7 @@ export async function generateAssistantResponse(
     status: 503,
     providerStatus: "NO_AI_PROVIDER",
     publicMessage:
-      "No AI provider is configured. Add OPENAI_API_KEY to .env.local or configure GEMINI_API_KEY as a fallback.",
+      "No AI provider is configured. Add openai_key (primary) or OPENAI_API_KEY (backup) to .env.local, or configure GEMINI_API_KEY as a fallback.",
   });
 }
 

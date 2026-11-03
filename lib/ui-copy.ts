@@ -22,8 +22,10 @@ export const uiCopy = {
     contact: "Contact UAEU staff", remaining: "questions remaining", used: "questions used", left: "left", of: "of",
     studentDocuments: "Student documents", academicDates: "Academic dates", library: "Library help", staff: "Talk to staff",
     conversation: "Conversation", faq: "Official-source answer", rag: "Source-based answer", web: "External grounding", guide: "Guided service", clarify: "More detail needed", handoff: "Staff assistance", urgent: "Urgent assistance", error: "System notice",
+    darkMode: "Dark mode", lightMode: "Light mode", skipToConversation: "Skip to conversation", assistantSettings: "Assistant settings and account", yourMessage: "Your message", assistantMessage: "Assistant message",
   },
   ar: {
+    darkMode: "الوضع الليلي", lightMode: "الوضع النهاري", skipToConversation: "الانتقال إلى المحادثة", assistantSettings: "إعدادات المساعد والحساب", yourMessage: "رسالتك", assistantMessage: "رسالة المساعد",
     signIn: "تسجيل الدخول", create: "إنشاء حساب", signOut: "تسجيل الخروج", clear: "مسح المحادثة",
     language: "لغة الإجابة", auto: "تلقائي", english: "English", arabic: "العربية",
     visitor: "زائر", account: "حساب تجريبي", visitorAccess: "وصول الزائر", browserSession: "جلسة محلية في المتصفح",

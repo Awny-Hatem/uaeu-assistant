@@ -5,7 +5,7 @@ import { AiProviderError, generateAssistantResponse, providerRequestSignal } fro
 const originalFetch = globalThis.fetch;
 const originalNow = Date.now;
 const originalTimeout = AbortSignal.timeout;
-const environmentKeys = ["AI_PROVIDER", "OPENAI_API_KEY", "GEMINI_API_KEY", "AI_PROVIDER_FALLBACK", "AI_PROVIDER_TIMEOUT_MS"] as const;
+const environmentKeys = ["AI_PROVIDER", "openai_key", "OPENAI_API_KEY", "GEMINI_API_KEY", "AI_PROVIDER_FALLBACK", "AI_PROVIDER_TIMEOUT_MS"] as const;
 const previousEnvironment = Object.fromEntries(environmentKeys.map(key => [key, process.env[key]]));
 let now = 1000;
 let timeoutCalls: number[] = [];
@@ -22,6 +22,7 @@ async function check(name: string, fn: () => void | Promise<void>) {
   requests = [];
   now = 1000;
   process.env.AI_PROVIDER = "openai";
+  process.env.openai_key = "synthetic-budget-primary-key";
   process.env.OPENAI_API_KEY = "synthetic-budget-openai-key";
   process.env.GEMINI_API_KEY = "synthetic-budget-gemini-key";
   process.env.AI_PROVIDER_FALLBACK = "";

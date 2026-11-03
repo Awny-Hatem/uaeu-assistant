@@ -7,6 +7,7 @@ import { jsonNoStore } from "@/lib/request-security";
 import { authCookieSecretConfigured } from "@/lib/session-cookie";
 import { loadEmbeddingChunks } from "@/lib/vector-rag";
 import { runtimeContract } from "@/lib/runtime-contract";
+import { sourceCoverageSnapshot } from "@/lib/source-registry";
 import { createHash } from "node:crypto";
 
 export const runtime = "nodejs";
@@ -20,6 +21,7 @@ export async function GET() {
   const embeddings = loadEmbeddingChunks(embeddingModel());
   const authConfigured = authCookieSecretConfigured();
   const contract = runtimeContract();
+  const sourceCoverage = sourceCoverageSnapshot();
   const coreKnowledgeReady =
     answerPacks.complete && knowledgeFiles.length >= 7 && serviceGuides.length >= 1;
 
@@ -63,6 +65,7 @@ export async function GET() {
       },
       approvedMarkdownFiles: knowledgeFiles.length,
       verifiedAnswers: verifiedAnswers.length,
+      coverage: sourceCoverage,
       sourceEvidence: {
         mappedReferences: verifiedAnswers.flatMap(({ citations }) => citations).filter(({ evidenceText }) => Boolean(evidenceText)).length,
         unmappedMultiSourceReferences: verifiedAnswers.filter(({ citations }) => citations.length > 1).flatMap(({ citations }) => citations).filter(({ evidenceText }) => !evidenceText).length,
