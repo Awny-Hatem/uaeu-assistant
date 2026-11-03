@@ -182,7 +182,7 @@ Final API statuses below are Codex source-review outcomes for the fixed branch; 
 | CQ084 | ❌ Incorrect | ✅ Correct |
 | CQ085 | ❌ Incorrect | ✅ Correct |
 | CQ086 | ❌ Incorrect | ✅ Correct |
-| CQ087 | ❌ Incorrect | ✅ Correct |
+| CQ087 | ❌ Incorrect | ⚠️ Partly correct |
 | CQ089 | ⚠️ Partly correct | ✅ Correct |
 | CQ091 | ❌ Incorrect | ✅ Correct |
 | CQ092 | ❌ Incorrect | ✅ Correct |

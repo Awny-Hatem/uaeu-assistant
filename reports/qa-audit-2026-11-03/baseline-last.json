@@ -1,0 +1,332 @@
+{
+  "startedAt": "2026-11-03T19:45:21.270Z",
+  "base": "http://127.0.0.1:3001",
+  "label": "baseline-last",
+  "methodology": "Fixed expected-fact and citation checks, not an independent official-source truth proof. Human review required for semantic completeness. Published audit47/17/38 is separate from this automated local baseline.",
+  "publishedHumanBaseline": {
+    "correct": 47,
+    "partial": 17,
+    "incorrect": 38
+  },
+  "results": [
+    {
+      "id": "NQ195",
+      "original": false,
+      "auditResult": null,
+      "focus": "Phrasing Sensitivity",
+      "group": "it-elective-count",
+      "turns": [
+        "How many major elective credits and courses are required for Information Technology at UAEU?"
+      ],
+      "expected": "The published IT catalog requires3major electives totaling9credits; do not substitute IS2courses/6credits.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Nine major-elective credits",
+          "any": [
+            "\\b9\\b",
+            "nine",
+            "تسع"
+          ]
+        },
+        {
+          "name": "Three courses",
+          "any": [
+            "\\b3\\b",
+            "three",
+            "ثلاث"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "conversation": [
+        {
+          "user": "How many major elective credits and courses are required for Information Technology at UAEU?",
+          "status": 200,
+          "seconds": 0.4,
+          "payload": {
+            "role": "assistant",
+            "content": "## Information Technology degree credit breakdown\n\nThe published catalog page specifies a minimum of 120 credit hours: 21 general education, 41 college requirements, 37 major requirements, 6 internship, 9 major electives (three courses), and 6 free electives. The separate 2025–26 cohort model plan PDF is labeled 130 total credit hours, so do not apply the catalog's 120-credit total to that cohort without a degree-audit confirmation.\n\nThis is the published curriculum, not a check of your individual degree audit or current course eligibility.",
+            "source": "rag",
+            "stateLabel": "curriculum_extract",
+            "disposition": "answer",
+            "citations": [
+              {
+                "title": "UAEU Information Technology degree credits and major electives",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Information Technology degree credit breakdown"
+              }
+            ],
+            "evidenceIds": [
+              "knowledge:30-information-technology-degree-requirements.md"
+            ],
+            "topic": "information-technology",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Nine major-elective credits",
+            "passed": true,
+            "patterns": [
+              "\\b9\\b",
+              "nine",
+              "تسع"
+            ]
+          },
+          {
+            "name": "Three courses",
+            "passed": true,
+            "patterns": [
+              "\\b3\\b",
+              "three",
+              "ثلاث"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "4c0ec2aa24b858ae7eac31b36a925e55c2aeb2e0b7ec0cdb35bfe4906ec255d8",
+    "files": 105
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "ec3ad31e5d369151dc94cfe65df38d44a37c5c97f321be4a3280b11763bb09ac",
+      "retrieval": {
+        "primary": "scoped-canonical-answers-with-closed-catalog-semantic-selection",
+        "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "curriculum-extract-then-canonical-selection-and-guarded-generation-fallback"
+      },
+      "approvedMarkdownFiles": 30,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "3a232832739d820c892644710bbe1e9d4897c62c8a4169096da7e39e80a39a21"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "counts": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-03T19:45:24.347Z",
+  "runtimeAfter": {
+    "sha256": "4c0ec2aa24b858ae7eac31b36a925e55c2aeb2e0b7ec0cdb35bfe4906ec255d8",
+    "files": 105
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "ec3ad31e5d369151dc94cfe65df38d44a37c5c97f321be4a3280b11763bb09ac",
+      "retrieval": {
+        "primary": "scoped-canonical-answers-with-closed-catalog-semantic-selection",
+        "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "curriculum-extract-then-canonical-selection-and-guarded-generation-fallback"
+      },
+      "approvedMarkdownFiles": 30,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "3a232832739d820c892644710bbe1e9d4897c62c8a4169096da7e39e80a39a21"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "originalCounts": {
+    "correct": 0,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "newCounts": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "identicalAnswerGroups": []
+}
