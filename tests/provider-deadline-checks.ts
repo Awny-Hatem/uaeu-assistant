@@ -5,7 +5,7 @@ import { AiProviderError, generateAssistantResponse, providerRequestSignal } fro
 const originalFetch = globalThis.fetch;
 const originalNow = Date.now;
 const originalTimeout = AbortSignal.timeout;
-const environmentKeys = ["AI_PROVIDER", "openai_key", "OPENAI_API_KEY", "GEMINI_API_KEY", "AI_PROVIDER_FALLBACK", "AI_PROVIDER_TIMEOUT_MS"] as const;
+const environmentKeys = ["AI_PROVIDER", "openai_key", "OPENAI_KEY", "OPENAI_API_KEY", "OPENAI", "GEMINI_API_KEY", "AI_PROVIDER_FALLBACK", "AI_PROVIDER_TIMEOUT_MS"] as const;
 const previousEnvironment = Object.fromEntries(environmentKeys.map(key => [key, process.env[key]]));
 let now = 1000;
 let timeoutCalls: number[] = [];
@@ -23,7 +23,9 @@ async function check(name: string, fn: () => void | Promise<void>) {
   now = 1000;
   process.env.AI_PROVIDER = "openai";
   process.env.openai_key = "synthetic-budget-primary-key";
+  process.env.OPENAI_KEY = "synthetic-budget-primary-key";
   process.env.OPENAI_API_KEY = "synthetic-budget-openai-key";
+  delete process.env.OPENAI;
   process.env.GEMINI_API_KEY = "synthetic-budget-gemini-key";
   process.env.AI_PROVIDER_FALLBACK = "";
   delete process.env.AI_PROVIDER_TIMEOUT_MS;
@@ -119,8 +121,8 @@ async function main() {
       };
       const result = await generateAssistantResponse({ ...args, deadlineAt: 2000 });
       assert.equal(result.provider, "gemini");
-      assert.deepEqual(timeoutCalls, [1000, 100]);
-      assert.equal(requests.length, 2);
+      assert.deepEqual(timeoutCalls, [1000, 100, 100]);
+      assert.equal(requests.length, 3);
     });
     await check("an exhausted first call cannot start the configured fallback", async () => {
       process.env.AI_PROVIDER_FALLBACK = "enabled";

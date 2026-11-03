@@ -106,7 +106,9 @@ Future UAEU integration could expose stable UI markers such as `data-help-id="do
 Create `.env.local` from `.env.example`:
 
 ```bash
-OPENAI_API_KEY=your-openai-api-key
+OPENAI_KEY=your-primary-openai-api-key
+OPENAI_API_KEY=your-backup-openai-api-key
+OPENAI=your-university-openai-api-key
 # AI_PROVIDER=openai
 # OPENAI_CHAT_MODEL=gpt-4.1-mini
 # AI_PROVIDER_TIMEOUT_MS=20000
@@ -125,6 +127,8 @@ OPENAI_API_KEY=your-openai-api-key
 Set `AI_PROVIDER=openai` or `AI_PROVIDER=gemini` explicitly in deployment. A missing key for that selected provider is an error; it does not silently switch vendors. Cross-provider fallback is disabled unless `AI_PROVIDER_FALLBACK=enabled`; enabling it means the retained conversation context may be sent to the second configured vendor after the first fails. Provider calls default to a 20-second timeout and can be changed with `AI_PROVIDER_TIMEOUT_MS`.
 
 Transient OpenAI network, rate-limit and server failures receive at most two retries within the existing absolute answer deadline. Backoff respects a valid server minimum and declines excessive waits; confirmed billing/quota, credential and invalid-request errors are not retried. Missing rate-limit subtype is labelled unclassified rather than guessed. Retry handling follows the [official rate-limit guidance](https://developers.openai.com/api/docs/guides/rate-limits); it cannot restore exhausted account credits or guarantee availability. Claim-verification batches settle all bounded sibling calls before returning.
+
+OpenAI accepts the three aliases above (plus the legacy `openai_key` name), deduplicates identical values, and fails over through every distinct configured key when a key cannot serve the request. Set `AI_PROVIDER_FALLBACK=enabled` to use Gemini after all OpenAI keys fail.
 
 Live Gemini embedding search is separately opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`. `AUTH_COOKIE_SECRET` is required for account/session features, must be a dedicated random value of at least 32 characters, and seals device-local auth cookies with authenticated encryption. Generate a different secret for every environment (for example, `openssl rand -base64 48`) and never commit it. Server-side raw chat history is disabled unless `SERVER_CHAT_HISTORY=enabled`. Local development stores SQLite in `data/chatbot.db`; Vercel uses temporary `/tmp` storage because the bundled project directory is read-only.
 

@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { AiProviderError, describeAiProviderError, generateAssistantResponse } from '../lib/ai-provider';
 
 const originals = { fetch: globalThis.fetch, now: Date.now, timeout: AbortSignal.timeout, random: Math.random, setTimeout: globalThis.setTimeout };
-const keys = ['AI_PROVIDER', 'openai_key', 'OPENAI_API_KEY', 'GEMINI_API_KEY', 'AI_PROVIDER_FALLBACK', 'AI_PROVIDER_TIMEOUT_MS'] as const;
+const keys = ['AI_PROVIDER', 'openai_key', 'OPENAI_KEY', 'OPENAI_API_KEY', 'OPENAI', 'GEMINI_API_KEY', 'AI_PROVIDER_FALLBACK', 'AI_PROVIDER_TIMEOUT_MS'] as const;
 const previous = Object.fromEntries(keys.map(key => [key, process.env[key]]));
 const args = { system: 'Synthetic retry test', messages: [{ role: 'user' as const, content: 'Synthetic question only' }] };
 const success = () => new Response(JSON.stringify({ status: 'completed', output_text: 'Synthetic answer' }));
@@ -22,7 +22,9 @@ async function check(name: string, run: () => void | Promise<void>) {
   now = 1_000; waits = []; signals = []; requests = []; timerOvershoot = 0;
   process.env.AI_PROVIDER = 'openai';
   process.env.openai_key = 'synthetic-primary-key';
-  process.env.OPENAI_API_KEY = 'synthetic-retry-key';
+  process.env.OPENAI_KEY = 'synthetic-primary-key';
+  process.env.OPENAI_API_KEY = 'synthetic-primary-key';
+  delete process.env.OPENAI;
   process.env.GEMINI_API_KEY = 'synthetic-unused-key';
   delete process.env.AI_PROVIDER_FALLBACK;
   delete process.env.AI_PROVIDER_TIMEOUT_MS;
@@ -91,6 +93,7 @@ async function main() {
       }
     });
     await check('a quota-exhausted primary key immediately replays the unchanged request with the backup key', async () => {
+      process.env.OPENAI_API_KEY = 'synthetic-retry-key';
       handler = attempt => attempt === 1 ? failure(429, 'credit_balance_exhausted') : success();
       assert.equal((await generateAssistantResponse(args)).text, 'Synthetic answer');
       assert.equal(requests.length, 2);
@@ -98,6 +101,18 @@ async function main() {
       assert.equal(requests[1].authorization, 'Bearer synthetic-retry-key');
       assert.deepEqual(requests[0].body, requests[1].body);
       assert.deepEqual(waits, []);
+    });
+    await check('three distinct OpenAI keys fail over in configured order', async () => {
+      process.env.OPENAI_API_KEY = 'synthetic-second-key';
+      process.env.OPENAI = 'synthetic-third-key';
+      handler = attempt => attempt <= 2 ? failure(429, 'credit_balance_exhausted') : success();
+      assert.equal((await generateAssistantResponse(args)).text, 'Synthetic answer');
+      assert.equal(requests.length, 3);
+      assert.deepEqual(requests.map(request => request.authorization), [
+        'Bearer synthetic-primary-key',
+        'Bearer synthetic-second-key',
+        'Bearer synthetic-third-key',
+      ]);
     });
     await check('quota type suppresses retries even under HTTP503 or an unfamiliar error code', async () => {
       process.env.OPENAI_API_KEY = process.env.openai_key;
