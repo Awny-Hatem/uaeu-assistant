@@ -21,8 +21,8 @@ function check(name: string, run: () => void) {
 }
 
 // Content-regression checks, not live verification or a proof of source entailment.
-check("45 service records retain bilingual answers and mapped official sources", () => {
-  assert.equal(entries.length, 45);
+check("46 service records retain bilingual answers and mapped official sources", () => {
+  assert.equal(entries.length, 46);
   assert.equal(new Set(entries.map(item => item.id)).size, entries.length);
   for (const item of entries) {
     assert.ok(item.answer_en.length > 20 && item.answer_ar.length > 20, item.id);
@@ -74,6 +74,12 @@ check("combined password and MFA recovery keeps the two supported paths separate
   assert.match(record.answer_en, /UITS Help Desk/);
   assert.match(record.answer_en, /never send a password or authentication code/);
   assert.ok(record.citations.some(source => source.url === "https://selfservice.uaeu.ac.ae/"));
+});
+check("housing and academic transfer records remain separate", () => {
+  const record = entry("housing-records-are-not-academic-transfer-credit");
+  assert.match(record.answer_en, /not.*academic credit/i);
+  assert.match(record.answer_en, /Rooms Assignment Service/);
+  assert.ok(record.citations.some(source => source.url.includes("serviceId=106")));
 });
 check("housing cost does not infer scholarship exceptions", () => {
   const record = entry("student-housing-cost");

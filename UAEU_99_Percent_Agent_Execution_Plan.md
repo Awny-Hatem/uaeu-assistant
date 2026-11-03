@@ -334,6 +334,18 @@ Keep the existing dark-mode and accessibility work, then complete:
 - Add targeted route tests and browser-visible error states.
 - Re-run the 100-case smoke suite: branch reached 92.8/100 with zero failures.
 
+### Targeted coverage slice — completed
+
+Before the full evaluation-hardening sprint, the branch received deterministic coverage for the highest-value partial cases identified in the 92.8 run:
+
+- course-planning capability boundaries, national-curriculum equivalency, and unscoped graduation-deadline rumors;
+- housing records versus academic transfer credit and lost-student-ID fee uncertainty;
+- credential reuse refusal and authenticated personal-hold boundaries;
+- direct portal-action review/confirmation boundaries, including requests that attempt to skip review;
+- bilingual privacy/action-boundary handling and regression tests for every new route.
+
+The complete offline suite passes after this slice: common questions 100/100, alignment 80/80, and all agent, grounding, security, integrity, content, deadline/retry, and canonical checks pass. The last full 100-case deployed benchmark remains 92.8 until a new deployment is evaluated; no 99% claim is made from local regression results alone.
+
 ### Sprint 2 — strengthen evaluation — next
 
 - Add claim ledgers and severity.

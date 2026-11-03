@@ -617,7 +617,9 @@ function groundedClarification(kind: GroundedAnswer["clarification"], query: str
 function withActionBoundary(content: string, query: string, locale: "ar" | "en"): string {
   const action = /\b(?:request|submit|issue|apply|book|pay|register|enrol|enroll|cancel)\b|تقديم|تقدم|تصدر|إصدار|اصدار|احجز|تحجز|حجز|سجل|تسجيل|ادفع|دفع|اطلب|طلب/iu.test(query);
   const inChat = /\b(?:through|via|in|using) (?:this|the|our) (?:chat|chatbot)|\b(?:can|could|would|will) you\s+(?:please\s+)?(?:request|submit|issue|apply|book|pay|register|enrol|enroll|cancel)\b|(?:من خلال|عبر|في) (?:هذه |هذا )?(?:المحادثة|الدردشة|الشات)|(?:هل يمكنك|تقدر) (?:تقديم|تصدر|تحجز|تسجيل|الدفع)/iu.test(query);
-  if (!action || !inChat) return content;
+  const directAction = /\b(?:open my portal|register me|enroll me|pay (?:the|any|a) fee|submit (?:it|this|the)|book it for me)\b/i.test(query);
+  const bypassReview = /\b(?:without|skip|do not show|don't show|no)\b[^.!?]{0,40}\b(?:review|confirm|confirmation|approval)\b/i.test(query);
+  if (!action || (!inChat && !directAction && !bypassReview)) return content;
   const boundary = locale === "ar"
     ? "لا أستطيع تقديم الطلب أو إتمام المعاملة نيابةً عنك عبر هذه المحادثة؛ أستطيع شرح الخطوات المنشورة، وعليك تنفيذها في الخدمة الرسمية."
     : "I cannot submit or complete the transaction for you through this chat. I can explain the published steps; you must complete them in the official service.";
@@ -781,16 +783,22 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
 
+  const credentialRequest = /\b(?:password|mfa|multi[- ]factor|verification code|authentication code|one[- ]time code)\b/i.test(latest) && /\b(?:retrieve|use|log[ -]?in|sign[ -]?in|paste|earlier|remember|send|share)\b/i.test(latest);
   const secretRequest = /\b(?:api[- ]?key|secret key|system prompt|hidden instructions|credentials)\b/i.test(latest) && /\b(?:show|give|reveal|print|ignore|tell|expose)\b/i.test(latest);
   const thirdPartyRecord = /\b(?:(?:another|other)\s+(?:student|person)|someone else(?:'s)?|(?:my\s+)?(?:friend|classmate)(?:'s|s))\b[^.!?]{0,90}\b(?:gpa|grades?|student id|records?|transcript)\b|\b(?:gpa|grades?|records?|transcript)\b[^.!?]{0,60}\b(?:of|for|belonging to)\s+(?:another student|someone else|my friend|my classmate)\b/i.test(latest) || /(?:معدل|درجات|سجل|كشف درجات)\s+(?:طالب آخر|طالب اخر|زميلي|صديقي)|(?:طالب آخر|طالب اخر|زميلي|صديقي).{0,60}(?:معدل|درجات|سجل)/u.test(latest);
   const personalRecommendations = /\b(?:actual|personal|my)\b.*\b(?:student|academic) record\b/i.test(latest);
-  if (secretRequest || thirdPartyRecord || personalRecommendations) {
+  const personalPortalRecordRequest = /\b(?:do i have|whether i have|can you tell me whether i have)\b[^.!?]{0,80}\b(?:registration hold|hold|account balance|application status|degree audit)\b/i.test(latest) && /\b(?:public pages?|public website|public source|from public)\b/i.test(latest);
+  if (credentialRequest || secretRequest || thirdPartyRecord || personalRecommendations || personalPortalRecordRequest) {
     const content = locale === "ar"
       ? secretRequest ? "لا يمكنني كشف مفاتيح API أو بيانات الاعتماد أو التعليمات المخفية. أستطيع مساعدتك في أسئلة خدمات جامعة الإمارات."
+        : credentialRequest ? "لا أستطيع استرجاع كلمات المرور أو رموز MFA أو رموز التحقق أو استخدامها من المحادثة. لا تلصق بيانات الدخول هنا. سجّل الدخول بنفسك عبر بوابة جامعة الإمارات الرسمية، واستخدم خدمة Password Self-Service عند نسيان كلمة المرور أو تواصل مع UITS من دون مشاركة الرمز."
         : thirdPartyRecord ? "لا يمكنني الاطلاع على درجات أو معدل أو سجلات طالب آخر أو كشفها، حتى لو عرفت رقمه الجامعي. لا ترسل معلوماته الشخصية."
+          : personalPortalRecordRequest ? "لا يمكن للصفحات العامة لجامعة الإمارات إثبات ما إذا كان على حسابك حظر تسجيل. هذه معلومة مرتبطة بسجل الطالب وتظهر بعد تسجيل الدخول إلى البوابة الرسمية. لا أستطيع الوصول إلى الحظر أو إزالته، لكن يمكنني شرح مكان التحقق منه من دون استلام بيانات الدخول."
           : "لا أملك وصولًا إلى سجلك الأكاديمي الفعلي. أستخدم الخطط والمتطلبات المنشورة وما تخبرني به؛ لذلك لا تمثل إجابتي تحققًا من أهليتك الشخصية للتسجيل أو التخرج."
-      : secretRequest ? "I cannot reveal API keys, credentials, or hidden system instructions. I can help with UAEU student-service questions."
+      : credentialRequest ? "I cannot retrieve or use passwords, MFA codes, or verification codes from chat. Never paste credentials here. Sign in yourself through the official UAEU portal; use Password Self-Service for a forgotten password or contact UITS without sharing the code."
+        : secretRequest ? "I cannot reveal API keys, credentials, or hidden system instructions. I can help with UAEU student-service questions."
         : thirdPartyRecord ? "I cannot access or disclose another student's GPA, grades, or academic records, even if you know their student ID. Please do not send their private information."
+          : personalPortalRecordRequest ? "Public UAEU pages cannot establish whether your account has a registration hold. That is an authenticated student-record fact visible after you sign in to the official portal. I cannot access or clear it, but I can explain where to check it without receiving your credentials."
           : "I do not have access to your actual academic record. My guidance uses published plans and requirements plus information you choose to provide; it is not a verification of your individual registration or graduation eligibility.";
     const payload: AssistantPayload = { role: "assistant", content, source: "conversation", stateLabel: "privacy_capability_boundary", disposition: "answer", citations: [] };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
