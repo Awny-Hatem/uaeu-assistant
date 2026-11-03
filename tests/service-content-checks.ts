@@ -21,8 +21,8 @@ function check(name: string, run: () => void) {
 }
 
 // Content-regression checks, not live verification or a proof of source entailment.
-check("44 service records retain bilingual answers and mapped official sources", () => {
-  assert.equal(entries.length, 44);
+check("45 service records retain bilingual answers and mapped official sources", () => {
+  assert.equal(entries.length, 45);
   assert.equal(new Set(entries.map(item => item.id)).size, entries.length);
   for (const item of entries) {
     assert.ok(item.answer_en.length > 20 && item.answer_ar.length > 20, item.id);
@@ -66,6 +66,14 @@ check("MFA and jobs absence claims are confined to inspected sources", () => {
   assert.doesNotMatch(entry("multi-factor-authentication-reset").answer_en, /public IT pages do not publish/);
   assert.match(entry("internships-student-jobs").answer_en, /inspected Internship System and Career Counseling pages/);
   assert.doesNotMatch(entry("internships-student-jobs").answer_en, /public catalog does not provide/);
+});
+check("combined password and MFA recovery keeps the two supported paths separate", () => {
+  const record = entry("password-and-mfa-recovery");
+  assert.match(record.answer_en, /I Forget My Password/);
+  assert.match(record.answer_en, /does not establish a complete lost-phone MFA-reset procedure/);
+  assert.match(record.answer_en, /UITS Help Desk/);
+  assert.match(record.answer_en, /never send a password or authentication code/);
+  assert.ok(record.citations.some(source => source.url === "https://selfservice.uaeu.ac.ae/"));
 });
 check("housing cost does not infer scholarship exceptions", () => {
   const record = entry("student-housing-cost");

@@ -945,6 +945,38 @@ async function main() {
       },
     },
     {
+      name: "composite transcript question uses one reviewed current-student/alumni answer",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{
+            role: "user",
+            content: "I need a transcript for a job application and then I want to know its cost. Use the same document context on the follow-up and distinguish current-student guidance from alumni rules.",
+          }],
+        });
+        assertFaq(result, "transcript-cost-and-student-status", "clarify");
+        assert.match(result.data.content ?? "", /currently enrolled student/i);
+        assert.match(result.data.content ?? "", /AED 30/i);
+        assert.match(result.data.content ?? "", /alumnus/i);
+      },
+    },
+    {
+      name: "composite password and replaced-phone question uses the reviewed recovery boundary",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{
+            role: "user",
+            content: "I forgot my password and my phone was replaced, so I cannot complete MFA. Which parts can Password Self-Service handle and when should I contact UITS?",
+          }],
+        });
+        assertFaq(result, "password-and-mfa-recovery", "answer");
+        assert.match(result.data.content ?? "", /I Forget My Password/);
+        assert.match(result.data.content ?? "", /UITS Help Desk/);
+        assert.match(result.data.content ?? "", /never send a password or authentication code/i);
+      },
+    },
+    {
       name: "student document workflow returns the verified guided service",
       run: async () => {
         const result = await postJson({

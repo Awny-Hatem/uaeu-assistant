@@ -146,7 +146,10 @@ async function main() {
     assert.equal(plannerCalls, 1);
     assert.equal(writerCalls, 2);
     assert.equal(intercepted, 4, "No unexpected provider/network operation may be hidden by fallback handling");
-    assert.ok(response.status >= 500);
+    assert.equal(response.status, 200);
+    assert.equal(body.source, "escalated");
+    assert.equal(body.answerStatus, "unavailable");
+    assert.equal(body.disposition, "clarify");
     assert.ok(!String(body.content).includes("987654321"));
     assert.deepEqual(body.citations, []);
   });

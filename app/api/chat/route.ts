@@ -45,6 +45,7 @@ type ChatBody = {
 type AssistantPayload = {
   role: "assistant";
   content: string;
+  answerStatus?: import("@/lib/agent-contracts").AgentAnswerStatus;
   source: AssistantSource;
   stateLabel: string;
   citations?: Citation[];
@@ -1086,15 +1087,18 @@ export async function POST(req: Request) {
     const supportRejected = groundingTrace?.status === "rejected" && !groundingTrace.reasonCodes.includes("verification_unavailable");
     const payload: AssistantPayload = {
       role: "assistant",
-      content: supportRejected ? (locale === "ar" ? "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة؛ الإجابات المحفوظة الموثقة ما زالت متاحة." : "The generated answer did not pass the source-support check, so I withheld its unsupported claims. You can retry; verified stored answers remain available.") : locale === "ar" ? "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ يمكنني الاستمرار في تقديم الإجابات المحفوظة الموثقة."
+      content: supportRejected ? (locale === "ar" ? "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة؛ أو حدّد الخدمة أو المساق أو الفصل أو فئة المتقدم لاستخدام سجل موثق أضيق نطاقاً." : "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Retry with the same question, or identify the specific service, course, term, or applicant category so I can use a narrower verified record.") : locale === "ar" ? "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ يمكنني الاستمرار في تقديم الإجابات المحفوظة الموثقة."
         : "I could not complete the answer because the answer service is temporarily unavailable. Please try again shortly; verified stored answers remain available.",
-      source: "error",
+      answerStatus: supportRejected ? "unavailable" : undefined,
+      source: supportRejected ? "escalated" : "error",
       stateLabel: supportRejected ? "grounding_rejected" : "provider_error",
       citations: [],
+      disposition: supportRejected ? "clarify" : undefined,
+      escalationReason: supportRejected ? "low_confidence" : undefined,
       grounding: groundingTrace,
       clarificationReason: groundingTrace?.status === "rejected" ? groundingTrace.reasonCodes.join(",") : providerError.providerStatus,
     };
 
-    return respond(payload, latest, locale, providerError.status);
+    return respond(payload, latest, locale, supportRejected ? 200 : providerError.status);
   }
 }
