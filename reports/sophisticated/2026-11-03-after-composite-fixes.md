@@ -186,7 +186,7 @@ This is an automated triage score, not a formal proof of factual correctness. It
 - Production: **43/100**, fail
 - Branch: **100/100**, pass
 - Production excerpt: The generated answer did not pass the source-support check, so I withheld its unsupported claims. You can retry; verified stored answers remain available.
-- Branch excerpt: **Password reset and lost-phone MFA are separate steps** - **Password Self-Service:** if you forgot the password, open UAEU Password Self-Service and choose **I Forget My Password**. Use **Change My Password** only when you still know the current password. Complete only the official identity-verification prompts. - **Replaced or unavailable phone:** Password Self-Service does not establish a complete lost-phone MFA-reset procedure. If you cannot complete multi-factor sign-in, contact the **UITS 
+- Branch excerpt: **Password reset and lost-phone MFA are separate steps** - **Password Self-Service:** if you forgot the password, open UAEU Password Self-Service and choose **I Forget My Password**. Use **Change My Password** only when you still know the current password. Complete only the official identity-verification prompts. - **Replaced or unavailable phone:** Password Self-Service does not establish a complete lost-phone MFA-reset procedure. If you cannot complete multi-factor sign-in, contact the **UITS**
 
 ## Both deployments failed
 
