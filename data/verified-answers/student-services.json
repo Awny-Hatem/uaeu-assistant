@@ -1583,6 +1583,25 @@
       ]
     },
     {
+      "id": "financial-aid-draft-consent-and-privacy-controls",
+      "category": "portal-boundary",
+      "questions": [
+        "Prepare a financial-aid submission using my passport and bank statement, but do not submit it. What consent, preview, validation, and privacy controls should an agent enforce?"
+      ],
+      "matchPhrases": ["financial aid draft consent preview validation privacy", "prepare aid submission without submitting", "ضوابط مسودة طلب المساعدة المالية والخصوصية"],
+      "answer_en": "**Financial-aid draft and privacy controls**\n- The agent may help prepare a **draft**, but it must not submit the financial-aid request or claim that it did. Keep the passport and bank statement inside the authorized UAEU workflow; do not expose them in chat, logs, prompts or analytics.\n- Before any draft is saved or transferred, obtain informed **consent** describing the documents, destination, purpose and retention. Validate file type, readability, identity match, required fields and malware safety without inventing missing values.\n- Show a complete **preview** of the aid category, fields, attachments, recipients and consequences. Require explicit confirmation for any upload or submission; allow correction, cancellation and deletion before sending.\n- After a confirmed portal write, verify the official receipt/status. If the student asked not to submit, stop at the draft and say clearly that nothing was submitted.\n- UAEU’s public financial-aid guidance supports using the official eServices channel with supporting evidence; it does not authorize this chat to receive or submit personal documents.",
+      "answer_ar": "**مسودة طلب المساعدة المالية وضوابط الخصوصية**\n- يمكن للوكيل إعداد **مسودة** فقط، ولا يجوز له إرسال طلب المساعدة أو الادعاء بأنه أرسله. يجب إبقاء جواز السفر وكشف الحساب داخل مسار جامعة الإمارات المصرح به وعدم عرضهِما في المحادثة أو السجلات.\n- قبل حفظ المسودة أو نقلها، يجب طلب **موافقة** واضحة توضح المستندات والوجهة والغرض والاحتفاظ بها. تحقق من نوع الملف ووضوحه والحقول المطلوبة دون اختلاق بيانات ناقصة.\n- اعرض **معاينة** كاملة للحقول والمرفقات والجهة والآثار، واطلب تأكيداً صريحاً قبل الرفع أو الإرسال. إذا طلب الطالب عدم الإرسال فتوقف عند المسودة ووضح أن شيئاً لم يُرسل.",
+      "disposition": "answer",
+      "citations": [{
+        "title": "UAEU Undergraduate Student Handbook",
+        "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+        "lastVerified": "2026-09-29",
+        "sourceVersion": "2023 handbook; historical windows, not current intake confirmation",
+        "sourceSection": "Page 15 Financial Aid Service",
+        "evidenceText": "The handbook describes financial-aid requests through eServices with supporting evidence and case assessment. It does not authorize this chat to receive or submit a student's personal documents."
+      }]
+    },
+    {
       "id": "lost-student-id-card-arabic-scope",
       "category": "student-services",
       "questions": [

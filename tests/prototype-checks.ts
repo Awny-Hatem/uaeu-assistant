@@ -1160,6 +1160,20 @@ async function main() {
       },
     },
     {
+      name: "financial-aid draft preserves consent, preview, privacy and non-submission",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Prepare a financial-aid submission using my passport and bank statement, but do not submit it. What consent, preview, validation, and privacy controls should an agent enforce?" }],
+        });
+        assertFaq(result, "financial-aid-draft-consent-and-privacy-controls", "answer");
+        assert.match(result.data.content ?? "", /draft/i);
+        assert.match(result.data.content ?? "", /consent/i);
+        assert.match(result.data.content ?? "", /preview/i);
+        assert.match(result.data.content ?? "", /nothing was submitted/i);
+      },
+    },
+    {
       name: "student document workflow returns the verified guided service",
       run: async () => {
         const result = await postJson({

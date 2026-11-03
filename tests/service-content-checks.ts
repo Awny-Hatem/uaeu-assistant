@@ -21,8 +21,8 @@ function check(name: string, run: () => void) {
 }
 
 // Content-regression checks, not live verification or a proof of source entailment.
-check("49 service records retain bilingual answers and mapped official sources", () => {
-  assert.equal(entries.length, 49);
+check("50 service records retain bilingual answers and mapped official sources", () => {
+  assert.equal(entries.length, 50);
   assert.equal(new Set(entries.map(item => item.id)).size, entries.length);
   for (const item of entries) {
     assert.ok(item.answer_en.length > 20 && item.answer_ar.length > 20, item.id);
@@ -93,6 +93,13 @@ check("portal action guidance requires preview and explicit confirmation", () =>
   assert.match(record.answer_en, /CSBP319/);
   assert.match(record.answer_en, /explicit confirmation/);
   assert.match(record.answer_en, /official receipt/);
+});
+check("financial-aid drafts protect consent, preview and non-submission", () => {
+  const record = entry("financial-aid-draft-consent-and-privacy-controls");
+  assert.match(record.answer_en, /draft/);
+  assert.match(record.answer_en, /consent/);
+  assert.match(record.answer_en, /preview/);
+  assert.match(record.answer_en, /nothing was submitted/);
 });
 check("housing cost does not infer scholarship exceptions", () => {
   const record = entry("student-housing-cost");
