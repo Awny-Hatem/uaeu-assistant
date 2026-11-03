@@ -1,3 +1,8 @@
+import courseIdentities from "@/data/course-code-identities.json";
+
+const CATALOG_CODES = new Set(courseIdentities.codes);
+const CATALOG_PREFIXES = new Set([...courseIdentities.codes.map(code => code.replace(/\d+$/, "")), "CSPB"]);
+
 /** Shared, conservative interpretation used by routing, retrieval and citations.
  * It resolves identities and requested facts; it never creates university facts.
  */
@@ -5,10 +10,13 @@ export function normalizeCourseCodes(text: string): string {
   // Whitespace alone is not enough to identify a code: "for 120 credits" is
   // ordinary prose. These prefixes are present in the bundled UAEU catalogs.
   // Compact and hyphenated unknown codes remain recognizable as unknown IDs.
-  const catalogPrefixes = new Set(["CENG", "CSBP", "ISEC", "ITBP", "MATH", "STAT"]);
-  return text.replace(/\b([a-z]{3,6})([\s\u00a0\u2010-\u2015-]*)(\d{3})(?!\d)/gi,
+  const spacedTerms = text.replace(/\b(fall|spring|summer|autumn|winter)(20\d{2})\b/gi, "$1 $2");
+  return spacedTerms.replace(/\b([a-z]{3,6})([\s\u00a0\u2010-\u2015-]*)(\d{3,4})(?!\d)/gi,
     (original, prefix: string, separator: string, number: string) => {
-      if (separator && !/[\u2010-\u2015-]/u.test(separator) && !catalogPrefixes.has(prefix.toUpperCase())) return original;
+      // Correct a letter transposition only when the resulting real catalog
+      // identity exists. Unknown numbers retain their supplied identity.
+      if (prefix.toUpperCase() === "CSPB" && CATALOG_CODES.has(`CSBP${number}`)) return `CSBP${number}`;
+      if (separator && !/[\u2010-\u2015-]/u.test(separator) && !CATALOG_PREFIXES.has(prefix.toUpperCase())) return original;
       return `${prefix.toUpperCase()}${number}`;
     });
 }
@@ -16,11 +24,39 @@ export function normalizeCourseCodes(text: string): string {
 export function normalizeQuery(text: string): string {
   return normalizeCourseCodes(text).toLowerCase().normalize("NFKD")
     .replace(/\p{M}/gu, "").replace(/ـ/g, "")
-    .replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
+    .replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\b(?:semister|semster|semestre)\b/g, "semester")
+    .replace(/\b(?:prerequisits?|prerequisities|pre requisite[ s]*)\b/g, "prerequisite")
+    .replace(/\s+/g, " ").trim();
 }
 
 export function courseCodes(text: string): string[] {
-  return [...new Set(normalizeCourseCodes(text).match(/\b[A-Z]{3,6}\d{3}\b/g) ?? [])];
+  return [...new Set(normalizeCourseCodes(text).match(/\b[A-Z]{3,6}\d{3,4}\b/g) ?? [])];
+}
+
+function courseNames(text: string): string[] {
+  const normalized = normalizeQuery(text);
+  return ([
+    ["CSBP319", /\bdata structures?\b|هياكل البيانات/u],
+    ["CSBP340", /\bdatabase systems?\b|قواعد البيانات/u],
+    ["CSBP219", /\bobject oriented programming\b|البرمج[ةه] (?:كائني[ةه]|كائنيه) التوجه/u],
+    ["CSBP411", /\bmachine learning\b|تعلم الال[ةه]/u],
+  ] as const).filter(([,pattern])=>pattern.test(normalized)).map(([code])=>code);
+}
+
+/** Targets are not the same as every identifier in the student's premise. */
+export function courseTargets(text: string): string[] {
+  const normalized = normalizeCourseCodes(text);
+  const explicit = courseCodes(normalized).filter(code=>{
+    const index=normalized.indexOf(code);
+    const before=normalized.slice(Math.max(0,index-70),index).toLowerCase();
+    const after=normalized.slice(index+code.length,index+code.length+60).toLowerCase();
+    return !(/\b(?:passed|completed|completing|finished|failed|taken|pending)\s+(?:course\s+)?$/u.test(before) ||
+      /\b(?:passed|completed|completing|finished|failed|taken)[^.!?]{0,60}\b(?:and|but|not)\s*$/u.test(before) ||
+      /^\s+(?:is\s+)?(?:still\s+)?pending\b/u.test(after) || /\brequires?\s+(?:course\s+)?$/u.test(before) ||
+      /^\s+(?:a\s+)?prerequisite\s+(?:for|of)\b/u.test(after) ||
+      /(?:أنهيت|انهيت|أكملت|اكملت|اجتزت|لم أكمل|لم اكمل|درست|نجحت في|رسبت في|يتطلب|يشترط)\s*$/u.test(before));
+  });
+  return explicit.length ? explicit : courseNames(text);
 }
 
 function isExternalAcademicCreditRequest(text: string): boolean {
@@ -31,6 +67,7 @@ function isExternalAcademicCreditRequest(text: string): boolean {
 }
 
 const SUBJECTS = [
+  ["events", "university events", /\b(?:university events?|uaeu events?|workshops?)\b|فعاليات|الفعاليات|ورش العمل/u],
   ["transcript", "official transcript", /\btranscripts?\b|كشف\s+(?:الدرجات|درجات)/u],
   ["certificate", "graduation certificate", /\b(?:graduation|degree) (?:certificate|diploma)|\bdiploma\b|شهاد[ةه]\s+(?:التخرج|الدرج[ةه])/u],
   ["enrollment-document", "enrollment certificate", /\benrollment (?:certificate|letter)|\bproof of enroll|\b(?:letter|certificate|document)\b.{0,35}\b(?:proving|confirming|showing|certifying|to prove|to confirm)\b.{0,35}\b(?:enrolled|enrolment|enrollment|student status)\b|شهاد[ةه]\s+قيد|اثبات\s+القيد|(?:رسال[ةه]|خطاب|شهاد[ةه]|وثيق[ةه]).{0,30}(?:تثبت|يثبت|اثبات|تاكيد).{0,25}(?:قيد|مقيد|طالب)/u],
@@ -38,7 +75,7 @@ const SUBJECTS = [
   ["twimc", "to whom it may concern letter", /to whom it may concern|\btwimc\b|لمن يهمه الامر/u],
   ["reference-letter", "recommendation letter", /\b(?:recommendation|reference) letter\b|رسالة توصية|خطاب توصية/u],
   ["graduation", "graduation", /\bgraduation\b|\bgraduate from\b|\bto graduate\b|التخرج|للتخرج|اتخرج/u],
-  ["admissions", "admission", /\badmissions?\b|\bapply (?:to|as) (?:a |an |the )?(?:uaeu|university|college|undergraduate|bachelor|postgraduate|master|phd|doctoral|international|emirati|national)\b|\bapply for (?:fall|spring|summer|autumn|winter)\b|\bundergraduate application|القبول|للقبول|قبول|البكالوريوس/u],
+  ["admissions", "admission", /\badmissions?\b|\bapply (?:to|as) (?:a |an |the )?(?:uaeu|university|college|undergraduate|bachelor|postgraduate|master|phd|doctoral|international|emirati|national)\b|\bapply for (?:fall|spring|summer|autumn|winter)\b|\bundergraduate application|القبول|للقبول|قبول/u],
   ["transfer", "external academic credit transfer", /\b(?:transfer(?:red)? credits?|credit transfer|credit recognition|credit evaluation|course equivalenc(?:y|ies)|advanced standing)\b/u],
   ["housing", "student housing", /\b(?:housing|dorms?|dormitory|accommodation|room assignment)\b|السكن|سكن|وحدات السكن/u],
   ["scholarship", "scholarship", /\bscholarships?\b|المنح|منح[ةه]|ابتعاث/u],
@@ -53,9 +90,9 @@ const SUBJECTS = [
   ["wifi", "campus wifi", /\b(?:wi fi|wifi|wireless)\b|واي فاي|الشبك[ةه] اللاسلكي[ةه]/u],
   ["faculty", "faculty teaching assignment", /\b(?:professor|faculty member|lecturer|instructor .*teach)\b|الاستاذ|الدكتور.*يدرس/u],
   ["information-security", "Information Security study plan", /\binformation security\b|امن المعلومات/u],
-  ["information-technology", "Information Technology study plan", /\binformation technology\b|\bit (?:major|degree|study plan|student)\b|تقني[ةه] المعلومات/u],
+  ["information-technology", "Information Technology study plan", /\binformation technology\b|\bit (?:major|degree|study plan|student|at uaeu)\b|تقني[ةه] المعلومات|تكنولوجيا المعلومات/u],
   ["mechanical-engineering", "Mechanical Engineering study plan", /\bmechanical engineering\b|الهندس[ةه] الميكانيكي[ةه]/u],
-  ["computer-science", "Computer Science study plan", /\bcomputer science\b|\bcs (?:major|student|courses)|علوم (?:الحاسوب|الكمبيوتر)/u],
+  ["computer-science", "Computer Science study plan", /\bcomputer science\b|\bcs\b|علوم (?:الحاسوب|حاسوب|الكمبيوتر)/u],
   ["counseling", "counseling", /\bcounsel(?:l)?ing\b|ارشاد نفسي|الارشاد النفسي/u],
   ["medical", "medical services", /\b(?:medical|health clinic)\b|العياد[ةه]|خدمات صحي[ةه]/u],
   ["major-change", "change of major", /\b(?:change|switch|transfer).*\bmajor\b|تغيير التخصص|تخصص.*اخر/u],
@@ -129,8 +166,7 @@ export function understandQuery(text: string): QueryMeaning {
     !/\b(?:course load|study load|credit load|semester load|per semester|normal semester)\b/u.test(normalized)) intents.splice(intents.indexOf("credit-load"), 1);
   // A named course question about requirements means prerequisites, not admission requirements.
   const explicit = courseCodes(text);
-  const codes = explicit.length ? explicit : /\bdata structures?\b|هياكل البيانات/u.test(normalized) ? ["CSBP319"]
-    : /\bdatabase systems?\b|قواعد البيانات/u.test(normalized) && !subjects.includes("library") ? ["CSBP340"] : [];
+  const codes = explicit.length ? explicit : subjects.includes("library") ? [] : courseNames(text);
   if (codes.length && intents.includes("requirements") && !intents.includes("prerequisites")) intents.unshift("prerequisites");
   const terms = [...normalized.matchAll(/\b(fall|spring|summer|autumn|winter)\b|(?:خريف|ربيع|صيف|شتاء)/g)]
     .map(([term]) => ({ autumn: "fall", خريف: "fall", ربيع: "spring", صيف: "summer", شتاء: "winter" }[term] ?? term));
@@ -143,7 +179,7 @@ export function understandQuery(text: string): QueryMeaning {
     intents.includes("start")) subjects.push("calendar");
   const degreeLevels: QueryMeaning["degreeLevels"] = [];
   const positiveDegreeText = normalized.replace(/\bnot (?:a |an )?(?:undergraduate|postgraduate|bachelor(?:s)?|master(?:s)?|phd|doctoral)(?: student| applicant| degree)?\b/gu, "");
-  if (/\b(?:postgraduates?|master|masters|phd|doctoral)\b|ماجستير|دكتوراه|دراسات عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
+  if (/\b(?:postgraduates?|master|masters|msc|mba|mpa|dba|doctorate|phd|doctoral)\b|ماجستير|دكتوراه|دراسات عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
   if (/\b(?:undergraduates?|bachelor|bachelors)\b|بكالوريوس/u.test(positiveDegreeText)) degreeLevels.push("undergraduate");
   const applicantCategories: QueryMeaning["applicantCategories"] = [];
   const positiveCategoryText = normalized.replace(/\bnot (?:a |an )?(?:uae national|emirati|citizen|international(?: applicant| student)?)\b|لست (?:مواطن[اة]?|اماراتي[اة]?|طالبا? دوليا?)/gu, "");
@@ -167,7 +203,8 @@ export function namedSubjects(text: string): QuerySubject[] {
   if (meaning.subjects.includes("transfer") && !meaning.intents.some((intent) => ["prerequisites", "topics"].includes(intent))) {
     return [{ key: "transfer", label: "external academic credit transfer", origin: text }];
   }
-  if (meaning.codes.length) return meaning.codes.map((code) => ({ key: code, label: code, origin: normalizeCourseCodes(text) }));
+  const targetCodes=courseTargets(text);
+  if (targetCodes.length && !meaning.subjects.includes("library")) return targetCodes.map((code) => ({ key: code, label: code, origin: normalizeCourseCodes(text) }));
   const matched = SUBJECTS.filter(([key]) => meaning.subjects.includes(key));
   // Specific documents take precedence over the general graduation/admission label.
   if (matched.some(([key]) => ["transcript", "certificate", "twimc", "enrollment-document"].includes(key))) {
@@ -244,7 +281,7 @@ export function resolveConversation(
     else ambiguous = active.length > 1;
   }
   const inheritsIntent = meaning.codes.length > 0 && !directFacts.length && /\bwhat about\b|ماذا عن|وماذا|وبالنسب[ةه]/u.test(meaning.normalized);
-  const verification = meaning.intents.includes("verify") && !directFacts.length;
+  const verification = meaning.intents.includes("verify") && !directFacts.length && active.length > 0;
   const intents = (!directFacts.length && (refers || inheritsIntent || verification)) ? lastIntent : meaning.intents;
   const sameSubjectReference = named.length === 1 && active.length === 1 &&
     named[0].key === active[0].key && REFERENCE.test(meaning.normalized);

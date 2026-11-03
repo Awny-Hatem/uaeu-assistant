@@ -38,6 +38,13 @@ function normalizeNumbers(text: string): string {
     .replace(/[۰-۹]/g, (digit) => String(digit.charCodeAt(0) - 0x6f0))
     .replace(/٬/g, "").replace(/٫/g, ".")
     .replace(/(?<=\d),(?=\d{3}\b)/g, "");
+  // Academic years use both2025–26 and2025–2026 in official publications.
+  // Canonicalize only a consecutive year range, never an arbitrary amount or
+  // ISO month/day, before comparing source-bound numeric tokens.
+  normalized = normalized.replace(/((?:19|20)\d{2})\s*[–—/-]\s*(\d{2})(?!\d)/g, (original, first: string, short: string) =>
+    Number(short) === (Number(first) + 1) % 100 ? `${first}–${Number(first) + 1}` : original);
+  const counts: Record<string,string>={one:"1",two:"2",three:"3",four:"4",five:"5",six:"6",seven:"7",eight:"8",nine:"9",ten:"10",eleven:"11",twelve:"12",thirteen:"13",fourteen:"14",fifteen:"15",sixteen:"16",seventeen:"17",eighteen:"18",nineteen:"19",twenty:"20"};
+  normalized=normalized.replace(/\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty)\b/gi,(word, _capture, offset:number, original:string)=>word.toLowerCase()==="one"&&!/^[ -]+(?:credit|course|hour|semester|year|month|day|chapter|article|item|renewal|option|route|of)\b/iu.test(original.slice(offset+word.length))?word:counts[word.toLowerCase()]);
   normalized = normalized.replace(/\b(\d{1,2})(?::(\d{2}))?\s*(a\.?m\.?|p\.?m\.?)\b/gi, (original, hour: string, minute: string | undefined, period: string) => {
     const value = Number(hour);
     if (value < 1 || value > 12 || Number(minute ?? "0") > 59) return original;
@@ -52,6 +59,12 @@ function normalizeNumbers(text: string): string {
 }
 
 const PHONE = /(?:\+?971[\s-]*)?(?:0?[234679][\s-]*\d{3}[\s-]*\d{4}|0?5\d[\s-]*\d{3}[\s-]*\d{4}|800[\s-]*\d{4,7})/g;
+function phoneNumbers(text: string): string[] {
+  // A consecutive academic-year range is not an eight-digit local telephone.
+  const withoutYears = text.replace(/((?:19|20)\d{2})\s*[–—/-]\s*((?:19|20)\d{2})/g, (original, first: string, last: string) =>
+    Number(last) === Number(first) + 1 ? " ".repeat(original.length) : original);
+  return withoutYears.match(PHONE) ?? [];
+}
 const EMAIL = /[\w.+&-]+@[\w.-]+\.[a-z]{2,}/gi;
 const phoneIdentity = (phone: string) => phone.replace(/\D/g, "").replace(/^971/, "").replace(/^0/, "");
 
@@ -83,8 +96,8 @@ export function sourceClaimViolations(answer: GroundedAnswer, sources: SourceEvi
     const sourceNumbers = new Set((body.match(/\d+(?:\.\d+)?/g) ?? []).map(Number));
     // A phone number may be formatted differently, so check its digit sequence
     // separately and avoid rejecting each space-separated component as a number.
-    const phones = text.match(PHONE) ?? [];
-    const sourcePhones = new Set((body.match(PHONE) ?? []).map(phoneIdentity));
+    const phones = phoneNumbers(text);
+    const sourcePhones = new Set(phoneNumbers(body).map(phoneIdentity));
     const unsupportedPhones = phones.filter((phone) => !sourcePhones.has(phoneIdentity(phone)));
     const unknownPhone = unsupportedPhones.length > 0;
     const numericText = phones.reduce((rest, phone) => rest.replaceAll(phone, ""), text).replace(/^\s*\d+[.)]\s/gm, "");

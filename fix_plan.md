@@ -6,13 +6,17 @@ Inputs reviewed: full102-case report, shared doc (including8earlier screenshot e
 
 ## Architecture
 
-Chat route: request/auth/rate guards → conversation resolution → exact/lexical FAQ → English curriculum sections → remote closed-catalog semantic selection → immutable canonical answer → lexical/vector context fallback → evidence-bound AI writer and claim verification. Markdown evidence is30approved files;121prepared answers and1service guide are additional sources. Embedding search is opt-in and inactive in the audit. SQLite stores prototype accounts/history/analytics; it is not a university-record API.
+Before the fixes, the chat route was: request/auth/rate guards → conversation resolution → exact/lexical FAQ → English curriculum sections → remote closed-catalog semantic selection → immutable canonical answer → lexical/vector context fallback → evidence-bound AI writer and claim verification. Markdown evidence is30approved files;121prepared answers and1service guide are additional sources. Embedding search is opt-in and inactive in the audit. SQLite stores prototype accounts/history/analytics; it is not a university-record API.
+
+After the fixes, scoped multilingual academic evidence planning precedes selection; only simple exact FAQ matches return a reviewed fixed answer. Other matching records feed the source-bound AI writer. All answer sources above remain accounted for. See reports/qa-audit-2026-11-03/ENGINEERING_NOTES.md.
 
 ## Baseline and validation
 
 Build and run evals before application changes; keep fixed expected-fact/citation checks and full live responses. Report automated baseline separately from published human47/17/38. Rerun after each group, retain all original cases and unseen variants. Browser-retest all55previous partial/fail entries plus new probes. Save results without secrets.
 
 ## Degree and program identity
+
+Implementation files: `lib/academic-retrieval.ts`, `lib/query-understanding.ts`, `lib/curriculum-retrieval.ts`, `lib/knowledge-files.ts`, and the program-specific `data/knowledge/34`–`50` records (no new MD record).
 
 Root cause: lib/curriculum-retrieval.ts ignores degreeLevel; query-understanding.ts only recognizes narrow abbreviations; semantic selector may choose related whole answers.
 
@@ -49,6 +53,8 @@ Fix: Add scoped official program documents; require program AND degree-level ide
 
 ## Multilingual intent and code normalization
 
+Implementation files: `lib/query-understanding.ts`, `data/course-code-identities.json`, `lib/academic-retrieval.ts`, `lib/academic-coverage.ts`, `app/api/chat/route.ts`, and updated bilingual course records `02`, `10`, `33`.
+
 Root cause: app/api/chat/route.ts disables curriculum retrieval outside English. requestedKind uses English-only regular expressions; normalizeCourseCodes does not recognize spaced MECH or validated CSPB transpositions.
 
 Fix: Shared multilingual intent/entity planner, catalog-validated code correction and typo normalization; bilingual retrieval; preserve requested facet.
@@ -71,6 +77,8 @@ Fix: Shared multilingual intent/entity planner, catalog-validated code correctio
 
 ## Missing dated evidence and source-specific facts
 
+Implementation files: `data/knowledge/51`–`59`, `data/verified-answers/academic.json` (tuition source-specific summary), `lib/academic-retrieval.ts`, `lib/source-evidence.ts`, and IT records `30`–`31`.
+
 Root cause: Missing indexed graduate/program/year-specific content; same graduate fee page contains a row not represented in the evidence.
 
 Fix: Add official cohort, historical catalog and dated MPA/admission sections; retain validity/uncertainty; no current diploma availability invented.
@@ -86,6 +94,8 @@ Fix: Add official cohort, historical catalog and dated MPA/admission sections; r
 
 ## Context and comparisons
 
+Implementation files: `lib/query-understanding.ts`, `lib/academic-retrieval.ts`, `app/api/chat/route.ts`, `lib/prompts.ts`, and focused/context regression tests.
+
 Root cause: resolveConversation and semantic fallback treat multiple programs as one subject; follow-up lab facet lost; canonical answers shown verbatim.
 
 Fix: Resolve references from user history with explicit ambiguity handling; preserve cohort for lab follow-up; retrieve both comparison sides; generate tailored answers.
@@ -98,6 +108,8 @@ Fix: Resolve references from user history with explicit ambiguity handling; pres
 | CQ077 | [Weird Case] | First answer lists only Information Security instead of comparing both degrees. Ambiguous "its electives" follow-up silently chooses IS and repeats the whole paragraph, instead of clarifying or covering both. |
 
 ## Abstention, relevance and boundaries
+
+Implementation files: `app/api/chat/route.ts`, `lib/academic-retrieval.ts`, `lib/academic-coverage.ts`, `lib/source-evidence.ts`, `lib/knowledge-files.ts`, and evidence/security regression tests.
 
 Root cause: Loose semantic canonical selection can answer unrelated contact/unknown/future/injected requests; generic clarification asks for supplied identifiers.
 
@@ -115,3 +127,65 @@ Fix: Unknown identifier/source-aware fallback, explicit out-of-scope and injecti
 ## Guardrails and trade-offs
 
 Use only official HTTPS UAEU URLs, excluding webtest/cms. Evidence/citation selection must remain source-specific. No secrets committed. Generation adds cost/latency; do not present offline/mock scores as live accuracy. Never relax expected facts to make a result pass. Retain ambiguity and dated-source limitations.
+
+## Recorded retest status
+
+Final API statuses below are Codex source-review outcomes for the fixed branch; browser attempts are additional evidence and retained separately. A timeout, withheld response or unresolved fact remains visible.
+
+| Test | Before published audit | Final reviewed API status |
+|---|---|---|
+| CQ001 | ⚠️ Partly correct | ✅ Correct |
+| CQ002 | ⚠️ Partly correct | ✅ Correct |
+| CQ003 | ⚠️ Partly correct | ✅ Correct |
+| CQ004 | ❌ Incorrect | ✅ Correct |
+| CQ005 | ⚠️ Partly correct | ✅ Correct |
+| CQ006 | ❌ Incorrect | ✅ Correct |
+| CQ008 | ⚠️ Partly correct | ✅ Correct |
+| CQ009 | ⚠️ Partly correct | ✅ Correct |
+| CQ010 | ❌ Incorrect | ✅ Correct |
+| CQ011 | ❌ Incorrect | ✅ Correct |
+| CQ012 | ❌ Incorrect | ✅ Correct |
+| CQ013 | ❌ Incorrect | ✅ Correct |
+| CQ014 | ❌ Incorrect | ✅ Correct |
+| CQ015 | ❌ Incorrect | ❌ Incorrect |
+| CQ016 | ❌ Incorrect | ✅ Correct |
+| CQ017 | ❌ Incorrect | ✅ Correct |
+| CQ019 | ❌ Incorrect | ✅ Correct |
+| CQ020 | ❌ Incorrect | ✅ Correct |
+| CQ022 | ❌ Incorrect | ✅ Correct |
+| CQ033 | ❌ Incorrect | ✅ Correct |
+| CQ034 | ❌ Incorrect | ✅ Correct |
+| CQ035 | ❌ Incorrect | ✅ Correct |
+| CQ036 | ❌ Incorrect | ✅ Correct |
+| CQ038 | ❌ Incorrect | ✅ Correct |
+| CQ042 | ❌ Incorrect | ❌ Incorrect |
+| CQ052 | ❌ Incorrect | ✅ Correct |
+| CQ053 | ⚠️ Partly correct | ✅ Correct |
+| CQ055 | ⚠️ Partly correct | ✅ Correct |
+| CQ056 | ⚠️ Partly correct | ✅ Correct |
+| CQ057 | ⚠️ Partly correct | ✅ Correct |
+| CQ059 | ⚠️ Partly correct | ✅ Correct |
+| CQ060 | ❌ Incorrect | ✅ Correct |
+| CQ061 | ❌ Incorrect | ✅ Correct |
+| CQ062 | ❌ Incorrect | ✅ Correct |
+| CQ063 | ⚠️ Partly correct | ✅ Correct |
+| CQ064 | ❌ Incorrect | ✅ Correct |
+| CQ065 | ⚠️ Partly correct | ✅ Correct |
+| CQ069 | ❌ Incorrect | ✅ Correct |
+| CQ070 | ⚠️ Partly correct | ✅ Correct |
+| CQ075 | ⚠️ Partly correct | ✅ Correct |
+| CQ077 | ⚠️ Partly correct | ✅ Correct |
+| CQ078 | ❌ Incorrect | ✅ Correct |
+| CQ080 | ❌ Incorrect | ✅ Correct |
+| CQ081 | ❌ Incorrect | ✅ Correct |
+| CQ082 | ❌ Incorrect | ⚠️ Partly correct |
+| CQ084 | ❌ Incorrect | ✅ Correct |
+| CQ085 | ❌ Incorrect | ✅ Correct |
+| CQ086 | ❌ Incorrect | ✅ Correct |
+| CQ087 | ❌ Incorrect | ✅ Correct |
+| CQ089 | ⚠️ Partly correct | ✅ Correct |
+| CQ091 | ❌ Incorrect | ✅ Correct |
+| CQ092 | ❌ Incorrect | ✅ Correct |
+| CQ093 | ❌ Incorrect | ✅ Correct |
+| CQ094 | ❌ Incorrect | ✅ Correct |
+| CQ102 | ❌ Incorrect | ✅ Correct |

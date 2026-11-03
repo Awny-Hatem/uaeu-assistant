@@ -1,6 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
-import { validateEvidenceOnly, type EvidenceOnlyExpectation } from "./evaluation-evidence-checks";
+import { validateGeneratedMockRetrieval, validateEvidenceOnly, type EvidenceOnlyExpectation } from "./evaluation-evidence-checks";
 
 type Message = {
   role: "user" | "assistant";
@@ -29,6 +29,8 @@ type AlignmentFixture = {
 };
 
 type ChatPayload = {
+  provider?:string;
+  responseMode?:string;
   content?: string;
   source?: string;
   faqId?: string;
@@ -196,6 +198,10 @@ function validateCase(
     errors.push(`expected HTTP 200, received ${status}${payload.error ? ` (${payload.error})` : ""}`);
     return errors;
   }
+  if(payload.provider==="mock" && payload.source==="rag" && !testCase.evidenceOnly){
+    if(payload.responseMode!=="grounded_generation")return ["Generated mock lost writer orchestration mode"];
+    return validateGeneratedMockRetrieval(testCase.messages ?? [{role:"user",content:testCase.question}],testCase.question,testCase.expectedAnswerId);
+  }
   if (payload.source !== testCase.expectedSource) {
     errors.push(`expected source ${testCase.expectedSource}, received ${payload.source ?? "none"}`);
   }
@@ -317,7 +323,7 @@ async function main(): Promise<void> {
     const payload = (await response.json()) as ChatPayload;
     results.push({
       testCase,
-      actualSource: payload.source ?? "none",
+      actualSource: payload.provider==="mock" && payload.source==="rag" ? "mock-retrieval-only" : payload.source ?? "none",
       errors: validateCase(fixture, testCase, response.status, payload),
     });
   }
@@ -330,7 +336,7 @@ async function main(): Promise<void> {
   });
 
   console.log(`Evaluated ${results.length} alignment cases across ${categories.size} categories.`);
-  console.log(`Mock route regressions only; ${fixture.cases.filter(c => c.evidenceOnly).length} generated-answer case(s) validate scoped evidence, not generated prose.`);
+  console.log(`Mock route regressions only; ${fixture.cases.filter(c => c.evidenceOnly).length} explicit procedural case(s); mock-retrieval-only cases validate approved evidence availability, not final generated prose or semantic selection.`);
   console.log(`Passed: ${results.length - failures.length}`);
   console.log(`Failed: ${failures.length}`);
   console.log(

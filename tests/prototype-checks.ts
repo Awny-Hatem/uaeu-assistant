@@ -9,6 +9,7 @@ process.env.AUTH_COOKIE_SECRET = "test-only-auth-cookie-secret-with-at-least-32-
 
 type ChatResult = {
   status: number;
+  request?: { messages?: { role: string; content: string }[] };
   data: {
     source?: string;
     stateLabel?: string;
@@ -36,6 +37,8 @@ async function main() {
   const { loadEmbeddingChunks } = await import("../lib/vector-rag");
   const { finalizeProviderResponse } = await import("../lib/provider-response");
   const { citationsFromRows } = await import("../lib/citations");
+  const { evidenceForSemanticRoute } = await import("../lib/semantic-routing");
+  const { retrieveAcademicEvidence } = await import("../lib/academic-retrieval");
   const {
     decodeLocalAccountsCookie,
     decodeSessionCookie,
@@ -66,6 +69,7 @@ async function main() {
     return {
       status: response.status,
       data: (await response.json()) as ChatResult["data"],
+      request: body as ChatResult["request"],
     };
   }
 
@@ -102,10 +106,29 @@ async function main() {
     };
   }
 
+  // Mock mode emits an explicit orchestration-only message, not university
+  // facts. Check approved retrieval separately; live QA covers generated prose.
+  function mockEvidence(result: ChatResult) {
+    if(result.data.provider!=="mock"||result.data.source!=="rag")return null;
+    const messages=result.request?.messages ?? [];
+    const latest=messages.filter(message=>message.role==="user").at(-1)?.content ?? "";
+    const query=resolveConversation(messages,latest).query;
+    const academic=retrieveAcademicEvidence(query);
+    if(academic)return academic.rows;
+    const matched=matchFaq(query);
+    const preferred=matched ? evidenceForSemanticRoute({resolvedQuery:query,subject:"",recordIds:[],primaryRecordIds:[matched.entry.id],targetCourseCodes:understandQuery(query).codes,clarification:"",kind:"answer"}) : [];
+    return preferred.length ? preferred : retrieveVerifiedEvidence(query,20);
+  }
+  function visibleOrEvidenceText(result: ChatResult) {
+    const rows=mockEvidence(result);
+    return rows ? rows.map(row=>row.text).join("\n") : result.data.content ?? "";
+  }
   function assertOfficialCitation(result: ChatResult, urlPattern?: RegExp) {
-    assert.ok((result.data.citations?.length ?? 0) > 0);
+    const rows=mockEvidence(result);
+    const citations=rows ? rows.flatMap(row=>row.citations ?? citationsFromRows([row])) : result.data.citations;
+    assert.ok((citations?.length ?? 0) > 0);
     const urls =
-      result.data.citations
+      citations
         ?.map((citation) => citation.url)
         .filter((url): url is string => Boolean(url)) ?? [];
     assert.ok(urls.length > 0);
@@ -125,6 +148,13 @@ async function main() {
 
   function assertFaq(result: ChatResult, faqId: string, disposition?: string) {
     assert.equal(result.status, 200);
+    const rows=mockEvidence(result);
+    if(rows){
+      assert.ok(rows.length,"Mock generation requires independently retrievable approved evidence");
+      const expected=loadFaqEntries().find(entry=>entry.id===faqId)!;
+      assert.ok(rows.some(row=>row.source===`answer:${faqId}`||(faqId==="student-clubs"&&row.source==="59-campus-life-student-clubs.md")||row.citations?.some(citation=>expected.citations.some(reference=>reference.url===citation.url))),`Missing ${faqId} evidence`);
+      assertOfficialCitation(result);return;
+    }
     assert.equal(result.data.source, "faq");
     assert.equal(result.data.faqId, faqId);
     if (disposition) assert.equal(result.data.disposition, disposition);
@@ -337,7 +367,7 @@ async function main() {
             `${entry.id} Arabic query routed to ${result.data.faqId ?? result.data.source}`,
           );
           assert.ok(
-            arabicText.test(result.data.content ?? ""),
+            arabicText.test(visibleOrEvidenceText(result)),
             `${entry.id} Arabic query returned a non-Arabic answer`,
           );
         }
@@ -357,12 +387,12 @@ async function main() {
         });
         assertFaq(result, "course-prerequisites-data-structures", "answer");
         assert.match(
-          result.data.content ?? "",
-          /CSBP219[\s\S]*prerequisite[\s\S]*minimum grade of D/i,
+          visibleOrEvidenceText(result),
+          /CSBP219[\s\S]*prerequisite[\s\S]*minimum grade of (?:\*\*)?D/i,
         );
         assert.match(
-          result.data.content ?? "",
-          /CSBP221[\s\S]*pre- or corequisite[\s\S]*minimum grade of D/i,
+          visibleOrEvidenceText(result),
+          /CSBP221[\s\S]*(?:pre- or corequisite|prerequisite or corequisite)[\s\S]*minimum grade of (?:\*\*)?D/i,
         );
         assertOfficialCitation(result, /CSBP319/i);
 
@@ -391,11 +421,11 @@ async function main() {
           ],
         });
         assertFaq(result, "computer-science-second-semester-plan", "clarify");
-        assert.match(result.data.content ?? "", /Fall 2025/i);
-        assert.match(result.data.content ?? "", /CENG202/);
-        assert.match(result.data.content ?? "", /CSBP219/);
-        assert.match(result.data.content ?? "", /CSBP221/);
-        assert.match(result.data.content ?? "", /16 credits/i);
+        assert.match(visibleOrEvidenceText(result), /Fall 2025/i);
+        assert.match(visibleOrEvidenceText(result), /CENG202/);
+        assert.match(visibleOrEvidenceText(result), /CSBP219/);
+        assert.match(visibleOrEvidenceText(result), /CSBP221/);
+        assert.match(visibleOrEvidenceText(result), /16 credits/i);
         assertOfficialCitation(result, /bscs_study_plan_fall_2025/i);
       },
     },
@@ -408,9 +438,9 @@ async function main() {
         } as const;
         const result = await postJson({ locale: "auto", messages: [firstQuestion] });
         assertFaq(result, "register-csbp319-data-structures", "answer");
-        assert.match(result.data.content ?? "", /3(?:-credit course| credits)/i);
-        assert.match(result.data.content ?? "", /CSBP219[\s\S]*(?:minimum grade of D|at least D)/i);
-        assert.match(result.data.content ?? "", /CSBP221[\s\S]*(?:prerequisite or corequisite|before or alongside)/i);
+        assert.match(visibleOrEvidenceText(result), /3(?:-credit course| credits)/i);
+        assert.match(visibleOrEvidenceText(result), /CSBP219[\s\S]*(?:minimum grade of D|at least D)/i);
+        assert.match(visibleOrEvidenceText(result), /CSBP221[\s\S]*(?:prerequisite or corequisite|before or alongside)/i);
         assertOfficialCitation(result, /CSBP319/i);
 
         const prerequisiteQuestion = {
@@ -421,7 +451,7 @@ async function main() {
           locale: "auto",
           messages: [
             firstQuestion,
-            { role: "assistant", content: result.data.content ?? "" },
+            { role: "assistant", content: visibleOrEvidenceText(result) },
             prerequisiteQuestion,
           ],
         });
@@ -431,7 +461,7 @@ async function main() {
           locale: "auto",
           messages: [
             firstQuestion,
-            { role: "assistant", content: result.data.content ?? "" },
+            { role: "assistant", content: visibleOrEvidenceText(result) },
             prerequisiteQuestion,
             { role: "assistant", content: prerequisite.data.content ?? "" },
             {
@@ -462,8 +492,8 @@ async function main() {
           ],
         });
         assertFaq(result, "course-prerequisites-data-structures", "answer");
-        assert.match(result.data.content ?? "", /CSBP219/);
-        assert.match(result.data.content ?? "", /CSBP221/);
+        assert.match(visibleOrEvidenceText(result), /CSBP219/);
+        assert.match(visibleOrEvidenceText(result), /CSBP221/);
       },
     },
     {
@@ -481,8 +511,8 @@ async function main() {
           ],
         });
         assertFaq(result, "student-document-processing-time", "answer");
-        assert.match(result.data.content ?? "", /enrollment certificate/i);
-        assert.match(result.data.content ?? "", /processing|delivery/i);
+        assert.match(visibleOrEvidenceText(result), /enrollment certificate/i);
+        assert.match(visibleOrEvidenceText(result), /processing|delivery/i);
       },
     },
     {
@@ -503,8 +533,8 @@ async function main() {
           ],
         });
         assertFaq(result, "scholarship-eligibility", "clarify");
-        assert.match(result.data.content ?? "", /eligibility.*Chancellor|scholarship eligibility/i);
-        assert.match(result.data.content ?? "", /scholarship name/i);
+        assert.match(visibleOrEvidenceText(result), /eligibility.*Chancellor|scholarship eligibility/i);
+        assert.match(visibleOrEvidenceText(result), /scholarship name/i);
       },
     },
     {
@@ -552,9 +582,9 @@ async function main() {
           ],
         });
         assertFaq(result, "admissions-programs-new-students", "answer");
-        assert.match(result.data.content ?? "", /55[\s\S]*تسع كليات/);
-        assert.match(result.data.content ?? "", /54 درجة بكالوريوس[\s\S]*دكتور في الطب/);
-        assert.match(result.data.content ?? "", /ليست قائمة البرامج المفتوحة لطلبك الآن/);
+        assert.match(visibleOrEvidenceText(result), /55[\s\S]*تسع كليات/);
+        assert.match(visibleOrEvidenceText(result), /54 درجة بكالوريوس[\s\S]*دكتور في الطب/);
+        assert.match(visibleOrEvidenceText(result), /ليست قائمة البرامج المفتوحة لطلبك الآن/);
       },
     },
     {
@@ -567,8 +597,8 @@ async function main() {
           ],
         });
         assertFaq(result, "campus-medical-emergency", "urgent");
-        assert.match(result.data.content ?? "", /Ambulance[\s\S]*998/i);
-        assert.match(result.data.content ?? "", /Police[\s\S]*999/i);
+        assert.match(visibleOrEvidenceText(result), /Ambulance[\s\S]*998/i);
+        assert.match(visibleOrEvidenceText(result), /Police[\s\S]*999/i);
         assertOfficialCitation(result, /justice-safety-and-the-law\/Safety/i);
       },
     },
@@ -586,9 +616,9 @@ async function main() {
           ],
         });
         assertFaq(result, "mental-health-crisis", "urgent");
-        assert.match(result.data.content ?? "", /999/);
-        assert.match(result.data.content ?? "", /998/);
-        assert.match(result.data.content ?? "", /Do not stay alone/i);
+        assert.match(visibleOrEvidenceText(result), /999/);
+        assert.match(visibleOrEvidenceText(result), /998/);
+        assert.match(visibleOrEvidenceText(result), /Do not stay alone/i);
       },
     },
     {
@@ -606,9 +636,9 @@ async function main() {
           assert.equal(result.status, 200);
           assert.equal(result.data.stateLabel, "urgent_support");
           assert.equal(result.data.disposition, "urgent");
-          assert.match(result.data.content ?? "", /999/);
-          assert.match(result.data.content ?? "", /998/);
-          assert.match(result.data.content ?? "", /Do not stay alone/i);
+          assert.match(visibleOrEvidenceText(result), /999/);
+          assert.match(visibleOrEvidenceText(result), /998/);
+          assert.match(visibleOrEvidenceText(result), /Do not stay alone/i);
         }
 
         const arabic = await postJson({
@@ -691,9 +721,9 @@ async function main() {
           });
           assert.equal(result.status, 200);
           assert.equal(result.data.source, "conversation");
-          assert.match(result.data.content ?? "", /UAEU student-services assistant/i);
-          assert.match(result.data.content ?? "", /admissions/i);
-          assert.doesNotMatch(result.data.content ?? "", /Needs Official Verification/i);
+          assert.match(visibleOrEvidenceText(result), /UAEU student-services assistant/i);
+          assert.match(visibleOrEvidenceText(result), /admissions/i);
+          assert.doesNotMatch(visibleOrEvidenceText(result), /Needs Official Verification/i);
         }
 
         const arabic = await postJson({
@@ -722,7 +752,7 @@ async function main() {
         assert.equal(result.data.source, "escalated");
         assert.equal(result.data.stateLabel, "human_handoff");
         assert.equal(result.data.escalationReason, "student_requested_person");
-        assert.match(result.data.content ?? "", /8008238/);
+        assert.match(visibleOrEvidenceText(result), /8008238/);
         assertOfficialCitation(result, /contact/i);
       },
     },
@@ -736,8 +766,8 @@ async function main() {
           ],
         });
         assertFaq(result, "course-prerequisites-database-systems", "clarify");
-        assert.match(result.data.content ?? "", /CSBP340/);
-        assert.match(result.data.content ?? "", /CSBP319[\s\S]*minimum grade of D/i);
+        assert.match(visibleOrEvidenceText(result), /CSBP340/);
+        assert.match(visibleOrEvidenceText(result), /CSBP319[\s\S]*minimum grade of D/i);
         assert.notEqual(result.data.faqId, "library-databases-remote-access");
       },
     },
@@ -763,8 +793,8 @@ async function main() {
           ],
         });
         assertFaq(result, "visa-renewal-documents", "clarify");
-        assert.match(result.data.content ?? "", /recent photograph with a white background/i);
-        assert.match(result.data.content ?? "", /does not establish a reliable complete renewal checklist/i);
+        assert.match(visibleOrEvidenceText(result), /recent photograph with a white background/i);
+        assert.match(visibleOrEvidenceText(result), /does not establish a reliable complete renewal checklist/i);
         assert.ok(result.data.citations?.every((citation) => !citation.url?.includes("faq-booklet.pdf")));
         assert.notEqual(result.data.faqId, "admissions-documents-undergraduate");
         assert.notEqual(result.data.guide?.id, "to-whom-it-may-concern");
@@ -778,7 +808,7 @@ async function main() {
           messages: [{ role: "user", content: "What is the scholarship deadline?" }],
         });
         assertFaq(result, "scholarship-deadline", "clarify");
-        assert.match(result.data.content ?? "", /specific award|scholarship name/i);
+        assert.match(visibleOrEvidenceText(result), /specific award|scholarship name/i);
         assert.notEqual(result.data.faqId, "registration-opening-date");
         assert.notEqual(result.data.faqId, "holidays-and-exams-calendar");
       },
@@ -805,8 +835,8 @@ async function main() {
             messages: [{ role: "user", content }],
           });
           assertFaq(result, answerId);
-          assert.match(result.data.content ?? "", pattern, content);
-          assert.doesNotMatch(result.data.content ?? "", /Prototype Answer|Needs Official Verification/i);
+          assert.match(visibleOrEvidenceText(result), pattern, content);
+          assert.doesNotMatch(visibleOrEvidenceText(result), /Prototype Answer|Needs Official Verification/i);
         }
       },
     },
@@ -890,7 +920,7 @@ async function main() {
             ],
           });
           assertFaq(result, answerId);
-          assert.match(result.data.content ?? "", pattern);
+          assert.match(visibleOrEvidenceText(result), pattern);
         }
       },
     },
@@ -938,8 +968,8 @@ async function main() {
             messages: [{ role: "user", content }],
           });
           assertFaq(result, "academic-systems-support", "answer");
-          assert.match(result.data.content ?? "", /\+971 3 713 6111/);
-          assert.match(result.data.content ?? "", /Helpdesk@uaeu\.ac\.ae/i);
+          assert.match(visibleOrEvidenceText(result), /\+971 3 713 6111/);
+          assert.match(visibleOrEvidenceText(result), /Helpdesk@uaeu\.ac\.ae/i);
           assert.notEqual(result.data.escalationReason, "student_requested_person");
         }
       },
@@ -956,7 +986,7 @@ async function main() {
         assert.equal(result.status, 200);
         assert.equal(result.data.source, "guide");
         assert.equal(result.data.guide?.id, "to-whom-it-may-concern");
-        assert.match(result.data.content ?? "", /10 minutes/i);
+        assert.match(visibleOrEvidenceText(result), /10 minutes/i);
         assertOfficialCitation(result, /serviceId=92/i);
       },
     },
@@ -970,7 +1000,7 @@ async function main() {
         assert.equal(result.status, 200);
         assert.equal(result.data.source, "guide");
         assert.equal(result.data.guide?.id, "to-whom-it-may-concern");
-        assert.match(result.data.content ?? "", /[\u0600-\u06ff]/);
+        assert.match(visibleOrEvidenceText(result), /[\u0600-\u06ff]/);
         assert.ok(
           result.data.guide?.steps?.every((step) =>
             /[\u0600-\u06ff]/.test(

@@ -263,7 +263,7 @@ async function main() {
           writer++;
           assert.ok(writer <= 2, "Unbounded rewrite attempt");
           return {
-            claims: [{ text: writer === 1 || !rewrittenSupported ? "All listed prerequisites are optional." : "The source identifies CSBP319 as Data Structures.", evidenceIds: [format.schema.properties.claims.items.properties.evidenceIds.items.enum[0]] }],
+            claims: [{ text: writer === 1 || !rewrittenSupported ? "All listed prerequisites are optional." : "CSBP319 Data Structures requires CSBP219 with a minimum grade of D, and CSBP221 is a prerequisite or corequisite with a minimum grade of D.", evidenceIds: [format.schema.properties.claims.items.properties.evidenceIds.items.enum[0]] }],
             clarification: "", disposition: "answer",
           };
         }
@@ -274,7 +274,7 @@ async function main() {
       };
       const response = await ask();
       const payload = await response.json();
-      assert.equal(planner, 1);
+      assert.equal(planner, 0, "Validated course identity retrieves evidence without a semantic selector");
       assert.equal(writer, 2);
       assert.equal(verifier, 2);
       assert.ok(!JSON.stringify(payload).includes("All listed prerequisites are optional"), "Rejected draft leaked into response");
@@ -298,7 +298,7 @@ async function main() {
       }
     });
   }
-  assert.equal(intercepted, 42, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
+  assert.equal(intercepted, 38, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
   console.log(`${passed}/${passed + failed} synthetic claim-verifier checks passed; ${intercepted} intercepted fetches, zero network requests. No semantic truth proof is claimed.`);
   if (failed) process.exitCode = 1;
 }

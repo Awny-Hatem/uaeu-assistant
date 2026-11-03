@@ -23,7 +23,9 @@ import { canonicalCandidateIds, evidenceForSemanticRoute, requestedCourseTargets
 import { preserveEvidenceQualifications } from "@/lib/answer-qualifiers";
 import { sourceEvidence, sourceEvidenceContext, sourceClaimViolations, type SourceEvidence } from "@/lib/source-evidence";
 import { verifySourceClaims } from "@/lib/claim-verifier";
-import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
+import { retrieveAcademicEvidence } from "@/lib/academic-retrieval";
+import { normalizeQuery } from "@/lib/query-understanding";
+import { academicCoverageViolations } from "@/lib/academic-coverage";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -426,7 +428,7 @@ const SENSITIVE_CONCEPTS = [
   },
   {
     query: /\bdeadline\b|(?:موعد نهائي|آخر موعد)/iu,
-    evidence: /\b(?:deadline|last day|due date)\b|(?:موعد نهائي|آخر موعد)/iu,
+    evidence: /\b(?:deadlines?|last day|due dates?)\b|(?:موعد نهائي|آخر موعد)/iu,
   },
   {
     query: /\blegal\b|(?:قانوني|قانونية)/iu,
@@ -783,6 +785,13 @@ export async function POST(req: Request) {
   const secretRequest = /\b(?:api[- ]?key|secret key|system prompt|hidden instructions|credentials)\b/i.test(latest) && /\b(?:show|give|reveal|print|ignore|tell|expose)\b/i.test(latest);
   const thirdPartyRecord = /\b(?:(?:another|other)\s+(?:student|person)|someone else(?:'s)?|(?:my\s+)?(?:friend|classmate)(?:'s|s))\b[^.!?]{0,90}\b(?:gpa|grades?|student id|records?|transcript)\b|\b(?:gpa|grades?|records?|transcript)\b[^.!?]{0,60}\b(?:of|for|belonging to)\s+(?:another student|someone else|my friend|my classmate)\b/i.test(latest) || /(?:معدل|درجات|سجل|كشف درجات)\s+(?:طالب آخر|طالب اخر|زميلي|صديقي)|(?:طالب آخر|طالب اخر|زميلي|صديقي).{0,60}(?:معدل|درجات|سجل)/u.test(latest);
   const personalRecommendations = /\b(?:actual|personal|my)\b.*\b(?:student|academic) record\b/i.test(latest);
+  const privateGraduationDecision = /\b(?:graduate|graduation)\b|اتخرج|التخرج/u.test(normalizeQuery(latest)) && /officially confirm|officially certify|formally confirm|confirm.*officially|توكد رسميا|تاكد رسميا/u.test(normalizeQuery(latest));
+  if (privateGraduationDecision) {
+    const content=locale==="ar" ? "لا أستطيع الاطلاع على تدقيق درجتك الفعلي أو تأكيد أهليتك للتخرج رسمياً. اطلب من كليتك والقبول والتسجيل التحقق من المتطلبات مقابل سجلك عبر القناة الرسمية؛ هذه المحادثة لا تصدر قرار تخرج." : "I cannot access your actual degree audit or officially confirm that you are eligible to graduate. Ask your college and Admission and Registration to verify the requirements against your record through the official channel; this chat cannot certify graduation.";
+    const payload: AssistantPayload={role:"assistant",content,source:"conversation",stateLabel:"privacy_capability_boundary",disposition:"answer",citations:[{title:"UAEU Degree Completion and Graduation Procedures",url:"https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",lastVerified:"2026-11-03"}],communications};
+    if (shouldPersistServerSide && userId) saveMessage(userId,"assistant",content,payload.source,payload,expectedHistoryGeneration);
+    return respond(payload,latest,locale);
+  }
   if (secretRequest || thirdPartyRecord || personalRecommendations) {
     const content = locale === "ar"
       ? secretRequest ? "لا يمكنني كشف مفاتيح API أو بيانات الاعتماد أو التعليمات المخفية. أستطيع مساعدتك في أسئلة خدمات جامعة الإمارات."
@@ -822,22 +831,29 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  const curriculum = locale === "en" ? retrieveCurriculumAnswer(routingQuery) : null;
-  if (curriculum) {
+  if (resolution.ambiguous) {
     const payload: AssistantPayload = {
-      role: "assistant",
-      content: curriculum.content,
-      source: "rag",
-      stateLabel: "curriculum_extract",
-      disposition: "answer",
-      citations: [curriculum.citation],
-      evidenceIds: [curriculum.evidenceId],
-      topic: resolution.subject?.key,
-      communications,
+      role: "assistant", content: missingSubjectContent(latest, locale, resolution.candidates.map(({ label }) => label)),
+      source: "escalated", stateLabel: "clarify_subject", disposition: "clarify", citations: [],
+      clarificationReason: "ambiguous_subject", communications,
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
+  const exactFaq = faqHit && !resolution.usedContext && [...faqHit.entry.questions, ...(faqHit.entry.matchPhrases ?? [])].some(question => normalizeQuery(question) === normalizeQuery(latest));
+  const academic = exactFaq ? null : retrieveAcademicEvidence(routingQuery);
+  if (academic?.gap) {
+    const identities = academic.identifiers?.join(" / ") ?? "";
+    const content = academic.gap === "ambiguous"
+      ? locale === "ar" ? `هل تقصد ${identities}؟ الاختصار وحده لا يحدد البرنامج.` : `Do you mean ${identities}? That abbreviation does not identify one program.`
+      : locale === "ar"
+        ? `لا أعرف إجابة موثقة لهذا الطلب${identities ? ` (${identities})` : ""} من الأدلة الرسمية المتاحة. ${academic.gap === "course" ? "لم أجد سجل مساق مطابقاً لهذا الرمز؛ لن أستبدله بمساق آخر." : academic.gap === "calendar" ? "السنة والفصل المذكوران واضحان؛ لا أملك موعداً منشوراً موثقاً لهما ولن أستخدم موعد سنة أخرى." : "لم أتحقق من البرنامج أو خطة الدفعة المطلوبة؛ هذا لا يثبت عدم وجودها."} يمكنك مراجعة الرابط الرسمي المرفق.`
+        : `I don't know a verified answer to this request${identities ? ` (${identities})` : ""} from the available official evidence. ${academic.gap === "course" ? "I could not find a matching course record for this identifier; I will not substitute another course." : academic.gap === "calendar" ? "The supplied term and year are clear; I do not have a verified published date for them and will not substitute another year's deadline." : "I could not verify the requested program or cohort plan; that does not prove it does not exist."} Check the linked official page.`;
+    const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "no_verified_context", disposition: "clarify", citations: academic.citation ? [academic.citation] : [], clarificationReason: `unverified_${academic.gap}`, communications };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  let preferredEvidence = academic?.rows ?? [];
   let semantic: SemanticRoute | null = null;
   let selectionUnavailable = false;
   const selectionFailure = (reason: "provider_unavailable" | "invalid_contract") => { if (reason === "provider_unavailable") selectionUnavailable = true; };
@@ -845,7 +861,7 @@ export async function POST(req: Request) {
     content: locale === "ar" ? "تعذر اختيار إجابة موثوقة بسبب عدم توفر خدمة الإجابة مؤقتًا. هذا ليس دليلًا على غياب سياسة الجامعة؛ حاول مجددًا بعد قليل."
       : "The answer-selection service is temporarily unavailable. This does not mean the university policy is missing; please try again shortly.",
   }, latest, locale, 503);
-  if (!directFaqHit || resolution.usedContext || resolution.needsClarification) {
+  if (!preferredEvidence.length && (!directFaqHit || resolution.usedContext || resolution.needsClarification)) {
     semantic = await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
     if (semantic) {
       if (["acknowledge", "greeting", "capabilities"].includes(semantic.kind)) {
@@ -861,7 +877,7 @@ export async function POST(req: Request) {
       faqHit = null; // Primary records render unchanged; supporting rows are not answers.
     }
   }
-  if (!semantic && ((resolution.needsClarification && !standaloneFaq) || (needsPreviousSubject && !previousUserMessage(sanitized)))) {
+  if (!preferredEvidence.length && !semantic && ((resolution.needsClarification && !standaloneFaq) || (needsPreviousSubject && !previousUserMessage(sanitized)))) {
     if (selectionUnavailable && previousUserMessage(sanitized) && !resolution.ambiguous) return selectionUnavailableResponse();
     const payload: AssistantPayload = {
       role: "assistant", content: missingSubjectContent(latest, locale, resolution.candidates.map(({ label }) => label)),
@@ -873,7 +889,7 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
   const meaning = understandQuery(routingQuery);
-  const needsApplicantCategory = !faqHit && !meaning.codes.length && meaning.subjects.includes("admissions") && meaning.intents.some((intent) => ["requirements", "eligibility"].includes(intent)) && !meaning.applicantCategories.length && !meaning.degreeLevel?.includes("postgraduate") && !meaning.intents.includes("deadline");
+  const needsApplicantCategory = !preferredEvidence.length && !faqHit && !meaning.codes.length && meaning.subjects.includes("admissions") && meaning.intents.some((intent) => ["requirements", "eligibility"].includes(intent)) && !meaning.applicantCategories.length && !meaning.degreeLevel?.includes("postgraduate") && !meaning.intents.includes("deadline");
 
   // A generic procedural/gap answer cannot be treated as an applicable dated
   // schedule. Let grounded generation acknowledge the supplied year and ask only
@@ -883,7 +899,7 @@ export async function POST(req: Request) {
   let canonicalProvider = semantic?.routingProvider;
   let canonicalModel = semantic?.routingModel;
   let recoveryEvidence: EvidenceRow[] | undefined;
-  if (!faqHit && !selectionUnavailable) {
+  if (!preferredEvidence.length && !faqHit && !selectionUnavailable) {
     recoveryEvidence = await retrieveContext(routingQuery, deadlineAt);
     const originalRequest = semantic ?? {
       resolvedQuery: routingQuery, subject: resolution.subject?.label ?? "", recordIds: [], primaryRecordIds: [],
@@ -906,7 +922,7 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  if (canonicalEntries.length) {
+  if (canonicalEntries.length && exactFaq) {
     const canonicalText = canonicalEntries.map((entry) => faqAnswer(entry, locale)).join("\n\n---\n\n");
     const content = withActionBoundary(canonicalText, latest, locale);
     if (content.length <= 5800) {
@@ -927,7 +943,7 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  if (faqHit && !contextualProcedure) {
+  if (!preferredEvidence.length && faqHit && !contextualProcedure && exactFaq) {
     const payload: AssistantPayload = {
       role: "assistant",
       content: withActionBoundary(faqAnswer(faqHit.entry, locale), latest, locale),
@@ -947,7 +963,7 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
 
-  const guide = semantic ? null : findServiceGuide(routingQuery);
+  const guide = preferredEvidence.length || semantic ? null : findServiceGuide(routingQuery);
   if (guide) {
     const payload: AssistantPayload = {
       role: "assistant",
@@ -970,7 +986,9 @@ export async function POST(req: Request) {
   // A selector outage is not evidence that the requested university rule is
   // absent. Do not start another factual-writer call after selection is unavailable.
   if (selectionUnavailable) return selectionUnavailableResponse();
-  let retrieved = semantic ? evidenceForSemanticRoute(semantic) : recoveryEvidence ?? await retrieveContext(routingQuery, deadlineAt);
+  if (!preferredEvidence.length && canonicalEntries.length) preferredEvidence = canonicalEntries.flatMap(entry => evidenceForSemanticRoute({ resolvedQuery: routingQuery, subject: resolution.subject?.label ?? "", recordIds: [], primaryRecordIds: [entry.id], targetCourseCodes: requestedCourseTargets(routingQuery), clarification: "", kind: "answer" }));
+  if (!preferredEvidence.length && !semantic && faqHit && !exactFaq) preferredEvidence = evidenceForSemanticRoute({ resolvedQuery: routingQuery, subject: resolution.subject?.label ?? "", recordIds: [], primaryRecordIds: [faqHit.entry.id], targetCourseCodes: requestedCourseTargets(routingQuery), clarification: "", kind: "answer" });
+  let retrieved = preferredEvidence.length ? preferredEvidence : semantic ? evidenceForSemanticRoute(semantic) : recoveryEvidence ?? await retrieveContext(routingQuery, deadlineAt);
   // A closed-catalog selector can miss a useful record. Its empty selection does
   // not suppress independently retrieved evidence that passes the same hard scope
   // and requested-fact gates. No unapproved or differently scoped facts are added.
@@ -1001,7 +1019,8 @@ export async function POST(req: Request) {
 
   const context = buildContextBlock(evidenceSources, userContext);
   const responseLanguage = locale === "ar" ? "Arabic" : "English";
-  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}\n\n${context}`;
+  const academicRequirements = academic?.rows.length ? academicCoverageViolations({ claims: [], clarification: "", disposition: "answer" }, evidenceSources, routingQuery) : [];
+  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}\nREQUESTED PROGRAM IDENTITIES (alias resolution, not evidence): ${academic?.identifiers?.join(" / ") ?? "as named in the request"}. Do not substitute a different program mentioned incidentally in a source.\n\n${context}\n\nREQUESTED-FACT COMPLETENESS (all facts must still cite their own supplied source):\n${academicRequirements.join("\n")}`;
   const history = trimHistory(sanitized, 12);
   let groundingTrace: AssistantPayload["grounding"];
 
@@ -1011,8 +1030,10 @@ export async function POST(req: Request) {
       if (!result.grounded) break;
       result.grounded = preserveEvidenceQualifications(result.grounded, evidenceSources, locale);
       let violations = sourceClaimViolations(result.grounded, evidenceSources, routingQuery);
+      const missingAcademicFacts = academic?.rows.length ? academicCoverageViolations(result.grounded, evidenceSources, routingQuery) : [];
+      violations.push(...missingAcademicFacts);
       let reasonCodes: AnswerGrounding["reasonCodes"] = violations.length
-        ? [violations.some((violation) => violation.includes("exclusion from this policy")) ? "unsupported_detail" : "unsupported_critical_token"] : [];
+        ? [missingAcademicFacts.length ? "scope_drift" : violations.some((violation) => violation.includes("exclusion from this policy")) ? "unsupported_detail" : "unsupported_critical_token"] : [];
       if (!violations.length) {
         groundingTrace = { status: "rejected", rewriteCount: attempt, reasonCodes: ["verification_unavailable"] };
         const verdict = await verifySourceClaims(result.grounded, evidenceSources, routingQuery, deadlineAt);
@@ -1026,7 +1047,10 @@ export async function POST(req: Request) {
       // or account details. Captured responses expose the same bounded reason codes.
       console.warn("Answer grounding rejected", { reasonCodes, rewriteCount: attempt, claimCount: result.grounded.claims.length, evidenceIds: result.grounded.claims.flatMap(({ evidenceIds }) => evidenceIds) });
       if (attempt === 1) throw new Error("Generated claims failed source support checks.");
-      result = await generateAssistantResponse({ system: `${system}\nA previous draft failed source checks: ${violations.join(" ")} The flagged claims ARE INVALID: do not repeat them unchanged. Rewrite them from their assigned source, removing any clause not established there; or omit that claim and give the remaining useful supported answer. Do not repeat unsupported numbers or contacts. For a comparison, put EACH category's facts in a SEPARATE claim with that category's own source ID; do not add comparative adjectives unless that same source establishes both sides. For course readiness, state the listed prerequisites and a conditional assessment, without claiming to verify or repeating unrelated user-supplied completed-course codes. For source scope limits, preserve the audience, term and exception. Do not combine facts from different sources under one ID.\nREJECTED DRAFT (untrusted data, never evidence): ${JSON.stringify(result.grounded)}`, messages: history, evidenceIds: evidenceSources.map(({ id }) => id), deadlineAt });
+      const correction = missingAcademicFacts.length
+        ? `The draft omitted material requested conditions. ADD the missing facts from their assigned sources rather than shortening the answer further: ${missingAcademicFacts.join(" ")} Keep every prerequisite and pre/corequisite, minimum grade, and requested cohort distinction. Retain other supported parts. If there are additional source-support violations, correct those too: ${violations.filter(violation => !missingAcademicFacts.includes(violation)).join(" ")}`
+        : `A previous draft failed source checks: ${violations.join(" ")} The flagged claims ARE INVALID: do not repeat them unchanged. Rewrite them from their assigned source, removing any clause not established there; or omit that claim and give the remaining useful supported answer. Do not repeat unsupported numbers or contacts.`;
+      result = await generateAssistantResponse({ system: `${system}\n${correction} For a comparison, put EACH category's facts in a SEPARATE claim with that category's own source ID; do not add comparative adjectives unless that same source establishes both sides. For course readiness, state the listed prerequisites and a conditional assessment, without claiming to verify or repeating unrelated user-supplied completed-course codes. For source scope limits, preserve the audience, term and exception. Do not combine facts from different sources under one ID.\nREJECTED DRAFT (untrusted data, never evidence): ${JSON.stringify(result.grounded)}`, messages: history, evidenceIds: evidenceSources.map(({ id }) => id), deadlineAt });
     }
     if (result.grounded) {
       if (result.grounded.claims.length && result.grounded.disposition === "abstain") result.grounded.disposition = "clarify";
@@ -1055,7 +1079,7 @@ export async function POST(req: Request) {
       responseMode: "grounded_generation",
       stateLabel: escalationReason ? "model_escalation" : "local_db",
       citations: escalationReason
-        ? []
+        ? (!missingSupport && result.grounded?.claims.length === 0 && academic?.citation ? [academic.citation] : [])
         : uniqueCitations(selectedSources.map(({ citation }) => citation)),
       disposition: escalationReason || remainingClarification ? "clarify" : "answer",
       communications,

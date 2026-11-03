@@ -14,6 +14,10 @@ export type KnowledgeDocument = {
   sourceUrl: string;
   lastVerified: string;
   curriculum?: boolean;
+  program?: string;
+  qualification?: string;
+  aliases?: string[];
+  archiveYear?: string;
   scope?: EvidenceScope;
 };
 
@@ -25,6 +29,7 @@ function officialUaeuUrl(value: string): boolean {
     const host = url.hostname.toLowerCase();
     return (
       url.protocol === "https:" &&
+      !/(?:webtest|cms)/i.test(host) &&
       (host === "uaeu.ac.ae" || host.endsWith(".uaeu.ac.ae"))
     );
   } catch {
@@ -79,6 +84,10 @@ export function parseApprovedDocument(
     sourceUrl: metadata.sourceurl,
     lastVerified: metadata.lastverified,
     curriculum: metadata.curriculum === "true",
+    program: metadata.program,
+    qualification: metadata.qualification,
+    aliases: metadata.aliases?.split("|").map(alias => alias.trim()).filter(Boolean),
+    archiveYear: metadata.archiveyear,
     scope: {
       courseCodes: metadata.coursecodes?.split(",").map((code) => code.trim().toUpperCase()),
       subjects: metadata.subjects?.split(",").map((subject) => subject.trim()),
@@ -109,7 +118,7 @@ export function knowledgeFingerprint(): string {
   for (const document of loadKnowledgeMarkdown()) {
     hash.update(document.filename);
     hash.update("\0");
-    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, curriculum: document.curriculum, scope: document.scope }));
+    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, curriculum: document.curriculum, scope: document.scope, program: document.program, qualification: document.qualification, aliases: document.aliases, archiveYear: document.archiveYear }));
     hash.update("\0");
   }
   return hash.digest("hex");

@@ -1,7 +1,7 @@
 /** Synthetic selection/renderer checks, not an official-source accuracy score. */
 import assert from "node:assert/strict";
 import { canonicalEntriesForSemanticRoute, resolveSemanticRoute, selectCanonicalFallback, type SemanticRoute } from "../lib/semantic-routing";
-import { faqAnswer, faqScope, loadFaqEntries, matchFaq } from "../lib/faq";
+import { faqScope, loadFaqEntries, matchFaq } from "../lib/faq";
 import { sourceClaimViolations, sourceEvidence } from "../lib/source-evidence";
 
 process.env.AI_PROVIDER = "openai";
@@ -14,7 +14,7 @@ process.env.SERVER_CHAT_HISTORY = "";
 process.env.GEMINI_EMBEDDING_SEARCH = "";
 process.env.TRUST_PROXY_HEADERS = "enabled";
 
-let calls = 0, passed = 0;
+let calls = 0, passed = 0, writerCalls=0, verifierCalls=0;
 const base: SemanticRoute = { resolvedQuery: "What should I do first to inspect a registration hold?", subject: "registration hold", recordIds: [], primaryRecordIds: ["registration-hold"], targetCourseCodes: [], clarification: "", kind: "answer" };
 const route = (change: Partial<SemanticRoute> = {}): SemanticRoute => ({ ...base, ...change });
 const entry = (id: string) => loadFaqEntries().find((entry) => entry.id === id)!;
@@ -28,7 +28,17 @@ globalThis.fetch = async (input, init) => {
   assert.equal(String(input), "https://api.openai.com/v1/responses");
   const request = JSON.parse(String(init?.body));
   const schema = request.text?.format?.name;
-  assert.ok(["catalog_route", "canonical_recovery_selection"].includes(schema), "Canonical facts must not invoke writer or verifier");
+  assert.ok(["catalog_route", "canonical_recovery_selection", "grounded_answer", "claim_source_verification"].includes(schema), "Unexpected provider operation");
+  if(schema==="grounded_answer"){
+    writerCalls++;
+    const sources=[...request.instructions.matchAll(/--- SOURCE ([^\s]+) ---\n[\s\S]*?REVIEWED SOURCE-SPECIFIC FACTS \(paraphrase, not a quotation\):\n([\s\S]*?)\nOnly this source's facts/g)];
+    assert.ok(sources.length,"The writer must receive real reviewed source blocks");
+    return new Response(JSON.stringify({status:"completed",output_text:JSON.stringify({claims:sources.map(match=>({text:match[2].trim(),evidenceIds:[match[1]]})),clarification:"",disposition:"answer"})}),{status:200});
+  }
+  if(schema==="claim_source_verification"){
+    verifierCalls++;const input=JSON.parse(request.input[0].content);
+    return new Response(JSON.stringify({status:"completed",output_text:JSON.stringify({verdicts:input.pairs.map((pair:{claimIndex:number;evidenceId:string})=>({claimIndex:pair.claimIndex,evidenceId:pair.evidenceId,status:"supported"}))})}),{status:200});
+  }
   assert.ok(!request.instructions.includes("REVIEWED SOURCE-SPECIFIC FACTS"));
   if (schema === "canonical_recovery_selection") recoveryRequest = JSON.parse(request.input[0].content);
   if (selectorUnavailable) return new Response(JSON.stringify({ error: { code: "credit_balance_exhausted", message: "Synthetic exhausted balance" } }), { status: 429 });
@@ -82,30 +92,31 @@ async function main() {
     assert.equal(response.status, 200);
     return response.json();
   };
-  await check("English canonical body is byte-faithful with honest record provenance", async () => {
+  await check("non-exact English request uses reviewed evidence and a checked writer", async () => {
     selected = route({ recordIds: ["academic-advisor-contact"] });
     const payload = await ask("How do I check a blocking hold before trying to enroll?");
-    assert.equal(payload.content, faqAnswer(entry("registration-hold"), "en"));
-    assert.equal(payload.stateLabel, "canonical_semantic_answer");
-    assert.equal(payload.responseMode, "canonical");
+    assert.equal(payload.stateLabel, "local_db");
+    assert.equal(payload.responseMode, "grounded_generation");
     assert.equal(payload.provider, "openai");
     assert.equal(payload.model, "gpt-4.1-mini");
-    assert.deepEqual(payload.evidenceIds, ["answer:registration-hold"]);
-    assert.equal(payload.claims, undefined);
-    assert.equal(payload.grounding, undefined);
+    assert.ok(payload.evidenceIds.every((id:string)=>id.startsWith("answer:registration-hold#")));
+    assert.ok(payload.claims.length);
+    assert.equal(payload.grounding.status,"checked");
     assert.ok(!payload.citations.some((citation: { url?: string }) => citation.url?.includes("serviceId=123")));
   });
-  await check("Arabic canonical body and its material qualifiers are unchanged", async () => {
+  await check("Arabic non-exact request also reaches the checked writer", async () => {
     selected = route();
     const payload = await ask("ظهرت مشكلة تمنعني من التسجيل بسبب قيد، من أين أبدأ؟", "ar");
-    assert.equal(payload.content, faqAnswer(entry("registration-hold"), "ar"));
+    assert.equal(payload.responseMode,"grounded_generation");
+    assert.equal(payload.grounding.status,"checked");
   });
-  await check("explicit course comparison renders separate complete immutable records", async () => {
+  await check("explicit course comparison preserves separate course evidence", async () => {
     const ids = ["course-prerequisites-data-structures", "course-prerequisites-database-systems"];
     selected = route({ resolvedQuery: "Compare prerequisites of CSBP319 and CSBP340", primaryRecordIds: ids, targetCourseCodes: ["CSBP319", "CSBP340"] });
     const payload = await ask("Compare the entry requirements for CSBP319 against CSBP340.");
-    assert.equal(payload.content, ids.map((id) => faqAnswer(entry(id), "en")).join("\n\n---\n\n"));
-    assert.deepEqual(payload.evidenceIds, ids.map((id) => `answer:${id}`));
+    assert.match(payload.content,/CSBP319/);assert.match(payload.content,/CSBP340/);
+    assert.equal(payload.responseMode,"grounded_generation");
+    assert.ok(payload.claims.every((claim:{evidenceIds:string[]})=>claim.evidenceIds.length===1));
   });
   await check("source retry feedback identifies the exact unsupported numeric token", () => {
     const sources = sourceEvidence([{ source: "synthetic:residency", score: 1, text: "At least 75% of credits must be completed here.", citations: [{ title: "Residency" }] }]);
@@ -131,14 +142,14 @@ async function main() {
     assert.equal(await selectCanonicalFallback(base, ["registration-hold"], "en", Date.now() - 1), null);
     assert.equal(calls, before);
   });
-  await check("route recovers one canonical answer without a factual writer", async () => {
+  await check("route recovers reviewed evidence then invokes the factual writer", async () => {
     selected = route({ primaryRecordIds: [], recordIds: ["registration-hold", "academic-advisor-contact"] });
     recoverySelected = { primaryRecordIds: ["registration-hold"] };
     const payload = await ask("How do I check a blocking hold before trying to enroll?");
-    assert.equal(payload.content, entry("registration-hold").answer_en);
-    assert.equal(payload.responseMode, "canonical");
-    assert.deepEqual(payload.evidenceIds, ["answer:registration-hold"]);
-    assert.equal(payload.claims, undefined);
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:registration-hold#")));
+    assert.equal(payload.responseMode, "grounded_generation");
+    assert.ok(payload.evidenceIds.every((id:string)=>id.startsWith("answer:registration-hold#")));
+    assert.ok(payload.claims.length);
   });
   await check("a null compact selection cannot turn external credit into an unresolved previous-course reference", async () => {
     selected = null;
@@ -146,11 +157,11 @@ async function main() {
     const before = calls;
     const question = "Will every course from my previous university count toward my degree?";
     const payload = await ask(question);
-    assert.equal(calls - before, 2, "Null compact selection must still reach full-body selection");
+    assert.ok(calls - before >= 4, "Null compact selection must reach full-body selection, writer and verifier");
     assert.equal(recoveryRequest?.request, question);
-    assert.equal(payload.content, entry("admissions-transfer-credits").answer_en);
-    assert.equal(payload.responseMode, "canonical");
-    assert.deepEqual(payload.evidenceIds, ["answer:admissions-transfer-credits"]);
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:admissions-transfer-credits#")));
+    assert.equal(payload.responseMode, "grounded_generation");
+    assert.ok(payload.evidenceIds.every((id:string)=>id.startsWith("answer:admissions-transfer-credits#")));
   });
   await check("a genuine previous-course question without history still needs the missing subject", async () => {
     selected = null;
@@ -164,8 +175,8 @@ async function main() {
     recoverySelected = undefined;
     selected = route({ resolvedQuery: "What are the school-certificate equivalency requirements for undergraduate admission?", primaryRecordIds: ["admissions-school-certificate-equivalency"] });
     const payload = await ask("What requirements apply to proving school-certificate equivalency for undergraduate admission?");
-    assert.equal(payload.content, entry("admissions-school-certificate-equivalency").answer_en);
-    assert.equal(payload.responseMode, "canonical");
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:admissions-school-certificate-equivalency#")));
+    assert.equal(payload.responseMode, "grounded_generation");
   });
   await check("ordinary admission requirements retain category clarification", async () => {
     selected = route({ resolvedQuery: "Which requirements apply to undergraduate admission?", primaryRecordIds: ["admissions-apply-undergraduate"] });
@@ -178,7 +189,7 @@ async function main() {
     const question = "How do I check a blocking hold before trying to enroll?";
     const payload = await ask(question);
     assert.equal(recoveryRequest?.request, question);
-    assert.equal(payload.content, entry("registration-hold").answer_en);
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:registration-hold#")));
   });
   await check("lossy credit-load rewrite cannot replace the original requested facet", async () => {
     selected = route({ resolvedQuery: "How do I apply for registration?", primaryRecordIds: ["course-add-drop"] });
@@ -186,7 +197,7 @@ async function main() {
     const question = "How many credits may a student register for during a regular semester?";
     const payload = await ask(question);
     assert.equal(recoveryRequest?.request, question);
-    assert.equal(payload.content, entry("semester-credit-load").answer_en);
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:semester-credit-load#")));
   });
   await check("academic standing cannot use course-repeat GPA overlap as its primary", async () => {
     const question = "What happens when my cumulative GPA drops below good academic standing?";
@@ -194,15 +205,15 @@ async function main() {
     recoverySelected = { primaryRecordIds: ["academic-probation"] };
     const payload = await ask(question);
     assert.ok(!recoveryRequest?.candidates.some(({ id }) => id === "course-repeat-grades"));
-    assert.equal(payload.content, entry("academic-probation").answer_en);
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:academic-probation#")));
   });
-  await check("transaction request receives immutable public procedure plus chat boundary", async () => {
+  await check("transaction request receives checked public evidence plus chat boundary", async () => {
     const question = "Can you submit a To Whom It May Concern letter request for me?";
     selected = route({ resolvedQuery: question, primaryRecordIds: [] });
     recoverySelected = { primaryRecordIds: ["enrollment-certificate"] };
     const payload = await ask(question);
     assert.match(payload.content, /^I cannot submit or complete the transaction/);
-    assert.ok(payload.content.endsWith(entry("enrollment-certificate").answer_en));
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:enrollment-certificate#")));
   });
   await check("selector outage is not mislabeled as absent university evidence", async () => {
     selectorUnavailable = true;
@@ -214,7 +225,7 @@ async function main() {
     assert.doesNotMatch(payload.content, /could not verify|missing official evidence/i);
     assert.deepEqual(payload.citations, []);
   });
-  assert.equal(calls, 31);
-  console.log(`${passed} canonical selection/rendering checks passed; ${calls} intercepted selector calls, no network and no factual writer calls.`);
+  assert.ok(writerCalls > 0); assert.ok(verifierCalls >= writerCalls);
+  console.log(`${passed} canonical selection/rendering checks passed; ${calls} intercepted provider calls, including checked writers; zero network requests. These synthetic checks are not a live accuracy score.`);
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; }).finally(() => { globalThis.fetch = originalFetch; });
