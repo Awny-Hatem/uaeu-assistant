@@ -1146,6 +1146,22 @@ async function main() {
       },
     },
     {
+      name: "failed Data Structures twice bypasses selector outage with reviewed next steps",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "I'm a second year, 4th semester, I failed data structure twice, what should I do?" },
+            { role: "user", content: "I'm a second year, 4th semester, I failed data structure twice, what should I do?" },
+          ],
+        });
+        assertFaq(result, "failed-data-structures-twice-next-steps", "answer");
+        assert.match(result.data.content ?? "", /repeat/i);
+        assert.match(result.data.content ?? "", /all attempts and grades remain on the transcript/i);
+        assert.match(result.data.content ?? "", /CSBP219|CSBP221|degree audit/i);
+      },
+    },
+    {
       name: "Arabic lost-ID request is separated from transcript service",
       run: async () => {
         const result = await postJson({
