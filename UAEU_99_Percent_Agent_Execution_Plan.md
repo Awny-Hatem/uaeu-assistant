@@ -2,7 +2,7 @@
 
 **Target branch:** `feature/autonomous-agent-foundation`
 
-**Baseline benchmark:** 3 November 2026, 100 sophisticated cases against production and the branch preview
+**Benchmark history:** 3 November 2026, 100 sophisticated cases against production and the branch preview
 
 **Target:** Make the branch a materially better, evidence-grounded UAEU student agent, with a minimum 99% result on the reviewed in-scope benchmark and no shared critical failures.
 
@@ -20,20 +20,48 @@ The first 100-case comparison produced:
 | Ties | 95 | 95 |
 | Shared failures | 2 | 2 |
 
-The branch is currently only marginally better. The result does not prove autonomous-agent capability because the branch and production still share almost all answer behavior. The next work must improve the underlying evidence, reasoning, and workflow tools—not only prompts or visual polish.
+At baseline, the branch was only marginally better. That result did not prove autonomous-agent capability because the branch and production shared almost all answer behavior. The next work must improve the underlying evidence, reasoning, and workflow tools—not only prompts or visual polish.
 
-The two shared failures are the first mandatory fixes:
+### Current branch status after Sprint 1
+
+The first execution slice is complete. Two deterministic reviewed records were added for the shared transcript and password/MFA failures, and source-grounding rejection was changed from a generic 502 into a safe structured escalation. The deployed rerun produced:
+
+| Measure | Production | Branch after fixes |
+|---|---:|---:|
+| Average automated score | 91.1 | **92.8** |
+| Passes | 89 | **91** |
+| Partial results | 8 | 9 |
+| Failures | 3 | **0** |
+| Branch wins | — | **4** |
+| Ties | — | 96 |
+| Shared failures | — | **0** |
+
+The branch is now safer and measurably better, but 92.8 is not close enough to claim 99%. The remaining score is concentrated in partial-quality planning, clarification, policy-scope, and generated-answer variance—not the two former hard failures. The report is stored in `reports/sophisticated/2026-11-03-after-composite-fixes.md`.
+
+The two shared failures that drove Sprint 1 were:
 
 1. **S029 — transcript follow-up:** request a transcript, then ask its cost while preserving current-student versus alumni context. Both deployments returned a source-grounding error instead of a useful answer.
 2. **S053 — password and MFA recovery:** the student forgot a password and replaced their phone, so MFA cannot complete. Both deployments returned a source-grounding error instead of separating self-service recovery from UITS escalation.
 
 Other observed differences:
 
-- **S019:** production failed with a 502 while the branch produced a partial clarification.
-- **S013:** production handled the course-planning scope better than the branch.
-- **S083:** production handled the Arabic graduation scenario better than the branch.
+- **S019:** production failed with a 502 in the baseline run while the branch produced a partial clarification; repeated runs show provider variance, so this remains a stability case.
+- **S013:** course-planning scope remains a partial-quality priority.
+- **S083:** Arabic graduation behavior remains a variance and claim-quality priority.
 
-## 2. What “99%” must mean
+## 2. The path from 92.8% to 99%
+
+Use staged gates instead of trying to jump directly from the current score to 99:
+
+| Milestone | Required result | Main work |
+|---|---|---|
+| **95%** | 95/100 strict passes, zero branch failures, no critical defects | Remove remaining generic clarifications; stabilize generated-answer variance; add canonical records for the most frequent partial cases |
+| **97%** | 97/100 strict passes across repeated runs, zero critical defects | Add claim ledgers, source/scope validation, complete pilot-domain coverage, and deterministic course/program reasoning |
+| **99%** | 99/100 reviewed passes across three runs, zero critical defects | Add degree-audit planning, authenticated read-only portal data, action boundaries, and human claim-level approval |
+
+Do not count a case as passing if it succeeds only because it contains expected keywords. A case must satisfy contract, evidence, decision-quality, and safety checks.
+
+## 3. What “99%” must mean
 
 The target is not 99% keyword matching. A case passes only when the answer is useful, correctly scoped, supported by applicable evidence, and safe for the requested action.
 
@@ -53,7 +81,7 @@ The target is not 99% keyword matching. A case passes only when the answer is us
 
 If the automated score reaches 99 but any critical safety, privacy, authorization, or fabricated-action test fails, the release still fails.
 
-## 3. Workstream A — eliminate the current shared failures first
+## 4. Workstream A — eliminate the current shared failures first
 
 ### A1. Add deterministic service handlers
 
@@ -103,7 +131,7 @@ Add tests for:
 
 **Gate A:** S029 and S053 pass on production-like local tests, and neither endpoint returns a 5xx for an answerable service request.
 
-## 4. Workstream B — make the benchmark strict enough to trust
+## 5. Workstream B — make the benchmark strict enough to trust
 
 The first benchmark is an excellent diagnostic, but its cue-based score can still reward a response that mentions some expected words without proving the requested claims.
 
@@ -154,7 +182,7 @@ Keep the 100-case set as a smoke benchmark, then add:
 
 **Gate B:** every score is reproducible, every pass has claim-level evidence, and no critical case passes only because of keyword overlap.
 
-## 5. Workstream C — build the authoritative UAEU knowledge plane
+## 6. Workstream C — build the authoritative UAEU knowledge plane
 
 The branch cannot reach reliable broad coverage with 121 verified answers and a small Markdown corpus alone.
 
@@ -197,7 +225,7 @@ Arabic answers must use the same evidence and scope rules as English answers. Do
 
 **Gate C:** every pilot domain has a measured coverage percentage, no unowned critical record, no silently stale policy, and held-out course/program identity tests fail closed on ambiguity.
 
-## 6. Workstream D — deterministic academic planning and graduation
+## 7. Workstream D — deterministic academic planning and graduation
 
 This is the core capability that differentiates the product from a normal ChatGPT account.
 
@@ -246,7 +274,7 @@ The interface must say “conditional plan” until the official degree audit an
 
 **Gate D:** independent academic reviewers approve representative plans for each pilot program, including transfer credit, failed prerequisites, catalog changes, probation, summer terms, and target-term infeasibility.
 
-## 7. Workstream E — controlled website and portal agent
+## 8. Workstream E — controlled website and portal agent
 
 ### E1. Start read-only
 
@@ -279,7 +307,7 @@ For every write action:
 
 **Gate E:** no unauthorized or unconfirmed write succeeds; duplicate/retry tests are safe; every successful action has a verified receipt; every failed action clearly reports “not submitted.”
 
-## 8. Workstream F — accessibility and trust UX
+## 9. Workstream F — accessibility and trust UX
 
 Keep the existing dark-mode and accessibility work, then complete:
 
@@ -297,21 +325,23 @@ Keep the existing dark-mode and accessibility work, then complete:
 
 **Gate F:** no critical accessibility defect, and users with disabilities can complete the pilot read-only and draft workflows without assistance.
 
-## 9. Branch implementation sequence
+## 10. Branch implementation sequence
 
-### Sprint 1 — stabilize failures
+### Sprint 1 — stabilize failures — completed
 
 - Implement the S029/S053 canonical service handlers.
 - Change grounding rejection into a useful typed response.
 - Add targeted route tests and browser-visible error states.
-- Re-run the 100-case smoke suite.
+- Re-run the 100-case smoke suite: branch reached 92.8/100 with zero failures.
 
-### Sprint 2 — strengthen evaluation
+### Sprint 2 — strengthen evaluation — next
 
 - Add claim ledgers and severity.
 - Add three-run variance testing.
 - Add human-review fields and a failure dashboard.
 - Block merges when critical cases regress.
+
+Immediate partial-case priorities are S013 (course-plan scope), S032 (graduation conditions), S067/S072/S073/S074 (multi-turn/privacy boundaries), and S100 (agent workflow ordering). Each must receive an independently reviewed answer outline before changing routing or prompts.
 
 ### Sprint 3 — improve evidence coverage
 
@@ -346,11 +376,11 @@ Keep the existing dark-mode and accessibility work, then complete:
 - Compare against production and a normal ChatGPT baseline using identical prompts and evidence requirements.
 - Release only if all critical gates pass.
 
-## 10. Definition of done
+## 11. Definition of done
 
 The branch is ready to claim “99%” only when:
 
-- S029 and S053 are fixed and remain fixed across repeated runs;
+- S029 and S053 are fixed and remain fixed across repeated runs; this is now true for the first deployed rerun and must remain a permanent regression gate;
 - the branch wins materially against production on the expanded held-out benchmark;
 - the score reflects claim-level evidence, not keyword coverage alone;
 - all high-stakes answers are sourced or explicitly unavailable with a concrete handoff;
@@ -360,5 +390,5 @@ The branch is ready to claim “99%” only when:
 - no critical privacy, authorization, wrong-record, stale-source, or fabricated-action defect remains;
 - every unsupported domain has an owner, coverage status, and user-facing resolution path.
 
-The practical conclusion is simple: the path from 91.6 to 99 is primarily a data, deterministic-planning, tool-integration, and evaluation problem. Prompt tuning alone will not produce a trustworthy UAEU agent.
+The practical conclusion is simple: the branch has moved from 91.6 to 92.8 and eliminated its two hard failures. The path from 92.8 to 99 is primarily a data, deterministic-planning, tool-integration, variance-control, and human-review problem. Prompt tuning alone will not produce a trustworthy UAEU agent.
 
