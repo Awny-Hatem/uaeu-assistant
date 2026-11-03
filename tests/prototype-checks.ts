@@ -1081,6 +1081,85 @@ async function main() {
       },
     },
     {
+      name: "degree-level mismatch is not answered with an undergraduate GPA rule",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I am a postgraduate student asking about a bachelor's graduation GPA. Detect the degree-level mismatch instead of applying the undergraduate rule to me." }],
+        });
+        assertFaq(result, "degree-level-mismatch-for-graduation-gpa", "clarify");
+        assert.match(result.data.content ?? "", /postgraduate/i);
+        assert.match(result.data.content ?? "", /undergraduate|bachelor/i);
+      },
+    },
+    {
+      name: "combined Wi-Fi and MFA failure keeps network settings bounded",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I can sign in to email but cannot connect to campus Wi-Fi and MFA prompts keep failing. Give a safe troubleshooting sequence without inventing network settings." }],
+        });
+        assertFaq(result, "combined-campus-wifi-and-mfa-troubleshooting", "answer");
+        assert.match(result.data.content ?? "", /Wi-Fi/i);
+        assert.match(result.data.content ?? "", /MFA/i);
+        assert.match(result.data.content ?? "", /never send your password/i);
+      },
+    },
+    {
+      name: "conditional computer science planning preserves requirements and no graduation guarantee",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Build a conditional Computer Science plan from Fall 2026 to graduation. I have completed the courses in my unofficial list, want no more than 15 credits per term, and need every remaining requirement and prerequisite explained. Do not claim an official graduation date." }],
+        });
+        assertFaq(result, "conditional-computer-science-degree-plan-scope", "clarify");
+        assert.match(result.data.content ?? "", /Computer Science/i);
+        assert.match(result.data.content ?? "", /remaining requirements/i);
+        assert.match(result.data.content ?? "", /conditional plan/i);
+      },
+    },
+    {
+      name: "stale offering plan preserves Spring 2028 risk and alternative boundaries",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "My target is graduation in Spring 2028, but one required course is offered only in Fall according to an old plan. How should the planner model sequencing, source freshness, and an alternative without promising the target term?" }],
+        });
+        assertFaq(result, "stale-course-offering-risk-for-spring-2028", "clarify");
+        assert.match(result.data.content ?? "", /Spring 2028/i);
+        assert.match(result.data.content ?? "", /old|stale/i);
+        assert.match(result.data.content ?? "", /alternative|cannot guarantee/i);
+      },
+    },
+    {
+      name: "agent architecture answer orders evidence through receipt verification",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Describe how the future UAEU agent should answer a scenario that requires current policy, a student record, a degree-plan computation, and a portal submission. Explain the order of evidence, authentication, computation, preview, confirmation, and receipt verification." }],
+        });
+        assertFaq(result, "future-agent-evidence-authentication-plan-action-order", "answer");
+        assert.match(result.data.content ?? "", /current applicable policy|source evidence/i);
+        assert.match(result.data.content ?? "", /authenticate|SSO/i);
+        assert.match(result.data.content ?? "", /preview/i);
+        assert.match(result.data.content ?? "", /receipt/i);
+      },
+    },
+    {
+      name: "Arabic lost-ID request is separated from transcript service",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "فقدت بطاقة الطالب وأحتاج إلى معرفة الجهة التي أبلغها بها وهل الاستبدال مجاني. لا تخلط هذا مع طلب كشف الدرجات." }],
+        });
+        assertFaq(result, "lost-student-id-card-arabic-scope", "answer");
+        assert.match(result.data.content ?? "", /بطاقة|الطالب/u);
+        assert.match(result.data.content ?? "", /الإبلاغ|التسجيل|الجهة/u);
+        assert.match(result.data.content ?? "", /رسوم|استبدال|مجاني/u);
+        assert.match(result.data.content ?? "", /كشف الدرجات/u);
+      },
+    },
+    {
       name: "student document workflow returns the verified guided service",
       run: async () => {
         const result = await postJson({

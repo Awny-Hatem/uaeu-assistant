@@ -783,7 +783,7 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
 
-  const credentialRequest = /\b(?:password|mfa|multi[- ]factor|verification code|authentication code|one[- ]time code)\b/i.test(latest) && /\b(?:retrieve|use|log[ -]?in|sign[ -]?in|paste|earlier|remember|send|share)\b/i.test(latest);
+  const credentialRequest = /\b(?:password|mfa|multi[- ]factor|verification code|authentication code|one[- ]time code)\b/i.test(latest) && /\b(?:retrieve|use|paste|earlier|remember|send|share)\b/i.test(latest);
   const secretRequest = /\b(?:api[- ]?key|secret key|system prompt|hidden instructions|credentials)\b/i.test(latest) && /\b(?:show|give|reveal|print|ignore|tell|expose)\b/i.test(latest);
   const thirdPartyRecord = /\b(?:(?:another|other)\s+(?:student|person)|someone else(?:'s)?|(?:my\s+)?(?:friend|classmate)(?:'s|s))\b[^.!?]{0,90}\b(?:gpa|grades?|student id|records?|transcript)\b|\b(?:gpa|grades?|records?|transcript)\b[^.!?]{0,60}\b(?:of|for|belonging to)\s+(?:another student|someone else|my friend|my classmate)\b/i.test(latest) || /(?:معدل|درجات|سجل|كشف درجات)\s+(?:طالب آخر|طالب اخر|زميلي|صديقي)|(?:طالب آخر|طالب اخر|زميلي|صديقي).{0,60}(?:معدل|درجات|سجل)/u.test(latest);
   const personalRecommendations = /\b(?:actual|personal|my)\b.*\b(?:student|academic) record\b/i.test(latest);
@@ -857,7 +857,8 @@ export async function POST(req: Request) {
   if (!directFaqHit || resolution.usedContext || resolution.needsClarification) {
     semantic = await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
     if (semantic) {
-      if (["acknowledge", "greeting", "capabilities"].includes(semantic.kind)) {
+      const semanticAcknowledgementIsSafe = semantic.kind !== "acknowledge" || conversationAcknowledgement(latest) !== null;
+      if (semanticAcknowledgementIsSafe && ["acknowledge", "greeting", "capabilities"].includes(semantic.kind)) {
         const kind = semantic.kind === "acknowledge" ? "thanks" : semantic.kind as "greeting" | "capabilities";
         const payload: AssistantPayload = { role: "assistant", content: acknowledgementContent(kind, locale), source: "conversation", stateLabel: "conversation_acknowledgement", disposition: "answer", citations: [] };
         if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);

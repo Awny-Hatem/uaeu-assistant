@@ -21,8 +21,8 @@ function check(name: string, run: () => void) {
 }
 
 // Content-regression checks, not live verification or a proof of source entailment.
-check("46 service records retain bilingual answers and mapped official sources", () => {
-  assert.equal(entries.length, 46);
+check("49 service records retain bilingual answers and mapped official sources", () => {
+  assert.equal(entries.length, 49);
   assert.equal(new Set(entries.map(item => item.id)).size, entries.length);
   for (const item of entries) {
     assert.ok(item.answer_en.length > 20 && item.answer_ar.length > 20, item.id);
@@ -80,6 +80,19 @@ check("housing and academic transfer records remain separate", () => {
   assert.match(record.answer_en, /not.*academic credit/i);
   assert.match(record.answer_en, /Rooms Assignment Service/);
   assert.ok(record.citations.some(source => source.url.includes("serviceId=106")));
+});
+check("combined Wi-Fi and MFA guidance avoids invented network settings", () => {
+  const record = entry("combined-campus-wifi-and-mfa-troubleshooting");
+  assert.match(record.answer_en, /Wi-Fi/);
+  assert.match(record.answer_en, /MFA/);
+  assert.match(record.answer_en, /never send your password or MFA code/);
+  assert.ok(record.citations.some(source => source.url.includes("student-handbook2023")));
+});
+check("portal action guidance requires preview and explicit confirmation", () => {
+  const record = entry("portal-action-review-before-registration-and-payment");
+  assert.match(record.answer_en, /CSBP319/);
+  assert.match(record.answer_en, /explicit confirmation/);
+  assert.match(record.answer_en, /official receipt/);
 });
 check("housing cost does not infer scholarship exceptions", () => {
   const record = entry("student-housing-cost");

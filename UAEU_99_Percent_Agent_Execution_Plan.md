@@ -38,6 +38,10 @@ The first execution slice is complete. Two deterministic reviewed records were a
 
 The branch is now safer and measurably better, but 92.8 is not close enough to claim 99%. The remaining score is concentrated in partial-quality planning, clarification, policy-scope, and generated-answer variance—not the two former hard failures. The report is stored in `reports/sophisticated/2026-11-03-after-composite-fixes.md`.
 
+### Deployed benchmark after the targeted coverage slice
+
+The next deployed revision (`785bede`) was evaluated against the same 100-case fixture. Production scored **90.9** with 89 passes, 8 partials and 3 failures; the branch scored **94.2** with **96 passes, 4 partials and 0 failures**. The branch won 17 cases, production won 5, 78 tied, and there were no shared failures. This is still an automated triage result rather than a claim of factual 94.2% accuracy; the captured report is `reports/sophisticated/2026-11-03-after-targeted-coverage.md`.
+
 The two shared failures that drove Sprint 1 were:
 
 1. **S029 — transcript follow-up:** request a transcript, then ask its cost while preserving current-student versus alumni context. Both deployments returned a source-grounding error instead of a useful answer.

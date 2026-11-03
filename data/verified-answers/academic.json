@@ -2533,6 +2533,83 @@
           "evidenceText": "The calendar provides dates for named academic terms. It does not separately label those dates as universal graduation-application deadlines, and a calendar date from another term cannot establish an unspecified October 31 deadline."
         }
       ]
+    },
+    {
+      "id": "degree-level-mismatch-for-graduation-gpa",
+      "category": "graduation",
+      "questions": [
+        "I am a postgraduate student asking about a bachelor's graduation GPA. Detect the degree-level mismatch instead of applying the undergraduate rule to me."
+      ],
+      "matchPhrases": ["postgraduate student bachelor's graduation GPA", "degree-level mismatch for graduation GPA", "اختلاف مستوى الدرجة وقاعدة معدل التخرج"],
+      "answer_en": "**Degree-level mismatch**\n- A postgraduate student’s graduation GPA must not be answered by applying an undergraduate or bachelor’s rule. The applicable degree, program, catalog year, and governing postgraduate policy must be identified first.\n- The published undergraduate graduation procedure is scoped to undergraduate programs; it is not proof of a postgraduate threshold. Ask for the exact postgraduate degree and cohort before stating a GPA rule.",
+      "answer_ar": "**اختلاف مستوى الدرجة**\n- لا يجوز تطبيق قاعدة تخرج البكالوريوس على طالب دراسات عليا. يجب أولاً تحديد الدرجة والبرنامج وسنة الخطة والسياسة الخاصة بالدراسات العليا.\n- إجراء التخرج المنشور للمرحلة الجامعية الأولى خاص ببرامج البكالوريوس ولا يثبت حداً للدراسات العليا.",
+      "disposition": "clarify",
+      "citations": [{
+        "title": "UAEU Undergraduate Degree Completion and Graduation Procedure",
+        "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",
+        "lastVerified": "2026-09-29",
+        "sourceSection": "Scope; procedure 4 Application for Degree",
+        "evidenceText": "The procedure is an undergraduate degree-completion and graduation procedure. Its undergraduate scope does not establish a postgraduate graduation GPA rule."
+      }]
+    },
+    {
+      "id": "conditional-computer-science-degree-plan-scope",
+      "category": "degree-planning",
+      "questions": [
+        "Build a conditional Computer Science plan from Fall 2026 to graduation. I have completed the courses in my unofficial list, want no more than 15 credits per term, and need every remaining requirement and prerequisite explained. Do not claim an official graduation date."
+      ],
+      "matchPhrases": ["conditional Computer Science plan from Fall 2026", "unofficial course list 15 credits per term", "خطة مشروطة لعلوم الحاسوب والمتطلبات المتبقية"],
+      "answer_en": "**Conditional Computer Science plan**\n- A useful plan must identify the Computer Science catalog/cohort, compare your unofficial completed-course list against the published requirements, evaluate each prerequisite/corequisite, and keep each term at or below 15 credits.\n- The result can explain remaining requirements and prerequisite order, but it remains a **conditional plan** until the official degree audit, completed-course grades, transfer decisions, and current section availability are confirmed.\n- I cannot claim an official graduation date from an unofficial list or a model plan; show the missing program, catalog year, course list and grades so the plan can be computed with those limits.",
+      "answer_ar": "**خطة مشروطة لعلوم الحاسوب**\n- يجب تحديد الخطة الدراسية والسنة، ومقارنة المقررات المكتملة غير الرسمية بالمتطلبات المنشورة، وفحص المتطلبات السابقة والمصاحبة، مع ألا تتجاوز الخطة 15 ساعة في الفصل.\n- يمكن شرح المتطلبات المتبقية وترتيب المتطلبات السابقة، لكن الخطة تبقى **مشروطة** حتى يؤكد التدقيق الأكاديمي الرسمي والدرجات وتوافر الشعب.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+          "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "The model plan lists courses and credits by semester and says the applicable cohort plan, completed prerequisites, placement and available sections must be confirmed before registration."
+        },
+        {
+          "title": "UAEU Catalog — CSBP319 Data Structures",
+          "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "The catalog record demonstrates that course-level prerequisite and corequisite rules must be evaluated from the applicable official record."
+        }
+      ]
+    },
+    {
+      "id": "stale-course-offering-risk-for-spring-2028",
+      "category": "degree-planning",
+      "questions": [
+        "My target is graduation in Spring 2028, but one required course is offered only in Fall according to an old plan. How should the planner model sequencing, source freshness, and an alternative without promising the target term?"
+      ],
+      "matchPhrases": ["Spring 2028 course offered only in Fall old plan", "source freshness alternative graduation term", "خطة قديمة ومقرر في الخريف وهدف ربيع 2028"],
+      "answer_en": "**Modeling a stale course-offering constraint**\n- Preserve **Spring 2028** as the student’s target, but treat the old Fall-only statement as stale or unconfirmed until a current catalog, timetable, or department source verifies the offering.\n- Compute the prerequisite sequence and show the earliest feasible placement; then model an alternative only if an official equivalent or alternate term is published.\n- Label the result as a risk and do not promise Spring 2028. If current offering data is unavailable, say that the target cannot be certified and route the student to the department or advising unit for confirmation.",
+      "answer_ar": "**التعامل مع معلومة قديمة عن طرح مقرر**\n- احتفظ بهدف **ربيع 2028**، لكن اعتبر معلومة طرح المقرر في الخريف فقط قديمة أو غير مؤكدة حتى يتحقق مصدر حالي.\n- احسب ترتيب المتطلبات السابقة واعرض البديل فقط إذا كان مدعوماً بمصدر رسمي، ولا تضمن الفصل المستهدف.",
+      "disposition": "clarify",
+      "citations": [{
+        "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+        "lastVerified": "2026-09-29",
+        "evidenceText": "A cohort model plan is not current timetable evidence for Spring 2028. The plan must be scoped to the applicable cohort and checked against current availability before registration."
+      }]
+    },
+    {
+      "id": "future-agent-evidence-authentication-plan-action-order",
+      "category": "agent-boundary",
+      "questions": [
+        "Describe how the future UAEU agent should answer a scenario that requires current policy, a student record, a degree-plan computation, and a portal submission. Explain the order of evidence, authentication, computation, preview, confirmation, and receipt verification."
+      ],
+      "matchPhrases": ["future agent current policy student record degree plan portal submission", "evidence authentication computation preview receipt", "ترتيب الأدلة والمصادقة والمعاينة والإيصال للوكيل"],
+      "answer_en": "**Required order for an autonomous UAEU workflow**\n1. Retrieve the current applicable policy/source evidence and record its scope, effective date, and conflicts.\n2. Authenticate the student through UAEU SSO/portal and read only the authorized student record; never infer personal status from public pages.\n3. Compute the conditional degree plan from the official requirements, student record, prerequisites and remaining credits, and show the assumptions.\n4. Present a reviewable preview with the exact courses, fees, consequences and destination; do not submit during planning.\n5. Obtain explicit confirmation for this exact action immediately before the portal write.\n6. Submit idempotently through the authorized portal tool, verify the official receipt/status, and report the receipt—or state clearly that nothing was submitted.",
+      "answer_ar": "**الترتيب المطلوب لسير عمل وكيل جامعة الإمارات**\n1. استرجاع السياسة الحالية والمصادر وتحديد نطاقها وتاريخها.\n2. مصادقة الطالب عبر الدخول الموحد وقراءة السجل المصرح به فقط.\n3. حساب خطة مشروطة من المتطلبات الرسمية والسجل والمتطلبات السابقة والساعات المتبقية.\n4. عرض معاينة قابلة للمراجعة توضح المقررات والرسوم والآثار والوجهة.\n5. طلب تأكيد صريح للإجراء المحدد قبل الإرسال.\n6. تنفيذ الإرسال بطريقة آمنة والتحقق من الإيصال أو توضيح أن شيئاً لم يُرسل.",
+      "disposition": "answer",
+      "citations": [{
+        "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+        "lastVerified": "2026-09-29",
+        "evidenceText": "The model plan is conditional on the applicable cohort and completed prerequisites; the workflow order and portal authorization are product safety requirements, not claims that the public plan itself grants portal access."
+      }]
     }
   ]
 }
