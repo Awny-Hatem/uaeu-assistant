@@ -115,6 +115,12 @@ function previousUserMessage(messages: ChatMessage[]): string | null {
   return null;
 }
 
+function asksPreviousQuestion(query: string): boolean {
+  const normalized = query.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
+  return /^(?:what did i ask|what was my (?:last|previous) question|what was my previous request|what did i say before)\b/u.test(normalized) ||
+    /^(?:ما السؤال الذي طرحته|ماذا سألت سابقا|ماذا سألت من قبل)/u.test(normalized);
+}
+
 function previousStandaloneUserMessage(messages: ChatMessage[]): string | null {
   let foundLatest = false;
   for (let index = messages.length - 1; index >= 0; index -= 1) {
@@ -719,6 +725,26 @@ export async function POST(req: Request) {
   }
 
   const locale = resolveLocale(latest, localePref);
+  if (asksPreviousQuestion(latest)) {
+    const previousQuestion = previousUserMessage(sanitized);
+    const content = previousQuestion
+      ? locale === "ar"
+        ? `كان سؤالك السابق: «${previousQuestion}»`
+        : `Your previous question was: “${previousQuestion}”`
+      : locale === "ar"
+        ? "لا توجد رسالة سابقة من المستخدم في هذه المحادثة."
+        : "There is no previous user question in this conversation.";
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content,
+      source: "conversation",
+      stateLabel: "conversation_history_answer",
+      disposition: "answer",
+      citations: [],
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
   const resolution = resolveConversation(sanitized, latest);
   const routingQuery = buildRoutingQuery(sanitized, latest);
   const communications = matchCommunications(routingQuery);

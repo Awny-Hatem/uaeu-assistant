@@ -31,6 +31,7 @@ function isExternalAcademicCreditRequest(text: string): boolean {
 }
 
 const SUBJECTS = [
+  ["computer-engineering", "Computer Engineering study plan", /\bcomputer engineering\b/u],
   ["transcript", "official transcript", /\btranscripts?\b|كشف\s+(?:الدرجات|درجات)/u],
   ["certificate", "graduation certificate", /\b(?:graduation|degree) (?:certificate|diploma)|\bdiploma\b|شهاد[ةه]\s+(?:التخرج|الدرج[ةه])/u],
   ["enrollment-document", "enrollment certificate", /\benrollment (?:certificate|letter)|\bproof of enroll|\b(?:letter|certificate|document)\b.{0,35}\b(?:proving|confirming|showing|certifying|to prove|to confirm)\b.{0,35}\b(?:enrolled|enrolment|enrollment|student status)\b|شهاد[ةه]\s+قيد|اثبات\s+القيد|(?:رسال[ةه]|خطاب|شهاد[ةه]|وثيق[ةه]).{0,30}(?:تثبت|يثبت|اثبات|تاكيد).{0,25}(?:قيد|مقيد|طالب)/u],
@@ -63,8 +64,9 @@ const SUBJECTS = [
   ["grade", "grades", /\b(?:grade|grading|academic standing|probation)\b|تقدير|درج[ةه]|انذار اكاديمي/u],
 ] as const;
 
-export type FactIntent = "prerequisites" | "fees" | "duration" | "deadline" | "status" | "eligibility" | "topics" | "location" | "hours" | "documents" | "apply" | "requirements" | "gpa" | "courses" | "contact" | "verify" | "start" | "exams" | "credit-load" | "standing" | "approval" | "withdrawal";
+export type FactIntent = "prerequisites" | "fees" | "duration" | "deadline" | "status" | "eligibility" | "topics" | "location" | "hours" | "documents" | "apply" | "requirements" | "gpa" | "courses" | "contact" | "verify" | "start" | "exams" | "credit-load" | "standing" | "approval" | "withdrawal" | "substitution";
 const INTENTS: [FactIntent, RegExp][] = [
+  ["substitution", /\b(?:instead of|in place of|replace|replacement|substitut\w*|equivalent to)\b/u],
   ["credit-load", /\b(?:credit (?:hours?|load)|course load|study load|semester load|normal load|maximum load|minimum load|how many credits)\b|العبء الدراسي|ساعات معتمد[ةه]|عدد الساعات/u],
   ["standing", /\b(?:academic standing|academic probation|on probation|probation|academic dismissal)\b|الوضع الاكاديمي|انذار اكاديمي|الانذار الاكاديمي|فصل اكاديمي/u],
   ["approval", /\b(?:approv\w*|authoriz\w*|authoris\w*|permission)\b|موافق[ةه]|يوافق|تصريح/u],
@@ -102,6 +104,18 @@ export type QueryMeaning = {
   degreeLevel?: "undergraduate" | "postgraduate";
   degreeLevels: ("undergraduate" | "postgraduate")[];
 };
+
+/** Explicit user corrections replace the active identity while preserving the
+ * request being corrected. This is internal; students never need topic labels. */
+export function isCorrectionQuery(text: string): boolean {
+  const normalized = normalizeQuery(text);
+  return /^(?:no|actually|i mean|i meant|i am asking about|im asking about|to clarify|correction)\b/u.test(normalized) ||
+    /\b(?:not|rather than)\b.{0,80}\b(?:i mean|i am asking about|im asking about)\b/u.test(normalized);
+}
+
+function escapeRegExp(value: string): string {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
 
 export function understandQuery(text: string): QueryMeaning {
   const normalized = normalizeQuery(text);
@@ -188,6 +202,7 @@ export type ConversationResolution = {
   intents: FactIntent[];
   needsClarification: boolean;
   usedContext: boolean;
+  corrected: boolean;
   ambiguous: boolean;
   candidates: QuerySubject[];
 };
@@ -230,6 +245,9 @@ export function resolveConversation(
   const meaning = understandQuery(latest);
   const named = namedSubjects(latest);
   const directFacts = meaning.intents.filter((intent) => !["verify", "courses"].includes(intent));
+  const corrected = isCorrectionQuery(latest);
+  const previous = prior.at(-1)?.content;
+  const correctionOnly = corrected && named.length > 0 && !directFacts.length && !meaning.codes.length;
   const refers = REFERENCE.test(meaning.normalized) || (!named.length && (GENERIC_FOLLOW_UP.test(meaning.normalized) || SLOT_FRAGMENT.test(meaning.normalized) || meaning.applicantCategories.length > 0 || meaning.degreeLevels.length > 0));
   let subject: QuerySubject | undefined = named[0];
   let ambiguous = false;
@@ -245,10 +263,10 @@ export function resolveConversation(
   }
   const inheritsIntent = meaning.codes.length > 0 && !directFacts.length && /\bwhat about\b|ماذا عن|وماذا|وبالنسب[ةه]/u.test(meaning.normalized);
   const verification = meaning.intents.includes("verify") && !directFacts.length;
-  const intents = (!directFacts.length && (refers || inheritsIntent || verification)) ? lastIntent : meaning.intents;
+  const intents = (!directFacts.length && (refers || inheritsIntent || verification || correctionOnly)) ? lastIntent : meaning.intents;
   const sameSubjectReference = named.length === 1 && active.length === 1 &&
     named[0].key === active[0].key && REFERENCE.test(meaning.normalized);
-  const usedContext = Boolean(subject && ((!named.length && refers) || sameSubjectReference || inheritsIntent || verification));
+  const usedContext = Boolean(subject && ((!named.length && refers) || sameSubjectReference || inheritsIntent || verification || correctionOnly));
   const intentText: Partial<Record<FactIntent, string>> = { fees: "cost fees", duration: "processing time how long", prerequisites: "prerequisites", deadline: "application deadline", eligibility: "eligibility", status: "status", requirements: "requirements", gpa: "GPA", topics: "course topics" };
   const origin = subject ? (active.some((item) => item.key === subject.key) ? activeScope ?? understandQuery(subject.origin) : understandQuery(subject.origin)) : undefined;
   const inheritedCategory = meaning.applicantCategory ?? origin?.applicantCategory;
@@ -258,10 +276,21 @@ export function resolveConversation(
   ].filter(Boolean).join(" ") : "";
   // Preserve the identity and applicability, not an old request verb. Otherwise
   // "apply to CSBP319" keeps outscoring a later request for its prerequisites.
+  const correctedPriorRequestText = correctionOnly && previous
+    ? namedSubjects(previous).reduce((request, previousSubject) => {
+      const core = previousSubject.label.replace(/\s+study plan$/i, "").trim();
+      return core.length >= 5
+        ? request.replace(new RegExp(`\\b${escapeRegExp(core)}\\b`, "gi"), "")
+        : request;
+    }, normalizeCourseCodes(previous)).replace(/\s+/g, " ").trim()
+    : "";
+  const correctedPriorRequest = correctionOnly && previous
+    ? `Corrected subject: ${subject?.label ?? ""}\nPrevious user request, interpreted under the corrected subject: ${correctedPriorRequestText}`
+    : `Follow-up question: ${normalizeCourseCodes(latest)}`;
   const query = usedContext && subject
-    ? `${subject.label} ${inheritedScope}\nRequested fact: ${intents.map((intent) => intentText[intent] ?? intent).join(" ")}\nFollow-up question: ${normalizeCourseCodes(latest)}`
+    ? `${subject.label} ${inheritedScope}\nRequested fact: ${intents.map((intent) => intentText[intent] ?? intent).join(" ")}\n${correctedPriorRequest}`
     : normalizeCourseCodes(latest);
-  return { query, subject, intents, usedContext, ambiguous, candidates: ambiguous ? active : [], needsClarification: !subject && refers && !named.length };
+  return { query, subject, intents, usedContext, corrected, ambiguous, candidates: ambiguous ? active : [], needsClarification: !subject && refers && !named.length };
 }
 
 export type EvidenceScope = {

@@ -19,6 +19,7 @@ type ChatResult = {
     disposition?: string;
     escalationReason?: string;
     provider?: string;
+    topic?: string;
     error?: string;
   };
 };
@@ -674,6 +675,41 @@ async function main() {
         assert.match(safe.data.content ?? "", /glad you're safe/i);
         assert.match(safe.data.content ?? "", /999/);
         assertOfficialCitation(safe, /justice-safety-and-the-law\/Safety/i);
+      },
+    },
+    {
+      name: "history question returns the previous user question, not the previous answer",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "How do I apply for undergraduate graduation?" },
+            { role: "assistant", content: "Previous graduation answer that must not be repeated." },
+            { role: "user", content: "What did I ask you in the last question?" },
+          ],
+        });
+        assert.equal(result.data.stateLabel, "conversation_history_answer");
+        assert.match(result.data.content ?? "", /How do I apply for undergraduate graduation/);
+        assert.doesNotMatch(result.data.content ?? "", /Previous graduation answer/);
+      },
+    },
+    {
+      name: "degree correction does not replay the old degree answer",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "Can I take Networking Security instead of Selected Topics in Information Security?" },
+            { role: "assistant", content: "Previous Information Security answer." },
+            { role: "user", content: "No, I mean Computer Engineering." },
+          ],
+        });
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "escalated");
+        assert.equal(result.data.stateLabel, "no_verified_context");
+        assert.equal(result.data.topic, "computer-engineering");
+        assert.match(result.data.content ?? "", /could not verify the requested substitution/i);
+        assert.doesNotMatch(result.data.content ?? "", /Published undergraduate degrees|Previous Information Security answer/i);
       },
     },
     {
