@@ -59,17 +59,15 @@ async function submit(page: Page, question: string) {
   await input.press('Enter');
 }
 
-test('dark mode toggle persists and exposes its state', async ({ page }) => {
+test('dark mode implementation remains available while its UI control is hidden', async ({ page }) => {
   await guest(page);
+  await page.addInitScript(() => localStorage.setItem('uaeu-chatbot-theme-v1', 'dark'));
   await page.goto('/');
-  const toggle = page.getByTestId('theme-toggle');
-  await expect(toggle).toBeVisible();
-  await expect(toggle).toHaveAttribute('aria-pressed', 'false');
-  await toggle.click();
-  await expect(toggle).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
+  await expect(page.getByTestId('mobile-theme-toggle')).toHaveCount(0);
   await expect(page.locator('html')).toHaveClass(/dark/);
   await page.reload();
-  await expect(page.getByTestId('theme-toggle')).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
   await expect(page.locator('html')).toHaveClass(/dark/);
 });
 
@@ -85,7 +83,7 @@ test('keyboard skip link and reduced-motion accessibility hooks are available', 
   await expect(page.locator('#main-content')).toBeFocused();
   await expect(page.getByRole('log')).toHaveAttribute('aria-busy', 'false');
   await expect(page.getByTestId('chat-input')).toHaveAttribute('aria-describedby', 'chat-hint');
-  await expect(page.getByTestId('theme-toggle')).toHaveAttribute('aria-label', /dark mode|light mode/i);
+  await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
 });
 
 for (const hungPath of ['/api/auth/session', '/api/history']) {

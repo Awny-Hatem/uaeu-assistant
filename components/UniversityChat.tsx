@@ -18,11 +18,9 @@ import {
   LockKeyhole,
   LogIn,
   LogOut,
-  Moon,
   Search,
   Send,
   ShieldCheck,
-  Sun,
   Trash2,
   User,
   UserCircle,
@@ -945,18 +943,6 @@ export function UniversityChat() {
               <option value="en">{copy.english}</option>
               <option value="ar">{copy.arabic}</option>
             </select>
-            <button
-              type="button"
-              data-testid="theme-toggle"
-              aria-pressed={theme === "dark"}
-              aria-label={theme === "dark" ? copy.lightMode : copy.darkMode}
-              title={theme === "dark" ? copy.lightMode : copy.darkMode}
-              onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-700 outline-none transition hover:border-[#E0182D]/50 hover:text-[#E0182D] dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:border-[#E0182D]/70"
-            >
-              {theme === "dark" ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
-              <span>{theme === "dark" ? copy.lightMode : copy.darkMode}</span>
-            </button>
           </div>
         </div>
 
@@ -1028,17 +1014,6 @@ export function UniversityChat() {
             <option value="en">{copy.english}</option>
             <option value="ar">{copy.arabic}</option>
           </select>
-          <button
-            type="button"
-            data-testid="mobile-theme-toggle"
-            aria-pressed={theme === "dark"}
-            aria-label={theme === "dark" ? copy.lightMode : copy.darkMode}
-            title={theme === "dark" ? copy.lightMode : copy.darkMode}
-            onClick={() => setTheme((current) => current === "dark" ? "light" : "dark")}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-700 outline-none transition hover:border-[#E0182D]/50 hover:text-[#E0182D] dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
-          >
-            {theme === "dark" ? <Sun size={16} aria-hidden="true" /> : <Moon size={16} aria-hidden="true" />}
-          </button>
           <div className="relative" ref={profileRef}>
             <button
               type="button"
