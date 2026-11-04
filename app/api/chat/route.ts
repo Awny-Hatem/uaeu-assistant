@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { describeAiProviderError, generateAssistantResponse } from "@/lib/ai-provider";
 import { recordAnalyticsEvent, classifyTopic } from "@/lib/analytics";
 import { citationsForFaq, citationForGuide, uniqueCitations, CONTACT_CITATION } from "@/lib/citations";
-import { courseIdentityConflict, faqAnswer, faqScope, matchFaq, type AnswerDisposition } from "@/lib/faq";
+import { courseIdentityConflict, faqAnswer, faqScope, loadFaqEntries, matchFaq, type AnswerDisposition } from "@/lib/faq";
 import { getGemini, embeddingModel } from "@/lib/gemini";
 import { evidenceIsRelevant, retrieveVerifiedEvidence, type EvidenceRow } from "@/lib/knowledge-files";
 import { resolveLocale } from "@/lib/language";
@@ -869,6 +869,28 @@ export async function POST(req: Request) {
       evidenceIds: [curriculum.evidenceId],
       topic: resolution.subject?.key,
       communications,
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  // A corrected program identity must not fall through to a generic planning
+  // capability record. If the corrected program has no reviewed record yet,
+  // disclose the evidence gap instead of answering from a neighboring degree.
+  const correctedProgramWithoutEvidence = resolution.corrected && resolution.subject?.key === "computer-engineering" &&
+    !loadFaqEntries().some((entry) => faqScope(entry).subjects?.includes("computer-engineering"));
+  if (correctedProgramWithoutEvidence) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: handoffContent("low_confidence", locale, routingQuery),
+      source: "escalated",
+      stateLabel: "no_verified_context",
+      citations: [],
+      communications,
+      escalationReason: "low_confidence",
+      disposition: "clarify",
+      clarificationReason: "missing_official_evidence",
+      topic: resolution.subject?.key,
+      evidenceIds: [],
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);

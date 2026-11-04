@@ -981,6 +981,23 @@ async function main() {
       },
     },
     {
+      name: "third-year major-change scenario answers the decision point directly",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "Can I switch my major from business administration to finance in third year?" },
+            { role: "assistant", content: "The official major-change procedure is available." },
+            { role: "user", content: "I'm asking if it's possible to change after my third year from business to finance." },
+          ],
+        });
+        assertFaq(result, "change-major-third-year");
+        assert.match(result.data.content ?? "", /does not state a third-year cutoff|third year is not identified/i);
+        assert.match(result.data.content ?? "", /not an approval guarantee|not a guarantee/i);
+        assert.doesNotMatch(result.data.content ?? "", /Computer Science second semester|Information Security/i);
+      },
+    },
+    {
       name: "technical-support contact questions return the verified UITS details",
       run: async () => {
         for (const content of [
