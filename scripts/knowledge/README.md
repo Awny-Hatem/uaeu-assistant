@@ -17,11 +17,14 @@ The SQLite queue and original response bytes are local, ignored artifacts. All d
 
 If extraction changes, stop the crawler, run `python3 scripts/knowledge/reextract.py .uaeu-crawl`, then resume. Never run ingestion against a changing index to manufacture a frozen evaluation.
 
+`--retry-transient` explicitly requeues one attempt for previously timed-out,429 or5xx public sources, preserving the previous failure metadata. It does not automatically loop and does not requeue permanent404errors. Source responses that look like not-found pages despite HTTP200are logged as soft404, not accepted as knowledge.
+
 ## Ingest and index
 
 ```sh
 python3 scripts/knowledge/ingest.py --cache .uaeu-crawl
 npx tsx scripts/knowledge/index.ts
+python3 scripts/knowledge/coverage-summary.py --cache .uaeu-crawl
 ```
 
 Ingestion preserves the existing approved front-matter format under `data/knowledge/crawled/`, one source per document, with language, verification, program, qualification, college, catalog-year, audience, temporal status, source checksum and section headings. HTML table rows retain cells/headings. Recognized model-plan grids are split by cohort, entry term, semester and unambiguous course row; clipped/slash-code cells are flagged rather than guessed. Other PDF text retains page numbers and a layout-review caution; extraction is not proof of an arrow's meaning or a cross-column prerequisite. Scanned/empty/error sources are excluded and reported. Exact extracted duplicates share a canonical source; already curated source URLs retain their existing reviewed summaries rather than being blindly duplicated. Historical/undated content does not establish current eligibility or availability. Minors/microcredentials are separate qualification types, not full degrees.
@@ -52,3 +55,5 @@ node evals/run-knowledge-expansion.mjs --base http://127.0.0.1:3000 --label expa
 The default is sequential. Optional concurrency is capped at three, with a shared minimum 2.3-second interval between request starts. Compare latency only under equivalent load; keep serial benchmarks separate from throughput batches. Each scenario includes alternate phrasings and saves all actual responses. `--variants main` selects only primary scenarios; `--ids KE001,KE002` selects cases; `--resume` requires the identical fixture checksum. Never edit code, approved data or the live index during a frozen evaluation. `--serving-snapshot` fingerprints the actual immutable baseline checkout. Identical-content source equivalences are audited separately; similar topics or different course IDs are not interchangeable sources. Source fixtures corrected after a run must be rerun with a new label, preserving invalid original attempts.
 
 For causal checks, start an otherwise identical local process with `CORPUS_SEARCH=disabled` and retest identical questions. This ablates the added index, not the legacy reviewed knowledge. Keep the ablation results separate from final results. Token diagnostics are cost estimates, and missing diagnostics are unknown rather than zero.
+
+`scripts/knowledge/report.mjs --after <actual-run.json> --output <report-prefix>` joins exact question/expected-source pairs to the preserved baselines and writes JSON/HTML test entries. It never fabricates a missing before run. `--allow-partial` is only for clearly labelled intermediate reports. Supply reviewed semantic/source decisions through the report's `reviewed-results.json`; unreviewed regex scores remain provisional. Never present an interrupted candidate run as the completed final evaluation. If the shared Google Doc's character limit is insufficient, preserve prior entries and use the user's selected overflow arrangement rather than silently omitting conversations.

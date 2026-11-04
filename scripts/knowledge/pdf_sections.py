@@ -6,6 +6,13 @@ import re
 import pdfplumber
 CODE=re.compile(r'^[A-Z]{3,6}\d{3,4}$')
 
+def printed_model_program(text):
+    """Return only a degree name actually printed before 'Model Study Plan'.
+    An official link to an old PDF does not establish degree equivalence.
+    """
+    match=re.search(r'\b((?:Bachelor|Master|Doctor)\s+of[^\n]{5,180}?)\s+(?:Model\s+)?Study\s+Plan\b',text[:5000],re.I)
+    return ' '.join(match[1].split()) if match else ''
+
 def model_plan_sections(file):
     sections=[];warnings=[];captions=set()
     with pdfplumber.open(file) as pdf:
@@ -57,7 +64,7 @@ def model_plan_sections(file):
                     body+='Courses or elective slots in this model semester:\n'+'\n'.join(group['rows'])
                     sections.append({'heading':caption+' — Semester '+semester+' course list','text':body,'page':page_number,'modelScope':caption})
                 found=found or valid>0
-            if not found:warnings.append(f'page {page_number}: no safely recognized course-row layout; page excerpt retained separately')
+            if not found:warnings.append(f'page {page_number}: no safely recognized course-row layout; excluded from structured model rows (raw page retained in crawl cache)')
     return sections,warnings
 
 

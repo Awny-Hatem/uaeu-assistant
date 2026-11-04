@@ -10,12 +10,13 @@ from urllib.error import HTTPError
 from lxml import html, etree
 from pypdf import PdfReader
 from io import BytesIO
+from program_feed import parse_program_feed
 
 DATE = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=4))).date().isoformat()
 UA = 'UAEU-Assistant-Research/2.0 (public university knowledge; robots-aware; 1 request/second/host)'
 ASSET = re.compile(r'\.(?:png|jpe?g|gif|svg|ico|mp[34]|avi|mov|woff2?|ttf|css|js|zip|exe|xlsx?|docx?|pptx?)$', re.I)
 EXCLUDE = re.compile(r'(?:webtest|cms|localhost|staging|preview)', re.I)
-DYNAMIC = re.compile(r'/(?:news|events|news_events|conferences|jobs|employment|vacancies|job_vacancies|photo_library|photo|media|media-center|newsletters?)(?:/|[_.-])|/cgs/tdd/.*\.pdf$|/[^/]*(?:daily[-_]news|news[-_]clippings?)[^/]*$', re.I)
+DYNAMIC = re.compile(r'/(?:news|events|news_events|blogs|conferences|jobs|employment|vacancies|job_vacancies|photo_library|photo|media|media-center|newsletters?)(?:/|[_.-])|/vc/uod/publications/|/cgs/tdd/.*\.pdf$|/[^/]*(?:daily[-_]?news|news[-_]clippings?)[^/]*$', re.I)
 HIST = re.compile(r'(?:old|bkp|backup|archive|prev_catalog|catalog_20|catalog-20|historical|201[0-9]|202[0-4])', re.I)
 
 
@@ -49,14 +50,20 @@ def eligible(u):
     if re.search(r'/(?:_resources|_includes|api|search|sign_in|login|logout|admin)/',p.path,re.I): return False
     if re.search(r'(?:_bkp|_backup|tabs-test|test2024|index-slider|news_events_tabs_slider)',p.path,re.I): return False
     # Avoid infinite calendar/search/query spaces. Retain observed legacy catalog IDs.
-    if p.query and not (p.hostname=='webapps.uaeu.ac.ae' and p.path.startswith('/catalog/') or '/catalog/courses/' in p.path): return False
+    if p.query:
+        query=dict(parse_qsl(p.query,keep_blank_values=True))
+        public_service=(p.hostname=='coreservices.uaeu.ac.ae' and p.path.lower()=='/servicecatalog/details' or re.fullmatch(r'/(?:en|ar)/eservices/details\.shtml',p.path)) and set(query)=={'serviceId'} and bool(re.fullmatch(r'\d{1,6}',query['serviceId']))
+        public_program=bool(re.fullmatch(r'/(?:en|ar)/catalog/program-details\.shtml',p.path)) and set(query)=={'PROGRAM_ID'} and bool(re.fullmatch(r'\d+(?:\.\d+){2}',query['PROGRAM_ID']))
+        public_calendar=p.hostname=='coreservices.uaeu.ac.ae' and p.path.lower()=='/calendar/calendar' and set(query)<={'culture'} and query.get('culture') in ('en','ar')
+        if not (p.hostname=='webapps.uaeu.ac.ae' and p.path.startswith('/catalog/') or re.fullmatch(r'/(?:en|ar)/(?:catalog|eng)/courses/course_\d+\.shtml',p.path) and set(query)=={'id'} and re.fullmatch(r'[A-Z]{3,6}\d{3,4}',query['id'],re.I) or public_service or public_program or public_calendar):return False
+    if re.fullmatch(r'/(?:en|ar)/catalog/summary/search\.xml',p.path) and not p.query:return True
     return p.path.endswith(('.shtml','.html','.htm','.asp','.aspx','.pdf','/')) or not Path(p.path).suffix
 
 
 def priority(u):
     s=urlsplit(u).path.lower()
     if urlsplit(u).hostname=='webapps.uaeu.ac.ae' and s.startswith('/catalog/'):return 1
-    return (0 if '/catalog/' in s and '/programs/' in s else 1 if re.search(r'study.plan|prev_catalog|polic|scholarship|admission|calendar|fees|catalog.*pdf',s) else 2 if re.search(r'campus_life|library|student|about/|contact|cgs|research|depart',s) else 3) + (2 if HIST.search(s) else 0)
+    return (0 if '/servicecatalog/' in s or '/eservices/' in s or '/catalog/' in s and '/programs/' in s else 1 if '/catalog/' in s or '/servicecatalog/' in s or '/eservices/' in s or '/accreditation/' in s or re.search(r'/vc/(?:index\.shtml)?$',s) else 1 if re.search(r'study.plan|prev_catalog|polic|scholarship|admission|calendar|fees|catalog.*pdf',s) else 2 if re.search(r'campus_life|library|student|about/|contact|cgs|research|depart',s) else 3) + (2 if HIST.search(s) else 0)
 
 
 class Redirects(HTTPRedirectHandler):
@@ -155,11 +162,14 @@ class Crawler:
                     obj=a.get_object().get('/A',{});target=obj.get('/URI') if obj else None
                     if target and official(urljoin(u,str(target))): links.append({'url':canonical(urljoin(u,str(target))),'text':''})
             return {'kind':'pdf','title':str(reader.metadata.title or Path(urlsplit(u).path).name) if reader.metadata else Path(urlsplit(u).path).name,'pages':pages,'sections':[{'heading':f'PDF page {p["page"]}','text':p['text'],'page':p['page']} for p in pages if p['text'].strip()],'links':links,'text':'\n\n'.join(p['text'] for p in pages),'quality':'text-extracted-layout-review-required'}
+        if re.fullmatch(r'/(?:en|ar)/catalog/summary/search\.xml',urlsplit(u).path):
+            parsed=parse_program_feed(b,u)
+            if parsed:return parsed
         doc=html.fromstring(b,base_url=u)
         links=[{'url':canonical(urljoin(u,a.get('href'))),'text':' '.join(a.text_content().split())} for a in doc.xpath('//a[@href]') if public_link(urljoin(u,a.get('href')))]
         alternate=[canonical(urljoin(u,a.get('href'))) for a in doc.xpath('//link[@rel="alternate"][@href]') if public_link(urljoin(u,a.get('href')))]
         title=' '.join(doc.xpath('//title/text()'))
-        for el in doc.xpath('//script|//style|//header|//footer|//nav|//form[.//input[@type="password"]]|//input|//textarea|//svg|//*[@aria-hidden="true"]|//*[contains(concat(" ",normalize-space(@class)," ")," breadcrumb ")]'):
+        for el in doc.xpath('//script|//style|//header|//footer|//nav|//*[@role="navigation"]|//*[contains(concat(" ",normalize-space(@class)," ")," tab-items ")]|//form[.//input[@type="password"]]|//input|//textarea|//svg|//*[@aria-hidden="true"]|//*[contains(concat(" ",normalize-space(@class)," ")," breadcrumb ")]'):
             el.drop_tree()
         main=doc.xpath('//main') or doc.xpath('//body') or [doc];node=main[0]
         sections=[];heading='Overview';parts=[];hierarchy={}
@@ -199,6 +209,9 @@ class Crawler:
 
     def fetch(self,row):
         u=row['url'];r={'url':u,'verified':DATE,'fetchedAt':datetime.datetime.now(datetime.timezone.utc).isoformat(),'discoveredOn':row['discovered_on'],'label':row['label']}
+        if row['result']:
+            previous=json.loads(row['result'])
+            r['previousAttempts']=previous.get('previousAttempts',[])+[{k:previous[k] for k in ['state','status','verified','error'] if k in previous}]
         try:
             if not self.allowed(u):return {**r,'status':0,'state':'robots-blocked','error':'robots.txt disallows crawl'}
             if DYNAMIC.search(urlsplit(u).path):return {**r,'status':None,'state':'link-only','reason':'news/events/media/jobs or individual thesis publication; reference link only, not current institutional requirements'}
@@ -210,17 +223,26 @@ class Crawler:
         except Exception as e:r.update(status=getattr(e,'code',0),state='failed',error=str(e))
         return r
 
+    def retry_transient_failures(self):
+        count=0
+        for row in self.db.execute('SELECT url,result FROM urls WHERE state="failed"').fetchall():
+            prior=json.loads(row['result'] or '{}');status=prior.get('status',0)
+            transient=status in (408,429,500,502,503,504) or status==0 and re.search(r'timed? out|timeout|temporarily|connection reset|remote end closed',prior.get('error',''),re.I)
+            if transient and eligible(row['url']) and not DYNAMIC.search(urlsplit(row['url']).path):
+                self.db.execute('UPDATE urls SET state="pending" WHERE url=?',(row['url'],));count+=1
+        self.db.commit();return count
+
     def run(self,max_pages):
         (self.root/'crawler.pid').write_text(str(os.getpid()))
         count=0;submitted=0;pending={};catalog_bodies={}
         # Reapply explicit scope rules when resuming an older queue. Retain every
         # discovered URL and reason rather than downloading duplicate viewer pages.
-        for row in self.db.execute('SELECT url FROM urls WHERE state="pending"').fetchall():
+        for row in self.db.execute('SELECT url,result FROM urls WHERE state="pending"').fetchall():
             u=row['url'];state='excluded' if not eligible(u) else 'link-only' if DYNAMIC.search(urlsplit(u).path) else None
             if state:
                 result={'url':u,'state':state,'reason':'duplicate viewer/assets or nonpublic/test route' if state=='excluded' else 'news/events/media/jobs or individual thesis publication; reference link only, not current institutional requirements'}
                 self.db.execute('UPDATE urls SET state=?,result=? WHERE url=?',(state,json.dumps(result),u))
-            else:self.db.execute('UPDATE urls SET priority=? WHERE url=?',(priority(u),u))
+            else:self.db.execute('UPDATE urls SET priority=? WHERE url=?',(-5 if json.loads(row['result'] or '{}').get('forceFetch') else priority(u),u))
         self.db.commit()
         for value in self.db.execute('SELECT result FROM urls WHERE state="fetched" AND url LIKE "%/catalog/courses/%"'):
             item=json.loads(value[0]);base=item['url'].split('?')[0];digest=hashlib.sha256(item.get('text','').encode()).hexdigest()
@@ -257,6 +279,8 @@ class Crawler:
         # Only after two different observed IDs returned identical complete catalog
         # text. These are content aliases, never falsely reported as fetched URLs.
         for row in self.db.execute('SELECT url FROM urls WHERE state="pending" AND url LIKE ?',(base+'?%',)).fetchall():
+            previous=json.loads(self.db.execute('SELECT result FROM urls WHERE url=?',(row['url'],)).fetchone()[0] or '{}')
+            if previous.get('forceFetch'):continue
             result={'url':row['url'],'state':'content-alias','canonicalUrl':canonical_url,'verified':DATE,'reason':'two observed course IDs returned the identical complete department catalog; source-specific course links retained'}
             self.db.execute('UPDATE urls SET state=?,result=? WHERE url=?',('content-alias',json.dumps(result),row['url']))
         self.db.commit()
@@ -267,10 +291,11 @@ class Crawler:
         print('STATE', {s:sum(r['state']==s for r in rows) for s in sorted({r['state'] for r in rows})},flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--cache',default='.uaeu-crawl');p.add_argument('--delay',type=float,default=1.0);p.add_argument('--max-pages',type=int,default=0);p.add_argument('--seed-map',action='append',default=[]);p.add_argument('--export-only',action='store_true');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--cache',default='.uaeu-crawl');p.add_argument('--delay',type=float,default=1.0);p.add_argument('--max-pages',type=int,default=0);p.add_argument('--seed-map',action='append',default=[]);p.add_argument('--export-only',action='store_true');p.add_argument('--retry-transient',action='store_true',help='One explicit retry of previously timed-out/429/5xx public sources; never loop automatically');a=p.parse_args()
     crawler=Crawler(a.cache,max(1,a.delay))
     if a.export_only:crawler.export()
     else:
         crawler.seed(a.seed_map)
+        if a.retry_transient:print('Requeued transient failures:',crawler.retry_transient_failures(),flush=True)
         try:crawler.run(a.max_pages)
         finally:crawler.export()

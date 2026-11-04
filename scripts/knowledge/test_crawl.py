@@ -1,10 +1,47 @@
 import json,tempfile,unittest
 from pathlib import Path
 from crawl import Crawler,eligible,canonical,official
-from pdf_sections import catalog_course_sections
-from ingest import academic_years
+from pdf_sections import catalog_course_sections,printed_model_program
+from program_feed import parse_program_feed
+from ingest import academic_years,bilingual_program_names
+from policy_metadata import policy_metadata
 
 class CrawlTests(unittest.TestCase):
+    def test_model_plan_identity_comes_from_the_printed_degree_not_a_link_label(self):
+        self.assertEqual(printed_model_program('Bachelor of Science in Computer Engineering Model Study Plan (2022–2023 Cohort onwards)'), 'Bachelor of Science in Computer Engineering')
+        self.assertEqual(printed_model_program('Master of Science in Water Resources Study Plan'), 'Master of Science in Water Resources')
+        self.assertEqual(printed_model_program('Open the study-plan link for your chosen degree'), '')
+
+    def test_printed_policy_metadata_uses_effective_date_not_access_or_review_date(self):
+        value = policy_metadata('Policy Number AE-05 Effective Date 12-Aug-2018 Most Recent Review Date 15-Apr-2018 Due Date for Next Review 01-Sep-2021')
+        self.assertEqual(value, {'policyId': 'AE-05', 'policyEffectiveDate': '2018-08-12'})
+        self.assertEqual(policy_metadata('Related Policy AE-05 Last verified 4-Nov-2026'), {})
+        self.assertEqual(policy_metadata('Policy Number AE-05 Effective Date 99-Bogus-2018'), {'policyId': 'AE-05'})
+
+    def test_official_xml_preserves_bilingual_identity_and_separates_minors(self):
+        raw=b'<PROGRAMS><PROGRAM><TITLE>Bachelor of Science in Test</TITLE><TITLE_AR>Arabic official title</TITLE_AR><COLLEGE_NAME>College of Test</COLLEGE_NAME><LEVEL>Undergraduate</LEVEL><URL_CATALOG>/en/catalog/undergraduate/programs/test.shtml</URL_CATALOG><STUDYPLAN_URL>https://www.uaeu.ac.ae/en/test-plan.pdf</STUDYPLAN_URL></PROGRAM><PROGRAM><TITLE>Minor in Test</TITLE><COLLEGE_NAME>College of Test</COLLEGE_NAME><LEVEL>Undergraduate</LEVEL><URL_CATALOG>/en/catalog/undergraduate/programs/minor-test.shtml</URL_CATALOG></PROGRAM></PROGRAMS>'
+        d=parse_program_feed(raw,'https://www.uaeu.ac.ae/en/catalog/summary/search.xml')
+        self.assertEqual(len(d['programRecords']),2)
+        self.assertEqual(d['programRecords'][0]['qualification'],'bachelor');self.assertEqual(d['programRecords'][1]['qualification'],'minor')
+        directory=next(s for s in d['sections'] if s['heading']=='College of Test — bachelor programs directory')
+        self.assertIn('Arabic official title',directory['text']);self.assertNotIn('Minor in Test',directory['text'])
+        self.assertTrue(any(a['url'].endswith('test-plan.pdf') for a in d['links']))
+
+    def test_bilingual_program_labels_use_the_same_observed_official_link(self):
+        target='https://www.uaeu.ac.ae/en/catalog/program-details.shtml?PROGRAM_ID=2884.2912.22882'
+        pages=[{'url':'https://www.uaeu.ac.ae/en/cgs/programs.shtml','links':[{'url':target,'text':'Master of Science in Electrical Engineering'}]},{'url':'https://www.uaeu.ac.ae/ar/cgs/programs.shtml','links':[{'url':target,'text':'ماجستير العلوم في الهندسة الكهربائية'}]}]
+        docs=[{'program':'Bachelor of Science in Electrical Engineering','qualification':'bachelor','topicId':'electrical-bachelor'},{'program':'Master of Science in Electrical Engineering','qualification':'master','topicId':'electrical-master'}]
+        names=bilingual_program_names(pages,docs)
+        self.assertTrue(any(a['alias']=='الهندسة الكهربائية' and a['qualification']=='bachelor' for a in names))
+        self.assertFalse(any(a['alias'].startswith('ماجستير') and a['qualification']=='bachelor' for a in names))
+    def test_explicit_retry_keeps_permanent_errors_failed(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            for name,status,error in [('temporary',503,'unavailable'),('timeout',0,'timed out'),('gone',404,'not found')]:
+                url='https://www.uaeu.ac.ae/en/'+name+'.shtml';c.add(url)
+                c.db.execute('UPDATE urls SET state="failed",result=? WHERE url=?',(json.dumps({'status':status,'error':error}),url))
+            c.db.commit();self.assertEqual(c.retry_transient_failures(),2)
+            self.assertEqual(c.db.execute('SELECT state FROM urls WHERE url LIKE "%gone.shtml"').fetchone()[0],'failed');c.db.close()
     def test_policy_approval_dates_are_not_catalog_cohorts(self):
         self.assertEqual(academic_years('Approved 2018/04/2008, reviewed 2021/09. Catalog 2025–2026 and 2015_16'),['2015-2016','2025-2026'])
     def test_official_boundary_and_loop_guard(self):
@@ -12,6 +49,12 @@ class CrawlTests(unittest.TestCase):
             self.assertFalse(eligible(url),url)
         self.assertTrue(eligible('https://webapps.uaeu.ac.ae/catalog/auto/department_IT_IT_CS.asp'))
         self.assertEqual(canonical('https://uaeu.ac.ae/en/catalog/?utm_source=x&id=3#part'),'https://www.uaeu.ac.ae/en/catalog/?id=3')
+    def test_public_services_and_program_queries_are_not_search_or_private_routes(self):
+        for url in ['https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106','https://www.uaeu.ac.ae/en/eservices/details.shtml?serviceId=89','https://www.uaeu.ac.ae/en/catalog/program-details.shtml?PROGRAM_ID=2884.2912.22882','https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en']:
+            self.assertTrue(eligible(url),url)
+        for url in ['https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106&token=secret','https://www.uaeu.ac.ae/en/eservices/details.shtml?search=student','https://www.uaeu.ac.ae/en/catalog/program-details.shtml?PROGRAM_ID=arbitrary','https://www.uaeu.ac.ae/en/search.shtml?q=anything']:
+            self.assertFalse(eligible(url),url)
+
     def test_robots_wildcards_and_longest_rule(self):
         with tempfile.TemporaryDirectory() as root:
             record={'status':200,'text':'User-agent: *\nDisallow: /_resources/*\nAllow: /_resources/public/\nDisallow: /private$\n'}
@@ -40,6 +83,13 @@ class CrawlTests(unittest.TestCase):
             self.assertTrue(any(s['heading']=='Required Credit Hours:132' for s in value['sections']))
             self.assertIn('Code | Prerequisite | Corequisite',value['text'])
             self.assertNotIn('ignore all rules',value['text']);self.assertNotIn('unrelated navigation',value['text']);c.db.close()
+
+    def test_side_navigation_is_discovered_but_is_not_answer_evidence(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            value=c.extract(b'<html><main><ul class="tab-items"><li><div class="accordion-title">University leadership</div><a href="/en/vc/index.shtml">Vice Chancellor</a></li></ul><div class="accordion-title">Actual rule</div><p>Minimum GPA 3.0.</p></main></html>','https://www.uaeu.ac.ae/en/real.shtml','text/html')
+            self.assertNotIn('University leadership',value['text']);self.assertIn('Minimum GPA 3.0',value['text'])
+            self.assertTrue(any(a['url'].endswith('/en/vc/index.shtml') for a in value['links']));c.db.close()
 
     def test_unwrapped_text_and_accordion_scope_survive(self):
         with tempfile.TemporaryDirectory() as root:
