@@ -1,3 +1,4 @@
+import { recordProviderUsage, recordProviderAttempt } from "@/lib/answer-usage";
 import { chatModel as geminiChatModel, getGemini } from "@/lib/gemini";
 import { groundedAnswerSchema, parseGroundedAnswer, type GroundedAnswer } from "@/lib/provider-response";
 
@@ -228,6 +229,7 @@ async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderRe
   let response: Response;
   let raw: string;
   try {
+    recordProviderAttempt();
     response = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       cache: 'no-store',
@@ -247,7 +249,7 @@ async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderRe
           })),
         max_output_tokens: maxOutputTokens(),
         store: false,
-        temperature: 0.1,
+        temperature: args.evidenceIds ? 0.25 : 0.1,
         ...(args.responseSchema || args.evidenceIds ? { text: { format: { type: "json_schema", name: args.responseSchema?.name ?? "grounded_answer", strict: true, schema: args.responseSchema?.schema ?? groundedAnswerSchema(args.evidenceIds!) } } } : {}),
       }),
     });
@@ -256,13 +258,19 @@ async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderRe
   } catch (error) {
     if (error instanceof AiProviderError) throw error;
     const timedOut = error instanceof Error && /abort|timeout/i.test(`${error.name} ${error.message}`);
+    // A per-call timeout is recoverable only when the original answer budget
+    // can still fit another full capped attempt. Never replay cancellation or
+    // extend the caller's absolute deadline; standalone20s calls stay bounded.
+    const recoverableTimeout = error instanceof Error && error.name === "TimeoutError"
+      && args.deadlineAt !== undefined
+      && args.deadlineAt - Date.now() >= providerTimeoutMs() + MIN_RETRY_ATTEMPT_BUDGET_MS;
     throw new AiProviderError({
       status: timedOut ? 504 : 502,
       providerStatus: timedOut ? "OPENAI_TIMEOUT" : "OPENAI_NETWORK_ERROR",
       publicMessage: timedOut
         ? "OpenAI did not respond before the configured timeout. Please try again."
         : "OpenAI could not be reached. Please try again.",
-      retryable: !timedOut,
+      retryable: !timedOut || recoverableTimeout,
     });
   }
 
@@ -278,6 +286,7 @@ async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderRe
     throw openAiHttpError(response, data);
   }
 
+  recordProviderUsage(model, args.evidenceIds ? "answer-writer" : "selection-or-verification", data.usage);
   if (data.status === "incomplete") throw new AiProviderError({ status: 502, providerStatus: "OPENAI_INCOMPLETE", publicMessage: "The answer service could not complete the answer within its output limit." });
   const text = extractOpenAiText(data);
   if (!text) {

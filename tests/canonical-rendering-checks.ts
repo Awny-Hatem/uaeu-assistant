@@ -13,6 +13,9 @@ process.env.CHATBOT_DEPLOYMENT_MODE = "prototype";
 process.env.SERVER_CHAT_HISTORY = "";
 process.env.GEMINI_EMBEDDING_SEARCH = "";
 process.env.TRUST_PROXY_HEADERS = "enabled";
+// This fault suite isolates the closed reviewed-record selector. The separate
+// knowledge-expansion suite exercises the real corpus, including its outages.
+process.env.CORPUS_SEARCH = "disabled";
 
 let calls = 0, passed = 0, writerCalls=0, verifierCalls=0;
 const base: SemanticRoute = { resolvedQuery: "What should I do first to inspect a registration hold?", subject: "registration hold", recordIds: [], primaryRecordIds: ["registration-hold"], targetCourseCodes: [], clarification: "", kind: "answer" };
@@ -205,7 +208,8 @@ async function main() {
     recoverySelected = { primaryRecordIds: ["academic-probation"] };
     const payload = await ask(question);
     assert.ok(!recoveryRequest?.candidates.some(({ id }) => id === "course-repeat-grades"));
-    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:academic-probation#")));
+    assert.ok(payload.evidenceIds.some((id:string)=>/^answer:(?:academic-probation|undergraduate-good-standing)#/.test(id)),JSON.stringify({content:payload.content,evidenceIds:payload.evidenceIds,state:payload.stateLabel}));
+    assert.ok(!payload.evidenceIds.some((id:string)=>id.startsWith('answer:course-repeat-grades#')));
   });
   await check("transaction request receives checked public evidence plus chat boundary", async () => {
     const question = "Can you submit a To Whom It May Concern letter request for me?";
@@ -213,7 +217,7 @@ async function main() {
     recoverySelected = { primaryRecordIds: ["enrollment-certificate"] };
     const payload = await ask(question);
     assert.match(payload.content, /^I cannot submit or complete the transaction/);
-    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:enrollment-certificate#")));
+    assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:enrollment-certificate#")||id.startsWith('guide:to-whom-it-may-concern#')||id.startsWith('guide:twimc')));
   });
   await check("selector outage is not mislabeled as absent university evidence", async () => {
     selectorUnavailable = true;

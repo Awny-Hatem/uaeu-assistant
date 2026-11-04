@@ -21,8 +21,8 @@ function check(name: string, run: () => void) {
 }
 
 // Content-regression checks, not live verification or a proof of source entailment.
-check("44 service records retain bilingual answers and mapped official sources", () => {
-  assert.equal(entries.length, 44);
+check("45 service records retain bilingual answers and mapped official sources", () => {
+  assert.equal(entries.length, 45);
   assert.equal(new Set(entries.map(item => item.id)).size, entries.length);
   for (const item of entries) {
     assert.ok(item.answer_en.length > 20 && item.answer_ar.length > 20, item.id);
@@ -49,10 +49,18 @@ check("software examples are explicitly historical in both languages with indepe
   assert.ok(record.citations.some(source => source.url.endsWith("login.jsp") && source.evidenceText?.includes("Helpdesk@uaeu.ac.ae")));
 });
 check("historical handbook advice keeps its date in both visible answers", () => {
-  for (const id of ["campus-wifi-connection", "campus-print-scan-copy", "housing-move-in-date", "campus-shuttle-schedule", "lost-and-found", "campus-dining-options", "student-clubs", "sports-facilities"]) {
+  for (const id of ["campus-wifi-connection", "campus-print-scan-copy", "housing-move-in-date", "campus-shuttle-schedule", "lost-and-found", "student-clubs", "sports-facilities"]) {
     assert.match(entry(id).answer_en, /2023/, id);
     assert.match(entry(id).answer_ar, /2023/, id);
   }
+});
+check("dining uses the current primary campus overview and does not invent live hours",()=>{
+  const record=entry('campus-dining-options');
+  assert.ok(record.citations.some(source=>source.url==='https://www.uaeu.ac.ae/en/campus_life/restaurants/'));
+  assert.match(record.answer_en,/both male and female/);
+  assert.match(record.answer_ar,/الطلاب والطالبات/);
+  assert.match(record.answer_en,/does not establish live opening hours/);
+  assert.match(record.answer_ar,/ولا تثبت مواعيد/);
 });
 check("Wi-Fi offers concrete support without fabricating a configuration", () => {
   const record = entry("campus-wifi-connection");
@@ -61,10 +69,12 @@ check("Wi-Fi offers concrete support without fabricating a configuration", () =>
   assert.match(record.answer_en, /do not support an exact network name or configuration sequence/);
   assert.doesNotMatch(record.answer_en, /select only the secured university network/);
 });
-check("MFA and jobs absence claims are confined to inspected sources", () => {
+check("MFA absence claims are confined to inspected sources; careers uses its public procedure", () => {
   assert.match(entry("multi-factor-authentication-reset").answer_en, /inspected DoIT overview and Password Self-Service/);
   assert.doesNotMatch(entry("multi-factor-authentication-reset").answer_en, /public IT pages do not publish/);
-  assert.match(entry("internships-student-jobs").answer_en, /inspected Internship System and Career Counseling pages/);
+  assert.match(entry("internships-student-jobs").answer_en, /Center for Career Placement and Alumni/);
+  assert.match(entry("internships-student-jobs").answer_en, /do not establish an individual placement guarantee/);
+  assert.ok(entry("internships-student-jobs").citations.some(source=>source.url.includes('/student_career/')));
   assert.doesNotMatch(entry("internships-student-jobs").answer_en, /public catalog does not provide/);
 });
 check("housing cost does not infer scholarship exceptions", () => {

@@ -1,3 +1,4 @@
+import { hybridHealthSnapshot } from "@/lib/hybrid-rag";
 import { providerHealthSnapshot } from "@/lib/ai-provider";
 import { faqHealthSnapshot, loadFaqEntries } from "@/lib/faq";
 import { embeddingModel } from "@/lib/gemini";
@@ -17,6 +18,7 @@ export async function GET() {
   const serviceGuides = loadServiceGuides();
   const verifiedAnswers = loadFaqEntries();
   const answerPacks = faqHealthSnapshot();
+  const corpus = hybridHealthSnapshot();
   const embeddings = loadEmbeddingChunks(embeddingModel());
   const authConfigured = authCookieSecretConfigured();
   const contract = runtimeContract();
@@ -28,7 +30,7 @@ export async function GET() {
   const embeddingAvailable = embeddingOptIn && provider.geminiConfigured && Boolean(embeddings?.length);
   const semanticCatalogEnabled = provider.provider === "openai" || provider.provider === "gemini";
   const contentFingerprint = createHash("sha256").update(JSON.stringify({
-    markdown: knowledgeFingerprint(), answers: verifiedAnswers, guides: serviceGuides,
+    corpus: corpus.fingerprint, markdown: knowledgeFingerprint(), answers: verifiedAnswers, guides: serviceGuides,
   })).digest("hex");
   const revision = (process.env.VERCEL_GIT_COMMIT_SHA || process.env.CHATBOT_BUILD_REVISION || "unknown").trim().slice(0, 80);
   const ready = coreKnowledgeReady && authConfigured && generationReady && contract.allowed;
@@ -53,14 +55,15 @@ export async function GET() {
       retrieval: {
         primary: "scoped-academic-retrieval-and-source-checked-generation",
         curriculumExtract: "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
-        embedding: !embeddingOptIn ? "disabled" : embeddingAvailable ? "ready" : "unavailable",
+        embedding: corpus.vectors > 0 ? "ready-openai-hybrid" : !embeddingOptIn ? "disabled" : embeddingAvailable ? "ready" : "unavailable",
         semanticCatalog: semanticCatalogEnabled ? "enabled-same-configured-provider-closed-record-ids" : "disabled-no-live-provider",
-        canonicalRendering: "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
-        generationEvidence: "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
-        groundingChecks: "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        canonicalRendering: "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        generationEvidence: "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        groundingChecks: "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
         groundingIsolation: { claimsPerRequest: 1, concurrency: 4, maxClaims: 16, totalAnswerBudgetMs: 54000, routeMaxDurationSeconds: 60 },
-        activePath: "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation",
+        activePath: "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation",
       },
+      hybridCorpus: corpus,
       approvedMarkdownFiles: knowledgeFiles.length,
       verifiedAnswers: verifiedAnswers.length,
       sourceEvidence: {

@@ -129,6 +129,7 @@ async function main() {
     const clean = sanitizeAnswerMetadata({ claims: [claim], grounding });
     assert.deepEqual(clean.claims, [claim]);
     assert.deepEqual(clean.grounding, grounding);
+    assert.deepEqual(sanitizeAnswerMetadata({ grounding: { ...grounding, rewriteCount: 2 } }).grounding, { ...grounding, rewriteCount: 2 });
     for (const claims of [
       [{ ...claim, text: "x".repeat(6001) }],
       Array.from({ length: 17 }, () => claim),
@@ -138,7 +139,7 @@ async function main() {
     ]) assert.equal(sanitizeAnswerMetadata({ claims }).claims, undefined);
     for (const invalid of [
       { ...grounding, reasonCodes: ["private draft or provider exception text"] },
-      { ...grounding, rewriteCount: 2 },
+      { ...grounding, rewriteCount: 3 },
       { ...grounding, reasonCodes: Array.from({ length: 17 }, () => "scope_drift") },
     ]) assert.equal(sanitizeAnswerMetadata({ grounding: invalid }).grounding, undefined);
     assert.equal(sanitizeAnswerMetadata({ claims: [claim], grounding: { ...grounding, status: "rejected" } }).claims, undefined);
@@ -296,8 +297,8 @@ async function main() {
     assert.equal(health.readiness.generation, false);
     assert.equal(health.build.revision, "test-build-revision");
     assert.match(health.knowledge.contentFingerprint, /^[a-f0-9]{64}$/);
-    assert.equal(health.knowledge.retrieval.activePath, "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation");
-    assert.equal(health.knowledge.retrieval.embedding, "disabled");
+    assert.equal(health.knowledge.retrieval.activePath, "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation");
+    assert.equal(health.knowledge.retrieval.embedding,health.knowledge.hybridCorpus.vectors>0?"ready-openai-hybrid":"disabled");
     assert.equal(health.deployment.productionReady, false);
     delete process.env.AI_PROVIDER;
     delete process.env.CHATBOT_BUILD_REVISION;

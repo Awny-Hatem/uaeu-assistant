@@ -80,6 +80,13 @@ async function main() {
   await check("Arabic numerals and grouped amounts retain valid numeric support", () => {
     assert.deepEqual(violations("The fee is AED 5000 in 2026.", "الرسوم ٥٬٠٠٠ درهم في ٢٠٢٦."), []);
   });
+  await check("Arabic morning and evening clocks retain time identity without admitting changed hours",()=>{
+    const source='Published working hours are 8:00 AM to 5:00 PM, and Friday 8:00 AM to 3:00 PM.';
+    assert.deepEqual(violations(source,'ساعات العمل من ٨ صباحاً إلى ٥ مساءً، والجمعة من 8 صباحا إلى 3 مساء.'),[]);
+    assert.deepEqual(violations(source,'من 8 صباحًا إلى 5 مساءً.'),[]);
+    assert.ok(violations(source,'ساعات العمل من 9 صباحا إلى 6 مساء.').length);
+    assert.ok(violations(source,'ساعات العمل حتى 5 صباحا.').length);
+  });
   await check("equivalent written-month and ISO dates do not create a false rejection", () => {
     assert.deepEqual(violations("The deadline is 18 September 2026.", "The deadline is 2026-09-18."), []);
     assert.deepEqual(violations("The published deadline18September2026 applies to this term.", "The deadline is 18 September 2026."), []);
@@ -111,7 +118,7 @@ async function main() {
     // verification: a quantity's presence does not establish its relationship.
     assert.deepEqual(violations("The service requires 5 documents.", "The service costs AED 5."), []);
   });
-  await check("route retries unsupported numeric claims once then withholds them", async () => {
+  await check("route bounds unsupported numeric claims to two revisions then withholds them", async () => {
     let plannerCalls = 0;
     let writerCalls = 0;
     globalThis.fetch = async (input, init) => {
@@ -144,8 +151,8 @@ async function main() {
     }));
     const body = await response.json();
     assert.equal(plannerCalls, 0, "Deterministic academic retrieval should avoid an unnecessary selector");
-    assert.equal(writerCalls, 2);
-    assert.equal(intercepted, 2, "Only two bounded writer attempts are needed; unsupported tokens fail before verification");
+    assert.equal(writerCalls, 3);
+    assert.equal(intercepted, 3, "At most three bounded writer attempts are allowed; unsupported tokens fail before verification");
     assert.ok(response.status >= 500);
     assert.ok(!String(body.content).includes("987654321"));
     assert.deepEqual(body.citations, []);

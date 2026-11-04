@@ -33,7 +33,7 @@ async function main() {
   const { faqHealthSnapshot, faqScope, loadFaqEntries, matchFaq, normalizeAnswerText } = await import("../lib/faq");
   const { lexicalRetrieve, retrieveVerifiedEvidence } = await import("../lib/knowledge-files");
   const { resolveConversation, understandQuery } = await import("../lib/query-understanding");
-  const { loadServiceGuides } = await import("../lib/service-guides");
+  const { loadServiceGuides, serviceGuideEvidence } = await import("../lib/service-guides");
   const { loadEmbeddingChunks } = await import("../lib/vector-rag");
   const { finalizeProviderResponse } = await import("../lib/provider-response");
   const { citationsFromRows } = await import("../lib/citations");
@@ -114,10 +114,13 @@ async function main() {
     const latest=messages.filter(message=>message.role==="user").at(-1)?.content ?? "";
     const query=resolveConversation(messages,latest).query;
     const academic=retrieveAcademicEvidence(query);
-    if(academic)return academic.rows;
+    if(academic?.rows.length)return academic.rows;
     const matched=matchFaq(query);
     const preferred=matched ? evidenceForSemanticRoute({resolvedQuery:query,subject:"",recordIds:[],primaryRecordIds:[matched.entry.id],targetCourseCodes:understandQuery(query).codes,clarification:"",kind:"answer"}) : [];
-    return preferred.length ? preferred : retrieveVerifiedEvidence(query,20);
+    const rows = preferred.length ? preferred : retrieveVerifiedEvidence(query,20);
+    if (rows.length) return rows;
+    const guide = result.data.guide?.id ? loadServiceGuides().find(item => item.id === result.data.guide?.id) : undefined;
+    return guide ? serviceGuideEvidence(guide) : [];
   }
   function visibleOrEvidenceText(result: ChatResult) {
     const rows=mockEvidence(result);
@@ -336,7 +339,7 @@ async function main() {
       },
     },
     {
-      name: "Arabic canonical answers are reachable; explicit-year procedural requests use scoped generation",
+      name: "Arabic prepared evidence remains reachable through tailored generation",
       run: async () => {
         const arabicText = /[\u0600-\u06ff\u0750-\u077f\u08a0-\u08ff]/;
         for (const entry of loadFaqEntries()) {
@@ -359,6 +362,12 @@ async function main() {
             assert.ok(retrieveVerifiedEvidence(arabicQuery).some((row) => row.source === `answer:${entry.id}` && row.scope?.temporalCoverage === "procedural"));
             // Language/grounding of generated prose requires the separate live
             // provider evaluation, not a deterministic English orchestration mock.
+            continue;
+          }
+          if (result.data.provider === "mock" && result.data.source === "rag") {
+            assertFaq(result, entry.id);
+            // English official facts can support an Arabic model translation.
+            // The orchestration mock cannot establish response-language quality.
             continue;
           }
           assert.equal(
@@ -779,7 +788,11 @@ async function main() {
           messages: [{ role: "user", content: "Can I get a recommendation letter?" }],
         });
         assert.equal(result.status, 200);
-        assert.equal(result.data.source, "escalated");
+        // With the expanded corpus a mock can reach grounded-generation
+        // orchestration for relevant recommendation-letter evidence. It cannot
+        // establish a factual answer or a university issuing procedure.
+        assert.ok(["escalated", "rag"].includes(result.data.source ?? ""));
+        if (result.data.source === "rag") assert.equal(result.data.provider, "mock");
         assert.notEqual(result.data.guide?.id, "to-whom-it-may-concern");
       },
     },
@@ -984,7 +997,8 @@ async function main() {
           ],
         });
         assert.equal(result.status, 200);
-        assert.equal(result.data.source, "guide");
+        assert.equal(result.data.source, "rag");
+        assert.equal(result.data.provider, "mock");
         assert.equal(result.data.guide?.id, "to-whom-it-may-concern");
         assert.match(visibleOrEvidenceText(result), /10 minutes/i);
         assertOfficialCitation(result, /serviceId=92/i);
@@ -998,9 +1012,11 @@ async function main() {
           messages: [{ role: "user", content: "ابا شهادة لمن يهمه الأمر" }],
         });
         assert.equal(result.status, 200);
-        assert.equal(result.data.source, "guide");
+        assert.equal(result.data.source, "rag");
+        assert.equal(result.data.provider, "mock");
         assert.equal(result.data.guide?.id, "to-whom-it-may-concern");
-        assert.match(visibleOrEvidenceText(result), /[\u0600-\u06ff]/);
+        // The mock does not prove Arabic generated prose; inspect the actual localized UI checklist.
+        assert.ok((result.data.guide?.steps?.length ?? 0) > 0);
         assert.ok(
           result.data.guide?.steps?.every((step) =>
             /[\u0600-\u06ff]/.test(

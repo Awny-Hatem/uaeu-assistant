@@ -25,7 +25,7 @@ export function sourceEvidenceContext(sources: SourceEvidence[]): string {
   return sources.map(({ id, row, citation, text }) => {
     const { evidenceText: _summary, ...metadata } = citation;
     void _summary;
-    return `--- SOURCE ${id} ---\nRECORD: ${row.source}\nSCOPE: ${JSON.stringify(row.scope ?? {})}\nREFERENCE: ${JSON.stringify(metadata)}\nREVIEWED SOURCE-SPECIFIC FACTS (paraphrase, not a quotation):\n${text}\nOnly this source's facts can be cited with ${id}. Other records, conversation history and missing information are not additional evidence for this source.`;
+    return `--- SOURCE ${id} ---\nRECORD: ${row.source}\nSCOPE: ${JSON.stringify(row.scope ?? {})}\nREFERENCE: ${JSON.stringify(metadata)}\n${row.source.startsWith("corpus:") ? "OFFICIAL SOURCE EXCERPT (automated extraction; preserve table headings, conditions and applicability)" : "REVIEWED SOURCE-SPECIFIC FACTS (paraphrase, not a quotation)"}:\n${text}\nOnly this source's facts can be cited with ${id}. Other records, conversation history and missing information are not additional evidence for this source.`;
   }).join("\n\n");
 }
 
@@ -49,6 +49,11 @@ function normalizeNumbers(text: string): string {
     const value = Number(hour);
     if (value < 1 || value > 12 || Number(minute ?? "0") > 59) return original;
     return `${value % 12 + (/^p/i.test(period) ? 12 : 0)}:${minute ?? "00"}`;
+  });
+  normalized=normalized.replace(/(\d{1,2})(?::(\d{2}))?\s*(صباح(?:\p{M}*ا)?\p{M}*|مساء(?:\p{M}*ا)?\p{M}*)(?!\p{L})/gu,(original,hour:string,minute:string|undefined,period:string)=>{
+    const value=Number(hour);
+    if(value<1||value>12||Number(minute??'0')>59)return original;
+    return `${value%12+(period.startsWith('مساء')?12:0)}:${minute??'00'}`;
   });
   for (let index = 0; index < months.length; index += 1) normalized = normalized.replace(new RegExp(`(?<![\\p{L}])(?:${months[index]})(?![\\p{L}])`, "giu"), (match, offset: number, original: string) => {
     if (match.toLowerCase() === "may" && !/\d\s*$|\b(?:in|during|until|from|by|on|each|every)\s*$/i.test(original.slice(0, offset)) && !/^\s+\d/.test(original.slice(offset + match.length))) return match;
@@ -132,6 +137,9 @@ export function sourceClaimViolations(answer: GroundedAnswer, sources: SourceEvi
       !/(?:do|does) not (?:establish|state|confirm)|not (?:verified|established)|لا (?:يثبت|تثبت)|لم يثبت/iu.test(part));
     const universalAbsence = /(?:not|never) publicly (?:published|available)|no (?:universal |other |separate )?(?:application )?(?:deadline|permit route|booking route|timetable)\b/i.test(text) &&
       !/\b(?:source|page|handbook|available evidence|record|verified|inspected)\b/i.test(text);
+    const wholePageAbsence = /\b(?:page|website|university|uaeu)\b[^.!?\n]{0,60}\b(?:does not|doesn't|do not) (?:state|publish|list|specify|mention)\b|(?:الصفحة|الموقع|الجامعة).{0,35}لا (?:تحدد|تذكر|تنشر|تسرد)/iu.test(claim.text);
+    const explicitOmission = /(?:does not|doesn't|not) (?:state|publish|list|specified|listed|established)|(?:pre|co)requisites?\s*:\s*none|no (?:pre|co)requisites?|لا (?:تحدد|تذكر|تنشر|تسرد)/iu.test(source.text);
+    if (wholePageAbsence && !explicitOmission) return [`Claim ${index + 1}, assigned source ${source.id}: omission from an excerpt or reviewed summary does not establish that the whole official page lacks the fact. Remove the categorical page/website absence assertion; state only what is not established in the available excerpt, or answer from the source-listed fact.`];
     const blanketApproval = /\bin other circumstances\b/i.test(body) && /\b(?:either|qualifying routes|alternative\w*)\b/i.test(body) &&
       /\b(?:need\w*|requir\w*|must)\b[^.]*\bapproval\b|\bapproval\b[^.]*\b(?:needed|required|necessary)\b|(?:يتطلب|تتطلب|يحتاج|تحتاج|يلزم|يجب)[^.]*موافق|الموافق[ةه][^.]*مطلوب/iu.test(text) &&
       !/\b(?:unless|otherwise|in other circumstances|do not always|does not always|not every|not all|qualifying routes)\b|في (?:الحالات|الظروف) (?:الأخرى|الاخرى)|ما لم|إلا إذا|الا اذا|عند استيفاء|ليس.*دائم|لا.*دائم/iu.test(text);

@@ -1,18 +1,23 @@
+import corpusIdentities from "@/data/corpus/course-identities.json";
 import courseIdentities from "@/data/course-code-identities.json";
 
-const CATALOG_CODES = new Set(courseIdentities.codes);
-const CATALOG_PREFIXES = new Set([...courseIdentities.codes.map(code => code.replace(/\d+$/, "")), "CSPB"]);
+const CATALOG_CODES = new Set([...courseIdentities.codes, ...corpusIdentities.codes]);
+const CATALOG_PREFIXES = new Set([...[...courseIdentities.codes, ...corpusIdentities.codes].map(code => code.replace(/\d+$/, "")), "CSPB"]);
+const CATALOG_NAMES = Object.entries(corpusIdentities.names).map(([name, code]) => [normalizeQuery(name), code] as const);
 
 /** Shared, conservative interpretation used by routing, retrieval and citations.
  * It resolves identities and requested facts; it never creates university facts.
  */
 export function normalizeCourseCodes(text: string): string {
+  text=text.replace(/[٠-٩]/gu,digit=>String(digit.charCodeAt(0)-0x660)).replace(/[۰-۹]/gu,digit=>String(digit.charCodeAt(0)-0x6f0));
   // Whitespace alone is not enough to identify a code: "for 120 credits" is
   // ordinary prose. These prefixes are present in the bundled UAEU catalogs.
   // Compact and hyphenated unknown codes remain recognizable as unknown IDs.
-  const spacedTerms = text.replace(/\b(fall|spring|summer|autumn|winter)(20\d{2})\b/gi, "$1 $2");
+  const spacedTerms = text.replace(/\b(fall|spring|summer|autumn|winter|the|for|from|in|year|cohort|program|catalog|catalogue|of|and|during|before|after|AY|FY)(20\d{2})(?!\d)/gi, "$1 $2")
+    .replace(/([\p{L}]+)(20\d{2})(?!\d)/gu,(original,prefix:string,year:string)=>CATALOG_PREFIXES.has(prefix.toUpperCase())||/^[A-Z]{3,6}$/.test(prefix)?original:`${prefix} ${year}`);
   return spacedTerms.replace(/\b([a-z]{3,6})([\s\u00a0\u2010-\u2015-]*)(\d{3,4})(?!\d)/gi,
     (original, prefix: string, separator: string, number: string) => {
+      if (/^20\d{2}$/.test(number) && /^(?:fall|spring|summer|autumn|winter|year|cohort|plan|the|for|from|during|before|after)$/i.test(prefix)) return `${prefix} ${number}`;
       // Correct a letter transposition only when the resulting real catalog
       // identity exists. Unknown numbers retain their supplied identity.
       if (prefix.toUpperCase() === "CSPB" && CATALOG_CODES.has(`CSBP${number}`)) return `CSBP${number}`;
@@ -26,6 +31,9 @@ export function normalizeQuery(text: string): string {
     .replace(/\p{M}/gu, "").replace(/ـ/g, "")
     .replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\b(?:semister|semster|semestre)\b/g, "semester")
     .replace(/\b(?:prerequisits?|prerequisities|pre requisite[ s]*)\b/g, "prerequisite")
+    .replace(/\b(?:admision|admisson|admisions)\b/g, "admission").replace(/\b(?:tution|tuision)\b/g, "tuition").replace(/\b(?:scholership|scholorship)\b/g, "scholarship")
+    .replace(/\bm\s+sc\b/g, "msc").replace(/\bph\s+d\b/g, "phd").replace(/\bb\s+sc\b/g, "bsc")
+    .replace(/\bdoctor\s+of\s+philosophy\b/g, "phd").replace(/\bdoctor\s+of\s+business\s+administration\b/g, "dba")
     .replace(/\s+/g, " ").trim();
 }
 
@@ -35,12 +43,18 @@ export function courseCodes(text: string): string[] {
 
 function courseNames(text: string): string[] {
   const normalized = normalizeQuery(text);
-  return ([
+  const builtIn = ([
     ["CSBP319", /\bdata structures?\b|هياكل البيانات/u],
     ["CSBP340", /\bdatabase systems?\b|قواعد البيانات/u],
     ["CSBP219", /\bobject oriented programming\b|البرمج[ةه] (?:كائني[ةه]|كائنيه) التوجه/u],
     ["CSBP411", /\bmachine learning\b|تعلم الال[ةه]/u],
   ] as const).filter(([,pattern])=>pattern.test(normalized)).map(([code])=>code);
+  const generated = CATALOG_NAMES.filter(([name]) => ` ${normalized} `.includes(` ${name} `));
+  const longest = generated.filter(([name]) => !generated.some(([other]) => other.length > name.length && other.includes(name)));
+  const explicitlyCourse = /\b(?:course|class|module|prerequisit|corequisit|syllabus)\w*\b|مساق|مقرر|متطلب/u.test(normalized);
+  if (!explicitlyCourse && /\b(?:bachelor|bachelors|bsc|bs|master|masters|msc|mba|mpa|phd|doctorate|doctoral|dba|undergraduate|postgraduate|minor|microcredential|micro credential|accelerated|diploma)\b|بكالوريوس|ماجستير|دكتوراه|تخصص فرعي|دبلوم/u.test(normalized)) return [];
+  if (!explicitlyCourse && /\b(?:degree|major|program)\b|تخصص|برنامج/u.test(normalized)) return builtIn;
+  return longest.length ? [...new Set(longest.map(([, code]) => code))] : builtIn;
 }
 
 /** Targets are not the same as every identifier in the student's premise. */
@@ -59,6 +73,14 @@ export function courseTargets(text: string): string[] {
   return explicit.length ? explicit : courseNames(text);
 }
 
+/** Stated study interests establish a recommendation request even when no
+ * programme has been named yet; "that" need not refer to an earlier turn. */
+export function isProgramRecommendation(text:string):boolean{
+  const query=normalizeQuery(text).replace(/[أإآٱ]/gu,'ا');
+  return /(?:which|what).{0,35}(?:major|degree|program)|recommend.{0,35}(?:major|degree|program)|اي.{0,25}(?:تخصص|برنامج)/u.test(query)
+    && /\b(?:like|enjoy|interests?|ai|programming)\b|احب|اهتم|الذكاء الاصطناعي/u.test(query);
+}
+
 function isExternalAcademicCreditRequest(text: string): boolean {
   const normalized = normalizeQuery(text);
   return /\b(?:transfer(?:red)? credits?|credit transfer|credit recognition|credit evaluation|course equivalenc(?:y|ies)|advanced standing)\b/u.test(normalized) ||
@@ -67,6 +89,8 @@ function isExternalAcademicCreditRequest(text: string): boolean {
 }
 
 const SUBJECTS = [
+  ["vice-chancellor", "UAEU Vice Chancellor", /\bvice chancellor\b|مدير\s+(?:جامع[ةه](?:\s+الامارات)?|الجامع[ةه]|uaeu)/u],
+  ["chancellor", "UAEU Chancellor", /(?<!vice )\bchancellor\b|الرييس الاعلى|الرييس الاعلي|الرئيس الاعلى|الرئيس الاعلي/u],
   ["events", "university events", /\b(?:university events?|uaeu events?|workshops?)\b|فعاليات|الفعاليات|ورش العمل/u],
   ["transcript", "official transcript", /\btranscripts?\b|كشف\s+(?:الدرجات|درجات)/u],
   ["certificate", "graduation certificate", /\b(?:graduation|degree) (?:certificate|diploma)|\bdiploma\b|شهاد[ةه]\s+(?:التخرج|الدرج[ةه])/u],
@@ -122,7 +146,7 @@ const INTENTS: [FactIntent, RegExp][] = [
   ["courses", /\b(?:courses?|subjects?|study plan|degree plan|curriculum)\b|مساقات|مساق|مقررات|مواد|الخطة/u],
   ["contact", /\b(?:contact|phone|email|reach)\b|تواصل|هاتف|بريد/u],
   ["verify", /\b(?:verify|sure|source|citation|is that correct)\b|تحقق|المصدر|متاكد|هل هذا صحيح/u],
-  ["start", /\b(?:starts?|starting|begins?|beginning|commences?|commencement)\b|يبدا|بداي[ةه]/u],
+  ["start", /\b(?:starts?|starting|begins?|beginning|commences?|commencement)\b|يبدا|تبدا|بداي[ةه]/u],
   ["exams", /\b(?:exams?|examinations?)\b|امتحان|اختبار/u],
 ];
 
@@ -144,6 +168,7 @@ export function understandQuery(text: string): QueryMeaning {
   const normalized = normalizeQuery(text);
   const subjects = SUBJECTS.filter(([, , pattern]) => pattern.test(normalized)).map(([key]) => key);
   if (!subjects.includes("transfer") && isExternalAcademicCreditRequest(text)) subjects.push("transfer");
+  if (!subjects.includes("admissions") && /(?:يتقدم|اتقدم|التقدم|الالتحاق|التحاق).{0,45}(?:بكالوريوس|ماجستير|دكتوراه|جامع[ةه]|دولي)/u.test(normalized)) subjects.push("admissions");
   // Degree applications establish an admissions topic even when the preposition
   // is "for". A degree document or an application to graduate is a different
   // transaction; neither should seed admissions context for a later slot reply.
@@ -161,6 +186,13 @@ export function understandQuery(text: string): QueryMeaning {
     if (admissionIndex >= 0) subjects.splice(admissionIndex, 1);
   }
   const intents = INTENTS.filter(([, pattern]) => pattern.test(normalized)).map(([key]) => key);
+  if (subjects.includes("scholarship") && /guarantee|يضمن|تضمن|ضمان/u.test(normalized) && !intents.includes("eligibility")) intents.push("eligibility");
+  // Removing an old grade/attempt from a transcript is not dropping a course.
+  // Preserve real withdrawal requests, including questions combining both.
+  const gradeRemoval=/(?:حذف|تحذف|تمسح|مسح|ازالة).{0,45}(?:محاول|المحاول|درجات|الدرجات|كشف الدرجات)/u.test(normalized);
+  const courseWithdrawal=/انسحاب|(?:حذف|احذف|تحذف).{0,16}(?:مساق|مقرر)|\b(?:drop|withdraw)\b/u.test(normalized);
+  if(gradeRemoval&&!courseWithdrawal&&intents.includes('withdrawal'))intents.splice(intents.indexOf('withdrawal'),1);
+
   // Counting transfer-recognized or degree credits is not semester study load.
   if (intents.includes("credit-load") && /\b(?:transfer\w*|recogniz\w*|degree|graduat\w*)\b/u.test(normalized) &&
     !/\b(?:course load|study load|credit load|semester load|per semester|normal semester)\b/u.test(normalized)) intents.splice(intents.indexOf("credit-load"), 1);
@@ -176,11 +208,11 @@ export function understandQuery(text: string): QueryMeaning {
   // "When" or "date" alone is insufficient: a date for adding classes or
   // another service must not be reclassified as the start of a semester.
   if (!subjects.length && !codes.length && terms.length && !/\bapplications?\b/u.test(normalized) &&
-    intents.includes("start")) subjects.push("calendar");
+    intents.some(intent=>intent==="start"||intent==="exams")) subjects.push("calendar");
   const degreeLevels: QueryMeaning["degreeLevels"] = [];
   const positiveDegreeText = normalized.replace(/\bnot (?:a |an )?(?:undergraduate|postgraduate|bachelor(?:s)?|master(?:s)?|phd|doctoral)(?: student| applicant| degree)?\b/gu, "");
   if (/\b(?:postgraduates?|master|masters|msc|mba|mpa|dba|doctorate|phd|doctoral)\b|ماجستير|دكتوراه|دراسات عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
-  if (/\b(?:undergraduates?|bachelor|bachelors)\b|بكالوريوس/u.test(positiveDegreeText)) degreeLevels.push("undergraduate");
+  if (/\b(?:undergraduates?|bachelor|bachelors|bsc|bs)\b|بكالوريوس/u.test(positiveDegreeText)) degreeLevels.push("undergraduate");
   const applicantCategories: QueryMeaning["applicantCategories"] = [];
   const positiveCategoryText = normalized.replace(/\bnot (?:a |an )?(?:uae national|emirati|citizen|international(?: applicant| student)?)\b|لست (?:مواطن[اة]?|اماراتي[اة]?|طالبا? دوليا?)/gu, "");
   if (/\b(?:international|non emiratis?|non nationals?|employee.*child|children of.*employee)\b|دولي|الدوليين|غير المواطنين|ابناء.*الموظف/u.test(positiveCategoryText)) applicantCategories.push("international");
@@ -315,9 +347,13 @@ export type EvidenceScope = {
   temporalCoverage?: "procedural" | "dated";
 };
 
-export function scopeAllows(query: string, text: string, scope: EvidenceScope = {}): boolean {
-  const wanted = understandQuery(query);
-  const evidence = understandQuery(text);
+export function scopeAllows(query: string, text: string, scope: EvidenceScope = {}, interpreted?: { wanted: QueryMeaning; evidence: QueryMeaning }): boolean {
+  const wanted = interpreted?.wanted ?? understandQuery(query);
+  const evidence = interpreted?.evidence ?? understandQuery(text);
+  const offices=["vice-chancellor","chancellor"];
+  const requestedOffices=wanted.subjects.filter(subject=>offices.includes(subject));
+  const sourceOffices=[...(scope.subjects??[]),...evidence.subjects].filter(subject=>offices.includes(subject));
+  if(requestedOffices.length&&sourceOffices.length&&!requestedOffices.some(subject=>sourceOffices.includes(subject)))return false;
   if (scope.courseCodes?.length && wanted.codes.length && !wanted.codes.some((code) => scope.courseCodes!.includes(code))) return false;
   if (scope.applicantCategory && !wanted.applicantCategories.includes(scope.applicantCategory)) return false;
   if (scope.degreeLevel && wanted.degreeLevel && wanted.degreeLevel !== scope.degreeLevel) return false;

@@ -155,7 +155,11 @@ async function main() {
     assert.equal(retrieveVerifiedEvidence(query).length, 0, query);
     const answer = await ask(query);
     assert.equal(answer.source, "escalated", query);
-    assert.deepEqual(answer.citations, [], query);
+    if (query.includes('Spring 2028')) {
+      assert.equal(answer.citations.length,1);
+      assert.equal(answer.citations[0].url,'https://www.uaeu.ac.ae/en/calendar/index.shtml');
+      assert.match(answer.citations[0].title,/unverified/);
+    } else assert.deepEqual(answer.citations, [], query);
     assert.equal(answer.disposition, "clarify");
   }
   const libraryRumor = retrieveVerifiedEvidence("Is library entry forbidden if my GPA falls below 2.5?");

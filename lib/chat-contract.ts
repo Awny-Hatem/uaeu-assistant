@@ -122,7 +122,7 @@ export function sanitizeAnswerMetadata(value: unknown): AnswerMetadata {
     result.claims = value.claims.map((claim) => ({ text: claim.text, evidenceIds: [...claim.evidenceIds] }));
   }
   if (record(value.grounding) && typeof value.grounding.status === "string" && ["checked", "rejected"].includes(value.grounding.status) &&
-    (value.grounding.rewriteCount === 0 || value.grounding.rewriteCount === 1) &&
+    (value.grounding.rewriteCount === 0 || value.grounding.rewriteCount === 1 || value.grounding.rewriteCount === 2) &&
     Array.isArray(value.grounding.reasonCodes) && value.grounding.reasonCodes.length <= 16 &&
     value.grounding.reasonCodes.every((code) => typeof code === "string" && code.length <= 80 &&
       GROUNDING_REASON_CODES.includes(code as typeof GROUNDING_REASON_CODES[number]))) {

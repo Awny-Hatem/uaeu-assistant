@@ -33,7 +33,7 @@ function qualification(query: string): string | undefined {
   const text = normalizeQuery(query).replace(/\bnot (?:the |a )?bachelor(?:s)?(?: degree)?\b/g, "");
   if (/\b(?:phd|ph d|doctorate|doctoral|dba)\b|دكتوراه/u.test(text)) return "doctorate";
   if (/\b(?:master|masters|msc|m sc|mba|mpa)\b|ماجستير/u.test(text)) return "master";
-  if (/\b(?:bachelor|bachelors|bsc|undergraduate|md)\b|بكالوريوس|دكتور في الطب/u.test(text)) return "bachelor";
+  if (/\b(?:bachelor|bachelors|bsc|bs|undergraduate|md)\b|بكالوريوس|دكتور في الطب/u.test(text)) return "bachelor";
   return undefined;
 }
 
@@ -42,7 +42,8 @@ function programsFor(query: string, documents: KnowledgeDocument[]): Program[] {
     .replace(/\bcollege of information technology\b|كلي[ةه] تقني[ةه] المعلومات/gu," ")
     .replace(/\b(?:excluding|except|not) (?:the )?(?:college of )?medicine(?: and health sciences)?\b/gu," ")
     .replace(/(?:غير|باستثناء|عدا|دون) (?:كلي[ةه] )?الطب(?: والعلوم الصحي[ةه])?/gu," ");
-  const requested = qualification(query);
+  const multiQualification = /\b(?:compare|versus|vs)\b|مقارن|قارن/u.test(normalized) && [/\b(?:bachelor|bachelors|bsc|bs|undergraduate)\b|بكالوريوس/u,/\b(?:master|masters|msc|mba|mpa)\b|ماجستير/u,/\b(?:phd|doctorate|doctoral|dba)\b|دكتوراه/u].filter(r => r.test(normalized)).length > 1;
+  const requested = multiQualification ? undefined : qualification(query);
   const programs: Program[] = [...BASE_PROGRAMS, ...documents.flatMap(document => document.program && document.qualification && document.scope?.subjects?.length ? [{
     key: document.scope.subjects[0], qualification: document.qualification ?? "bachelor", label: document.program,
     aliases: [document.program, ...(document.aliases ?? [])],
@@ -55,12 +56,20 @@ function programsFor(query: string, documents: KnowledgeDocument[]): Program[] {
   // IT on its own is ambiguous with the English pronoun. Preserve uppercase or
   // an explicit major/degree context; never interpret "is it required" as IT.
   if (/\bIT\b/u.test(query) && !matches.some(program => program.key === "information-technology") && (!requested || requested === "bachelor")) matches.push(BASE_PROGRAMS[2]);
+  if (multiQualification) {
+    const clauses=normalized.split(/\b(?:versus|vs|and)\s+(?=(?:the )?(?:bachelor|master|msc|mba|mpa|bsc|bs\b|phd|doctorate|doctoral|dba))|\s+و(?=بكالوريوس|ماجستير|دكتوراه)/u);
+    const bound=new Set(matches.map(program=>program.key)).size>1 && clauses.length>1
+      ? matches.filter(program=>clauses.some(clause=>(!qualification(clause)||qualification(clause)===program.qualification)&&program.aliases.some(alias=>contains(clause,alias))))
+      : matches;
+    return [...new Map(bound.map(program => [program.key + ":" + program.qualification, program])).values()];
+  }
   const keys = [...new Set(matches.map(program => program.key))];
   return keys.map(key => matches.find(program => program.key === key && program.qualification === (requested ?? "bachelor")) ?? matches.find(program => program.key === key)!);
 }
 
 function row(document: KnowledgeDocument, text: string, section?: string): EvidenceRow {
-  return { source: document.filename, title: document.title, scope: document.scope, score: 100,
+  const sectionYears=section?[...section.matchAll(/\b(20\d{2})\s*[-–—/]\s*(20\d{2})\b/g)].flatMap(match=>Number(match[2])===Number(match[1])+1?[Number(match[1]),Number(match[2])]:[]):[];
+  return { source: document.filename, title: document.title, scope: sectionYears.length?{...document.scope,years:[...new Set(sectionYears)]}:document.scope, score: 100,
     text: `# ${document.title}\n${text}`, citations: [{ title: document.title, url: document.sourceUrl, lastVerified: document.lastVerified, sourceSection: section }] };
 }
 
@@ -78,12 +87,12 @@ function facetsFor(query: string, hasCode: boolean): Set<Facet> {
   if (/\b(?:final|last) (?:taught )?semester\b|(?:اخر|الاخير).{0,15}(?:فصل|تدريس)|فصل.{0,12}(?:اخر|اخير)/u.test(text)) out.add("final");
   if (/\blabs?\b|مختبر|مختبرات/u.test(text) && !hasCode) out.add("labs");
   if (/\b(?:prerequisit\w*|pre requisite\w*|co requisite\w*|corequisit\w*|pre co|concurrent|alongside|without completing|before taking|before mech|must i pass|need before|pass before)\b|(?:متطلب|المتطلب|المتطلبات).{0,12}(?:سابق|السابق|متزامن|المتزامن)|شو لازم قبل|اخذ.{0,15}مع /u.test(text)) out.add("prerequisites");
-  if (/\b(?:required|mandatory|compulsory|elective|part of|belongs to|need to take|do i need|to graduate)\b|اجباري|الزامي|اختياري|عشان يتخرج|لازم.{0,25}(?:يدرس|ياخذ)/u.test(text) && hasCode && !out.has("prerequisites")) out.add("status");
+  if (/\b(?:required|mandatory|compulsory|elective|part of|belongs to|need to take|do i need|to graduate)\b|اجباري|الزامي|اختياري|من متطلبات|ضمن متطلبات|عشان يتخرج|لازم.{0,25}(?:يدرس|ياخذ)/u.test(text) && hasCode && !out.has("prerequisites")) out.add("status");
   if (/\belectives?\b|اختياري[ةه]|الاختياري[ةه]/u.test(text) && !hasCode) out.add("electives");
   if (/\b(?:required|mandatory) courses\b|\bcourses (?:required|needed)\b|المساقات المطلوب[ةه]|المواد الاجباري[ةه]/u.test(text) && !hasCode) out.add("required");
   if (/\b(?:topics?|covers?|content|syllabus|learn)\b|المواضيع|موضوعات|يغطيها|محتوى/u.test(text)) out.add("topics");
   if (/\b(?:which|what) semester\b|normally taken|بأي فصل|اي فصل/u.test(text) && hasCode) out.add("placement");
-  if (/\b(?:credits?|hours?|cr hrs|credit breakdown)\b|ساعات|ساع[ةه]|كم ساعة/u.test(text) && !out.has("first") && !out.has("final") && !out.has("labs") && !out.has("prerequisites") && (!out.has("electives") || /\b(?:total|degree|breakdown|university requirements|college requirements|major requirements)\b/u.test(text))) out.add("credits");
+  if (/\b(?:credits?|hours?|cr hrs|credit breakdown)\b|ساعات|ساع[ةه]|كم ساعة/u.test(text) && !out.has("first") && !out.has("final") && !out.has("labs") && !out.has("prerequisites") && (!out.has("electives") || /\b(?:total|degree|breakdown|university requirements|college requirements|major requirements)\b|مجموع|اجمالي|تقسيم/u.test(text))) out.add("credits");
   if (hasCode && !out.size) out.add("prerequisites");
   return out;
 }
@@ -94,24 +103,37 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
   const meaning = understandQuery(query), text = meaning.normalized;
   // External credit recognition belongs to the transfer policy, not a degree total.
   if (meaning.subjects.includes("transfer")) return null;
+  if (/\b(?:accelerated|minor|microcredential|micro credential)\b|تخصص فرعي|مؤهل مصغر/u.test(text)) return null;
   const programs = programsFor(query, documents), codes = courseTargets(query);
   const selectedQualification = qualification(query);
+  if (!codes.length && !programs.length && /\b(?:the course|this course|course called|course named|principles of|introduction to|fundamentals of)\b|مساق|مقرر/u.test(text) && /credit|hour|prerequis|corequis|ساع|متطلب/u.test(text)) return null;
   const fees = /\b(?:fees?|tuition|cost|price)\b|رسوم|تكلف[ةه]/u.test(text);
-  const admission = /\b(?:admissions?|ielts|apply|applying|reject)\b|قبول|ايلتس|اقدم|التقديم|التقدم|ارفض|يرفض/u.test(text);
+  const admission = meaning.subjects.includes("admissions") || /\b(?:admissions?|ielts|apply|applying|reject)\b|قبول|ايلتس|اقدم|التقديم|التقدم|رفض/u.test(text);
   const docs = (needle: string) => documents.filter(document => document.filename.includes(needle)).map(document => row(document, document.content));
 
   if (/\b(?:attire|dress code|gown|clothing)\b|زي التخرج|ملابس التخرج/u.test(text) && /graduation|ceremony|تخرج/u.test(text)) return {rows:docs("graduation-attire-source-gap"),citation:{title:"UAEU commencement — lookup page; current attire rules unverified",url:"https://www.uaeu.ac.ae/en/commencement/",lastVerified:"2026-11-03"}};
   if (/\bstudent clubs?\b|\bclubs?.*join\b|اندية|نوادي/u.test(text) && !/\b(?:create|found|start|establish)\b|تاسيس|انشاء/u.test(text)) return {rows:docs("campus-life-student-clubs")};
 
-  if (/\b(?:catalogs?|catalogues?)\b|كتالوج|دليل البرامج/u.test(text) && meaning.years.length) {
+  // A window explicitly labelled FOR an intake is distinct from an event
+  // occurring DURING a semester in the calendar's container heading.
+  if (/internal (?:college )?transfer|التحويل الداخلي/u.test(text) && meaning.years.length) {
+    const entry=loadFaqEntries().find(entry=>entry.category==='registration'
+      && entry.questions.some(question=>/internal (?:college )?transfer|التحويل الداخلي/iu.test(question))
+      && meaning.years.every(year=>faqScope(entry).years?.includes(year))
+      && meaning.terms.every(term=>entry.questions.some(question=>understandQuery(question).terms.includes(term))));
+    if(entry)return {rows:reviewed(entry.id)};
+  }
+  if (!codes.length && !programs.length && /\b(?:catalogs?|catalogues?)\b|كتالوج|دليل\s+(?:(?:ال)?(?:برامج|مساقات|مقررات|دراسات)|course\b|graduate\b|undergraduate\b)/u.test(text) && meaning.years.length) {
     const graduate = /\bgraduate\b|دراسات عليا/u.test(text) && !/\bundergraduate\b/u.test(text);
-    const selected = documents.filter(document => document.archiveYear && document.filename.includes(graduate ? "catalog-graduate-" : "catalog-undergraduate-") && document.archiveYear.split("_").every(year => meaning.years.includes(Number(year))));
+    const kind = graduate ? "graduate" : /\bcourse\b|دليل المساقات|دليل المقررات/u.test(text) ? "course" : "undergraduate";
+    const selected = documents.filter(document => document.archiveYear && document.filename.includes(`catalog-${kind}-`) && document.archiveYear.split("_").every(year => meaning.years.includes(Number(year))));
     if (selected.length) return { rows: selected.map(document => row(document, document.content)) };
     return { rows: [], gap: "cohort", identifiers: meaning.years.map(String), citation: { ...PROGRAM_INDEX, title: "UAEU previous catalogs", url: "https://www.uaeu.ac.ae/en/dvcaa/aau/prev_catalog.shtml" } };
   }
   if (/\bdiploma\b|دبلوم/u.test(text) && /\b(?:old|historical|listing|now|current|graduate)\b|قديم|حاليا|تاريخ/u.test(text)) return { rows: docs("diploma-offering-scope") };
-  if (/\bgeneral (?:enquiries|enquiries|inquiries|contact)\b|\bcontact ua e?u\b|التواصل العام|الاستفسارات العام/u.test(text)) return { rows: docs("general-contact") };
-  if (fees && /\b(?:professional accounting|mpa)\b|المحاسب[ةه] المهني[ةه]/u.test(text)) return { rows: docs("master-professional-accounting-fees") };
+  if (/\bgeneral (?:enquiries|enquiries|inquiries|contact)\b|\bcontact ua e?u\b|التواصل العام|الاستفسارات العام/u.test(text) && !meaning.intents.includes("hours")) return { rows: docs("general-contact") };
+  if (fees && /\b(?:professional accounting|mpa)\b|المحاسب[ةه] المهني[ةه]|ماجستير المهني في المحاسب[ةه]/u.test(text)) return { rows: docs("master-professional-accounting-fees"), identifiers: ["Master of Professional Accounting"] };
+  if (meaning.subjects.includes("scholarship") && /guarantee|يضمن|تضمن|ضمان/u.test(text) && !meaning.degreeLevels.includes("postgraduate")) return {rows:reviewed("scholarship-eligibility")};
   if (admission && selectedQualification === "master") return { rows: docs("graduate-admissions-conditions") };
   if (fees && !/\b(?:housing|accommodation|residence)\b|سكن/u.test(text) && /\binternational\b|دولي/u.test(text) && selectedQualification !== "master" && selectedQualification !== "doctorate" && (programs.length || /undergraduate|بكالوريوس/u.test(text))) return { rows: reviewed("tuition-program-cost", citation => Boolean(citation.url?.includes("international-students-undergraduate"))), identifiers: programs.map(program => program.label) };
   if (!codes.length && selectedQualification !== "master" && selectedQualification !== "doctorate" && /\bnormal\b|الحد الطبيعي/u.test(text) && /semester|load|الفصل/u.test(text) && !programs.some(program=>program.key==="medicine")) {
@@ -127,19 +149,32 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
   // These facts already have reviewed source-specific records. Reuse that
   // evidence rather than ingest duplicate program documents for routing fixes.
   if (programs.length === 1 && programs[0].key === "medicine" && /credit|hour|graduation|gpa|degree requirements|ساع|تخرج|معدل/u.test(text)) return { rows: reviewed("graduation-policy-applicability", citation => !/credit|hour|ساع/u.test(text) || Boolean(citation.url?.includes("doctor-of-medicine.shtml"))), identifiers: [programs[0].label] };
-  if (programs.length === 1 && programs[0].key === "data-science-ai" && !/credit|hour|ساع/u.test(text)) {
-    const existing=loadFaqEntries().find(entry=>entry.id==="admissions-programs-new-students");
-    const college=existing?.answer_en.split("\n").find(line=>/Computing.*Data Science|Information Technology.*Data Science/i.test(line));
-    const rows=reviewed("admissions-programs-new-students", citation=>Boolean(citation.url?.includes("/catalog/summary/")));
-    if(college) for(const record of rows){record.text=college;record.citations=record.citations?.map(citation=>({...citation,evidenceText:college}));}
-    return {rows,identifiers:[programs[0].label]};
+  // A current program-finder snapshot cannot establish historical offering.
+  if (programs.length === 1 && meaning.years.length && /offer|exist|college|كلي[ةه]|هل/u.test(text) && !/credit|hour|ساع|semester|فصل|prerequis|متطلب/u.test(text)) return null;
+  // Identity/college lookups use fields from the individual program-finder
+  // reference, never the combined routing answer or a different college page.
+  if (!codes.length && programs.length === 1 && selectedQualification !== "master" && selectedQualification !== "doctorate" && !/credit|hour|ساع|semester|فصل|prerequis|متطلب|requirements?|accredit|abet|معتمد|اعتماد|courses?|مساق|مقرر|مواد|eligib|اهلي|موهل/u.test(text) && /offer|exist|college|كلي[ةه]|تقدم|تطرح|موجود|متوفر/u.test(text)) {
+    const rows = reviewed("admissions-programs-new-students", citation => Boolean(citation.url?.includes("/catalog/summary/")));
+    const identityRows = rows.flatMap(record => {
+      const citations = record.citations?.flatMap(citation => {
+        const identity = citation.evidenceText?.split("\n").find(line => line.startsWith("Program title: ") && normalizeQuery(line.split(" | ")[0]).includes(normalizeQuery(programs[0].label)));
+        return identity ? [{...citation, evidenceText:identity}] : [];
+      }) ?? [];
+      return citations.length ? [{...record,text:citations.map(c=>c.evidenceText).join("\n"),citations}] : [];
+    });
+    if (identityRows.length) return {rows:identityRows,identifiers:[programs[0].label]};
   }
 
+  // Repetition/grading is a general academic policy, not an unrecognised
+  // degree merely because the student says "bachelor course".
+  if (!codes.length && !programs.length && /repeat|failed course|course failure|رسب|اعاد[ةه]|محاولات|المحاولات/u.test(text)) return null;
   const facets = facetsFor(query, codes.length > 0);
-  if (programs.length > 1) facets.add("credits");
+  if(programs.length>1&&!facets.size)facets.add('credits');
   if (!programs.length && !codes.length && /\b(?:normal|regular|per) semester\b|semester (?:load|credit load)|الحد الطبيعي.{0,35}الفصل|العبء الدراسي/u.test(text)) return null;
   if (/\bCE\b/u.test(query) && !programs.length) return { rows: [], gap: "ambiguous", identifiers: ["Civil Engineering", "Computer Engineering"], citation: PROGRAM_INDEX };
-  const programQuestion = /\b(?:offer|program|degree|bachelor|master|doctorate)\b|بكالوريوس|تخصص/u.test(text) && /\b(?:offer|teach|exists?|courses?|credits?|hours?|study plan)\b|ساع|مواد|مساق|هل.*فيها/u.test(text);
+  const ordinaryProgramRequest=/\b(?:offer|programs?|degrees?|bachelor|master|doctorate)\b|بكالوريوس|ماجستير|دكتوراه|تخصص/u.test(text) && /\b(?:offer|teach|exists?|courses?|credits?|hours?|study plan)\b|ساع|مواد|مساق|هل.*فيها/u.test(text);
+  const namedMajor=/\bmajors?\b|\b(?:bachelor|master|phd|doctorate) (?:of|in)\b|(?:بكالوريوس|ماجستير|دكتوراه)\s+(?!(?:في\s+)?(?:جامعة|الجامعة|برنامج|البرنامج|التخرج))\p{L}+/u.test(text);
+  const programQuestion=ordinaryProgramRequest || namedMajor&&/\b(?:graduation|requirements?)\b|متطلبات/u.test(text);
   if (!codes.length && !programs.length) return programQuestion ? { rows: [], gap: "program", citation: PROGRAM_INDEX } : null;
   if (!facets.size && !programQuestion && programs.length < 2) return null;
 
@@ -147,11 +182,12 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
   if (codes.length && !["status", "placement", "first", "labs", "final"].some(facet => facets.has(facet as Facet))) {
     // A second code often names a prerequisite object; the first named course
     // is the target unless the question explicitly compares course records.
-    const targets = /\bcompare\b|مقارن/u.test(text) ? codes : codes.slice(0, 1);
+    const targets = /\bcompare\b|مقارن|قارن/u.test(text) ? codes : codes.slice(0, 1);
     for (const code of targets) {
-      const exact = documents.filter(document => document.scope?.courseCodes?.includes(code));
+      const datedCatalog = meaning.years.length > 0;
+      const exact = documents.filter(document => document.scope?.courseCodes?.includes(code) && (!datedCatalog || meaning.years.every(year => document.scope?.years?.includes(year))));
       if (!exact.length) {
-        const embedded = documents.filter(document => document.curriculum && document.scope?.degreeLevel !== "postgraduate").flatMap(document => splitIntoSections(document.content).filter(section => section.split("\n")[0].includes(code) && /prerequisite/i.test(section.split("\n")[0])).map(section => row(document, section)));
+        const embedded = documents.filter(document => document.curriculum && document.scope?.degreeLevel !== "postgraduate" && (!datedCatalog || meaning.years.every(year => document.scope?.years?.includes(year)))).flatMap(document => splitIntoSections(document.content).filter(section => section.split("\n")[0].includes(code) && /prerequisite/i.test(section.split("\n")[0])).map(section => row(document, section)));
         if (!embedded.length) return { rows: [], gap: "course", identifiers: [code], citation: COURSE_INDEX };
         rows.push(...embedded); continue;
       }
@@ -181,7 +217,15 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
       eligible.sort((a,b) => b.section.split("\n")[0].localeCompare(a.section.split("\n")[0]));
       eligible.splice(1);
     }
-    rows.push(...eligible.map(({ document, section }) => row(document, section, section.split("\n")[0].replace(/^## /, ""))));
+    // Undated total/elective-hour questions prefer a published aggregate
+    // breakdown over a cohort model and unrelated elective-option lists.
+    // Explicit cohorts, catalog/model contrasts and requested course lists keep
+    // their original evidence and all material publication differences.
+    const onlyCreditCounts = facets.has("credits") && [...facets].every(facet => facet === "credits" || facet === "electives") && !meaning.years.length
+      && !/model|cohort|study plan|which|list|available|options|نموذج|دفع[ةه]|خط[ةه]|ما هي|ماهي|قائم[ةه]|متاح/u.test(text);
+    const aggregates = onlyCreditCounts ? eligible.filter(({document,section}) => !document.scope?.years?.length && /credit breakdown|degree credit requirement|published curriculum|degree structure/u.test(normalizeQuery(section.split("\n").slice(0,3).join(" ")))) : [];
+    const chosen = aggregates.length ? aggregates : eligible;
+    rows.push(...chosen.map(({ document, section }) => row(document, section, section.split("\n")[0].replace(/^## /, ""))));
   }
   if (rows.length) return { rows: [...new Map(rows.map(row => [row.source + row.text, row])).values()].slice(0, 8), identifiers: programs.map(program => program.label) };
   return { rows: [], gap: facets.has("first") || facets.has("placement") ? "cohort" : codes.length ? "course" : "program", identifiers: codes.length ? codes : programs.map(p => p.label), citation: codes.length ? COURSE_INDEX : PROGRAM_INDEX };

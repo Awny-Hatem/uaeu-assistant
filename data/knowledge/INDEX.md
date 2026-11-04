@@ -1,6 +1,6 @@
 # UAEU knowledge index
 
-Updated 2026-11-04T19:14:58.507263+00:00. **8,379 approved knowledge documents**, including 67 curated and 8,312 crawled sources. **143,834 indexed sections**; 154 reviewed answers; 11 guided workflows; 16,982 entity alias records.
+Updated 2026-11-04T22:40:29.566282+00:00. **8,379 approved knowledge documents**, including 67 curated and 8,312 crawled sources. **143,834 indexed sections**; 154 reviewed answers; 11 guided workflows; 16,982 entity alias records.
 
 Use the readable titles below to open source files in VS Code. Stable hash filenames prevent name collisions; they do not hide the document title. This navigation index is not itself chatbot evidence. Verification dates confirm access, not policy effective dates.
 
