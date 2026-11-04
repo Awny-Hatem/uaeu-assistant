@@ -2,7 +2,7 @@
 title: Data Privacy and Security
 sourceUrl: https://www.uaeu.ac.ae/ar/research/centers/bidac/data-privacy-and-security.shtml
 status: approved
-language: ar
+language: en
 lastVerified: 2026-11-04
 subject: university-people
 catalogYear: not stated
@@ -16,26 +16,6 @@ sourceDate: not inferred from verification date
 # Data Privacy and Security
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
-
-## Overview
-نظرة عامة
-
-رسالة مدير المركز
-
-الأهداف
-
-المشاريع البحثية الحالية
-
-## الأعضاء
-أعضاء المجلس الاستشاري
-
-أعضاء المجلس العلمي
-
-طلبة الدراسات العليا
-
-طلبة التدريب
-
-استفسارات عامة
 
 ## Data Privacy and Security
 Recent years have seen an outburst in clinical and genomic data stockpiled in huge biomedical data warehouses. Access to this data offers a unique opportunity to undertake biomedical research and may improve quality of care, reduce healthcare costs and advance personalized medicine. However, the availability of such data for widespread research activities is dependent on the protection of participants privacy.

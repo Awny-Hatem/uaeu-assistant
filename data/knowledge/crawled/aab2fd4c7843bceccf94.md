@@ -17,24 +17,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## Overview
-نظره عامة
-
-## أقسام
-قسم التخطيط الاستراتيجي
-
-قسم استشراف المستقبل
-
-التميزالمؤسسي
-
-الخطة الإستراتيجية
-
-منبر التميز
-
-الهيكل التنظيمي
-
-للتواصل
-
 ## للتواصل
 إدارة الاستراتيجية والمستقبل
 

@@ -21,7 +21,7 @@ MECH340 Fluid Mechanics is 3 credit hours and is a required Mechanical Engineeri
 
 ## MECH348 Fluid Mechanics Lab — prerequisite and pre/corequisite
 
-MECH348 Fluid Mechanics Lab is 1 credit hour and is a required Mechanical Engineering major course. Prerequisite: MECH210 Measurement and Instrumentation Lab with a minimum grade of D. The catalog separately lists MECH340 Fluid Mechanics as "Pre/Co" with a minimum grade of D: MECH340 may be completed beforehand or taken concurrently, subject to the university's enrollment rules. This is not a strict must-take-concurrently corequisite, and MECH210 is not a pre/corequisite.
+MECH348 Fluid Mechanics Lab is 1 credit hour and is a required Mechanical Engineering major course. Prerequisite: MECH210 Measurement and Instrumentation Lab with a minimum grade of D. The catalog separately lists MECH340 Fluid Mechanics as "Pre/Co" with a minimum grade of D: MECH340 may be completed beforehand or taken concurrently, subject to the university's enrollment rules. MECH340 therefore has two permitted timings: prior completion or concurrent study. MECH210 remains a strict prior prerequisite that must be completed before MECH348.
 
 
 توضيح عربي لعلاقات MECH348 في السجل نفسه: يجب إتمام MECH210 مسبقاً بدرجة لا تقل عن D. أما MECH340 فهو متطلب سابق أو متزامن (Pre/Co) بدرجة لا تقل عن D؛ يمكن إتمامه قبل MECH348 أو دراسته معه وفق قواعد التسجيل. لا تعني إمكانية التزامن مع MECH340 إسقاط المتطلب السابق MECH210، ولا يُعد MECH210 متطلباً متزامناً.

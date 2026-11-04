@@ -18,19 +18,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## Computer and Network Engineering > Computer and Network Engineering
-Overview
-
-Facilities
-
-Consultancy Services
-
-Academic Programs
-
-Faculty
-
-General Enquiries
-
 ## Computer and Network Engineering > Overview
 The Department of Computer and Network Engineering offers an innovative Computer Engineering undergraduate program to address current demands and future market needs in the UAE.
 

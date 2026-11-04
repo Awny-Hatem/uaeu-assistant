@@ -1,0 +1,163 @@
+---
+title: Khaled El Tarabily  - United Arab Emirates University
+sourceUrl: https://research.uaeu.ac.ae/en/persons/khaled-el-tarabily/
+status: approved
+language: en
+lastVerified: 2026-11-04
+subject: university-people
+catalogYear: not stated
+temporalStatus: undated-current-page
+audience: public; exact eligibility as published in sections
+topicId: /persons/khaled-el-tarabily/
+extraction: structured-html
+sourceSha256: fa091d63f7fd680b65fd3011b68c11b7941e3d8b4652589f05b3fcc711ad9051
+sourceDate: not inferred from verification date
+---
+# Khaled El Tarabily
+ - United Arab Emirates University
+
+Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
+
+## Overview
+View Scopus Profile
+
+## Khaled El Tarabily
+Professor
+
+Professor , Department of Biology
+
+Email ktarabily uaeu.ac ae
+
+h-index
+
+1996 … 2026
+
+Research activity per year
+
+## Khaled El Tarabily > Fingerprint
+Dive into the research topics where Khaled El Tarabily is active. These topic labels come from the works of this person. Together they form a unique fingerprint.
+
+6 Similar Profiles
+
+Actinobacteria Agricultural and Biological Sciences 100%
+
+United Arab Emirates Keyphrases 99%
+
+Actinomycetes Keyphrases 58%
+
+Biocontrol Agent Keyphrases 56%
+
+Streptomycetes Keyphrases 56%
+
+Broiler chicken Keyphrases 56%
+
+Biological Activity Keyphrases 56%
+
+Antioxidant Agricultural and Biological Sciences 55%
+
+View full fingerprint
+
+## Khaled El Tarabily > Collaborations and top research areas from the last five years
+Recent external collaboration on country/territory level. Dive into details by clicking on the dots or Select a country/territory from the list
+
+## Dive into details
+Select a country/territory to view shared publications and projects
+
+Close
+
+Explore network further
+
+## Dive into details > Research output
+Research output per year 1996 2021 2022 2023 2024 2025 2026
+
+180 Article
+
+65 Review article
+
+7 Comment/debate
+
+6 Chapter
+
+2 More
+
+1 Conference contribution
+
+1 Short survey
+
+## Dive into details > Research output > Algae: A Sustainable Source of Antioxidants, Antimicrobial, Anticancer Compounds, and Their Roles in Human Nutrition
+El-Saadony, M. T., Saad, A. M., Sitohy, M., Mohammed, D. M., Alkafaas, S. S., Salem, H. M., Ahmed, A. E., Fahmy, M. A., Mathew, B. T., Abuqamar, S. F. & El-Tarabily, K. A. , Jan 1 2026 , Algae: A Promising Source of Food, Feed and Bioproducts. Springer Nature , p. 657-729 73 p.
+Research output : Chapter in Book/Report/Conference proceeding › Chapter
+
+Anticancer Drugs 100%
+
+Human nutrition 100%
+
+Antioxidant/antimicrobial Activity 100%
+
+Sustainable Sourcing 100%
+
+Human Nutrition 100%
+
+## Dive into details > Research output > Algae as a Sustainable Source of High-Value Nutritional Ingredients: Regulatory Framework and Health Benefits
+El-Saadony, M. T., Saad, A. M., Sitohy, M., Mohammed, D. M., Salem, H. M., Alkafaas, S. S., Choudhary, M., Ghosh, S., Fahmy, M. A., Mosa, W. F. A., El-Mageed, T. A. A., Mathew, B. T., Abuqamar, S. F. & El-Tarabily, K. A. , Jan 1 2026 , Algae: A Promising Source of Food, Feed and Bioproducts. Springer Nature , p. 551-619 69 p.
+Research output : Chapter in Book/Report/Conference proceeding › Chapter
+
+Health Benefits 100%
+
+Regulatory Framework 100%
+
+Nutritional Additive 100%
+
+Sustainable Sourcing 100%
+
+High nutritional Value 100%
+
+## Dive into details > Research output > Bioremediation potential of bacterial isolates for diamide pesticides: Enzymatic activity, tolerance, biofilm formation, and degradation efficiency
+Fahmy, M. A., Alwutayd, K. M., Ashkan, M. F., Mojally, M., Alqahtani, A. M., Alsulami, R. N., Mostafa, Y. S., Khodeer, D., Al-Najjar, M. A. A., Abuqamar, S. F. , El-Tarabily, K. A. & El-Saadony, M. T., Feb 1 2026 , In: Ecotoxicology and Environmental Safety. 311 , 119745.
+Research output : Contribution to journal › Article › peer-review
+
+Open Access
+
+Enzymatic Activity 100%
+
+Pesticides 100%
+
+Bacterial Isolates 100%
+
+Degradation Efficiency 100%
+
+Bioremediation Potential 100%
+
+10 Link opens in a new tab Citations (Scopus)
+
+## Dive into details > Research output > Characterization and identification of marine-derived bacterial consortia for sustainable bioremediation of chlorpyrifos in marine water
+Fahmy, M. A., Motwali, E. A., Alkathiry, H., Almutairi, J. A., Ahmed, A. E., Ashkan, M. F., Alzayed, R. M., Alhajouj, S. A., Sitohy, M., Al-Najjar, M. A. A., El-Tarabily, K. A. , AbuQamar, S. F. & El-Saadony, M. T., Sept 2026 , In: Bioresource Technology Reports. 35 , 102860.
+Research output : Contribution to journal › Article › peer-review
+
+Marine Water 100%
+
+Chlorpyrifos 100%
+
+Sustainable Bioremediation 100%
+
+Marine-derived 100%
+
+Bacterial Consortium 100%
+
+## Dive into details > Research output > Comparative efficacy of silver nanoparticles from agro-industrial waste of cumin, anise, and banana peel against Fusarium oxysporum on common bean (Phaseolus vulgaris)
+Oraby, R., Alqahtani, A. N., AL-Essa, L. A., AlOmari, H., Aljhdli, M. O., Sumayli, M., Taha, R., Saad, A. M., Elmaghraby, L., Taha, T. F., Taha, M. A., Mosa, W. F. A., El-Saadony, M. T., Mathew, B. T., AbuQamar, S. F. & El-Tarabily, K. A. , Sept 2026 , In: European Journal of Plant Pathology. 174 , 9 , p. 1745-1760 16 p.
+Research output : Contribution to journal › Article › peer-review
+
+Open Access
+
+Anise 100%
+
+Comparative Efficacy 100%
+
+Fusarium Oxysporum 100%
+
+Phaseolus Vulgaris 100%
+
+Silver Nanoparticles 100%
+
+View all 260 research outputs

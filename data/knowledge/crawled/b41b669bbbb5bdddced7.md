@@ -25,39 +25,6 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-Overview
-
-## Judging Criteria
-Literature
-
-Painting
-
-Sculpture
-
-Arabic Calligraphy
-
-Visual Communication
-
-Music
-
-Eligibility
-
-General Terms and Conditions
-
-Submission Guidelines
-
-Registration
-
-Intellectual Property & Copyright
-
-Advancement Criteria
-
-AI Originality & Disclosure
-
-Morality Principles
-
-Contact Us
-
 ## Advancement Criteria
 For the first round, digital reproductions of the entry will be used to determine advancement in the competition.
 

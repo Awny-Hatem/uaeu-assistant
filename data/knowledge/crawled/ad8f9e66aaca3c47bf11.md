@@ -32,7 +32,7 @@ Source applicability: undated-current-page. Verification date confirms access, n
 
 الرقم الجامعي *
 
-الكلية * Select Academic Affairs Agriculture & Veterinary Med. Business & Economics Doctorate Economics & Administrative Sc. Education Engineering Food & Agriculture Humanities & Social Sciences Information Technology Law Medicine & Health Sciences Science
+الكلية *
 
 رقم الهاتف *
 إرسال

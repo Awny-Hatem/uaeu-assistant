@@ -17,28 +17,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## Overview
-Overview
-
-Student Accounts Office Policies
-
-## Program and Housing Rates
-Master Programs
-
-Doctorate Programs
-
-Undergraduate Programs
-
-Tuition Fee Payment Options
-
-Payment Methods
-
-Withdrawal Deadlines and Financial Obligations
-
-FAQS
-
-Contact Us
-
 ## How can I view and pay my tuition fees online?
 You can view and pay your tuition fees through the UAEU student portal. Check the following link for the steps: E-services
 

@@ -17,24 +17,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## نظرة عامة
-نظرة عامة
-
-التسجيل
-
-## نظرة عامة > مراكز التعلم
-مركز التقوية
-
-مركز التحدث
-
-مركز الكتابة
-
-مركز التكنولوجيا
-
-الموقع
-
-استفسارات عامة
-
 ## نظرة عامة > نظرة عامة
 تقدم وحدة دعم التعلم الطلابي (SLSU) خدمات دعم أكاديمي مجانية لطلبة جامعة الإمارات العربية المتحدة منذ التحاقهم بالجامعة وحتى مرحلة الدراسات العليا. وتعمل الوحدة عن كثب مع الطلبة بهدف مساعدتهم على تحقيق إمكاناتهم الأكاديمية وتطوير المهارات اللازمة للنجاح في حياتهم المهنية والمستقبلية.
 

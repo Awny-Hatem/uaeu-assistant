@@ -17,24 +17,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## استفسارات عامة
-نظرة عامة
-
-التسجيل
-
-## استفسارات عامة > مراكز التعلم
-مركز التقوية
-
-مركز التحدث
-
-مركز الكتابة
-
-مركز التكنولوجيا
-
-الموقع
-
-استفسارات عامة
-
 ## استفسارات عامة > استفسارات عامة
 وحدة دعم التعلم الطلابي
 

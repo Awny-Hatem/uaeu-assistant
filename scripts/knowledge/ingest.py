@@ -6,7 +6,7 @@ import argparse, collections, hashlib, json, re, sqlite3, datetime
 from pathlib import Path
 from urllib.parse import urlsplit, parse_qsl
 from pdf_sections import model_plan_sections, catalog_course_sections, printed_model_program
-from crawl import official, eligible, DYNAMIC
+from crawl import official, eligible, reference_only
 from policy_metadata import policy_metadata
 
 DATE=datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=4))).date().isoformat()
@@ -15,6 +15,7 @@ COLLEGES={'cavm':'College of Agriculture and Veterinary Medicine','cbe':'College
 FAST=re.compile(r'/(news|events|news_events|spotlights|conferences|employment|jobs|vacancies|media-center|media|photo_library|photo|newsletters)/',re.I)
 YEARS=re.compile(r'\b((?:19|20)\d{2})\s*[-_/–—]\s*((?:19|20)?\d{2})\b')
 COURSE=re.compile(r'\b([A-Z]{3,6})[ -]?(\d{3,4})\b')
+COMMON_INITIALS=set('BE BA AS AM AT IN ON TO OF BY OR DO IF HE WE US AN SO UP GO NO ALL AND THE FOR ARE NOT HOW WHY CAN WAS YOU OUR OUT USE HAS HAD GET NEW NOW ONE TWO'.split())
 
 def academic_years(text):
     # Approval dates such as 2018/04/2008 are not academic-year ranges.
@@ -23,6 +24,10 @@ def academic_years(text):
         end=end if len(end)==4 else start[:2]+end
         if int(end)==int(start)+1:years.append(start+'-'+end)
     return sorted(set(years))
+
+def calendar_years(heading):
+    """Read a calendar event's printed term/year, never an access date."""
+    return sorted(set(re.findall(r'(?:Fall|Spring|Summer)(?:\s+Semester)?\s*[:–—-]?\s*(20\d{2})\b',heading,re.I)))
 
 def program_subject(name):
     return clean(re.sub(r'^(?:Bachelor|Master)(?: of (?:Science|Arts|Education))? (?:in|of) |^Doctor of Philosophy in ','',name,flags=re.I)).casefold()
@@ -123,11 +128,13 @@ def main():
         if '/catalog/courses/' in r['url']:
             code=dict(parse_qsl(urlsplit(r['url']).query)).get('id','')
             if re.fullmatch(r'[A-Z]{3,6}\d{3,4}',code):course_urls[(r['url'].split('?')[0],code)]=r['url']
-    good=[d for d in records if d['state']=='fetched' and d.get('text') and official(d.get('finalUrl',d['url'])) and eligible(d['url']) and not FAST.search(d['url']) and not DYNAMIC.search(d['url'])]
-    byurl={d['url']:d for d in good};seen={};documents=[];aliases=[];chunks=[];coverage=[];rejected=[]
+    good=[d for d in records if d['state']=='fetched' and d.get('text') and official(d.get('finalUrl',d['url'])) and eligible(d['url']) and not FAST.search(d['url']) and not reference_only(d['url'])]
+    byurl={d['url']:d for d in good};seen={};seen_urls=set();documents=[];aliases=[];chunks=[];coverage=[];rejected=[]
     dest=ROOT/'data/knowledge/crawled';dest.mkdir(exist_ok=True)
-    for d in sorted(good,key=lambda d:(d['url'] not in old_urls, '/catalog/' not in d['url'],d['url'])):
+    for d in sorted(good,key=lambda d:(d['url'] not in old_urls, d['url']!=d.get('finalUrl',d['url']), '/catalog/' not in d['url'],d['url'])):
         u=d.get('finalUrl',d['url']);title=clean(d.get('title') or d.get('label') or urlsplit(u).path)
+        if u in seen_urls:
+            coverage.append({'url':d['url'],'status':'partial','canonicalUrl':u,'reason':'same final official URL as an already retained source; redirect alias is not a second document','verified':d['verified']});continue
         text=clean(d['text']);digest=hashlib.sha256(text.encode()).hexdigest()
         if digest in seen:
             coverage.append({'url':d['url'],'status':'partial','canonicalUrl':seen[digest],'reason':'exact extracted-content duplicate; shared canonical evidence','verified':d['verified']});continue
@@ -155,6 +162,7 @@ def main():
         topic=re.sub(r'^/(en|ar)/','/',path);topic=re.sub(r'\.(s?html?|aspx?)$','',topic)
         docid=hashlib.sha256(u.encode()).hexdigest()[:20];filename=docid+'.md';subject=category(u,title)
         policy = policy_metadata(text) if d.get('kind') == 'pdf' else {}
+        if policy.get('policySeries')=='printed-legacy-ACA-ADM':temporal='historical'
         meta={'title':title,'sourceUrl':u,'status':'approved','language':lang,'lastVerified':d['verified'],'subject':subject,'college':college,'program':program,'qualification':qual,'degreeLevel':level,'catalogYear':' | '.join(years) or 'not stated','temporalStatus':temporal,'audience':'public; exact eligibility as published in sections','topicId':topic,'extraction':d['quality'],'sourceSha256':d['sha256'],'sourceDate':'not inferred from verification date',**({'linkedProgram':linked_program} if printed_program and linked_program and linked_program.casefold()!=printed_program.casefold() else {}),**policy}
         # Parsed front matter matches the existing one-key-per-line format.
         front='---\n'+'\n'.join(k+': '+str(v).replace('\n',' ') for k,v in meta.items() if v)+'\n---\n'
@@ -192,7 +200,7 @@ def main():
             if labels:sections=[{'heading':program+' — published degree credit breakdown','text':'Published requirement/category headings from this program page. Preserve their hierarchy; subcategories may already be included in a parent total.\n'+'\n'.join(dict.fromkeys(labels))}]+sections
         for section in sections:
             heading=clean(section['heading']);body='\n'.join(line.rstrip() for line in section['text'].splitlines()).strip() if d.get('kind')=='pdf' else clean(section['text'])
-            section_years=academic_years(section.get('modelScope','')) or (academic_years(heading+' '+body[:1200]) if d.get('kind')=='html' else []) or years
+            section_years=academic_years(section.get('modelScope','')) or (academic_years(heading+' '+body[:1200]) if d.get('kind')=='html' else []) or (calendar_years(heading) if re.search(r'calendar|academic[-_ ]dates',u+' '+title,re.I) else []) or years
             if re.search(r'(?:^| > )عفوا$|cookie|subscribe|accessibility menu|website feedback',heading,re.I):continue
             if global_scope and body and clean(body)!=clean(global_scope):body='Page-wide published applicability (same official source):\n'+global_scope+'\n\nSection facts:\n'+body
             if body and clean(body).lower() in existing_text.get(u,''):continue
@@ -208,10 +216,12 @@ def main():
                 if chunk_url!=u:part='Official course record: '+chunk_url+'\n'+part
                 head=heading+(f' — continuation {number+1}' if number else '')
                 content+=['## '+head,part,''];codes=sorted({m[0]+m[1] for m in COURSE.findall(head+' '+part)})
-                course_match=re.match(r'^([A-Z]{3,6})[ -]?(\d{3,4})\b',heading)
+                course_context=bool(re.search(r'/(?:catalog|eng)/courses/|/catalog/auto/department_|course[_-]?catalog',u,re.I) or section.get('modelScope') and re.search(r'^Course code:',part,re.M))
+                course_match=re.match(r'^([A-Z]{3,6})[ -]?(\d{3,4})\b',heading) if course_context else None
                 course=course_match[1]+course_match[2] if course_match else ''
                 valid.append({'id':f'{docid}:{len(valid)}','source':f'crawled/{filename}','title':title,'url':chunk_url,'verified':d['verified'],'text':part,'heading':head,'page':section.get('page'),'language':lang,'program':section.get('program',program),'college':section.get('college',college),'qualification':section.get('qualification',qual),'degreeLevel':section.get('degreeLevel',level),'years':section_years,'temporal':'cohort-specific' if section.get('modelScope') else 'dated-publication' if section_years and temporal!='historical' else temporal,'subject':subject,'topicId':section.get('topicId',topic),'courseCode':course,'mentionedCodes':codes,**policy,'hash':hashlib.sha256((chunk_url+'\n'+head+'\n'+part).encode()).hexdigest()})
         if not valid:rejected.append({'url':u,'reason':'no usable sections'});continue
+        seen_urls.add(u)
         (dest/filename).write_text(front+'\n'.join(content));documents.append({**meta,'filename':'crawled/'+filename,'chunks':len(valid)});chunks+=valid
         # Only observed names; Arabic counterparts linked via official alternate or identical language-neutral topic.
         names={title}
@@ -224,7 +234,7 @@ def main():
         if program:
             for field,pattern in [('credits',r'credit|hour|ساع'),('plan',r'study.plan|model.plan|خطة'),('prerequisites',r'prerequisite|متطلب.{0,10}سابق')]:
                 if not re.search(pattern,text,re.I):missing.append(field)
-        coverage.append({'url':d['url'],'canonicalUrl':u,'status':'partial' if missing or d.get('kind')=='pdf' else 'yes','verified':d['verified'],'topic':title,'language':lang,'category':subject,'file':'data/knowledge/crawled/'+filename,'reason':('not published in this source: '+', '.join(missing)) if missing else 'PDF layout retained; table relationships need targeted verification' if d.get('kind')=='pdf' else 'structured source sections indexed; completeness applies only to this page'})
+        coverage.append({'url':d['url'],'canonicalUrl':u,'status':'partial' if missing or d.get('kind')=='pdf' else 'yes','verified':d['verified'],'topic':title,'language':lang,'category':subject,'file':'data/knowledge/crawled/'+filename,'reason':('not established in the extracted page: '+', '.join(missing)) if missing else 'PDF layout retained; table relationships need targeted verification' if d.get('kind')=='pdf' else 'structured source sections approved; indexing readiness is reported separately'})
     program_topics={d['topicId']:d for d in documents if d.get('program')}
     observed_keys={(v['alias'],v['topicId']) for v in aliases}
     for page in good:
@@ -263,12 +273,13 @@ def main():
             candidates=[name]
             if kind=='college':
                 file_alias=re.search(r'/([a-z]{2,5})_(?:bsc|msc|phd|study)',chunk['url'],re.I)
-                if file_alias:candidates.append(file_alias[1].upper())
+                if file_alias and file_alias[1].lower() in set(COLLEGES)|{'coe'}:candidates.append(file_alias[1].upper())
             if name.isascii():
                 words=[w for w in re.findall(r'[A-Za-z]+',name) if w.lower() not in ['of','and','the','in','for']]
                 acronym=''.join(w[0].upper() for w in words)
                 if 2<=len(acronym)<=6:candidates.append(acronym)
             for alias in candidates:
+                if alias in COMMON_INITIALS:continue
                 key=(alias,chunk['topicId'])
                 if key in entity_keys:continue
                 entity_keys.add(key);aliases.append({'alias':alias,'canonical':name,'topicId':chunk['topicId'],'program':'','qualification':'','language':chunk['language'],'sourceUrl':chunk['url'],'entityType':kind})
@@ -277,7 +288,7 @@ def main():
             short=re.sub(r'^(?:Bachelor of (?:Science|Arts|Education)|Master of (?:Science|Arts|Education)|Doctor of Philosophy) in ','',alias['program'],flags=re.I)
             words=[w for w in re.findall(r'[A-Za-z]+',short) if w.lower() not in ['of','and','the','in','for']]
             acronym=''.join(w[0].upper() for w in words)
-            if 2<=len(acronym)<=5 and acronym not in {'BS','BSC','MS','MSC','PHD','PDF'} and (acronym,alias['topicId']) not in entity_keys:
+            if 2<=len(acronym)<=5 and acronym not in COMMON_INITIALS|{'BS','BSC','MS','MSC','PHD','PDF'} and (acronym,alias['topicId']) not in entity_keys:
                 entity_keys.add((acronym,alias['topicId']));aliases.append({**alias,'alias':acronym,'entityType':'program-acronym'})
     corpus=ROOT/'data/corpus';corpus.mkdir(exist_ok=True)
     course_names=collections.defaultdict(set)

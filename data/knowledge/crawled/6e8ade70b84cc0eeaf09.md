@@ -2,7 +2,7 @@
 title: Health Data Science
 sourceUrl: https://www.uaeu.ac.ae/ar/research/centers/bidac/health-data-science.shtml
 status: approved
-language: ar
+language: en
 lastVerified: 2026-11-04
 subject: student-life-services
 catalogYear: not stated
@@ -16,26 +16,6 @@ sourceDate: not inferred from verification date
 # Health Data Science
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
-
-## Overview
-نظرة عامة
-
-رسالة مدير المركز
-
-الأهداف
-
-المشاريع البحثية الحالية
-
-## الأعضاء
-أعضاء المجلس الاستشاري
-
-أعضاء المجلس العلمي
-
-طلبة الدراسات العليا
-
-طلبة التدريب
-
-استفسارات عامة
 
 ## Health Data Science
 Health Data Science is an interdisciplinary field and the study of health data. It uses scientific methods, processes, algorithms and systems to extract knowledge and insights from structured and unstructured health data. The goal of health data science is to gain insights and knowledge from health data.

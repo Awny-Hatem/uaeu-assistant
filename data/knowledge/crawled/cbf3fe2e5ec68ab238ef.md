@@ -18,13 +18,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## للتواصل > للتواصل
-الاستفسارات العامة
-
-الأعضاء الأكاديميون
-
-الإداريون
-
 ## للتواصل > الاستفسارات العامة
 نشكركم على اهتمامكم بكلية العلوم . لمزيد من المعلومات الرجاء التواصل على العنوان التالي:
 

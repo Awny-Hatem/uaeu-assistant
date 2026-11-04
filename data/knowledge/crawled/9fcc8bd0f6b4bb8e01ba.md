@@ -1,12 +1,12 @@
 ---
-title: Bachelor of Science in the Mathematics of Data Science — official model study plan
+title: Bachelor of Science in Mathematics of Data Science — model study plan (degree name as printed in PDF)
 sourceUrl: https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_mathematics_of_data_science_study_plan.pdf
 status: approved
 language: en
 lastVerified: 2026-11-04
 subject: academics
 college: College of Science
-program: Bachelor of Science in the Mathematics of Data Science
+program: Bachelor of Science in Mathematics of Data Science
 qualification: bachelor
 degreeLevel: undergraduate
 catalogYear: 2024-2025
@@ -16,8 +16,9 @@ topicId: /cos/pdf/cos_bsc_mathematics_of_data_science_study_plan.pdf
 extraction: text-extracted-layout-review-required
 sourceSha256: e0df05392b26c653bc7f7dc412f7a9ed1b6cf8063db52a00c2c9685f0ad0635e
 sourceDate: not inferred from verification date
+linkedProgram: Bachelor of Science in the Mathematics of Data Science
 ---
-# Bachelor of Science in the Mathematics of Data Science — official model study plan
+# Bachelor of Science in Mathematics of Data Science — model study plan (degree name as printed in PDF)
 
 Source applicability: historical. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 

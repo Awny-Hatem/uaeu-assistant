@@ -1,5 +1,5 @@
 ---
-title: Bachelor of Science in Biology — official model study plan
+title: Bachelor of Science in Biology — model study plan (degree name as printed in PDF)
 sourceUrl: https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_biology_study_plan.pdf
 status: approved
 language: en
@@ -17,7 +17,7 @@ extraction: text-extracted-layout-review-required
 sourceSha256: 510255b927dda27d9da63fd693f4151a674d286f984d3dba36aa7a388c8a6558
 sourceDate: not inferred from verification date
 ---
-# Bachelor of Science in Biology — official model study plan
+# Bachelor of Science in Biology — model study plan (degree name as printed in PDF)
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 

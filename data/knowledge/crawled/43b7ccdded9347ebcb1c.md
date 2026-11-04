@@ -25,34 +25,6 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-## Project Description > About CGS
-Overview
-
-Deans Message
-
-GS at a Glance
-
-Graduate Programs
-
-Admission Requirements
-
-Tuition and Fees
-
-Scholarships, Fellowships and Graduate Assistantships
-
-Forms and Guidelines
-
-Publications
-
-Thesis and Dissertation Defenses
-
-## Project Description > Media
-News
-
-Events
-
-Contact us
-
 ## Project Description > Project Description
 Early-life exposures have a major influence on health and development in adulthood. Birth cohort studies can assist in investigating these associations. This project aims to establish a prospective mother and child cohort study in Al Ain to investigate the maternal and early-life determinants of infant, child and adolescent health, as well as maternal health. The study will recruit 10,000 Emirati pregnant women at approximately 12 weeks gestation during the period 2016-2018. For each mother/new-born dyad enrolled into the study an initial dataset will be collected this will act as the starting point from which the children will be followed up and re-surveyed at intervals throughout their life course to show how familial, socioeconomic and lifestyle factors interact with genetic and environmental factors to influence health outcomes and achievements later in life.
 

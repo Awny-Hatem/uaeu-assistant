@@ -37,6 +37,7 @@ Search Directory Filter
 Services News Find Your Program
 
 ## Undergraduate Programs > Bachelor of Science in Information Technology
+Published academic-year scope: 2017-2018 | 2018-2019 | 2019-2020 | 2020-2021 | 2021-2022
 Information Technology (IT) is becoming the cornerstone to any economy in the world. Since the spread of the Internet and communication applications in their diversified forms, IT became an integrated part of everyone's life in modern society. In UAE, IT plays a major role in the development of the society. Therefore, it is only natural to have the United Arab Emirates University offer a degree program in Information Technology with a strong IT foundation in addition to covering current IT trends such as: Cloud Computing, The Internet of Things, Mobile/Web Development and Big Data/Data Analytics. The Bachelor of Science in Information Technology is accredited by the Computing Accreditation Commission (CAC) of ABET, http://www.abet.org. (1 Credit Hour “CH” is equivalent to 2 ECTS Credit Hours “European Credit Transfer and Accumulation System”).
 
 Enrollment and degree awarded for the past five years are as follows:

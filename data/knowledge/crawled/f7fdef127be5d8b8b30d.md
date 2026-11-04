@@ -1,5 +1,5 @@
 ---
-title: Bachelor of Veterinary Medicine — official model study plan
+title: Bachelor of Veterinary Medicine — model study plan (degree name as printed in PDF)
 sourceUrl: https://www.uaeu.ac.ae/en/cavm/pdf/cfa_bsc_veterinary_medicine_study_plan.pdf
 status: approved
 language: en
@@ -17,7 +17,7 @@ extraction: text-extracted-layout-review-required
 sourceSha256: d416403a1416d58481486893c87db82a99c2b1962a1017aaef37a43d0a7a5b7c
 sourceDate: not inferred from verification date
 ---
-# Bachelor of Veterinary Medicine — official model study plan
+# Bachelor of Veterinary Medicine — model study plan (degree name as printed in PDF)
 
 Source applicability: historical. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 

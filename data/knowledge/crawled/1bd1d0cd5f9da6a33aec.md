@@ -19,12 +19,6 @@ sourceDate: not inferred from verification date
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
 ## للتواصل > للتواصل
-استفسارات عامة
-
-الأعضاء الأكاديميون
-
-الإداريون
-
 شكركم على اهتمامكم بكلية التربية. لمزيد من المعلومات الرجاء التواصل على العنوان التالي:
 
 كلية التربية

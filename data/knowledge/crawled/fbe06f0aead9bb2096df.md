@@ -12,6 +12,8 @@ topicId: /about/policies/admissions_and_enrollment/pol-ae_11_en.pdf
 extraction: text-extracted-layout-review-required
 sourceSha256: cecc3a752af2592b621a9a1e4a3b1ecaac97173af413f1bc9109b9c0d5c3223e
 sourceDate: not inferred from verification date
+policyId: AE-11
+policyEffectiveDate: 2014-03-02
 ---
 # Microsoft Word - 1_admissions_and_enrollment_policies_en-15012014
 

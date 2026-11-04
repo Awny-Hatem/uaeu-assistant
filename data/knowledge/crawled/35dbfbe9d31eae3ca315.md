@@ -25,34 +25,6 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-## Graduate Research Fellowships for UAE Nationals > About CGS
-Overview
-
-Deans Message
-
-GS at a Glance
-
-Graduate Programs
-
-Admission Requirements
-
-Tuition and Fees
-
-Scholarships, Fellowships and Graduate Assistantships
-
-Forms and Guidelines
-
-Publications
-
-Thesis and Dissertation Defenses
-
-## Graduate Research Fellowships for UAE Nationals > Media
-News
-
-Events
-
-Contact us
-
 ## Graduate Research Fellowships for UAE Nationals > Graduate Research Fellowships for UAE Nationals
 Fellowships
 

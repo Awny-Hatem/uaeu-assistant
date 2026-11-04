@@ -18,19 +18,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## Department of Computer Science and Software Engineering > Department of Computer Science and Software Engineering
-Overview
-
-Facilities
-
-Consultancy Services
-
-Academic Programs
-
-Faculty
-
-General Enquiries
-
 ## Department of Computer Science and Software Engineering > Overview
 The Department of Computer Science and Software Engineering (CSSE) offers innovative Computer Science and Software Engineering programs to address current demands and future market needs in the UAE.
 

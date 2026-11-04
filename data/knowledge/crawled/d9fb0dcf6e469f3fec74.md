@@ -2,7 +2,7 @@
 title: المشاريع البحثية الحالية
 sourceUrl: https://www.uaeu.ac.ae/ar/research/centers/bidac/ongoing-research-projects.shtml
 status: approved
-language: ar
+language: en
 lastVerified: 2026-11-04
 subject: university-people
 catalogYear: not stated
@@ -16,26 +16,6 @@ sourceDate: not inferred from verification date
 # المشاريع البحثية الحالية
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
-
-## Overview
-نظرة عامة
-
-رسالة مدير المركز
-
-الأهداف
-
-المشاريع البحثية الحالية
-
-## الأعضاء
-أعضاء المجلس الاستشاري
-
-أعضاء المجلس العلمي
-
-طلبة الدراسات العليا
-
-طلبة التدريب
-
-استفسارات عامة
 
 ## المشاريع البحثية الحالية
 Project | PI

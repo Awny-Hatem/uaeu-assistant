@@ -18,15 +18,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## College of Computing and Artificial Intelligence > Students
-Undergraduate Students Affairs
-
-Students Clubs
-
-Student Projects
-
-Dean’s List
-
 ## College of Computing and Artificial Intelligence > Students > Undergraduate Students Affairs (Advising and Internship)
 Student Affairs assists our CCAI students from day one until their graduation. Provides various activities and services to support the students’ academic life and cultivate their carrier planning and development. Student Affairs Office consists of two main units: 1) The advising unit and 2) The Extracurricular Activities and Carrier Development Unit. Being the bridge between the students and CCAI College, we always encourage your feedback, questions and suggestions to provide better support and service.
 
@@ -49,6 +40,7 @@ Abstract
 People spend a considerable amount of time queuing for services such as when attending appointments/walk-ins. This could be in hospitals, offices or any other environment where customers require a face to face interaction with the service provider. This is particularly a concern in these times given the need to avoid over-crowding and comply with Covid-19 related social distancing measures. The work in this project has focused on realizing an electronic smart queuing management system that would address the aforementioned issues. In particular, free up people’s time, reduce inconvenience and frustration resulting from the wait, contribute towards minimising over-crowding as much as possible and reduce inefficiencies resulting from cancelled appointments which could instead be swapped. Towards this, a smartphone application and the necessary backend infrastructure required to support this was developed. Using the proposed solution, patients are able to book their appointments, walk-in tickets and even swap their appointments with others (rather than cancelling if they can’t make it) in a privacy-preserving manner without being physically at the premises. Such a system could potentially influence the way smart queues are realized in hospitals or in other similar environments where queues are a common sighting such as banks and offices.
 
 ## College of Computing and Artificial Intelligence > Second Best Project
+Published academic-year scope: 2019-2020
 Students Names | Project Title | Advisor
 Khaled Edhah Salem Aljabri | Ranger Mobile Robot (Nurse) | Dr. Munkhjargal Gochoo
 Ali Monir Haji Ali

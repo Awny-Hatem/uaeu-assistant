@@ -26,17 +26,6 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-## Research > Research
-Overview
-
-Capabilities
-
-Opportunities
-
-Publications
-
-Industry
-
 ## Research > Overview
 The College of Education (CEDU) faculty members are continually engaged in scholarship activities that contribute to the knowledge base in teaching, learning, and leadership within their field of specialization. Faculty research interests encompass four major specializations including curriculum and instruction, special education, educational leadership and foundations of education, and physical education.
 

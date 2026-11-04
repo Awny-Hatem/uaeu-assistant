@@ -12,6 +12,8 @@ topicId: /about/policies/admissions_and_enrollment/pol-ae_03_en.pdf
 extraction: text-extracted-layout-review-required
 sourceSha256: 60fd12207c53934e70a5d15b5039625b53be3381a712c9c9687cb0c70db76e2b
 sourceDate: not inferred from verification date
+policyId: AE-03
+policyEffectiveDate: 2014-03-02
 ---
 # pol-ae_03_en.pdf
 

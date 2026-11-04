@@ -1,5 +1,5 @@
 ---
-title: Bachelor of Science in Marine Fisheries and Animal Science — official model study plan
+title: Bachelor of Science in Marine Fisheries and Animal Science — model study plan (degree name as printed in PDF)
 sourceUrl: https://www.uaeu.ac.ae/en/cavm/pdf/cfa_bsc_marine_fisheries_and_animal_science_study_plan.pdf
 status: approved
 language: en
@@ -17,7 +17,7 @@ extraction: text-extracted-layout-review-required
 sourceSha256: 58e032ed1452fa179c38bde2046d2b7850a362968314423a66b2bacdcc854fb4
 sourceDate: not inferred from verification date
 ---
-# Bachelor of Science in Marine Fisheries and Animal Science — official model study plan
+# Bachelor of Science in Marine Fisheries and Animal Science — model study plan (degree name as printed in PDF)
 
 Source applicability: historical. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 

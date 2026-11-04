@@ -25,14 +25,6 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-Overview
-
-Incoming Students
-
-Outgoing Students
-
-Contact Us
-
 ## Contact Us
 Student Exchange Unit
 

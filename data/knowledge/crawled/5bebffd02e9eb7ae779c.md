@@ -18,18 +18,8 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## Department of Arabic Language and Literature
-Overview
-
-Mission
-
-Academic Programs
-
-Faculty
-
-General Enquiries
-
 ## Department of Arabic Language and Literature > Overview
+Published academic-year scope: 1977-1978
 The Department of Arabic Language and Literature was one of the first seven departments established in the College of Humanities and Social Sciences in 1977. Classes began in the academic year 1977 – 1978 with small numbers of students and faculty members.
 
 The Department has grown significantly year after year. It is considered now to be the biggest department in The College of Humanities and Social Sciences. Today, this department plays a leading role in providing different organizations and institutions with professional, skillful graduates.

@@ -2,7 +2,7 @@
 title: Computational Sciences
 sourceUrl: https://www.uaeu.ac.ae/ar/research/centers/bidac/computational-sciences.shtml
 status: approved
-language: ar
+language: en
 lastVerified: 2026-11-04
 subject: university-people
 catalogYear: not stated
@@ -16,26 +16,6 @@ sourceDate: not inferred from verification date
 # Computational Sciences
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
-
-## Overview
-نظرة عامة
-
-رسالة مدير المركز
-
-الأهداف
-
-المشاريع البحثية الحالية
-
-## الأعضاء
-أعضاء المجلس الاستشاري
-
-أعضاء المجلس العلمي
-
-طلبة الدراسات العليا
-
-طلبة التدريب
-
-استفسارات عامة
 
 ## Computational Sciences
 This area can involve computational chemistry/physics/biology/biochemistry. The applications under this category may span a wide range of applications including, but not limited to health.

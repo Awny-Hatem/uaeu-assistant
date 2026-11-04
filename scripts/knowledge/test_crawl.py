@@ -1,12 +1,65 @@
-import json,tempfile,unittest
+import json,tempfile,unittest,gzip
 from pathlib import Path
-from crawl import Crawler,eligible,canonical,official
+from crawl import Crawler,eligible,canonical,official,reference_only,audit_safe_result
 from pdf_sections import catalog_course_sections,printed_model_program
 from program_feed import parse_program_feed
-from ingest import academic_years,bilingual_program_names
+from ingest import academic_years,bilingual_program_names,calendar_years
 from policy_metadata import policy_metadata
 
 class CrawlTests(unittest.TestCase):
+    def test_streamed_export_preserves_all_sources_without_large_sqlite_sort(self):
+        with tempfile.TemporaryDirectory() as root:
+            crawler=Crawler(root,1)
+            crawler.add('https://www.uaeu.ac.ae/en/about/index.shtml',label='About UAEU')
+            crawler.export()
+            with gzip.open(Path(root,'manifest.json.gz'),'rt',encoding='utf-8') as source:record=json.load(source)
+            self.assertEqual(record['counts'],{'pending':1})
+            self.assertEqual(record['sources'][0]['label'],'About UAEU')
+            self.assertFalse(Path(root,'manifest.json.gz.tmp').exists())
+            crawler.db.close()
+    def test_reference_only_failures_are_not_reported_as_missing_institutional_knowledge(self):
+        with tempfile.TemporaryDirectory() as root:
+            crawler=Crawler(root,1);url='https://scholarworks.uaeu.ac.ae/context/all_theses/article/477/type/native/viewcontent'
+            crawler.add(url)
+            crawler.db.execute('UPDATE urls SET state="failed",result=? WHERE url=?',(json.dumps({'url':url,'state':'failed','status':403,'error':'Forbidden'}),url));crawler.db.commit()
+            crawler.run(1,1)
+            row=crawler.db.execute('SELECT state,result FROM urls WHERE url=?',(url,)).fetchone();value=json.loads(row['result'])
+            self.assertEqual(row['state'],'link-only');self.assertEqual(value['priorState'],'failed');self.assertEqual(value['status'],403)
+            crawler.db.close()
+    def test_invalid_pdf_unicode_is_quarantined_without_losing_original_bytes(self):
+        source={'url':'https://www.uaeu.ac.ae/en/bad.pdf','bodyFile':'original.pdf','sha256':'abc','state':'fetched','text':'bad \udbc0 glyph'}
+        safe=audit_safe_result(source)
+        self.assertEqual(safe['state'],'failed');self.assertEqual(safe['bodyFile'],'original.pdf');self.assertNotIn('text',safe)
+        json.dumps(safe,ensure_ascii=False).encode('utf-8')
+        good={'text':'نص عربي سليم','state':'fetched'};self.assertEqual(audit_safe_result(good),good)
+    def test_research_publications_are_references_but_center_directories_are_sources(self):
+        self.assertTrue(reference_only('https://research.uaeu.ac.ae/en/publications/a-scientific-paper/'))
+        self.assertTrue(reference_only('https://research.uaeu.ac.ae/en/persons/a-faculty-member/similar/'))
+        self.assertFalse(reference_only('https://research.uaeu.ac.ae/en/persons/a-faculty-member/'))
+        self.assertFalse(reference_only('https://research.uaeu.ac.ae/en/organisations/national-water-and-energy-center/'))
+        self.assertFalse(reference_only('https://www.uaeu.ac.ae/en/research/centers/index.shtml'))
+        self.assertTrue(reference_only('https://scholarworks.uaeu.ac.ae/all_theses/477/'))
+        self.assertTrue(reference_only('https://scholarworks.uaeu.ac.ae/context/all_theses/article/477/type/native/viewcontent'))
+        self.assertTrue(reference_only('https://research.uaeu.ac.ae/files/123456/a-paper.pdf'))
+        self.assertFalse(reference_only('https://scholarworks.uaeu.ac.ae/public_law/'))
+        self.assertTrue(reference_only('https://scholarworks.uaeu.ac.ae/ijre/vol50/iss2/'))
+        self.assertTrue(reference_only('https://conferences.uaeu.ac.ae/old-symposium/'))
+
+    def test_calendar_years_come_from_printed_term_heading(self):
+        self.assertEqual(calendar_years('Academic Calendar > Spring Semester 2027 > Classes start'), ['2027'])
+        self.assertEqual(calendar_years('Last verified 2026-11-04'), [])
+
+    def test_host_crawl_delay_does_not_slow_unrelated_official_hosts(self):
+        with tempfile.TemporaryDirectory() as root:
+            Path(root,'robots-research.uaeu.ac.ae.json').write_text(json.dumps({'status':200,'text':'User-agent: *\nCrawl-delay: 5\n'}))
+            Path(root,'robots-www.uaeu.ac.ae.json').write_text(json.dumps({'status':200,'text':'User-agent: *\nAllow: /\n'}))
+            c=Crawler(root,1)
+            self.assertTrue(c.allowed('https://research.uaeu.ac.ae/en/organisations/'))
+            self.assertTrue(c.allowed('https://www.uaeu.ac.ae/en/'))
+            self.assertEqual(c.delays['research.uaeu.ac.ae'],5)
+            self.assertEqual(c.delays.get('www.uaeu.ac.ae',c.delay),1)
+            self.assertEqual(c.delay,1);c.db.close()
+
     def test_model_plan_identity_comes_from_the_printed_degree_not_a_link_label(self):
         self.assertEqual(printed_model_program('Bachelor of Science in Computer Engineering Model Study Plan (2022–2023 Cohort onwards)'), 'Bachelor of Science in Computer Engineering')
         self.assertEqual(printed_model_program('Master of Science in Water Resources Study Plan'), 'Master of Science in Water Resources')
@@ -16,6 +69,7 @@ class CrawlTests(unittest.TestCase):
         value = policy_metadata('Policy Number AE-05 Effective Date 12-Aug-2018 Most Recent Review Date 15-Apr-2018 Due Date for Next Review 01-Sep-2021')
         self.assertEqual(value, {'policyId': 'AE-05', 'policyEffectiveDate': '2018-08-12'})
         self.assertEqual(policy_metadata('Related Policy AE-05 Last verified 4-Nov-2026'), {})
+        self.assertEqual(policy_metadata('Section: ACA-ADM Policy Number: 09 Effective Date: 5 September 2004'), {'policyId':'ACA-ADM-09','policySeries':'printed-legacy-ACA-ADM','policyEffectiveDate':'2004-09-05'})
         self.assertEqual(policy_metadata('Policy Number AE-05 Effective Date 99-Bogus-2018'), {'policyId': 'AE-05'})
 
     def test_official_xml_preserves_bilingual_identity_and_separates_minors(self):

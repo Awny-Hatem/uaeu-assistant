@@ -2,9 +2,9 @@
 """Resumable public UAEU crawl. Network requests never use authenticated sessions.
 Run with bundled Python (lxml, pypdf), see README.md. Cached bodies are local only.
 """
-import argparse, concurrent.futures, datetime, hashlib, heapq, json, re, sqlite3, time, threading, os
+import argparse, concurrent.futures, datetime, hashlib, heapq, json, re, sqlite3, time, threading, os, gzip
 from pathlib import Path
-from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl, urlencode, quote
+from urllib.parse import urljoin, urlsplit, urlunsplit, parse_qsl, urlencode, quote, unquote
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.error import HTTPError
 from lxml import html, etree
@@ -16,8 +16,23 @@ DATE = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=4))).dat
 UA = 'UAEU-Assistant-Research/2.0 (public university knowledge; robots-aware; 1 request/second/host)'
 ASSET = re.compile(r'\.(?:png|jpe?g|gif|svg|ico|mp[34]|avi|mov|woff2?|ttf|css|js|zip|exe|xlsx?|docx?|pptx?)$', re.I)
 EXCLUDE = re.compile(r'(?:webtest|cms|localhost|staging|preview)', re.I)
-DYNAMIC = re.compile(r'/(?:news|events|news_events|blogs|conferences|jobs|employment|vacancies|job_vacancies|photo_library|photo|media|media-center|newsletters?)(?:/|[_.-])|/vc/uod/publications/|/cgs/tdd/.*\.pdf$|/[^/]*(?:daily[-_]?news|news[-_]clippings?)[^/]*$', re.I)
+DYNAMIC = re.compile(r'/(?:news|events|news_events|spotlights|blogs|conferences|jobs|employment|vacancies|job_vacancies|photo_library|photo|media|media-center|newsletters?)(?:/|[_.-])|/vc/uod/publications/|/cgs/tdd/.*\.pdf$|/[^/]*(?:daily[-_]?news|news[-_]clippings?)[^/]*$', re.I)
 HIST = re.compile(r'(?:old|bkp|backup|archive|prev_catalog|catalog_20|catalog-20|historical|201[0-9]|202[0-4])', re.I)
+
+def audit_safe_result(result):
+    """Quarantine malformed extraction instead of silently repairing facts."""
+    try:
+        json.dumps(result,ensure_ascii=False).encode('utf-8')
+        return result
+    except UnicodeEncodeError:
+        return {**{key:result[key] for key in ['url','finalUrl','status','verified','bodyFile','sha256','contentType'] if key in result},'state':'failed','quality':'invalid-unicode-extraction','error':'Extracted source contains invalid Unicode; original response bytes retained for manual/OCR review. No text approved.'}
+
+def reference_only(url):
+    p=urlsplit(url)
+    return bool(DYNAMIC.search(p.path)
+        or p.hostname=='research.uaeu.ac.ae' and (re.match(r'^/(?:en|ar)/(?:publications|datasets|prizes|projects|activities|clippings|impacts)/[^/]+/?$',p.path) or re.search(r'/(?:similar|network|network-map|network-organisations|publications|fingerprints|activities|projects)/?$',p.path) or re.match(r'^/files/\d+/',p.path))
+        or p.hostname=='scholarworks.uaeu.ac.ae' and (re.search(r'/\d+/?$',p.path) or re.search(r'/vol\d+(?:/|$)',p.path) or re.search(r'/context/[^/]+/article/\d+/',p.path))
+        or p.hostname in {'conferences.uaeu.ac.ae','jobs.uaeu.ac.ae','uaeulawjournal.uaeu.ac.ae'})
 
 
 def official(u):
@@ -41,6 +56,7 @@ def canonical(u):
 
 def eligible(u):
     p=urlsplit(u)
+    if unquote(p.path).rstrip('/').split('/')[-1]=='للتواصل عبر واتساب':return False
     if re.search(r'/(?:en|ar)/.*?/(?:en|ar)/',p.path): return False
     if len(p.path)>300: return False
     if re.search(r'/(?:demo\d*|test)/|index[-_](?:test|ws|bkp)|(?:_back|_backup|_bkp)\d*|eform[^/]*test|eform-(?:failure|response)|/(?:failure|success|subscribe)\.shtml$',p.path,re.I): return False
@@ -80,13 +96,13 @@ class Crawler:
         self.root=Path(root);self.root.mkdir(parents=True,exist_ok=True);(self.root/'bodies').mkdir(exist_ok=True)
         self.db=sqlite3.connect(self.root/'crawl.sqlite');self.db.row_factory=sqlite3.Row
         self.db.execute('CREATE TABLE IF NOT EXISTS urls(url TEXT PRIMARY KEY, discovered_on TEXT, label TEXT, priority INT, state TEXT DEFAULT "pending", result TEXT)')
-        self.rules={}; self.next={}; self.locks={}; self.delay=delay;self.opener=build_opener(Redirects(self))
+        self.rules={}; self.next={}; self.locks={}; self.delay=delay;self.delays={};self.opener=build_opener(Redirects(self))
         self.db.execute('UPDATE urls SET state="pending" WHERE state="fetching"');self.db.commit()
 
     def throttle(self,host):
         lock=self.locks.setdefault(host,threading.Lock())
         with lock:
-            time.sleep(max(0,self.next.get(host,0)-time.monotonic()));self.next[host]=time.monotonic()+self.delay
+            time.sleep(max(0,self.next.get(host,0)-time.monotonic()));self.next[host]=time.monotonic()+self.delays.get(host,self.delay)
 
     def raw(self,u,cap=35_000_000):
         self.throttle(urlsplit(u).netloc)
@@ -128,7 +144,7 @@ class Crawler:
                     for key,value in items:
                         if key in ('allow','disallow') and value:rules.append((key=='allow',re.compile('^'+re.escape(value).replace(r'\*','.*').replace(r'\$','$'))))
                         elif key=='crawl-delay':
-                            try:self.delay=max(self.delay,float(value))
+                            try:self.delays[host]=max(self.delays.get(host,self.delay),float(value))
                             except ValueError:pass
             self.rules[host]=rules
         path=urlsplit(u).path+('?' + urlsplit(u).query if urlsplit(u).query else '')
@@ -138,7 +154,7 @@ class Crawler:
     def add(self,u,parent='',label=''):
         u=canonical(u)
         if eligible(u):
-            state='link-only' if DYNAMIC.search(urlsplit(u).path) else 'pending'
+            state='link-only' if reference_only(u) else 'pending'
             result=json.dumps({'url':u,'state':state,'reason':'news/events/media/jobs or individual thesis publication; reference link only, not current institutional requirements'}) if state=='link-only' else None
             self.db.execute('INSERT OR IGNORE INTO urls(url,discovered_on,label,priority,state,result) VALUES(?,?,?,?,?,?)',(u,parent,label,priority(u),state,result))
 
@@ -169,7 +185,7 @@ class Crawler:
         links=[{'url':canonical(urljoin(u,a.get('href'))),'text':' '.join(a.text_content().split())} for a in doc.xpath('//a[@href]') if public_link(urljoin(u,a.get('href')))]
         alternate=[canonical(urljoin(u,a.get('href'))) for a in doc.xpath('//link[@rel="alternate"][@href]') if public_link(urljoin(u,a.get('href')))]
         title=' '.join(doc.xpath('//title/text()'))
-        for el in doc.xpath('//script|//style|//header|//footer|//nav|//*[@role="navigation"]|//*[contains(concat(" ",normalize-space(@class)," ")," tab-items ")]|//form[.//input[@type="password"]]|//input|//textarea|//svg|//*[@aria-hidden="true"]|//*[contains(concat(" ",normalize-space(@class)," ")," breadcrumb ")]'):
+        for el in doc.xpath('//script|//style|//header|//footer|//nav|//*[@role="navigation"]|//*[contains(concat(" ",normalize-space(@class)," ")," tab-items ")]|//form[.//input[@type="password"]]|//input|//select|//textarea|//svg|//*[@aria-hidden="true"]|//*[contains(concat(" ",normalize-space(@class)," ")," breadcrumb ")]'):
             el.drop_tree()
         main=doc.xpath('//main') or doc.xpath('//body') or [doc];node=main[0]
         sections=[];heading='Overview';parts=[];hierarchy={}
@@ -214,7 +230,7 @@ class Crawler:
             r['previousAttempts']=previous.get('previousAttempts',[])+[{k:previous[k] for k in ['state','status','verified','error'] if k in previous}]
         try:
             if not self.allowed(u):return {**r,'status':0,'state':'robots-blocked','error':'robots.txt disallows crawl'}
-            if DYNAMIC.search(urlsplit(u).path):return {**r,'status':None,'state':'link-only','reason':'news/events/media/jobs or individual thesis publication; reference link only, not current institutional requirements'}
+            if reference_only(u):return {**r,'status':None,'state':'link-only','reason':'news/events/media/jobs or individual thesis publication; reference link only, not current institutional requirements'}
             b,status,final,ct=self.raw(u);r.update(status=status,finalUrl=final,contentType=ct,sha256=hashlib.sha256(b).hexdigest())
             if not official(final):raise ValueError('Nonofficial final URL')
             key=hashlib.sha256(u.encode()).hexdigest();name=key+('.pdf' if b.startswith(b'%PDF') else '.html');(self.root/'bodies'/name).write_bytes(b);r['bodyFile']=name
@@ -228,31 +244,36 @@ class Crawler:
         for row in self.db.execute('SELECT url,result FROM urls WHERE state="failed"').fetchall():
             prior=json.loads(row['result'] or '{}');status=prior.get('status',0)
             transient=status in (408,429,500,502,503,504) or status==0 and re.search(r'timed? out|timeout|temporarily|connection reset|remote end closed',prior.get('error',''),re.I)
-            if transient and eligible(row['url']) and not DYNAMIC.search(urlsplit(row['url']).path):
+            if transient and eligible(row['url']) and not reference_only(row['url']):
                 self.db.execute('UPDATE urls SET state="pending" WHERE url=?',(row['url'],));count+=1
         self.db.commit();return count
 
-    def run(self,max_pages):
+    def run(self,max_pages,workers=3):
         (self.root/'crawler.pid').write_text(str(os.getpid()))
         count=0;submitted=0;pending={};catalog_bodies={}
         # Reapply explicit scope rules when resuming an older queue. Retain every
         # discovered URL and reason rather than downloading duplicate viewer pages.
         for row in self.db.execute('SELECT url,result FROM urls WHERE state="pending"').fetchall():
-            u=row['url'];state='excluded' if not eligible(u) else 'link-only' if DYNAMIC.search(urlsplit(u).path) else None
+            u=row['url'];state='excluded' if not eligible(u) else 'link-only' if reference_only(u) else None
             if state:
                 result={'url':u,'state':state,'reason':'duplicate viewer/assets or nonpublic/test route' if state=='excluded' else 'news/events/media/jobs or individual thesis publication; reference link only, not current institutional requirements'}
                 self.db.execute('UPDATE urls SET state=?,result=? WHERE url=?',(state,json.dumps(result),u))
             else:self.db.execute('UPDATE urls SET priority=? WHERE url=?',(-5 if json.loads(row['result'] or '{}').get('forceFetch') else priority(u),u))
+        for row in self.db.execute('SELECT url FROM urls WHERE state IN ("fetched","failed","empty","soft-404")').fetchall():
+            if reference_only(row['url']):
+                result=json.loads(self.db.execute('SELECT result FROM urls WHERE url=?',(row['url'],)).fetchone()[0]);result.update(priorState=result.get('state'),state='link-only',reason='Individual research output, duplicate profile view, news or media: retained as a reference link, not current institutional requirements')
+                self.db.execute('UPDATE urls SET state=?,result=? WHERE url=?',('link-only',json.dumps(result,ensure_ascii=False),row['url']))
         self.db.commit()
         for value in self.db.execute('SELECT result FROM urls WHERE state="fetched" AND url LIKE "%/catalog/courses/%"'):
             item=json.loads(value[0]);base=item['url'].split('?')[0];digest=hashlib.sha256(item.get('text','').encode()).hexdigest()
             catalog_bodies.setdefault((base,digest),[]).append(item['url'])
         for (base,digest),urls in catalog_bodies.items():
             if len(urls)>1:self.alias_catalog(base,urls[0])
-        # At most three requests in flight, starts still serialized per host.
-        with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
+        # A bounded larger pool processes slow PDFs while request starts remain
+        # serialized per host, including its published crawl delay.
+        with concurrent.futures.ThreadPoolExecutor(max_workers=workers) as pool:
             while True:
-                while len(pending)<3 and (not max_pages or submitted<max_pages) and not (self.root/'STOP').exists():
+                while len(pending)<workers and (not max_pages or submitted<max_pages) and not (self.root/'STOP').exists():
                     row=self.db.execute('SELECT * FROM urls WHERE state="pending" ORDER BY priority,rowid LIMIT 1').fetchone()
                     if not row:break
                     # Robots initialized on the coordinator; workers only read rules.
@@ -262,7 +283,7 @@ class Crawler:
                 if not pending:break
                 done,_=concurrent.futures.wait(pending,return_when=concurrent.futures.FIRST_COMPLETED)
                 for future in done:
-                    row=pending.pop(future);r=future.result()
+                    row=pending.pop(future);r=audit_safe_result(future.result())
                     self.db.execute('UPDATE urls SET state=?,result=? WHERE url=?',(r['state'],json.dumps(r,ensure_ascii=False),row['url']))
                     for a in r.get('links',[]):self.add(a['url'],row['url'],a['text'])
                     for a in r.get('alternates',[]):self.add(a,row['url'],'language alternate')
@@ -286,16 +307,29 @@ class Crawler:
         self.db.commit()
 
     def export(self):
-        rows=[dict(r) for r in self.db.execute('SELECT * FROM urls ORDER BY priority,url')]
-        (self.root/'manifest.json').write_text(json.dumps({'date':DATE,'counts':{s:sum(r['state']==s for r in rows) for s in sorted({r['state'] for r in rows})},'sources':[{**json.loads(r['result'])} if r['result'] else {'url':r['url'],'state':r['state'],'discoveredOn':r['discovered_on'],'label':r['label']} for r in rows]},ensure_ascii=False,indent=2))
-        print('STATE', {s:sum(r['state']==s for r in rows) for s in sorted({r['state'] for r in rows})},flush=True)
+        counts=dict(self.db.execute('SELECT state,count(*) FROM urls GROUP BY state'))
+        # The cache DB remains the authoritative resumable record. Stream its
+        # duplicate audit export so a large crawl does not sort gigabytes of
+        # source text into SQLite temporary files or hold it all in memory.
+        destination=self.root/'manifest.json.gz';temporary=self.root/'manifest.json.gz.tmp'
+        with gzip.open(temporary,'wt',encoding='utf-8',compresslevel=3) as output:
+            output.write('{"date":'+json.dumps(DATE)+',"counts":'+json.dumps(counts)+',"sources":[')
+            first=True
+            for url, in self.db.execute('SELECT url FROM urls ORDER BY priority,url'):
+                row=self.db.execute('SELECT * FROM urls WHERE url=?',(url,)).fetchone()
+                value=json.loads(row['result']) if row['result'] else {'url':row['url'],'state':row['state'],'discoveredOn':row['discovered_on'],'label':row['label']}
+                if not first:output.write(',\n')
+                output.write(json.dumps(value,ensure_ascii=False));first=False
+            output.write(']}\n')
+        os.replace(temporary,destination)
+        print('STATE',counts,flush=True)
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--cache',default='.uaeu-crawl');p.add_argument('--delay',type=float,default=1.0);p.add_argument('--max-pages',type=int,default=0);p.add_argument('--seed-map',action='append',default=[]);p.add_argument('--export-only',action='store_true');p.add_argument('--retry-transient',action='store_true',help='One explicit retry of previously timed-out/429/5xx public sources; never loop automatically');a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--cache',default='.uaeu-crawl');p.add_argument('--delay',type=float,default=1.0);p.add_argument('--workers',type=int,choices=range(1,7),default=3);p.add_argument('--max-pages',type=int,default=0);p.add_argument('--seed-map',action='append',default=[]);p.add_argument('--export-only',action='store_true');p.add_argument('--retry-transient',action='store_true',help='One explicit retry of previously timed-out/429/5xx public sources; never loop automatically');a=p.parse_args()
     crawler=Crawler(a.cache,max(1,a.delay))
     if a.export_only:crawler.export()
     else:
         crawler.seed(a.seed_map)
         if a.retry_transient:print('Requeued transient failures:',crawler.retry_transient_failures(),flush=True)
-        try:crawler.run(a.max_pages)
+        try:crawler.run(a.max_pages,a.workers)
         finally:crawler.export()

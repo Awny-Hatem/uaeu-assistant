@@ -25,57 +25,5 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-## GENERAL INFORMATION
-General Information
-
-Vision, Mission, Values and Goals
-
-History and Key Achievements
-
-Distinguished Alumni
-
-Accreditation
-
-Strategic Plan
-
-Bylaws, Policies and Procedures
-
-Organizational Charts
-
-## UNIVERSITY LEADERSHIP
-Board Of Trustees
-
-Chancellor's Message
-
-Vice Chancellor's Message
-
-Deputy VC for Academic Affairs Message
-
-Associate Provost for Research Message
-
-Associate Provost for Student Affairs Message
-
-Deputy VC for Finance and Admin Affairs Message
-
-## UAEU FACTS AND FIGURES
-Facts and Figures
-
-Annual Report
-
-## Frequently Asked Questions
-Student Affairs Deanship
-
-Department of Residential Life and Nutritional Services
-
-Student Services Department
-
-Career Placement and Alumni
-
-Enrollment Deanship Department
-
-College of Graduate Studies
-
-Library Deanship
-
 ## University Council Performance Evaluation & Assessment > Performance Evaluation and Assessment of the University Council
 Mar 14, 2026

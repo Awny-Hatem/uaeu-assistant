@@ -25,14 +25,6 @@ ENTER
 Customer pulse
 Customer Pulse Survey
 
-Overview
-
-Incoming Students
-
-Outgoing Students
-
-Contact Us
-
 ## Incoming Students
 Students enrolled in undergraduate education at universities with exchange agreements with UAEU are eligible to study at UAEU for up to two semesters as specified in the exchange agreement and agreed upon by both institutions.
 

@@ -18,19 +18,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## Department of Cognitive Sciences
-Overview
-
-Mission
-
-Facilities
-
-Academic Programs
-
-Faculty
-
-General Enquiries
-
 ## Department of Cognitive Sciences > Overview
 Cognitive Sciences is the inter-disciplinary study of the mind. The Cognitive Sciences department at UAEU is based around the traditional core subjects of Psychology, Linguistics and Philosophy. We offer a range of degrees and courses that offer students a huge variety of different perspectives on the human mind and behavior, including: Neuroscience, Artificial Intelligence & Robotics, Psychiatry, Computer Science, Logic, Evolutionary Theory and much more.
 

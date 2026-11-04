@@ -36,14 +36,19 @@ if(fs.existsSync(previous)){
     }
   }finally{old.close();}
 }
-let tokens=0,requests=0;
+let tokens=0,requests=0,unmeteredResponses=0;
 async function main(){
   if(!noEmbeddings){
     const missing=chunks.filter(c=>!find.get(embeddingKey(c),EMBEDDING_MODEL,EMBEDDING_DIMENSIONS));
-    for(let offset=0;offset<missing.length;offset+=64){
-      const batch=missing.slice(offset,offset+64);let response:Response|undefined;
+    let completed=0,nextStart=Date.now();
+    const embed=async(batch:typeof chunks)=>{
+      const slot=Math.max(Date.now(),nextStart);nextStart=slot+1000;
+      await new Promise(resolve=>setTimeout(resolve,Math.max(0,slot-Date.now())));
+      let response:Response|undefined;
+      let result:{data?:{index:number;embedding:number[]}[];usage?:{total_tokens?:number}}|undefined;
       for(let attempt=0;attempt<4;attempt++){
-        try { response=await fetch("https://api.openai.com/v1/embeddings",{method:"POST",headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({model:EMBEDDING_MODEL,dimensions:EMBEDDING_DIMENSIONS,input:batch.map(embeddingInput)}),signal:AbortSignal.timeout(60000)}); } catch {
+        fs.appendFileSync(path.join(folder,'embedding-attempts.jsonl'),JSON.stringify({at:new Date().toISOString(),fingerprint:manifest.chunkFingerprint,batchHash:crypto.createHash('sha256').update(batch.map(embeddingKey).join('\n')).digest('hex'),attempt:attempt+1,inputs:batch.length})+'\n');
+        try { response=await fetch("https://api.openai.com/v1/embeddings",{method:"POST",headers:{Authorization:`Bearer ${process.env.OPENAI_API_KEY}`,"Content-Type":"application/json"},body:JSON.stringify({model:EMBEDDING_MODEL,dimensions:EMBEDDING_DIMENSIONS,input:batch.map(embeddingInput)}),signal:AbortSignal.timeout(60000)});if(response.ok)result=await response.json(); } catch {
           if(attempt===3)throw new Error("Embedding request timed out after bounded retries; completed batches remain cached");
           await new Promise(resolve=>setTimeout(resolve,2000*2**attempt));continue;
         }
@@ -58,18 +63,27 @@ async function main(){
         await new Promise(resolve=>setTimeout(resolve,Math.max(retry,Math.min(30000,2000*2**attempt))));
       }
       if(!response?.ok)throw new Error(`Embedding service unavailable; cached completed batches are reusable`);
-      const result=await response.json();
-      if(result.data?.length!==batch.length)throw new Error("Embedding batch count mismatch");
+      const rows=result?.data;
+      if(!rows||rows.length!==batch.length)throw new Error("Embedding batch count mismatch");
       const store=vectorCache.transaction(()=>{
-        for(const row of result.data){
+        for(const row of rows){
           const c=batch[row.index], v=row.embedding;
           if(!c||!Array.isArray(v)||v.length!==EMBEDDING_DIMENSIONS||!v.every(Number.isFinite))throw new Error("Invalid embedding vector");
           const floats=Float32Array.from(v);put.run(embeddingKey(c),EMBEDDING_MODEL,EMBEDDING_DIMENSIONS,Buffer.from(floats.buffer));
         }
-      });store();tokens+=result.usage?.total_tokens??0;requests++;
-      fs.appendFileSync(path.join(folder,"embedding-usage.jsonl"),JSON.stringify({at:new Date().toISOString(),fingerprint:manifest.chunkFingerprint,model:EMBEDDING_MODEL,tokens:result.usage?.total_tokens??null,requests:1})+"\n");
-      console.log(`Embedded ${Math.min(offset+batch.length,missing.length)}/${missing.length}; returned tokens ${tokens}`);
-      await new Promise(resolve=>setTimeout(resolve,1000));
+      });store();const returnedTokens=result?.usage?.total_tokens;tokens+=returnedTokens??0;requests++;if(returnedTokens===undefined)unmeteredResponses++;
+      fs.appendFileSync(path.join(folder,"embedding-usage.jsonl"),JSON.stringify({at:new Date().toISOString(),fingerprint:manifest.chunkFingerprint,model:EMBEDDING_MODEL,tokens:returnedTokens??null,requests:1})+"\n");
+      completed+=batch.length;
+      console.log(`Embedded ${completed}/${missing.length}; returned tokens ${tokens}`);
+    };
+    // Up to three independent64-input batches, one request start per second.
+    // Settle the entire group before propagating failure: no provider request
+    // or cache write may outlive this refresh's error result.
+    for(let offset=0;offset<missing.length;offset+=192){
+      const batches=[0,64,128].map(shift=>missing.slice(offset+shift,offset+shift+64)).filter(batch=>batch.length);
+      const settled=await Promise.allSettled(batches.map(embed));
+      const failed=settled.find(result=>result.status==='rejected');
+      if(failed?.status==='rejected')throw failed.reason;
     }
   }
   const temp=path.join(folder,"search.build.sqlite");if(fs.existsSync(temp))fs.unlinkSync(temp);
@@ -87,7 +101,7 @@ async function main(){
   const set=db.prepare("INSERT INTO metadata VALUES(?,?)");db.transaction(()=>{for(const [k,v] of Object.entries(metadata))set.run(k,v);})();
   db.exec("INSERT INTO chunk_fts(chunk_fts) VALUES('optimize'); PRAGMA optimize;");db.close();vectorCache.close();
   fs.renameSync(temp,path.join(folder,"search.sqlite"));
-  fs.writeFileSync(path.join(folder,"index-build.json"),JSON.stringify({model:EMBEDDING_MODEL,dimensions:EMBEDDING_DIMENSIONS,chunks:chunks.length,newEmbeddingRequests:requests,newEmbeddingTokens:tokens,newEmbeddingEstimatedUsd:tokens*.02/1e6,priceSource:"https://developers.openai.com/api/docs/models/text-embedding-3-small",priceVerified:"2026-11-04",vectors:!noEmbeddings?chunks.length:0,fingerprint:manifest.chunkFingerprint},null,2)+'\n');
+  fs.writeFileSync(path.join(folder,"index-build.json"),JSON.stringify({model:EMBEDDING_MODEL,dimensions:EMBEDDING_DIMENSIONS,chunks:chunks.length,newEmbeddingRequests:requests,newEmbeddingTokens:tokens,newEmbeddingUnmeteredResponses:unmeteredResponses,newEmbeddingEstimatedUsd:unmeteredResponses?null:tokens*.02/1e6,priceSource:"https://developers.openai.com/api/docs/models/text-embedding-3-small",priceVerified:"2026-11-04",vectors:!noEmbeddings?chunks.length:0,fingerprint:manifest.chunkFingerprint},null,2)+'\n');
   console.log(`Indexed ${chunks.length} chunks; dense=${!noEmbeddings}`);
 }
 main().catch(error=>{console.error(error.message);process.exitCode=1;});

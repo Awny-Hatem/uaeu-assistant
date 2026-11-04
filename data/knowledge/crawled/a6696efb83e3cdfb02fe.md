@@ -40,7 +40,7 @@ Name of Researcher *
 
 Email *
 
-College * Select College Business & Economics Humanities & Social Sciences Education Engineering Food & Agriculture Information Technology Law Medicine & Health Sciences Science College of Graduate Studies
+College *
 
 Manuscript Editing Service The UAEU Manuscript Editing Service is to support your publishing output. Faculty and staff can have their manuscripts edited, proofread and checked for free before final submission for publication to peer-reviewed journals. UAEU Libraries have contracted a professional agency in the field with a pool of editors worldwide to do the editing services. We encourage all faculty, staff and graduate students to make use of the services. Please follow the guidelines to apply for this services. Guidelines
 

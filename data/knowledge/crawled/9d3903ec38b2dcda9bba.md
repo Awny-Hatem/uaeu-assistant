@@ -17,34 +17,6 @@ sourceDate: not inferred from verification date
 
 Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
-## About CGS
-Overview
-
-Deans Message
-
-GS at a Glance
-
-Graduate Programs
-
-Admission Requirements
-
-Tuition and Fees
-
-Scholarships, Fellowships and Graduate Assistantships
-
-Forms and Guidelines
-
-Publications
-
-Thesis and Dissertation Defenses
-
-## Media
-News
-
-Events
-
-Contact us
-
 ## PhD Scholarship (All Nationalities)
 The purpose of the “PhD Scholarship” is to recruit high achieving graduate students in certain majors at UAEU and provide them with full and continuous financial support to pursue their graduate studies at UAEU.
 

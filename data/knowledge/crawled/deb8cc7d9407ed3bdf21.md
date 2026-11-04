@@ -5,8 +5,8 @@ status: approved
 language: ar
 lastVerified: 2026-11-04
 subject: registration-policies
-catalogYear: not stated
-temporalStatus: undated-current-page
+catalogYear: 2026
+temporalStatus: dated-publication
 audience: public; exact eligibility as published in sections
 topicId: /dvcsae/registration/pdfs/2026/early-registration-schedule-fall-2026.pdf
 extraction: text-extracted-layout-review-required
@@ -15,7 +15,7 @@ sourceDate: not inferred from verification date
 ---
 # جدول التسجيل والسحب والإضافة
 
-Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
+Source applicability: dated-publication. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
 
 ## PDF page 1
 02

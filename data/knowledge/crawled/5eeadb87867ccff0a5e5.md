@@ -631,6 +631,7 @@ Discuss evolution of vertebrates through scientific studies.
 Critically evaluate biological literature and interpret case studies in avian biology, through discussions, presentations and reports.
 
 ## BIOE453 Environmental Toxicology
+Official course record: https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOE453
 The course aims at introducing a profound knowledge of the fundamental concepts of toxicity and its ecological implications. It includes a detailed study of the classification of toxicants and pollutants, the principal physiological mechanisms governing the action of these pollutants and some general aspects of pollution stress on individuals, populations and ecosystems.
 Environmental Toxicology (BIOE453) > Credit Hours : 3
 
@@ -1817,6 +1818,7 @@ Demonstrate the use of these methods for real-life problem-solving and hypothesi
 Distinguish between trait-based genetics and gene-based genomics.
 
 ## BION210 Animal Biology for Non-Majors
+Official course record: https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BION210
 This course aims at studying the biology and taxonomy of invertebrates and vertebrates of the animal kingdom. It includes the phyla: Porifera, Cnidaria, Platyhelminthes, Nematoda, Mollusca, Annelida, Arthropoda, Echinodermata and Chordata which includes lower chordates, fishes, amphibians, reptiles, birds and mammals with specific examples from each group selected for a detailed study.
 Animal Biology for Non-Majors (BION210) > Credit Hours : 3
 
