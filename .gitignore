@@ -61,3 +61,15 @@ next-env.d.ts
 # Private provider diagnostics contain account identifiers; preserve locally only.
 /reports/independent/isolated-gpt41-comparison-20260929.json
 /reports/independent/isolated-gpt41-comparison-followup-20260929.json
+
+# Rebuildable official-source search indexes and private crawl bodies
+/.uaeu-crawl/
+/data/corpus/*.sqlite
+/data/corpus/*.sqlite-*
+/data/corpus/chunks.jsonl
+
+/data/corpus/embedding-usage.jsonl
+
+# Python extraction bytecode is a local build artifact.
+__pycache__/
+*.pyc
