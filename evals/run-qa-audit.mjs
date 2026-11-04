@@ -15,7 +15,7 @@ const selected = option('--ids', '').split(',').filter(Boolean);
 const dataset = JSON.parse(fs.readFileSync('evals/qa-audit-2026-11-03.json', 'utf8'));
 const cases = dataset.cases.filter(c => !selected.length || selected.includes(c.id));
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
-const canonicalUrl = value => {
+export const canonicalUrl = value => {
   const u = new URL(value);
   return u.hostname.replace(/^www\./, '') + u.pathname.replace(/\/index\.shtml$/, '/').replace(/\/$/, '').replace('/en/cit/programs/undergraduate/', '/en/catalog/undergraduate/programs/').replace('/en/eng/programs/undergraduate/', '/en/catalog/undergraduate/programs/') + (u.pathname.endsWith('/course_2945.shtml') ? '' : u.search);
 };
