@@ -48,6 +48,18 @@ try {
     assert.ok(result.intents.includes("substitution"));
     assert.match(result.query, /Computer Engineering/);
   });
+  check("apologetic degree correction replaces the active program but preserves the request", () => {
+    const result = resolve(
+      "How many credit hours do I need to graduate from Information Security?",
+      "Sorry I meant computer engineering.",
+    );
+    assert.equal(result.subject?.key, "computer-engineering");
+    assert.equal(result.usedContext, true);
+    assert.equal(result.corrected, true);
+    assert.ok(result.intents.includes("hours"));
+    assert.match(result.query, /credit hours|how many credits|Requested fact: hours/i);
+    assert.doesNotMatch(result.query, /Information Security/i);
+  });
   check("third-turn document follow-up retains intervening category update", () => {
     const result = resolve("What are undergraduate admission requirements for Fall 2027?", "I am international.", "What documents do I need?");
     const meaning = understandQuery(result.query);

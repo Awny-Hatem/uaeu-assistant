@@ -713,6 +713,25 @@ async function main() {
       },
     },
     {
+      name: "apologetic degree correction keeps the original credit question",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "How many credit hours do I need to graduate from Information Security?" },
+            { role: "assistant", content: "Previous Information Security credit answer." },
+            { role: "user", content: "Sorry I meant computer engineering." },
+          ],
+        });
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "escalated");
+        assert.equal(result.data.stateLabel, "no_verified_context");
+        assert.equal(result.data.topic, "computer-engineering");
+        assert.match(result.data.content ?? "", /could not verify/i);
+        assert.doesNotMatch(result.data.content ?? "", /Computer Science second semester|Previous Information Security credit answer|120-credit curriculum/i);
+      },
+    },
+    {
       name: "greetings and capability questions receive a concrete bilingual scope answer",
       run: async () => {
         for (const content of [

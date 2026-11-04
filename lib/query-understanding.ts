@@ -109,7 +109,7 @@ export type QueryMeaning = {
  * request being corrected. This is internal; students never need topic labels. */
 export function isCorrectionQuery(text: string): boolean {
   const normalized = normalizeQuery(text);
-  return /^(?:no|actually|i mean|i meant|i am asking about|im asking about|to clarify|correction)\b/u.test(normalized) ||
+  return /^(?:no|sorry|actually|i mean|i meant|i am asking about|im asking about|to clarify|correction)\b/u.test(normalized) ||
     /\b(?:not|rather than)\b.{0,80}\b(?:i mean|i am asking about|im asking about)\b/u.test(normalized);
 }
 

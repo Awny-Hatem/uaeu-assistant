@@ -108,7 +108,7 @@ CATALOG:\n${JSON.stringify(catalog)}`,
     if (supplied.years.some((year) => !resolved.years.includes(year)) || supplied.terms.some((term) => !resolved.terms.includes(term)) ||
       (supplied.applicantCategories.some((category) => !resolved.applicantCategories.includes(category))) ||
       (supplied.degreeLevel && supplied.degreeLevel !== resolved.degreeLevel)) return null;
-    const protectedSubjects = ["admissions", "housing", "scholarship", "visa", "library", "parking", "tuition", "transcript", "certificate"];
+    const protectedSubjects = ["admissions", "housing", "scholarship", "visa", "library", "parking", "tuition", "transcript", "certificate", "computer-engineering"];
     if (supplied.subjects.some((subject) => protectedSubjects.includes(subject) && !resolved.subjects.includes(subject))) return null;
     if (/\b(?:gpa|cgpa)\b|معدل.*تراكمي/iu.test(latest) && !/\b(?:gpa|cgpa)\b/i.test(route.resolvedQuery)) return null;
     if (/\b(?:medicine|cmhs)\b|كلية الطب/iu.test(latest) && !/\b(?:medicine|cmhs)\b/i.test(route.resolvedQuery)) return null;
