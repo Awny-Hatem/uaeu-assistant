@@ -1,0 +1,127 @@
+{
+  "at": "2026-11-04T23:02:30.494610+00:00",
+  "status": "unfinished_waiting_for_provider_credit_or_usage_limit",
+  "candidate": "v38",
+  "branch": "feat/uaeu-knowledge-expansion",
+  "localCommits": [
+    "a533c50",
+    "281c687",
+    "accc609"
+  ],
+  "providerBlock": {
+    "code": "OPENAI_QUOTA_EXHAUSTED",
+    "paidRunsStopped": true,
+    "userAlreadyAsked": true,
+    "noNewPaidProbes": true
+  },
+  "counts": {
+    "at": "2026-11-04T22:40:29.566282+00:00",
+    "knowledgeDocuments": 8379,
+    "crawledDocuments": 8312,
+    "curatedDocuments": 67,
+    "approvedSections": 143834,
+    "indexedSections": 143834,
+    "verifiedAnswers": 154,
+    "serviceGuides": 11,
+    "aliases": 16982,
+    "courseIdentities": 4351,
+    "changeSincePreviousSnapshot": {
+      "knowledgeDocuments": 0,
+      "crawledDocuments": 0,
+      "curatedDocuments": 0,
+      "approvedSections": 0,
+      "indexedSections": 0,
+      "verifiedAnswers": 0,
+      "serviceGuides": 0,
+      "aliases": 0,
+      "courseIdentities": 0
+    }
+  },
+  "validation": {
+    "offlineSuites": "passed; work/examiner-offline-v38b.log",
+    "knowledgeIntegration": "31+13+6 checks passed",
+    "productionBuild": "npm run build -- --webpack passed; work/examiner-build-v38-final2.log",
+    "lint": "passed; work/examiner-lint-v38-review-final3.log",
+    "typeScript": "passed; work/examiner-tsc-v38-review-final3.log",
+    "integrity": "12 evaluation + 6 examiner + 16 primary-review contract checks passed; no model accuracy claimed",
+    "currentLiveRetest": "NOT RUN; provider blocked",
+    "reviewerV1": "INVALIDATED: graded reference instead of actual reply in known bad controls; excluded from final pass claims",
+    "reviewerV2": "Local contract checks passed; positive live calibration incomplete due provider limit"
+  },
+  "interruptedV37": {
+    "examinerSubmissions": 454,
+    "examinerTarget": 600,
+    "regressionShard1": 446,
+    "regressionShard2": 450,
+    "regressionTarget": 1782,
+    "browserPrimaryCases": 23,
+    "browserTarget": 100
+  },
+  "historicalV34": {
+    "completedSubmissions": 600,
+    "automatedCounts": {
+      "correct": 535,
+      "partial": 27,
+      "incorrect": 38
+    },
+    "literalFactualReusePairs": 151,
+    "nearSimilarityFlags": 242,
+    "currentCertification": false
+  },
+  "baselineMatching": {
+    "examinerMatched": 600,
+    "regressionMatched": 1782,
+    "regressionUnmatched": 0,
+    "regressionCurrentRubric": {
+      "correct": 370,
+      "partial": 223,
+      "incorrect": 1189
+    },
+    "classification": "derived reassessment of preserved actual responses; provisional automated rubric"
+  },
+  "cost": {
+    "knownLowerBoundUsd": 24.88206782,
+    "notBillingStatement": true,
+    "unmeteredOrLostUsageUnknown": true
+  },
+  "localApp": {
+    "url": "http://localhost:3000/",
+    "revision": "feat-uaeu-knowledge-expansion-v38-awaiting-live-retest",
+    "healthCheckedWithoutPaidRequest": true,
+    "providerConfiguredIsNotProofOfAvailableCredit": true,
+    "prototypeDb": ":memory:",
+    "auxiliaryServersStopped": true
+  },
+  "sharedLog": {
+    "url": "https://docs.google.com/document/d/10lWlUnyx4mJrcVWIqJsaFe-Ya0aEOecZcSwiXV0p1hc/edit",
+    "latestStatusAppended": true,
+    "previousContentPrefixPreserved": true,
+    "fullFinalLogComplete": false,
+    "endOfTestingAdded": false
+  },
+  "remaining": [
+    "Calibrate strict reviewer against positive and negative actual-answer controls after provider restored.",
+    "Run focused live checks of v38 fixes; do not mark fixed before passing.",
+    "Freeze current code/data/grader/provider; run all 600 examiner submissions and all 1782 regression submissions (889/893 shards).",
+    "Run all 100 browser main cases on final candidate.",
+    "Rebuild old-data control with identical final code and review actual answers; lost v9 crawl snapshot cannot be reconstructed or claimed.",
+    "Source/manual adjudicate results; v1 reviewer scores must not be reused.",
+    "Resolve or honestly report literal and near answer repetition; strict anti-FAQ success is not established.",
+    "Finish final change inventory, causal before/after comparison, commands, cost, gaps and limitations.",
+    "Publish complete final conversations in linked continuation Google Docs, verify append preservation, and add final bold red END OF TESTING only when finished."
+  ],
+  "queuedTask": {
+    "name": "FR3/FR4 memory and personalization",
+    "requestAttachment": "/Users/aliabdullah/.codex/attachments/27b8f984-a5d7-46f2-90f1-4209db78670e/Pasted text.txt",
+    "startCondition": "knowledge expansion and Examiner100 report completed",
+    "started": false,
+    "branchCreated": false,
+    "memoryPlanCreated": false
+  },
+  "remoteActions": {
+    "push": false,
+    "deployment": false,
+    "pullRequest": false,
+    "teammateMessage": false
+  }
+}

@@ -1,0 +1,1008 @@
+{
+  "startedAt": "2026-11-04T05:11:01.038Z",
+  "base": "http://127.0.0.1:3001",
+  "label": "baseline-historical-course",
+  "fixture": "evals/knowledge-expansion-2026-11-04.json",
+  "fixtureSha256": "aeb42addd35eea0e4616903f4eefd7046aba0500a67d98f0b0d01778e0866092",
+  "methodology": "Expected facts extracted independently from original official HTML; automated scoring is provisional and requires source/semantic review. Each variant is an isolated conversation unless explicit follow-up turns are listed. Duplicate phrasing corrections are audited separately; corrected variants receive a fresh baseline.",
+  "results": [
+    {
+      "id": "KE328",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "College of Business and Economics",
+      "turns": [
+        "In 2015–2016, what was the prerequisite for ACCT 334 Governmental Accounting?"
+      ],
+      "expected": "The 2015–2016 course catalog page2 lists ACCT334 Governmental Accounting,3.00CH, prerequisite ACCT225. No minimum letter grade is printed in that course record; do not import a current prerequisite/grade rule.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "historical prerequisite",
+          "any": [
+            "ACCT\\s*225"
+          ]
+        },
+        {
+          "name": "year retained",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "What did the 2015-2016 UAEU record require before acct-334?",
+        "acct334 in2015–2016: prerequisits plz?",
+        "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟"
+      ],
+      "sourceQuote": "ACCT334 Governmental Accounting (3.00 CH) ... Prerequisites ACCT225",
+      "sourcePage": 2,
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE328",
+      "conversation": [
+        {
+          "user": "In 2015–2016, what was the prerequisite for ACCT 334 Governmental Accounting?",
+          "status": 200,
+          "seconds": 0.191,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (Bachelor of Accounting) from the available official evidence. I could not verify the requested program or cohort plan; that does not prove it does not exist. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official undergraduate programs",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_program",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "historical prerequisite",
+            "passed": false,
+            "patterns": [
+              "ACCT\\s*225"
+            ]
+          },
+          {
+            "name": "year retained",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "historical prerequisite",
+          "year retained"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE328-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "College of Business and Economics",
+      "turns": [
+        "What did the 2015-2016 UAEU record require before acct-334?"
+      ],
+      "expected": "The 2015–2016 course catalog page2 lists ACCT334 Governmental Accounting,3.00CH, prerequisite ACCT225. No minimum letter grade is printed in that course record; do not import a current prerequisite/grade rule.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "historical prerequisite",
+          "any": [
+            "ACCT\\s*225"
+          ]
+        },
+        {
+          "name": "year retained",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "What did the 2015-2016 UAEU record require before acct-334?",
+        "acct334 in2015–2016: prerequisits plz?",
+        "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟"
+      ],
+      "sourceQuote": "ACCT334 Governmental Accounting (3.00 CH) ... Prerequisites ACCT225",
+      "sourcePage": 2,
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE328",
+      "conversation": [
+        {
+          "user": "What did the 2015-2016 UAEU record require before acct-334?",
+          "status": 200,
+          "seconds": 0.142,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (ACCT334) from the available official evidence. I could not find a matching course record for this identifier; I will not substitute another course. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official course catalog",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_course",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "historical prerequisite",
+            "passed": false,
+            "patterns": [
+              "ACCT\\s*225"
+            ]
+          },
+          {
+            "name": "year retained",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "historical prerequisite",
+          "year retained"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE328-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "College of Business and Economics",
+      "turns": [
+        "acct334 in2015–2016: prerequisits plz?"
+      ],
+      "expected": "The 2015–2016 course catalog page2 lists ACCT334 Governmental Accounting,3.00CH, prerequisite ACCT225. No minimum letter grade is printed in that course record; do not import a current prerequisite/grade rule.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "historical prerequisite",
+          "any": [
+            "ACCT\\s*225"
+          ]
+        },
+        {
+          "name": "year retained",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "What did the 2015-2016 UAEU record require before acct-334?",
+        "acct334 in2015–2016: prerequisits plz?",
+        "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟"
+      ],
+      "sourceQuote": "ACCT334 Governmental Accounting (3.00 CH) ... Prerequisites ACCT225",
+      "sourcePage": 2,
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE328",
+      "conversation": [
+        {
+          "user": "acct334 in2015–2016: prerequisits plz?",
+          "status": 200,
+          "seconds": 0.17,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (ACCT334) from the available official evidence. I could not find a matching course record for this identifier; I will not substitute another course. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official course catalog",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_course",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "historical prerequisite",
+            "passed": false,
+            "patterns": [
+              "ACCT\\s*225"
+            ]
+          },
+          {
+            "name": "year retained",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "historical prerequisite",
+          "year retained"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE328-V3",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "college": "College of Business and Economics",
+      "turns": [
+        "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟"
+      ],
+      "expected": "The 2015–2016 course catalog page2 lists ACCT334 Governmental Accounting,3.00CH, prerequisite ACCT225. No minimum letter grade is printed in that course record; do not import a current prerequisite/grade rule.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "historical prerequisite",
+          "any": [
+            "ACCT\\s*225"
+          ]
+        },
+        {
+          "name": "year retained",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "What did the 2015-2016 UAEU record require before acct-334?",
+        "acct334 in2015–2016: prerequisits plz?",
+        "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟"
+      ],
+      "sourceQuote": "ACCT334 Governmental Accounting (3.00 CH) ... Prerequisites ACCT225",
+      "sourcePage": 2,
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE328",
+      "conversation": [
+        {
+          "user": "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟",
+          "status": 200,
+          "seconds": 2.263,
+          "payload": {
+            "role": "assistant",
+            "content": "ما رمز واسم المساق الذي تقصده؟ تختلف المتطلبات السابقة حسب المساق والخطة الدراسية.",
+            "source": "escalated",
+            "stateLabel": "clarify_subject",
+            "citations": [],
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "disposition": "clarify",
+            "clarificationReason": "missing_subject"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "historical prerequisite",
+            "passed": false,
+            "patterns": [
+              "ACCT\\s*225"
+            ]
+          },
+          {
+            "name": "year retained",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "historical prerequisite",
+          "year retained"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE329",
+      "category": "academics",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "What were the prerequisites for CSBP219 in 2015?"
+      ],
+      "expected": "No verified2015CSBP219record was found in the inspected source. Do not silently apply the undated/current CSBP219 prerequisite to2015 or claim universal nonexistence. Acknowledge the specific historical evidence gap.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "historical evidence limitation",
+          "any": [
+            "do not have.*matching",
+            "cannot verify",
+            "could not verify",
+            "no.*verified",
+            "not.*record",
+            "not.*2015",
+            "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+            "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+          ]
+        }
+      ],
+      "forbidden": [
+        "CSBP119"
+      ],
+      "variants": [
+        "CSBP 219: show me its2015 prerequisite rule.",
+        "What was required before csbp-219 back in2015?",
+        "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟"
+      ],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE329",
+      "conversation": [
+        {
+          "user": "What were the prerequisites for CSBP219 in 2015?",
+          "status": 200,
+          "seconds": 3.767,
+          "payload": {
+            "role": "assistant",
+            "content": "CSBP219 Object Oriented Programming is a 3-credit undergraduate course whose prerequisite is CSBP119 Algorithms and Problem Solving with a minimum grade of D.\n\nI cannot view your personal student record; this explains the published rules, not an individual eligibility decision.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Course Catalog — CSBP219 Object Oriented Programming",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219",
+                "lastVerified": "2026-09-29"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "CSBP219",
+            "evidenceIds": [
+              "09-csbp219-object-oriented-programming.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "CSBP219 Object Oriented Programming is a 3-credit undergraduate course whose prerequisite is CSBP119 Algorithms and Problem Solving with a minimum grade of D.",
+                "evidenceIds": [
+                  "09-csbp219-object-oriented-programming.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "historical evidence limitation",
+            "passed": true,
+            "patterns": [
+              "do not have.*matching",
+              "cannot verify",
+              "could not verify",
+              "no.*verified",
+              "not.*record",
+              "not.*2015",
+              "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+              "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [
+          "CSBP119"
+        ],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE329-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "CSBP 219: show me its2015 prerequisite rule."
+      ],
+      "expected": "No verified2015CSBP219record was found in the inspected source. Do not silently apply the undated/current CSBP219 prerequisite to2015 or claim universal nonexistence. Acknowledge the specific historical evidence gap.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "historical evidence limitation",
+          "any": [
+            "do not have.*matching",
+            "cannot verify",
+            "could not verify",
+            "no.*verified",
+            "not.*record",
+            "not.*2015",
+            "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+            "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+          ]
+        }
+      ],
+      "forbidden": [
+        "CSBP119"
+      ],
+      "variants": [
+        "CSBP 219: show me its2015 prerequisite rule.",
+        "What was required before csbp-219 back in2015?",
+        "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟"
+      ],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE329",
+      "conversation": [
+        {
+          "user": "CSBP 219: show me its2015 prerequisite rule.",
+          "status": 502,
+          "seconds": 2.065,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. You can retry; verified stored answers remain available.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 1,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "historical evidence limitation",
+            "passed": true,
+            "patterns": [
+              "do not have.*matching",
+              "cannot verify",
+              "could not verify",
+              "no.*verified",
+              "not.*record",
+              "not.*2015",
+              "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+              "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE329-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "What was required before csbp-219 back in2015?"
+      ],
+      "expected": "No verified2015CSBP219record was found in the inspected source. Do not silently apply the undated/current CSBP219 prerequisite to2015 or claim universal nonexistence. Acknowledge the specific historical evidence gap.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "historical evidence limitation",
+          "any": [
+            "do not have.*matching",
+            "cannot verify",
+            "could not verify",
+            "no.*verified",
+            "not.*record",
+            "not.*2015",
+            "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+            "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+          ]
+        }
+      ],
+      "forbidden": [
+        "CSBP119"
+      ],
+      "variants": [
+        "CSBP 219: show me its2015 prerequisite rule.",
+        "What was required before csbp-219 back in2015?",
+        "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟"
+      ],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE329",
+      "conversation": [
+        {
+          "user": "What was required before csbp-219 back in2015?",
+          "status": 200,
+          "seconds": 0.148,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (CSBP219) from the available official evidence. I could not find a matching course record for this identifier; I will not substitute another course. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official course catalog",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_course",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "historical evidence limitation",
+            "passed": true,
+            "patterns": [
+              "do not have.*matching",
+              "cannot verify",
+              "could not verify",
+              "no.*verified",
+              "not.*record",
+              "not.*2015",
+              "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+              "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE329-V3",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Weird Case",
+      "turns": [
+        "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟"
+      ],
+      "expected": "No verified2015CSBP219record was found in the inspected source. Do not silently apply the undated/current CSBP219 prerequisite to2015 or claim universal nonexistence. Acknowledge the specific historical evidence gap.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "historical evidence limitation",
+          "any": [
+            "do not have.*matching",
+            "cannot verify",
+            "could not verify",
+            "no.*verified",
+            "not.*record",
+            "not.*2015",
+            "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+            "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+          ]
+        }
+      ],
+      "forbidden": [
+        "CSBP119"
+      ],
+      "variants": [
+        "CSBP 219: show me its2015 prerequisite rule.",
+        "What was required before csbp-219 back in2015?",
+        "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟"
+      ],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE329",
+      "conversation": [
+        {
+          "user": "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟",
+          "status": 200,
+          "seconds": 2.301,
+          "payload": {
+            "role": "assistant",
+            "content": "المساق CSBP219 البرمجة كائنية التوجه يتطلب إكمال مساق CSBP119 الخوارزميات وحل المشكلات بدرجة لا تقل عن D كمتطلب سابق، وذلك حسب سجل الكتالوج المتوفر حتى عام 2026.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Course Catalog — CSBP219 Object Oriented Programming",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219",
+                "lastVerified": "2026-09-29"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "CSBP219",
+            "evidenceIds": [
+              "09-csbp219-object-oriented-programming.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "المساق CSBP219 البرمجة كائنية التوجه يتطلب إكمال مساق CSBP119 الخوارزميات وحل المشكلات بدرجة لا تقل عن D كمتطلب سابق، وذلك حسب سجل الكتالوج المتوفر حتى عام 2026.",
+                "evidenceIds": [
+                  "09-csbp219-object-oriented-programming.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "historical evidence limitation",
+            "passed": false,
+            "patterns": [
+              "do not have.*matching",
+              "cannot verify",
+              "could not verify",
+              "no.*verified",
+              "not.*record",
+              "not.*2015",
+              "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+              "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [
+          "CSBP119"
+        ],
+        "missing": [
+          "historical evidence limitation"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "881c83e94791522d5f3029cf9ab74de3c109a91add4c6bfcd8014582b53970fc",
+    "files": 99,
+    "servingSnapshot": "/private/tmp/uaeu-expansion-baseline-2026-11-04"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "25e5edf7bc92c7730971c55b35976b90bea42806c5852c30d6336cde0c8bf353",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "concurrency": 3,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 1,
+    "partial": 1,
+    "incorrect": 6
+  },
+  "finishedAt": "2026-11-04T05:11:19.513Z",
+  "runtimeAfter": {
+    "sha256": "881c83e94791522d5f3029cf9ab74de3c109a91add4c6bfcd8014582b53970fc",
+    "files": 99,
+    "servingSnapshot": "/private/tmp/uaeu-expansion-baseline-2026-11-04"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "25e5edf7bc92c7730971c55b35976b90bea42806c5852c30d6336cde0c8bf353",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 2.065,
+    "p95": 3.767,
+    "max": 3.767
+  },
+  "usage": {
+    "measuredAnswers": 0,
+    "totalAnswers": 8,
+    "estimatedUsd": null,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "KE328-V1",
+      "KE328-V2"
+    ]
+  ]
+}
