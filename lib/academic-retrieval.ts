@@ -222,7 +222,7 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
     // Explicit cohorts, catalog/model contrasts and requested course lists keep
     // their original evidence and all material publication differences.
     const onlyCreditCounts = facets.has("credits") && [...facets].every(facet => facet === "credits" || facet === "electives") && !meaning.years.length
-      && !/model|cohort|study plan|which|list|available|options|نموذج|دفع[ةه]|خط[ةه]|ما هي|ماهي|قائم[ةه]|متاح/u.test(text);
+      && !/\b(?:model|cohort|study plan|which|list|available|options)\b|نموذج|دفع[ةه]|خط[ةه]|ما هي|ماهي|قائم[ةه]|متاح/u.test(text);
     const aggregates = onlyCreditCounts ? eligible.filter(({document,section}) => !document.scope?.years?.length && /credit breakdown|degree credit requirement|published curriculum|degree structure/u.test(normalizeQuery(section.split("\n").slice(0,3).join(" ")))) : [];
     const chosen = aggregates.length ? aggregates : eligible;
     rows.push(...chosen.map(({ document, section }) => row(document, section, section.split("\n")[0].replace(/^## /, ""))));

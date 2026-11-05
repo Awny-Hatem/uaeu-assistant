@@ -94,12 +94,12 @@ export function academicCoverageViolations(answer: GroundedAnswer, sources: Sour
       const bound = source.text.match(/\b(?:published )?minimum\s*(?:is|of|:)?\s*(\d+)\s*(?:credit(?: hours?)?|hours?)/iu)?.[1];
       const total = bound ?? source.text.match(/published\s+(\d+)[ -]credit\s+degree structure/iu)?.[1];
       const ownText = normalizeQuery(answer.claims.filter(claim=>claim.evidenceIds.includes(source.id)).map(claim=>claim.text).join("\n"));
-      if (total && !new RegExp(`\\b${total}\\b`).test(ownText)) violations.push(`The requested program's source ${source.id} establishes ${total} degree credit hours. State that program's total under its own source; the same number under a different program does not answer this part.`);
+      if (total && !new RegExp(`\\b${total}\\b`).test(ownText)) violations.push(`The requested program's source ${source.id} establishes ${total} degree credit hours. State that program's total under its own source${bound ? ', explicitly qualified as a minimum / at least / حد أدنى' : ''}; the same number under a different program does not answer this part.`);
       const elective = source.text.match(/(\d+)\s+major electives|major electives\s+(\d+)/iu);
       const electiveHours = elective?.[1] ?? elective?.[2];
       if (/elective|اختياري/u.test(q) && electiveHours && !new RegExp(`\\b${electiveHours}\\b`).test(ownText)) violations.push(`The requested source ${source.id} establishes ${electiveHours} major-elective credit hours. Include that program's elective count under this source instead of borrowing another program's number.`);
 
-      for (const claim of answer.claims.filter(claim=>claim.evidenceIds.includes(source.id))) if (bound && normalizeQuery(claim.text).includes(bound) && !/minimum|at least|حد\s+(?:ال)?ادنى|على الاقل/u.test(normalizeQuery(claim.text))) violations.push(`This source publishes a minimum of ${bound} credit hours; preserve the minimum qualification in its degree-total claim instead of asserting an unqualified exact total.`);
+      for (const claim of answer.claims.filter(claim=>claim.evidenceIds.includes(source.id))) if (bound && normalizeQuery(claim.text).includes(bound) && !/minimum|at least|حد\s+(?:ال)?ادنى|على الاقل/u.test(normalizeQuery(claim.text))) violations.push(`Source ${source.id} publishes a minimum of ${bound} credit hours; preserve the minimum qualification (minimum / at least / حد أدنى) in its degree-total claim instead of asserting an unqualified exact total.`);
     }
 
   }
