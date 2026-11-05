@@ -3,6 +3,7 @@ import { describeAiProviderError, generateAssistantResponse } from "@/lib/ai-pro
 import { recordAnalyticsEvent, classifyTopic } from "@/lib/analytics";
 import { citationsForFaq, citationForGuide, uniqueCitations, CONTACT_CITATION } from "@/lib/citations";
 import { courseIdentityConflict, faqAnswer, faqScope, loadFaqEntries, matchFaq, type AnswerDisposition } from "@/lib/faq";
+import { classifyDeadlineScope, deadlineRecordMatches } from "@/lib/agent-v2/deadline-scope";
 import { getGemini, embeddingModel } from "@/lib/gemini";
 import { evidenceIsRelevant, retrieveVerifiedEvidence, type EvidenceRow } from "@/lib/knowledge-files";
 import { resolveLocale } from "@/lib/language";
@@ -747,14 +748,35 @@ export async function POST(req: Request) {
   }
   const resolution = resolveConversation(sanitized, latest);
   const routingQuery = buildRoutingQuery(sanitized, latest);
+  const currentDeadlineScope = classifyDeadlineScope(latest);
+  const deadlineScope = currentDeadlineScope.kind === "missing-domain" && resolution.usedContext
+    ? classifyDeadlineScope(routingQuery)
+    : currentDeadlineScope;
+  if (deadlineScope.kind === "missing-domain" || deadlineScope.kind === "ambiguous-domain") {
+    const content = locale === "ar"
+      ? deadlineScope.kind === "missing-domain"
+        ? "أي موعد نهائي تقصد: القبول، أم المنح، أم التسجيل الأكاديمي، أم خدمة أخرى؟ أحتاج إلى تحديد العملية حتى لا أستبدل موعدًا بآخر."
+        : `ذكرت أكثر من عملية (${deadlineScope.domains.join("، ")}). أي موعد تريد تحديده؟ سأتحقق من كل عملية على حدة.`
+      : deadlineScope.kind === "missing-domain"
+        ? "Which deadline do you mean: admissions, scholarships, course registration, or another process? I need the process name so I do not substitute one deadline for another."
+        : `Your question names more than one process (${deadlineScope.domains.join(", ")}). Which deadline should I check? I will keep each process separate.`;
+    const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "clarify_deadline_domain", disposition: "clarify", citations: [], clarificationReason: "ambiguous_subject" };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
   const communications = matchCommunications(routingQuery);
-  const standaloneFaq = matchFaq(latest);
+  const matchedStandaloneFaq = matchFaq(latest);
+  const standaloneFaq = matchedStandaloneFaq && deadlineScope.kind === "scoped" &&
+    !deadlineRecordMatches(deadlineScope.domain, matchedStandaloneFaq.entry.id, matchedStandaloneFaq.entry.category, matchedStandaloneFaq.entry.questions.join(" "))
+    ? null : matchedStandaloneFaq;
   const needsPreviousSubject = requiresPreviousSubject(latest) || (resolution.needsClarification && !standaloneFaq);
   const directFaqHit = needsPreviousSubject || resolution.usedContext ? null : standaloneFaq;
   const contextualFaqHit = matchFaq(routingQuery);
   let faqHit = needsPreviousSubject && !previousUserMessage(sanitized)
     ? null
     : directFaqHit ?? contextualFaqHit;
+  if (faqHit && deadlineScope.kind === "scoped" &&
+    !deadlineRecordMatches(deadlineScope.domain, faqHit.entry.id, faqHit.entry.category, faqHit.entry.questions.join(" "))) faqHit = null;
   const acknowledgement = conversationAcknowledgement(latest);
 
   if (acknowledgement) {
@@ -904,6 +926,19 @@ export async function POST(req: Request) {
   }, latest, locale, 503);
   if (!directFaqHit || resolution.usedContext || resolution.needsClarification) {
     semantic = await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
+    if (semantic && deadlineScope.kind === "scoped") {
+      const selectedIds = semantic.primaryRecordIds?.length ? semantic.primaryRecordIds : semantic.recordIds;
+      const selectedEntries = loadFaqEntries().filter((entry) => selectedIds.includes(entry.id));
+      if (selectedEntries.length && selectedEntries.some((entry) =>
+        !deadlineRecordMatches(deadlineScope.domain, entry.id, entry.category, entry.questions.join(" ")))) {
+        const content = locale === "ar"
+          ? "لم أتمكن من مطابقة مصدر موثوق مع نوع الموعد الذي طلبته. لن أستبدله بموعد لعملية أخرى. حدّد الفصل/السنة وفئة المتقدم، أو تواصل مع مكتب القبول المختص للتحقق من الموعد الحالي."
+          : "I could not match the selected official record to the deadline process you asked about, so I will not substitute another process's date. Tell me the intake/year and applicant category, or confirm the current date with the responsible UAEU office.";
+        const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "deadline_evidence_scope_mismatch", disposition: "clarify", citations: [], clarificationReason: "missing_official_evidence" };
+        if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+        return respond(payload, latest, locale);
+      }
+    }
     if (semantic) {
       const semanticAcknowledgementIsSafe = semantic.kind !== "acknowledge" || conversationAcknowledgement(latest) !== null;
       if (semanticAcknowledgementIsSafe && ["acknowledge", "greeting", "capabilities"].includes(semantic.kind)) {
