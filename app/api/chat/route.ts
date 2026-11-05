@@ -874,8 +874,9 @@ async function handleChat(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  const exactPrepared = faqHit && !resolution.usedContext && [...faqHit.entry.questions, ...(faqHit.entry.matchPhrases ?? [])].some(question => normalizeQuery(question) === normalizeQuery(latest));
-  let academic = exactPrepared ? null : retrieveAcademicEvidence(routingQuery);
+  const majorRecommendation = isProgramRecommendation(routingQuery);
+  const exactPrepared = !majorRecommendation && faqHit && !resolution.usedContext && [...faqHit.entry.questions, ...(faqHit.entry.matchPhrases ?? [])].some(question => normalizeQuery(question) === normalizeQuery(latest));
+  let academic = exactPrepared || majorRecommendation ? null : retrieveAcademicEvidence(routingQuery);
   const corpusIdentity = expandCorpusQuery(routingQuery);
   const identifiedCourse = requestedCourseTargets(routingQuery).length > 0;
   // A longer named program (Mathematics Education) must not borrow a shorter
@@ -888,7 +889,7 @@ async function handleChat(req: Request) {
   // answers this request. A larger corpus must not replace that precise record
   // with loosely related handbook pages. This is evidence for the writer only.
   const serviceMeaning = understandQuery(routingQuery);
-  const directReviewedRoute = !academic?.rows.length && !identifiedCourse && !serviceMeaning.years.length && !corpusIdentity.programs?.length && directFaqHit && directFaqHit.score >= 1000
+  const directReviewedRoute = !majorRecommendation && !academic?.rows.length && !identifiedCourse && !serviceMeaning.years.length && !corpusIdentity.programs?.length && directFaqHit && directFaqHit.score >= 1000
     ? { resolvedQuery:routingQuery,subject:serviceMeaning.subjects[0]??directFaqHit.entry.category,recordIds:[],primaryRecordIds:[directFaqHit.entry.id],targetCourseCodes:[],clarification:"",kind:"answer" } satisfies SemanticRoute : null;
   const reviewedService = directReviewedRoute && canonicalEntriesForSemanticRoute(directReviewedRoute).length ? evidenceForSemanticRoute(directReviewedRoute) : [];
   const workflowRequest = /step by step|walk.{0,20}through|\bguide\b|how (?:do|can|to)\b|\b(?:request|apply for|order)\b|خطوات|كيف|ابا|ابي|اريد|أريد|ابغي|أبغى|بدي/iu.test(latest);
@@ -903,11 +904,11 @@ async function handleChat(req: Request) {
   let selectionUnavailable = false;
   const selectionFailure = (reason: "provider_unavailable" | "invalid_contract") => { if (reason === "provider_unavailable") selectionUnavailable = true; };
   const collegeDirectoryRequest = Boolean(corpusIdentity.colleges?.length) && /programs?|degrees?|offer|برامج|تخصصات/iu.test(routingQuery) && !/credit|hours?|semester|ساع|فصل/iu.test(routingQuery);
-  const earlySemantic = (publicServiceRequest || publicUniversityRequest || collegeDirectoryRequest) && !identifiedCourse && !exactPrepared && !academic?.rows.length && !workflowEvidence.length && !reviewedService.length
+  const earlySemantic = !majorRecommendation && (publicServiceRequest || publicUniversityRequest || collegeDirectoryRequest) && !identifiedCourse && !exactPrepared && !academic?.rows.length && !workflowEvidence.length && !reviewedService.length
     ? await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure) : null;
   const earlyEntries = earlySemantic?.kind === "answer" ? canonicalEntriesForSemanticRoute({ ...earlySemantic, resolvedQuery: routingQuery }) : [];
   const reviewedSemanticEvidence = earlyEntries.flatMap(entry=>evidenceForSemanticRoute({ resolvedQuery:routingQuery, subject:earlySemantic!.subject, recordIds:[], primaryRecordIds:[entry.id], targetCourseCodes:requestedCourseTargets(routingQuery), clarification:"", kind:"answer" }));
-  const expansionEvidence = workflowEvidence.length ? workflowEvidence : reviewedService.length ? reviewedService : reviewedSemanticEvidence.length ? reviewedSemanticEvidence : !exactPrepared && !academic?.rows.length && academic?.gap !== "ambiguous" && !missingCorpusSubject && !unverifiedProgramIdentity ? await hybridRetrieve(routingQuery, 8, deadlineAt) : [];
+  const expansionEvidence = majorRecommendation ? await hybridRetrieve(routingQuery, 8, deadlineAt) : workflowEvidence.length ? workflowEvidence : reviewedService.length ? reviewedService : reviewedSemanticEvidence.length ? reviewedSemanticEvidence : !exactPrepared && !academic?.rows.length && academic?.gap !== "ambiguous" && !missingCorpusSubject && !unverifiedProgramIdentity ? await hybridRetrieve(routingQuery, 8, deadlineAt) : [];
   if (academic?.gap && expansionEvidence.length) academic = { ...academic, rows: expansionEvidence, gap: undefined };
   if (academic?.gap) {
     const identities = academic.identifiers?.join(" / ") ?? "";
@@ -1019,18 +1020,19 @@ async function handleChat(req: Request) {
 
   const context = buildContextBlock(evidenceSources, userContext);
   const responseLanguage = locale === "ar" ? "Arabic" : "English";
-  const requestStyle = /\b(?:hey|plz|pls|im|i.m)\b/i.test(latest) ? "Use a brief conversational explanation with ordinary verbs, addressed naturally to the student. Rephrase the evidence in spoken English or Arabic; do not copy a catalog-style source sentence. Preserve all necessary conditions."
-    : /\bchecklist\b|قائمة تحقق|قائمة مختصرة/iu.test(latest) ? "Write an actual short advisor checklist: label the requested fields or actions clearly and phrase each item for that checklist, rather than copying full source paragraphs. Keep all material conditions; omit an introductory paragraph."
-    : /\bnew (?:uaeu )?student\b|طالب جديد|طالبة جديدة/iu.test(latest) ? "Orient a new student in explanatory prose: unpack the named abbreviation, term or source applicability when the source establishes it, and make the requested fact easy to interpret. Reword the explanation rather than transcribing the source sentence. Separate distinct requested facts, and never invent another fact to make the answer longer."
-    : /:|\btotal (?:credit|hour)/i.test(latest) && latest.length < 180 ? "Use a compact answer to the requested value or list; omit a stock introductory sentence."
-    : /according to|catalog entry|published/i.test(latest) ? "State precisely what the named publication establishes, with its qualification and cohort when relevant."
+  const presentationRequest = resolution.usedContext ? `${previousUserMessage(sanitized) ?? ""}\n${latest}` : latest;
+  const requestStyle = /\b(?:hey|plz|pls|im|i.m)\b/i.test(presentationRequest) ? "Use a brief conversational explanation with ordinary verbs, addressed naturally to the student; when explaining a requirement, use the second-person conditional (you need / تحتاج) without asserting personal eligibility. Rephrase the evidence in spoken English or Arabic; do not copy a catalog-style source sentence. Preserve all necessary conditions."
+    : /\bchecklist\b|قائمة تحقق|قائمة مختصرة/iu.test(presentationRequest) ? "Write an actual short advisor checklist: label the requested fields or actions clearly and phrase each item for that checklist, rather than copying full source paragraphs. Keep all material conditions; omit an introductory paragraph."
+    : /\bnew (?:uaeu )?student\b|طالب جديد|طالبة جديدة/iu.test(presentationRequest) ? "Orient a new student in explanatory prose: unpack the named abbreviation, term or source applicability when the source establishes it, and make the requested fact easy to interpret. Reword the explanation rather than transcribing the source sentence. Separate distinct requested facts, and never invent another fact to make the answer longer."
+    : /:|\btotal (?:credit|hour)/i.test(presentationRequest) && latest.length < 180 ? "Use a compact answer to the requested value or list; omit a stock introductory sentence."
+    : /according to|catalog entry|published/i.test(presentationRequest) ? "State precisely what the named publication establishes, with its qualification and cohort when relevant."
     : "Match the latest question naturally and focus on its requested facts.";
   const mixedLanguageStyle=locale==='ar'&&/[a-z]{2,}/iu.test(latest)?"Reply naturally in Arabic and retain the student's useful Latin university/course abbreviations in the answer when identifying those same source-established entities; give their Arabic names too when the source establishes them. Keep people's published Arabic names and local office terminology accurate.":"";
   const creditTotalStyle = /\b(?:credits?|hours?)\b|ساعات|ساع[ةه]/iu.test(routingQuery) && !/working hours|office hours|opening hours|ساعات العمل|اوقات العمل|semester|elective|breakdown|courses?|prerequis|corequis|فصل|اختياري|تقسيم|مساق|مقرر|متطلب/iu.test(routingQuery)
     ? "For this total-credit request, state the published total and exact qualification. Avoid adding unrequested course counts, arithmetic or an assumed catalog year."
     : "";
   const academicRequirements = academicCoverageViolations({ claims: [], clarification: "", disposition: "answer" }, evidenceSources, routingQuery);
-  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nREQUEST STYLE: ${requestStyle} ${mixedLanguageStyle} ${creditTotalStyle}\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}\nREQUESTED PROGRAM IDENTITIES (alias resolution, not evidence): ${academic?.identifiers?.join(" / ") ?? "as named in the request"}. Do not substitute a different program mentioned incidentally in a source.\n\n${context}\n\nREQUESTED-FACT COMPLETENESS (all facts must still cite their own supplied source):\n${academicRequirements.join("\n")}\nFor course readiness or concurrency, prefer describing the published prerequisite and pre/corequisite relationships. If giving permission (including يمكنك), place ALL prior conditions and concurrent conditions in that same conditional claim. A separate later paragraph cannot qualify an earlier unconditional permission.`;
+  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}\nREQUESTED PROGRAM IDENTITIES (alias resolution, not evidence): ${academic?.identifiers?.join(" / ") ?? "as named in the request"}. Do not substitute a different program mentioned incidentally in a source.\n\n${context}\n\nREQUESTED-FACT COMPLETENESS (all facts must still cite their own supplied source):\n${academicRequirements.join("\n")}\nFor course readiness or concurrency, prefer describing the published prerequisite and pre/corequisite relationships. If giving permission (including يمكنك), place ALL prior conditions and concurrent conditions in that same conditional claim. A separate later paragraph cannot qualify an earlier unconditional permission.\n\nFINAL ANSWER PRESENTATION: ${requestStyle} ${mixedLanguageStyle} ${creditTotalStyle} Apply this to the wording of the factual claims themselves while preserving the exact source-supported meaning. A checklist request needs labeled fields or actions, not an unchanged catalog sentence. A casual request should use conversational sentence structure rather than a catalog definition. Do not add filler, invented facts, random greetings or formatting solely to make answers different.`;
   const history = trimHistory(sanitized, 12);
   const roleOverride=/\b(?:ignore|disregard).{0,45}(?:previous|system|instructions)|\b(?:new|override).{0,20}system (?:rule|instructions?)|تجاهل.{0,35}(?:التعليمات|تعليمات)|تعليمات النظام الجديدة/iu.test(latest);
   if(roleOverride){

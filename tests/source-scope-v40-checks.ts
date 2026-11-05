@@ -7,6 +7,16 @@ import {loadFaqEntries,faqScope} from '../lib/faq';
 import type {GroundedAnswer} from '../lib/provider-response';
 async function main(){
  let passed=0;const pass=(s:string)=>{passed++;console.log('PASS '+s);};
+ delete process.env.OPENAI_API_KEY;
+ for(const [years,amount,other] of [['2025–2026','2500','2,661'],['2026–2027','2,661','2500']]){
+   const rows=await hybridRetrieve(`What are Computer Science tuition fees for international students admitted in ${years}?`);
+   assert.ok(rows[0].citations?.[0].url?.includes('program-and-housing-rates-international-students-undergraduate-students'));
+   assert.ok(rows[0].text.includes('Computer Science'));assert.ok(rows[0].text.includes(amount));assert.ok(!rows[0].text.includes(other));
+   assert.ok(rows[0].scope?.years?.includes(Number(years.slice(0,4))));
+   pass(`actual indexed tuition retrieval ranks the ${years} table and excludes the other admission year's amount`);
+ }
+ const recommended=await hybridRetrieve('أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟');
+ assert.ok(recommended.length>=2);assert.ok(recommended.slice(0,2).some(r=>r.text.includes('Data Science and Artificial Intelligence')));assert.ok(recommended.slice(0,2).some(r=>r.text.includes('Computer and Artificial Intelligence Engineering')));assert.ok(recommended.every(r=>r.source.startsWith('corpus:')));pass('Arabic interests retrieve published full-program descriptions rather than a college directory');
  const q='How many credits does the Master of Science in Genomic Medicine require?';
  delete process.env.OPENAI_API_KEY;const sources=sourceEvidence((await hybridRetrieve(q)).filter(r=>r.citations?.some(c=>c.url?.includes('/master-of-science-in-genomic-medicine.shtml'))));assert.ok(sources.length>=2);const first=sources.find(s=>/minimum[^\n]{0,20}33|33 credit hours/iu.test(s.text))!;assert.ok(first);
  const answer:GroundedAnswer={claims:[{text:'The Master of Science in Genomic Medicine requires a minimum of 33 credit hours.',evidenceIds:[first.id]}],clarification:'',disposition:'answer'};

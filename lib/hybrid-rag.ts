@@ -151,6 +151,18 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
   if(calendarDomain&&calendarEvents.length)qTerms.push(...terms('academic calendar '+meaning.terms.join(' ')+' '+(calendarEvents.length>1?'Classes Begin Last day to add courses':/اضاف|\badd\b/u.test(queryText)?'Last day to add courses':'Classes Begin')));
   const asksFees = /\b(?:fees?|tuition|costs?)\b|رسوم|تكلف/u.test(queryText) && !/\bnot (?:the )?(?:fees?|tuition|costs?)\b/u.test(queryText);
   const majorRecommendation=isProgramRecommendation(query);
+  // Interest wording is often Arabic while program descriptions are English.
+  // Translate only understood concepts for recall, then require the actual
+  // program excerpt to establish the fit; a college directory is insufficient.
+  const interestConcepts = [
+    [/\bai\b|artificial intelligence|الذكاء الاصطناعي/u, /\bai\b|artificial intelligence|الذكاء الاصطناعي/u, "artificial intelligence"],
+    [/programming|البرمج[ةه]/u, /programming|برمج/u, "programming"],
+  ] as const;
+  const requestedInterests=majorRecommendation?interestConcepts.filter(([request])=>request.test(queryText)):[];
+  if(requestedInterests.length)qTerms.push(...terms(requestedInterests.map(([, ,label])=>label).join(' ')));
+  const namedFeeProgram=(c:Chunk)=>asksFees&&Boolean(expanded.programs?.some(program=>fold(c.text).includes(program)));
+  const feeTable=(c:Chunk)=>namedFeeProgram(c)&&/per\s*cr\.?\s*fee|fee per credit|رسوم الساعة/iu.test(c.heading+' '+c.text);
+
   const recommendationLetter = /recommendation letters?|reference letters?|(?:رسالة|خطاب) توصية|تزكية/u;
   const requestedLetter=recommendationLetter.test(queryText);
   const wantsLetterIssuance = requestedLetter
@@ -236,7 +248,7 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
   if (qTerms.length) {
     const baseExpression = qTerms.slice(0, 48).map(t => `"${t.replaceAll('"', '""')}"`).join(" OR ");
     const expression = asksFees ? `(${baseExpression}) AND (fee OR fees OR tuition OR aed OR charge OR charges OR free OR رسوم OR درهم OR مجاني OR مجانية)` : baseExpression;
-    const scopedIds = [...byId.values()].filter(c => expanded.topics.includes(c.topicId) || Boolean(c.program && expanded.programs?.includes(fold(c.program)))).map(c => c.id);
+    const scopedIds = [...byId.values()].filter(c => expanded.topics.includes(c.topicId) || Boolean(c.program && expanded.programs?.includes(fold(c.program))) || feeTable(c)).map(c => c.id);
     const scoped: {id:string;rank:number}[] = [];
     // Query eligible identity rows BEFORE the global result limit. Otherwise a
     // repeated directory can fill that limit and hide the actual credit table.
@@ -277,22 +289,20 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     const exactCourse=targets.includes(c.courseCode);
     const identity=expanded.topics.includes(c.topicId) || Boolean(c.program && expanded.programs?.includes(fold(c.program)));
     const structuredCalendarMatch=calendarDomain&&calendarEvents.length>0&&wantedYears.length>0;
-    if (!exactCourse && !identity && !structuredCalendarMatch && !(overlap>=2 && overlap/Math.max(1,originalTerms.length)>=0.2) && (denseScores.get(id)??0)<0.47) return [];
+    const matchingInterests=requestedInterests.filter(([,description])=>description.test(body)).length;
+    if (!exactCourse && !identity && !structuredCalendarMatch && !feeTable(c) && !matchingInterests && !(overlap>=2 && overlap/Math.max(1,originalTerms.length)>=0.2) && (denseScores.get(id)??0)<0.47) return [];
     let rerank=score + (c.language === preferredLanguage ? 0.004 : 0) + (/breakdown|categor|تقسيم/u.test(queryText) && /degree credit breakdown/i.test(c.heading) ? 0.16 : 0) + (firstSemester && /Semester 1.*course list/i.test(c.heading) ? 0.15 : 0) + (simpleCredits && identity && /required credit hours|degree credit requirement/i.test(c.heading) ? 0.09 : 0) + overlap*0.004 + (identity?0.025:0) + (exactCourse?0.08:0);
     if(majorRecommendation&&!wantedYears.length&&c.temporal==='undated-current-page'&&c.program&&['bachelor','master','doctorate'].includes(c.qualification))rerank+=0.035;
     if (majorRecommendation && c.program && ["bachelor", "master", "doctorate"].includes(c.qualification)) {
-      const interestConcepts = [
-        [/\bai\b|artificial intelligence|الذكاء الاصطناعي/u, /\bai\b|artificial intelligence|الذكاء الاصطناعي/u],
-        [/programming|البرمج[ةه]/u, /programming|برمج/u],
-      ] as const;
-      rerank += interestConcepts.filter(([request, description]) => request.test(queryText) && description.test(body)).length * 0.035;
+      rerank += matchingInterests * 0.035;
       if (!meaning.degreeLevel && c.qualification === "bachelor") rerank += 0.025;
     }
     // A graduation-credit total is not a tuition rate. Prefer monetary facts
     // within the eligible programme/year rather than a matching degree heading.
     if (asksFees) {
       const monetary = /\b(?:aed|dirhams?)\b|درهم|(?:tuition|application|رسوم).{0,50}\d|\d.{0,50}(?:tuition|application fee|رسوم)/u.test(fold(c.heading+' '+c.text));
-      if (monetary) rerank += 0.10;
+      if (feeTable(c)) rerank += 0.24;
+      else if (monetary) rerank += 0.10;
       else if (/required credit hours|degree credit requirement|degree credit breakdown/i.test(c.heading)) rerank -= 0.10;
     }
     for(const [queryFacet,evidenceFacet] of [

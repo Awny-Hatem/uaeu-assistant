@@ -249,7 +249,7 @@ async function generateWithOpenAiAttempt(args: GenerateArgs): Promise<ProviderRe
           })),
         max_output_tokens: maxOutputTokens(),
         store: false,
-        temperature: args.evidenceIds ? 0.25 : 0.1,
+        temperature: args.evidenceIds ? 0.45 : 0.1,
         ...(args.responseSchema || args.evidenceIds ? { text: { format: { type: "json_schema", name: args.responseSchema?.name ?? "grounded_answer", strict: true, schema: args.responseSchema?.schema ?? groundedAnswerSchema(args.evidenceIds!) } } } : {}),
       }),
     });
