@@ -19,6 +19,18 @@ If extraction changes, stop the crawler, run `python3 scripts/knowledge/reextrac
 
 `--retry-transient` explicitly requeues one attempt for previously timed-out,429 or5xx public sources, preserving the previous failure metadata. It does not automatically loop and does not requeue permanent404errors. Source responses that look like not-found pages despite HTTP200are logged as soft404, not accepted as knowledge.
 
+## Repair one cached tabbed source
+
+When a source puts years or audiences in tab labels outside the visible table, the extractor retains each label with its own panel, including inactive panels. To repair an already approved document after changing extraction, stop live evaluation batches, then run:
+
+```sh
+python3 scripts/knowledge/repair-tab-scopes.py --cache .uaeu-crawl --url https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-international-students-undergraduate-students.shtml --apply
+npx tsx scripts/knowledge/index.ts
+python3 scripts/knowledge/readable-index.py
+```
+
+The repair reads the original cached bytes, verifies their checksum and changes only the selected approved document and its manifest/cache metadata. It preserves the original fetched and verified dates and saves a local cache backup. It does not claim a fresh web verification. Review the emitted repair report and check the indexed section years before starting a new frozen test batch.
+
 ## Ingest and index
 
 ```sh

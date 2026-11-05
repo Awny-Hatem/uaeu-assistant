@@ -185,20 +185,28 @@ class Crawler:
         links=[{'url':canonical(urljoin(u,a.get('href'))),'text':' '.join(a.text_content().split())} for a in doc.xpath('//a[@href]') if public_link(urljoin(u,a.get('href')))]
         alternate=[canonical(urljoin(u,a.get('href'))) for a in doc.xpath('//link[@rel="alternate"][@href]') if public_link(urljoin(u,a.get('href')))]
         title=' '.join(doc.xpath('//title/text()'))
+        # Tab labels are factual scope, often an admission year. Navigation is
+        # removed below, so bind its printed label to the referenced panel first.
+        tab_labels={}
+        for tab in doc.xpath('//*[@role="tab"][@aria-controls] | //*[@data-tabs-target]'):
+            target=(tab.get('aria-controls') or tab.get('data-tabs-target') or '').lstrip('#')
+            label=' '.join(tab.text_content().split())
+            if target and label and re.fullmatch(r'[A-Za-z0-9_-]+',target):tab_labels[target]=label
+
         for el in doc.xpath('//script|//style|//header|//footer|//nav|//*[@role="navigation"]|//*[contains(concat(" ",normalize-space(@class)," ")," tab-items ")]|//form[.//input[@type="password"]]|//input|//select|//textarea|//svg|//*[@aria-hidden="true"]|//*[contains(concat(" ",normalize-space(@class)," ")," breadcrumb ")]'):
-            el.drop_tree()
+            if el.get('id') not in tab_labels:el.drop_tree()
         main=doc.xpath('//main') or doc.xpath('//body') or [doc];node=main[0]
-        sections=[];heading='Overview';parts=[];hierarchy={}
+        sections=[];heading='Overview';parts=[];hierarchy={};active_tabs=[]
         def flush():
             nonlocal parts
             text=re.sub(r'[ \t]+',' ',''.join(parts))
             text=re.sub(r' *\n *','\n',text);text=re.sub(r'\n{3,}','\n\n',text).strip()
-            if text or heading:sections.append({'heading':heading,'text':text})
+            if text or heading:sections.append({'heading':' > '.join(active_tabs+[heading]),'text':text})
             parts=[]
         def add_text(value):
             value=' '.join((value or '').split())
             if value:parts.append(' '+value+' ')
-        def walk(el):
+        def walk_content(el):
             nonlocal heading
             if not isinstance(el.tag,str):return
             tag=el.tag.lower();classes=(el.get('class') or '').split()
@@ -219,6 +227,13 @@ class Crawler:
             for child in el:
                 walk(child);add_text(child.tail)
             if tag in ['p','div','li','ul','ol','section','article','dl','dt','dd','br']:parts.append('\n')
+        def walk(el):
+            nonlocal heading
+            label=tab_labels.get(el.get('id')) if isinstance(el.tag,str) else None
+            if not label:return walk_content(el)
+            flush();previous_heading=heading;previous_hierarchy=hierarchy.copy()
+            active_tabs.append(label);walk_content(el);flush();active_tabs.pop()
+            hierarchy.clear();hierarchy.update(previous_hierarchy);heading=previous_heading
         walk(node);flush()
         text='\n\n'.join(s['heading']+'\n'+s['text'] for s in sections)
         return {'kind':'html','title':title,'soft404':any(re.fullmatch(r'(?:.* > )?(?:page not found!?|404 error|403 forbidden)',s['heading'],re.I) for s in sections),'sections':sections,'links':links,'alternates':alternate,'text':text,'quality':'structured-html'}

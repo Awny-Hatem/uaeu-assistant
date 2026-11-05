@@ -7,6 +7,15 @@ from ingest import academic_years,bilingual_program_names,calendar_years
 from policy_metadata import policy_metadata
 
 class CrawlTests(unittest.TestCase):
+    def test_tab_year_scope_survives_navigation_removal_and_hidden_panels(self):
+        raw=b'<html><title>Fees</title><body><main><h1>Tuition</h1><div class="tab-items"><a role="tab" aria-controls="fees-new">Fees 2026/2027 and onwards</a><a role="tab" aria-controls="fees-old">Fees 2025/2026 and before</a></div><div id="fees-new"><h2>College of Test</h2><table><tr><th>Program</th><th>Fee</th></tr><tr><td>BSc Test</td><td>2661</td></tr></table></div><div id="fees-old" aria-hidden="true"><h2>College of Test</h2><table><tr><th>Program</th><th>Fee</th></tr><tr><td>BSc Test</td><td>2500</td></tr></table></div></main></body></html>'
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1);d=c.extract(raw,'https://www.uaeu.ac.ae/en/fees.shtml','text/html');c.db.close()
+        new=[s for s in d['sections'] if '2661' in s['text']];old=[s for s in d['sections'] if '2500' in s['text']]
+        self.assertEqual(len(new),1);self.assertEqual(len(old),1)
+        self.assertIn('2026/2027',new[0]['heading']);self.assertNotIn('2025/2026',new[0]['heading'])
+        self.assertIn('2025/2026',old[0]['heading']);self.assertNotIn('2026/2027',old[0]['heading'])
+
     def test_streamed_export_preserves_all_sources_without_large_sqlite_sort(self):
         with tempfile.TemporaryDirectory() as root:
             crawler=Crawler(root,1)

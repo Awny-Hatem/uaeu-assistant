@@ -1,6 +1,6 @@
 # UAEU knowledge index
 
-Updated 2026-11-04T22:40:29.566282+00:00. **8,379 approved knowledge documents**, including 67 curated and 8,312 crawled sources. **143,834 indexed sections**; 154 reviewed answers; 11 guided workflows; 16,982 entity alias records.
+Updated 2026-11-05T08:22:59.887580+00:00. **8,379 approved knowledge documents**, including 67 curated and 8,312 crawled sources. **143,834 indexed sections**; 155 reviewed answers; 11 guided workflows; 16,982 entity alias records.
 
 Use the readable titles below to open source files in VS Code. Stable hash filenames prevent name collisions; they do not hide the document title. This navigation index is not itself chatbot evidence. Verification dates confirm access, not policy effective dates.
 
@@ -8721,6 +8721,7 @@ Use the readable titles below to open source files in VS Code. Stable hash filen
 | library-research-data-assistance | library | [Source](https://www.uaeu.ac.ae/en/library/research-data-services.shtml) | [Open pack](../verified-answers/observed-source-gaps.json) |
 | university-overview-enrollment | university | [Source](https://www.uaeu.ac.ae/en/about/overview.shtml) | [Open pack](../verified-answers/observed-source-gaps.json) |
 | university-overview-quoted-rankings | university | [Source](https://www.uaeu.ac.ae/en/about/overview.shtml) | [Open pack](../verified-answers/observed-source-gaps.json) |
+| university-homepage-rankings | university | [Source](https://www.uaeu.ac.ae/en/) | [Open pack](../verified-answers/observed-source-gaps.json) |
 | account-password-reset | it | [Source](https://selfservice.uaeu.ac.ae/), [Source](https://jobnavigator.uaeu.ac.ae/login.jsp) | [Open pack](../verified-answers/student-services.json) |
 | student-portal-sign-in | it | [Source](https://my.uaeu.ac.ae/), [Source](https://ssb.uaeu.ac.ae/prod/twbkwbis.P_ValLogin), [Source](https://selfservice.uaeu.ac.ae/) | [Open pack](../verified-answers/student-services.json) |
 | multi-factor-authentication-reset | it | [Source](https://www.uaeu.ac.ae/en/vc/doit/), [Source](https://selfservice.uaeu.ac.ae/) | [Open pack](../verified-answers/student-services.json) |
