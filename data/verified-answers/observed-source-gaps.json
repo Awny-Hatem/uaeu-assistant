@@ -148,6 +148,44 @@
         "role": "Reviewed source-specific evidence for observed v34 failures; generated prose still requires source verification",
         "beforeRun": "reports/knowledge-expansion-2026-11-04/regression-v34-1.json and regression-v34-2.json"
       }
+    },
+    {
+      "id": "university-homepage-rankings",
+      "category": "university",
+      "questions": [
+        "What QS global and THE global rankings are displayed on the UAEU homepage?",
+        "What is UAEU ranked according to the current homepage cards?",
+        "ما تصنيفا QS وTHE العالميان المعروضان في الصفحة الرئيسية لجامعة الإمارات؟",
+        "ما أرقام تصنيف الجامعة العالمي في صفحتها الرئيسية؟"
+      ],
+      "matchPhrases": [
+        "UAEU homepage rankings",
+        "QS global THE global",
+        "تصنيف QS THE الصفحة الرئيسية"
+      ],
+      "answer_en": "The UAEU homepage UAEU at a Glance cards inspected on 5 November 2026 display QS Global Rankings #217, THE Global Rankings 235, and QS Arab Region Rankings #5. These are figures displayed in those homepage cards, which do not identify a ranking edition/year; the inspection date is not a ranking edition. Preserve the named ranking body and global versus Arab-region scope.",
+      "answer_ar": "تعرض بطاقات UAEU at a Glance في الصفحة الرئيسية، كما فحصت في 5 نوفمبر 2026، المرتبة 217 في تصنيف QS العالمي والمرتبة 235 في تصنيف THE العالمي والمرتبة الخامسة في تصنيف QS للمنطقة العربية. لا تحدد هذه البطاقات سنة إصدار كل تصنيف؛ تاريخ الفحص ليس سنة التصنيف. يجب الحفاظ على اسم الجهة والتمييز بين التصنيف العالمي والإقليمي.",
+      "scope": {
+        "subjects": [
+          "university"
+        ]
+      },
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Homepage UAEU at a Glance Rankings",
+          "url": "https://www.uaeu.ac.ae/en/",
+          "lastVerified": "2026-11-05",
+          "sourceSection": "UAEU at a Glance QS Arab Region Rankings QS Global Rankings THE Global Rankings",
+          "evidenceText": "The homepage UAEU at a Glance cards display QS Arab Region Rankings #5; QS - Global Rankings #217; THE - Global Rankings 235. No ranking edition/year is printed in those cards. These are homepage display figures, not a claim about an unprinted ranking edition."
+        }
+      ],
+      "review": {
+        "reviewedBy": "Codex",
+        "sourceSha256": "06be65962a07841436379516751c954d747a603cc7913231387c3edf09fe4a6a",
+        "sourceFetchedAt": "2026-11-04T02:27:26.819442+00:00",
+        "method": "Existing crawl already contained both figures; v39 all six homepage variants selected a different overview page instead. Curated source ownership fixes observed retrieval failure; this is not newly discovered raw web knowledge."
+      }
     }
   ],
   "schemaVersion": 1

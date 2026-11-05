@@ -111,6 +111,11 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
   const admission = meaning.subjects.includes("admissions") || /\b(?:admissions?|ielts|apply|applying|reject)\b|قبول|ايلتس|اقدم|التقديم|التقدم|رفض/u.test(text);
   const docs = (needle: string) => documents.filter(document => document.filename.includes(needle)).map(document => row(document, document.content));
 
+  if (/rankings?|تصنيف|تصنيفا/u.test(text) && !/overview|صفحة التعريف|صفحه التعريف/u.test(text) && !meaning.years.length) return {rows:reviewed("university-homepage-rankings")};
+  const standingRequest = /good academic standing|الوضع الاكاديمي الجيد|وضع اكاديمي جيد/u.test(text);
+  const medicineOnly = /medicine|الطب/u.test(text) && !/outside.{0,25}medicine|exclud.{0,25}medicine|except.{0,25}medicine|خارج.{0,20}الطب|باستثناء.{0,20}الطب|غير.{0,15}الطب/u.test(text);
+  if (standingRequest && !medicineOnly) return {rows:reviewed("undergraduate-good-standing")};
+
   if (/\b(?:attire|dress code|gown|clothing)\b|زي التخرج|ملابس التخرج/u.test(text) && /graduation|ceremony|تخرج/u.test(text)) return {rows:docs("graduation-attire-source-gap"),citation:{title:"UAEU commencement — lookup page; current attire rules unverified",url:"https://www.uaeu.ac.ae/en/commencement/",lastVerified:"2026-11-03"}};
   if (/\bstudent clubs?\b|\bclubs?.*join\b|اندية|نوادي/u.test(text) && !/\b(?:create|found|start|establish)\b|تاسيس|انشاء/u.test(text)) return {rows:docs("campus-life-student-clubs")};
 

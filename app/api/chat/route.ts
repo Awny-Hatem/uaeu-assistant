@@ -593,12 +593,12 @@ function missingSubjectContent(query: string, locale: "ar" | "en", candidates: s
 function groundedClarification(kind: GroundedAnswer["clarification"], query: string, locale: "ar" | "en"): string {
   const meaning = understandQuery(query);
   if (!kind) return "";
-  if (kind === "applicant_category" && (meaning.applicantCategory || meaning.degreeLevel === "postgraduate" || !meaning.subjects.some(subject => ["admissions", "tuition", "scholarship"].includes(subject)))) return "";
+  if (kind === "applicant_category" && (isProgramRecommendation(query) || meaning.applicantCategory || meaning.degreeLevel === "postgraduate" || !meaning.subjects.some(subject => ["admissions", "tuition", "scholarship"].includes(subject)))) return "";
   if (kind === "degree_level" && meaning.degreeLevel) return "";
   if (kind === "term_year" && meaning.terms.length && meaning.years.length) return "";
   if (kind === "term_year" && meaning.codes.length && !meaning.intents.some((intent) => ["deadline", "start"].includes(intent)) && !/\b(?:offered|offering|available|semester|term|year)\b|فصل|سنة|طرح/iu.test(query)) return "";
   if (kind === "course_identity" && meaning.codes.length) return "";
-  if (kind === "student_status" && /\b(?:current student|currently enrolled|alumni|alumnus|former student)\b|طالب حالي|خريج/i.test(query)) return "";
+  if (kind === "student_status" && /\b(?:current student|currently enrolled|alumni|alumnus|former student)\b|طالب(?:[ةه])?\s+(?:حالي|مسجل|مقيد)|خريج/iu.test(normalizeQuery(query))) return "";
   if (kind === "request_type" && (meaning.subjects.length || meaning.codes.length)) return "";
   if (kind === "unverified_fact") return handoffContent("low_confidence", locale, query);
   const questions = {
@@ -624,8 +624,8 @@ function withActionBoundary(content: string, query: string, locale: "ar" | "en")
   if (portalQuestion && asksAssistantAccess) content += locale === "ar"
     ? "\n\nلا أستطيع فتح حسابك في Blackboard أو قراءة محتوى مساقاتك الخاصة. أستطيع شرح المعلومات العامة؛ تحقق من محتوى المساق بعد تسجيل الدخول أو مع مدرس المساق."
     : "\n\nI cannot access your Blackboard account or read your private course content. I can explain public information; check your course content after signing in or with your instructor.";
-  const asksSuggestionGuarantee = /(?:which|what).{0,30}(?:major|program|degree)|recommend|suggest|اي.{0,25}تخصص|يناسب/iu.test(normalizeQuery(query))
-    && /(?:guarantee|guaranteed).{0,60}(?:admi|admit)|(?:admi|admit).{0,60}guarantee|(?:يضمن|تضمن|ضمان).{0,30}القبول/iu.test(query);
+  const asksSuggestionGuarantee = isProgramRecommendation(query)
+    && /guarantee|guaranteed|يضمن|تضمن|ضمان/iu.test(query) && /admi|admit|قبول/iu.test(query);
   if (asksSuggestionGuarantee && !/(?:not|no).{0,30}guarantee|admission.{0,30}not guaranteed|لا.{0,20}يضمن/iu.test(content)) content += locale === "ar"
     ? "\n\nاقتراح تخصص في هذه المحادثة لا يضمن القبول ولا يمثل قرار قبول أو تحققاً من أهليتك الشخصية."
     : "\n\nA program suggestion from this chat does not guarantee admission or constitute an admission decision or a check of your personal eligibility.";
@@ -802,7 +802,8 @@ async function handleChat(req: Request) {
     return respond(payload, latest, locale);
   }
 
-  const generalRequest = !resolution.usedContext && !/\b(?:uaeu|university|campus)\b|جامع[ةه]|الحرم/iu.test(latest) &&
+  const liveWeatherRequest = !resolution.usedContext && /\bweather\b|طقس/iu.test(latest) && !/\b(?:policy|classes|class|closure|cancel|cancellation|attendance)\b|سياس|محاضر|الدراس|الغاء|إلغاء|تاجيل|تأجيل/iu.test(latest);
+  const generalRequest = liveWeatherRequest || !resolution.usedContext && !/\b(?:uaeu|university|campus)\b|جامع[ةه]|الحرم/iu.test(latest) &&
     (/\b(?:write|compose|generate|create)\b[\s\S]{0,100}\b(?:poem|story|joke|recipe|tutorial|code|script)\b|(?:اكتب|انشئ).{0,80}(?:قصيدة|قصة|نكتة|وصفة|كود)/iu.test(latest) || /\bweather\b|حالة الطقس|الطقس اليوم/iu.test(latest));
   if (generalRequest) {
     const payload: AssistantPayload = { role: "assistant", source: "conversation", stateLabel: "out_of_scope", disposition: "answer", citations: [CONTACT_CITATION],
@@ -953,7 +954,7 @@ async function handleChat(req: Request) {
     return respond(payload, latest, locale);
   }
   const meaning = understandQuery(routingQuery);
-  const needsApplicantCategory = !faqHit && !meaning.codes.length && meaning.subjects.includes("admissions") && meaning.intents.some((intent) => ["requirements", "eligibility"].includes(intent)) && !meaning.applicantCategories.length && !meaning.degreeLevel?.includes("postgraduate") && !meaning.intents.includes("deadline");
+  const needsApplicantCategory = !isProgramRecommendation(routingQuery) && !faqHit && !meaning.codes.length && meaning.subjects.includes("admissions") && meaning.intents.some((intent) => ["requirements", "eligibility"].includes(intent)) && !meaning.applicantCategories.length && !meaning.degreeLevel?.includes("postgraduate") && !meaning.intents.includes("deadline");
 
   let canonicalEntries: import("@/lib/faq").FaqEntry[] = [];
   let recoveryEvidence: EvidenceRow[] | undefined;
@@ -1018,13 +1019,13 @@ async function handleChat(req: Request) {
 
   const context = buildContextBlock(evidenceSources, userContext);
   const responseLanguage = locale === "ar" ? "Arabic" : "English";
-  const requestStyle = /\b(?:hey|plz|pls|im|i.m)\b/i.test(latest) ? "Use a short, plain spoken reply addressed to the student; preserve all necessary conditions."
-    : /\bchecklist\b|قائمة تحقق|قائمة مختصرة/iu.test(latest) ? "Use a short checklist of the requested source-backed facts; keep all material conditions and avoid an introductory paragraph."
-    : /\bnew (?:uaeu )?student\b|طالب جديد|طالبة جديدة/iu.test(latest) ? "Orient a new student briefly: explain an abbreviation or applicability condition when the supplied source supports it. Separate distinct requested facts clearly, and do not invent a second fact when the source supports only one."
+  const requestStyle = /\b(?:hey|plz|pls|im|i.m)\b/i.test(latest) ? "Use a brief conversational explanation with ordinary verbs, addressed naturally to the student. Rephrase the evidence in spoken English or Arabic; do not copy a catalog-style source sentence. Preserve all necessary conditions."
+    : /\bchecklist\b|قائمة تحقق|قائمة مختصرة/iu.test(latest) ? "Write an actual short advisor checklist: label the requested fields or actions clearly and phrase each item for that checklist, rather than copying full source paragraphs. Keep all material conditions; omit an introductory paragraph."
+    : /\bnew (?:uaeu )?student\b|طالب جديد|طالبة جديدة/iu.test(latest) ? "Orient a new student in explanatory prose: unpack the named abbreviation, term or source applicability when the source establishes it, and make the requested fact easy to interpret. Reword the explanation rather than transcribing the source sentence. Separate distinct requested facts, and never invent another fact to make the answer longer."
     : /:|\btotal (?:credit|hour)/i.test(latest) && latest.length < 180 ? "Use a compact answer to the requested value or list; omit a stock introductory sentence."
     : /according to|catalog entry|published/i.test(latest) ? "State precisely what the named publication establishes, with its qualification and cohort when relevant."
     : "Match the latest question naturally and focus on its requested facts.";
-  const mixedLanguageStyle=locale==='ar'&&/[a-z]{2,}/iu.test(latest)?"Reply naturally in Arabic while retaining useful university/course abbreviations the student used. Keep people's published Arabic names and local office terminology accurate.":"";
+  const mixedLanguageStyle=locale==='ar'&&/[a-z]{2,}/iu.test(latest)?"Reply naturally in Arabic and retain the student's useful Latin university/course abbreviations in the answer when identifying those same source-established entities; give their Arabic names too when the source establishes them. Keep people's published Arabic names and local office terminology accurate.":"";
   const creditTotalStyle = /\b(?:credits?|hours?)\b|ساعات|ساع[ةه]/iu.test(routingQuery) && !/working hours|office hours|opening hours|ساعات العمل|اوقات العمل|semester|elective|breakdown|courses?|prerequis|corequis|فصل|اختياري|تقسيم|مساق|مقرر|متطلب/iu.test(routingQuery)
     ? "For this total-credit request, state the published total and exact qualification. Avoid adding unrequested course counts, arithmetic or an assumed catalog year."
     : "";

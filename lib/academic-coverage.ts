@@ -93,16 +93,31 @@ export function academicCoverageViolations(answer: GroundedAnswer, sources: Sour
     for (const source of totalSources) {
       const bound = source.text.match(/\b(?:published )?minimum\s*(?:is|of|:)?\s*(\d+)\s*(?:credit(?: hours?)?|hours?)/iu)?.[1];
       const total = bound ?? source.text.match(/published\s+(\d+)[ -]credit\s+degree structure/iu)?.[1];
-      const ownText = normalizeQuery(answer.claims.filter(claim=>claim.evidenceIds.includes(source.id)).map(claim=>claim.text).join("\n"));
+      // Two sections of one scoped program publication can independently
+      // establish the same total. Coverage needs the program fact once, not a
+      // redundant copy under every excerpt ID. Different programs, cohorts,
+      // degree levels and conflicting totals remain separate requirements.
+      const singleProgramPublication = /\/(?:bachelor|master|doctor|phd|bsc|msc|diploma)[^/]*\.shtml$/iu.test(source.citation.url?.split("#")[0] ?? "");
+      const family = totalSources.filter(other => other.id === source.id || singleProgramPublication &&
+        other.row.title === source.row.title && other.citation.url?.split("#")[0] === source.citation.url?.split("#")[0] &&
+        JSON.stringify(other.row.scope ?? {}) === JSON.stringify(source.row.scope ?? {}) &&
+        (other.text.match(/\b(?:published )?minimum\s*(?:is|of|:)?\s*(\d+)\s*(?:credit(?: hours?)?|hours?)/iu)?.[1] ?? other.text.match(/published\s+(\d+)[ -]credit\s+degree structure/iu)?.[1]) === total);
+      const familyIds = new Set(family.map(other => other.id));
+      const ownText = normalizeQuery(answer.claims.filter(claim=>claim.evidenceIds.some(id=>familyIds.has(id))).map(claim=>claim.text).join("\n"));
       if (total && !new RegExp(`\\b${total}\\b`).test(ownText)) violations.push(`The requested program's source ${source.id} establishes ${total} degree credit hours. State that program's total under its own source${bound ? ', explicitly qualified as a minimum / at least / حد أدنى' : ''}; the same number under a different program does not answer this part.`);
       const elective = source.text.match(/(\d+)\s+major electives|major electives\s+(\d+)/iu);
       const electiveHours = elective?.[1] ?? elective?.[2];
       if (/elective|اختياري/u.test(q) && electiveHours && !new RegExp(`\\b${electiveHours}\\b`).test(ownText)) violations.push(`The requested source ${source.id} establishes ${electiveHours} major-elective credit hours. Include that program's elective count under this source instead of borrowing another program's number.`);
 
-      for (const claim of answer.claims.filter(claim=>claim.evidenceIds.includes(source.id))) if (bound && normalizeQuery(claim.text).includes(bound) && !/minimum|at least|حد\s+(?:ال)?ادنى|على الاقل/u.test(normalizeQuery(claim.text))) violations.push(`Source ${source.id} publishes a minimum of ${bound} credit hours; preserve the minimum qualification (minimum / at least / حد أدنى) in its degree-total claim instead of asserting an unqualified exact total.`);
+      for (const claim of answer.claims.filter(claim=>claim.evidenceIds.includes(source.id))) if (bound && normalizeQuery(claim.text).includes(bound) && !/minimum|at least|not less than|no fewer than|حد(?:ا)?\s+(?:ال)?ادنى|عل[ىي] الاقل|لا\s*(?:يقل|تقل)\s+عن/u.test(normalizeQuery(claim.text))) violations.push(`Source ${source.id} publishes a minimum of ${bound} credit hours; preserve the minimum qualification (minimum / at least / حد أدنى) in its degree-total claim instead of asserting an unqualified exact total.`);
     }
 
   }
+  if (/good academic standing|وضع اكاديمي جيد|الوضع الاكاديمي الجيد/u.test(q) && /cgpa|gpa|معدل/u.test(q)) {
+    const standing = sources.find(source => /(?:2\.00|2\.0).{0,100}(?:Good Academic Standing|وضع اكاديمي جيد)|Good Academic Standing.{0,100}(?:2\.00|2\.0)/iu.test(source.text));
+    if (standing && !/(?<!\d)2(?:[.,]0{1,2})?(?!\d)/u.test(text)) violations.push(`Source ${standing.id} gives the requested good-standing threshold, CGPA at least 2.00 on a 4-point scale. State that threshold, semester-end timing and non-Medicine scope rather than merely saying GPA is considered.`);
+  }
+  if (/liwa|tipasa|تيباسا/u.test(q) && /how long|for how long|loan period|لمد[ةه]|مد[ةه]/u.test(q) && sources.some(source=>/one month|شهر واحد/iu.test(source.text)) && !/month|شهر/iu.test(text)) violations.push("The question asks how long the LIWA Tipasa loan lasts. Include the source's one-month loan period with its own source, alongside the requested item limit and renewals.");
   const itCatalog = sources.some(source => source.row.scope?.subjects?.includes("information-technology") && /minimum.*120|minimum of 120/u.test(source.text));
   const itModel = sources.some(source => source.citation.url?.includes("cit_bsc_information_technology_study_plan.pdf") && /130/u.test(source.text));
   if (degreeCredits && itCatalog && itModel && !(normalized.includes("120") && normalized.includes("130"))) violations.push("Explain both publications: catalog120 versus the separately cited Fall2025–26 model label130. Do not hide the source conflict or certify one for the student's cohort.");

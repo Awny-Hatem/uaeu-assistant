@@ -172,7 +172,7 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     if (expanded.colleges?.length && c.college && !expanded.colleges.some(v => collegeKey(v) === collegeKey(c.college))) return false;
     if (expanded.qualification && c.qualification && expanded.qualification !== c.qualification) return false;
     if (meaning.degreeLevel && c.degreeLevel && meaning.degreeLevel !== c.degreeLevel) return false;
-    if (expanded.topics.length && c.program && !expanded.topics.includes(c.topicId) && !expanded.programs?.includes(identityKey(c.program))) return false;
+    if (!majorRecommendation && expanded.topics.length && c.program && !expanded.topics.includes(c.topicId) && !expanded.programs?.includes(identityKey(c.program))) return false;
     if (wantedYears.length && c.years.length && !yearGroups.some(g => g.every(y => c.years.some(v => v.split('-').includes(String(y)))))) return false;
     if (wantedYears.length && (calendarDomain || targets.length || /deadline|calendar|catalog|cohort|plan|fees?|tuition|cost|موعد|تقويم|دفعة|خطة|رسوم/u.test(queryText)) && !c.years.length && !yearGroups.some(g => g.every(y => c.text.includes(String(y))))) return false;
     if (firstSemester && wantedYears.length && !c.years.length) return false;
@@ -215,6 +215,7 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     ] as const;
     for (const [wanted, found] of relationships) if (wanted.test(queryText) && !found.test(fold(c.title+' '+c.heading+' '+c.text))) return false;
     if (majorRecommendation && !targets.length && c.courseCode) return false;
+    if (majorRecommendation && !c.program) return false; // A college overview is not a sourced degree recommendation.
     if (currentCourseTargets.length && c.temporal==='historical' && currentCourseTargets.some(code=>c.courseCode===code||c.mentionedCodes?.includes(code))) return false;
     if (c.courseCode && c.years.length && currentCourseTargets.includes(c.courseCode)) return false;
     if (firstSemester && /Recommended semester in this model:/i.test(c.text) && !/Recommended semester in this model: 1 \(/i.test(c.text)) return false;
@@ -279,6 +280,14 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     if (!exactCourse && !identity && !structuredCalendarMatch && !(overlap>=2 && overlap/Math.max(1,originalTerms.length)>=0.2) && (denseScores.get(id)??0)<0.47) return [];
     let rerank=score + (c.language === preferredLanguage ? 0.004 : 0) + (/breakdown|categor|تقسيم/u.test(queryText) && /degree credit breakdown/i.test(c.heading) ? 0.16 : 0) + (firstSemester && /Semester 1.*course list/i.test(c.heading) ? 0.15 : 0) + (simpleCredits && identity && /required credit hours|degree credit requirement/i.test(c.heading) ? 0.09 : 0) + overlap*0.004 + (identity?0.025:0) + (exactCourse?0.08:0);
     if(majorRecommendation&&!wantedYears.length&&c.temporal==='undated-current-page'&&c.program&&['bachelor','master','doctorate'].includes(c.qualification))rerank+=0.035;
+    if (majorRecommendation && c.program && ["bachelor", "master", "doctorate"].includes(c.qualification)) {
+      const interestConcepts = [
+        [/\bai\b|artificial intelligence|الذكاء الاصطناعي/u, /\bai\b|artificial intelligence|الذكاء الاصطناعي/u],
+        [/programming|البرمج[ةه]/u, /programming|برمج/u],
+      ] as const;
+      rerank += interestConcepts.filter(([request, description]) => request.test(queryText) && description.test(body)).length * 0.035;
+      if (!meaning.degreeLevel && c.qualification === "bachelor") rerank += 0.025;
+    }
     // A graduation-credit total is not a tuition rate. Prefer monetary facts
     // within the eligible programme/year rather than a matching degree heading.
     if (asksFees) {
