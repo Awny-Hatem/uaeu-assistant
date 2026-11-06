@@ -1,6 +1,6 @@
 {
   "at": "2026-11-04T23:02:30.494610+00:00",
-  "status": "unfinished_waiting_for_provider_credit_or_usage_limit",
+  "status": "live_verification_resumed",
   "candidate": "v38",
   "branch": "feat/uaeu-knowledge-expansion",
   "localCommits": [
@@ -10,9 +10,10 @@
   ],
   "providerBlock": {
     "code": "OPENAI_QUOTA_EXHAUSTED",
-    "paidRunsStopped": true,
+    "paidRunsStopped": false,
     "userAlreadyAsked": true,
-    "noNewPaidProbes": true
+    "noNewPaidProbes": false,
+    "restored": "2026-11-05; actual source-review calls succeeded"
   },
   "counts": {
     "at": "2026-11-04T22:40:29.566282+00:00",
@@ -46,7 +47,7 @@
     "integrity": "12 evaluation + 6 examiner + 16 primary-review contract checks passed; no model accuracy claimed",
     "currentLiveRetest": "NOT RUN; provider blocked",
     "reviewerV1": "INVALIDATED: graded reference instead of actual reply in known bad controls; excluded from final pass claims",
-    "reviewerV2": "Local contract checks passed; positive live calibration incomplete due provider limit"
+    "reviewerV2": "Eight calibration controls behaved conservatively: three known positives passed; five known negatives/incomplete cases did not pass. Finite calibration, not certification."
   },
   "interruptedV37": {
     "examinerSubmissions": 454,

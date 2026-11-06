@@ -1,16 +1,16 @@
 # UAEU Assistant — 100 examiner scenarios
 
-**CURRENT STATUS — 5 November 2026:** local v38 contains further source and retrieval fixes, but its live retest is pending. OpenAI returned a real credit/account/project usage-limit error; the v37 attempt was interrupted at 454/600 submissions. The original v1 secondary reviewer was invalidated and its pass counts are not certification. The historical completed v34 scores below are automated results from that older build. No current all-100 or all-variants success is claimed.
+**CURRENT STATUS — 5 November 2026:** Completed v43: 100/100 main API checks; 597/600 submissions passed automated checks, two partial and one incorrect. Independent source/manual review remains pending. There are 50 identical factual-answer pairs and 92 near-similarity flags; strict anti-FAQ success is not established. No final completion is claimed.
 
 Copy each main question or variation into a new conversation unless follow-ups are specified. Check the official source and the assigned cohort/category.
 
-Latest completed attempt: examiner-all-v34; 2026-11-04T18:31:11.263Z. Main automated results: **98 correct / 1 partly correct / 1 incorrect**. These are provisional automated source/fact checks; they are not an all-variants or independent semantic certification.
+Latest completed attempt: examiner-all-v43; 2026-11-05T08:55:33.542Z. Main automated results: **100 correct / 0 partly correct / 0 incorrect**. These are provisional automated source/fact checks; they are not an all-variants or independent semantic certification.
 
-Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-all-v34.json`. Runtime/data unchanged during the run: **true**.
+Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-all-v43.json`. Runtime/data unchanged during the run: **true**.
 
 ## 1. EX001 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -32,7 +32,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 2. EX002 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -54,7 +54,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 3. EX003 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -76,7 +76,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 4. EX004 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -98,7 +98,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 5. EX005 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -121,7 +121,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 6. EX006 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -143,7 +143,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 7. EX007 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -165,7 +165,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 8. EX008 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -187,7 +187,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 9. EX009 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -209,7 +209,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 10. EX010 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -231,7 +231,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 11. EX011 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -253,7 +253,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 12. EX012 — Programs and accreditation
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -275,7 +275,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 13. EX013 — Programs and accreditation
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -298,7 +298,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 14. EX014 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -320,7 +320,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 15. EX015 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -342,7 +342,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 16. EX016 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -364,7 +364,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 17. EX017 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -386,7 +386,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 18. EX018 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -408,7 +408,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 19. EX019 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -430,7 +430,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 20. EX020 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -452,7 +452,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 21. EX021 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -474,7 +474,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 22. EX022 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -496,7 +496,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 23. EX023 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -518,7 +518,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 24. EX024 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -540,7 +540,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 25. EX025 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -562,7 +562,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 26. EX026 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -584,7 +584,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 27. EX027 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -606,7 +606,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 28. EX028 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -628,7 +628,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 29. EX029 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -650,7 +650,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 30. EX030 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -672,7 +672,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 31. EX031 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -694,7 +694,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 32. EX032 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -716,7 +716,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 33. EX033 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -738,7 +738,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 34. EX034 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -760,7 +760,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 35. EX035 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -782,7 +782,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 36. EX036 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -804,7 +804,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 37. EX037 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -826,7 +826,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 38. EX038 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -849,7 +849,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 39. EX039 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -871,7 +871,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 40. EX040 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: partial
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -893,7 +893,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 41. EX041 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -916,7 +916,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 42. EX042 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -938,7 +938,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 43. EX043 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -960,7 +960,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 44. EX044 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -982,7 +982,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 45. EX045 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1004,7 +1004,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 46. EX046 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1026,7 +1026,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 47. EX047 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1048,7 +1048,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 48. EX048 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1070,7 +1070,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 49. EX049 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1092,7 +1092,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 50. EX050 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1114,7 +1114,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 51. EX051 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ Main API passed; five variants or their fixes still pending
 
 **Main conversation:**
 
@@ -1137,7 +1137,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 52. EX052 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1160,7 +1160,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 53. EX053 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1182,7 +1182,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 54. EX054 — Programs and courses
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1206,7 +1206,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 55. EX055 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1228,7 +1228,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 56. EX056 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1250,7 +1250,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 57. EX057 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1272,7 +1272,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 58. EX058 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1294,7 +1294,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 59. EX059 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1316,7 +1316,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 60. EX060 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1338,7 +1338,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 61. EX061 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1361,7 +1361,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 62. EX062 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1383,7 +1383,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 63. EX063 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1405,7 +1405,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 64. EX064 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1427,7 +1427,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 65. EX065 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1449,7 +1449,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 66. EX066 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1471,7 +1471,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 67. EX067 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1493,7 +1493,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 68. EX068 — Programs and study plans
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ Main API passed; five variants or their fixes still pending
 
 **Main conversation:**
 
@@ -1516,7 +1516,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 69. EX069 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1539,7 +1539,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 70. EX070 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1561,7 +1561,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 71. EX071 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1583,7 +1583,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 72. EX072 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1605,7 +1605,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 73. EX073 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1627,7 +1627,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 74. EX074 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1650,7 +1650,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 75. EX075 — Admissions and money
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1673,7 +1673,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 76. EX076 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1695,7 +1695,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 77. EX077 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1717,7 +1717,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 78. EX078 — Registration and policies
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1739,7 +1739,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 79. EX079 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1762,7 +1762,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 80. EX080 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1786,7 +1786,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 81. EX081 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ Main API passed; five variants or their fixes still pending
 
 **Main conversation:**
 
@@ -1809,7 +1809,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 82. EX082 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1831,7 +1831,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 83. EX083 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1854,7 +1854,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 84. EX084 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1873,10 +1873,11 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 **Official UAEU sources:**
 
 - [Official source](https://www.uaeu.ac.ae/en/campus_life/restaurants/)
+- [Official source](https://www.uaeu.ac.ae/ar/campus_life/restaurants/overview.shtml)
 
 ## 85. EX085 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1899,7 +1900,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 86. EX086 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1921,7 +1922,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 87. EX087 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1940,10 +1941,13 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 **Official UAEU sources:**
 
 - [Official source](https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106)
+- [Official source](https://www.uaeu.ac.ae/ar/admission/orientation/male_housing.shtml)
+- [Official source](https://www.uaeu.ac.ae/ar/admission/orientation/female_housing.shtml)
+- [Official source](https://www.uaeu.ac.ae/ar/admission/orientation/room_allocation.shtml)
 
 ## 88. EX088 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1966,7 +1970,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 89. EX089 — Student services
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -1989,7 +1993,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 90. EX090 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2013,7 +2017,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 91. EX091 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2037,7 +2041,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 92. EX092 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2062,7 +2066,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 93. EX093 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: incorrect
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2088,7 +2092,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 94. EX094 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2109,7 +2113,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 95. EX095 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2131,7 +2135,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 96. EX096 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2156,7 +2160,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 97. EX097 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2181,7 +2185,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 98. EX098 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2203,7 +2207,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 99. EX099 — Tricky and conversational
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 
@@ -2228,7 +2232,7 @@ Actual complete conversations: `reports/knowledge-expansion-2026-11-04/examiner-
 
 ## 100. EX100 — Basics
 
-**Latest status:** ⚠️ v38 live verification pending; historical v34 main: correct
+**Latest status:** ⚠️ All six automated checks passed; independent review pending
 
 **Main conversation:**
 

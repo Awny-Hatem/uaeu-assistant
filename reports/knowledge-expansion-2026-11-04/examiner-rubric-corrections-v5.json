@@ -1,0 +1,44 @@
+{
+  "at": "2026-11-04T09:27:25.979149+00:00",
+  "priorFixtureSha256": "5a61e2f53f28863ac92a33652edc1bbee2e0b1b5ea71d0c692f7f400c9a12cb8",
+  "revisedFixtureSha256": "b4696a913a0caa904d6ae23a14b6921ebe4023aa3370424bcfd66b01454d4dcb",
+  "changes": [
+    {
+      "id": "EX060",
+      "reason": "Require the less-than relationship and permit faithful Arabic expression of two years; the original test only matched English words and could accept the wrong age relationship.",
+      "before": [
+        {
+          "name": "IELTS",
+          "any": [
+            "6\\.5"
+          ]
+        },
+        {
+          "name": "age",
+          "any": [
+            "two years",
+            "2 years"
+          ]
+        }
+      ],
+      "after": [
+        {
+          "name": "IELTS",
+          "any": [
+            "6\\.5"
+          ]
+        },
+        {
+          "name": "age",
+          "any": [
+            "(?:less than|under)\\s+(?:two|2)\\s+years",
+            "أقل من (?:سنتين|عامين)",
+            "اقل من (?:سنتين|عامين)",
+            "أقل من\\s*2\\s*(?:سنة|سنوات|عام)",
+            "اقل من\\s*2\\s*(?:سنة|سنوات|عام)"
+          ]
+        }
+      ]
+    }
+  ]
+}

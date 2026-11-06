@@ -29,7 +29,7 @@
     "test:qa-audit": "tsx tests/qa-audit-regressions.ts",
     "eval:qa-audit": "node evals/run-qa-audit.mjs",
     "eval:examiner": "node evals/run-examiner.mjs",
-    "test:observed-source-scope": "tsx tests/observed-source-scope-checks.ts && tsx tests/source-scope-v40-checks.ts",
+    "test:observed-source-scope": "tsx tests/observed-source-scope-checks.ts && tsx tests/source-scope-v40-checks.ts && tsx tests/academic-service-completeness-checks.ts",
     "test:knowledge": "tsx tests/knowledge-expansion-checks.ts && tsx tests/observed-retrieval-checks.ts && tsx tests/source-claim-grouping-checks.ts",
     "eval:review-sources": "tsx evals/review-primary-sources.mjs"
   },

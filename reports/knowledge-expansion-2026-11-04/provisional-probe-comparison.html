@@ -1,0 +1,176 @@
+<html><head><meta charset="utf-8"><title>Knowledge expansion — local test</title><style>body{font:12pt Arial;line-height:1.4;max-width:1050px;margin:40px auto}h1,h2{color:#8b1631}article{border-top:1px solid #bbb;margin:24px 0;padding-top:12px}pre{white-space:pre-wrap;font:11pt Arial}a{overflow-wrap:anywhere}</style></head><body><h1>Knowledge expansion — local test</h1><p>Local only. Branch feat/uaeu-knowledge-expansion. No push, deployment or PR. The complete raw attempts are retained separately. Unreviewed automated scores are provisional, and are not claimed as independently verified fixes.</p><pre>{
+  &quot;completeRun&quot;: true,
+  &quot;runtimeUnchanged&quot;: false,
+  &quot;afterArtifact&quot;: &quot;reports/knowledge-expansion-2026-11-04/probe-expanded-v3.json&quot;,
+  &quot;scenarioDefinitions&quot;: 327,
+  &quot;newScenarioDefinitions&quot;: 327,
+  &quot;legacyScenarioDefinitions&quot;: 0,
+  &quot;submittedVariants&quot;: 9,
+  &quot;main&quot;: {
+    &quot;correct&quot;: 3,
+    &quot;partial&quot;: 0,
+    &quot;incorrect&quot;: 0
+  },
+  &quot;all&quot;: {
+    &quot;correct&quot;: 8,
+    &quot;partial&quot;: 1,
+    &quot;incorrect&quot;: 0
+  },
+  &quot;beforePaired&quot;: {
+    &quot;correct&quot;: 0,
+    &quot;partial&quot;: 3,
+    &quot;incorrect&quot;: 6
+  },
+  &quot;paired&quot;: 9,
+  &quot;unpaired&quot;: [],
+  &quot;byCategory&quot;: {
+    &quot;academics&quot;: {
+      &quot;correct&quot;: 5,
+      &quot;partial&quot;: 0,
+      &quot;incorrect&quot;: 0
+    },
+    &quot;conversation-boundaries&quot;: {
+      &quot;correct&quot;: 3,
+      &quot;partial&quot;: 1,
+      &quot;incorrect&quot;: 0
+    }
+  },
+  &quot;byLanguage&quot;: {
+    &quot;ar&quot;: {
+      &quot;correct&quot;: 1,
+      &quot;partial&quot;: 1,
+      &quot;incorrect&quot;: 0
+    },
+    &quot;en&quot;: {
+      &quot;correct&quot;: 7,
+      &quot;partial&quot;: 0,
+      &quot;incorrect&quot;: 0
+    }
+  },
+  &quot;latency&quot;: {
+    &quot;median&quot;: 6.031,
+    &quot;p95&quot;: 7.438,
+    &quot;max&quot;: 7.438,
+    &quot;over70SecondHarnessAnomalies&quot;: 0
+  },
+  &quot;usage&quot;: {
+    &quot;answers&quot;: 10,
+    &quot;diagnostics&quot;: 10,
+    &quot;unknownCostAnswers&quot;: 0,
+    &quot;knownUsageUsd&quot;: 0.018581520000000004,
+    &quot;estimatedUsd&quot;: 0.018581520000000004,
+    &quot;baselineCost&quot;: &quot;unknown: old build did not return provider usage&quot;
+  },
+  &quot;identicalFactualParaphraseGroups&quot;: [
+    [
+      &quot;KE032-V2&quot;,
+      &quot;KE032-V4&quot;
+    ]
+  ],
+  &quot;reviewed&quot;: 0,
+  &quot;reviewedImprovements&quot;: [],
+  &quot;limitations&quot;: [
+    &quot;Automated regex scores are provisional without semantic/source review.&quot;,
+    &quot;An unchanged index/source fingerprint is required for a frozen comparison.&quot;,
+    &quot;Before batches are sequential; throughput batches with concurrency3 are not directly comparable latency benchmarks.&quot;,
+    &quot;Unavailable provider usage is unknown, not zero.&quot;,
+    &quot;All previous invalid fixture definitions and failed attempts are retained in their original artifacts.&quot;
+  ]
+}</pre><article><h2>KE032 [Missing Knowledge]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Ecology and Environmental Sciences?</p><p><b>Expected answer:</b> The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ❌ Incorrect</h3><p><b>User:</b> According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Ecology and Environmental Sciences?</p><p><b>Assistant:</b></p><pre>**Please identify the UAEU request**
+I could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.</pre><p>Sources: </p><p>HTTP 200; 4.522 seconds; state model_escalation; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Ecology and Environmental Sciences?</p><p><b>Assistant:</b></p><pre>The Doctor of Philosophy in Ecology and Environmental Sciences requires a minimum of 54 credit hours to complete.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">Doctor of Philosophy in Ecology and Environmental Sciences — https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p>HTTP 200; 4.569 seconds; state local_db; usage {&quot;inputTokens&quot;:4068,&quot;outputTokens&quot;:72,&quot;estimatedUsd&quot;:0.0017336600000000001,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: primary scenario; result ✅ Correct.</p></article><article><h2>KE032-V1 [Missing Knowledge]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?</p><p><b>Expected answer:</b> The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ❌ Incorrect</h3><p><b>User:</b> Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?</p><p><b>Assistant:</b></p><pre>**Please identify the UAEU request**
+I could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.</pre><p>Sources: </p><p>HTTP 200; 4.098 seconds; state model_escalation; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?</p><p><b>Assistant:</b></p><pre>The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">Doctor of Philosophy in Ecology and Environmental Sciences — https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p>HTTP 200; 6.192 seconds; state local_db; usage {&quot;inputTokens&quot;:4119,&quot;outputTokens&quot;:73,&quot;estimatedUsd&quot;:0.0017583200000000003,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: KE032-V1; result ✅ Correct.</p></article><article><h2>KE032-V2 [Missing Knowledge]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu</p><p><b>Expected answer:</b> The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ❌ Incorrect</h3><p><b>User:</b> hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu</p><p><b>Assistant:</b></p><pre>**Please identify the UAEU request**
+I could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.</pre><p>Sources: </p><p>HTTP 200; 5.007 seconds; state model_escalation; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu</p><p><b>Assistant:</b></p><pre>The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours to complete.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">Doctor of Philosophy in Ecology and Environmental Sciences — https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p>HTTP 200; 6.031 seconds; state local_db; usage {&quot;inputTokens&quot;:4060,&quot;outputTokens&quot;:75,&quot;estimatedUsd&quot;:0.0017364000000000004,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: KE032-V2; result ✅ Correct.</p></article><article><h2>KE032-V3 [Missing Knowledge]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟</p><p><b>Expected answer:</b> The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ❌ Incorrect</h3><p><b>User:</b> كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟</p><p><b>Assistant:</b></p><pre>**Please identify the UAEU request**
+I could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.</pre><p>Sources: </p><p>HTTP 200; 3.858 seconds; state model_escalation; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟</p><p><b>Assistant:</b></p><pre>الحد الأدنى للساعات المعتمدة المطلوبة لبرنامج دكتوراه في علم البيئة والعلوم البيئية هو 54 ساعة معتمدة.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">Doctor of Philosophy in Ecology and Environmental Sciences — https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p>HTTP 200; 6.204 seconds; state local_db; usage {&quot;inputTokens&quot;:4154,&quot;outputTokens&quot;:82,&quot;estimatedUsd&quot;:0.00120122,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: KE032-V3; result ✅ Correct.</p></article><article><h2>KE032-V4 [Missing Knowledge]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?</p><p><b>Expected answer:</b> The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ❌ Incorrect</h3><p><b>User:</b> Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?</p><p><b>Assistant:</b></p><pre>**Please identify the UAEU request**
+I could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.</pre><p>Sources: </p><p>HTTP 200; 3.892 seconds; state model_escalation; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?</p><p><b>Assistant:</b></p><pre>The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours to complete.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml">Doctor of Philosophy in Ecology and Environmental Sciences — https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml</a></p><p>HTTP 200; 6.011 seconds; state local_db; usage {&quot;inputTokens&quot;:4121,&quot;outputTokens&quot;:75,&quot;estimatedUsd&quot;:0.0017623200000000004,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: KE032-V4; result ✅ Correct.</p></article><article><h2>KE310 [Weird Case]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> Compare total credits of the UAEU Bachelor of Science in Mechanical Engineering and Master of Science in Mechanical Engineering.</p><p><b>Expected answer:</b> Bachelor132credits; master30credits, separately labelled and sourced.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ⚠️ Partly correct</h3><p><b>User:</b> Compare total credits of the UAEU Bachelor of Science in Mechanical Engineering and Master of Science in Mechanical Engineering.</p><p><b>Assistant:</b></p><pre>The UAEU Master of Science in Mechanical Engineering program requires a minimum of 30 credit hours for completion.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p>HTTP 200; 2.332 seconds; state local_db; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> Compare total credits of the UAEU Bachelor of Science in Mechanical Engineering and Master of Science in Mechanical Engineering.</p><p><b>Assistant:</b></p><pre>The UAEU Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours.
+
+The UAEU Master of Science in Mechanical Engineering requires a minimum of 30 credit hours.</pre><p>Sources: <a href="https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml">UAEU Mechanical Engineering degree requirements and electives — https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p>HTTP 200; 6.039 seconds; state local_db; usage {&quot;inputTokens&quot;:4939,&quot;outputTokens&quot;:126,&quot;estimatedUsd&quot;:0.0021772000000000002,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: primary scenario; result ✅ Correct.</p></article><article><h2>KE310-V1 [Weird Case]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?</p><p><b>Expected answer:</b> Bachelor132credits; master30credits, separately labelled and sourced.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ⚠️ Partly correct</h3><p><b>User:</b> BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?</p><p><b>Assistant:</b></p><pre>The Master of Science in Mechanical Engineering program at UAEU requires a minimum of 30 credit hours.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p>HTTP 200; 2.427 seconds; state local_db; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?</p><p><b>Assistant:</b></p><pre>The Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours.
+
+The Master of Science in Mechanical Engineering requires a minimum of 30 credit hours.</pre><p>Sources: <a href="https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml">UAEU Mechanical Engineering degree requirements and electives — https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p>HTTP 200; 4.515 seconds; state local_db; usage {&quot;inputTokens&quot;:4915,&quot;outputTokens&quot;:122,&quot;estimatedUsd&quot;:0.0021612000000000003,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: KE310-V1; result ✅ Correct.</p></article><article><h2>KE310-V2 [Weird Case]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه.</p><p><b>Expected answer:</b> Bachelor132credits; master30credits, separately labelled and sourced.</p><p><b>Official UAEU source supporting the expected answer:</b><br><a href="https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p><b>Complete conversation:</b></p><h3>Before expansion — ⚠️ Partly correct</h3><p><b>User:</b> قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه.</p><p><b>Assistant:</b></p><pre>برنامج ماجستير العلوم في الهندسة الميكانيكية في جامعة الإمارات يتطلب على الأقل 30 ساعة معتمدة.</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p>HTTP 200; 4.16 seconds; state local_db; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه.</p><p><b>Assistant:</b></p><pre>برنامج ماجستير العلوم في الهندسة الميكانيكية يتطلب حدًا أدنى من 30 ساعة معتمدة.
+
+هل تقصد برنامج بكالوريوس أم ماجستير أم دكتوراه؟</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a></p><p>HTTP 200; 7.438 seconds; state local_db; usage {&quot;inputTokens&quot;:8659,&quot;outputTokens&quot;:219,&quot;estimatedUsd&quot;:0.0038140000000000005,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ⚠️ Partly correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: {&quot;result&quot;:&quot;partial&quot;,&quot;checks&quot;:[{&quot;name&quot;:&quot;bachelor&quot;,&quot;passed&quot;:false,&quot;patterns&quot;:[&quot;132&quot;]},{&quot;name&quot;:&quot;master&quot;,&quot;passed&quot;:true,&quot;patterns&quot;:[&quot;30&quot;]}],&quot;sourcePass&quot;:true,&quot;httpPass&quot;:true,&quot;officialOnly&quot;:true,&quot;unrelated&quot;:[],&quot;missing&quot;:[&quot;bachelor&quot;],&quot;requiresHumanReview&quot;:true,&quot;languagePass&quot;:true}</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: KE310-V2; result ⚠️ Partly correct.</p></article><article><h2>KE312 [Weird Case]</h2><p>Tester name: Codex<br>Date: 2026-11-04<br>Version tested: Local, http://localhost:3000, branch feat/uaeu-knowledge-expansion.</p><p><b>Question or scenario:</b> Compare the Bachelor of Science in Mechanical Engineering and Master of Science in Horticulture credit requirements. → What about its first semester?</p><p><b>Expected answer:</b> The comparison has two programs; clarify which program before answering its plan.</p><p><b>Official UAEU source supporting the expected answer:</b><br></p><p><b>Complete conversation:</b></p><h3>Before expansion — ❌ Incorrect</h3><p><b>User:</b> Compare the Bachelor of Science in Mechanical Engineering and Master of Science in Horticulture credit requirements.</p><p><b>Assistant:</b></p><pre>The Master of Science in Mechanical Engineering requires a minimum of 30 credit hours for the degree.
+
+The Master of Science in Horticulture requires a minimum of 36 credit hours for the degree.
+
+Are you asking about an undergraduate, master&#39;s, or PhD program?</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml">UAEU Master of Science in Mechanical Engineering — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml">UAEU Master of Science in Horticulture — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml</a></p><p>HTTP 200; 2.446 seconds; state local_db; usage unknown</p><p><b>User:</b> What about its first semester?</p><p><b>Assistant:</b></p><pre>Among the listed courses for the Bachelor of Science in Mechanical Engineering Fall 2026–27 cohort first semester, the credit hours total 17 and include MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits).
+
+Are you asking about an undergraduate, master&#39;s, or PhD program?</pre><p>Sources: <a href="https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf">UAEU Mechanical Engineering model plan first semester — https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf</a></p><p>HTTP 200; 2.962 seconds; state local_db; usage unknown</p><h3>Expanded local version</h3><p><b>User:</b> Compare the Bachelor of Science in Mechanical Engineering and Master of Science in Horticulture credit requirements.</p><p><b>Assistant:</b></p><pre>The Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours, including 21 credit hours of general education, 35 credit hours of College of Engineering required courses, 68 credit hours of Mechanical Engineering specialization courses, 2 credit hours for internships, and 6 credit hours of specialization electives.
+
+The Master of Science in Horticulture requires a minimum of 36 credit hours in total for the degree.</pre><p>Sources: <a href="https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml">UAEU Mechanical Engineering degree requirements and electives — https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml</a><br><a href="https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml">UAEU Master of Science in Horticulture — program requirements — https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml</a></p><p>HTTP 200; 3.712 seconds; state local_db; usage {&quot;inputTokens&quot;:4897,&quot;outputTokens&quot;:174,&quot;estimatedUsd&quot;:0.0022372,&quot;unmeteredAttempts&quot;:0}</p><p><b>User:</b> What about its first semester?</p><p><b>Assistant:</b></p><pre>Do you mean Master of Science in Horticulture or Bachelor of Science in Mechanical Engineering? More than one subject was mentioned; which one does this follow-up concern?</pre><p>Sources: </p><p>HTTP 200; 1.424 seconds; state clarify_subject; usage {&quot;inputTokens&quot;:0,&quot;outputTokens&quot;:0,&quot;estimatedUsd&quot;:0,&quot;unmeteredAttempts&quot;:0}</p><p><b>Result: ✅ Correct</b><br>Review status: automated official-source rubric; semantic review still required</p><p>What went wrong, if anything: No automated rubric failure; confirm semantic/source review before claiming an independently verified fix.</p><p>Was the cited source relevant? Expected official source or independently audited identical-content equivalent matched.</p><p>Was the response unusually slow? No response exceeded20seconds.</p><p>Phrasing variation: primary scenario; result ✅ Correct.</p></article><p><b>Summary</b></p><pre>{
+  &quot;completeRun&quot;: true,
+  &quot;runtimeUnchanged&quot;: false,
+  &quot;afterArtifact&quot;: &quot;reports/knowledge-expansion-2026-11-04/probe-expanded-v3.json&quot;,
+  &quot;scenarioDefinitions&quot;: 327,
+  &quot;newScenarioDefinitions&quot;: 327,
+  &quot;legacyScenarioDefinitions&quot;: 0,
+  &quot;submittedVariants&quot;: 9,
+  &quot;main&quot;: {
+    &quot;correct&quot;: 3,
+    &quot;partial&quot;: 0,
+    &quot;incorrect&quot;: 0
+  },
+  &quot;all&quot;: {
+    &quot;correct&quot;: 8,
+    &quot;partial&quot;: 1,
+    &quot;incorrect&quot;: 0
+  },
+  &quot;beforePaired&quot;: {
+    &quot;correct&quot;: 0,
+    &quot;partial&quot;: 3,
+    &quot;incorrect&quot;: 6
+  },
+  &quot;paired&quot;: 9,
+  &quot;unpaired&quot;: [],
+  &quot;byCategory&quot;: {
+    &quot;academics&quot;: {
+      &quot;correct&quot;: 5,
+      &quot;partial&quot;: 0,
+      &quot;incorrect&quot;: 0
+    },
+    &quot;conversation-boundaries&quot;: {
+      &quot;correct&quot;: 3,
+      &quot;partial&quot;: 1,
+      &quot;incorrect&quot;: 0
+    }
+  },
+  &quot;byLanguage&quot;: {
+    &quot;ar&quot;: {
+      &quot;correct&quot;: 1,
+      &quot;partial&quot;: 1,
+      &quot;incorrect&quot;: 0
+    },
+    &quot;en&quot;: {
+      &quot;correct&quot;: 7,
+      &quot;partial&quot;: 0,
+      &quot;incorrect&quot;: 0
+    }
+  },
+  &quot;latency&quot;: {
+    &quot;median&quot;: 6.031,
+    &quot;p95&quot;: 7.438,
+    &quot;max&quot;: 7.438,
+    &quot;over70SecondHarnessAnomalies&quot;: 0
+  },
+  &quot;usage&quot;: {
+    &quot;answers&quot;: 10,
+    &quot;diagnostics&quot;: 10,
+    &quot;unknownCostAnswers&quot;: 0,
+    &quot;knownUsageUsd&quot;: 0.018581520000000004,
+    &quot;estimatedUsd&quot;: 0.018581520000000004,
+    &quot;baselineCost&quot;: &quot;unknown: old build did not return provider usage&quot;
+  },
+  &quot;identicalFactualParaphraseGroups&quot;: [
+    [
+      &quot;KE032-V2&quot;,
+      &quot;KE032-V4&quot;
+    ]
+  ],
+  &quot;reviewed&quot;: 0,
+  &quot;reviewedImprovements&quot;: [],
+  &quot;limitations&quot;: [
+    &quot;Automated regex scores are provisional without semantic/source review.&quot;,
+    &quot;An unchanged index/source fingerprint is required for a frozen comparison.&quot;,
+    &quot;Before batches are sequential; throughput batches with concurrency3 are not directly comparable latency benchmarks.&quot;,
+    &quot;Unavailable provider usage is unknown, not zero.&quot;,
+    &quot;All previous invalid fixture definitions and failed attempts are retained in their original artifacts.&quot;
+  ]
+}</pre><p style="color:#ff0000"><b>END OF TESTING</b></p></body></html>

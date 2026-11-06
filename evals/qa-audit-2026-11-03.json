@@ -1801,9 +1801,33 @@
       ],
       "checks": [
         {
-          "name": "Expected fact 1",
+          "name": "General education 21 credits",
           "any": [
-            "\\b132\\b"
+            "\\b21\\b"
+          ]
+        },
+        {
+          "name": "College requirements 35 credits",
+          "any": [
+            "\\b35\\b"
+          ]
+        },
+        {
+          "name": "Major requirements 68 credits",
+          "any": [
+            "\\b68\\b"
+          ]
+        },
+        {
+          "name": "Internship two credits",
+          "any": [
+            "\\b2\\b|two|ساعت"
+          ]
+        },
+        {
+          "name": "Major electives six credits",
+          "any": [
+            "\\b6\\b|six|ست(?:ة|ه)?"
           ]
         }
       ],

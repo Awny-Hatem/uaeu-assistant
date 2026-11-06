@@ -111,6 +111,17 @@ export function retrieveAcademicEvidence(query: string, documents = loadKnowledg
   const admission = meaning.subjects.includes("admissions") || /\b(?:admissions?|ielts|apply|applying|reject)\b|قبول|ايلتس|اقدم|التقديم|التقدم|رفض/u.test(text);
   const docs = (needle: string) => documents.filter(document => document.filename.includes(needle)).map(document => row(document, document.content));
 
+  if (!meaning.years.length) {
+    if (!/password|setup|not working|connection problem|انقطاع|مشكلة|كلم[ةه] المرور/u.test(text) && /housing|residen|dorm|سكن/u.test(text) && /kitchens?|laundry|internet|daily.{0,20}bus|buses.{0,20}daily|مطابخ|مطبخ|غسيل|انترنت|حافلات.{0,25}يومي/u.test(text)) return {rows:reviewed("residential-published-facilities-and-shuttle")};
+    if (meaning.degreeLevel !== "undergraduate" && /\b(?:masters?|doctor(?:ate|al)?|phd|graduate|postgraduate)\b|ماجستير|دكتوراه|دراسات عليا/u.test(text) && /full time|part time|دوام كامل|دوام جزيي|دوام جزئي/u.test(text) && !/credit|hours?|fees?|tuition|cost|gpa|scholarship|employment|\bwork\b|ساع|رسوم|معدل|منح|وظيف/u.test(text)) return {rows:reviewed("graduate-published-study-modes")};
+    if (!/national medical library|\bnml\b|المكتب[ةه] الطبي[ةه]|مكتب[ةه] كلي[ةه] الطب/u.test(text) && /reference staff|موظف.{0,12}المراجع/u.test(text) && /hours?|on site|until|ساعات|اوقات|متى|حتي|حتى/u.test(text)) return {rows:reviewed("library-published-reference-staff-hours")};
+    if (/password|كلم[ةه] (?:ال)?مرور/u.test(text) && /forgot|reset|recover|نسيت|استعاد|تعيين/u.test(text) && !/wifi|wi fi|portal is down|mfa|multi factor/u.test(text)) return {rows:reviewed("account-password-reset")};
+    if (/\bmission\b|رسال[ةه] الجامع[ةه]|رسال[ةه] جامع[ةه]/u.test(text) && !/college|department|program|vision|values|كلي[ةه]|قسم|برنامج|رؤي[ةه]|قيم/u.test(text)) return {rows:reviewed("university-mission")};
+    if (/working hours|office hours|business hours|ساعات (?:ال)?عمل/u.test(text) && /contact page|general contact|university|uaeu|التواصل العام|جه[ةه] التواصل|ساعات عمل الجامع[ةه]/u.test(text) && !/library|department|college|\b(?:uits|doit|clinic|registrar)\b|مكتب[ةه]|قسم|كلي[ةه]|عياد[ةه]/u.test(text)) return {rows:reviewed("university-contact-hours")};
+    if (!/college|department|school|campus|كلي[ةه]|قسم|الحرم/u.test(text) && /overview|صفح[ةه] التعريف|صفح[ةه] النبذ[ةه]/u.test(text) && /students?|enrollment|طلب[ةه]|طلاب/u.test(text) && /how many|number|عدد|تقريبي/u.test(text)) return {rows:reviewed("university-overview-enrollment")};
+    if (meaning.degreeLevel !== "postgraduate" && /academic probation|الانذار الاكاديمي/u.test(text)) return {rows:reviewed("academic-probation")};
+    if (meaning.degreeLevel !== "postgraduate" && /normal.{0,20}(?:semester|load)|regular.{0,20}(?:semester|load)|العبء الدراسي|الفصل (?:العادي|الاعتيادي)/u.test(text) && /credit|hours?|ساع|عبء/u.test(text) && !/summer|صيف|\b(?:postgraduate|graduate)\b|ماجستير|دكتوراه/u.test(text)) return {rows:reviewed("semester-credit-load")};
+  }
   if (/rankings?|تصنيف|تصنيفا/u.test(text) && !/overview|صفحة التعريف|صفحه التعريف/u.test(text) && !meaning.years.length) return {rows:reviewed("university-homepage-rankings")};
   const standingRequest = /good academic standing|الوضع الاكاديمي الجيد|وضع اكاديمي جيد/u.test(text);
   const medicineOnly = /medicine|الطب/u.test(text) && !/outside.{0,25}medicine|exclud.{0,25}medicine|except.{0,25}medicine|خارج.{0,20}الطب|باستثناء.{0,20}الطب|غير.{0,15}الطب/u.test(text);

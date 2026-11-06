@@ -18,6 +18,7 @@ process.env.TRUST_PROXY_HEADERS = "enabled";
 process.env.CORPUS_SEARCH = "disabled";
 
 let calls = 0, passed = 0, writerCalls=0, verifierCalls=0;
+let lastWriterInstructions = "";
 const base: SemanticRoute = { resolvedQuery: "What should I do first to inspect a registration hold?", subject: "registration hold", recordIds: [], primaryRecordIds: ["registration-hold"], targetCourseCodes: [], clarification: "", kind: "answer" };
 const route = (change: Partial<SemanticRoute> = {}): SemanticRoute => ({ ...base, ...change });
 const entry = (id: string) => loadFaqEntries().find((entry) => entry.id === id)!;
@@ -33,7 +34,7 @@ globalThis.fetch = async (input, init) => {
   const schema = request.text?.format?.name;
   assert.ok(["catalog_route", "canonical_recovery_selection", "grounded_answer", "claim_source_verification"].includes(schema), "Unexpected provider operation");
   if(schema==="grounded_answer"){
-    writerCalls++;
+    writerCalls++;lastWriterInstructions=request.instructions;
     const sources=[...request.instructions.matchAll(/--- SOURCE ([^\s]+) ---\n[\s\S]*?REVIEWED SOURCE-SPECIFIC FACTS \(paraphrase, not a quotation\):\n([\s\S]*?)\nOnly this source's facts/g)];
     assert.ok(sources.length,"The writer must receive real reviewed source blocks");
     return new Response(JSON.stringify({status:"completed",output_text:JSON.stringify({claims:sources.map(match=>({text:match[2].trim(),evidenceIds:[match[1]]})),clarification:"",disposition:"answer"})}),{status:200});
@@ -198,8 +199,10 @@ async function main() {
     selected = route({ resolvedQuery: "How do I apply for registration?", primaryRecordIds: ["course-add-drop"] });
     recoverySelected = { primaryRecordIds: ["semester-credit-load"] };
     const question = "How many credits may a student register for during a regular semester?";
+    const previousRecovery=recoveryRequest;
     const payload = await ask(question);
-    assert.equal(recoveryRequest?.request, question);
+    if(recoveryRequest!==previousRecovery)assert.equal(recoveryRequest?.request, question);
+    assert.ok(lastWriterInstructions.includes(`RESOLVED REQUEST (context only, not evidence): ${question}`),"The checked writer must retain the original facet even when a direct reviewed route bypasses recovery selection");
     assert.ok(payload.evidenceIds.some((id:string)=>id.startsWith("answer:semester-credit-load#")));
   });
   await check("academic standing cannot use course-repeat GPA overlap as its primary", async () => {

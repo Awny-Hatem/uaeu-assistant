@@ -1,6 +1,6 @@
 # UAEU knowledge index
 
-Updated 2026-11-05T08:22:59.887580+00:00. **8,379 approved knowledge documents**, including 67 curated and 8,312 crawled sources. **143,834 indexed sections**; 155 reviewed answers; 11 guided workflows; 16,982 entity alias records.
+Updated 2026-11-05T09:28:46.662936+00:00. **8,379 approved knowledge documents**, including 67 curated and 8,312 crawled sources. **143,834 indexed sections**; 158 reviewed answers; 11 guided workflows; 16,982 entity alias records.
 
 Use the readable titles below to open source files in VS Code. Stable hash filenames prevent name collisions; they do not hide the document title. This navigation index is not itself chatbot evidence. Verification dates confirm access, not policy effective dates.
 
@@ -8710,6 +8710,9 @@ Use the readable titles below to open source files in VS Code. Stable hash filen
 | phd-application-recommendations-cv | admissions | [Source](https://www.uaeu.ac.ae/en/cgs/admission.shtml) | [Open pack](../verified-answers/examiner-core.json) |
 | cit-undergraduate-degree-directory | programs | [Source](https://www.uaeu.ac.ae/en/catalog/summary/search.xml) | [Open pack](../verified-answers/examiner-core.json) |
 | elite-scholarship-benefits-current | scholarships | [Source](https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml) | [Open pack](../verified-answers/examiner-core.json) |
+| residential-published-facilities-and-shuttle | housing | [Source](https://www.uaeu.ac.ae/en/campus_life/residential/) | [Open pack](../verified-answers/examiner-service-gaps-2026-11-05.json) |
+| graduate-published-study-modes | admissions | [Source](https://www.uaeu.ac.ae/en/cgs/admission.shtml) | [Open pack](../verified-answers/examiner-service-gaps-2026-11-05.json) |
+| library-published-reference-staff-hours | library | [Source](https://www.uaeu.ac.ae/en/library/libraryhours.shtml) | [Open pack](../verified-answers/examiner-service-gaps-2026-11-05.json) |
 | library-companion-people-of-determination | library | [Source](https://uaeu.ac.ae/en/library/library-club.shtml) | [Open pack](../verified-answers/knowledge-gaps.json) |
 | library-online-scan-copyright-limit | library | [Source](https://uaeu.ac.ae/en/library/scanservice.shtml) | [Open pack](../verified-answers/knowledge-gaps.json) |
 | lost-student-id-card-replacement | student-services | [Source](https://uaeu.ac.ae/en/about/policies/pdf/admission/2_undergraduate_admissions-en.pdf) | [Open pack](../verified-answers/knowledge-gaps.json) |
@@ -8722,7 +8725,7 @@ Use the readable titles below to open source files in VS Code. Stable hash filen
 | university-overview-enrollment | university | [Source](https://www.uaeu.ac.ae/en/about/overview.shtml) | [Open pack](../verified-answers/observed-source-gaps.json) |
 | university-overview-quoted-rankings | university | [Source](https://www.uaeu.ac.ae/en/about/overview.shtml) | [Open pack](../verified-answers/observed-source-gaps.json) |
 | university-homepage-rankings | university | [Source](https://www.uaeu.ac.ae/en/) | [Open pack](../verified-answers/observed-source-gaps.json) |
-| account-password-reset | it | [Source](https://selfservice.uaeu.ac.ae/), [Source](https://jobnavigator.uaeu.ac.ae/login.jsp) | [Open pack](../verified-answers/student-services.json) |
+| account-password-reset | it | [Source](https://selfservice.uaeu.ac.ae/), [Source](https://uaeu.ac.ae/en/vc/doit/contact-us.shtml) | [Open pack](../verified-answers/student-services.json) |
 | student-portal-sign-in | it | [Source](https://my.uaeu.ac.ae/), [Source](https://ssb.uaeu.ac.ae/prod/twbkwbis.P_ValLogin), [Source](https://selfservice.uaeu.ac.ae/) | [Open pack](../verified-answers/student-services.json) |
 | multi-factor-authentication-reset | it | [Source](https://www.uaeu.ac.ae/en/vc/doit/), [Source](https://selfservice.uaeu.ac.ae/) | [Open pack](../verified-answers/student-services.json) |
 | campus-wifi-connection | it | [Source](https://www.uaeu.ac.ae/en/vc/doit/), [Source](https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf), [Source](https://selfservice.uaeu.ac.ae/) | [Open pack](../verified-answers/student-services.json) |

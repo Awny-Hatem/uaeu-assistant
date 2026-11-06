@@ -89,6 +89,8 @@ function isExternalAcademicCreditRequest(text: string): boolean {
 }
 
 const SUBJECTS = [
+  ["student-exchange", "student exchange", /\b(?:student exchange|university exchange|outgoing exchange|incoming exchange|study abroad)\b|التبادل الدراسي|تبادل طلاب|التبادل الطلابي/u],
+  ["health-club", "UAEU Health Club", /\bhealth club\b|النادي الصحي|ناد صحي/u],
   ["vice-chancellor", "UAEU Vice Chancellor", /\bvice chancellor\b|مدير\s+(?:جامع[ةه](?:\s+الامارات)?|الجامع[ةه]|uaeu)/u],
   ["chancellor", "UAEU Chancellor", /(?<!vice )\bchancellor\b|الرييس الاعلى|الرييس الاعلي|الرئيس الاعلى|الرئيس الاعلي/u],
   ["events", "university events", /\b(?:university events?|uaeu events?|workshops?)\b|فعاليات|الفعاليات|ورش العمل/u],
@@ -108,7 +110,7 @@ const SUBJECTS = [
   ["parking", "parking", /\b(?:parking|vehicle permit)\b|مواقف|تصريح.*سيار/u],
   ["calendar", "academic calendar", /\b(?:calendar|semester start|term start|classes (?:start|begin)|holiday|final exams?)\b|التقويم|بداي[ةه] الفصل|الامتحانات النهائي[ةه]/u],
   ["tuition", "tuition fees", /\btuition\b|الرسوم الدراسي[ةه]/u],
-  ["registration", "course registration", /\b(?:registration|register|enroll|add drop|drop a course|dropping|withdraw\w*|credit load|course load|study load|normal load)\b|تسجيل|حذف|انسحاب|العبء الدراسي/u],
+  ["registration", "course registration", /\b(?:registration|register|enroll|add drop|drop a course|dropping|withdraw\w*|credit load|course load|study load|normal load)\b|تسجيل|حذف|انسحاب|العبء الدراسي|الانذار الاكاديمي|العبء الدراسي/u],
   ["internship", "internship", /\binternships?\b|التدريب|تدريب/u],
   ["password", "password reset", /\b(?:password|mfa|multi factor|account locked)\b|كلم[ةه] المرور|المصادق[ةه]/u],
   ["wifi", "campus wifi", /\b(?:wi fi|wifi|wireless)\b|واي فاي|الشبك[ةه] اللاسلكي[ةه]/u],
@@ -138,7 +140,7 @@ const INTENTS: [FactIntent, RegExp][] = [
   ["status", /\b(?:status|track|tracking|progress)\b|حال[ةه] الطلب|متابع[ةه] الطلب/u],
   ["eligibility", /\b(?:eligible|eligibility|qualify|qualified)\b|اهلي[ةه]|موهل|استحق/u],
   ["topics", /\b(?:topics?|content|covers?|covered|taught|learn|syllabus)\b|موضوعات|المواضيع|محتوى|يتناول|يدرسها/u],
-  ["hours", /\b(?:opening hours|hours|open|closed)\b|ساعات العمل|اوقات العمل|ساعات الدوام|متى.*(?:تفتح|تغلق)/u],
+  ["hours", /\b(?:opening hours|hours|open|closed)\b|ساعات (?:ال)?عمل|اوقات (?:ال)?عمل|ساعات (?:ال)?دوام|متى.*(?:تفتح|تغلق)/u],
   ["location", /\b(?:where|location|located|address)\b|اين|موقع/u],
   ["documents", /\b(?:documents?|paperwork)\b|مستندات|الاوراق|وثائق/u],
   ["apply", /\b(?:apply|request|order|obtain|collect|issue|register|renew)\b|اطلب|اقدم|اطلع|استخراج|اصدار|استلام|تقديم|اجدد/u],

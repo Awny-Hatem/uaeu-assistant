@@ -243,6 +243,12 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     return true;
   };
   const byId = new Map(store.chunks.filter(allowed).map(c => [c.id,c]));
+  const preferCurrentCatalogueTotals = simpleCredits && !wantedYears.length && !targets.length && !historicalRequest && !/working hours|office hours|opening hours|business hours|\b(?:model|cohort|historic|archive|old|previous|plan)\b|ساعات العمل|اوقات العمل|خطة|دفعة|قديم/u.test(queryText);
+  const currentCatalogueTotals = preferCurrentCatalogueTotals ? [...byId.values()].filter(c=>(c.program && expanded.programs?.includes(identityKey(c.program)) || expanded.entityLabels?.some(label=>identityKey(label)===identityKey(c.title))) && c.temporal==='undated-current-page' && /\/catalog\/(?:undergraduate|graduate)\/programs\//u.test(c.url) && /required credit hours|degree credit requirement|degree credit breakdown/iu.test(c.heading)) : [];
+  if (currentCatalogueTotals.length) {
+    const currentPrograms=new Set(currentCatalogueTotals.map(c=>identityKey(c.program)));
+    for(const [id,c] of byId)if(c.program && currentPrograms.has(identityKey(c.program)) && c.years.length && /\.pdf(?:$|[?#])/iu.test(c.url) && /model.*(?:plan|semester)|study plan|cohort/iu.test(c.title+' '+c.heading))byId.delete(id);
+  }
   if (!byId.size) return [];
   let lexical: { id: string; rank: number }[] = [];
   if (qTerms.length) {
@@ -265,6 +271,10 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     }
     lexical = [...new Map([...scoped.sort((a,b)=>a.rank-b.rank),...global].map(row=>[row.id,row])).values()];
   }
+  // Hundreds of model-plan rows can fill the lexical LIMIT before the
+  // program's concise catalog-total heading is seen. Seed only exact owned
+  // current catalog totals, before fusion, for an unscoped credit question.
+  if (currentCatalogueTotals.length) lexical=[...new Map([...currentCatalogueTotals.map(c=>({id:c.id,rank:0})),...lexical].map(row=>[row.id,row])).values()];
   let dense: { id: string; similarity: number }[] = [];
   try {
     const vector = await queryEmbedding(query, deadlineAt);
@@ -292,6 +302,7 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     const matchingInterests=requestedInterests.filter(([,description])=>description.test(body)).length;
     if (!exactCourse && !identity && !structuredCalendarMatch && !feeTable(c) && !matchingInterests && !(overlap>=2 && overlap/Math.max(1,originalTerms.length)>=0.2) && (denseScores.get(id)??0)<0.47) return [];
     let rerank=score + (c.language === preferredLanguage ? 0.004 : 0) + (/breakdown|categor|تقسيم/u.test(queryText) && /degree credit breakdown/i.test(c.heading) ? 0.16 : 0) + (firstSemester && /Semester 1.*course list/i.test(c.heading) ? 0.15 : 0) + (simpleCredits && identity && /required credit hours|degree credit requirement/i.test(c.heading) ? 0.09 : 0) + overlap*0.004 + (identity?0.025:0) + (exactCourse?0.08:0);
+    if (currentCatalogueTotals.some(total=>total.id===c.id)) rerank += 0.22;
     if(majorRecommendation&&!wantedYears.length&&c.temporal==='undated-current-page'&&c.program&&['bachelor','master','doctorate'].includes(c.qualification))rerank+=0.035;
     if (majorRecommendation && c.program && ["bachelor", "master", "doctorate"].includes(c.qualification)) {
       rerank += matchingInterests * 0.035;

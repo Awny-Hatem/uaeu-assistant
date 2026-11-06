@@ -23,6 +23,28 @@ export function academicCoverageViolations(answer: GroundedAnswer, sources: Sour
     }
   }
   const target = courseTargets(query)[0];
+  if (target && /credit|hours?|ساع/u.test(q) && !/prerequis|corequis|متطلب|semester|فصل/u.test(q)) {
+    const owned=sources.filter(source=>source.row.scope?.courseCodes?.includes(target));
+    const amount=owned.map(source=>source.text.match(/(?:published\s+)?credit\s+hours\s*:\s*(\d+(?:\.\d+)?)/iu)?.[1]).find(value=>value!==undefined);
+    if (amount!==undefined) {
+      const names:Record<string,string>={"0":"zero|صفر", "1":"one|واحد|واحدة", "2":"two|اثنتين|اثنين", "3":"three|ثلاث", "4":"four|اربع|اربعة", "5":"five|خمس|خمسة", "6":"six|ست|ستة", "7":"seven|سبع|سبعة", "8":"eight|ثمان|ثماني|ثمانية", "9":"nine|تسع|تسعة", "10":"ten|عشر|عشرة"};
+      const number=`(?:${amount.replaceAll('.', '[.]')}|${names[amount]??amount})`;
+      const explicit=new RegExp(String.raw`${number}\s*(?:credit|hours?|ساع)|(?:credit hours|الساعات المعتمدة|ساعات المساق)\s*(?::|هي|هو)?\s*${amount}(?!\d)`,'iu').test(normalized);
+      const singular=amount==='1'&&/بساع[ةه](?: معتمد[ةه])? واحد[ةه]|ساع[ةه](?: معتمد[ةه])? واحد[ةه]/u.test(normalized);
+      const dual=amount==='2'&&/ساعت(?:ان|ين)(?: معتمدت(?:ان|ين))?/u.test(normalized);
+      const zero=amount==='0'&&/لا يحمل ساعات معتمدة|ليس له ساعات معتمدة|لا توجد له ساعات معتمدة|(?:carries|has) no credit hours|is (?:a )?non.credit course/u.test(normalized);
+      if(!explicit&&!singular&&!dual&&!zero)violations.push(`The student's course-credit question needs ${target}'s own published Credit Hours value ${amount}. State that amount as course credits under its source; a description or a number about a different subject does not answer it.`);
+    }
+  }
+  const finalTaught=/last taught semester|final taught semester|اخر فصل تدريس|الفصل الدراسي الاخير قبل التدريب/u.test(q);
+  if(finalTaught)for(const source of sources){
+    const total=source.text.match(/final taught semester[^\n]*?(\d+)\s*credits total/iu)?.[1];
+    if(total&&!new RegExp(String.raw`\b${total}\b`).test(text))violations.push(`Include the source-published subtotal ${total} credits for the final taught semester, under the applicable cohort. Keep the internship semester separate.`);
+  }
+  if(/password|كلم[ةه] (?:ال)?مرور/u.test(q) && /contact|help|support|اتواصل|مساعد[ةه]|دعم/u.test(q)){
+    const help=sources.find(source=>/Helpdesk@uaeu\.ac\.ae/i.test(source.text)&&/6111/.test(source.text));
+    if(help){if(!/Helpdesk@uaeu\.ac\.ae/i.test(text))violations.push(`The question asks for IT help as well as recovery. Include Helpdesk@uaeu.ac.ae from source ${help.id}, separately from the recovery portal's source.`);if(!/6111/.test(text))violations.push(`Include the source-published IT support telephone ending 6111 from ${help.id}; the recovery URL alone does not answer the requested contact route.`);}
+  }
   const prerequisiteRequest = Boolean(target) && (/prerequisit|corequisit|pre requisite|concurrent|alongside|while taking|same semester|(?:take|taking|register|enroll|enrol).{0,40}\bwith\b|before|without completing|متطلب|سابق|متزامن|مع /u.test(q) || q === target!.toLowerCase());
   if (prerequisiteRequest) {
     const prerequisiteSentences = sources.flatMap(source => source.text.split(/\n|;|(?<=[.!?])\s+/u))
@@ -97,7 +119,7 @@ export function academicCoverageViolations(answer: GroundedAnswer, sources: Sour
       // establish the same total. Coverage needs the program fact once, not a
       // redundant copy under every excerpt ID. Different programs, cohorts,
       // degree levels and conflicting totals remain separate requirements.
-      const singleProgramPublication = /\/(?:bachelor|master|doctor|phd|bsc|msc|diploma)[^/]*\.shtml$/iu.test(source.citation.url?.split("#")[0] ?? "");
+      const singleProgramPublication = /\/(?:bachelor|master|doctor|phd|bsc|msc|diploma|minor|credit-?bearing|dual-master|general-education-requirements)[^/]*\.shtml$/iu.test(source.citation.url?.split("#")[0] ?? "");
       const family = totalSources.filter(other => other.id === source.id || singleProgramPublication &&
         other.row.title === source.row.title && other.citation.url?.split("#")[0] === source.citation.url?.split("#")[0] &&
         JSON.stringify(other.row.scope ?? {}) === JSON.stringify(source.row.scope ?? {}) &&

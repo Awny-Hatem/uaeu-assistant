@@ -981,7 +981,7 @@ async function main() {
             messages: [{ role: "user", content }],
           });
           assertFaq(result, "academic-systems-support", "answer");
-          assert.match(visibleOrEvidenceText(result), /\+971 3 713 6111/);
+          assert.match(visibleOrEvidenceText(result), /\+971\s*3\s*713\s*6111/);
           assert.match(visibleOrEvidenceText(result), /Helpdesk@uaeu\.ac\.ae/i);
           assert.notEqual(result.data.escalationReason, "student_requested_person");
         }

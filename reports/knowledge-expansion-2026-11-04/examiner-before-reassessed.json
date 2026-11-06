@@ -1,5 +1,5 @@
 {
-  "at": "2026-11-04T22:45:59.616Z",
+  "at": "2026-11-05T08:37:50.437Z",
   "method": "Reassessment of preserved exact-question transcripts under the final fair rubric; no answers rewritten or fabricated. Dated-fee corrections use separately executed exact dated questions.",
   "origins": [
     {
@@ -12,13 +12,13 @@
     }
   ],
   "counts": {
-    "correct": 401,
-    "partial": 114,
+    "correct": 402,
+    "partial": 113,
     "incorrect": 85
   },
   "primaryCounts": {
-    "correct": 75,
-    "partial": 16,
+    "correct": 74,
+    "partial": 17,
     "incorrect": 9
   },
   "unmatched": [],
@@ -52327,10 +52327,14 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
             "passed": true,
             "patterns": [
-              "\\b12\\b"
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
             ]
           },
           {
@@ -52572,10 +52576,14 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
             "passed": true,
             "patterns": [
-              "\\b12\\b"
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
             ]
           },
           {
@@ -52817,10 +52825,14 @@
         "result": "partial",
         "checks": [
           {
-            "name": "Expected fact 1",
-            "passed": false,
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
+            "passed": true,
             "patterns": [
-              "\\b12\\b"
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
             ]
           },
           {
@@ -52861,7 +52873,6 @@
         "officialOnly": true,
         "unrelated": [],
         "missing": [
-          "Expected fact 1",
           "elective credit total or faithful course-count equivalent"
         ],
         "requiresHumanReview": true,
@@ -53068,10 +53079,14 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
             "passed": true,
             "patterns": [
-              "\\b12\\b"
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
             ]
           },
           {
@@ -53313,10 +53328,14 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
             "passed": true,
             "patterns": [
-              "\\b12\\b"
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
             ]
           },
           {
@@ -53558,10 +53577,14 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
             "passed": true,
             "patterns": [
-              "\\b12\\b"
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
             ]
           },
           {
@@ -56619,10 +56642,38 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "General education 21 credits",
             "passed": true,
             "patterns": [
-              "\\b132\\b"
+              "\\b21\\b"
+            ]
+          },
+          {
+            "name": "College requirements 35 credits",
+            "passed": true,
+            "patterns": [
+              "\\b35\\b"
+            ]
+          },
+          {
+            "name": "Major requirements 68 credits",
+            "passed": true,
+            "patterns": [
+              "\\b68\\b"
+            ]
+          },
+          {
+            "name": "Internship two credits",
+            "passed": true,
+            "patterns": [
+              "\\b2\\b|two|ساعت"
+            ]
+          },
+          {
+            "name": "Major electives six credits",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b|six|ست(?:ة|ه)?"
             ]
           }
         ],
@@ -56772,10 +56823,38 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "General education 21 credits",
             "passed": true,
             "patterns": [
-              "\\b132\\b"
+              "\\b21\\b"
+            ]
+          },
+          {
+            "name": "College requirements 35 credits",
+            "passed": true,
+            "patterns": [
+              "\\b35\\b"
+            ]
+          },
+          {
+            "name": "Major requirements 68 credits",
+            "passed": true,
+            "patterns": [
+              "\\b68\\b"
+            ]
+          },
+          {
+            "name": "Internship two credits",
+            "passed": true,
+            "patterns": [
+              "\\b2\\b|two|ساعت"
+            ]
+          },
+          {
+            "name": "Major electives six credits",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b|six|ست(?:ة|ه)?"
             ]
           }
         ],
@@ -56925,10 +57004,38 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "General education 21 credits",
             "passed": true,
             "patterns": [
-              "\\b132\\b"
+              "\\b21\\b"
+            ]
+          },
+          {
+            "name": "College requirements 35 credits",
+            "passed": true,
+            "patterns": [
+              "\\b35\\b"
+            ]
+          },
+          {
+            "name": "Major requirements 68 credits",
+            "passed": true,
+            "patterns": [
+              "\\b68\\b"
+            ]
+          },
+          {
+            "name": "Internship two credits",
+            "passed": true,
+            "patterns": [
+              "\\b2\\b|two|ساعت"
+            ]
+          },
+          {
+            "name": "Major electives six credits",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b|six|ست(?:ة|ه)?"
             ]
           }
         ],
@@ -57078,10 +57185,38 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "General education 21 credits",
             "passed": true,
             "patterns": [
-              "\\b132\\b"
+              "\\b21\\b"
+            ]
+          },
+          {
+            "name": "College requirements 35 credits",
+            "passed": true,
+            "patterns": [
+              "\\b35\\b"
+            ]
+          },
+          {
+            "name": "Major requirements 68 credits",
+            "passed": true,
+            "patterns": [
+              "\\b68\\b"
+            ]
+          },
+          {
+            "name": "Internship two credits",
+            "passed": true,
+            "patterns": [
+              "\\b2\\b|two|ساعت"
+            ]
+          },
+          {
+            "name": "Major electives six credits",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b|six|ست(?:ة|ه)?"
             ]
           }
         ],
@@ -57231,10 +57366,38 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "General education 21 credits",
             "passed": true,
             "patterns": [
-              "\\b132\\b"
+              "\\b21\\b"
+            ]
+          },
+          {
+            "name": "College requirements 35 credits",
+            "passed": true,
+            "patterns": [
+              "\\b35\\b"
+            ]
+          },
+          {
+            "name": "Major requirements 68 credits",
+            "passed": true,
+            "patterns": [
+              "\\b68\\b"
+            ]
+          },
+          {
+            "name": "Internship two credits",
+            "passed": true,
+            "patterns": [
+              "\\b2\\b|two|ساعت"
+            ]
+          },
+          {
+            "name": "Major electives six credits",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b|six|ست(?:ة|ه)?"
             ]
           }
         ],
@@ -57384,10 +57547,38 @@
         "result": "correct",
         "checks": [
           {
-            "name": "Expected fact 1",
+            "name": "General education 21 credits",
             "passed": true,
             "patterns": [
-              "\\b132\\b"
+              "\\b21\\b"
+            ]
+          },
+          {
+            "name": "College requirements 35 credits",
+            "passed": true,
+            "patterns": [
+              "\\b35\\b"
+            ]
+          },
+          {
+            "name": "Major requirements 68 credits",
+            "passed": true,
+            "patterns": [
+              "\\b68\\b"
+            ]
+          },
+          {
+            "name": "Internship two credits",
+            "passed": true,
+            "patterns": [
+              "\\b2\\b|two|ساعت"
+            ]
+          },
+          {
+            "name": "Major electives six credits",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b|six|ست(?:ة|ه)?"
             ]
           }
         ],
@@ -98223,7 +98414,7 @@
         }
       ],
       "assessment": {
-        "result": "partial",
+        "result": "correct",
         "checks": [
           {
             "name": "Required fact 1",
@@ -98236,7 +98427,7 @@
             ]
           }
         ],
-        "sourcePass": false,
+        "sourcePass": true,
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
@@ -98387,7 +98578,7 @@
         }
       ],
       "assessment": {
-        "result": "partial",
+        "result": "correct",
         "checks": [
           {
             "name": "Required fact 1",
@@ -98400,7 +98591,7 @@
             ]
           }
         ],
-        "sourcePass": false,
+        "sourcePass": true,
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
@@ -99941,7 +100132,7 @@
         }
       ],
       "assessment": {
-        "result": "correct",
+        "result": "partial",
         "checks": [
           {
             "name": "Expected fact 1",
@@ -99952,11 +100143,15 @@
             ]
           },
           {
-            "name": "Expected fact 2",
-            "passed": true,
+            "name": "Published daily limit for the requested book scan",
+            "passed": false,
             "patterns": [
-              "article",
-              "مقال"
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا"
             ]
           },
           {
@@ -99971,7 +100166,9 @@
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
-        "missing": [],
+        "missing": [
+          "Published daily limit for the requested book scan"
+        ],
         "requiresHumanReview": true,
         "languagePass": true
       },
@@ -100148,7 +100345,7 @@
         }
       ],
       "assessment": {
-        "result": "correct",
+        "result": "partial",
         "checks": [
           {
             "name": "Expected fact 1",
@@ -100159,11 +100356,15 @@
             ]
           },
           {
-            "name": "Expected fact 2",
-            "passed": true,
+            "name": "Published daily limit for the requested book scan",
+            "passed": false,
             "patterns": [
-              "article",
-              "مقال"
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا"
             ]
           },
           {
@@ -100178,7 +100379,9 @@
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
-        "missing": [],
+        "missing": [
+          "Published daily limit for the requested book scan"
+        ],
         "requiresHumanReview": true,
         "languagePass": true
       },
@@ -100355,7 +100558,7 @@
         }
       ],
       "assessment": {
-        "result": "correct",
+        "result": "partial",
         "checks": [
           {
             "name": "Expected fact 1",
@@ -100366,11 +100569,15 @@
             ]
           },
           {
-            "name": "Expected fact 2",
-            "passed": true,
+            "name": "Published daily limit for the requested book scan",
+            "passed": false,
             "patterns": [
-              "article",
-              "مقال"
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا"
             ]
           },
           {
@@ -100385,7 +100592,9 @@
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
-        "missing": [],
+        "missing": [
+          "Published daily limit for the requested book scan"
+        ],
         "requiresHumanReview": true,
         "languagePass": true
       },
@@ -100573,11 +100782,15 @@
             ]
           },
           {
-            "name": "Expected fact 2",
+            "name": "Published daily limit for the requested book scan",
             "passed": true,
             "patterns": [
-              "article",
-              "مقال"
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا"
             ]
           },
           {
@@ -100780,11 +100993,15 @@
             ]
           },
           {
-            "name": "Expected fact 2",
-            "passed": false,
+            "name": "Published daily limit for the requested book scan",
+            "passed": true,
             "patterns": [
-              "article",
-              "مقال"
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا"
             ]
           },
           {
@@ -100799,9 +101016,7 @@
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
-        "missing": [
-          "Expected fact 2"
-        ],
+        "missing": [],
         "requiresHumanReview": true,
         "languagePass": true
       },
@@ -100991,11 +101206,15 @@
             ]
           },
           {
-            "name": "Expected fact 2",
+            "name": "Published daily limit for the requested book scan",
             "passed": true,
             "patterns": [
-              "article",
-              "مقال"
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا"
             ]
           },
           {
@@ -102048,7 +102267,7 @@
         }
       ],
       "assessment": {
-        "result": "partial",
+        "result": "correct",
         "checks": [
           {
             "name": "Requested fact or honest scope",
@@ -102058,7 +102277,7 @@
             ]
           }
         ],
-        "sourcePass": false,
+        "sourcePass": true,
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
@@ -102265,7 +102484,7 @@
         }
       ],
       "assessment": {
-        "result": "partial",
+        "result": "correct",
         "checks": [
           {
             "name": "Requested fact or honest scope",
@@ -102275,7 +102494,7 @@
             ]
           }
         ],
-        "sourcePass": false,
+        "sourcePass": true,
         "httpPass": true,
         "officialOnly": true,
         "unrelated": [],
