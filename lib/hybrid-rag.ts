@@ -248,6 +248,12 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
   if (currentCatalogueTotals.length) {
     const currentPrograms=new Set(currentCatalogueTotals.map(c=>identityKey(c.program)));
     for(const [id,c] of byId)if(c.program && currentPrograms.has(identityKey(c.program)) && c.years.length && /\.pdf(?:$|[?#])/iu.test(c.url) && /model.*(?:plan|semester)|study plan|cohort/iu.test(c.title+' '+c.heading))byId.delete(id);
+    // The catalog entry owns the published total. An undated non-catalog page
+    // with the same title (e.g. an older cluster breakdown) is a competing
+    // figure, not a second source for the same total, so keep it out of a
+    // simple total question.
+    const totalTitles=new Set(currentCatalogueTotals.map(c=>identityKey(c.title)));
+    for(const [id,c] of byId)if(c.temporal!=='historical' && !c.years.length && !/\/catalog\//u.test(c.url) && totalTitles.has(identityKey(c.title)) && /\d+\s*(?:credit|hours?)|ساع/iu.test(c.text))byId.delete(id);
   }
   if (!byId.size) return [];
   let lexical: { id: string; rank: number }[] = [];

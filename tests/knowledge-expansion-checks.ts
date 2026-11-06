@@ -95,7 +95,7 @@ async function main(){
   await check('office identities and working-hour facets do not borrow adjacent university facts',()=>{
     assert.ok(understandQuery('UAEU — من هو مدير UAEU؟').subjects.includes('vice-chancellor'));
     assert.equal(scopeAllows('Who is the Vice Chancellor?','The Chancellor is named on the official Chancellor page.',{subjects:['chancellor']}),false);
-    assert.ok(retrieveAcademicEvidence('hey, What working hours does UAEU’s general Contact page publish?')?.rows.some(row=>row.source==='answer:university-general-contact'));
+    assert.ok(retrieveAcademicEvidence('hey, What working hours does UAEU’s general Contact page publish?')?.rows.some(row=>row.source==='answer:university-contact-hours'));
     const sources=sourceEvidence(retrieveAcademicEvidence('How many credits for Information Technology?')?.rows??[]);
     assert.deepEqual(academicCoverageViolations({claims:[{text:'The Information Technology programme is accredited by ABET.',evidenceIds:[sources[0]?.id??'E1S1']}],clarification:'',disposition:'answer'},sources,'Is Information Technology accredited by ABET?'),[]);
     assert.equal(matchFaq('UAEU — من هو مدير UAEU؟')?.entry.id,'university-vice-chancellor');

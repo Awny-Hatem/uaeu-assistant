@@ -5227,7 +5227,8 @@
       ],
       "expected": "The published catalog entry states minimum 21 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
       "sources": [
-        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/general-education-requirements.shtml"
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/general-education-requirements.shtml",
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf"
       ],
       "needsCitation": true,
       "checks": [
@@ -5247,7 +5248,14 @@
       "sourceQuote": "Required Credit Hours : minimum 21 hours",
       "sourceBodySha256": "0784c8d146b8dd08700bb2c66cc20a755a61ff4d1b4584021f48e92af4c0ef22",
       "sourceVerified": "2026-11-04",
-      "reviewRequired": true
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ]
     },
     {
       "id": "KE160",
@@ -9097,15 +9105,15 @@
           "name": "full time",
           "any": [
             "full.time",
-            "دوام\\s+كامل"
+            "(?:ال)?دوام\\s+(?:ال)?كامل"
           ]
         },
         {
           "name": "part time",
           "any": [
             "part.time",
-            "دوام\\s+جزئي",
-            "دوام\\s+جزيي"
+            "(?:ال)?دوام\\s+(?:ال)?جز[ئي]ي",
+            "جز[ئي]ي"
           ]
         }
       ],
@@ -9118,7 +9126,14 @@
       "sourceQuote": "dentials of the applicants and where they have graduates from. uaeu admits students in master and doctorate programs on full-time and part-time basis. for information on graduate program credit transfer, please refer to the transfer of credits section on the policy document . admission requirements for admission cycles and deadlines (click here) graduate programs admissions > masters pr",
       "sourceBodySha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727",
       "sourceVerified": "2026-11-04",
-      "reviewRequired": true
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ]
     },
     {
       "id": "KE258",
@@ -9173,7 +9188,11 @@
       ],
       "expected": "Through the college coordinator for the student exchange program; partner agreement governs tuition.",
       "sources": [
-        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/outgoing-students.shtml"
       ],
       "needsCitation": true,
       "checks": [
@@ -9194,7 +9213,14 @@
       "sourceQuote": "ates university who wish to study abroad for up to two semesters at any partner university can submit their application through the college coordinator for the student exchange program. the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodati",
       "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
       "sourceVerified": "2026-11-04",
-      "reviewRequired": true
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ]
     },
     {
       "id": "KE260",
@@ -10073,7 +10099,8 @@
         {
           "name": "bus",
           "any": [
-            "buses|bus"
+            "buses|bus",
+            "حافل"
           ]
         }
       ],
@@ -10086,7 +10113,14 @@
       "sourceQuote": ", mosques, gyms and game rooms, outdoor sports courts, kitchens, laundry rooms, internet access, and cleaning services. air-conditioned buses also operate daily between student housing and the university’s colleges. residential life residential life > rooms assignment residential life > housing fees residential life > transportation services residential life > nutrition services residential life >",
       "sourceBodySha256": "254c8ba837e55742848ea059a6a7b2c31e00fe2dc71e94a6eedddcc17c16c9cc",
       "sourceVerified": "2026-11-04",
-      "reviewRequired": true
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ]
     },
     {
       "id": "KE284",
@@ -10691,7 +10725,7 @@
         {
           "name": "labor market",
           "any": [
-            "labou?r market",
+            "labou?r[\\s-]+market",
             "سوق\\s+العمل"
           ]
         }
@@ -10705,7 +10739,14 @@
       "sourceQuote": "ompetitive capabilities by encouraging research collaboration and innovation, establishes a stimulating environment for entrepreneurship and builds graduates' skills in line with the future labor market needs.\"",
       "sourceBodySha256": "082b36475b1eaa89875d982126983c1cb3decf02e6b11e5aa522f39d660fce8d",
       "sourceVerified": "2026-11-04",
-      "reviewRequired": true
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ]
     },
     {
       "id": "KE300",

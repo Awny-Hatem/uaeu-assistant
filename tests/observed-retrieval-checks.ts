@@ -34,6 +34,13 @@ async function main(){
   const result=retrieveAcademicEvidence('للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟');
   assert.ok(result?.rows.some(row=>row.source.includes('52-master-professional-accounting-fees')));
  });
+ await check('a catalog program total is not replaced by an older same-title cluster page',async()=>{
+  for(const q of ['كم عدد الساعات المطلوبة لبرنامج General Education Requirements في جامعة الإمارات؟','General Education Requirements UAEU crdit hours plz?']){
+   const rows=await hybridRetrieve(q,6);
+   assert.match(rows[0]?.citations?.[0]?.url??'',/catalog\/undergraduate\/programs\/general-education-requirements/);
+   assert.ok(!rows.some(row=>row.citations?.[0]?.url?.includes('/dvcaa/aau/general.shtml')));
+  }
+ });
  await check('an unverified named major cannot inherit a related engineering degree' ,()=>{
   for(const name of ['Dragon Engineering','Starlight Engineering'])assert.equal(retrieveAcademicEvidence(`UAEU ${name} major: graduation requirements?`)?.gap,'program');
   assert.equal(retrieveAcademicEvidence('إذا رسبت في مساق بكالوريوس إجباري فهل أعيده وهل تُحذف المحاولات القديمة من كشف الدرجات؟'),null);
