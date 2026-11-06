@@ -41,6 +41,11 @@ async function main(){
    assert.ok(!rows.some(row=>row.citations?.[0]?.url?.includes('/dvcaa/aau/general.shtml')));
   }
  });
+ await check('everyday Arabic spelling slips (ه for ة) still identify the named major',()=>{
+  const slip=retrieveAcademicEvidence('ما مساقات الفصل الاول ومجموع ساعاتها في نموذج الهندسه الميكانيكيه لدخول خريف 2026–2027');
+  const exact=retrieveAcademicEvidence('ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟');
+  assert.deepEqual(slip?.rows.map(r=>r.source),exact?.rows.map(r=>r.source));assert.ok(slip?.rows.length);
+ });
  await check('an unverified named major cannot inherit a related engineering degree' ,()=>{
   for(const name of ['Dragon Engineering','Starlight Engineering'])assert.equal(retrieveAcademicEvidence(`UAEU ${name} major: graduation requirements?`)?.gap,'program');
   assert.equal(retrieveAcademicEvidence('إذا رسبت في مساق بكالوريوس إجباري فهل أعيده وهل تُحذف المحاولات القديمة من كشف الدرجات؟'),null);

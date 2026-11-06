@@ -26,6 +26,12 @@ export function normalizeCourseCodes(text: string): string {
     });
 }
 
+/** Everyday Arabic spelling slips (ة/ه, ى/ي, hamza seats) for entity matching
+ * only. Regex rules elsewhere keep their own [ةه] classes and are unaffected. */
+export function foldArabicSpelling(text: string): string {
+  return text.replace(/ة/gu, "ه").replace(/ى/gu, "ي").replace(/[أإآٱ]/gu, "ا");
+}
+
 export function normalizeQuery(text: string): string {
   return normalizeCourseCodes(text).toLowerCase().normalize("NFKD")
     .replace(/\p{M}/gu, "").replace(/ـ/g, "")

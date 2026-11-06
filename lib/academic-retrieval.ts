@@ -1,6 +1,6 @@
 import { loadKnowledgeMarkdown, splitIntoSections, type EvidenceRow, type KnowledgeDocument } from "@/lib/knowledge-files";
 import { faqScope, loadFaqEntries } from "@/lib/faq";
-import { courseTargets, normalizeQuery, understandQuery } from "@/lib/query-understanding";
+import { courseTargets, foldArabicSpelling, normalizeQuery, understandQuery } from "@/lib/query-understanding";
 import type { Citation } from "@/lib/prototype-types";
 
 type Facet = "first" | "final" | "labs" | "credits" | "status" | "electives" | "required" | "prerequisites" | "topics" | "placement";
@@ -23,8 +23,8 @@ const BASE_PROGRAMS: Program[] = [
 function contains(text: string, phrase: string): boolean {
   const normalized = normalizeQuery(phrase);
   if (/[\u0600-\u06ff]/u.test(normalized)) {
-    const stem=normalized.replace(/^ال/u, "").replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-    return new RegExp(`(?:^|\\s)(?:[لبوكف]?ال|لل|[لبوكف])?${stem}(?=\\s|$)`,"u").test(text);
+    const stem=foldArabicSpelling(normalized).replace(/^ال/u, "").replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+    return new RegExp(`(?:^|\\s)(?:[لبوكف]?ال|لل|[لبوكف])?${stem}(?=\\s|$)`,"u").test(foldArabicSpelling(text));
   }
   return ` ${text} `.includes(` ${normalized} `);
 }
