@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Database from "better-sqlite3";
 import { detectLocale } from "@/lib/language";
-import { courseTargets, foldArabicSpelling, normalizeCourseCodes, normalizeQuery, understandQuery, isProgramRecommendation } from "@/lib/query-understanding";
+import { courseTargets, dropLinkWords, foldArabicSpelling, normalizeCourseCodes, normalizeQuery, understandQuery, isProgramRecommendation } from "@/lib/query-understanding";
 import type { EvidenceRow } from "@/lib/knowledge-files";
 import { providerRequestSignal } from "@/lib/ai-provider";
 import { recordEmbeddingCacheHit, recordProviderUsage, recordProviderAttempt } from "@/lib/answer-usage";
@@ -52,7 +52,7 @@ function index(): Index | undefined {
     const db = new Database(CORPUS_INDEX_PATH, { readonly: true, fileMustExist: true });
     const metadata = Object.fromEntries((db.prepare("SELECT key,value FROM metadata").all() as { key: string; value: string }[]).map(r => [r.key, r.value]));
     if (metadata.schemaVersion !== "1" || metadata.model !== EMBEDDING_MODEL || Number(metadata.dimensions) !== EMBEDDING_DIMENSIONS) { db.close(); return undefined; }
-    const aliases = (JSON.parse(metadata.aliases) as Alias[]).map(alias=>({...alias,normalizedAlias:fold(alias.alias),matchAlias:foldArabicSpelling(fold(alias.alias))}));
+    const aliases = (JSON.parse(metadata.aliases) as Alias[]).map(alias=>({...alias,normalizedAlias:fold(alias.alias),matchAlias:dropLinkWords(foldArabicSpelling(fold(alias.alias)))}));
     const chunks: Chunk[] = [], vectors = new Map<string, Float32Array>();
     for (const row of db.prepare("SELECT data,embedding FROM chunks").iterate() as Iterable<{ data: string; embedding: Buffer | null }>) {
       const chunk = JSON.parse(row.data) as Chunk; chunks.push(chunk);
@@ -97,8 +97,8 @@ export function expandCorpusQuery(query: string): { query: string; topics: strin
   const qualification = /accelerated|تسريع/u.test(text) ? "accelerated" : /micro credential|microcredential|مؤهل مصغر/u.test(text) ? "microcredential" : /\bminor\b|تخصص فرعي/u.test(text) ? "minor" : /\bdiploma\b|دبلوم/u.test(text) ? "diploma" : multipleDegrees ? undefined : /\b(?:phd|ph d|doctorate|doctoral|dba)\b|دكتوراه/u.test(text) ? "doctorate" : /\b(?:master|masters|msc|mba|mpa)\b|ماجستير/u.test(text) ? "master" : /\b(?:bachelor|bsc|bs|undergraduate)\b|بكالوريوس/u.test(text) ? "bachelor" : /\bminor\b|فرعي/u.test(text) ? "minor" : /microcredential|micro credential/u.test(text) ? "microcredential" : undefined;
   const commonWordInitials = new Set("BE AS AM AT IN ON TO OF BY OR DO IF HE WE US AN SO UP GO NO ALL AND THE FOR ARE NOT HOW WHY CAN WAS YOU OUR OUT USE HAS HAD GET NEW NOW ONE TWO".split(" "));
   const genericLabel=/^(?:uaeu|united arab emirates university|engineering|courses?|application|deadline|overview|contact us|programs?|programmes?|undergraduate programs|graduate programs|admission requirements|academic calendar|faqs?|general information|جامعة الامارات(?: العربية المتحدة)?|مساقات|المساقات|مقررات|المقررات|تقديم الطلب|الموعد النهائي)$/iu;
-  const spellingText = foldArabicSpelling(text);
-  const matched = store.aliases.filter(a => !commonWordInitials.has(a.alias) && (a.program || !genericLabel.test(a.normalizedAlias!)) && (!/^(?:english|arabic)$/i.test(a.alias) || !a.program || /\b(?:english|arabic) (?:major|degree|program)\b/u.test(queryText)) && (!( ["ME", "IT", "IS"].includes(a.alias)) || new RegExp(`\\b${a.alias}\\b`).test(query) || /\b(?:me|it|is) (?:major|degree)\b/u.test(queryText)) && (!qualification || !a.qualification || a.qualification === qualification) && spellingText.includes(` ${a.matchAlias!} `));
+  const spellingText = ` ${dropLinkWords(foldArabicSpelling(text))} `;
+  const matched = store.aliases.filter(a => !commonWordInitials.has(a.alias) && (a.program || !genericLabel.test(a.normalizedAlias!)) && (!/^(?:english|arabic)$/i.test(a.alias) || !a.program || /\b(?:english|arabic) (?:major|degree|program)\b/u.test(queryText)) && (!( ["ME", "IT", "IS", "AE"].includes(a.alias)) || new RegExp(`\\b${a.alias}\\b(?![\\s_-]*\\d)`).test(query) || /\b(?:me|it|is) (?:major|degree)\b/u.test(queryText)) && (!qualification || !a.qualification || a.qualification === qualification) && spellingText.includes(` ${a.matchAlias!} `));
   // Short nested aliases must not override an explicitly named larger entity.
   const selected = matched.filter(a => !matched.some(b => b.alias.length > a.alias.length && b.normalizedAlias!.includes(a.normalizedAlias!) && a.topicId !== b.topicId));
   const additions = selected.filter(a => !/^(?:uaeu|united arab emirates university)$/i.test(a.canonical)).flatMap(a => [a.canonical, ...a.equivalents.filter(v => !/[>›»]/u.test(v) && v.length < 140)]);

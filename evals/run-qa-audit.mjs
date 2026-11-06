@@ -17,7 +17,8 @@ const cases = dataset.cases.filter(c => !selected.length || selected.includes(c.
 const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 export const canonicalUrl = value => {
   const u = new URL(value);
-  return u.hostname.replace(/^www\./, '') + u.pathname.replace(/\/index\.shtml$/, '/').replace(/\/$/, '').replace('/en/cit/programs/undergraduate/', '/en/catalog/undergraduate/programs/').replace('/en/eng/programs/undergraduate/', '/en/catalog/undergraduate/programs/') + (u.pathname.endsWith('/course_2945.shtml') ? '' : u.search);
+  // An official /ar/ page is the Arabic counterpart of the same /en/ path.
+  return u.hostname.replace(/^www\./, '') + u.pathname.replace(/^\/ar\//, '/en/').replace(/\/index\.shtml$/, '/').replace(/\/$/, '').replace('/en/cit/programs/undergraduate/', '/en/catalog/undergraduate/programs/').replace('/en/eng/programs/undergraduate/', '/en/catalog/undergraduate/programs/') + (u.pathname.endsWith('/course_2945.shtml') ? '' : u.search);
 };
 export const official = value => {
   try { const u = new URL(value); return u.protocol === 'https:' && /(^|\.)uaeu\.ac\.ae$/i.test(u.hostname) && !/(?:webtest|cms)/i.test(u.hostname); } catch { return false; }

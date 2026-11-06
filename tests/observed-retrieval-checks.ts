@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import {retrieveAcademicEvidence} from '../lib/academic-retrieval';
 import {groupModelPlanRows,hybridRetrieve} from '../lib/hybrid-rag';
 import {loadFaqEntries} from '../lib/faq';
-import {understandQuery} from '../lib/query-understanding';
+import {understandQuery,correctQueryTypos} from '../lib/query-understanding';
 import type {EvidenceRow} from '../lib/knowledge-files';
 let passed=0;
 async function check(name:string,fn:()=>void|Promise<void>){await fn();passed++;console.log('PASS '+name);}
@@ -45,6 +45,18 @@ async function main(){
   const slip=retrieveAcademicEvidence('ما مساقات الفصل الاول ومجموع ساعاتها في نموذج الهندسه الميكانيكيه لدخول خريف 2026–2027');
   const exact=retrieveAcademicEvidence('ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟');
   assert.deepEqual(slip?.rows.map(r=>r.source),exact?.rows.map(r=>r.source));assert.ok(slip?.rows.length);
+ });
+ await check('one-edit domain typos are corrected without touching valid words or plurals',()=>{
+  assert.equal(correctQueryTypos('total cradit requirment for infomation technology, is it requred? uaue computr sceince wetaher'),'total credit requirement for information technology, is it required? uaeu computer science weather');
+  const safe='What CS requires? It does not matter. Master of Science. Students select courses, collect credits, undergraduates, internships.';
+  assert.equal(correctQueryTypos(safe),safe);
+ });
+ await check('casual program names without linking words resolve to the catalog entry',()=>{
+  assert.match(retrieveAcademicEvidence('according published uaeu program catalog minimum total credit requirement bachelor law?')?.rows[0]?.source??'',/bachelor-law/);
+  assert.match(retrieveAcademicEvidence('minimum total credit requirement master business administration?')?.rows[0]?.source??'',/master-business-administration/);
+ });
+ await check('a policy code such as AE-04 is not the AE program abbreviation',()=>{
+  assert.equal(retrieveAcademicEvidence('Is a P grade in a pass/fail course counted in the GPA under AE-04?')?.gap,undefined);
  });
  await check('an unverified named major cannot inherit a related engineering degree' ,()=>{
   for(const name of ['Dragon Engineering','Starlight Engineering'])assert.equal(retrieveAcademicEvidence(`UAEU ${name} major: graduation requirements?`)?.gap,'program');

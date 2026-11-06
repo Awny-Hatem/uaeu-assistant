@@ -1,6 +1,6 @@
 import { loadKnowledgeMarkdown, splitIntoSections, type EvidenceRow, type KnowledgeDocument } from "@/lib/knowledge-files";
 import { faqScope, loadFaqEntries } from "@/lib/faq";
-import { courseTargets, foldArabicSpelling, normalizeQuery, understandQuery } from "@/lib/query-understanding";
+import { courseTargets, dropLinkWords, foldArabicSpelling, normalizeQuery, understandQuery } from "@/lib/query-understanding";
 import type { Citation } from "@/lib/prototype-types";
 
 type Facet = "first" | "final" | "labs" | "credits" | "status" | "electives" | "required" | "prerequisites" | "topics" | "placement";
@@ -26,7 +26,7 @@ function contains(text: string, phrase: string): boolean {
     const stem=foldArabicSpelling(normalized).replace(/^ال/u, "").replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
     return new RegExp(`(?:^|\\s)(?:[لبوكف]?ال|لل|[لبوكف])?${stem}(?=\\s|$)`,"u").test(foldArabicSpelling(text));
   }
-  return ` ${text} `.includes(` ${normalized} `);
+  return ` ${text} `.includes(` ${normalized} `) || (/\b(?:of|in|the)\b/u.test(normalized) && ` ${dropLinkWords(text)} `.includes(` ${dropLinkWords(normalized)} `));
 }
 
 function qualification(query: string): string | undefined {

@@ -28,8 +28,49 @@ export function normalizeCourseCodes(text: string): string {
 
 /** Everyday Arabic spelling slips (ة/ه, ى/ي, hamza seats) for entity matching
  * only. Regex rules elsewhere keep their own [ةه] classes and are unaffected. */
+/** Casual program names often drop linking words: "bachelor law",
+ * "master business administration". Used for entity matching only. */
+export function dropLinkWords(text: string): string {
+  return text.replace(/\b(?:of|in|the)\b/gu, " ").replace(/\s+/gu, " ").trim();
+}
+
 export function foldArabicSpelling(text: string): string {
   return text.replace(/ة/gu, "ه").replace(/ى/gu, "ي").replace(/[أإآٱ]/gu, "ا");
+}
+
+// Domain words students commonly misspell. Every correct inflection is listed
+// so a valid word (requires, credits) is never "corrected" into another one.
+const DOMAIN_WORDS = new Set(("information technology computer computing science sciences engineering mechanical electrical chemical architectural " +
+  "credit credits required require requires requirement requirements elective electives course courses prerequisite prerequisites corequisite corequisites " +
+  "university semester semesters scholarship scholarships admission admissions graduate graduates undergraduate postgraduate library tuition calendar " +
+  "registration register catalog catalogue bachelor bachelors doctorate medicine business administration accounting security intelligence artificial " +
+  "programming structures weather founded established located colleges college program programs programme programmes students student transcript " +
+  "deadline deadlines internship schedule housing transfer withdraw withdrawal minimum maximum chancellor mission vision attendance exchange " +
+  "electricity mechanics physics chemistry biology mathematics statistics economics education environmental").split(" "));
+const NEVER_CORRECT = new Set("matter master course coarse curse cause causes create created credible acquire acquired inquire inquired enquire inquiry college collect select selection".split(" "));
+function withinOneEdit(a: string, b: string): boolean {
+  if (a === b || Math.abs(a.length - b.length) > 1) return false;
+  if (a.length === b.length) {
+    const diff: number[] = [];
+    for (let i = 0; i < a.length && diff.length < 3; i++) if (a[i] !== b[i]) diff.push(i);
+    return diff.length === 1 || (diff.length === 2 && diff[1] === diff[0] + 1 && a[diff[0]] === b[diff[1]] && a[diff[1]] === b[diff[0]]);
+  }
+  const [s, l] = a.length < b.length ? [a, b] : [b, a];
+  let i = 0; while (i < s.length && s[i] === l[i]) i++;
+  return s.slice(i) === l.slice(i + 1);
+}
+/** Correct unambiguous one-edit misspellings of domain words in a student's
+ * question (cradit, requred, computr, sceince, wetaher, uaue). Applied to user
+ * turns only, never to source documents; uncertain words are left unchanged. */
+export function correctQueryTypos(text: string): string {
+  return text.replace(/\buaue\b/giu, (m) => (m === m.toUpperCase() ? "UAEU" : "uaeu")).replace(/[A-Za-z]{5,}/gu, (word) => {
+    const lower = word.toLowerCase();
+    if (DOMAIN_WORDS.has(lower) || NEVER_CORRECT.has(lower) || /s$/u.test(lower) && DOMAIN_WORDS.has(lower.slice(0, -1))) return word;
+    const options = [...DOMAIN_WORDS].filter((candidate) => candidate.length >= 5 && withinOneEdit(lower, candidate));
+    if (options.length !== 1) return word;
+    const fixed = options[0];
+    return word === word.toUpperCase() ? fixed.toUpperCase() : word[0] === word[0].toUpperCase() ? fixed[0].toUpperCase() + fixed.slice(1) : fixed;
+  });
 }
 
 export function normalizeQuery(text: string): string {

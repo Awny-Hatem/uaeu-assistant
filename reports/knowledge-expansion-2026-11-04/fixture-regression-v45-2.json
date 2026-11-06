@@ -2158,7 +2158,8 @@
       "إجباري",
       "اجباري",
       "إلزامي",
-      "الزامي"
+      "الزامي",
+      "مطلوب"
      ]
     }
    ],
@@ -2233,7 +2234,9 @@
     {
      "name": "Requested fact or honest scope",
      "any": [
-      "not.*(?:verify|verified|establish|publish)|no.*verified|لا.*(?:يتوفر|تتوفر|أملك|استطيع|أستطيع)|لم أجد"
+      "not.*(?:verify|verified|establish|publish)|no.*verified|لا.*(?:يتوفر|تتوفر|أملك|استطيع|أستطيع)|لم أجد",
+      "does not (?:provide|list|specify|state)",
+      "لا (?:توفر|تذكر|تحدد)"
      ]
     }
    ],

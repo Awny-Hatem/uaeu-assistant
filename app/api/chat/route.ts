@@ -16,7 +16,7 @@ import type { AnswerGrounding, AssistantSource, Citation, EscalationReason, Serv
 import { findServiceGuide, serviceGuideEvidence, localizeServiceGuide } from "@/lib/service-guides";
 import { loadEmbeddingChunks, vectorRetrieve } from "@/lib/vector-rag";
 import { matchCommunications } from "@/lib/communications";
-import { courseCodes, resolveConversation, understandQuery } from "@/lib/query-understanding";
+import { correctQueryTypos, courseCodes, resolveConversation, understandQuery } from "@/lib/query-understanding";
 import { authenticatedSessionUser } from "@/lib/auth-session";
 import { historyGeneration, persistChatMessage } from "@/lib/chat-history";
 import { runtimeContract } from "@/lib/runtime-contract";
@@ -721,18 +721,21 @@ async function handleChat(req: Request) {
     );
   }
 
+  // Retrieval and routing see unambiguous domain-word typos corrected
+  // (cradit -> credit); stored history keeps the student's own wording.
+  const originalLatest = lastUserMessage((retainedMessages as ChatMessage[]).map((message) => ({ role: message.role, content: message.content.trim() })));
   const sanitized: ChatMessage[] = (retainedMessages as ChatMessage[]).map((message) => ({
     role: message.role,
-    content: message.content.trim(),
+    content: message.role === "user" ? correctQueryTypos(message.content.trim()) : message.content.trim(),
   }));
 
   const latest = lastUserMessage(sanitized);
-  if (!latest) {
+  if (!latest || !originalLatest) {
     return jsonNoStore({ error: "A user message is required." }, { status: 400 });
   }
 
   if (shouldPersistServerSide && userId) {
-    saveMessage(userId, "user", latest, undefined, undefined, expectedHistoryGeneration);
+    saveMessage(userId, "user", originalLatest, undefined, undefined, expectedHistoryGeneration);
   }
 
   const locale = resolveLocale(latest, localePref);
