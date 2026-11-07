@@ -117,16 +117,19 @@ OPENAI_API_KEY=your-openai-api-key
 # NEXT_PUBLIC_STANDARD_ACCOUNT_QUESTION_LIMIT=50
 # CHATBOT_DATA_DIR=./data
 # CHATBOT_DB_PATH=./data/chatbot.db
-# SERVER_CHAT_HISTORY=enabled
+# MEMORY_TTL_HOURS=24
 # ADMIN_ANALYTICS_TOKEN=your-long-random-admin-token
-# AUTH_COOKIE_SECRET=replace-with-a-unique-random-secret
+# AUTH_JWT_SECRET=replace-with-a-unique-random-secret
+# PROFILE_ENCRYPTION_KEY=replace-with-another-unique-random-secret
+# TURSO_DATABASE_URL=libsql://your-db-your-org.turso.io
+# TURSO_AUTH_TOKEN=your-turso-token
 ```
 
 Set `AI_PROVIDER=openai` or `AI_PROVIDER=gemini` explicitly in deployment. A missing key for that selected provider is an error; it does not silently switch vendors. Cross-provider fallback is disabled unless `AI_PROVIDER_FALLBACK=enabled`; enabling it means the retained conversation context may be sent to the second configured vendor after the first fails. Provider calls default to a 20-second timeout and can be changed with `AI_PROVIDER_TIMEOUT_MS`.
 
 Transient OpenAI network, rate-limit and server failures receive at most two retries within the existing absolute answer deadline. Backoff respects a valid server minimum and declines excessive waits; confirmed billing/quota, credential and invalid-request errors are not retried. Missing rate-limit subtype is labelled unclassified rather than guessed. Retry handling follows the [official rate-limit guidance](https://developers.openai.com/api/docs/guides/rate-limits); it cannot restore exhausted account credits or guarantee availability. Claim-verification batches settle all bounded sibling calls before returning.
 
-Live Gemini embedding search is separately opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`. `AUTH_COOKIE_SECRET` is required for account/session features, must be a dedicated random value of at least 32 characters, and seals device-local auth cookies with authenticated encryption. Generate a different secret for every environment (for example, `openssl rand -base64 48`) and never commit it. Server-side raw chat history is disabled unless `SERVER_CHAT_HISTORY=enabled`. Local development stores SQLite in `data/chatbot.db`; Vercel uses temporary `/tmp` storage because the bundled project directory is read-only.
+Live Gemini embedding search is separately opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`. Sign-in needs `AUTH_JWT_SECRET`, a dedicated random value of at least 32 characters (for example, `openssl rand -base64 48`), different in every environment and never committed. Conversation memory, accounts and profiles live in a libSQL store: set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in production so they are durable and shared across serverless instances; without them a local `data/app-store.db` file is used, which is fine for development but would sit in per-instance `/tmp` on Vercel. See `docs/data-retention.md` for what is kept, for how long and who can read it.
 
 ### Deployment and account contract
 
@@ -187,7 +190,7 @@ Open http://localhost:3000 for the chat. The aggregate analytics page at http://
 - Guest and account conversation history use browser storage by default.
 - The UI stores at most 80 messages in that browser, warns against pasting sensitive records, and provides a Clear Conversation control. If server history is explicitly enabled, the same control deletes it.
 - Auth and chat API routes validate JSON content type, limit request size, apply basic rate limits, and reject cross-origin browser posts.
-- Sessions and device-local account fallback use purpose-bound AES-256-GCM sealed, HTTP-only, same-site cookies with strict payload validation; a dedicated `AUTH_COOKIE_SECRET` is mandatory. Deploying this version intentionally invalidates older local auth cookies, so existing local users must sign in again.
+- Sign-in uses a 15-minute HS256 access JWT and a rotating, hashed refresh token in httpOnly SameSite=Strict cookies. Every request also checks the server session row, so logout invalidates tokens immediately. Passwords use bcrypt (cost 12). Conversation memory is keyed by a random httpOnly cookie whose hash is all the server stores; the student ID is AES-256-GCM encrypted and never logged or sent to the model.
 - Cross-provider AI fallback is off by default so a failed provider does not silently forward chat context to another vendor.
 - Security headers are configured in `next.config.ts`, including CSP, clickjacking protection, `nosniff`, referrer policy, and permissions policy.
 - Analytics stores aggregate fields only: source, topic, locale, guide ID, escalation reason, and timestamp.

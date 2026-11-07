@@ -952,6 +952,14 @@ export function UniversityChat() {
             </button>
           )}
           {user ? (
+            <>
+            <a
+              href="/profile"
+              data-testid="edit-profile"
+              className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+            >
+              {uiLocale === "ar" ? "تعديل الملف" : "Edit profile"}
+            </a>
             <button
               type="button"
               onClick={handleLogout}
@@ -962,6 +970,7 @@ export function UniversityChat() {
               <LogOut size={15} />
               {copy.signOut}
             </button>
+            </>
           ) : (
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -1051,6 +1060,10 @@ export function UniversityChat() {
                     </button>
                   )}
                   {user ? (
+                    <>
+                    <a href="/profile" className="flex w-full items-center gap-2 border-b border-zinc-100 px-4 py-3 text-xs font-bold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                      {uiLocale === "ar" ? "تعديل الملف" : "Edit profile"}
+                    </a>
                     <button
                       type="button"
                       onClick={handleLogout}
@@ -1060,6 +1073,7 @@ export function UniversityChat() {
                       <LogOut size={13} />
                       {copy.signOut}
                     </button>
+                    </>
                   ) : (
                     <div className="grid grid-cols-2 gap-2 p-3">
                       <button

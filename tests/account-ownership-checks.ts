@@ -1,21 +1,19 @@
 import assert from "node:assert/strict";
 import Module, { createRequire } from "node:module";
 import path from "node:path";
-import type Database from "better-sqlite3";
 
-// This file covers the legacy opt-in account history (SERVER_CHAT_HISTORY).
-// Server conversation memory has its own checks in tests/memory-*.ts.
-process.env.SERVER_MEMORY = "disabled";
-
-// Real route/auth/history code with sealed test cookies and an isolated SQLite
-// database. Only the Next request-cookie accessor is substituted. This is not
-// an HTTP/browser test. Every network/model call is forbidden and counted.
+// Real route handlers with real JWT sessions and an isolated in-memory libSQL
+// store. Only the Next cookie accessor is substituted. A browser that still
+// believes it is account A, while holding B's cookies (or none, or revoked
+// ones), must get 409 with no side effects; B's own requests are the controls.
+process.env.APP_STORE_URL = ":memory:";
 process.env.CHATBOT_DB_PATH = ":memory:";
-process.env.AUTH_COOKIE_SECRET = "test-only-peer-account-boundary-secret-over-32-characters";
+process.env.AUTH_JWT_SECRET = "test-only-peer-account-boundary-secret-over-32-characters";
 process.env.CHATBOT_DEPLOYMENT_MODE = "prototype";
 process.env.CHATBOT_DURABLE_STORAGE = "";
 process.env.AI_PROVIDER = "mock";
 process.env.GEMINI_EMBEDDING_SEARCH = "";
+process.env.OPENAI_API_KEY = "";
 process.env.VERCEL = "0";
 
 const requireModule = createRequire(path.resolve("tests/account-ownership-checks.ts"));
@@ -23,179 +21,112 @@ type Loader = (name: string, parent: unknown, isMain: boolean) => unknown;
 const moduleLoader = Module as unknown as { _load: Loader };
 const originalLoad = moduleLoader._load;
 const originalFetch = globalThis.fetch;
-const originalNow = Date.now;
-let activeToken: string | undefined;
-let cookieWrites = 0;
+let jar = new Map<string, string>();
 let providerCalls = 0;
-let historyReads = 0;
-let historyClears = 0;
-let historyWrites = 0;
 let checks = 0;
-let db: Database.Database | undefined;
 
 moduleLoader._load = function (name, parent, isMain) {
   if (name === "next/headers") {
-    return {
-      cookies: async () => ({
-        get: () => activeToken ? { value: activeToken } : undefined,
-        set: () => { cookieWrites += 1; },
-      }),
-    };
+    return { cookies: async () => ({ get: (n: string) => (jar.get(n) ? { value: jar.get(n)! } : undefined), set: (n: string, v: string) => { jar.set(n, v); } }) };
+  }
+  if (name === "next/server") {
+    const real = originalLoad.call(this, name, parent, isMain) as Record<string, unknown>;
+    return { ...real, after: (work: () => unknown) => { void work(); } };
   }
   const real = originalLoad.call(this, name, parent, isMain);
   if (/(?:^|\/)ai-provider(?:\.ts)?$/.test(name)) {
-    return {
-      ...real as typeof import("../lib/ai-provider"),
-      generateAssistantResponse: async () => {
-        providerCalls += 1;
-        throw new Error("A model provider must not be called in an ownership test");
-      },
-    };
-  }
-  if (/(?:^|\/)chat-history(?:\.ts)?$/.test(name)) {
-    const history = real as typeof import("../lib/chat-history");
-    return {
-      ...history,
-      readChatHistory: (...args: Parameters<typeof history.readChatHistory>) => {
-        historyReads += 1;
-        return history.readChatHistory(...args);
-      },
-      clearChatHistory: (...args: Parameters<typeof history.clearChatHistory>) => {
-        historyClears += 1;
-        return history.clearChatHistory(...args);
-      },
-      persistChatMessage: (...args: Parameters<typeof history.persistChatMessage>) => {
-        historyWrites += 1;
-        return history.persistChatMessage(...args);
-      },
-    };
+    return { ...real as object, generateAssistantResponse: async () => { providerCalls += 1; throw new Error("A model provider must not be called in an ownership test"); } };
   }
   return real;
 };
-globalThis.fetch = async () => {
-  providerCalls += 1;
-  throw new Error("Network access is forbidden in an ownership test");
-};
+globalThis.fetch = async () => { providerCalls += 1; throw new Error("Network access is forbidden in an ownership test"); };
 
 async function main() {
-  db = (requireModule("../lib/db.ts") as typeof import("../lib/db")).default;
-  assert.equal(db.name, ":memory:");
-  const { encodeSessionCookie } = requireModule("../lib/session-cookie.ts") as typeof import("../lib/session-cookie");
-  const { authenticatedSessionUser, revokeSession } = requireModule("../lib/auth-session.ts") as typeof import("../lib/auth-session");
-  const { persistChatMessage } = requireModule("../lib/chat-history.ts") as typeof import("../lib/chat-history");
+  const { createAccount } = requireModule("../lib/auth/accounts.ts") as typeof import("../lib/auth/accounts");
+  const session = requireModule("../lib/auth/session.ts") as typeof import("../lib/auth/session");
+  const memory = requireModule("../lib/memory/store.ts") as typeof import("../lib/memory/store");
+  const { store } = requireModule("../lib/store/client.ts") as typeof import("../lib/store/client");
   const chat = (requireModule("../app/api/chat/route.ts") as typeof import("../app/api/chat/route")).POST;
   const history = requireModule("../app/api/history/route.ts") as typeof import("../app/api/history/route");
   const logout = (requireModule("../app/api/auth/logout/route.ts") as typeof import("../app/api/auth/logout/route")).POST;
-  const user = (id: string) => ({
-    id, username: id, email: `${id}@example.invalid`, studentType: "Visitor", major: null,
-    universityAffiliation: "general" as const,
-  });
-  const tokenFor = (id: string) => {
-    const token = encodeSessionCookie(user(id));
-    assert.ok(token);
-    return token;
+
+  const a = await createAccount({ username: "peer_a", email: "a@example.invalid", password: "PeerPassw0rd", studentType: "Visitor", universityAffiliation: "general" });
+  const b = await createAccount({ username: "peer_b", email: "b@example.invalid", password: "PeerPassw0rd", studentType: "Visitor", universityAffiliation: "general" });
+  const login = async (id: string) => { jar = new Map(); await session.startSession({ get: (n) => (jar.get(n) ? { value: jar.get(n)! } : undefined), set: (n, v) => { jar.set(n, v); } }, id); return new Map(jar); };
+  const goodB = await login(b.id);
+  const revokedA = await login(a.id);
+  jar = new Map(revokedA);
+  await session.endSession({ get: (n) => (jar.get(n) ? { value: jar.get(n)! } : undefined), set: (n, v) => { jar.set(n, v); } });
+
+  // B has a stored conversation that must never be touched by refused requests.
+  const bMemory = (await memory.openSession(null, b.id))!;
+  await memory.appendExchange(bMemory.session, "private-b question", "private-b answer");
+  const counts = async () => Number((await (await store()).execute("SELECT COUNT(*) AS n FROM memory_turns")).rows[0].n);
+
+  const cases: [string, Map<string, string> | undefined, string | null][] = [
+    ["A assertion with valid B cookies", goodB, a.id],
+    ["missing assertion with valid B cookies", goodB, null],
+    ["guest assertion with valid B cookies", goodB, "guest"],
+    ["A assertion with no cookies", undefined, a.id],
+    ["A assertion with revoked A cookies", revokedA, a.id],
+  ];
+  const endpoints = {
+    chat: { method: "POST", call: (r: Request) => chat(r) },
+    historyGet: { method: "GET", call: (r: Request) => history.GET(r) },
+    historyDelete: { method: "DELETE", call: (r: Request) => history.DELETE(r) },
+    logout: { method: "POST", call: (r: Request) => logout(r) },
   };
-  for (const id of ["peer-account-a", "peer-account-b"]) {
-    db.prepare("INSERT INTO users(id,username,email,password_hash,student_type) VALUES(?,?,?,?,?)")
-      .run(id, id, `${id}@example.invalid`, "test-only-hash", "Visitor");
-  }
-  const goodB = tokenFor("peer-account-b");
-  const revokedA = tokenFor("peer-account-a");
-  revokeSession(revokedA);
-  let expiredA: string;
-  try {
-    Date.now = () => originalNow() - 9 * 86400000;
-    expiredA = tokenFor("peer-account-a");
-  } finally {
-    Date.now = originalNow;
-  }
-  assert.equal(authenticatedSessionUser(expiredA), null);
-  assert.equal(authenticatedSessionUser(revokedA), null);
-  assert.equal(authenticatedSessionUser(goodB)?.id, "peer-account-b");
-
-  process.env.SERVER_CHAT_HISTORY = "enabled";
-  persistChatMessage("peer-account-a", "user", "private-a");
-  persistChatMessage("peer-account-b", "user", "private-b");
-  const endpoints = [
-    ["chat", "POST", chat],
-    ["history-get", "GET", history.GET],
-    ["history-delete", "DELETE", history.DELETE],
-    ["logout", "POST", logout],
-  ] as const;
-  const cases = [
-    ["A assertion with valid B cookie", goodB, "peer-account-a"],
-    ["missing assertion with valid B cookie", goodB, null],
-    ["guest assertion with valid B cookie", goodB, "guest"],
-    ["A assertion with missing cookie", undefined, "peer-account-a"],
-    ["A assertion with expired cookie", expiredA, "peer-account-a"],
-    ["A assertion with revoked cookie", revokedA, "peer-account-a"],
-  ] as const;
-  const sideEffects = () => ({ providerCalls, historyReads, historyClears, historyWrites, cookieWrites });
-
-  for (const serverHistory of ["enabled", ""]) {
-    process.env.SERVER_CHAT_HISTORY = serverHistory;
-    for (const [label, token, expected] of cases) {
-      activeToken = token;
-      for (const [endpoint, method, handler] of endpoints) {
-        const headers: Record<string, string> = { "content-type": "application/json" };
-        if (expected !== null) headers["x-chat-account-id"] = expected;
-        const before = sideEffects();
-        const response = await handler(new Request(`http://localhost/api/${endpoint}`, {
-          method, headers,
-          ...(endpoint === "chat" ? {
-            body: JSON.stringify({ messages: [{ role: "user", content: "Inspect the study details in my private context." }] }),
-          } : {}),
-        }));
-        const body = await response.json();
-        assert.equal(response.status, 409, `${endpoint}: ${label}`);
-        assert.equal(body.code, "account_changed");
-        assert.match(response.headers.get("cache-control") ?? "", /no-store/);
-        assert.ok(!JSON.stringify(body).includes("peer-account-"), "Rejection disclosed an account ID");
-        assert.deepEqual(sideEffects(), before, `${endpoint}: sensitive work happened before refusal`);
-        assert.equal((db.prepare("SELECT COUNT(*) AS count FROM messages").get() as { count: number }).count, 2);
-        assert.equal(authenticatedSessionUser(goodB)?.id, "peer-account-b", "Mismatched request revoked B");
-        checks += 1;
-      }
+  for (const [label, cookies, asserted] of cases) {
+    for (const [endpoint, { method, call }] of Object.entries(endpoints)) {
+      jar = new Map(cookies ?? []);
+      const before = { providerCalls, turns: await counts() };
+      const headers: Record<string, string> = { origin: "http://localhost", "content-type": "application/json" };
+      if (asserted) headers["x-chat-account-id"] = asserted;
+      const response = await call(new Request(`http://localhost/api/${endpoint}`, {
+        method, headers, ...(endpoint === "chat" ? { body: JSON.stringify({ messages: [{ role: "user", content: "Inspect the study details in my private context." }] }) } : {}),
+      }));
+      const body = await response.json();
+      assert.equal(response.status, 409, `${endpoint}: ${label}`);
+      assert.equal(body.code, "account_changed");
+      assert.ok(!JSON.stringify(body).includes(a.id) && !JSON.stringify(body).includes(b.id), "Rejection disclosed an account ID");
+      assert.deepEqual({ providerCalls, turns: await counts() }, before, `${endpoint}: work happened before refusal (${label})`);
+      jar = new Map(goodB);
+      assert.equal(await session.currentUserId({ get: (n) => (jar.get(n) ? { value: jar.get(n)! } : undefined), set: () => undefined }), b.id, "A mismatched request revoked B");
+      checks += 1;
     }
   }
 
-  activeToken = goodB;
-  process.env.SERVER_CHAT_HISTORY = "enabled";
-  const accountHeaders = { "x-chat-account-id": "peer-account-b" };
-  let response = await history.GET(new Request("http://localhost/api/history", { headers: accountHeaders }));
+  // Controls: B's own requests succeed and stay inside B's data.
+  jar = new Map(goodB);
+  const own = { "x-chat-account-id": b.id, origin: "http://localhost" };
+  let response = await history.GET(new Request("http://localhost/api/history", { headers: own }));
   assert.equal(response.status, 200);
-  const ownHistory = await response.json() as { messages: { content: string }[] };
-  assert.deepEqual(ownHistory.messages.map(item => item.content), ["private-b"]);
+  assert.deepEqual((await response.json() as { messages: { content: string }[] }).messages.map((m) => m.content), ["private-b question", "private-b answer"]);
   checks += 1;
 
-  response = await chat(new Request("http://localhost/api/chat", {
-    method: "POST", headers: { ...accountHeaders, "content-type": "application/json" },
-    body: JSON.stringify({ messages: [{ role: "user", content: "Thank you" }] }),
-  }));
+  response = await chat(new Request("http://localhost/api/chat", { method: "POST", headers: { ...own, "content-type": "application/json" }, body: JSON.stringify({ messages: [{ role: "user", content: "Thank you" }] }) }));
   assert.equal(response.status, 200);
   checks += 1;
 
-  response = await history.DELETE(new Request("http://localhost/api/history", { method: "DELETE", headers: accountHeaders }));
+  const aMemory = (await memory.openSession(null, a.id))!;
+  await memory.appendExchange(aMemory.session, "private-a question", "private-a answer");
+  jar = new Map(goodB);
+  response = await history.DELETE(new Request("http://localhost/api/history", { method: "DELETE", headers: own }));
   assert.equal(response.status, 200);
-  assert.equal((db.prepare("SELECT COUNT(*) AS count FROM messages WHERE user_id=?").get("peer-account-a") as { count: number }).count, 1);
-  assert.equal((db.prepare("SELECT COUNT(*) AS count FROM messages WHERE user_id=?").get("peer-account-b") as { count: number }).count, 0);
+  assert.equal(await memory.turnCount(aMemory.session.keyHash), 2, "B's clear must not delete A's memory");
+  assert.equal(await memory.turnCount(bMemory.session.keyHash), 0);
   checks += 1;
 
-  response = await logout(new Request("http://localhost/api/logout", { method: "POST", headers: accountHeaders }));
+  response = await logout(new Request("http://localhost/api/auth/logout", { method: "POST", headers: own }));
   assert.equal(response.status, 200);
-  assert.equal(authenticatedSessionUser(goodB), null);
-  assert.equal(cookieWrites, 1);
+  jar = new Map(goodB);
+  assert.equal(await session.currentUserId({ get: (n) => (jar.get(n) ? { value: jar.get(n)! } : undefined), set: () => undefined }), null, "logout must invalidate the unexpired access token");
   assert.equal(providerCalls, 0);
   checks += 1;
-  console.log(`${checks}/${checks} actual-handler account ownership checks passed (48 refusals, 4 controls; in-memory SQLite, no network)`);
+  console.log(`${checks}/${checks} actual-handler account ownership checks passed (20 refusals, 4 controls; in-memory libSQL, JWT sessions, no network)`);
 }
 
-main().catch(error => {
-  console.error(error);
-  process.exitCode = 1;
-}).finally(() => {
+main().catch((error) => { console.error(error); process.exitCode = 1; }).finally(() => {
   moduleLoader._load = originalLoad;
   globalThis.fetch = originalFetch;
-  Date.now = originalNow;
-  db?.close();
 });

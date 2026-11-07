@@ -10,6 +10,7 @@ import { getQuotaPlan } from "../lib/access";
 import { accountOwnershipGuard } from "../lib/request-security";
 
 process.env.CHATBOT_DB_PATH = ":memory:";
+process.env.APP_STORE_URL = ":memory:";
 process.env.AUTH_COOKIE_SECRET = "test-only-ui-security-secret-at-least-32-characters";
 delete process.env.CHATBOT_DURABLE_STORAGE;
 delete process.env.CHATBOT_DEPLOYMENT_MODE;
@@ -145,28 +146,31 @@ async function main() {
     assert.equal(sanitizeAnswerMetadata({ claims: [claim], grounding: { ...grounding, status: "rejected" } }).claims, undefined);
   });
 
-  const { default: db } = await import("../lib/db");
-  const { encodeSessionCookie } = await import("../lib/session-cookie");
-  const { registerSession, authenticatedSessionUser, revokeSession } = await import("../lib/auth-session");
-  const { persistChatMessage, readChatHistory, clearChatHistory, historyGeneration } = await import("../lib/chat-history");
   const { readJsonRequest, rateLimitGuard } = await import("../lib/request-security");
   const { classifyTopic } = await import("../lib/analytics");
-  const user = { id: "audit-user", username: "audit", email: "audit@example.com", studentType: "Visitor", major: null, universityAffiliation: "general" as const };
-  db.prepare("INSERT INTO users(id,username,email,password_hash,student_type,major,university_affiliation) VALUES(?,?,?,?,?,?,?)")
-    .run(user.id, user.username, user.email, "test-hash", user.studentType, null, "general");
+  const authSession = await import("../lib/auth/session");
+  const { createAccount } = await import("../lib/auth/accounts");
+  const jarFor = () => {
+    const values = new Map<string, string>();
+    return { values, get: (n: string) => (values.has(n) && values.get(n) !== "" ? { value: values.get(n)! } : undefined), set: (n: string, v: string) => { values.set(n, v); } };
+  };
+  const auditAccount = await createAccount({ username: `audit_${Date.now()}`, email: `audit${Date.now()}@example.com`, password: "AuditPassw0rd", studentType: "Visitor", universityAffiliation: "general" });
 
-  await check("logout revokes token replay on the current store", () => {
-    const token = encodeSessionCookie(user)!;
-    registerSession(user, token);
-    assert.equal(authenticatedSessionUser(token)?.id, user.id);
-    revokeSession(token);
-    assert.equal(authenticatedSessionUser(token), null);
+  await check("logout revokes replay of a still-unexpired access token", async () => {
+    const jar = jarFor();
+    await authSession.startSession(jar, auditAccount.id);
+    assert.equal(await authSession.currentUserId(jar), auditAccount.id);
+    const stolen = jarFor();
+    for (const [k, v] of jar.values) stolen.values.set(k, v);
+    await authSession.endSession(jar);
+    assert.equal(await authSession.currentUserId(stolen), null, "copied access token must stop working after logout");
+    stolen.values.delete(authSession.ACCESS_COOKIE);
+    assert.equal(await authSession.currentUserId(stolen), null, "copied refresh token must stop working after logout");
   });
 
   await check("production mode and impossible durable-store declaration fail closed", () => {
     process.env.CHATBOT_DEPLOYMENT_MODE = "production";
     assert.equal(runtimeContract().allowed, false);
-    assert.equal(authenticatedSessionUser(encodeSessionCookie(user)), null);
     delete process.env.CHATBOT_DEPLOYMENT_MODE;
     process.env.CHATBOT_DURABLE_STORAGE = "enabled";
     assert.equal(runtimeContract().storageConfigurationValid, false);
@@ -201,41 +205,21 @@ async function main() {
     }
   });
 
-  await check("durable registered session and logout revocation survive fresh server processes", () => {
+  await check("signed-in sessions and logout revocation survive fresh server processes", () => {
     const prefix = path.join(tmpdir(), "uaeu-auth-test-");
     const directory = mkdtempSync(prefix);
-    const env = { ...process.env, CHATBOT_DB_PATH: path.join(directory, "sessions.db"), CHATBOT_DURABLE_STORAGE: "enabled", CHATBOT_DEPLOYMENT_MODE: "prototype", VERCEL: "0" };
-    const common = "const db=require('./lib/db.ts').default; const {encodeSessionCookie}=require('./lib/session-cookie.ts'); const {authenticatedSessionUser,registerSession,revokeSession}=require('./lib/auth-session.ts');";
-    const run = (code: string, extra: Record<string, string> = {}) => execFileSync(process.execPath, ["--require", "tsx/cjs", "-e", common + code], { cwd: process.cwd(), env: { ...env, ...extra }, encoding: "utf8" }).trim();
+    const env = { ...process.env, APP_STORE_URL: `file:${path.join(directory, "store.db")}`, CHATBOT_DEPLOYMENT_MODE: "prototype", VERCEL: "0" };
+    const common = "const s=require('./lib/auth/session.ts'); const a=require('./lib/auth/accounts.ts'); const jar=(c)=>{const m=new Map(Object.entries(c||{}));return {m,get:n=>m.get(n)?{value:m.get(n)}:undefined,set:(n,v)=>m.set(n,v)}}; (async()=>{";
+    const run = (code: string, extra: Record<string, string> = {}) => execFileSync(process.execPath, ["--require", "tsx/cjs", "-e", common + code + "})().catch(e=>{console.error(e);process.exit(1)})"], { cwd: process.cwd(), env: { ...env, ...extra }, encoding: "utf8" }).trim();
     try {
-      const token = run("const user={id:'persistent-test',username:'tester',email:'test@example.invalid',studentType:'Visitor',major:null,universityAffiliation:'general'}; db.prepare('INSERT INTO users(id,username,email,password_hash,student_type) VALUES (?,?,?,?,?)').run(user.id,user.username,user.email,'test-only-hash',user.studentType); const token=encodeSessionCookie(user);registerSession(user,token);process.stdout.write(token);db.close();");
-      assert.equal(run("process.stdout.write(String(Boolean(authenticatedSessionUser(process.env.TEST_SESSION))));db.close();", { TEST_SESSION: token }), "true");
-      run("revokeSession(process.env.TEST_SESSION);db.close();", { TEST_SESSION: token });
-      assert.equal(run("process.stdout.write(String(Boolean(authenticatedSessionUser(process.env.TEST_SESSION))));db.close();", { TEST_SESSION: token }), "false");
-      assert.equal(run("db.prepare('DELETE FROM sessions').run(); const user={id:'persistent-test',username:'tester',email:'test@example.invalid',studentType:'Visitor',major:null,universityAffiliation:'general'};process.stdout.write(String(Boolean(authenticatedSessionUser(encodeSessionCookie(user)))));db.close();"), "false");
+      const cookies = run("const acct=await a.createAccount({username:'persist_test',email:'persist@example.invalid',password:'Persist123x',studentType:'Visitor',universityAffiliation:'general'}); const j=jar(); await s.startSession(j,acct.id); process.stdout.write(JSON.stringify(Object.fromEntries(j.m)));");
+      assert.equal(run("process.stdout.write(String(Boolean(await s.currentUserId(jar(JSON.parse(process.env.C))))));", { C: cookies }), "true");
+      run("await s.endSession(jar(JSON.parse(process.env.C)));", { C: cookies });
+      assert.equal(run("process.stdout.write(String(Boolean(await s.currentUserId(jar(JSON.parse(process.env.C))))));", { C: cookies }), "false");
     } finally {
       if (!path.resolve(directory).startsWith(path.resolve(prefix))) throw new Error("Unsafe test cleanup path");
       rmSync(directory, { recursive: true, force: true });
     }
-  });
-
-  await check("server history preserves evidence and bounds reads/retention", () => {
-    process.env.SERVER_CHAT_HISTORY = "enabled";
-    for (let index = 0; index < 85; index += 1) {
-      persistChatMessage(user.id, "assistant", `Answer ${index}`, "faq", {
-        faqId: "test-answer", responseMode: "canonical", disposition: "answer", citations: [{ title: "Official source", url: "https://www.uaeu.ac.ae", lastVerified: "2026-09-29" }],
-      });
-    }
-    const messages = readChatHistory(user.id);
-    assert.equal(messages.length, 80);
-    assert.equal(messages[0].content, "Answer 5");
-    assert.equal(messages.at(-1)?.faqId, "test-answer");
-    assert.equal(messages.at(-1)?.responseMode, "canonical");
-    assert.equal(messages.at(-1)?.citations?.[0].title, "Official source");
-    assert.equal(messages.at(-1)?.disposition, "answer");
-    db.prepare("UPDATE messages SET timestamp = ?").run(Date.now() - 31 * 86400000);
-    assert.equal(readChatHistory(user.id).length, 0);
-    delete process.env.SERVER_CHAT_HISTORY;
   });
 
   await check("malformed auth object bodies return 400, not 500", async () => {
@@ -247,18 +231,6 @@ async function main() {
         assert.equal(response.status, 400);
       }
     }
-  });
-
-  await check("history deletion rejects late server writes from an older conversation", () => {
-    process.env.SERVER_CHAT_HISTORY = "enabled";
-    const previousGeneration = historyGeneration(user.id);
-    persistChatMessage(user.id, "user", "old question", undefined, undefined, previousGeneration);
-    clearChatHistory(user.id);
-    persistChatMessage(user.id, "assistant", "late old answer", "rag", {}, previousGeneration);
-    assert.equal(readChatHistory(user.id).length, 0);
-    persistChatMessage(user.id, "user", "new question", undefined, undefined, historyGeneration(user.id));
-    assert.equal(readChatHistory(user.id)[0].content, "new question");
-    delete process.env.SERVER_CHAT_HISTORY;
   });
 
   await check("request size guard stops reading chunked bodies at the byte limit", async () => {
@@ -305,7 +277,6 @@ async function main() {
   });
 
   console.log(`${checks}/${checks} UI/auth/security checks passed`);
-  db.close();
 }
 
 main().catch((error) => { console.error(error); process.exitCode = 1; });

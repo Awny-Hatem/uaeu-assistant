@@ -5,7 +5,9 @@ import { embeddingModel } from "@/lib/gemini";
 import { loadServiceGuides } from "@/lib/service-guides";
 import { knowledgeFingerprint, loadKnowledgeMarkdown } from "@/lib/knowledge-files";
 import { jsonNoStore } from "@/lib/request-security";
-import { authCookieSecretConfigured } from "@/lib/session-cookie";
+import { authConfigured as jwtAuthConfigured } from "@/lib/auth/session";
+import { storeIsDurable } from "@/lib/store/client";
+import { memoryEnabled, memoryTtlMs } from "@/lib/memory/store";
 import { loadEmbeddingChunks } from "@/lib/vector-rag";
 import { runtimeContract } from "@/lib/runtime-contract";
 import { createHash } from "node:crypto";
@@ -20,7 +22,7 @@ export async function GET() {
   const answerPacks = faqHealthSnapshot();
   const corpus = hybridHealthSnapshot();
   const embeddings = loadEmbeddingChunks(embeddingModel());
-  const authConfigured = authCookieSecretConfigured();
+  const authConfigured = jwtAuthConfigured();
   const contract = runtimeContract();
   const coreKnowledgeReady =
     answerPacks.complete && knowledgeFiles.length >= 7 && serviceGuides.length >= 1;
@@ -47,8 +49,13 @@ export async function GET() {
       crossProviderFallback: provider.crossProviderFallback,
     },
     auth: {
-      encryptedCookies: true,
-      dedicatedSecretConfigured: authConfigured,
+      scheme: "jwt-access-plus-rotating-refresh",
+      secretConfigured: authConfigured,
+    },
+    memory: {
+      enabled: memoryEnabled(),
+      ttlHours: memoryTtlMs() / 3_600_000,
+      durableStore: storeIsDurable(),
     },
     knowledge: {
       contentFingerprint,

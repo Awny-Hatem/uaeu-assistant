@@ -11,7 +11,7 @@ const PROGRAM_INDEX: Citation = { title: "UAEU official undergraduate programs",
 const COURSE_INDEX: Citation = { title: "UAEU official course catalog", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml", lastVerified: "2026-11-03" };
 const CALENDAR: Citation = { title: "UAEU academic calendar", url: "https://www.uaeu.ac.ae/en/calendar/index.shtml", lastVerified: "2026-11-03" };
 
-const BASE_PROGRAMS: Program[] = [
+export const BASE_PROGRAMS: Program[] = [
   { key: "computer-science", qualification: "bachelor", label: "Bachelor of Science in Computer Science", aliases: ["computer science", "CS", "علوم الحاسوب", "علوم حاسوب", "علوم الكمبيوتر"] },
   { key: "mechanical-engineering", qualification: "bachelor", label: "Bachelor of Science in Mechanical Engineering", aliases: ["mechanical engineering", "ME major", "ME degree", "ME", "الهندسة الميكانيكية"] },
   { key: "information-technology", qualification: "bachelor", label: "Bachelor of Science in Information Technology", aliases: ["information technology", "IT major", "IT degree", "IT at UAEU", "تقنية المعلومات", "تكنولوجيا المعلومات"] },

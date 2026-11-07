@@ -1,28 +1,18 @@
-import { authenticatedSessionUser, revokeSession } from '@/lib/auth-session';
 import { cookies } from 'next/headers';
+import { currentAccountId } from '@/lib/auth/current';
+import { endSession } from '@/lib/auth/session';
 import { accountOwnershipGuard, jsonNoStore, rateLimitGuard, sameOriginGuard } from '@/lib/request-security';
-import { SESSION_COOKIE_NAME, sessionCookieOptions } from '@/lib/session-cookie';
 
 export async function POST(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
-
-  const limited = rateLimitGuard(req, 'auth:logout', {
-    limit: 20,
-    windowMs: 60 * 1000,
-  });
+  const limited = rateLimitGuard(req, 'auth:logout', { limit: 20, windowMs: 60 * 1000 });
   if (limited) return limited;
-
-  const cookieStore = await cookies();
-  const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-  const user = authenticatedSessionUser(token);
-  const ownershipError = accountOwnershipGuard(req, user?.id ?? null);
+  const userId = await currentAccountId();
+  const ownershipError = accountOwnershipGuard(req, userId);
   if (ownershipError) return ownershipError;
-
-  if (token) {
-    revokeSession(token);
-    cookieStore.set(SESSION_COOKIE_NAME, '', sessionCookieOptions(0));
-  }
-
+  // Deleting the server session invalidates the access token immediately,
+  // even though the JWT itself has not expired yet.
+  await endSession(await cookies());
   return jsonNoStore({ success: true });
 }

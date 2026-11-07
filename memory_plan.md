@@ -61,7 +61,7 @@ Branch: `feat/memory-personalization`, cut from `feat/uaeu-knowledge-expansion`.
   - Topic history: until deleted.
   - Accounts: until deleted.
 
-## 3. Production storage (owner decision needed before implementation)
+## 3. Production storage (decided 7 Nov 2026: Turso / libSQL)
 
 The Vercel serverless filesystem is read-only apart from `/tmp`. `/tmp` is separate for each instance and is wiped on cold start, so SQLite there would lose memory and logins at random and would not be shared across instances. FR3's "survives restarts, works across processes" cannot be met on Vercel with file SQLite.
 
@@ -92,3 +92,26 @@ The `MemoryStore`/`UserStore` interfaces stay the same whichever option is chose
 - **Regression:** Examiner 100 plus all existing evals, to check nothing regresses.
 - **Browser:** login, chat, refresh, server restart, check that memory remains, clear, check that it is gone, logout.
 - **Logging:** results go in the continuation Google Doc labelled [Memory]/[Personalization], ending with END OF TESTING in bold red.
+
+## 5. Implementation status (7 Nov 2026)
+
+- Production store: **Turso / libSQL**, chosen by the owner. `lib/store/client.ts` uses one `@libsql/client` for production (`TURSO_DATABASE_URL`) and for the local file used in development and tests.
+- FR3 (conversation memory):
+  - Store and summary: `lib/memory/store.ts`, `lib/memory/summary.ts` and `lib/memory/conversation.ts`.
+  - Wired into `app/api/chat/route.ts` and `app/api/history/route.ts`.
+  - The UI sends cookies for guests, shows the server copy after a refresh, and actually deletes the stored copy on Clear.
+- FR4 (accounts and personalization):
+  - Accounts and sessions: `lib/auth/{session,accounts,current}.ts` (JWT plus a rotating refresh token, bcrypt cost 12).
+  - Profile: `lib/profile/{store,programs,personalize}.ts`, `app/api/profile` and the `/profile` page.
+  - The old sealed-cookie auth and the opt-in `SERVER_CHAT_HISTORY` modules were removed.
+- Privacy and retention: `docs/data-retention.md`.
+- Tests:
+  - `tests/memory-store-checks.ts`, `tests/memory-route-checks.ts` and `tests/auth-profile-checks.ts` (`npm run test:memory`).
+  - Ported: `tests/account-ownership-checks.ts` and `tests/ui-security-checks.ts`.
+- Evals:
+  - `evals/memory-personalization.json`, built by `scripts/knowledge/make-memory-evals.py`: 35 follow-up, 20 personalization, 20 guest and 6 control cases.
+  - Runner: `evals/run-memory-evals.mjs`.
+- Known limits:
+  - Rate limits are still per instance.
+  - Identity is self-registered, not UAEU SSO.
+  - The student ID format is not published in the indexed sources, so only digits (7–12) are checked.

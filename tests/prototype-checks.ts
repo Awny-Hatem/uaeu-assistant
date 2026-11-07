@@ -4,6 +4,7 @@ process.env.AI_PROVIDER = "mock";
 process.env.SERVER_CHAT_HISTORY = "";
 process.env.GEMINI_EMBEDDING_SEARCH = "";
 process.env.CHATBOT_DB_PATH = ":memory:";
+process.env.APP_STORE_URL = ":memory:";
 process.env.TRUST_PROXY_HEADERS = "enabled"; // Isolated synthetic request identities in this test process only.
 process.env.AUTH_COOKIE_SECRET = "test-only-auth-cookie-secret-with-at-least-32-characters";
 
@@ -39,13 +40,7 @@ async function main() {
   const { citationsFromRows } = await import("../lib/citations");
   const { evidenceForSemanticRoute } = await import("../lib/semantic-routing");
   const { retrieveAcademicEvidence } = await import("../lib/academic-retrieval");
-  const {
-    decodeLocalAccountsCookie,
-    decodeSessionCookie,
-    encodeLocalAccountsCookie,
-    encodeSessionCookie,
-    LOCAL_ACCOUNTS_MAX_AGE_MS,
-  } = await import("../lib/session-cookie");
+  const { store: appStore } = await import("../lib/store/client");
 
   let requestNumber = 0;
 
@@ -208,62 +203,17 @@ async function main() {
       },
     },
     {
-      name: "encrypted local-account fallback stays below browser cookie limits",
-      run: () => {
-        const accounts = Array.from({ length: 5 }, (_, index) => ({
-          id: `account-${index}-${"x".repeat(24)}`,
-          username: `user_${index}_${"u".repeat(24)}`,
-          email: `${"e".repeat(60 - index)}@uaeu.ac.ae`,
-          studentType: "Current Student",
-          major: "m".repeat(80),
-          universityAffiliation: "uaeu" as const,
-          passwordHash: `$2b$10$${"h".repeat(53)}`,
-          createdAt: Date.now(),
-        }));
-        const encoded = encodeLocalAccountsCookie(accounts);
-        assert.ok(encoded?.startsWith("sealed3."));
-        assert.ok(Buffer.byteLength(encoded ?? "", "utf8") <= 3_800);
-        assert.ok(decodeLocalAccountsCookie(encoded).length >= 1);
-
-        assert.equal(encodeSessionCookie(accounts[0]), null);
-        const session = encodeSessionCookie({
-          id: accounts[0].id,
-          username: accounts[0].username,
-          email: accounts[0].email,
-          studentType: accounts[0].studentType,
-          major: accounts[0].major,
-          universityAffiliation: accounts[0].universityAffiliation,
-        });
-        assert.ok(session?.startsWith("sealed3."));
-        assert.equal(decodeSessionCookie(encoded), null);
-        assert.deepEqual(decodeLocalAccountsCookie(session), []);
-
-        const realDateNow = Date.now;
-        const issuedAt = realDateNow();
-        try {
-          Date.now = () => issuedAt;
-          const expiringAccounts = encodeLocalAccountsCookie(accounts);
-          assert.ok(decodeLocalAccountsCookie(expiringAccounts).length >= 1);
-          Date.now = () => issuedAt + LOCAL_ACCOUNTS_MAX_AGE_MS + 1;
-          assert.deepEqual(decodeLocalAccountsCookie(expiringAccounts), []);
-        } finally {
-          Date.now = realDateNow;
-        }
-      },
-    },
-    {
-      name: "signup fails before inserting when cookie encryption is not configured",
+      name: "signup fails before inserting when the auth secret is not configured",
       run: async () => {
         const previousSecret = process.env.AUTH_COOKIE_SECRET;
+        const previousJwt = process.env.AUTH_JWT_SECRET;
         const username = `no_secret_${Date.now()}`;
-        const countUser = () =>
-          (db.prepare("SELECT COUNT(*) AS count FROM users WHERE username = ?").get(username) as {
-            count: number;
-          }).count;
+        const countUser = async () => Number((await (await appStore()).execute({ sql: "SELECT COUNT(*) AS count FROM accounts WHERE username = ?", args: [username] })).rows[0].count);
 
         try {
           delete process.env.AUTH_COOKIE_SECRET;
-          assert.equal(countUser(), 0);
+          delete process.env.AUTH_JWT_SECRET;
+          assert.equal(await countUser(), 0);
           const response = await signupPost(
             new Request("http://localhost/api/auth/signup", {
               method: "POST",
@@ -277,10 +227,12 @@ async function main() {
             }),
           );
           assert.equal(response.status, 503);
-          assert.equal(countUser(), 0);
+          assert.equal(await countUser(), 0);
         } finally {
           if (previousSecret === undefined) delete process.env.AUTH_COOKIE_SECRET;
           else process.env.AUTH_COOKIE_SECRET = previousSecret;
+          if (previousJwt === undefined) delete process.env.AUTH_JWT_SECRET;
+          else process.env.AUTH_JWT_SECRET = previousJwt;
         }
       },
     },
