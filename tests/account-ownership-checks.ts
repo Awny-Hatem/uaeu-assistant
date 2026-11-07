@@ -99,7 +99,7 @@ async function main() {
   // Controls: B's own requests succeed and stay inside B's data.
   jar = new Map(goodB);
   const own = { "x-chat-account-id": b.id, origin: "http://localhost" };
-  let response = await history.GET(new Request("http://localhost/api/history", { headers: own }));
+  let response: Response = await history.GET(new Request("http://localhost/api/history", { headers: own }));
   assert.equal(response.status, 200);
   assert.deepEqual((await response.json() as { messages: { content: string }[] }).messages.map((m) => m.content), ["private-b question", "private-b answer"]);
   checks += 1;

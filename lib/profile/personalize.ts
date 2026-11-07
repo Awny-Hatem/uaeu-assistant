@@ -11,6 +11,21 @@ const SELF_REFERENCE = /\b(?:my|mine|i|i'm|im|me)\b.{0,40}\b(?:major|program(?:m
 const SELF_REFERENCE_AR = /(?:تخصصي|برنامجي|كليتي|خطتي|دراستي|مساقاتي|سنتي|احتاج|أحتاج|علي ان|عليّ|لازم اخذ|لازم آخذ|يلزمني|اقدر اسجل|أقدر أسجل)/u;
 const PROGRAM_DEPENDENT = /\b(?:credits?|credit hours|courses?|electives?|prerequisites?|study plan|degree plan|graduat\w*|requirements?|major|college|internship|capstone|accredit\w*)\b|ساع|مساق|مقرر|متطلب|خطة|تخرج|تخصص|كلية|تدريب/iu;
 
+/** "my major", "تخصصي" etc. in a question whose answer depends on the program. */
+export function asksAboutOwnProgram(query: string): boolean {
+  return (SELF_REFERENCE.test(query) || SELF_REFERENCE_AR.test(query)) && PROGRAM_DEPENDENT.test(query) && !namesAProgram(query);
+}
+
+/** Ask which program instead of guessing, when no saved major can be used. */
+export function ownProgramClarification(locale: "ar" | "en", signedIn: boolean): string {
+  if (locale === "ar") return signedIn
+    ? "أي برنامج في جامعة الإمارات تقصد؟ اكتب اسم البرنامج (مثل بكالوريوس العلوم في علوم الحاسوب) وسأجيب من صفحته الرسمية في الدليل. يمكنك أيضًا حفظ تخصصك في صفحة الملف الشخصي لأستخدمه في أسئلة مثل هذه."
+    : "أي برنامج في جامعة الإمارات تقصد؟ اكتب اسم البرنامج (مثل بكالوريوس العلوم في علوم الحاسوب) وسأجيب من صفحته الرسمية في الدليل. إذا سجلت الدخول وحفظت تخصصك في ملفك، يمكنني استخدامه في أسئلة مثل هذه.";
+  return signedIn
+    ? "Which UAEU program do you mean? Tell me the program name (for example, Bachelor of Science in Computer Science) and I will answer from its official catalog entry. You can also save your major on your profile page so I can use it for questions like this."
+    : "Which UAEU program do you mean? Tell me the program name (for example, Bachelor of Science in Computer Science) and I will answer from its official catalog entry. If you sign in and save your major on your profile, I can use it for questions like this.";
+}
+
 export type Personalization = { query: string; used: boolean; fields: string[] };
 
 const GENERIC = /^(?:my|the|a|an|and|of|in|for|i|me|is|it|to|do|can|what|how|many|much|need|take|program|programme|major|degree|plan|study|courses?|credits?|electives?|requirements?|college|year|graduate|graduation|uaeu)$/i;

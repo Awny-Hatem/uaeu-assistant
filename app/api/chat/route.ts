@@ -19,7 +19,7 @@ import { correctQueryTypos, courseCodes, resolveConversation, understandQuery } 
 import { currentAccountId } from "@/lib/auth/current";
 import { getAccount } from "@/lib/auth/accounts";
 import { getProfile, recordTopic, type Profile } from "@/lib/profile/store";
-import { personalizeQuery, profilePromptBlock, type Personalization } from "@/lib/profile/personalize";
+import { asksAboutOwnProgram, namesAProgram, ownProgramClarification, personalizeQuery, profilePromptBlock, type Personalization } from "@/lib/profile/personalize";
 import { runtimeContract } from "@/lib/runtime-contract";
 import { MAX_CHAT_BODY_BYTES, MAX_CHAT_MESSAGES, MAX_CHAT_MESSAGE_CHARS } from "@/lib/chat-contract";
 import { canonicalCandidateIds, canonicalEntriesForSemanticRoute, evidenceForSemanticRoute, requestedCourseTargets, resolveSemanticRoute, selectCanonicalFallback, type SemanticRoute } from "@/lib/semantic-routing";
@@ -658,15 +658,29 @@ async function retrieveContext(latest: string, deadlineAt?: number): Promise<Evi
 }
 
 /** Per-request memory state shared between handleChat and the POST wrapper. */
-type MemoryRequest = { session?: MemorySession; latestOriginal?: string; seededFromClient?: boolean; userId?: string | null };
+type MemoryRequest = { session?: MemorySession; latestOriginal?: string; seededFromClient?: boolean; userId?: string | null; profileNote?: { en: string; ar: string } };
 
 export function POST(req: Request) {
   return withAnswerUsage(async () => {
     const memory: MemoryRequest = {};
-    const response = await handleChat(req, memory);
+    let response: Response = await handleChat(req, memory);
+    if (memory.profileNote) response = await withProfileNote(response, memory.profileNote);
     if (memory.session && memory.latestOriginal) await rememberExchange(memory, response);
     return response;
   });
+}
+
+/**
+ * Say plainly when a saved profile shaped the answer, in the reply's language.
+ * Deterministic, so transparency does not depend on the model's wording.
+ */
+async function withProfileNote(response: Response, note: { en: string; ar: string }): Promise<Response> {
+  if (response.status !== 200) return response;
+  const body = await response.clone().json().catch(() => null) as Record<string, unknown> | null;
+  if (!body || typeof body.content !== "string" || body.source === "error" || body.disposition === "clarify") return response;
+  if (/saved (?:major|profile)|المحفوظ|ملفك/iu.test(body.content)) return response;
+  const arabic = /[\u0600-\u06ff]/u.test(body.content.slice(0, 120));
+  return jsonNoStore({ ...body, content: `${arabic ? note.ar : note.en}\n\n${body.content}`, personalized: true });
 }
 
 async function rememberExchange(memory: MemoryRequest, response: Response) {
@@ -784,7 +798,11 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   const lastUserIndex = sanitized.findLastIndex((message) => message.role === "user");
   if (profile && lastUserIndex >= 0) {
     personalization = personalizeQuery(sanitized[lastUserIndex].content, profile);
-    if (personalization.used) sanitized[lastUserIndex] = { role: "user", content: personalization.query };
+    if (personalization.used) {
+      sanitized[lastUserIndex] = { role: "user", content: personalization.query };
+      const used = personalization.fields.includes("major") ? profile.major : profile.college;
+      memory.profileNote = { en: `Based on your saved profile (${used}):`, ar: `بناءً على ملفك المحفوظ (${used}):` };
+    }
   }
 
   const latest = lastUserMessage(sanitized);
@@ -916,6 +934,16 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
       role: "assistant", content: missingSubjectContent(latest, locale, resolution.candidates.map(({ label }) => label)),
       source: "escalated", stateLabel: "clarify_subject", disposition: "clarify", citations: [],
       clarificationReason: "ambiguous_subject", communications,
+    };
+    return respond(payload, latest, locale);
+  }
+  // "How many credits do I need for my major?" with no usable saved major and
+  // no program named anywhere in the conversation: ask, never guess.
+  if (!personalization.used && !resolution.usedContext && asksAboutOwnProgram(latest) && !namesAProgram(routingQuery)) {
+    const payload: AssistantPayload = {
+      role: "assistant", content: ownProgramClarification(locale, Boolean(userId)),
+      source: "escalated", stateLabel: "clarify_subject", disposition: "clarify", citations: [],
+      clarificationReason: "own_program_unknown", communications,
     };
     return respond(payload, latest, locale);
   }
