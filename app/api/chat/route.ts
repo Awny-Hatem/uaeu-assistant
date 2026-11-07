@@ -19,7 +19,7 @@ import { correctQueryTypos, courseCodes, resolveConversation, understandQuery } 
 import { currentAccountId } from "@/lib/auth/current";
 import { getAccount } from "@/lib/auth/accounts";
 import { getProfile, recordTopic, type Profile } from "@/lib/profile/store";
-import { asksAboutOwnProgram, namesAProgram, ownProgramClarification, personalizeQuery, profilePromptBlock, type Personalization } from "@/lib/profile/personalize";
+import { asksAboutOwnProgram, namesAProgram, ownProgramClarification, personalizeQuery, profilePromptBlock, studentLevel, type Personalization } from "@/lib/profile/personalize";
 import { runtimeContract } from "@/lib/runtime-contract";
 import { MAX_CHAT_BODY_BYTES, MAX_CHAT_MESSAGES, MAX_CHAT_MESSAGE_CHARS } from "@/lib/chat-contract";
 import { canonicalCandidateIds, canonicalEntriesForSemanticRoute, evidenceForSemanticRoute, requestedCourseTargets, resolveSemanticRoute, selectCanonicalFallback, type SemanticRoute } from "@/lib/semantic-routing";
@@ -32,6 +32,7 @@ import { academicCoverageViolations } from "@/lib/academic-coverage";
 import { appendExchange, MEMORY_COOKIE, memoryCookieOptions, memoryEnabled, openSession, recentTurns, turnCount, type MemorySession, type MemoryTurn } from "@/lib/memory/store";
 import { refreshSummary, summaryDue } from "@/lib/memory/summary";
 import { serverConversation } from "@/lib/memory/conversation";
+import { asksOwnStudentId, asksRemainingCourses, compareQuestion, ownStudentIdReply, facetCarryQuestion, levelSwitchQuestion, registrationWhenHint, remainingCoursesReply, translatePrevious, translationTarget } from "@/lib/memory/followups";
 import { after } from "next/server";
 
 export const runtime = "nodejs";
@@ -159,7 +160,9 @@ function needsConversationContext(query: string): boolean {
     /\b(?:can you |please )?verify (?:this|that|it|the (?:answer|information|prerequisite|requirements?))(?:\s+from\s+(?:the\s+)?official page)?\b/i.test(
       query,
     ) ||
-    /(?:هذا|هذه|ذلك|تلك|لهذا|لهذه|هل أنا مؤهل|كم يستغرق)/u.test(query)
+    /(?:هذا|هذه|ذلك|تلك|لهذا|لهذه|هل أنا مؤهل|كم يستغرق)/u.test(query) ||
+    // A short question that opens with "and"/"و" continues the previous subject.
+    (query.length < 90 && (/^\s*and (?:what|how|is|are|when|which|who|where)\b/i.test(query) || /^\s*و(?:ما|كم|هل|متى|ماذا|أين|اين|من|كيف)(?=\s|$)/u.test(query)))
   );
 }
 
@@ -677,7 +680,7 @@ export function POST(req: Request) {
 async function withProfileNote(response: Response, note: { en: string; ar: string }): Promise<Response> {
   if (response.status !== 200) return response;
   const body = await response.clone().json().catch(() => null) as Record<string, unknown> | null;
-  if (!body || typeof body.content !== "string" || body.source === "error" || body.disposition === "clarify") return response;
+  if (!body || typeof body.content !== "string" || body.source === "error") return response;
   if (/saved (?:major|profile)|المحفوظ|ملفك/iu.test(body.content)) return response;
   const arabic = /[\u0600-\u06ff]/u.test(body.content.slice(0, 120));
   return jsonNoStore({ ...body, content: `${arabic ? note.ar : note.en}\n\n${body.content}`, personalized: true });
@@ -800,9 +803,19 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     personalization = personalizeQuery(sanitized[lastUserIndex].content, profile);
     if (personalization.used) {
       sanitized[lastUserIndex] = { role: "user", content: personalization.query };
-      const used = personalization.fields.includes("major") ? profile.major : profile.college;
-      memory.profileNote = { en: `Based on your saved profile (${used}):`, ar: `بناءً على ملفك المحفوظ (${used}):` };
+      const level = studentLevel(profile);
+      const used = personalization.fields.includes("major") ? profile.major : personalization.fields.includes("college") ? profile.college : level === "graduate" ? "graduate student" : "undergraduate student";
+      const usedAr = personalization.fields.includes("major") || personalization.fields.includes("college") ? used : level === "graduate" ? "طالب دراسات عليا" : "طالب بكالوريوس";
+      memory.profileNote = { en: `Based on your saved profile (${used}):`, ar: `بناءً على ملفك المحفوظ (${usedAr}):` };
     }
+  }
+
+  // "And for the master's?" / "والدكتوراه؟": same field at another level, from memory.
+  if (lastUserIndex >= 0 && !personalization.used) {
+    const prior = sanitized.slice(0, lastUserIndex);
+    const current = sanitized[lastUserIndex].content;
+    const switched = levelSwitchQuestion(current, prior) ?? compareQuestion(current, prior) ?? facetCarryQuestion(current, prior) ?? registrationWhenHint(current);
+    if (switched) sanitized[lastUserIndex] = { role: "user", content: switched };
   }
 
   const latest = lastUserMessage(sanitized);
@@ -814,7 +827,27 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
 
   // A saved language preference decides only when the message itself does not
   // (for example a bare course code); the student's own language always wins.
-  const locale = resolveLocale(latest, localePref === "auto" && profile?.language && !/[a-z\u0600-\u06ff]{3,}/iu.test(originalLatest) ? profile.language : localePref);
+  const locale = resolveLocale(latest, localePref === "auto" && profile?.language && !/[a-z\u0600-\u06ff]{3,}/iu.test(originalLatest.replace(/\b[A-Z]{2,5}\s?\d{3,4}\b/gi, "")) ? profile.language : localePref);
+  // "Translate that to Arabic": a faithful translation of the previous answer,
+  // which was already source-checked; no new facts are introduced.
+  const translateTo = translationTarget(latest);
+  const previousAnswer = translateTo ? [...sanitized.slice(0, -1)].reverse().find((m) => m.role === "assistant")?.content : undefined;
+  if (translateTo && previousAnswer) {
+    const translated = await translatePrevious(previousAnswer, translateTo);
+    if (translated) {
+      const payload: AssistantPayload = { role: "assistant", content: translated, source: "conversation", stateLabel: "translation", disposition: "answer", citations: [] };
+      return respond(payload, latest, translateTo);
+    }
+  }
+  if (asksOwnStudentId(latest)) {
+    const payload: AssistantPayload = { role: "assistant", content: ownStudentIdReply(locale), source: "conversation", stateLabel: "privacy_boundary", disposition: "answer", citations: [] };
+    return respond(payload, latest, locale);
+  }
+  // "What courses do I have remaining?" needs the student's record: say so plainly.
+  if (asksRemainingCourses(latest)) {
+    const payload: AssistantPayload = { role: "assistant", content: remainingCoursesReply(locale, profile?.major ?? null), source: "escalated", stateLabel: "individual_record", disposition: "clarify", citations: [], clarificationReason: "individual_record" };
+    return respond(payload, latest, locale);
+  }
   let resolution = resolveConversation(sanitized, latest);
   const corpusContext = !resolution.ambiguous ? corpusFollowUp(sanitized, latest) : null;
   if (corpusContext) resolution = { ...resolution, usedContext: !corpusContext.ambiguous, ambiguous: corpusContext.ambiguous, needsClarification: corpusContext.ambiguous, candidates: corpusContext.labels.map(label => ({ key: label, label, origin: "previous user request" })) };

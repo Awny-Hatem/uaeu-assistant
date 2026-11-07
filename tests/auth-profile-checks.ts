@@ -200,6 +200,10 @@ async function main() {
     assert.equal(personalizeQuery("How many credits do I need for Mechanical Engineering?", p).used, false, "explicit program wins");
     assert.equal(personalizeQuery("How many credits is the Bachelor of Law?", p).used, false);
     assert.equal(personalizeQuery("How many credits do I need for my major?", null).used, false, "guests are never personalized");
+    assert.match(personalizeQuery("When is my registration?", p).query, /\(undergraduate student; registration start date/, "registration uses level, not program");
+    assert.match(personalizeQuery("When is my registration?", { ...p, major: "Master of Business Administration", academicYear: "graduate" }).query, /\(graduate student;/);
+    assert.equal(personalizeQuery("What are my prerequisites for CSBP219?", p).used, false, "a named course needs no program");
+    assert.match(personalizeQuery("What is my study plan for this year?", p).query, /Computer Science; year 2 of the model plan/);
     const block = profilePromptBlock(p, personalizeQuery("How many credits do I need for my major?", p));
     assert.match(block, /not evidence/);
     assert.doesNotMatch(block, /2345|student id/i);

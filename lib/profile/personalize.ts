@@ -1,4 +1,5 @@
 import { resolveProgram } from "@/lib/profile/programs";
+import { courseCodes } from "@/lib/query-understanding";
 import type { Profile } from "@/lib/profile/store";
 
 // Tailor an answer to the signed-in student's saved profile ONLY when the
@@ -7,13 +8,15 @@ import type { Profile } from "@/lib/profile/store";
 // evidence, and nothing beyond these saved fields is ever claimed about the
 // student. The student ID is never part of this.
 
-const SELF_REFERENCE = /\b(?:my|mine|i|i'm|im|me)\b.{0,40}\b(?:major|program(?:me)?|degree|college|plan|courses?|credits?|electives?|requirements?|graduat\w*|study plan|year)\b|\b(?:major|program(?:me)?|degree|college|courses?|credits?|electives?|requirements?)\b.{0,30}\b(?:do i|should i|can i|i need|i have|for me)\b|\bfor my (?:major|program|degree|college|year)\b/iu;
-const SELF_REFERENCE_AR = /(?:تخصصي|برنامجي|كليتي|خطتي|دراستي|مساقاتي|سنتي|احتاج|أحتاج|علي ان|عليّ|لازم اخذ|لازم آخذ|يلزمني|اقدر اسجل|أقدر أسجل)/u;
+const SELF_REFERENCE = /\b(?:my|mine|i|i'm|im|me)\b.{0,40}\b(?:major|program(?:me)?|degree|college|plan|courses?|credits?|electives?|requirements?|graduat\w*|study plan|year|registration|register|prerequisites?)\b|\b(?:major|program(?:me)?|degree|college|courses?|credits?|electives?|requirements?)\b.{0,30}\b(?:do i|should i|can i|i need|i have|for me)\b|\bfor my (?:major|program|degree|college|year)\b/iu;
+const SELF_REFERENCE_AR = /(?:تخصصي|برنامجي|كليتي|خطتي|دراستي|مساقاتي|سنتي|تسجيلي|احتاج|أحتاج|علي ان|عليّ|لازم اخذ|لازم آخذ|يلزمني|اقدر اسجل|أقدر أسجل|متى اسجل|متى أسجل)/u;
+// Registration and calendar answers depend on level (undergraduate vs graduate), not program.
+const LEVEL_DEPENDENT = /\bregist\w*|\badd(?:\s*(?:and|\/|&)\s*|-)drop\b|\bcalendar\b|تسجيل|اسجل|أسجل|السحب والإضافة|التقويم/iu;
 const PROGRAM_DEPENDENT = /\b(?:credits?|credit hours|courses?|electives?|prerequisites?|study plan|degree plan|graduat\w*|requirements?|major|college|internship|capstone|accredit\w*)\b|ساع|مساق|مقرر|متطلب|خطة|تخرج|تخصص|كلية|تدريب/iu;
 
 /** "my major", "تخصصي" etc. in a question whose answer depends on the program. */
 export function asksAboutOwnProgram(query: string): boolean {
-  return (SELF_REFERENCE.test(query) || SELF_REFERENCE_AR.test(query)) && PROGRAM_DEPENDENT.test(query) && !namesAProgram(query);
+  return (SELF_REFERENCE.test(query) || SELF_REFERENCE_AR.test(query)) && PROGRAM_DEPENDENT.test(query) && !LEVEL_DEPENDENT.test(query) && !courseCodes(query).length && !namesAProgram(query);
 }
 
 /** Ask which program instead of guessing, when no saved major can be used. */
@@ -47,15 +50,32 @@ export function namesAProgram(query: string): boolean {
 export function personalizeQuery(query: string, profile: Profile | null): Personalization {
   if (!profile || (!profile.major && !profile.college && !profile.academicYear)) return { query, used: false, fields: [] };
   const selfReferenced = SELF_REFERENCE.test(query) || SELF_REFERENCE_AR.test(query);
-  if (!selfReferenced || !PROGRAM_DEPENDENT.test(query)) return { query, used: false, fields: [] };
+  if (!selfReferenced) return { query, used: false, fields: [] };
+  if (LEVEL_DEPENDENT.test(query) && !PROGRAM_DEPENDENT.test(query.replace(LEVEL_DEPENDENT, ""))) {
+    const level = studentLevel(profile);
+    // "When is my registration?" is answered from the published academic calendar.
+    const when = /\bwhen\b|\bdate|متى|موعد/iu.test(query) ? "; registration start date for the next semester in the published academic calendar" : "";
+    return level ? { query: `${query} (${level} student${when})`, used: true, fields: ["level"] } : { query, used: false, fields: [] };
+  }
+  if (!PROGRAM_DEPENDENT.test(query) || courseCodes(query).length) return { query, used: false, fields: [] }; // a named course needs no program
   if (namesAProgram(query)) return { query, used: false, fields: [] }; // an explicit program wins
   const fields: string[] = [];
   const parts: string[] = [];
   if (profile.major) { parts.push(`program: ${profile.major}`); fields.push("major"); }
   else if (profile.college) { parts.push(`college: ${profile.college}`); fields.push("college"); }
-  if (profile.academicYear && /\byear\b|سنت|سنة|level/iu.test(query)) { parts.push(profile.academicYear === "graduate" ? "graduate student" : `year ${profile.academicYear}`); fields.push("academicYear"); }
+  if (profile.academicYear && /\byear\b|remaining|next semester|this semester|study plan|سنت|سنة|المتبقي|الفصل القادم|خطتي|level/iu.test(query)) { parts.push(profile.academicYear === "graduate" ? "graduate student" : `year ${profile.academicYear} of the model plan`); fields.push("academicYear"); }
   if (!parts.length) return { query, used: false, fields: [] };
   return { query: `${query} (${parts.join("; ")})`, used: true, fields };
+}
+
+/** Undergraduate or graduate, from the saved year or the saved program's qualification. */
+export function studentLevel(profile: Profile): "undergraduate" | "graduate" | null {
+  if (profile.academicYear === "graduate") return "graduate";
+  if (profile.major) {
+    const r = resolveProgram(profile.major, undefined, true);
+    if (r.ok) return /master|doctor|graduate|diploma/i.test(r.value.qualification) ? "graduate" : "undergraduate";
+  }
+  return profile.academicYear ? "undergraduate" : null;
 }
 
 /** Prompt block for a personalized request; empty when the profile was not used. */
@@ -66,7 +86,8 @@ export function profilePromptBlock(profile: Profile | null, p: Personalization):
     p.fields.includes("major") ? `- Saved major: ${profile.major}` : "",
     p.fields.includes("college") ? `- Saved college: ${profile.college}` : "",
     p.fields.includes("academicYear") ? `- Saved academic year: ${profile.academicYear}` : "",
-    "The question refers to the student's own program without naming one, so answer for the saved program above. Say briefly that you used their saved profile (for example \"For your saved major, …\"). Do not state any other personal fact about the student, do not claim to have checked their record, and do not infer eligibility.",
+    p.fields.includes("level") ? `- Level from saved profile: ${studentLevel(profile)}` : "",
+    "The question refers to the student's own program or level without naming one, so answer for the saved details above. The student's own completed courses and registration appointment are NOT known: never say which courses they have left or when their personal slot is; give the published plan or calendar and say their degree audit/portal is controlling. Say briefly that you used their saved profile (for example \"For your saved major, …\"). Do not state any other personal fact about the student, do not claim to have checked their record, and do not infer eligibility.",
   ];
   return lines.filter(Boolean).join("\n");
 }

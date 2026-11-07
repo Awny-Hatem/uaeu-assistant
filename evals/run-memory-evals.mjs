@@ -5,8 +5,8 @@
 // Usage: node evals/run-memory-evals.mjs --base http://127.0.0.1:3003 --label memory-v1 [--ids a,b]
 import fs from 'node:fs';
 import crypto from 'node:crypto';
-import { assess } from './run-qa-audit.mjs';
-import { applySourceEquivalences } from './source-equivalences.mjs';
+import { gradeScenario } from './memory-grading.mjs';
+
 
 const args = process.argv.slice(2), opt = (k, d) => (args.includes(k) ? args[args.indexOf(k) + 1] : d);
 const base = opt('--base', 'http://127.0.0.1:3003'), label = opt('--label', 'memory-local');
@@ -58,7 +58,7 @@ for (const c of fixture.cases) {
     await ensureAccount();
     browser = signedIn;
     await browser.call('/api/history', 'DELETE'); // no memory leaks between scenarios
-    const p = await browser.call('/api/profile', 'PUT', { major: c.profile.major, academicYear: c.profile.academicYear, college: '', studentId: c.profile.studentId ?? '' });
+    const p = await browser.call('/api/profile', 'PUT', { major: c.profile.major, academicYear: c.profile.academicYear, college: '', studentId: c.profile.studentId ?? '', language: c.profile.language ?? '' });
     if (p.status !== 200) throw new Error(`Profile setup failed for ${c.id}: ${JSON.stringify(p.body)}`);
   } else browser = new Browser();
   const conversation = [];
@@ -68,7 +68,7 @@ for (const c of fixture.cases) {
     const r = await browser.call('/api/chat', 'POST', { messages: [{ role: 'user', content: user }] });
     conversation.push({ user, status: r.status, seconds: +((performance.now() - started) / 1000).toFixed(3), payload: r.body });
   }
-  const assessment = applySourceEquivalences(assess(c, conversation), c, conversation);
+  const assessment = gradeScenario(c, conversation);
   const stored = await browser.call('/api/history');
   run.results.push({ ...c, conversation, assessment, serverTurnsAfter: stored.body?.messages?.length ?? null });
   fs.writeFileSync(file, JSON.stringify(run, null, 1));

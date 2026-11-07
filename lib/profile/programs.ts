@@ -109,3 +109,49 @@ export function resolveProgram(input: string, level?: "undergraduate" | "graduat
   if (names.length === 1) return { ok: true, value: programs.get(names[0])! };
   return { ok: false, reason: names.length ? "ambiguous" : "unknown", candidates: names.slice(0, 6) };
 }
+
+/** Official program names (and curated core aliases) found in a text, most recent mention last. */
+export function programsMentioned(text: string, fullNamesOnly = false): ProgramMatch[] {
+  const { programs } = load();
+  const hay = ` ${norm(text)} `;
+  const hits: { at: number; len: number; p: ProgramMatch }[] = [];
+  const names = new Map<string, string>();
+  for (const name of programs.keys()) if (!/Accelerated|Micro-Credential|Minor|Concentration|\bModel\b|\bPlan\b/i.test(name)) names.set(norm(name), name);
+  if (!fullNamesOnly) for (const p of BASE_PROGRAMS) if (programs.has(p.label)) for (const a of p.aliases) if (a.length > 3) names.set(norm(a), p.label);
+  for (const [key, name] of names) {
+    let from = 0, at: number;
+    while ((at = hay.indexOf(` ${key} `, from)) >= 0) { hits.push({ at, len: key.length, p: programs.get(name)! }); from = at + 1; }
+  }
+  // Prefer the longest name at a position (a full name over a nested alias), then order by position.
+  hits.sort((a, b) => a.at - b.at || b.len - a.len);
+  const out: ProgramMatch[] = [];
+  let end = -1;
+  for (const h of hits) if (h.at >= end) { out.push(h.p); end = h.at + h.len; }
+  return out;
+}
+
+/** The same field at another level: Bachelor of Science in X -> Master of Science in X / Doctor of Philosophy in X. */
+export function sameFieldAt(program: string, level: "master" | "doctorate" | "bachelor"): string | null {
+  const { programs } = load();
+  const field = program.replace(/^(?:Bachelor|Master|Doctor)(?: of [A-Z][a-z]+(?: [A-Z][a-z]+)?)? in (?:the )?/i, "").replace(/^(?:Bachelor|Master) of /i, "").trim().toLowerCase();
+  if (!field || field === program.toLowerCase()) return null;
+  const wanted = level === "master" ? /^master/i : level === "doctorate" ? /^doctor/i : /^bachelor/i;
+  const candidates = [...programs.values()].filter((p) => wanted.test(p.program) && !/Accelerated|Micro-Credential|Minor|Concentration|\bModel\b|\bPlan\b/i.test(p.program)
+    && (p.program.toLowerCase().endsWith(` ${field}`) || p.program.toLowerCase().endsWith(` ${field} sciences`)));
+  return candidates.length === 1 ? candidates[0].program : null;
+}
+
+/** "Chemistry" at the bachelor level -> Bachelor of Science in Chemistry; exact field names only. */
+export function programByField(phrase: string, level: "undergraduate" | "graduate"): string | null {
+  const { programs } = load();
+  const key = norm(phrase);
+  if (key.length < 4) return null;
+  const hits = [...programs.values()].filter((p) => {
+    if (/Accelerated|Micro-Credential|Minor|Concentration|Dual|\bModel\b|\bPlan\b/i.test(p.program)) return false;
+    const isGrad = /^(?:master|doctor)/i.test(p.program);
+    if ((level === "graduate") !== isGrad || (level === "graduate" && !/^master/i.test(p.program))) return false;
+    const field = p.program.replace(/^(?:Bachelor|Master|Doctor)(?: of [A-Z][a-z]+(?: [A-Z][a-z]+)?)? in (?:the )?/i, "").replace(/^(?:Bachelor|Master) of /i, "");
+    return norm(field) === key;
+  });
+  return hits.length === 1 ? hits[0].program : null;
+}
