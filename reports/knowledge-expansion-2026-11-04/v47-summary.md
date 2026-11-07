@@ -6,8 +6,8 @@ runtimeUnchanged = true for every API run.
 |---|---|---|---|---|
 | Examiner 600 (main 100/0/0) | 592 | 7 | 1 | 0 |
 | Phrasing pass 399 | 384 | 11 | 4 | 0 |
-| Regression 1,782 | 1686 | 21 | 8 | 67 |
-| Browser (100 scenarios) | 3 answered | – | – | 97 returned 503 OPENAI_QUOTA_EXHAUSTED |
+| Regression 1,782 | 1753 | 21 | 8 | 0 (67 rerun on 7 Nov: 67/67 correct) |
+| Browser (100 scenarios, rerun 7 Nov) | 100 | 0 | 0 | 0 |
 
 - Examiner reuse: 23 exact factual reuse pairs (v46 had 24, v45 had 50) and 56 near-identical pairs.
 - Examiner latency: mean 3.43s, p95 6.84s, max 13.9s. No answer took over 20s.
