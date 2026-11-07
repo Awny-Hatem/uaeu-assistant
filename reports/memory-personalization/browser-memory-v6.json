@@ -1,0 +1,114 @@
+{
+ "base": "http://127.0.0.1:3000",
+ "label": "browser-memory-v6",
+ "steps": [
+  {
+   "phase": "before",
+   "name": "guest follow-up uses server memory (Bachelor of Law, 130 credits)",
+   "pass": true,
+   "answer": "The Bachelor of Law undergraduate program at UAEU requires a minimum of 130 credit hours to complete the degree."
+  },
+  {
+   "phase": "before",
+   "name": "memory cookie is httpOnly and SameSite=Lax, not readable by page script",
+   "pass": true,
+   "cookie": {
+    "httpOnly": true,
+    "sameSite": "Lax"
+   }
+  },
+  {
+   "phase": "before",
+   "name": "after a refresh with local storage wiped, the conversation is restored from the server",
+   "pass": true,
+   "serverTurns": 4
+  },
+  {
+   "phase": "before",
+   "name": "sign-up succeeds and sets session cookies",
+   "pass": true,
+   "status": 200
+  },
+  {
+   "phase": "before",
+   "name": "auth cookies are httpOnly and SameSite=Strict",
+   "pass": true,
+   "names": [
+    "uaeu_rt:Strict",
+    "uaeu_at:Strict"
+   ]
+  },
+  {
+   "phase": "before",
+   "name": "profile page resolves an Arabic major to the catalog program",
+   "pass": true,
+   "saved": "Saved. Major: Bachelor of Science in Computer Science."
+  },
+  {
+   "phase": "before",
+   "name": "the profile page shows only the last 4 digits of the student ID",
+   "pass": true,
+   "placeholder": "Saved, ending 8765"
+  },
+  {
+   "phase": "before",
+   "name": "signed-in answer uses the saved major and says so (120 credits)",
+   "pass": true,
+   "answer": "For your saved major, Bachelor of Science in Computer Science, the minimum credit requirement to graduate is 120 credit hours, including general education, college requirements, major requirements, in"
+  },
+  {
+   "phase": "before",
+   "name": "still signed in after a refresh",
+   "pass": true
+  },
+  {
+   "phase": "after",
+   "name": "guest memory survives a server restart",
+   "pass": true,
+   "serverTurns": 4
+  },
+  {
+   "phase": "after",
+   "name": "after the restart a follow-up is still resolved from memory (College of Law)",
+   "pass": true,
+   "answer": "UAEU includes a College of Law among its nine colleges."
+  },
+  {
+   "phase": "after",
+   "name": "Clear conversation deletes the server copy",
+   "pass": true
+  },
+  {
+   "phase": "after",
+   "name": "a reload after Clear shows an empty conversation",
+   "pass": true
+  },
+  {
+   "phase": "after",
+   "name": "signed-in session survives a server restart",
+   "pass": true,
+   "major": "Bachelor of Science in Computer Science"
+  },
+  {
+   "phase": "after",
+   "name": "signed-in memory survives the restart",
+   "pass": true,
+   "serverTurns": 2
+  },
+  {
+   "phase": "after",
+   "name": "logout ends the session",
+   "pass": true
+  },
+  {
+   "phase": "after",
+   "name": "cookies copied before logout no longer authenticate",
+   "pass": true
+  }
+ ],
+ "accountId": "ad45733f-3e6e-4d75-9289-5c119012d8e8",
+ "summary": {
+  "passed": 17,
+  "failed": 0
+ }
+}
