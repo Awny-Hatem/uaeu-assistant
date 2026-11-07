@@ -3,6 +3,10 @@ import Module, { createRequire } from "node:module";
 import path from "node:path";
 import type Database from "better-sqlite3";
 
+// This file covers the legacy opt-in account history (SERVER_CHAT_HISTORY).
+// Server conversation memory has its own checks in tests/memory-*.ts.
+process.env.SERVER_MEMORY = "disabled";
+
 // Real route/auth/history code with sealed test cookies and an isolated SQLite
 // database. Only the Next request-cookie accessor is substituted. This is not
 // an HTTP/browser test. Every network/model call is forbidden and counted.

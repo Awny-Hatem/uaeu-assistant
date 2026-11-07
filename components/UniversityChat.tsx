@@ -396,6 +396,19 @@ export function UniversityChat() {
     setGuestQuestionsUsed(guestState.questionsUsed);
     setMessages(guestState.messages);
     guestHydratedRef.current = true;
+    if (guestState.messages.length) return;
+    // The server keeps guest memory under an httpOnly cookie. When this browser
+    // has no local copy (storage cleared, another tab profile), show it.
+    const request = ownershipRef.current.begin();
+    fetch("/api/history", { headers: { 'x-chat-account-id': 'guest' }, cache: 'no-store', credentials: 'same-origin', signal: AbortSignal.any([request.signal, AbortSignal.timeout(10_000)]) })
+      .then(async (res) => {
+        if (!res.ok || !request.isCurrent()) return;
+        const data = (await res.json()) as { messages?: unknown };
+        const stored = sanitizeStoredMessages(data.messages);
+        if (stored.length && request.isCurrent()) setMessages((current) => (current.length ? current : stored));
+      })
+      .catch(() => { /* Display falls back to an empty thread; memory still works server-side. */ })
+      .finally(() => request.finish());
   }, []);
 
   const loadAccountConversation = useCallback(async (loggedUser: AuthUser) => {
@@ -669,7 +682,13 @@ export function UniversityChat() {
       }
     } else {
       writeGuestState([], guestQuestionsUsed);
-      setBanner(copy.cleared);
+      try {
+        const result = await fetch("/api/history", { method: "DELETE", headers: { 'x-chat-account-id': 'guest' }, credentials: 'same-origin', signal: request.signal });
+        if (!result.ok) throw new Error("Delete failed");
+        if (request.isCurrent()) { setDeletionPending(false); setBanner(copy.cleared); }
+      } catch {
+        if (request.isCurrent()) { setDeletionPending(true); setBanner(copy.clearFailed); }
+      }
     }
     if (request.isCurrent()) setProfileOpen(false);
     request.finish();
@@ -751,7 +770,8 @@ export function UniversityChat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-chat-account-id': user?.id ?? 'guest' },
-        credentials: user ? 'same-origin' : 'omit',
+        // Guests send cookies too: their conversation memory lives server-side.
+        credentials: 'same-origin',
         body: JSON.stringify(payload),
         signal: request.signal,
       });
