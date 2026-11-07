@@ -82,9 +82,39 @@ const SCHEMA: string[] = [
   `CREATE INDEX IF NOT EXISTS memory_turns_key_idx ON memory_turns(key_hash, id)`,
 ];
 
+const busy = (error: unknown) => /SQLITE_BUSY|SQLITE_LOCKED|database is locked/i.test(error instanceof Error ? `${error.message} ${(error as { code?: string }).code ?? ""}` : String(error));
+
+async function retryBusy<T>(work: () => Promise<T>): Promise<T> {
+  for (let attempt = 0; ; attempt++) {
+    try { return await work(); }
+    catch (error) {
+      if (!busy(error) || attempt >= 8) throw error;
+      await new Promise((r) => setTimeout(r, Math.min(40 * 2 ** attempt, 1500) + Math.random() * 40));
+    }
+  }
+}
+
+/**
+ * Another process holding the lock (two local servers on one file) must delay a
+ * statement, not lose it: the driver's busy timeout waits first, and a lock
+ * still held after that (or a hosted-database lock) is retried with backoff.
+ */
+function withBusyRetry(db: Client): Client {
+  const execute = db.execute.bind(db) as (...a: unknown[]) => Promise<unknown>;
+  const batch = db.batch.bind(db) as (...a: unknown[]) => Promise<unknown>;
+  (db as unknown as { execute: unknown }).execute = (...a: unknown[]) => retryBusy(() => execute(...a));
+  (db as unknown as { batch: unknown }).batch = (...a: unknown[]) => retryBusy(() => batch(...a));
+  return db;
+}
+
 export async function store(): Promise<Client> {
   if (!client) {
-    client = createClient({ url: storeUrl(), authToken: process.env.TURSO_AUTH_TOKEN?.trim() || undefined });
+    const url = storeUrl();
+    const localFile = url.startsWith("file:") && !url.includes(":memory:");
+    // Local file: ONE connection, so the PRAGMAs below hold for every statement
+    // (the driver otherwise pools connections), plus a busy timeout for locks
+    // held by another local process.
+    client = withBusyRetry(createClient({ url, authToken: process.env.TURSO_AUTH_TOKEN?.trim() || undefined, ...(localFile ? { concurrency: 1, timeout: 5000 } : {}) }));
     ready = (async () => {
       await client!.execute("PRAGMA foreign_keys = ON");
       // Overwrite deleted rows so a cleared conversation cannot be recovered

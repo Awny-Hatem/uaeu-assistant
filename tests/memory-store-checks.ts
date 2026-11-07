@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { execFileSync } from "node:child_process";
+import { execFileSync, spawn } from "node:child_process";
 
 // FR3 memory store: isolated SQLite file through the same libSQL client used in
 // production (Turso). No network and no AI calls.
@@ -62,6 +62,29 @@ await check("memory is shared across processes", async () => {
   const out = execFileSync(process.execPath, ["--import", "tsx", "--input-type=module", "-e", script], { encoding: "utf8", env: { ...process.env } });
   assert.deepEqual(JSON.parse(out.trim().split("\n").at(-1)!), ["first process question", "first process answer", "second process question", "second process answer"]);
   assert.equal(await store.turnCount(session.keyHash), 4);
+});
+
+await check("four processes writing at once lose no turns (busy timeout + retry)", async () => {
+  // Regression: under load, two servers sharing the local file returned SQLITE_BUSY and dropped turns.
+  const script = `
+    process.env.APP_STORE_URL=${JSON.stringify(process.env.APP_STORE_URL)};
+    const s = await import(${JSON.stringify(path.resolve("lib/memory/store.ts"))});
+    const hashes = await Promise.all(Array.from({ length: 25 }, async (_, i) => {
+      const o = await s.openSession(null, null);
+      for (let n = 0; n < 3; n++) if (!(await s.appendExchange(o.session, "q" + i + "-" + n, "a" + i + "-" + n))) throw new Error("write refused");
+      return o.session.keyHash;
+    }));
+    console.log(JSON.stringify(hashes));`;
+  const run = () => new Promise<string[]>((resolve, reject) => {
+    const child = spawn(process.execPath, ["--import", "tsx", "--input-type=module", "-e", script], { env: { ...process.env } });
+    let out = "", err = "";
+    child.stdout.on("data", (d) => { out += d; });
+    child.stderr.on("data", (d) => { err += d; });
+    child.on("close", (code) => (code === 0 ? resolve(JSON.parse(out.trim().split("\n").at(-1)!)) : reject(new Error(err.slice(-500)))));
+  });
+  const all = (await Promise.all([run(), run(), run(), run()])).flat();
+  assert.equal(all.length, 100);
+  for (const hash of all) assert.equal(await store.turnCount(hash), 6);
 });
 
 await check("clear deletes the stored rows, and a late write from before the clear is dropped", async () => {

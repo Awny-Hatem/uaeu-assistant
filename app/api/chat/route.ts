@@ -972,7 +972,8 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   }
   // "How many credits do I need for my major?" with no usable saved major and
   // no program named anywhere in the conversation: ask, never guess.
-  if (!personalization.used && !resolution.usedContext && asksAboutOwnProgram(latest) && !namesAProgram(routingQuery)) {
+  const preparedForLatest = Boolean(faqHit && [...faqHit.entry.questions, ...(faqHit.entry.matchPhrases ?? [])].some(question => normalizeQuery(question) === normalizeQuery(latest)));
+  if (!personalization.used && !resolution.usedContext && !preparedForLatest && asksAboutOwnProgram(latest) && !namesAProgram(routingQuery)) {
     const payload: AssistantPayload = {
       role: "assistant", content: ownProgramClarification(locale, Boolean(userId)),
       source: "escalated", stateLabel: "clarify_subject", disposition: "clarify", citations: [],

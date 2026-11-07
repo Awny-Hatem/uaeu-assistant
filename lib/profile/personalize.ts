@@ -14,9 +14,20 @@ const SELF_REFERENCE_AR = /(?:تخصصي|برنامجي|كليتي|خطتي|در
 const LEVEL_DEPENDENT = /\bregist\w*|\badd(?:\s*(?:and|\/|&)\s*|-)drop\b|\bcalendar\b|تسجيل|اسجل|أسجل|السحب والإضافة|التقويم/iu;
 const PROGRAM_DEPENDENT = /\b(?:credits?|credit hours|courses?|electives?|prerequisites?|study plan|degree plan|graduat\w*|requirements?|major|college|internship|capstone|accredit\w*)\b|ساع|مساق|مقرر|متطلب|خطة|تخرج|تخصص|كلية|تدريب/iu;
 
+// Asking back is only right when the student explicitly refers to THEIR program;
+// "can I see my course content" or "when can I apply" are general questions.
+const OWN_PROGRAM = /\bmy\s+(?:own\s+)?(?:major|program(?:me)?|degree|study\s+plan|degree\s+plan|plan|specialization|specialisation)\b/iu;
+const OWN_PROGRAM_AR = /(?:^|[\s،,؟?])(?:ل|ب|في)?(?:تخصصي|برنامجي|خطتي)(?=$|[\s،,؟?.])/u;
+
+// Facts that differ per program; "count toward my degree" (transfer credit) is not one.
+const OWN_PROGRAM_FACT = /\bcr\w{0,2}dits?\b|credit hours|\belectives?\b|study plan|degree plan|\bgraduat\w*|\brequirements?\b|\bprerequisites?\b|\bremaining\b|\bleft\b|\b(?:year|semester)\s*\d|ساع|خطة|متطلب|تخرج|المتبقي|الفصل/iu;
+
 /** "my major", "تخصصي" etc. in a question whose answer depends on the program. */
 export function asksAboutOwnProgram(query: string): boolean {
-  return (SELF_REFERENCE.test(query) || SELF_REFERENCE_AR.test(query)) && PROGRAM_DEPENDENT.test(query) && !LEVEL_DEPENDENT.test(query) && !courseCodes(query).length && !namesAProgram(query);
+  if (!OWN_PROGRAM.test(query) && !OWN_PROGRAM_AR.test(query)) return false;
+  // The topic must come from the rest of the question: "change my major" is a procedure, not a program fact.
+  const rest = query.replace(new RegExp(OWN_PROGRAM.source, "giu"), " ").replace(new RegExp(OWN_PROGRAM_AR.source, "gu"), " ");
+  return OWN_PROGRAM_FACT.test(rest) && !LEVEL_DEPENDENT.test(query) && !courseCodes(query).length && !namesAProgram(query);
 }
 
 /** Ask which program instead of guessing, when no saved major can be used. */
