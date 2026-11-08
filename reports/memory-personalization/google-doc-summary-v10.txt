@@ -1,0 +1,18 @@
+[Memory] [Personalization] Summary — FR3 conversation memory and FR4 sign-in/personalization
+Tester name: Claude (continuing Codex)
+Date: 8 November 2026
+Version tested: Local — http://localhost:3000/ and http://localhost:3003/ (two server processes sharing one store) — branch feat/memory-personalization, build memory-v10 (commits 03c1598 to 87ec7e2). Not pushed or deployed.
+What was built: server-side conversation memory for guests and signed-in users (libSQL; local SQLite file now, Turso in production), random memory key in an httpOnly SameSite=Lax cookie, 24-hour sliding expiry, Clear conversation deletes the stored rows. Sign-in with a 15-minute JWT access cookie plus a rotating refresh session, bcrypt passwords, logout revokes the session. Profile page (major, college, year, language, optional student ID stored encrypted and shown only as the last 4 digits) validated against the catalog. Answers use the profile only when the question depends on it and say so.
+Live results on memory-v10:
+- 94/94 memory and personalization scenarios passed the automated checks (see the manual-review entry at the end: 91 correct, 2 partly correct, 1 incorrect): 21 multi-turn follow-ups of 3–5 turns (English, Arabic, typos), 23 two-turn follow-ups taken from the examiner fixtures, 22 personalization scenarios (CS year 2, Accounting year 4, MBA, Arabic preference, missing major, student-ID privacy), 22 guest-versus-signed-in comparisons, 6 privacy and prompt-injection controls.
+- Browser test (system Chrome): 17/17 — guest follow-up from memory, refresh with local storage wiped, sign up, edit profile in Arabic, personalized answer, real server restart, memory and sign-in still there, Clear deletes, logout, copied cookies refused.
+- No regressions against v47: Examiner main 100/100; all 600 examiner submissions 599 correct, 1 partial (v47: 592/7/1); phrasing 391/5/3 (v47: 384/11/4); regression 1,764/11/7 (v47: 1,753/21/8); browser examiner 100/100.
+- Offline: 395 offline checks, typecheck and lint pass, including 24 account-ownership checks, 12 memory-store checks (one has four processes writing at the same time), and the follow-up and auth/profile unit checks.
+Problems found and fixed during testing:
+- Build memory-v9 regressed: the "Which UAEU program do you mean?" question fired on general questions (internal transfer, failed courses, Blackboard, micro-credentials), so Examiner main fell to 95/3/2. It now fires only for explicit "my major / my program / my degree" questions about program facts.
+- Under load, two local servers sharing one database file got "database is locked" errors and lost 3 conversation turns. The store now uses one connection with a lock wait and retries; the four-process test covers it.
+Caveats, stated honestly:
+- The regression and phrasing totals combine the full memory-v9 run with a memory-v10 rerun of every case that was not correct on v9; cases that passed on v9 were not rerun on v10.
+- Some scenario expectations were corrected after review (recorded in the report files as rubricCorrections). One known weak pass: after the restart, "Which college offers it?" was answered "UAEU has nine colleges, including the College of Law" instead of saying directly that the College of Law offers the Bachelor of Law.
+- NQ180 is graded partial but is correct: it says MECH340 may be taken "at the same time", while the check looks for the word "concurrent".
+- Builds v1–v9 were intermediate; only the memory-v10 results below are final.

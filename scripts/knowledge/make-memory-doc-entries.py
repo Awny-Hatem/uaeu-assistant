@@ -60,7 +60,7 @@ for r in run['results']:
 lines.append('[Memory] [Personalization] Browser test — sign in, ask, refresh, restart the server, continue')
 lines.append('Tester name: Claude (continuing Codex)')
 lines.append('Date: 7 November 2026')
-lines.append('Version tested: Local — http://localhost:3000/ — feat/memory-personalization (build memory-v9), system Chrome via Playwright; the server process was stopped and started again between the two phases.')
+lines.append(f'Version tested: Local — http://localhost:3000/ — feat/memory-personalization (build {BUILD}), system Chrome via Playwright; the server process was stopped and started again between the two phases.')
 for s in browser['steps']:
     lines.append(f"{'✅' if s['pass'] else '❌'} ({s['phase']}) {s['name']}" + (f" — {s.get('answer')}" if s.get('answer') else ''))
 lines.append(f"Result: {browser['summary']['passed']}/{browser['summary']['passed'] + browser['summary']['failed']} steps passed.")
