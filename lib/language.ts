@@ -10,7 +10,7 @@ export function detectLocale(text: string): Locale {
   if (/\b(?:answer|reply|respond)\s+(?:to me\s+)?in\s+Arabic\b/i.test(normalized)) return "ar";
   if (/بالانجليزي|بالانجليزيه|باللغة الانجليزية/u.test(normalized)) return "en";
   const englishFrame = /^(?:please\s+)?(?:what|when|where|which|how|does|do|is|are|can|could|should|tell|give|explain)\b/i.test(normalized);
-  const arabicFrame = /(?:^|[\s:،])(?:كم|ما|ماذا|كيف|هل|مت[ىي]|اين|وين|شو|ليش|لماذا|اريد|اعطني|اشرح|ارجو)(?=\s|[؟:،]|$)/u.test(normalized);
+  const arabicFrame = /(?:^|[\s:،])(?:كم|ما|ماذا|كيف|هل|مت[ىي]|اين|وين|شو|ليش|لماذا|اريد|اعطني|اشرح|ارجو|اخبرني|خبرني|حدثني|عرفني|قل لي|ابي|ابغى|ممكن)(?=\s|[؟:،]|$)/u.test(normalized);
   // The request frame carries more language signal than a long English proper
   // program name or a course code embedded in an Arabic question.
   if (arabicFrame && !englishFrame) return "ar";

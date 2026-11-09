@@ -3,6 +3,7 @@ import type { EvidenceRow } from "@/lib/knowledge-files";
 import type { Citation } from "@/lib/prototype-types";
 import type { GroundedAnswer } from "@/lib/provider-response";
 import { courseCodes } from "@/lib/query-understanding";
+import { splitSemesterColumns } from "@/lib/study-plan-columns";
 
 export type SourceEvidence = { id: string; row: EvidenceRow; citation: Citation; text: string };
 
@@ -15,7 +16,8 @@ export function sourceEvidence(rows: EvidenceRow[]): SourceEvidence[] {
     const citations = row.citations ?? citationsFromRows([row]);
     return citations.flatMap((citation, sourceIndex) => {
       const identityOnly = row.source.startsWith("course-identity:");
-      const text = identityOnly ? row.text : citation.evidenceText?.trim() || (citations.length === 1 ? row.text : "");
+      const raw = identityOnly ? row.text : citation.evidenceText?.trim() || (citations.length === 1 ? row.text : "");
+      const text = row.source.startsWith("corpus:") ? splitSemesterColumns(raw) : raw;
       return text ? [{ id: `E${index + 1}S${sourceIndex + 1}`, row, citation, text }] : [];
     });
   });

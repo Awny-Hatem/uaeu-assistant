@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
-import { asksOwnStudentId, asksRemainingCourses, compareQuestion, facetCarryQuestion, lastProgram, levelSwitchQuestion, registrationWhenHint, remainingCoursesReply, translationTarget } from "../lib/memory/followups";
+import { asksOwnStudentId, asksRemainingCourses, compareQuestion, facetCarryQuestion, lastProgram, levelSwitchQuestion, registrationWhenHint, remainingCoursesReply, translationTarget, refersToPreviousAnswer, withoutTranslationTurns } from "../lib/memory/followups";
+import { detectLocale } from "../lib/language";
+import { splitSemesterColumns } from "../lib/study-plan-columns";
 import { programsMentioned, sameFieldAt } from "../lib/profile/programs";
 
 // Follow-ups resolved from stored conversation turns (no network).
@@ -57,5 +59,29 @@ check("'what is my student ID?' is recognised (EN/AR) without catching ID-card p
   assert.equal(asksOwnStudentId("What is my student ID?"), true);
   assert.equal(asksOwnStudentId("ما هو رقمي الجامعي؟"), true);
   assert.equal(asksOwnStudentId("How do I replace a lost student ID card?"), false);
+});
+check("a translation exchange is skipped when resolving the next follow-up", () => {
+  const m = [{ role: "user", content: "What are the prerequisites for CSBP 219?" }, { role: "assistant", content: "CSBP119, minimum grade D." }, { role: "user", content: "Translate that to Arabic." }, { role: "assistant", content: "..." }, { role: "user", content: "What was the minimum grade you mentioned?" }];
+  assert.deepEqual(withoutTranslationTurns(m).map((t) => t.content), ["What are the prerequisites for CSBP 219?", "CSBP119, minimum grade D.", "What was the minimum grade you mentioned?"]);
+  assert.equal(withoutTranslationTurns(m.slice(0, 3)).length, 3, "the latest translation request itself is kept");
+});
+check("questions about the previous answer are recognised (EN/AR)", () => {
+  assert.equal(refersToPreviousAnswer("What was the minimum grade you mentioned?"), true);
+  assert.equal(refersToPreviousAnswer("ما الدرجة التي ذكرتها؟"), true);
+  assert.equal(refersToPreviousAnswer("What is the minimum grade for CSBP119?"), false);
+  assert.equal(refersToPreviousAnswer("My advisor said I need CSBP119, is that right?"), false);
+});
+check("an Arabic request frame wins over an embedded English program name", () => {
+  assert.equal(detectLocale("أخبرني عن برنامج Bachelor of Science in Petroleum Engineering"), "ar");
+  assert.equal(detectLocale("Tell me about the Bachelor of Science in Petroleum Engineering"), "en");
+});
+check("two-column study-plan pages are split into one list per semester", () => {
+  const row = (l: string, r: string) => l.padEnd(44) + r;
+  const page = [row("Year 1 - First Semester", "Year 1 - Second Semester"), row("GEAE101   English   3", "CENG202   Discrete Math   3"), row("Elective  Culture Elective 1  3", "Math140   Linear Algebra  3")].join("\n");
+  const out = splitSemesterColumns(page);
+  const second = out.slice(out.indexOf("Year 1 - Second Semester"));
+  assert.match(second, /CENG202[\s\S]*Math140/);
+  assert.doesNotMatch(second, /Culture Elective|GEAE101/);
+  assert.equal(splitSemesterColumns("No plan here."), "No plan here.");
 });
 console.log(`memory follow-up checks: ${passed} passed`);

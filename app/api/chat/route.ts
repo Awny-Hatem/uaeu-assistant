@@ -32,7 +32,7 @@ import { academicCoverageViolations } from "@/lib/academic-coverage";
 import { appendExchange, MEMORY_COOKIE, memoryCookieOptions, memoryEnabled, openSession, recentTurns, turnCount, type MemorySession, type MemoryTurn } from "@/lib/memory/store";
 import { refreshSummary, summaryDue } from "@/lib/memory/summary";
 import { serverConversation } from "@/lib/memory/conversation";
-import { asksOwnStudentId, asksRemainingCourses, compareQuestion, ownStudentIdReply, facetCarryQuestion, levelSwitchQuestion, registrationWhenHint, remainingCoursesReply, translatePrevious, translationTarget } from "@/lib/memory/followups";
+import { asksOwnStudentId, asksRemainingCourses, compareQuestion, ownStudentIdReply, facetCarryQuestion, levelSwitchQuestion, registrationWhenHint, remainingCoursesReply, translatePrevious, translationTarget, withoutTranslationTurns, recallFromPrevious, refersToPreviousAnswer } from "@/lib/memory/followups";
 import { after } from "next/server";
 
 export const runtime = "nodejs";
@@ -154,6 +154,7 @@ function needsConversationContext(query: string): boolean {
   if (hasExplicitSubject) return false;
 
   return (
+    refersToPreviousAnswer(query) ||
     /\b(?:what about (?:this|that|it|them|those|these)|which one|same (?:course|program|service)|are you sure|what(?:'s| is) (?:the )?(?:source|citation))\b/i.test(
       query,
     ) ||
@@ -839,6 +840,17 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
       return respond(payload, latest, translateTo);
     }
   }
+  // "What was the minimum grade you mentioned?": answer from the previous,
+  // already source-checked answer (skipping a translation of it).
+  if (!translateTo && refersToPreviousAnswer(latest)) {
+    const earlier = withoutTranslationTurns(sanitized).slice(0, -1);
+    const lastAnswer = [...earlier].reverse().find((m) => m.role === "assistant")?.content;
+    const recalled = lastAnswer ? await recallFromPrevious(lastAnswer, latest, locale) : null;
+    if (recalled) {
+      const payload: AssistantPayload = { role: "assistant", content: recalled, source: "conversation", stateLabel: "recall", disposition: "answer", citations: [] };
+      return respond(payload, latest, locale);
+    }
+  }
   if (asksOwnStudentId(latest)) {
     const payload: AssistantPayload = { role: "assistant", content: ownStudentIdReply(locale), source: "conversation", stateLabel: "privacy_boundary", disposition: "answer", citations: [] };
     return respond(payload, latest, locale);
@@ -848,6 +860,9 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     const payload: AssistantPayload = { role: "assistant", content: remainingCoursesReply(locale, profile?.major ?? null), source: "escalated", stateLabel: "individual_record", disposition: "clarify", citations: [], clarificationReason: "individual_record" };
     return respond(payload, latest, locale);
   }
+  // Routing and follow-up resolution skip translation exchanges (FR3).
+  const untranslated = withoutTranslationTurns(sanitized);
+  if (untranslated.length !== sanitized.length) sanitized.splice(0, sanitized.length, ...untranslated);
   let resolution = resolveConversation(sanitized, latest);
   const corpusContext = !resolution.ambiguous ? corpusFollowUp(sanitized, latest) : null;
   if (corpusContext) resolution = { ...resolution, usedContext: !corpusContext.ambiguous, ambiguous: corpusContext.ambiguous, needsClarification: corpusContext.ambiguous, candidates: corpusContext.labels.map(label => ({ key: label, label, origin: "previous user request" })) };

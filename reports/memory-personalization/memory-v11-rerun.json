@@ -1,0 +1,2337 @@
+{
+ "startedAt": "2026-11-09T09:08:10.260Z",
+ "base": "http://127.0.0.1:3003",
+ "label": "memory-v11-rerun",
+ "results": [
+  {
+   "id": "MF08",
+   "suite": "followup",
+   "turns": [
+    "Tell me about the Bachelor of Science in Horticulture.",
+    "how many credts does it need",
+    "what about the master's?",
+    "and the PhD in horticulture sciences?"
+   ],
+   "turnGrades": [
+    null,
+    {
+     "checks": [
+      {
+       "name": "published credit total",
+       "any": [
+        "(?<!\\d)120(?!\\d)"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-horticulture.shtml"
+     ],
+     "needsCitation": true,
+     "basis": "KE136"
+    },
+    {
+     "checks": [
+      {
+       "name": "published credit total",
+       "any": [
+        "(?<!\\d)36(?!\\d)"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml"
+     ],
+     "needsCitation": true,
+     "basis": "KE082"
+    },
+    {
+     "checks": [
+      {
+       "name": "published credit total",
+       "any": [
+        "(?<!\\d)54(?!\\d)"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-horticulture-sciences.shtml"
+     ],
+     "needsCitation": true,
+     "basis": "KE038"
+    }
+   ],
+   "checks": [
+    {
+     "name": "published credit total",
+     "any": [
+      "(?<!\\d)54(?!\\d)"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-horticulture-sciences.shtml"
+   ],
+   "needsCitation": true,
+   "conversation": [
+    {
+     "user": "Tell me about the Bachelor of Science in Horticulture.",
+     "status": 200,
+     "seconds": 4.765,
+     "payload": {
+      "role": "assistant",
+      "content": "The Bachelor of Science in Horticulture at UAEU provides students with fundamental scientific knowledge on the production and protection of horticultural plants in arid environments, develops skills for resource-efficient cultivation, and enhances abilities to sustain natural resources and improve environmental quality.\n\nThe program combines theoretical knowledge with practical training in research labs, experimental farms, and internships, preparing students to be creative experts in areas such as organic farming, plant protection, greenhouse management, landscaping, and applied biotechnology.\n\nStudents complete required courses totaling 45 credit hours covering topics like soil and water principles, plant protection, horticulture introduction, plant physiology, irrigation management, and a senior project.\n\nThe Bachelor of Science in Horticulture is offered by the College of Agriculture and Veterinary Medicine, Department of Integrative Agriculture, as an undergraduate degree program.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Bachelor of Science in Horticulture",
+        "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-horticulture.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Undergraduate Programs > Bachelor of Science in Horticulture > Program Objectives"
+       },
+       {
+        "title": "UAEU Official Program Finder — bilingual catalog data",
+        "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Bachelor of Science in Horticulture — published program-finder record"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:a9dd214e2bfe7960dcd7:4#E1S1",
+       "corpus:a9dd214e2bfe7960dcd7:10#E2S1",
+       "corpus:2cbd9a1819b5702cb87d:123#E4S1"
+      ],
+      "claims": [
+       {
+        "text": "The Bachelor of Science in Horticulture at UAEU provides students with fundamental scientific knowledge on the production and protection of horticultural plants in arid environments, develops skills for resource-efficient cultivation, and enhances abilities to sustain natural resources and improve environmental quality.",
+        "evidenceIds": [
+         "corpus:a9dd214e2bfe7960dcd7:4#E1S1"
+        ]
+       },
+       {
+        "text": "The program combines theoretical knowledge with practical training in research labs, experimental farms, and internships, preparing students to be creative experts in areas such as organic farming, plant protection, greenhouse management, landscaping, and applied biotechnology.",
+        "evidenceIds": [
+         "corpus:2cbd9a1819b5702cb87d:123#E4S1"
+        ]
+       },
+       {
+        "text": "Students complete required courses totaling 45 credit hours covering topics like soil and water principles, plant protection, horticulture introduction, plant physiology, irrigation management, and a senior project.",
+        "evidenceIds": [
+         "corpus:a9dd214e2bfe7960dcd7:10#E2S1"
+        ]
+       },
+       {
+        "text": "The Bachelor of Science in Horticulture is offered by the College of Agriculture and Veterinary Medicine, Department of Integrative Agriculture, as an undergraduate degree program.",
+        "evidenceIds": [
+         "corpus:2cbd9a1819b5702cb87d:123#E4S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 4737,
+       "attemptedCalls": 5,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 6385,
+         "cachedInputTokens": 1920,
+         "outputTokens": 221,
+         "estimatedUsd": 0.0023316
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1463,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006348
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1678,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0007208000000000001
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1690,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0007256000000000001
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1561,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006740000000000001
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 12777,
+       "outputTokens": 345,
+       "knownUsageUsd": 0.005086800000000001,
+       "estimatedUsd": 0.005086800000000001,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "how many credts does it need",
+     "status": 200,
+     "seconds": 2.086,
+     "payload": {
+      "role": "assistant",
+      "content": "The Bachelor of Science in Horticulture at UAEU requires a minimum of 120 credit hours to complete the degree.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Bachelor of Science in Horticulture — program requirements",
+        "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-horticulture.shtml",
+        "lastVerified": "2026-11-03",
+        "sourceSection": "Bachelor of Science in Horticulture — degree credit requirement"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "34-bachelor-horticulture-catalog.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Bachelor of Science in Horticulture at UAEU requires a minimum of 120 credit hours to complete the degree.",
+        "evidenceIds": [
+         "34-bachelor-horticulture-catalog.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2076,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3694,
+         "cachedInputTokens": 1920,
+         "outputTokens": 50,
+         "estimatedUsd": 0.0009816
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1395,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006076
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5089,
+       "outputTokens": 81,
+       "knownUsageUsd": 0.0015892,
+       "estimatedUsd": 0.0015892,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "what about the master's?",
+     "status": 200,
+     "seconds": 2.141,
+     "payload": {
+      "role": "assistant",
+      "content": "The Master of Science in Horticulture at UAEU requires a minimum of 36 credit hours to complete the degree.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Master of Science in Horticulture — program requirements",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml",
+        "lastVerified": "2026-11-03",
+        "sourceSection": "Master of Science in Horticulture — degree credit requirement"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "46-master-horticulture-catalog.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Master of Science in Horticulture at UAEU requires a minimum of 36 credit hours to complete the degree.",
+        "evidenceIds": [
+         "46-master-horticulture-catalog.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2130,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3709,
+         "cachedInputTokens": 1920,
+         "outputTokens": 50,
+         "estimatedUsd": 0.0009876
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1378,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006008000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5087,
+       "outputTokens": 81,
+       "knownUsageUsd": 0.0015884,
+       "estimatedUsd": 0.0015884,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "and the PhD in horticulture sciences?",
+     "status": 200,
+     "seconds": 2.772,
+     "payload": {
+      "role": "assistant",
+      "content": "The Doctor of Philosophy in Horticulture Sciences degree at UAEU requires a minimum of 54 credit hours.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Doctor of Philosophy in Horticulture Sciences",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-horticulture-sciences.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Doctor of Philosophy in Horticulture Sciences > Degree Requirements > Required Credit Hours : minimum 54 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:58c85645512a6caed04d:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Doctor of Philosophy in Horticulture Sciences degree at UAEU requires a minimum of 54 credit hours.",
+        "evidenceIds": [
+         "corpus:58c85645512a6caed04d:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2760,
+       "attemptedCalls": 3,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "text-embedding-3-small",
+         "purpose": "query-embedding",
+         "inputTokens": 14,
+         "cachedInputTokens": 0,
+         "outputTokens": 0,
+         "estimatedUsd": 2.8e-7
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4283,
+         "cachedInputTokens": 0,
+         "outputTokens": 48,
+         "estimatedUsd": 0.00179
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1360,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005936
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5657,
+       "outputTokens": 79,
+       "knownUsageUsd": 0.00238388,
+       "estimatedUsd": 0.00238388,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     null,
+     {
+      "turn": 2,
+      "basis": "KE136",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "published credit total",
+        "passed": true,
+        "patterns": [
+         "(?<!\\d)120(?!\\d)"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     },
+     {
+      "turn": 3,
+      "basis": "KE082",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "published credit total",
+        "passed": true,
+        "patterns": [
+         "(?<!\\d)36(?!\\d)"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     },
+     {
+      "turn": 4,
+      "basis": "KE038",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "published credit total",
+        "passed": true,
+        "patterns": [
+         "(?<!\\d)54(?!\\d)"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 3,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 8
+  },
+  {
+   "id": "MF21",
+   "suite": "followup",
+   "turns": [
+    "How many credits does the Master of Science in Genomic Medicine require?",
+    "وكم ساعة يحتاج هذا البرنامج؟",
+    "And the Master of Public Health?"
+   ],
+   "turnGrades": [
+    {
+     "checks": [
+      {
+       "name": "published credit total",
+       "any": [
+        "(?<!\\d)33(?!\\d)"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml"
+     ],
+     "needsCitation": true,
+     "basis": "KE080"
+    },
+    {
+     "checks": [
+      {
+       "name": "published credit total",
+       "any": [
+        "(?<!\\d)33(?!\\d)"
+       ]
+      },
+      {
+       "name": "answers in Arabic",
+       "any": [
+        "[؀-ۿ]{3,}(?:\\s+[؀-ۿ]{2,}){3,}"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml"
+     ],
+     "needsCitation": true,
+     "basis": "KE080"
+    },
+    {
+     "checks": [
+      {
+       "name": "published credit total",
+       "any": [
+        "(?<!\\d)34(?!\\d)"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-public-health.shtml"
+     ],
+     "needsCitation": true,
+     "basis": "KE068"
+    }
+   ],
+   "checks": [
+    {
+     "name": "published credit total",
+     "any": [
+      "(?<!\\d)34(?!\\d)"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-public-health.shtml"
+   ],
+   "needsCitation": true,
+   "conversation": [
+    {
+     "user": "How many credits does the Master of Science in Genomic Medicine require?",
+     "status": 200,
+     "seconds": 2.425,
+     "payload": {
+      "role": "assistant",
+      "content": "The Master of Science in Genomic Medicine requires a minimum of 33 credit hours to complete the degree.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Master of Science in Genomic Medicine requires a minimum of 33 credit hours to complete the degree.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2418,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4022,
+         "cachedInputTokens": 0,
+         "outputTokens": 47,
+         "estimatedUsd": 0.0016840000000000002
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1354,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005912000000000001
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 5376,
+       "outputTokens": 78,
+       "knownUsageUsd": 0.0022752000000000002,
+       "estimatedUsd": 0.0022752000000000002,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "وكم ساعة يحتاج هذا البرنامج؟",
+     "status": 200,
+     "seconds": 3.395,
+     "payload": {
+      "role": "assistant",
+      "content": "برنامج ماجستير العلوم في الطب الجينومي يتطلب حد أدنى 33 ساعة معتمدة لإتمام الدرجة.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "برنامج ماجستير العلوم في الطب الجينومي يتطلب حد أدنى 33 ساعة معتمدة لإتمام الدرجة.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 3387,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4172,
+         "cachedInputTokens": 1920,
+         "outputTokens": 52,
+         "estimatedUsd": 0.0011760000000000002
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1359,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005932
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 5531,
+       "outputTokens": 83,
+       "knownUsageUsd": 0.0017692000000000003,
+       "estimatedUsd": 0.0017692000000000003,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "And the Master of Public Health?",
+     "status": 200,
+     "seconds": 3.129,
+     "payload": {
+      "role": "assistant",
+      "content": "The Master of Public Health degree at UAE University requires a minimum of 34 credit hours for completion.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Public Health",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-public-health.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Public Health > Degree Requirements > Required Credit Hours : minimum 34 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:67e673c46d35b928f1e7:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Master of Public Health degree at UAE University requires a minimum of 34 credit hours for completion.",
+        "evidenceIds": [
+         "corpus:67e673c46d35b928f1e7:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 3121,
+       "attemptedCalls": 3,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "text-embedding-3-small",
+         "purpose": "query-embedding",
+         "inputTokens": 11,
+         "cachedInputTokens": 0,
+         "outputTokens": 0,
+         "estimatedUsd": 2.2e-7
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4305,
+         "cachedInputTokens": 0,
+         "outputTokens": 46,
+         "estimatedUsd": 0.0017955999999999998
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1338,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005848000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5654,
+       "outputTokens": 77,
+       "knownUsageUsd": 0.00238062,
+       "estimatedUsd": 0.00238062,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     {
+      "turn": 1,
+      "basis": "KE080",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "published credit total",
+        "passed": true,
+        "patterns": [
+         "(?<!\\d)33(?!\\d)"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     },
+     {
+      "turn": 2,
+      "basis": "KE080",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "published credit total",
+        "passed": true,
+        "patterns": [
+         "(?<!\\d)33(?!\\d)"
+        ]
+       },
+       {
+        "name": "answers in Arabic",
+        "passed": true,
+        "patterns": [
+         "[؀-ۿ]{3,}(?:\\s+[؀-ۿ]{2,}){3,}"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     },
+     {
+      "turn": 3,
+      "basis": "KE068",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "published credit total",
+        "passed": true,
+        "patterns": [
+         "(?<!\\d)34(?!\\d)"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 3,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 6
+  },
+  {
+   "id": "M2-CQ075",
+   "suite": "followup-2turn",
+   "turns": [
+    "In the Fall 2025 Computer Science model plan, which courses are in the first semester?",
+    "Which of those are labs, and how many credits are they?"
+   ],
+   "checks": [
+    {
+     "name": "Expected fact 1",
+     "any": [
+      "CSBP\\s*121"
+     ]
+    },
+    {
+     "name": "Expected fact 2",
+     "any": [
+      "\\b1\\b"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+   ],
+   "needsCitation": true,
+   "forbidden": [],
+   "basis": "CQ075",
+   "conversation": [
+    {
+     "user": "In the Fall 2025 Computer Science model plan, which courses are in the first semester?",
+     "status": 200,
+     "seconds": 2.445,
+     "payload": {
+      "role": "assistant",
+      "content": "In the Fall 2025 first semester for the Bachelor of Science in Computer Science, the courses are: GEAE101 Academic English for Humanities and STEM (3 credits), MATH105 Calculus I (3 credits), CSBP119 Algorithms and Problem Solving (3 credits), PHYS105 General Physics I (3 credits), one Culture Elective 1 (3 credits, chosen from approved options), and CSBP121 Programming Lab I (1 credit), totaling 16 credit hours.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Computer Science Fall 2025 first-semester model plan",
+        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+        "lastVerified": "2026-10-06",
+        "sourceSection": "Computer Science first semester — Fall 2025 entry"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "topic": "computer-science",
+      "evidenceIds": [
+       "29-computer-science-first-semester.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "In the Fall 2025 first semester for the Bachelor of Science in Computer Science, the courses are: GEAE101 Academic English for Humanities and STEM (3 credits), MATH105 Calculus I (3 credits), CSBP119 Algorithms and Problem Solving (3 credits), PHYS105 General Physics I (3 credits), one Culture Elective 1 (3 credits, chosen from approved options), and CSBP121 Programming Lab I (1 credit), totaling 16 credit hours.",
+        "evidenceIds": [
+         "29-computer-science-first-semester.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2439,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3527,
+         "cachedInputTokens": 1920,
+         "outputTokens": 124,
+         "estimatedUsd": 0.0010332
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1503,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006508000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5030,
+       "outputTokens": 155,
+       "knownUsageUsd": 0.0016840000000000002,
+       "estimatedUsd": 0.0016840000000000002,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "Which of those are labs, and how many credits are they?",
+     "status": 200,
+     "seconds": 2.586,
+     "payload": {
+      "role": "assistant",
+      "content": "In the Fall 2025 first semester Computer Science plan, the course CSBP121 Programming Lab I is the lab, carrying 1 credit hour.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Computer Science Fall 2025 first-semester model plan",
+        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+        "lastVerified": "2026-10-06",
+        "sourceSection": "Computer Science first semester — Fall 2025 entry"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "topic": "computer-science",
+      "evidenceIds": [
+       "29-computer-science-first-semester.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "In the Fall 2025 first semester Computer Science plan, the course CSBP121 Programming Lab I is the lab, carrying 1 credit hour.",
+        "evidenceIds": [
+         "29-computer-science-first-semester.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2580,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3631,
+         "cachedInputTokens": 1920,
+         "outputTokens": 56,
+         "estimatedUsd": 0.0009660000000000001
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1435,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006236
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5066,
+       "outputTokens": 87,
+       "knownUsageUsd": 0.0015896,
+       "estimatedUsd": 0.0015896,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     null,
+     {
+      "turn": 2,
+      "result": "correct",
+      "checks": [
+       {
+        "name": "Expected fact 1",
+        "passed": true,
+        "patterns": [
+         "CSBP\\s*121"
+        ]
+       },
+       {
+        "name": "Expected fact 2",
+        "passed": true,
+        "patterns": [
+         "\\b1\\b"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 4
+  },
+  {
+   "id": "M2-CQ076",
+   "suite": "followup-2turn",
+   "turns": [
+    "What courses are in the final taught semester of the Information Security2025-2026 model plan?",
+    "Now switch to Computer Science: what should a CS student take in the first semester?"
+   ],
+   "checks": [
+    {
+     "name": "Expected fact 1",
+     "any": [
+      "GEAE\\s*101"
+     ]
+    },
+    {
+     "name": "Expected fact 2",
+     "any": [
+      "MATH\\s*105"
+     ]
+    },
+    {
+     "name": "Expected fact 3",
+     "any": [
+      "CSBP\\s*119"
+     ]
+    },
+    {
+     "name": "Expected fact 4",
+     "any": [
+      "PHYS\\s*105"
+     ]
+    },
+    {
+     "name": "Expected fact 5",
+     "any": [
+      "CSBP\\s*121"
+     ]
+    },
+    {
+     "name": "Expected fact 6",
+     "any": [
+      "\\b16\\b"
+     ]
+    },
+    {
+     "name": "Expected fact 7",
+     "any": [
+      "first semester",
+      "semester 1",
+      "semester one",
+      "الفصل.*(?:اول|أول)",
+      "اول فصل",
+      "أول فصل"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf",
+    "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+    "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+   ],
+   "needsCitation": true,
+   "forbidden": [],
+   "basis": "CQ076",
+   "conversation": [
+    {
+     "user": "What courses are in the final taught semester of the Information Security2025-2026 model plan?",
+     "status": 200,
+     "seconds": 2.712,
+     "payload": {
+      "role": "assistant",
+      "content": "The final taught semester (Year 4 Semester 8, Spring) of the 2025-2026 Information Security model plan includes these courses totaling 13 credits: ISEC412 Digital Forensics (3 credits), ISEC422 Security Policy, Laws, and Governance (3 credits), ITBP481 Senior Graduation Project II (3 credits), ISEC413 Security Architecture and Mechanisms (3 credits), and ISEC423 Systems Security Lab (1 credit).",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU BSc Information Security — 2025–2026 and 2022–2023 Model Plans",
+        "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf",
+        "lastVerified": "2026-09-29",
+        "sourceSection": "2025–2026 cohort onwards: Fall entrants, 120 credits"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "topic": "information-security",
+      "evidenceIds": [
+       "13-information-security-cohort-plans.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The final taught semester (Year 4 Semester 8, Spring) of the 2025-2026 Information Security model plan includes these courses totaling 13 credits: ISEC412 Digital Forensics (3 credits), ISEC422 Security Policy, Laws, and Governance (3 credits), ITBP481 Senior Graduation Project II (3 credits), ISEC413 Security Architecture and Mechanisms (3 credits), and ISEC423 Systems Security Lab (1 credit).",
+        "evidenceIds": [
+         "13-information-security-cohort-plans.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2703,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3450,
+         "cachedInputTokens": 1920,
+         "outputTokens": 119,
+         "estimatedUsd": 0.0009943999999999999
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1512,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006544000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 4962,
+       "outputTokens": 150,
+       "knownUsageUsd": 0.0016488,
+       "estimatedUsd": 0.0016488,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "Now switch to Computer Science: what should a CS student take in the first semester?",
+     "status": 200,
+     "seconds": 3.132,
+     "payload": {
+      "role": "assistant",
+      "content": "A Computer Science student entering in Fall 2025 should take these courses totaling 16 credit hours: GEAE101 Academic English for Humanities and STEM (3 credits), MATH105 Calculus I (3 credits), CSBP119 Algorithms and Problem Solving (3 credits), PHYS105 General Physics I (3 credits), one Culture Elective 1 from the approved options (3 credits), and CSBP121 Programming Lab I (1 credit).",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Computer Science Fall 2025 first-semester model plan",
+        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+        "lastVerified": "2026-10-06",
+        "sourceSection": "Computer Science first semester — Fall 2025 entry"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "topic": "computer-science",
+      "evidenceIds": [
+       "29-computer-science-first-semester.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "A Computer Science student entering in Fall 2025 should take these courses totaling 16 credit hours: GEAE101 Academic English for Humanities and STEM (3 credits), MATH105 Calculus I (3 credits), CSBP119 Algorithms and Problem Solving (3 credits), PHYS105 General Physics I (3 credits), one Culture Elective 1 from the approved options (3 credits), and CSBP121 Programming Lab I (1 credit).",
+        "evidenceIds": [
+         "29-computer-science-first-semester.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 3124,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3648,
+         "cachedInputTokens": 1920,
+         "outputTokens": 117,
+         "estimatedUsd": 0.0010704
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1496,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.000648
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5144,
+       "outputTokens": 148,
+       "knownUsageUsd": 0.0017184000000000001,
+       "estimatedUsd": 0.0017184000000000001,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "partial",
+    "turns": [
+     null,
+     {
+      "turn": 2,
+      "result": "partial",
+      "checks": [
+       {
+        "name": "Expected fact 1",
+        "passed": true,
+        "patterns": [
+         "GEAE\\s*101"
+        ]
+       },
+       {
+        "name": "Expected fact 2",
+        "passed": true,
+        "patterns": [
+         "MATH\\s*105"
+        ]
+       },
+       {
+        "name": "Expected fact 3",
+        "passed": true,
+        "patterns": [
+         "CSBP\\s*119"
+        ]
+       },
+       {
+        "name": "Expected fact 4",
+        "passed": true,
+        "patterns": [
+         "PHYS\\s*105"
+        ]
+       },
+       {
+        "name": "Expected fact 5",
+        "passed": true,
+        "patterns": [
+         "CSBP\\s*121"
+        ]
+       },
+       {
+        "name": "Expected fact 6",
+        "passed": true,
+        "patterns": [
+         "\\b16\\b"
+        ]
+       },
+       {
+        "name": "Expected fact 7",
+        "passed": false,
+        "patterns": [
+         "first semester",
+         "semester 1",
+         "semester one",
+         "الفصل.*(?:اول|أول)",
+         "اول فصل",
+         "أول فصل"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [
+       "Expected fact 7"
+      ],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [
+     "turn 2: Expected fact 7"
+    ],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 4
+  },
+  {
+   "id": "M2-EX096-V1",
+   "suite": "followup-2turn",
+   "turns": [
+    "hey, How many credits does the Master of Science in Genomic Medicine require?",
+    "وكم ساعة يحتاج هذا البرنامج؟"
+   ],
+   "checks": [
+    {
+     "name": "total",
+     "any": [
+      "33"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml"
+   ],
+   "needsCitation": true,
+   "forbidden": [
+    "233"
+   ],
+   "basis": "EX096",
+   "conversation": [
+    {
+     "user": "hey, How many credits does the Master of Science in Genomic Medicine require?",
+     "status": 200,
+     "seconds": 4.559,
+     "payload": {
+      "role": "assistant",
+      "content": "The Master of Science in Genomic Medicine at UAEU requires a minimum of 33 credit hours to complete the degree.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Master of Science in Genomic Medicine at UAEU requires a minimum of 33 credit hours to complete the degree.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 4550,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4101,
+         "cachedInputTokens": 3968,
+         "outputTokens": 50,
+         "estimatedUsd": 0.00053
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1357,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005924000000000001
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 5458,
+       "outputTokens": 81,
+       "knownUsageUsd": 0.0011224,
+       "estimatedUsd": 0.0011224,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "وكم ساعة يحتاج هذا البرنامج؟",
+     "status": 200,
+     "seconds": 2.185,
+     "payload": {
+      "role": "assistant",
+      "content": "برنامج ماجستير العلوم في الطب الجينومي يحتاج إلى حد أدنى 33 ساعة معتمدة لإكمال الدرجة.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "برنامج ماجستير العلوم في الطب الجينومي يحتاج إلى حد أدنى 33 ساعة معتمدة لإكمال الدرجة.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2177,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4252,
+         "cachedInputTokens": 1920,
+         "outputTokens": 52,
+         "estimatedUsd": 0.0012080000000000003
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1359,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005932
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 5611,
+       "outputTokens": 83,
+       "knownUsageUsd": 0.0018012000000000002,
+       "estimatedUsd": 0.0018012000000000002,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     null,
+     {
+      "turn": 2,
+      "result": "correct",
+      "checks": [
+       {
+        "name": "total",
+        "passed": true,
+        "patterns": [
+         "33"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 4
+  },
+  {
+   "id": "M2-EX096-V2",
+   "suite": "followup-2turn",
+   "turns": [
+    "Please explain to a new UAEU student: How many credits does the Master of Science in Genomic Medicine require?",
+    "وكم ساعة يحتاج هذا البرنامج؟"
+   ],
+   "checks": [
+    {
+     "name": "total",
+     "any": [
+      "33"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml"
+   ],
+   "needsCitation": true,
+   "forbidden": [
+    "233"
+   ],
+   "basis": "EX096",
+   "conversation": [
+    {
+     "user": "Please explain to a new UAEU student: How many credits does the Master of Science in Genomic Medicine require?",
+     "status": 200,
+     "seconds": 3.211,
+     "payload": {
+      "role": "assistant",
+      "content": "The Master of Science in Genomic Medicine at UAE University requires a minimum of 33 credit hours to complete the degree.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Master of Science in Genomic Medicine at UAE University requires a minimum of 33 credit hours to complete the degree.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 3201,
+       "attemptedCalls": 3,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "text-embedding-3-small",
+         "purpose": "query-embedding",
+         "inputTokens": 23,
+         "cachedInputTokens": 0,
+         "outputTokens": 0,
+         "estimatedUsd": 4.6000000000000004e-7
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4211,
+         "cachedInputTokens": 1920,
+         "outputTokens": 50,
+         "estimatedUsd": 0.0011884
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1357,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005924000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5591,
+       "outputTokens": 81,
+       "knownUsageUsd": 0.0017812600000000002,
+       "estimatedUsd": 0.0017812600000000002,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "وكم ساعة يحتاج هذا البرنامج؟",
+     "status": 200,
+     "seconds": 2.696,
+     "payload": {
+      "role": "assistant",
+      "content": "برنامج ماجستير العلوم في الطب الجيني في جامعة الإمارات يتطلب إكمال حد أدنى 33 ساعة معتمدة لإتمام الدرجة العلمية.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "برنامج ماجستير العلوم في الطب الجيني في جامعة الإمارات يتطلب إكمال حد أدنى 33 ساعة معتمدة لإتمام الدرجة العلمية.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2690,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4232,
+         "cachedInputTokens": 1920,
+         "outputTokens": 57,
+         "estimatedUsd": 0.0012080000000000003
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1364,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005952
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 5596,
+       "outputTokens": 88,
+       "knownUsageUsd": 0.0018032000000000005,
+       "estimatedUsd": 0.0018032000000000005,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     null,
+     {
+      "turn": 2,
+      "result": "correct",
+      "checks": [
+       {
+        "name": "total",
+        "passed": true,
+        "patterns": [
+         "33"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 4
+  },
+  {
+   "id": "M2-EX096-V3",
+   "suite": "followup-2turn",
+   "turns": [
+    "Give a concise advisor checklist: How many credits does the Master of Science in Genomic Medicine require?",
+    "وكم ساعة يحتاج هذا البرنامج؟"
+   ],
+   "checks": [
+    {
+     "name": "total",
+     "any": [
+      "33"
+     ]
+    }
+   ],
+   "sources": [
+    "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml"
+   ],
+   "needsCitation": true,
+   "forbidden": [
+    "233"
+   ],
+   "basis": "EX096",
+   "conversation": [
+    {
+     "user": "Give a concise advisor checklist: How many credits does the Master of Science in Genomic Medicine require?",
+     "status": 200,
+     "seconds": 3.496,
+     "payload": {
+      "role": "assistant",
+      "content": "The Master of Science in Genomic Medicine requires a minimum of 33 credit hours to complete the degree.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The Master of Science in Genomic Medicine requires a minimum of 33 credit hours to complete the degree.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 3489,
+       "attemptedCalls": 3,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "text-embedding-3-small",
+         "purpose": "query-embedding",
+         "inputTokens": 20,
+         "cachedInputTokens": 0,
+         "outputTokens": 0,
+         "estimatedUsd": 4.0000000000000003e-7
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4061,
+         "cachedInputTokens": 1920,
+         "outputTokens": 47,
+         "estimatedUsd": 0.0011236000000000002
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1354,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005912000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 5435,
+       "outputTokens": 78,
+       "knownUsageUsd": 0.0017152000000000003,
+       "estimatedUsd": 0.0017152000000000003,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "وكم ساعة يحتاج هذا البرنامج؟",
+     "status": 200,
+     "seconds": 2.48,
+     "payload": {
+      "role": "assistant",
+      "content": "برنامج ماجستير العلوم في الطب الجينومي يتطلب إكمال حد أدنى 33 ساعة معتمدة.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "Master of Science in Genomic Medicine",
+        "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+        "lastVerified": "2026-11-04",
+        "sourceSection": "Graduate Programs > Master of Science in Genomic Medicine > Degree Requirements > Required Credit Hours : minimum 33 hours"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "evidenceIds": [
+       "corpus:dc540202ddf07ee73c3c:6#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "برنامج ماجستير العلوم في الطب الجينومي يتطلب إكمال حد أدنى 33 ساعة معتمدة.",
+        "evidenceIds": [
+         "corpus:dc540202ddf07ee73c3c:6#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 2473,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 4205,
+         "cachedInputTokens": 2944,
+         "outputTokens": 50,
+         "estimatedUsd": 0.0008788000000000001
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1357,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0005924000000000001
+        }
+       ],
+       "embeddingCacheHits": 1,
+       "inputTokens": 5562,
+       "outputTokens": 81,
+       "knownUsageUsd": 0.0014712000000000002,
+       "estimatedUsd": 0.0014712000000000002,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     null,
+     {
+      "turn": 2,
+      "result": "correct",
+      "checks": [
+       {
+        "name": "total",
+        "passed": true,
+        "patterns": [
+         "33"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 4
+  },
+  {
+   "id": "MG09",
+   "suite": "guest",
+   "turns": [
+    "How many credits do I need to graduate in my major?"
+   ],
+   "comparesWith": "MP09",
+   "checks": [
+    {
+     "name": "asks which program instead of assuming",
+     "any": [
+      "which (?:UAEU )?(?:program|major|degree)",
+      "أي برنامج",
+      "أي تخصص"
+     ]
+    }
+   ],
+   "sources": [],
+   "needsCitation": false,
+   "forbidden": [
+    "saved (?:major|profile)",
+    "your saved",
+    "المحفوظ",
+    "ملفك المحفوظ"
+   ],
+   "conversation": [
+    {
+     "user": "How many credits do I need to graduate in my major?",
+     "status": 200,
+     "seconds": 0.069,
+     "payload": {
+      "role": "assistant",
+      "content": "Which UAEU program do you mean? Tell me the program name (for example, Bachelor of Science in Computer Science) and I will answer from its official catalog entry. If you sign in and save your major on your profile, I can use it for questions like this.",
+      "source": "escalated",
+      "stateLabel": "clarify_subject",
+      "disposition": "clarify",
+      "citations": [],
+      "clarificationReason": "own_program_unknown",
+      "communications": [],
+      "usage": {
+       "elapsedMs": 66,
+       "attemptedCalls": 0,
+       "unmeteredAttempts": 0,
+       "calls": [],
+       "embeddingCacheHits": 0,
+       "inputTokens": 0,
+       "outputTokens": 0,
+       "knownUsageUsd": 0,
+       "estimatedUsd": 0,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     {
+      "turn": 1,
+      "result": "correct",
+      "checks": [
+       {
+        "name": "asks which program instead of assuming",
+        "passed": true,
+        "patterns": [
+         "which (?:UAEU )?(?:program|major|degree)",
+         "أي برنامج",
+         "أي تخصص"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 2
+  },
+  {
+   "id": "MP10",
+   "suite": "personalization",
+   "turns": [
+    "When is my registration?"
+   ],
+   "turnGrades": [
+    {
+     "checks": [
+      {
+       "name": "Spring 2027 registration start",
+       "any": [
+        "2\\s*November\\s*2026",
+        "November\\s*2,?\\s*2026",
+        "2\\s*نوفمبر",
+        "٢\\s*نوفمبر"
+       ]
+      }
+     ],
+     "sources": [
+      "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"
+     ],
+     "needsCitation": false,
+     "basis": "data/knowledge/04-academic-calendar-2026-2027.md"
+    }
+   ],
+   "profile": {
+    "major": "Bachelor of Science in Information Technology",
+    "academicYear": "1"
+   },
+   "checks": [
+    {
+     "name": "Spring 2027 registration start",
+     "any": [
+      "2\\s*November\\s*2026",
+      "November\\s*2,?\\s*2026",
+      "2\\s*نوفمبر",
+      "٢\\s*نوفمبر"
+     ]
+    }
+   ],
+   "sources": [
+    "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"
+   ],
+   "needsCitation": false,
+   "forbidden": [],
+   "conversation": [
+    {
+     "user": "When is my registration?",
+     "status": 200,
+     "seconds": 7.09,
+     "payload": {
+      "role": "assistant",
+      "content": "Based on your saved profile (undergraduate student):\n\nFor your saved undergraduate level, registration for the next semester, Spring 2027, begins on Monday, 2 November 2026, according to the 2026–2027 academic calendar at UAEU. Your personal registration time may vary and is controlled by your student portal.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Academic Calendar",
+        "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+        "lastVerified": "2026-09-29"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [
+       {
+        "id": "academic-calendar",
+        "title": "Academic Calendar",
+        "description": "Check the official UAEU academic calendar for dates, registration windows, exams, and university deadlines.",
+        "url": "https://webapps.uaeu.ac.ae/calendar/index.aspx",
+        "category": "deadline",
+        "keywords": [
+         "academic calendar",
+         "registration date",
+         "registration window",
+         "exam schedule",
+         "final exams",
+         "add drop",
+         "semester start",
+         "university holiday",
+         "التقويم الأكاديمي",
+         "مواعيد الامتحانات"
+        ],
+        "lastVerified": "2026-09-16"
+       }
+      ],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "topic": "calendar",
+      "evidenceIds": [
+       "answer:registration-opening-date#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "For your saved undergraduate level, registration for the next semester, Spring 2027, begins on Monday, 2 November 2026, according to the 2026–2027 academic calendar at UAEU. Your personal registration time may vary and is controlled by your student portal.",
+        "evidenceIds": [
+         "answer:registration-opening-date#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 7080,
+       "attemptedCalls": 3,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 23110,
+         "cachedInputTokens": 22912,
+         "outputTokens": 60,
+         "estimatedUsd": 0.0024664
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3635,
+         "cachedInputTokens": 1920,
+         "outputTokens": 83,
+         "estimatedUsd": 0.0010107999999999998
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1532,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006624000000000001
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 28277,
+       "outputTokens": 174,
+       "knownUsageUsd": 0.0041396,
+       "estimatedUsd": 0.0041396,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      },
+      "personalized": true
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     {
+      "turn": 1,
+      "basis": "data/knowledge/04-academic-calendar-2026-2027.md",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "Spring 2027 registration start",
+        "passed": true,
+        "patterns": [
+         "2\\s*November\\s*2026",
+         "November\\s*2,?\\s*2026",
+         "2\\s*نوفمبر",
+         "٢\\s*نوفمبر"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 1,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 2
+  }
+ ],
+ "testAccount": {
+  "usernamePrefix": "eval_",
+  "createdAt": "2026-11-09T09:09:01.350Z"
+ },
+ "finishedAt": "2026-11-09T09:09:10.423Z",
+ "summary": {
+  "bySuite": {
+   "followup": {
+    "correct": 2,
+    "partial": 0,
+    "incorrect": 0
+   },
+   "followup-2turn": {
+    "correct": 4,
+    "partial": 1,
+    "incorrect": 0
+   },
+   "guest": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+   },
+   "personalization": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+   }
+  },
+  "total": 9
+ }
+}
