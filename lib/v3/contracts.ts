@@ -70,9 +70,12 @@ export type EvidenceItem = {
 };
 
 export type ExecutionEntities = {
+  domain?: string;
+  eventType?: string;
   courses?: string[];
   program?: string;
   cohort?: string;
+  degreeLevel?: "undergraduate" | "postgraduate";
   term?: string;
   year?: number;
   applicantCategory?: string;
@@ -155,8 +158,10 @@ export function isExecutionPlan(value: unknown): value is ExecutionPlan {
   const needs = value.needs;
   return ["evidence", "liveResearch", "studentData", "academicRules", "planning", "universityAction"]
     .every((key) => typeof needs[key] === "boolean") &&
+    isOptionalString(value.entities.domain) && isOptionalString(value.entities.eventType) &&
     isOptionalString(value.entities.program) && isOptionalString(value.entities.cohort) &&
     isOptionalString(value.entities.term) && isOptionalString(value.entities.applicantCategory) &&
+    (value.entities.degreeLevel === undefined || isOneOf(value.entities.degreeLevel, ["undergraduate", "postgraduate"] as const)) &&
     (value.entities.year === undefined || (typeof value.entities.year === "number" && Number.isInteger(value.entities.year))) &&
     (value.entities.courses === undefined || isStringArray(value.entities.courses));
 }
