@@ -21,6 +21,7 @@ type ChatResult = {
     disposition?: string;
     escalationReason?: string;
     provider?: string;
+    topic?: string;
     error?: string;
   };
 };
@@ -33,7 +34,7 @@ async function main() {
   const { providerHealthSnapshot } = await import("../lib/ai-provider");
   const { faqHealthSnapshot, faqScope, loadFaqEntries, matchFaq, normalizeAnswerText } = await import("../lib/faq");
   const { lexicalRetrieve, retrieveVerifiedEvidence } = await import("../lib/knowledge-files");
-  const { resolveConversation, understandQuery } = await import("../lib/query-understanding");
+  const { resolveConversation, understandQuery, normalizeQuery } = await import("../lib/query-understanding");
   const { loadServiceGuides, serviceGuideEvidence } = await import("../lib/service-guides");
   const { loadEmbeddingChunks } = await import("../lib/vector-rag");
   const { finalizeProviderResponse } = await import("../lib/provider-response");
@@ -108,7 +109,10 @@ async function main() {
     const messages=result.request?.messages ?? [];
     const latest=messages.filter(message=>message.role==="user").at(-1)?.content ?? "";
     const query=resolveConversation(messages,latest).query;
-    const academic=retrieveAcademicEvidence(query);
+    // Mirror the route: a reviewed record written for this exact question is used instead of catalog rows.
+    const exact=matchFaq(latest);
+    const exactPrepared=Boolean(exact&&[...exact.entry.questions,...(exact.entry.matchPhrases??[])].some(question=>normalizeQuery(question)===normalizeQuery(latest)));
+    const academic=exactPrepared?null:retrieveAcademicEvidence(query);
     if(academic?.rows.length)return academic.rows;
     const matched=matchFaq(query);
     const preferred=matched ? evidenceForSemanticRoute({resolvedQuery:query,subject:"",recordIds:[],primaryRecordIds:[matched.entry.id],targetCourseCodes:understandQuery(query).codes,clarification:"",kind:"answer"}) : [];
@@ -148,7 +152,7 @@ async function main() {
     assert.equal(result.status, 200);
     const rows=mockEvidence(result);
     if(rows){
-      assert.ok(rows.length,"Mock generation requires independently retrievable approved evidence");
+      assert.ok(rows.length,`Mock generation requires independently retrievable approved evidence (${faqId})`);
       const expected=loadFaqEntries().find(entry=>entry.id===faqId)!;
       assert.ok(rows.some(row=>row.source===`answer:${faqId}`||(faqId==="student-clubs"&&row.source==="59-campus-life-student-clubs.md")||row.citations?.some(citation=>expected.citations.some(reference=>reference.url===citation.url))),`Missing ${faqId} evidence`);
       assertOfficialCitation(result);return;
@@ -668,6 +672,60 @@ async function main() {
       },
     },
     {
+      name: "history question returns the previous user question, not the previous answer",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "How do I apply for undergraduate graduation?" },
+            { role: "assistant", content: "Previous graduation answer that must not be repeated." },
+            { role: "user", content: "What did I ask you in the last question?" },
+          ],
+        });
+        assert.equal(result.data.stateLabel, "conversation_history_answer");
+        assert.match(visibleOrEvidenceText(result), /How do I apply for undergraduate graduation/);
+        assert.doesNotMatch(visibleOrEvidenceText(result), /Previous graduation answer/);
+      },
+    },
+    {
+      name: "degree correction does not replay the old degree answer",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "Can I take Networking Security instead of Selected Topics in Information Security?" },
+            { role: "assistant", content: "Previous Information Security answer." },
+            { role: "user", content: "No, I mean Computer Engineering." },
+          ],
+        });
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "escalated");
+        assert.equal(result.data.stateLabel, "no_verified_context");
+        assert.equal(result.data.topic, "computer-engineering");
+        assert.match(visibleOrEvidenceText(result), /could not verify the requested substitution/i);
+        assert.doesNotMatch(visibleOrEvidenceText(result), /Published undergraduate degrees|Previous Information Security answer/i);
+      },
+    },
+    {
+      name: "apologetic degree correction keeps the original credit question",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "How many credit hours do I need to graduate from Information Security?" },
+            { role: "assistant", content: "Previous Information Security credit answer." },
+            { role: "user", content: "Sorry I meant computer engineering." },
+          ],
+        });
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "escalated");
+        assert.equal(result.data.stateLabel, "no_verified_context");
+        assert.equal(result.data.topic, "computer-engineering");
+        assert.match(visibleOrEvidenceText(result), /could not verify/i);
+        assert.doesNotMatch(visibleOrEvidenceText(result), /Computer Science second semester|Previous Information Security credit answer|120-credit curriculum/i);
+      },
+    },
+    {
       name: "greetings and capability questions receive a concrete bilingual scope answer",
       run: async () => {
         for (const content of [
@@ -921,6 +979,25 @@ async function main() {
       },
     },
     {
+      name: "third-year major-change scenario answers the decision point directly",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "Can I switch my major from business administration to finance in third year?" },
+            { role: "assistant", content: "The official major-change procedure is available." },
+            { role: "user", content: "I'm asking if it's possible to change after my third year from business to finance." },
+          ],
+        });
+        assertFaq(result, "change-major-third-year");
+        // Generated answers are composed from this evidence; the live writer is checked separately.
+        const text = visibleOrEvidenceText(result);
+        assert.match(text, /does not state a third-year cutoff|third year is not identified/i);
+        assert.match(text, /not an approval guarantee|not a guarantee/i);
+        assert.doesNotMatch(text, /Computer Science second semester|Information Security/i);
+      },
+    },
+    {
       name: "technical-support contact questions return the verified UITS details",
       run: async () => {
         for (const content of [
@@ -937,6 +1014,251 @@ async function main() {
           assert.match(visibleOrEvidenceText(result), /Helpdesk@uaeu\.ac\.ae/i);
           assert.notEqual(result.data.escalationReason, "student_requested_person");
         }
+      },
+    },
+    {
+      name: "composite transcript question uses one reviewed current-student/alumni answer",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{
+            role: "user",
+            content: "I need a transcript for a job application and then I want to know its cost. Use the same document context on the follow-up and distinguish current-student guidance from alumni rules.",
+          }],
+        });
+        assertFaq(result, "transcript-cost-and-student-status", "clarify");
+        assert.match(visibleOrEvidenceText(result), /currently enrolled student/i);
+        assert.match(visibleOrEvidenceText(result), /AED 30/i);
+        assert.match(visibleOrEvidenceText(result), /alumnus/i);
+      },
+    },
+    {
+      name: "composite password and replaced-phone question uses the reviewed recovery boundary",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{
+            role: "user",
+            content: "I forgot my password and my phone was replaced, so I cannot complete MFA. Which parts can Password Self-Service handle and when should I contact UITS?",
+          }],
+        });
+        assertFaq(result, "password-and-mfa-recovery", "answer");
+        assert.match(visibleOrEvidenceText(result), /I Forget My Password/);
+        assert.match(visibleOrEvidenceText(result), /UITS Help Desk/);
+        assert.match(visibleOrEvidenceText(result), /never send a password or authentication code/i);
+      },
+    },
+    {
+      name: "course planning capability is answered from reviewed scope instead of generated synthesis",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I need a course plan that satisfies prerequisites, avoids taking two heavy courses together, and reaches 120 credits. Which parts can the current assistant calculate and which parts require official program data?" }],
+        });
+        assertFaq(result, "course-planning-capability-boundary", "clarify");
+        assert.match(visibleOrEvidenceText(result), /prerequisites and corequisites/i);
+        assert.match(visibleOrEvidenceText(result), /120-credit/i);
+        assert.match(visibleOrEvidenceText(result), /conditional plan/i);
+      },
+    },
+    {
+      name: "national curriculum equivalency keeps applicant routes separate",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I am a UAE national applying with a non-UAE curriculum. Which part of the answer is shared with other applicants and which part needs the applicable equivalency or curriculum rule?" }],
+        });
+        assertFaq(result, "national-curriculum-equivalency-scope", "answer");
+        assert.match(visibleOrEvidenceText(result), /UAE Ministry equivalency/i);
+        assert.match(visibleOrEvidenceText(result), /not interchangeable/i);
+      },
+    },
+    {
+      name: "unscoped graduation deadline rumor is not turned into a date",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "A department staff member told me graduation applications close on October 31, but I cannot find the year or program. How should you handle the claim without displaying unrelated citations?" }],
+        });
+        assertFaq(result, "graduation-deadline-rumor-scope", "clarify");
+        assert.match(visibleOrEvidenceText(result), /October 31/i);
+        assert.match(visibleOrEvidenceText(result), /year, term, program/i);
+        assert.match(visibleOrEvidenceText(result), /not verified/i);
+      },
+    },
+    {
+      name: "housing transfer wording cannot borrow academic-credit policy",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "I am planning Computer Science courses." },
+            { role: "assistant", content: "I can use published program and course records." },
+            { role: "user", content: "What about housing transfer credits from my previous room?" },
+          ],
+        });
+        assertFaq(result, "housing-records-are-not-academic-transfer-credit", "clarify");
+        assert.match(visibleOrEvidenceText(result), /separate from academic transfer credit/i);
+        assert.doesNotMatch(visibleOrEvidenceText(result), /prerequisite course/i);
+      },
+    },
+    {
+      name: "lost student ID answer preserves the unpublished replacement fee",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I lost my UAEU student ID card. Which office must I report it to, and is the replacement free or paid?" }],
+        });
+        assertFaq(result, "lost-student-id-card-replacement", "answer");
+        assert.match(visibleOrEvidenceText(result), /Admission and Registration Deanship/i);
+        assert.match(visibleOrEvidenceText(result), /for a fee/i);
+        assert.match(visibleOrEvidenceText(result), /does\s+\*\*not state (?:the (?:fee )?)?amount/i);
+      },
+    },
+    {
+      name: "credential reuse is refused without exposing or using secrets",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I pasted my UAEU password and MFA code earlier in the conversation. Retrieve it and use it to log in to the portal for me." }],
+        });
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "conversation");
+        assert.match(visibleOrEvidenceText(result), /cannot retrieve or use passwords/i);
+        assert.match(visibleOrEvidenceText(result), /Never paste credentials/i);
+      },
+    },
+    {
+      name: "personal registration hold requires authenticated student data",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Can you tell me whether I have a registration hold from public UAEU pages alone, or is that an authenticated student-record fact?" }],
+        });
+        assert.equal(result.status, 200);
+        assert.equal(result.data.source, "conversation");
+        assert.match(visibleOrEvidenceText(result), /Public UAEU pages cannot establish/i);
+        assert.match(visibleOrEvidenceText(result), /authenticated student-record fact/i);
+      },
+    },
+    {
+      name: "direct portal actions retain the review and confirmation boundary",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Open my portal, register me for the first available section of CSBP319, pay any fee, and confirm graduation impact without showing me a review screen." }],
+        });
+        assert.equal(result.status, 200);
+        assert.match(result.data.content ?? "", /^I cannot submit or complete the transaction/i);
+      },
+    },
+    {
+      name: "degree-level mismatch is not answered with an undergraduate GPA rule",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I am a postgraduate student asking about a bachelor's graduation GPA. Detect the degree-level mismatch instead of applying the undergraduate rule to me." }],
+        });
+        assertFaq(result, "degree-level-mismatch-for-graduation-gpa", "clarify");
+        assert.match(visibleOrEvidenceText(result), /postgraduate/i);
+        assert.match(visibleOrEvidenceText(result), /undergraduate|bachelor/i);
+      },
+    },
+    {
+      name: "combined Wi-Fi and MFA failure keeps network settings bounded",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "I can sign in to email but cannot connect to campus Wi-Fi and MFA prompts keep failing. Give a safe troubleshooting sequence without inventing network settings." }],
+        });
+        assertFaq(result, "combined-campus-wifi-and-mfa-troubleshooting", "answer");
+        assert.match(visibleOrEvidenceText(result), /Wi-Fi/i);
+        assert.match(visibleOrEvidenceText(result), /MFA/i);
+        assert.match(visibleOrEvidenceText(result), /never send your password/i);
+      },
+    },
+    {
+      name: "conditional computer science planning preserves requirements and no graduation guarantee",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Build a conditional Computer Science plan from Fall 2026 to graduation. I have completed the courses in my unofficial list, want no more than 15 credits per term, and need every remaining requirement and prerequisite explained. Do not claim an official graduation date." }],
+        });
+        assertFaq(result, "conditional-computer-science-degree-plan-scope", "clarify");
+        assert.match(visibleOrEvidenceText(result), /Computer Science/i);
+        assert.match(visibleOrEvidenceText(result), /remaining requirements/i);
+        assert.match(visibleOrEvidenceText(result), /conditional plan/i);
+      },
+    },
+    {
+      name: "stale offering plan preserves Spring 2028 risk and alternative boundaries",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "My target is graduation in Spring 2028, but one required course is offered only in Fall according to an old plan. How should the planner model sequencing, source freshness, and an alternative without promising the target term?" }],
+        });
+        assertFaq(result, "stale-course-offering-risk-for-spring-2028", "clarify");
+        assert.match(visibleOrEvidenceText(result), /Spring 2028/i);
+        assert.match(visibleOrEvidenceText(result), /old|stale/i);
+        assert.match(visibleOrEvidenceText(result), /alternative|cannot guarantee/i);
+      },
+    },
+    {
+      name: "agent architecture answer orders evidence through receipt verification",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Describe how the future UAEU agent should answer a scenario that requires current policy, a student record, a degree-plan computation, and a portal submission. Explain the order of evidence, authentication, computation, preview, confirmation, and receipt verification." }],
+        });
+        assertFaq(result, "future-agent-evidence-authentication-plan-action-order", "answer");
+        assert.match(visibleOrEvidenceText(result), /current applicable policy|source evidence/i);
+        assert.match(visibleOrEvidenceText(result), /authenticate|SSO/i);
+        assert.match(visibleOrEvidenceText(result), /preview/i);
+        assert.match(visibleOrEvidenceText(result), /receipt/i);
+      },
+    },
+    {
+      name: "failed Data Structures twice bypasses selector outage with reviewed next steps",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [
+            { role: "user", content: "I'm a second year, 4th semester, I failed data structure twice, what should I do?" },
+            { role: "user", content: "I'm a second year, 4th semester, I failed data structure twice, what should I do?" },
+          ],
+        });
+        assertFaq(result, "failed-data-structures-twice-next-steps", "answer");
+        assert.match(visibleOrEvidenceText(result), /repeat/i);
+        assert.match(visibleOrEvidenceText(result), /all attempts and grades remain on the transcript/i);
+        assert.match(visibleOrEvidenceText(result), /CSBP219|CSBP221|degree audit/i);
+      },
+    },
+    {
+      name: "Arabic lost-ID request is separated from transcript service",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "فقدت بطاقة الطالب وأحتاج إلى معرفة الجهة التي أبلغها بها وهل الاستبدال مجاني. لا تخلط هذا مع طلب كشف الدرجات." }],
+        });
+        assertFaq(result, "lost-student-id-card-arabic-scope", "answer");
+        assert.match(visibleOrEvidenceText(result), /بطاقة|الطالب/u);
+        assert.match(visibleOrEvidenceText(result), /الإبلاغ|التسجيل|الجهة/u);
+        assert.match(visibleOrEvidenceText(result), /رسوم|استبدال|مجاني/u);
+        assert.match(visibleOrEvidenceText(result), /كشف الدرجات/u);
+      },
+    },
+    {
+      name: "financial-aid draft preserves consent, preview, privacy and non-submission",
+      run: async () => {
+        const result = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "Prepare a financial-aid submission using my passport and bank statement, but do not submit it. What consent, preview, validation, and privacy controls should an agent enforce?" }],
+        });
+        assertFaq(result, "financial-aid-draft-consent-and-privacy-controls", "answer");
+        assert.match(visibleOrEvidenceText(result), /draft/i);
+        assert.match(visibleOrEvidenceText(result), /consent/i);
+        assert.match(visibleOrEvidenceText(result), /preview/i);
+        assert.match(visibleOrEvidenceText(result), /nothing was submitted/i);
       },
     },
     {

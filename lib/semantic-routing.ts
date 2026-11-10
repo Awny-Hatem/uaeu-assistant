@@ -1,7 +1,7 @@
 import { AiProviderError, configuredProviderName, generateAssistantResponse } from "@/lib/ai-provider";
 import { faqScope, faqScopeAllows, loadFaqEntries, type FaqEntry } from "@/lib/faq";
 import { hasRequestedFactEvidence, type EvidenceRow } from "@/lib/knowledge-files";
-import { courseCodes, namedSubjects, normalizeCourseCodes, normalizeQuery, resolveConversation, understandQuery } from "@/lib/query-understanding";
+import { courseCodes, isCorrectionQuery, namedSubjects, normalizeCourseCodes, normalizeQuery, resolveConversation, understandQuery } from "@/lib/query-understanding";
 
 export type SemanticRoute = {
   resolvedQuery: string;
@@ -108,11 +108,11 @@ CATALOG:\n${JSON.stringify(catalog)}`,
     if (supplied.years.some((year) => !resolved.years.includes(year)) || supplied.terms.some((term) => !resolved.terms.includes(term)) ||
       (supplied.applicantCategories.some((category) => !resolved.applicantCategories.includes(category))) ||
       (supplied.degreeLevel && supplied.degreeLevel !== resolved.degreeLevel)) return null;
-    const protectedSubjects = ["admissions", "housing", "scholarship", "visa", "library", "parking", "tuition", "transcript", "certificate"];
+    const protectedSubjects = ["admissions", "housing", "scholarship", "visa", "library", "parking", "tuition", "transcript", "certificate", "computer-engineering"];
     if (supplied.subjects.some((subject) => protectedSubjects.includes(subject) && !resolved.subjects.includes(subject))) return null;
     if (/\b(?:gpa|cgpa)\b|معدل.*تراكمي/iu.test(latest) && !/\b(?:gpa|cgpa)\b/i.test(route.resolvedQuery)) return null;
     if (/\b(?:medicine|cmhs)\b|كلية الطب/iu.test(latest) && !/\b(?:medicine|cmhs)\b/i.test(route.resolvedQuery)) return null;
-    const protectedFacets = ["prerequisites", "gpa", "fees", "duration", "deadline", "credit-load", "standing", "approval", "withdrawal"];
+    const protectedFacets = ["prerequisites", "gpa", "fees", "duration", "deadline", "credit-load", "standing", "approval", "withdrawal", "substitution"];
     if (supplied.intents.some((intent) => protectedFacets.includes(intent) && !resolved.intents.includes(intent))) return null;
     if (supplied.intents.some((intent) => protectedFacets.includes(intent)) || /\b(?:below|above|violations?|suspension|suspended)\b/i.test(latest)) {
       const numbers = (normalizeCourseCodes(latest).match(/\b\d+(?:\.\d+)?\b/g) ?? []).map(Number);
@@ -143,8 +143,9 @@ CATALOG:\n${JSON.stringify(catalog)}`,
     }
     const latestSubjects = namedSubjects(latest).map(({ key }) => key).filter((key) => key !== "grade");
     const sameSubject = latestSubjects.some((subject) => active.subjects.includes(subject));
-    const newSubject = latestSubjects.length > 0 && active.subjects.length > 0 && !sameSubject;
-    const inheritsScope = !newSubject && (isReference || sameSubject);
+    const correctedSubject = isCorrectionQuery(latest) && latestSubjects.length > 0 && active.subjects.length > 0 && !sameSubject;
+    const newSubject = latestSubjects.length > 0 && active.subjects.length > 0 && !sameSubject && !correctedSubject;
+    const inheritsScope = correctedSubject || (!newSubject && (isReference || sameSubject));
     const establishedCategories = [...supplied.applicantCategories, ...(inheritsScope && !supplied.applicantCategories.length ? active.applicantCategories : [])];
     const establishedDegrees = [...supplied.degreeLevels, ...(inheritsScope && !supplied.degreeLevels.length ? active.degreeLevels : [])];
     const establishedYears = supplied.years.length ? supplied.years : inheritsScope ? active.years : [];
@@ -153,8 +154,8 @@ CATALOG:\n${JSON.stringify(catalog)}`,
       resolved.degreeLevels.some((degree) => !establishedDegrees.includes(degree)) ||
       resolved.years.some((year) => !establishedYears.includes(year)) ||
       resolved.terms.some((term) => !establishedTerms.includes(term))) return null;
-    if (!newSubject && (isReference || sameSubject)) {
-      const inheritedSubject = active.subjects[0];
+    if (!newSubject && (isReference || sameSubject || correctedSubject)) {
+      const inheritedSubject = correctedSubject ? latestSubjects[0] : active.subjects[0];
       if (inheritedSubject && [...protectedSubjects, "graduation", "password", "enrollment-document", "student-document", "twimc"].includes(inheritedSubject) && !resolved.subjects.includes(inheritedSubject)) return null;
       if ((!supplied.years.length && active.years.some((year) => !resolved.years.includes(year))) ||
         (!supplied.terms.length && active.terms.some((term) => !resolved.terms.includes(term))) ||

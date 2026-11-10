@@ -21,8 +21,8 @@ function check(name: string, run: () => void) {
 }
 
 // Content-regression checks, not live verification or a proof of source entailment.
-check("45 service records retain bilingual answers and mapped official sources", () => {
-  assert.equal(entries.length, 45);
+check("51 service records retain bilingual answers and mapped official sources", () => {
+  assert.equal(entries.length, 51);
   assert.equal(new Set(entries.map(item => item.id)).size, entries.length);
   for (const item of entries) {
     assert.ok(item.answer_en.length > 20 && item.answer_ar.length > 20, item.id);
@@ -76,6 +76,40 @@ check("MFA absence claims are confined to inspected sources; careers uses its pu
   assert.match(entry("internships-student-jobs").answer_en, /do not establish an individual placement guarantee/);
   assert.ok(entry("internships-student-jobs").citations.some(source=>source.url.includes('/student_career/')));
   assert.doesNotMatch(entry("internships-student-jobs").answer_en, /public catalog does not provide/);
+});
+check("combined password and MFA recovery keeps the two supported paths separate", () => {
+  const record = entry("password-and-mfa-recovery");
+  assert.match(record.answer_en, /I Forget My Password/);
+  assert.match(record.answer_en, /does not establish a complete lost-phone MFA-reset procedure/);
+  assert.match(record.answer_en, /UITS Help Desk/);
+  assert.match(record.answer_en, /never send a password or authentication code/);
+  assert.ok(record.citations.some(source => source.url === "https://selfservice.uaeu.ac.ae/"));
+});
+check("housing and academic transfer records remain separate", () => {
+  const record = entry("housing-records-are-not-academic-transfer-credit");
+  assert.match(record.answer_en, /not.*academic credit/i);
+  assert.match(record.answer_en, /Rooms Assignment Service/);
+  assert.ok(record.citations.some(source => source.url.includes("serviceId=106")));
+});
+check("combined Wi-Fi and MFA guidance avoids invented network settings", () => {
+  const record = entry("combined-campus-wifi-and-mfa-troubleshooting");
+  assert.match(record.answer_en, /Wi-Fi/);
+  assert.match(record.answer_en, /MFA/);
+  assert.match(record.answer_en, /never send your password or MFA code/);
+  assert.ok(record.citations.some(source => source.url.includes("student-handbook2023")));
+});
+check("portal action guidance requires preview and explicit confirmation", () => {
+  const record = entry("portal-action-review-before-registration-and-payment");
+  assert.match(record.answer_en, /CSBP319/);
+  assert.match(record.answer_en, /explicit confirmation/);
+  assert.match(record.answer_en, /official receipt/);
+});
+check("financial-aid drafts protect consent, preview and non-submission", () => {
+  const record = entry("financial-aid-draft-consent-and-privacy-controls");
+  assert.match(record.answer_en, /draft/);
+  assert.match(record.answer_en, /consent/);
+  assert.match(record.answer_en, /preview/);
+  assert.match(record.answer_en, /nothing was submitted/);
 });
 check("housing cost does not infer scholarship exceptions", () => {
   const record = entry("student-housing-cost");

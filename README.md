@@ -106,7 +106,9 @@ Future UAEU integration could expose stable UI markers such as `data-help-id="do
 Create `.env.local` from `.env.example`:
 
 ```bash
-OPENAI_API_KEY=your-openai-api-key
+OPENAI_KEY=your-primary-openai-api-key
+OPENAI_API_KEY=your-backup-openai-api-key
+OPENAI=your-university-openai-api-key
 # AI_PROVIDER=openai
 # OPENAI_CHAT_MODEL=gpt-4.1-mini
 # AI_PROVIDER_TIMEOUT_MS=20000
@@ -129,7 +131,9 @@ Set `AI_PROVIDER=openai` or `AI_PROVIDER=gemini` explicitly in deployment. A mis
 
 Transient OpenAI network, rate-limit and server failures receive at most two retries within the existing absolute answer deadline. Backoff respects a valid server minimum and declines excessive waits; confirmed billing/quota, credential and invalid-request errors are not retried. Missing rate-limit subtype is labelled unclassified rather than guessed. Retry handling follows the [official rate-limit guidance](https://developers.openai.com/api/docs/guides/rate-limits); it cannot restore exhausted account credits or guarantee availability. Claim-verification batches settle all bounded sibling calls before returning.
 
-Live Gemini embedding search is separately opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`. Sign-in needs `AUTH_JWT_SECRET`, a dedicated random value of at least 32 characters (for example, `openssl rand -base64 48`), different in every environment and never committed. Conversation memory, accounts and profiles live in a libSQL store: set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in production so they are durable and shared across serverless instances; without them a local `data/app-store.db` file is used, which is fine for development but would sit in per-instance `/tmp` on Vercel. See `docs/data-retention.md` for what is kept, for how long and who can read it.
+OpenAI accepts the three aliases above (plus the legacy `openai_key` name), deduplicates identical values, and fails over through every distinct configured key when a key cannot serve the request. Set `AI_PROVIDER_FALLBACK=enabled` to use Gemini after all OpenAI keys fail.
+
+Live Gemini embedding search is separately opt-in through `GEMINI_EMBEDDING_SEARCH=enabled`. Sign-in needs `AUTH_JWT_SECRET` (the older `AUTH_COOKIE_SECRET` name is also accepted), a dedicated random value of at least 32 characters (for example, `openssl rand -base64 48`), different in every environment and never committed. Conversation memory, accounts and profiles live in a libSQL store: set `TURSO_DATABASE_URL` and `TURSO_AUTH_TOKEN` in production so they are durable and shared across serverless instances; without them a local `data/app-store.db` file is used, which is fine for development but would sit in per-instance `/tmp` on Vercel. See `docs/data-retention.md` for what is kept, for how long and who can read it.
 
 ### Deployment and account contract
 

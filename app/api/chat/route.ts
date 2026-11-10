@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { describeAiProviderError, generateAssistantResponse } from "@/lib/ai-provider";
 import { recordAnalyticsEvent, classifyTopic } from "@/lib/analytics";
 import { citationsForFaq, uniqueCitations, CONTACT_CITATION } from "@/lib/citations";
-import { courseIdentityConflict, faqAnswer, faqScope, matchFaq, type AnswerDisposition } from "@/lib/faq";
+import { courseIdentityConflict, faqAnswer, faqScope, loadFaqEntries, matchFaq, type AnswerDisposition } from "@/lib/faq";
 import { getGemini, embeddingModel } from "@/lib/gemini";
 import { evidenceIsRelevant, retrieveVerifiedEvidence, type EvidenceRow } from "@/lib/knowledge-files";
 import { resolveLocale } from "@/lib/language";
@@ -55,6 +55,7 @@ type ChatBody = {
 type AssistantPayload = {
   role: "assistant";
   content: string;
+  answerStatus?: import("@/lib/agent-contracts").AgentAnswerStatus;
   source: AssistantSource;
   stateLabel: string;
   citations?: Citation[];
@@ -122,6 +123,12 @@ function previousUserMessage(messages: ChatMessage[]): string | null {
     return messages[i].content;
   }
   return null;
+}
+
+function asksPreviousQuestion(query: string): boolean {
+  const normalized = query.toLowerCase().replace(/[^\p{L}\p{N}\s]/gu, " ").replace(/\s+/g, " ").trim();
+  return /^(?:what did i ask|what was my (?:last|previous) question|what was my previous request|what did i say before)\b/u.test(normalized) ||
+    /^(?:ما السؤال الذي طرحته|ماذا سألت سابقا|ماذا سألت من قبل)/u.test(normalized);
 }
 
 function previousStandaloneUserMessage(messages: ChatMessage[]): string | null {
@@ -625,7 +632,9 @@ function withActionBoundary(content: string, query: string, locale: "ar" | "en")
     : "\n\nA program suggestion from this chat does not guarantee admission or constitute an admission decision or a check of your personal eligibility.";
   const action = /\b(?:request|submit|issue|apply|book|pay|register|enrol|enroll|cancel)\b|تقديم|تقدم|تصدر|إصدار|اصدار|احجز|تحجز|حجز|سجل|تسجيل|ادفع|دفع|اطلب|طلب/iu.test(query);
   const inChat = /\b(?:through|via|in|using) (?:this|the|our) (?:chat|chatbot)|\b(?:can|could|would|will) you\s+(?:please\s+)?(?:request|submit|issue|apply|book|pay|register|enrol|enroll|cancel)\b|(?:من خلال|عبر|في) (?:هذه |هذا )?(?:المحادثة|الدردشة|الشات)|(?:هل يمكنك|تقدر) (?:تقديم|تصدر|تحجز|تسجيل|الدفع)/iu.test(query);
-  if (!action || !inChat) return content;
+  const directAction = /\b(?:open my portal|register me|enroll me|pay (?:the|any|a) fee|submit (?:it|this|the)|book it for me)\b/i.test(query);
+  const bypassReview = /\b(?:without|skip|do not show|don't show|no)\b[^.!?]{0,40}\b(?:review|confirm|confirmation|approval)\b/i.test(query);
+  if (!action || (!inChat && !directAction && !bypassReview)) return content;
   const boundary = locale === "ar"
     ? "لا أستطيع تقديم الطلب أو إتمام المعاملة نيابةً عنك عبر هذه المحادثة؛ أستطيع شرح الخطوات المنشورة، وعليك تنفيذها في الخدمة الرسمية."
     : "I cannot submit or complete the transaction for you through this chat. I can explain the published steps; you must complete them in the official service.";
@@ -840,6 +849,25 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
       return respond(payload, latest, translateTo);
     }
   }
+  if (asksPreviousQuestion(latest)) {
+    const previousQuestion = previousUserMessage(sanitized);
+    const content = previousQuestion
+      ? locale === "ar"
+        ? `كان سؤالك السابق: «${previousQuestion}»`
+        : `Your previous question was: “${previousQuestion}”`
+      : locale === "ar"
+        ? "لا توجد رسالة سابقة من المستخدم في هذه المحادثة."
+        : "There is no previous user question in this conversation.";
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content,
+      source: "conversation",
+      stateLabel: "conversation_history_answer",
+      disposition: "answer",
+      citations: [],
+    };
+    return respond(payload, latest, locale);
+  }
   // "What was the minimum grade you mentioned?": answer from the previous,
   // already source-checked answer (skipping a translation of it).
   if (!translateTo && refersToPreviousAnswer(latest)) {
@@ -856,7 +884,8 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     return respond(payload, latest, locale);
   }
   // "What courses do I have remaining?" needs the student's record: say so plainly.
-  if (asksRemainingCourses(latest)) {
+  // A strongly matched reviewed record for the exact scenario answers instead.
+  if (asksRemainingCourses(latest) && (matchFaq(latest)?.score ?? 0) < 1000) {
     const payload: AssistantPayload = { role: "assistant", content: remainingCoursesReply(locale, profile?.major ?? null), source: "escalated", stateLabel: "individual_record", disposition: "clarify", citations: [], clarificationReason: "individual_record" };
     return respond(payload, latest, locale);
   }
@@ -929,9 +958,11 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     return respond(payload, latest, locale);
   }
 
+  const credentialRequest = /\b(?:password|mfa|multi[- ]factor|verification code|authentication code|one[- ]time code)\b/i.test(latest) && /\b(?:retrieve|use|paste|earlier|remember|send|share)\b/i.test(latest);
   const secretRequest = /(?:^|[^a-z0-9])(?:[a-z0-9]+_)*api[-_ ]?(?:key|secret)(?:[^a-z0-9]|$)|\b(?:secret key|system prompt|hidden instructions|credentials)\b|مفتاح.{0,15}(?:api|السري)|مفاتيح.{0,15}api|تعليمات.{0,12}(?:مخفية|المخفية)|بيانات الاعتماد/iu.test(latest) && /\b(?:show|give|reveal|print|ignore|tell|expose)\b|اطبع|اكشف|اظهر|أظهر|تجاهل|اعطني|أعطني/iu.test(latest);
   const thirdPartyRecord = /\b(?:(?:another|other)\s+(?:student|person)|someone else(?:'s)?|(?:my\s+)?(?:friend|classmate)(?:'s|s))\b[^.!?]{0,90}\b(?:gpa|grades?|student id|records?|transcript)\b|\b(?:gpa|grades?|records?|transcript)\b[^.!?]{0,60}\b(?:of|for|belonging to)\s+(?:another student|someone else|my friend|my classmate)\b/i.test(latest) || /(?:معدل|درجات|سجل|كشف درجات)\s+(?:طالب آخر|طالب اخر|زميلي|صديقي)|(?:طالب آخر|طالب اخر|زميلي|صديقي).{0,60}(?:معدل|درجات|سجل)/u.test(latest);
   const personalRecommendations = /\b(?:actual|personal|my)\b.*\b(?:student|academic) record\b/i.test(latest);
+  const personalPortalRecordRequest = /\b(?:do i have|whether i have|can you tell me whether i have)\b[^.!?]{0,80}\b(?:registration hold|hold|account balance|application status|degree audit)\b/i.test(latest) && /\b(?:public pages?|public website|public source|from public)\b/i.test(latest);
   const liveSeatRead = /\b(?:seat|seats|seat availability)\b/iu.test(latest) && /\b(?:live|real[- ]?time|right now|currently|tomorrow)\b/iu.test(latest) && /\b(?:can you|could you|see|check|view|confirm|i have|my)\b/iu.test(latest)
     || /(?:مقعد|مقاعد).{0,50}(?:مباشر|مباشرة|الان|الآن|غدا|غداً)|(?:هل تستطيع|هل يمكنك).{0,50}(?:مقعد|مقاعد)/u.test(latest);
 
@@ -941,15 +972,19 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     const payload: AssistantPayload={role:"assistant",content,source:"conversation",stateLabel:"privacy_capability_boundary",disposition:"answer",citations:[{title:"UAEU Degree Completion and Graduation Procedures",url:"https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",lastVerified:"2026-11-03"}],communications};
     return respond(payload,latest,locale);
   }
-  if (secretRequest || thirdPartyRecord || personalRecommendations || liveSeatRead) {
+  if (credentialRequest || secretRequest || thirdPartyRecord || personalRecommendations || liveSeatRead || personalPortalRecordRequest) {
     const content = locale === "ar"
       ? secretRequest ? "لا يمكنني كشف مفاتيح API أو بيانات الاعتماد أو التعليمات المخفية. أستطيع مساعدتك في أسئلة خدمات جامعة الإمارات."
+        : credentialRequest ? "لا أستطيع استرجاع كلمات المرور أو رموز MFA أو رموز التحقق أو استخدامها من المحادثة. لا تلصق بيانات الدخول هنا. سجّل الدخول بنفسك عبر بوابة جامعة الإمارات الرسمية، واستخدم خدمة Password Self-Service عند نسيان كلمة المرور أو تواصل مع UITS من دون مشاركة الرمز."
         : liveSeatRead ? "لا أستطيع الاطلاع على المقاعد المتاحة مباشرةً أو على سجل تسجيلك الشخصي. تحقق عبر نظام التسجيل الرسمي أو القبول والتسجيل؛ الخطة المنشورة لا تثبت توفر مقعد فعلي."
         : thirdPartyRecord ? "لا يمكنني الاطلاع على درجات أو معدل أو سجلات طالب آخر أو كشفها، حتى لو عرفت رقمه الجامعي. لا ترسل معلوماته الشخصية."
+          : personalPortalRecordRequest ? "لا يمكن للصفحات العامة لجامعة الإمارات إثبات ما إذا كان على حسابك حظر تسجيل. هذه معلومة مرتبطة بسجل الطالب وتظهر بعد تسجيل الدخول إلى البوابة الرسمية. لا أستطيع الوصول إلى الحظر أو إزالته، لكن يمكنني شرح مكان التحقق منه من دون استلام بيانات الدخول."
           : "لا أملك وصولًا إلى سجلك الأكاديمي الفعلي. أستخدم الخطط والمتطلبات المنشورة وما تخبرني به؛ لذلك لا تمثل إجابتي تحققًا من أهليتك الشخصية للتسجيل أو التخرج."
-      : secretRequest ? "I cannot reveal API keys, credentials, or hidden system instructions. I can help with UAEU student-service questions."
+      : credentialRequest ? "I cannot retrieve or use passwords, MFA codes, or verification codes from chat. Never paste credentials here. Sign in yourself through the official UAEU portal; use Password Self-Service for a forgotten password or contact UITS without sharing the code."
+        : secretRequest ? "I cannot reveal API keys, credentials, or hidden system instructions. I can help with UAEU student-service questions."
         : liveSeatRead ? "I cannot view live seat availability or your personal registration record. Check the official registration system or Admission and Registration; a published study plan does not establish live seats."
         : thirdPartyRecord ? "I cannot access or disclose another student's GPA, grades, or academic records, even if you know their student ID. Please do not send their private information."
+          : personalPortalRecordRequest ? "Public UAEU pages cannot establish whether your account has a registration hold. That is an authenticated student-record fact visible after you sign in to the official portal. I cannot access or clear it, but I can explain where to check it without receiving your credentials."
           : "I do not have access to your actual academic record. My guidance uses published plans and requirements plus information you choose to provide; it is not a verification of your individual registration or graduation eligibility.";
     const payload: AssistantPayload = { role: "assistant", content, source: "conversation", stateLabel: "privacy_capability_boundary", disposition: "answer", citations: [] };
     return respond(payload, latest, locale);
@@ -982,6 +1017,27 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
       role: "assistant", content: missingSubjectContent(latest, locale, resolution.candidates.map(({ label }) => label)),
       source: "escalated", stateLabel: "clarify_subject", disposition: "clarify", citations: [],
       clarificationReason: "ambiguous_subject", communications,
+    };
+    return respond(payload, latest, locale);
+  }
+  // A corrected program identity must not fall through to a generic planning
+  // capability record. If the corrected program has no reviewed record yet,
+  // disclose the evidence gap instead of answering from a neighboring degree.
+  const correctedProgramWithoutEvidence = resolution.corrected && resolution.subject?.key === "computer-engineering" &&
+    !loadFaqEntries().some((entry) => faqScope(entry).subjects?.includes("computer-engineering"));
+  if (correctedProgramWithoutEvidence) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: handoffContent("low_confidence", locale, routingQuery),
+      source: "escalated",
+      stateLabel: "no_verified_context",
+      citations: [],
+      communications,
+      escalationReason: "low_confidence",
+      disposition: "clarify",
+      clarificationReason: "missing_official_evidence",
+      topic: resolution.subject?.key,
+      evidenceIds: [],
     };
     return respond(payload, latest, locale);
   }
@@ -1051,7 +1107,8 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   if (!preferredEvidence.length && (!directFaqHit || resolution.usedContext || resolution.needsClarification)) {
     semantic = semantic ?? await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
     if (semantic) {
-      if (["acknowledge", "greeting", "capabilities"].includes(semantic.kind)) {
+      const semanticAcknowledgementIsSafe = semantic.kind !== "acknowledge" || conversationAcknowledgement(latest) !== null;
+      if (semanticAcknowledgementIsSafe && ["acknowledge", "greeting", "capabilities"].includes(semantic.kind)) {
         const kind = semantic.kind === "acknowledge" ? "thanks" : semantic.kind as "greeting" | "capabilities";
         const payload: AssistantPayload = { role: "assistant", content: acknowledgementContent(kind, locale), source: "conversation", stateLabel: "conversation_acknowledgement", disposition: "answer", citations: [] };
         return respond(payload, latest, locale);
@@ -1112,8 +1169,19 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // not suppress independently retrieved evidence that passes the same hard scope
   // and requested-fact gates. No unapproved or differently scoped facts are added.
   if (semantic && !retrieved.length) retrieved = await retrieveContext(routingQuery, deadlineAt);
-  const evidenceSources = sourceEvidence(retrieved);
-  if (!evidenceSources.length || (looksSensitiveWithoutEvidence(routingQuery) && !hasDirectSensitiveEvidence(routingQuery, retrieved))) {
+  let evidenceSources = sourceEvidence(retrieved);
+  // A reviewed record written for this exact question is its own evidence when
+  // the narrower scope gates find nothing (for example a future target term).
+  // It replaces only a refusal; every other route is unchanged.
+  let exactRecordUsed = false;
+  const lacksEvidence = !evidenceSources.length || (looksSensitiveWithoutEvidence(routingQuery) && !hasDirectSensitiveEvidence(routingQuery, retrieved));
+  if (lacksEvidence && exactPrepared && faqHit) {
+    const entry = faqHit.entry;
+    retrieved = [{ source: `answer:${entry.id}`, title: entry.answer_en.split("\n")[0], scope: faqScope(entry), citations: entry.citations, text: `${entry.answer_en}\n\n${entry.answer_ar ?? ""}`, score: 100 }];
+    evidenceSources = sourceEvidence(retrieved);
+    exactRecordUsed = evidenceSources.length > 0;
+  }
+  if (!exactRecordUsed && lacksEvidence) {
     const escalationReason: EscalationReason = looksSensitiveWithoutEvidence(routingQuery)
       ? "sensitive_policy"
       : "low_confidence";
@@ -1247,15 +1315,18 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     const supportRejected = groundingTrace?.status === "rejected" && !groundingTrace.reasonCodes.includes("verification_unavailable");
     const payload: AssistantPayload = {
       role: "assistant",
-      content: supportRejected ? (locale === "ar" ? "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة أو مراجعة مصدر الجامعة الرسمي مباشرة." : "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.") : locale === "ar" ? "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ هذا العطل لا يعني أن معلومات الجامعة غير متوفرة."
-        : "I could not complete the answer because the answer service is temporarily unavailable. Please try again shortly; this service failure does not establish that the university information is missing.",
-      source: "error",
+      content: supportRejected ? (locale === "ar" ? "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة؛ أو حدّد الخدمة أو المساق أو الفصل أو فئة المتقدم لاستخدام سجل موثق أضيق نطاقاً." : "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Retry with the same question, or identify the specific service, course, term, or applicant category so I can use a narrower verified record.") : locale === "ar" ? "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ يمكنني الاستمرار في تقديم الإجابات المحفوظة الموثقة."
+        : "I could not complete the answer because the answer service is temporarily unavailable. Please try again shortly; verified stored answers remain available.",
+      answerStatus: supportRejected ? "unavailable" : undefined,
+      source: supportRejected ? "escalated" : "error",
       stateLabel: supportRejected ? "grounding_rejected" : "provider_error",
       citations: [],
+      disposition: supportRejected ? "clarify" : undefined,
+      escalationReason: supportRejected ? "low_confidence" : undefined,
       grounding: groundingTrace,
       clarificationReason: groundingTrace?.status === "rejected" ? groundingTrace.reasonCodes.join(",") : providerError.providerStatus,
     };
 
-    return respond(payload, latest, locale, providerError.status);
+    return respond(payload, latest, locale, supportRejected ? 200 : providerError.status);
   }
 }

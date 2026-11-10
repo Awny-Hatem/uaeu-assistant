@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Bot,
   CalendarDays,
@@ -51,6 +51,7 @@ type UiMessage = AnswerMetadata & {
   source?: AssistantSource;
 };
 type LocalePref = "auto" | "ar" | "en";
+type ThemePreference = "light" | "dark";
 type AuthUser = {
   id: string;
   username: string;
@@ -86,6 +87,7 @@ const GUEST_STATE_KEY = "uaeu-chatbot-guest-v4";
 const ACCOUNT_USAGE_KEY = "uaeu-chatbot-account-usage-v1";
 const ACCOUNT_MESSAGES_KEY = "uaeu-chatbot-account-messages-v1";
 const LANGUAGE_KEY = "uaeu-chatbot-language-v1";
+const THEME_KEY = "uaeu-chatbot-theme-v1";
 
 const SUGGESTIONS = [
   {
@@ -116,6 +118,17 @@ function genId() {
 
 function todayKey() {
   return uaeDateKey();
+}
+
+function readThemePreference(): ThemePreference {
+  if (typeof window === "undefined") return "light";
+  try {
+    const stored = localStorage.getItem(THEME_KEY);
+    if (stored === "light" || stored === "dark") return stored;
+    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  } catch {
+    return "light";
+  }
 }
 
 function safeMarkdownUrl(url: string): string {
@@ -334,6 +347,8 @@ export function UniversityChat() {
     try { const value = localStorage.getItem(LANGUAGE_KEY); return value === "en" || value === "ar" ? value : "auto"; }
     catch { return "auto"; }
   });
+  const [theme, setTheme] = useState<ThemePreference>(() => readThemePreference());
+  const reduceMotion = useReducedMotion();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<UiMessage[]>([]);
   const [loading, setLoading] = useState(false);
@@ -359,6 +374,12 @@ export function UniversityChat() {
   useEffect(() => {
     try { localStorage.setItem(LANGUAGE_KEY, locale); } catch { /* Optional preference storage. */ }
   }, [locale]);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+    document.documentElement.style.colorScheme = theme;
+    try { localStorage.setItem(THEME_KEY, theme); } catch { /* Optional preference storage. */ }
+  }, [theme]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -595,8 +616,8 @@ export function UniversityChat() {
   }, []);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages, loading]);
+    bottomRef.current?.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth" });
+  }, [messages, loading, reduceMotion]);
 
   async function handleAuth(loggedUser: AuthUser) {
     const transition = Symbol("account-change");
@@ -871,7 +892,14 @@ export function UniversityChat() {
 
   return (
     <div lang={uiLocale} dir={uiLocale === "ar" ? "rtl" : "ltr"} className="flex h-full w-full bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
-      <aside className="hidden h-full w-72 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-950 md:flex lg:w-80">
+      <a
+        href="#main-content"
+        tabIndex={0}
+        className="absolute left-3 top-3 z-[100] rounded-lg bg-zinc-950 px-4 py-3 text-sm font-bold text-white"
+      >
+        {copy.skipToConversation}
+      </a>
+      <aside aria-label={copy.assistantSettings} className="hidden h-full w-72 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-950 md:flex lg:w-80">
         <div className="border-b border-zinc-200 px-7 py-7 dark:border-zinc-800">
           <Image
             src="/uaeu-chatbot-logo.png"
@@ -994,7 +1022,7 @@ export function UniversityChat() {
         </div>
       </aside>
 
-      <section className="flex h-full min-w-0 flex-1 flex-col bg-white dark:bg-[#111111]">
+      <section id="main-content" role="main" tabIndex={-1} aria-label={copy.conversation} className="flex h-full min-w-0 flex-1 flex-col bg-white dark:bg-[#111111]">
         <header className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:hidden">
           <Image
             src="/uaeu-chatbot-logo.png"
@@ -1101,8 +1129,8 @@ export function UniversityChat() {
         {banner && (
           <motion.div
             role="status"
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={reduceMotion ? false : { opacity: 0, y: -8 }}
+            animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
             className="border-b border-rose-200 bg-rose-50 px-4 py-3 text-center text-sm font-semibold text-rose-900 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-100"
           >
             {banner}
@@ -1115,14 +1143,16 @@ export function UniversityChat() {
         )}
 
         <div className="flex min-h-0 flex-1 flex-col lg:flex-row">
-          <div role="log" aria-label={uiLocale === "ar" ? "المحادثة" : "Conversation"} aria-live="polite" aria-relevant="additions" className="min-h-0 flex-1 overflow-y-auto px-4 py-8 sm:px-8 lg:px-14">
+          <div role="log" aria-label={copy.conversation} aria-live="polite" aria-atomic="false" aria-relevant="additions" aria-busy={loading || historyLoading} className="min-h-0 flex-1 overflow-y-auto px-4 py-8 sm:px-8 lg:px-14">
             <AnimatePresence initial={false}>
               {messages.map((message) => (
                 <motion.div
                   key={message.id}
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ type: "spring", stiffness: 420, damping: 30 }}
+                  role="article"
+                  initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+                  animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
+                  transition={reduceMotion ? { duration: 0 } : { type: "spring", stiffness: 420, damping: 30 }}
+                  aria-label={message.role === "user" ? copy.yourMessage : copy.assistantMessage}
                   className={`mx-auto mb-7 flex w-full max-w-4xl gap-3 sm:gap-4 ${
                     message.role === "user" ? "flex-row-reverse" : "flex-row"
                   }`}
@@ -1231,7 +1261,7 @@ export function UniversityChat() {
 
             {(loading || historyLoading) && (
               <motion.div
-                initial={{ opacity: 0 }}
+                initial={reduceMotion ? false : { opacity: 0 }}
                 animate={{ opacity: 1 }}
                 className="mx-auto mb-8 flex w-full max-w-4xl gap-4"
               >
@@ -1273,6 +1303,7 @@ export function UniversityChat() {
               <label className="sr-only" htmlFor="chat-question">{copy.askLabel}</label>
               <textarea
                 id="chat-question"
+                aria-describedby="chat-hint"
                 data-testid="chat-input"
                 ref={inputRef}
                 className="max-h-40 min-h-[58px] w-full resize-none rounded-2xl border border-zinc-200 bg-white px-5 py-4 pr-16 text-[1rem] font-medium text-zinc-900 shadow-sm outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 disabled:bg-zinc-50 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:disabled:bg-zinc-900/60"
@@ -1319,7 +1350,7 @@ export function UniversityChat() {
                 setLoading(false);
               }}>{copy.cancel}</button>
             )}
-            <p className="mt-2 text-center text-[11px] font-medium text-zinc-400 dark:text-zinc-600">
+            <p id="chat-hint" className="mt-2 text-center text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
               {copy.historyNotice}
             </p>
           </div>

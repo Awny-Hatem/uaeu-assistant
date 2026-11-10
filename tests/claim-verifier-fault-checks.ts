@@ -297,8 +297,11 @@ async function main() {
           assert.ok(claim.evidenceIds.every((id: string) => payload.evidenceIds.includes(id)));
         }
       } else {
-        assert.ok(response.status >= 500);
+        assert.equal(response.status, 200);
         assert.equal(payload.stateLabel, "grounding_rejected");
+        assert.equal(payload.source, "escalated");
+        assert.equal(payload.answerStatus, "unavailable");
+        assert.equal(payload.disposition, "clarify");
         assert.equal(payload.grounding.status, "rejected");
         assert.deepEqual(payload.grounding.reasonCodes, ["contradiction"]);
         assert.deepEqual(payload.citations, []);

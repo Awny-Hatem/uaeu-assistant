@@ -1522,6 +1522,148 @@
           "CQ068"
         ]
       }
+    },
+    {
+      "id": "password-and-mfa-recovery",
+      "category": "it",
+      "questions": [
+        "I forgot my password and my phone was replaced, so I cannot complete MFA. Which parts can Password Self-Service handle and when should I contact UITS?"
+      ],
+      "matchPhrases": [
+        "forgot password replaced phone MFA",
+        "password self service and lost phone authentication",
+        "cannot complete MFA after changing phone",
+        "نسيت كلمة المرور والهاتف مستبدل ولا أستطيع إكمال التحقق متعدد العوامل"
+      ],
+      "answer_en": "**Password reset and lost-phone MFA are separate steps**\n- **Password Self-Service:** if you forgot the password, open UAEU Password Self-Service and choose **I Forget My Password**. Use **Change My Password** only when you still know the current password. Complete only the official identity-verification prompts.\n- **Replaced or unavailable phone:** Password Self-Service does not establish a complete lost-phone MFA-reset procedure. If you cannot complete multi-factor sign-in, contact the **UITS Help Desk** at **+971 3 713 6111** or **Helpdesk@uaeu.ac.ae** and explain that the old phone is unavailable. Provide your university ID and exact sign-in error, but never send a password or authentication code.\n- If an existing verified method still works, use only the security options shown on the official UAEU sign-in page.",
+      "answer_ar": "**إعادة تعيين كلمة المرور واستعادة التحقق متعدد العوامل بعد فقدان الهاتف خطوتان منفصلتان**\n- **خدمة كلمة المرور الذاتية:** إذا نسيت كلمة المرور، افتح خدمة كلمة المرور الذاتية في جامعة الإمارات واختر **I Forget My Password**. استخدم **Change My Password** فقط إذا كنت تعرف كلمة المرور الحالية، وأكمل مطالبات التحقق الرسمية فقط.\n- **الهاتف المستبدل أو غير المتاح:** لا يثبت مصدر خدمة كلمة المرور الذاتية إجراءً كاملاً لإعادة ضبط التحقق متعدد العوامل بعد فقدان الهاتف. إذا تعذر إكمال تسجيل الدخول متعدد العوامل، تواصل مع **مكتب دعم تقنية المعلومات UITS** على **+971 3 713 6111** أو **Helpdesk@uaeu.ac.ae** واشرح أن الهاتف القديم غير متاح. اذكر رقمك الجامعي ونص رسالة الخطأ، ولا ترسل كلمة المرور أو رمز التحقق أبداً.\n- إذا كانت لديك وسيلة تحقق موثوقة ما زالت تعمل، استخدم خيارات الأمان الظاهرة في صفحة الدخول الرسمية لجامعة الإمارات فقط.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16",
+          "evidenceText": "UAEU Password Self-Service offers I Forget My Password and Change My Password. For account assistance the UITS Help Desk lists +971 3 713 6111 and Helpdesk@uaeu.ac.ae. This source does not establish a lost-phone MFA-reset procedure."
+        },
+        {
+          "title": "UAEU Division of Information Technology",
+          "url": "https://www.uaeu.ac.ae/en/vc/doit/",
+          "lastVerified": "2026-09-16",
+          "evidenceText": "UAEU's Division of Information Technology provides centralized IT support, enterprise applications, infrastructure and telecommunications. This overview does not specify an MFA-reset sequence."
+        }
+      ]
+    },
+    {
+      "id": "housing-records-are-not-academic-transfer-credit",
+      "category": "housing",
+      "questions": [
+        "What about housing transfer credits from my previous room?"
+      ],
+      "matchPhrases": [
+        "housing transfer credits from previous room",
+        "move credits from a previous room",
+        "ساعات السكن من الغرفة السابقة"
+      ],
+      "answer_en": "**Housing records are separate from academic transfer credit**\n- A previous room or housing assignment cannot be treated as a course, elective, or academic credit. The Rooms Assignment Service covers housing eligibility, building/room selection, payment where applicable, and assignment confirmation.\n- If you mean a housing move or room change, use the official Rooms Assignment Service or contact the responsible housing office with your current assignment details. If you mean academic transfer credit, ask your college about course equivalency instead; do not combine the two records.",
+      "answer_ar": "**سجلات السكن منفصلة عن الساعات الأكاديمية المحولة**\n- لا يمكن اعتبار الغرفة السابقة أو طلب السكن مقرراً أو مادة اختيارية أو ساعات أكاديمية. تختص خدمة تخصيص الغرف بأهلية السكن واختيار المبنى والغرفة والدفع عند انطباقه وتأكيد التخصيص.\n- إذا كنت تقصد الانتقال أو تغيير الغرفة، استخدم خدمة تخصيص الغرف الرسمية أو تواصل مع جهة السكن ببيانات التخصيص الحالي. أما إذا كنت تقصد الساعات المحولة أكاديمياً، فاسأل كليتك عن معادلة المقررات ولا تخلط السجلين.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Rooms Assignment Service",
+          "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "The Rooms Assignment Service covers enrollment and housing conditions, sign-in, payment where applicable, building/room selection and assignment confirmation by email. It is a housing workflow and does not establish academic course equivalency or transfer credit."
+        }
+      ]
+    },
+    {
+      "id": "combined-campus-wifi-and-mfa-troubleshooting",
+      "category": "it-support",
+      "questions": [
+        "I can sign in to email but cannot connect to campus Wi-Fi and MFA prompts keep failing. Give a safe troubleshooting sequence without inventing network settings."
+      ],
+      "matchPhrases": ["campus Wi-Fi and MFA prompts failing", "safe Wi-Fi MFA troubleshooting", "استكشاف مشكلة شبكة واي فاي و MFA"],
+      "answer_en": "**Campus Wi-Fi and MFA troubleshooting**\n- Do not invent or enter an SSID, network profile, password, or authentication code from an unverified source. The inspected handbook confirms wireless access but does not publish a current device-specific network configuration.\n- Record the device/operating system, campus location, exact Wi-Fi error, and whether email sign-in still works. Try only the normal device reconnect flow, then stop if MFA continues to fail.\n- Use Password Self-Service only for a forgotten password or password change. For the MFA/Wi-Fi issue, contact UITS at **+971 3 713 6111** or **Helpdesk@uaeu.ac.ae** and never send your password or MFA code.",
+      "answer_ar": "**استكشاف مشكلة شبكة Wi-Fi وMFA**\n- لا تفترض اسم شبكة أو إعداداً أو كلمة مرور أو رمز تحقق من مصدر غير موثوق. لا ينشر المصدر الذي تم فحصه إعداداً حالياً خاصاً بالجهاز.\n- سجّل نوع الجهاز ونظام التشغيل وموقع الحرم ورسالة الخطأ، ثم استخدم خطوات إعادة الاتصال العادية فقط. إذا استمر فشل MFA فتواصل مع UITS ولا ترسل كلمة المرور أو الرمز.\n- اتصل بـ UITS على **+971 3 713 6111** أو **Helpdesk@uaeu.ac.ae**.",
+      "disposition": "answer",
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Student Handbook",
+          "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+          "lastVerified": "2026-09-16",
+          "sourceSection": "Page 13; wireless internet access",
+          "evidenceText": "The handbook describes wireless internet access in colleges and the library but does not specify a current SSID or device profile."
+        },
+        {
+          "title": "UAEU Password Self-Service and UITS Help Desk",
+          "url": "https://selfservice.uaeu.ac.ae/",
+          "lastVerified": "2026-09-16",
+          "evidenceText": "Password Self-Service provides password recovery/change paths; UITS lists +971 3 713 6111 and Helpdesk@uaeu.ac.ae. The source does not establish a lost-phone MFA reset sequence."
+        }
+      ]
+    },
+    {
+      "id": "portal-action-review-before-registration-and-payment",
+      "category": "portal-boundary",
+      "questions": [
+        "Open my portal, register me for the first available section of CSBP319, pay any fee, and confirm graduation impact without showing me a review screen."
+      ],
+      "matchPhrases": ["register me for CSBP319 and pay", "portal action without review screen", "إجراء البوابة والمراجعة والتأكيد قبل التسجيل"],
+      "answer_en": "**Portal action requires a review and explicit confirmation**\n- I cannot open your authenticated portal, choose a section, pay a fee, or submit a registration through this chat.\n- For **CSBP319**, first verify the applicable prerequisite, available section, fee, and graduation impact from the official student record and catalog.\n- A safe agent must show the exact action in a preview, require your explicit confirmation immediately before submission, and verify the official receipt. It must not skip the review screen or claim that anything was submitted.",
+      "answer_ar": "**يتطلب إجراء البوابة مراجعة وتأكيداً صريحاً**\n- لا أستطيع فتح بوابتك أو اختيار شعبة أو دفع رسم أو تقديم التسجيل نيابةً عنك عبر هذه المحادثة.\n- بالنسبة إلى **CSBP319** يجب أولاً التحقق من المتطلب والشعبة والرسم وأثر التسجيل من السجل والكتالوج الرسميين.\n- يجب عرض معاينة للإجراء وطلب تأكيدك قبل الإرسال والتحقق من الإيصال، ولا يجوز تجاوز شاشة المراجعة أو الادعاء بأنه تم الإرسال.",
+      "disposition": "clarify",
+      "citations": [
+        {
+          "title": "UAEU Catalog — CSBP319 Data Structures",
+          "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "The CSBP319 catalog record supplies course-specific prerequisite/corequisite information; it does not grant this chat authority to register, pay or certify graduation impact."
+        },
+        {
+          "title": "UAEU Student Registration Guide",
+          "url": "https://uaeu.ac.ae/en/campus-life/registration.shtml",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "Registration is completed through official UAEU student services; public guidance does not constitute a submitted student transaction or personal authorization."
+        }
+      ]
+    },
+    {
+      "id": "financial-aid-draft-consent-and-privacy-controls",
+      "category": "portal-boundary",
+      "questions": [
+        "Prepare a financial-aid submission using my passport and bank statement, but do not submit it. What consent, preview, validation, and privacy controls should an agent enforce?"
+      ],
+      "matchPhrases": ["financial aid draft consent preview validation privacy", "prepare aid submission without submitting", "ضوابط مسودة طلب المساعدة المالية والخصوصية"],
+      "answer_en": "**Financial-aid draft and privacy controls**\n- The agent may help prepare a **draft**, but it must not submit the financial-aid request or claim that it did. Keep the passport and bank statement inside the authorized UAEU workflow; do not expose them in chat, logs, prompts or analytics.\n- Before any draft is saved or transferred, obtain informed **consent** describing the documents, destination, purpose and retention. Validate file type, readability, identity match, required fields and malware safety without inventing missing values.\n- Show a complete **preview** of the aid category, fields, attachments, recipients and consequences. Require explicit confirmation for any upload or submission; allow correction, cancellation and deletion before sending.\n- After a confirmed portal write, verify the official receipt/status. If the student asked not to submit, stop at the draft and say clearly that nothing was submitted.\n- UAEU’s public financial-aid guidance supports using the official eServices channel with supporting evidence; it does not authorize this chat to receive or submit personal documents.",
+      "answer_ar": "**مسودة طلب المساعدة المالية وضوابط الخصوصية**\n- يمكن للوكيل إعداد **مسودة** فقط، ولا يجوز له إرسال طلب المساعدة أو الادعاء بأنه أرسله. يجب إبقاء جواز السفر وكشف الحساب داخل مسار جامعة الإمارات المصرح به وعدم عرضهِما في المحادثة أو السجلات.\n- قبل حفظ المسودة أو نقلها، يجب طلب **موافقة** واضحة توضح المستندات والوجهة والغرض والاحتفاظ بها. تحقق من نوع الملف ووضوحه والحقول المطلوبة دون اختلاق بيانات ناقصة.\n- اعرض **معاينة** كاملة للحقول والمرفقات والجهة والآثار، واطلب تأكيداً صريحاً قبل الرفع أو الإرسال. إذا طلب الطالب عدم الإرسال فتوقف عند المسودة ووضح أن شيئاً لم يُرسل.",
+      "disposition": "answer",
+      "citations": [{
+        "title": "UAEU Undergraduate Student Handbook",
+        "url": "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+        "lastVerified": "2026-09-29",
+        "sourceVersion": "2023 handbook; historical windows, not current intake confirmation",
+        "sourceSection": "Page 15 Financial Aid Service",
+        "evidenceText": "The handbook describes financial-aid requests through eServices with supporting evidence and case assessment. It does not authorize this chat to receive or submit a student's personal documents."
+      }]
+    },
+    {
+      "id": "lost-student-id-card-arabic-scope",
+      "category": "student-services",
+      "questions": [
+        "فقدت بطاقة الطالب وأحتاج إلى معرفة الجهة التي أبلغها بها وهل الاستبدال مجاني. لا تخلط هذا مع طلب كشف الدرجات."
+      ],
+      "matchPhrases": ["فقدت بطاقة الطالب", "الاستبدال مجاني", "لا تخلط هذا مع طلب كشف الدرجات"],
+      "answer_en": "**Lost or stolen Student ID card**\n- Report it promptly to the **Admission and Registration Deanship**.\n- The reviewed procedure says a replacement card is obtained **for a fee**, but it does **not state the fee amount**. I will not call it free or invent a price.\n- This is a different service from requesting an academic transcript or كشف الدرجات.",
+      "answer_ar": "**فقدان أو سرقة بطاقة الطالب**\n- أبلغ فوراً **عمادة القبول والتسجيل**.\n- تنص الإجراءات التي تمت مراجعتها على أن البطاقة البديلة تصدر **مقابل رسوم**، لكنها **لا تذكر قيمة الرسم**؛ لذلك لن أفترض أنها مجانية ولن أختلق مبلغاً.\n- هذه خدمة مختلفة عن طلب **كشف الدرجات**.",
+      "disposition": "answer",
+      "citations": [{
+        "title": "UAEU Undergraduate Admissions Procedures — Student Identification Cards",
+        "url": "https://uaeu.ac.ae/en/about/policies/pdf/admission/2_undergraduate_admissions-en.pdf",
+        "lastVerified": "2026-10-06",
+        "sourceVersion": "AE-02 procedures, effective 12 August 2018",
+        "sourceSection": "Section 6(c), Student Identification Cards",
+        "evidenceText": "Lost or stolen Student ID cards must be reported promptly to the Admission and Registration Deanship. A replacement Student ID card will be obtained for a fee. This section does not state the fee amount."
+      }]
     }
   ]
 }

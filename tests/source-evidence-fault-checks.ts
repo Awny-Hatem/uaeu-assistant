@@ -153,7 +153,10 @@ async function main() {
     assert.equal(plannerCalls, 0, "Deterministic academic retrieval should avoid an unnecessary selector");
     assert.equal(writerCalls, 3);
     assert.equal(intercepted, 3, "At most three bounded writer attempts are allowed; unsupported tokens fail before verification");
-    assert.ok(response.status >= 500);
+    assert.equal(response.status, 200);
+    assert.equal(body.source, "escalated");
+    assert.equal(body.answerStatus, "unavailable");
+    assert.equal(body.disposition, "clarify");
     assert.ok(!String(body.content).includes("987654321"));
     assert.deepEqual(body.citations, []);
   });
