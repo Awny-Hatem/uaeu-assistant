@@ -29,3 +29,20 @@ Date: 9 November 2026. Local build memory-v11, branch feat/memory-personalizatio
   - KE263-V3 (scholarship, not a study plan) was correct in 1 of 2 runs. It's an intermittent selection miss; the splitter doesn't change those chunks.
 - **Offline:** tsc and lint pass, along with all check suites and the memory follow-up checks (13, including 4 new).
 - **Not rerun:** the browser memory test and the full 600 examiner + 1,782 regression suites.
+
+## Full-suite results on memory-v11 (10 November 2026)
+- **Totals** combine the full run with two reruns of every non-correct case. Details are in `full-suite-v11-summary.json`.
+  - Examiner, all 600: 600 / 0 / 0 (v10: 599/1/0).
+  - Phrasing (399): 394 / 4 / 1 (v10: 391/5/3).
+  - Regression (1,782): 1765 / 12 / 5 (v10: 1764/11/7).
+  - Browser examiner: 100/100, and every rendered page matches the API.
+  - Browser memory: 17/17.
+- **Interruptions.** The first full run (9 November) was disrupted when the Mac went to sleep on battery, so OpenAI couldn't be reached and about 380 requests failed. The reruns were made with `caffeinate`, time limits per suite, and a stop on provider or 429 signals.
+  - That watchdog stopped the browser examiner at 95 of 100 after 5 network timeouts. There was no 429 or quota error, and a direct API call returned 200. The browser run was then resumed and finished.
+- **Remaining misses, reviewed by hand:**
+  - KE148 (3 phrasings) and KE269-V4: the source check withheld the answer (a safe refusal). KE148 already failed this way on v10.
+  - EX077-V3 asks for clarification instead of answering, the same as on v10.
+  - NQ190 gives the same answer on v9, v10 and v11 (Student Activities page, no note of the source date), and its grade flips between partly correct and incorrect.
+  - KE277-V3 and KE260-V3 are correct on manual review; only the check wording failed.
+  - The other partly correct cases are unchanged from v10.
+- **Google Doc.** The v11 summary, the MF06, MF19 and MP02 retests, and the browser memory test were added. My earlier END OF TESTING line was moved to the end. Codex's earlier content was checked as unchanged, and the added text matches `google-doc-entries-v11.txt`.

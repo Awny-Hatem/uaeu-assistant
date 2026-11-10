@@ -9,6 +9,7 @@ import json, re, sys
 
 label, browser_label = sys.argv[1], sys.argv[2]
 BUILD = sys.argv[3] if len(sys.argv) > 3 else 'memory-v9'
+DATE = sys.argv[4] if len(sys.argv) > 4 else '7 November 2026'
 run = json.load(open(f'reports/memory-personalization/{label}.json', encoding='utf-8'))
 browser = json.load(open(f'reports/memory-personalization/{browser_label}.json', encoding='utf-8'))
 ICON = {'correct': '✅ Correct', 'partial': '⚠️ Partly correct', 'incorrect': '❌ Incorrect'}
@@ -32,7 +33,7 @@ for r in run['results']:
     graded = [(i, g) for i, g in enumerate(grades) if g]
     lines.append(f"{TAG[r['suite']]} {r['id']} — {KIND[r['suite']]} ({len(r['turns'])} turn{'s' if len(r['turns']) > 1 else ''})")
     lines.append('Tester name: Claude (continuing Codex)')
-    lines.append('Date: 7 November 2026')
+    lines.append(f'Date: {DATE}')
     lines.append(f"Version tested: Local — http://localhost:3003/ — feat/memory-personalization (build {BUILD})")
     prof = r.get('profile')
     who = 'Guest (no account)' if not prof else f"Signed-in test account; saved profile: major {prof.get('major') or '(none)'}, year {prof.get('academicYear')}" + (f", language {prof['language']}" if prof.get('language') else '') + (', student ID saved' if prof.get('studentId') else '')
@@ -59,7 +60,7 @@ for r in run['results']:
 
 lines.append('[Memory] [Personalization] Browser test — sign in, ask, refresh, restart the server, continue')
 lines.append('Tester name: Claude (continuing Codex)')
-lines.append('Date: 7 November 2026')
+lines.append(f'Date: {DATE}')
 lines.append(f'Version tested: Local — http://localhost:3000/ — feat/memory-personalization (build {BUILD}), system Chrome via Playwright; the server process was stopped and started again between the two phases.')
 for s in browser['steps']:
     lines.append(f"{'✅' if s['pass'] else '❌'} ({s['phase']}) {s['name']}" + (f" — {s.get('answer')}" if s.get('answer') else ''))
