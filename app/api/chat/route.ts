@@ -24,6 +24,8 @@ import { preserveEvidenceQualifications } from "@/lib/answer-qualifiers";
 import { sourceEvidence, sourceEvidenceContext, sourceClaimViolations, type SourceEvidence } from "@/lib/source-evidence";
 import { verifySourceClaims } from "@/lib/claim-verifier";
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
+import { createEvidenceService } from "@/lib/evidence/evidence-service";
+import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -747,6 +749,13 @@ export async function POST(req: Request) {
   }
   const resolution = resolveConversation(sanitized, latest);
   const routingQuery = buildRoutingQuery(sanitized, latest);
+  const v3Enabled = process.env.UAEU_AGENT_V3_ENABLED === "enabled" ||
+    (process.env.VERCEL_ENV !== "production" && process.env.UAEU_AGENT_V3_ENABLED !== "disabled");
+  const executionPlan = v3Enabled ? createExecutionPlan({
+    conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    latest,
+  }) : null;
+  const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH"].includes(executionPlan.mode));
   const communications = matchCommunications(routingQuery);
   const standaloneFaq = matchFaq(latest);
   const needsPreviousSubject = requiresPreviousSubject(latest) || (resolution.needsClarification && !standaloneFaq);
@@ -755,6 +764,7 @@ export async function POST(req: Request) {
   let faqHit = needsPreviousSubject && !previousUserMessage(sanitized)
     ? null
     : directFaqHit ?? contextualFaqHit;
+  if (v3EvidenceMode) faqHit = null;
   const acknowledgement = conversationAcknowledgement(latest);
 
   if (acknowledgement) {
@@ -857,7 +867,26 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  const curriculum = locale === "en" ? retrieveCurriculumAnswer(routingQuery) : null;
+  let v3EvidenceRows: EvidenceRow[] | undefined;
+  if (v3EvidenceMode && executionPlan) {
+    if (executionPlan.missingContext.length) {
+      const content = locale === "ar"
+        ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${executionPlan.missingContext.join("؛ ")}.`
+        : `I need one detail before I can verify the right rule: ${executionPlan.missingContext.join("; ")}.`;
+      const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "v3_missing_context", disposition: "clarify", clarificationReason: "missing_context", citations: [], communications };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const evidenceResult = createEvidenceService().search(evidenceQueryForPlan(executionPlan));
+    v3EvidenceRows = evidenceResult.evidence.map((item) => ({
+      source: item.id,
+      text: item.excerpt,
+      score: 1,
+      title: item.title,
+      citations: [{ title: item.title, url: item.url, lastVerified: item.lastVerified, evidenceText: item.excerpt }],
+    }));
+  }
+  const curriculum = !v3EvidenceMode && locale === "en" ? retrieveCurriculumAnswer(routingQuery) : null;
   if (curriculum) {
     const payload: AssistantPayload = {
       role: "assistant",
@@ -878,7 +907,7 @@ export async function POST(req: Request) {
   // disclose the evidence gap instead of answering from a neighboring degree.
   const correctedProgramWithoutEvidence = resolution.corrected && resolution.subject?.key === "computer-engineering" &&
     !loadFaqEntries().some((entry) => faqScope(entry).subjects?.includes("computer-engineering"));
-  if (correctedProgramWithoutEvidence) {
+  if (!v3EvidenceMode && correctedProgramWithoutEvidence) {
     const payload: AssistantPayload = {
       role: "assistant",
       content: handoffContent("low_confidence", locale, routingQuery),
@@ -902,7 +931,7 @@ export async function POST(req: Request) {
     content: locale === "ar" ? "تعذر اختيار إجابة موثوقة بسبب عدم توفر خدمة الإجابة مؤقتًا. هذا ليس دليلًا على غياب سياسة الجامعة؛ حاول مجددًا بعد قليل."
       : "The answer-selection service is temporarily unavailable. This does not mean the university policy is missing; please try again shortly.",
   }, latest, locale, 503);
-  if (!directFaqHit || resolution.usedContext || resolution.needsClarification) {
+  if (!v3EvidenceMode && (!directFaqHit || resolution.usedContext || resolution.needsClarification)) {
     semantic = await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
     if (semantic) {
       const semanticAcknowledgementIsSafe = semantic.kind !== "acknowledge" || conversationAcknowledgement(latest) !== null;
@@ -919,7 +948,7 @@ export async function POST(req: Request) {
       faqHit = null; // Primary records render unchanged; supporting rows are not answers.
     }
   }
-  if (!semantic && ((resolution.needsClarification && !standaloneFaq) || (needsPreviousSubject && !previousUserMessage(sanitized)))) {
+  if (!v3EvidenceMode && !semantic && ((resolution.needsClarification && !standaloneFaq) || (needsPreviousSubject && !previousUserMessage(sanitized)))) {
     if (selectionUnavailable && previousUserMessage(sanitized) && !resolution.ambiguous) return selectionUnavailableResponse();
     const payload: AssistantPayload = {
       role: "assistant", content: missingSubjectContent(latest, locale, resolution.candidates.map(({ label }) => label)),
@@ -941,7 +970,9 @@ export async function POST(req: Request) {
   let canonicalProvider = semantic?.routingProvider;
   let canonicalModel = semantic?.routingModel;
   let recoveryEvidence: EvidenceRow[] | undefined;
-  if (!faqHit && !selectionUnavailable) {
+  if (v3EvidenceMode) {
+    recoveryEvidence = v3EvidenceRows ?? [];
+  } else if (!faqHit && !selectionUnavailable) {
     recoveryEvidence = await retrieveContext(routingQuery, deadlineAt);
     const originalRequest = semantic ?? {
       resolvedQuery: routingQuery, subject: resolution.subject?.label ?? "", recordIds: [], primaryRecordIds: [],
@@ -985,7 +1016,7 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  if (faqHit && !contextualProcedure) {
+  if (!v3EvidenceMode && faqHit && !contextualProcedure) {
     const payload: AssistantPayload = {
       role: "assistant",
       content: withActionBoundary(faqAnswer(faqHit.entry, locale), latest, locale),
@@ -1005,7 +1036,7 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
 
-  const guide = semantic ? null : findServiceGuide(routingQuery);
+  const guide = v3EvidenceMode || semantic ? null : findServiceGuide(routingQuery);
   if (guide) {
     const payload: AssistantPayload = {
       role: "assistant",
