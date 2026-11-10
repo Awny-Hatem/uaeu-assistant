@@ -1,0 +1,1347 @@
+{
+  "derived": true,
+  "startedAt": "2026-11-04T22:07:48.587Z",
+  "finishedAt": "2026-11-04T22:07:48.588Z",
+  "base": "http://127.0.0.1:3000",
+  "fixtureSha256": "actual-preserved-calibration-v2",
+  "runtimeBefore": {
+    "sha256": "cf6e1b2840fb2c358c74409efb50e024a83a8019a30201569843b5a8a336e439",
+    "files": 8453,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "results": [
+    {
+      "turns": [
+        "Who founded UAEU, and when was it established?"
+      ],
+      "expected": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "1976"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Zayed|زايد"
+          ]
+        }
+      ],
+      "id": "good-founding",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, Who founded UAEU, and when was it established?",
+        "Please explain to a new UAEU student: Who founded UAEU, and when was it established?",
+        "Give a concise advisor checklist: Who founded UAEU, and when was it established?",
+        "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+        "UAEU — متى تأسست UAEU ومن مؤسسها؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "d98dbb28d0dd425e998635fa86894ca8b7c0c15143cd2fa1c39dfc17e0bfd6b1"
+      },
+      "parentId": "good-founding",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Who founded UAEU, and when was it established?",
+          "status": 200,
+          "seconds": 23.334,
+          "payload": {
+            "role": "assistant",
+            "content": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Overview",
+                "url": "https://www.uaeu.ac.ae/en/about/overview.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Overview",
+                "evidenceText": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-founding#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+                "evidenceIds": [
+                  "answer:university-founding#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 23330,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 1,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2764,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 48,
+                  "estimatedUsd": 0.0011824000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1280,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005616
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4044,
+              "outputTokens": 79,
+              "knownUsageUsd": 0.001744,
+              "estimatedUsd": null,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "1976"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Zayed|زايد"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Who founded UAEU, and when was it established?"
+      ],
+      "expected": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "1976"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Zayed|زايد"
+          ]
+        }
+      ],
+      "id": "bad-founding",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, Who founded UAEU, and when was it established?",
+        "Please explain to a new UAEU student: Who founded UAEU, and when was it established?",
+        "Give a concise advisor checklist: Who founded UAEU, and when was it established?",
+        "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+        "UAEU — متى تأسست UAEU ومن مؤسسها؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "d98dbb28d0dd425e998635fa86894ca8b7c0c15143cd2fa1c39dfc17e0bfd6b1"
+      },
+      "parentId": "bad-founding",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Who founded UAEU, and when was it established?",
+          "status": 200,
+          "seconds": 5.123,
+          "payload": {
+            "role": "assistant",
+            "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "citations": [],
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "disposition": "clarify",
+            "clarificationReason": "missing_official_evidence",
+            "topic": "UAEU founding and establishment date",
+            "evidenceIds": [],
+            "usage": {
+              "elapsedMs": 5099,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 16390,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 65,
+                  "estimatedUsd": 0.00666
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1459,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 7,
+                  "estimatedUsd": 0.0005948
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 17849,
+              "outputTokens": 72,
+              "knownUsageUsd": 0.0072548000000000005,
+              "estimatedUsd": 0.0072548000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "1976"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "Zayed|زايد"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "متى تأسست جامعة الإمارات ومن مؤسسها؟"
+      ],
+      "expected": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "1976"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Zayed|زايد"
+          ]
+        }
+      ],
+      "id": "bad-founding-ar",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, Who founded UAEU, and when was it established?",
+        "Please explain to a new UAEU student: Who founded UAEU, and when was it established?",
+        "Give a concise advisor checklist: Who founded UAEU, and when was it established?",
+        "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+        "UAEU — متى تأسست UAEU ومن مؤسسها؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "d98dbb28d0dd425e998635fa86894ca8b7c0c15143cd2fa1c39dfc17e0bfd6b1"
+      },
+      "parentId": "bad-founding-ar",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+          "status": 200,
+          "seconds": 6.441,
+          "payload": {
+            "role": "assistant",
+            "content": "**حدد طلب جامعة الإمارات بدقة**\nلم أتمكن من ربط الصياغة بخدمة أو مساق موثق واحد. أرسل اسم الخدمة أو رمز المساق، وحدد هل تريد الخطوات أو الموعد أو الرسوم أو الأهلية أو حالة الطلب.",
+            "source": "escalated",
+            "responseMode": "grounded_generation",
+            "stateLabel": "model_escalation",
+            "citations": [],
+            "disposition": "clarify",
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "UAE University founding date and founder",
+            "evidenceIds": [],
+            "claims": [],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "clarificationReason": "missing_official_evidence",
+            "usage": {
+              "elapsedMs": 6001,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 16390,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 73,
+                  "estimatedUsd": 0.0066728
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1414,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 13,
+                  "estimatedUsd": 0.0005863999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3067,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 43,
+                  "estimatedUsd": 0.0012955999999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3500,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 19,
+                  "estimatedUsd": 0.0014304
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 24371,
+              "outputTokens": 148,
+              "knownUsageUsd": 0.0099852,
+              "estimatedUsd": 0.0099852,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "1976"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "Zayed|زايد"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "bad-archive",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "bad-archive",
+      "conversation": [
+        {
+          "user": "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي.",
+          "status": 200,
+          "seconds": 6.824,
+          "payload": {
+            "role": "assistant",
+            "content": "الدليل الرسمي لبرامج البكالوريوس في جامعة الإمارات العربية المتحدة متوفر عبر كتالوج البرامج المنشور، ويشمل 55 برنامج بكالوريوس عبر تسع كليات.\n\nهذا الدليل المنشور هو إصدار عام ويجب ملاحظة أن وجود البرنامج في الكتالوج لا يضمن توفر مقاعد للقبول أو قبول الطالب شخصياً.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "HTTP Last-Modified2026-09-22; retrieved2026-09-29",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Published undergraduate degrees — 55 across nine colleges\nThe official program-finder catalog checked 29 September 2026 lists 54 bachelor's degrees plus Doctor of Medicine under Undergraduate:\n- Agriculture and Veterinary Medicine (5): Agricultural Resource Management; Food Science; Horticulture; Marine Fisheries and Animal Science; Veterinary Medicine.\n- Business and Economics (8): Accounting; Entrepreneurship; Human Resources Management and Development; Marketing; Supply Chain Management and Logistics; Economics; Finance and Banking; Statistics and Data Analytics.\n- Computing and Artificial Intelligence (5): Computer and Artificial Intelligence Engineering; Computer Science; Data Science and Artificial Intelligence; Information Security; Information Technology.\n- Education (3): Early Childhood; Health and Physical Education; Special Education.\n- Engineering (8): Aerospace Engineering; Architectural Engineering; Chemical Engineering; Civil Engineering; Communication Engineering; Electrical Engineering; Mechanical Engineering; Petroleum Engineering.\n- Humanities and Social Sciences (13): Arabic Language and Literature; English Literature; Geography; History and Archaeology; Linguistics; Mass Communication; Political Science; Psychology; Tourism Studies; Translation Studies; Visual Studies and Creative Industries; Applied Sociology and Social Data Analytics; Social Work.\n- Law (1): Law.\n- Medicine and Health Sciences (4): Dietetics; Nutritional Science; Speech-Language Pathology; Doctor of Medicine.\n- Science (8): Mathematics of Data Science; Biochemistry; Biology; Chemistry; Geosciences; Mathematics; Physics; Space Sciences.\nThis snapshot contains70 Undergraduate-labelled records: 55 degrees, 12 minors, 2micro-credentials and 1GeneralEducation record. Program existence does not establish admission availability for an applicant/intake."
+              },
+              {
+                "title": "UAEU Bachelor's Admission — Conditions and Requirements",
+                "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=89",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "Admission competition, annual category-specific policies and program capacity",
+                "evidenceText": "Undergraduate admission is competitive, based on academic qualifications and educational program capacity. UAEU issues admission policy annually with requirements for each applicant category. A published catalog degree is not a promise of available seats or personal admission."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "undergraduate catalog 2019-2020",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1",
+              "answer:admissions-programs-new-students#E1S2"
+            ],
+            "claims": [
+              {
+                "text": "الدليل الرسمي لبرامج البكالوريوس في جامعة الإمارات العربية المتحدة متوفر عبر كتالوج البرامج المنشور، ويشمل 55 برنامج بكالوريوس عبر تسع كليات.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              },
+              {
+                "text": "هذا الدليل المنشور هو إصدار عام ويجب ملاحظة أن وجود البرنامج في الكتالوج لا يضمن توفر مقاعد للقبول أو قبول الطالب شخصياً.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S2"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6822,
+              "attemptedCalls": 6,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 16409,
+                  "cachedInputTokens": 15232,
+                  "outputTokens": 105,
+                  "estimatedUsd": 0.002162
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2306,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 15,
+                  "estimatedUsd": 0.0009464000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3359,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 61,
+                  "estimatedUsd": 0.0014412000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3813,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 118,
+                  "estimatedUsd": 0.001138
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1658,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007128000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1320,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005776
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 28865,
+              "outputTokens": 361,
+              "knownUsageUsd": 0.006978000000000001,
+              "estimatedUsd": 0.006978000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "year",
+            "passed": false,
+            "patterns": [
+              "2019"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "year"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "missing-college",
+      "original": true,
+      "focus": "Missing Knowledge",
+      "group": "new-degree",
+      "turns": [
+        "Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "suite": "legacy",
+      "parentId": "missing-college",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+          "status": 200,
+          "seconds": 2.813,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers an undergraduate program titled Data Science and Artificial Intelligence.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "- **Computing and Artificial Intelligence (5):** Computer and Artificial Intelligence Engineering; Computer Science; Data Science and Artificial Intelligence; Information Security; Information Technology."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers an undergraduate program titled Data Science and Artificial Intelligence.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2811,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2842,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 55,
+                  "estimatedUsd": 0.0006487999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3279,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 44,
+                  "estimatedUsd": 0.000806
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1324,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005792000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7445,
+              "outputTokens": 130,
+              "knownUsageUsd": 0.0020340000000000002,
+              "estimatedUsd": 0.0020340000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "ما رؤية جامعة الإمارات؟"
+      ],
+      "expected": "UAEU’s published vision emphasizes leadership and innovation in higher education, research and community service at national and international levels.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "innovat(?:ion|or)|ابتكار"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "research|بحث"
+          ]
+        }
+      ],
+      "id": "good-vision-ar",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما رؤية جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What is UAEU’s vision?",
+        "Please explain to a new UAEU student: What is UAEU’s vision?",
+        "Give a concise advisor checklist: What is UAEU’s vision?",
+        "ما رؤية جامعة الإمارات؟",
+        "UAEU — ما رؤية UAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "f8009d8091dd5b43ed2c4a0c7f8eebeb363562a34d54495e5feb0da2e0ed1e59"
+      },
+      "parentId": "good-vision-ar",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما رؤية جامعة الإمارات؟",
+          "status": 200,
+          "seconds": 2.141,
+          "payload": {
+            "role": "assistant",
+            "content": "رؤية جامعة الإمارات هي أن تكون رائدة ومبتكرة في التعليم العالي والبحث العلمي وخدمة المجتمع على المستويين الوطني والدولي.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Vision, Mission, Values & Goals",
+                "url": "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Vision",
+                "evidenceText": "UAEU’s published vision emphasizes leadership and innovation in higher education, research and community service at national and international levels."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-vision#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "رؤية جامعة الإمارات هي أن تكون رائدة ومبتكرة في التعليم العالي والبحث العلمي وخدمة المجتمع على المستويين الوطني والدولي.",
+                "evidenceIds": [
+                  "answer:university-vision#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2138,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2763,
+                  "cachedInputTokens": 1792,
+                  "outputTokens": 55,
+                  "estimatedUsd": 0.0006556
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1295,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005676
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4058,
+              "outputTokens": 86,
+              "knownUsageUsd": 0.0012232,
+              "estimatedUsd": 0.0012232,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "innovat(?:ion|or)|ابتكار"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "research|بحث"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "http-error",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "❌ Main API incorrect; fix/retest pending",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "incorrect",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "be98b24778f3595691b77d62d89b2ba1d5329841fbd22c98f56d4a2f1d87567e"
+      },
+      "parentId": "http-error",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+          "status": 502,
+          "seconds": 6.661,
+          "payload": {
+            "role": "assistant",
+            "content": "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة أو مراجعة مصدر الجامعة الرسمي مباشرة.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "unsupported_detail"
+              ]
+            },
+            "clarificationReason": "unsupported_detail",
+            "usage": {
+              "elapsedMs": 6655,
+              "attemptedCalls": 7,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4040,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 110,
+                  "estimatedUsd": 0.001792
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4535,
+                  "cachedInputTokens": 3840,
+                  "outputTokens": 152,
+                  "estimatedUsd": 0.0009052
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1362,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005944000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1370,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 39,
+                  "estimatedUsd": 0.0006104
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4545,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 142,
+                  "estimatedUsd": 0.0014692000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1362,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005944000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1360,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 35,
+                  "estimatedUsd": 0.0006
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 18574,
+              "outputTokens": 540,
+              "knownUsageUsd": 0.0065656,
+              "estimatedUsd": 0.0065656,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": false,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": false,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": false
+          },
+          {
+            "name": "Final source group 2",
+            "passed": false
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3",
+          "Expected fact 4",
+          "Expected fact 5",
+          "Final source group 1",
+          "Final source group 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "good-ar-credit",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Phrasing Sensitivity",
+      "college": "",
+      "turns": [
+        "أريد نفس معلومات المساق BMB 601: كم ساعة معتمدة؟"
+      ],
+      "expected": "Techniques in Biochemistry (BMB601): 2 credit hours. Do not substitute the degree total or another course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2901.shtml?id=BMB601"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "course credits",
+          "any": [
+            "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+            "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+            "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+          ]
+        },
+        {
+          "name": "correct course identity",
+          "any": [
+            "BMB601"
+          ]
+        }
+      ],
+      "variants": [
+        "How many credit hours is BMB601 at UAEU?",
+        "How many credit hours is bmb-601 at UAEU?",
+        "hey how many crdit hours is bmb 601 worth at uaeu plz?",
+        "أريد نفس معلومات المساق BMB 601: كم ساعة معتمدة؟"
+      ],
+      "sourceQuote": "Techniques in Biochemistry (BMB601) | credits 2 | prerequisites ",
+      "sourceBodySha256": "8240360f869a239694d33072d8e52500973628f1eaf59bcd924056adb613d299",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "good-ar-credit",
+      "conversation": [
+        {
+          "user": "أريد نفس معلومات المساق BMB 601: كم ساعة معتمدة؟",
+          "status": 200,
+          "seconds": 2.219,
+          "payload": {
+            "role": "assistant",
+            "content": "مساق BMB601 Techniques in Biochemistry معتمد بساعتين معتمدتين.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Catalog — BMB601 Techniques in Biochemistry",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2901.shtml?id=BMB601",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "BMB601 Techniques in Biochemistry"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "BMB601",
+            "evidenceIds": [
+              "corpus:10c6025aae9cc6757808:0#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "مساق BMB601 Techniques in Biochemistry معتمد بساعتين معتمدتين.",
+                "evidenceIds": [
+                  "corpus:10c6025aae9cc6757808:0#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2216,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 35,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 7.000000000000001e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3037,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 44,
+                  "estimatedUsd": 0.0007091999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1507,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006524000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4579,
+              "outputTokens": 75,
+              "knownUsageUsd": 0.0013622999999999999,
+              "estimatedUsd": 0.0013622999999999999,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "course credits",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "passed": true,
+            "patterns": [
+              "BMB601"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "course credits"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ]
+}

@@ -1,0 +1,136 @@
+{
+  "at": "2026-11-04T08:30:58.800019+00:00",
+  "priorFixtureSha256": "6b72172d9fac5d99865d3f3b00386d0044fddfdecc0adf8c1efd556885dd6af3",
+  "revisedFixtureSha256": "c46284405487e26e03523a67effc95c8fd1a6a51cd447e4a54b804b67159ff9e",
+  "changes": [
+    {
+      "id": "EX058",
+      "kind": "scope correction",
+      "reason": "The expected fee table expressly expires after AY2025–2026, whereas the original question omitted its year. An undated program letter independently states AED210. The corrected question explicitly requests the historical year; original attempts are retained and will not be counted as proof of this revised question.",
+      "before": {
+        "focus": "Examiner",
+        "group": "mpa-fee",
+        "turns": [
+          "What is the UAEU Master of Professional Accounting tuition per credit and application fee?"
+        ],
+        "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+        ],
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "needsCitation": true,
+        "id": "EX058",
+        "category": "Admissions and money",
+        "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+        "lastResult": "⚠️ Not yet tested",
+        "variants": [
+          "hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+          "UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+        ],
+        "followUpQuestion": null,
+        "reviewRequired": true
+      },
+      "after": {
+        "focus": "Examiner",
+        "group": "mpa-fee",
+        "turns": [
+          "For academic year 2025–2026, what published tuition per credit and application fee apply to the UAEU Master of Professional Accounting?"
+        ],
+        "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+        ],
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "needsCitation": true,
+        "id": "EX058",
+        "category": "Admissions and money",
+        "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+        "lastResult": "⚠️ Not yet tested",
+        "variants": [
+          "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+          "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+        ],
+        "followUpQuestion": null,
+        "reviewRequired": true
+      }
+    },
+    {
+      "id": "EX061",
+      "kind": "independently inspected alternative official source",
+      "url": "https://www.uaeu.ac.ae/en/about/policies/pdf/graduateprograms/3_the_phd_programs-en.pdf",
+      "sourceSha256": "9da3acac012576745c0411f2942be9ba8d37587de668598b3cf32b1267426279",
+      "relevantExcerpt": "Two letters of recommendation from professionals familiar with the student’s academic work; (vi) Copy of the applicant's CV",
+      "restriction": "Accepts only the scenario facts reviewed here, not the entire page as a universal authority or as proof of latest policy revision."
+    },
+    {
+      "id": "EX069",
+      "kind": "independently inspected alternative official source",
+      "url": "https://www.uaeu.ac.ae/en/about/policies/admissions_and_enrollment/pol_pro-ae_05_en.pdf",
+      "sourceSha256": "852bb5306bab8ab05ccba5834f23320c090395a1fa6ee3dff2f51a59732f3d76",
+      "relevantExcerpt": "Good Academic Standing An undergraduate student with a Cumulative Grade Point Average (CGPA) of (2.00) or higher (on a scale of 4) at the end of an academic semester is classified as in Good Academic Standing",
+      "restriction": "Accepts only the scenario facts reviewed here, not the entire page as a universal authority or as proof of latest policy revision."
+    },
+    {
+      "id": "EX074",
+      "kind": "independently inspected alternative official source",
+      "url": "https://www.uaeu.ac.ae/en/about/policies/admissions_and_enrollment/pol_pro-ae_09_en.pdf",
+      "sourceSha256": "07947bd3c65baa3139b19e8bfbb408ff70d3839ee9485409c05da5d8391ef0d1",
+      "relevantExcerpt": "Student Academic Grievances and Appeals Committee (SAGAC) a) Student Academic Grievances and Appeals will be reviewed and decided by a Standing University Committee established for this purpose. The Committee shall be appointed by the Vice Chancellor",
+      "restriction": "Accepts only the scenario facts reviewed here, not the entire page as a universal authority or as proof of latest policy revision."
+    },
+    {
+      "id": "EX085",
+      "kind": "independently inspected alternative official source",
+      "url": "https://www.uaeu.ac.ae/en/about/faqs/library-deanship.shtml",
+      "sourceSha256": "e4b98884d7a7be8047fa5cf91f385bb31d8a848ba4a8ca5def31d95aa482c51f",
+      "relevantExcerpt": "Tipasa Interlibrary Loan of books for LIWA Consortium Who can request and borrow via LIWA Tipasa? Registered students, staff and faculty of UAEU. How many items can be requested? A patron can borrow maximum of 10 items for faculty member, students and staff per visit. For how long can an item be borrowed? LIWA Tipasa's item can be borrowed for one month for all faculty member, students and staff. The item can be renewed for two times",
+      "restriction": "Accepts only the scenario facts reviewed here, not the entire page as a universal authority or as proof of latest policy revision."
+    }
+  ]
+}

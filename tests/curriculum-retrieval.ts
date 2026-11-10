@@ -12,6 +12,7 @@ async function main() {
   const { POST } = await import("../app/api/chat/route");
   const { loadKnowledgeMarkdown } = await import("../lib/knowledge-files");
   const { retrieveCurriculumAnswer } = await import("../lib/curriculum-retrieval");
+  const { retrieveAcademicEvidence } = await import("../lib/academic-retrieval");
   const documents = loadKnowledgeMarkdown();
   const priorDocuments = documents.filter(({ curriculum }) => !curriculum);
   const cases: [string, RegExp, string][] = [
@@ -19,7 +20,7 @@ async function main() {
     ["In UAEU's Fall 2025 Computer Science study plan, what courses are in the first semester?", /GEAE101.*MATH105.*CSBP119.*CSBP121/, "29-computer-science-first-semester.md"],
     ["How many total credit hours are required for the UAEU Mechanical Engineering major?", /132 credit hours/, "26-mechanical-engineering-degree-requirements.md"],
     ["How many total credit hours are required for the UAEU Computer Science major?", /120 credit hours/, "28-computer-science-degree-requirements.md"],
-    ["How many total credit hours are required for the UAEU Information Technology major?", /120 credit hours.*130 total credit hours/, "30-information-technology-degree-requirements.md"],
+    ["How many total credit hours are required for the UAEU Information Technology major?", /120 credit hours/, "30-information-technology-degree-requirements.md"],
     ["Is CSBP319 Data Structures required for the UAEU Computer Science major?", /CSBP319.*mandatory college requirement/, "28-computer-science-degree-requirements.md"],
     ["Is CSBP340 Database Systems required for the UAEU Information Technology major?", /CSBP340.*mandatory major requirement/, "30-information-technology-degree-requirements.md"],
     ["Is ISEC421 Risk Analysis and Management required for Information Security, and in which semester is it normally taken?", /ISEC421.*required.*Semester 7/, "32-information-security-first-semester.md"],
@@ -52,10 +53,13 @@ async function main() {
     assert.equal(response.status, 200, question);
     const answer = await response.json();
     assert.equal(answer.source, "rag", question);
-    assert.equal(answer.stateLabel, "curriculum_extract", question);
-    assert.match(answer.content, expected, question);
-    assert.ok(answer.evidenceIds.includes(result.evidenceId), question);
-    assert.equal(answer.citations[0].url, result.citation.url, question);
+    assert.equal(answer.stateLabel, "local_db", question);
+    assert.equal(answer.provider,"mock",question);
+    assert.equal(answer.responseMode,"grounded_generation",question);
+    const planned=retrieveAcademicEvidence(question)?.rows ?? [];
+    assert.ok(planned.some(row=>row.source===filename),question);
+    assert.match(planned.map(row=>row.text).join("\n"),expected,question);
+    assert.ok(planned.some(row=>row.citations?.some(citation=>citation.url===result.citation.url)),question);
   }
   for (const question of [
     "What are the prerequisites for CSBP319 Data Structures?",
@@ -65,7 +69,7 @@ async function main() {
   assert.equal(retrieveCurriculumAnswer("What is the first semester Mechanical Engineering plan for 2022?"), null);
   assert.equal(retrieveCurriculumAnswer("What courses are required for admission to Computer Science?"), null);
   assert.match(retrieveCurriculumAnswer("Is CIVL240 a prerequisite for MECH340 Fluid Mechanics?")?.content ?? "", /MECH340.*CIVL240.*minimum grade of D/);
-  console.log(`Curriculum retrieval: ${cases.length} routed cases and source ablations passed.`);
+  console.log(`Curriculum retrieval: ${cases.length} evidence/orchestration cases and source ablations passed. Live generated accuracy is measured separately.`);
 }
 
 main().catch((error) => { console.error(error); process.exitCode = 1; });

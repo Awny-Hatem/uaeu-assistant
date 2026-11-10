@@ -31,7 +31,7 @@ export const GROUNDING_REASON_CODES = [
 
 export type AnswerGrounding = {
   status: "checked" | "rejected";
-  rewriteCount: 0 | 1;
+  rewriteCount: 0 | 1 | 2;
   reasonCodes: (typeof GROUNDING_REASON_CODES[number])[];
 };
 
@@ -77,6 +77,8 @@ export type ServiceGuide = {
   verificationNote?: string;
   verificationNoteAr?: string;
   steps: GuideStep[];
+  scopeNote?: string;
+  sources?: Citation[];
 };
 
 export type UniversityCommunication = {

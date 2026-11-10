@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import type { Locale } from "@/lib/language";
 import type { Citation } from "@/lib/prototype-types";
-import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope } from "@/lib/query-understanding";
+import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope, type QueryMeaning } from "@/lib/query-understanding";
 
 export type AnswerDisposition =
   | "answer"
@@ -38,6 +38,9 @@ const CITATION_FRESHNESS_MS = 180 * 24 * 60 * 60 * 1000;
 const ANSWER_DIR = path.join(process.cwd(), "data", "verified-answers");
 
 const MATCH_STOP_WORDS = new Set([
+  "hey",
+  "hello",
+  "hi",
   "a",
   "about",
   "an",
@@ -491,8 +494,8 @@ function phraseScore(
   return 2_000 + normalizedPhrase.length;
 }
 
-function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): number {
-  if (!faqScopeAllows(query, entry)) return 0;
+function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry, meaning?: QueryMeaning): number {
+  if (!faqScopeAllows(query, entry, meaning)) return 0;
   if (entry.excludePhrases?.some((phrase) => containsPhrase(query, phrase))) {
     return 0;
   }
@@ -513,7 +516,13 @@ function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): n
   return score;
 }
 
+// Loaded records are immutable for this process; cache derived ownership only,
+// never answers or user questions. A refreshed pack creates new record objects.
+const scopeCache = new WeakMap<FaqEntry, EvidenceScope>();
+const evidenceMeaningCache = new WeakMap<FaqEntry, QueryMeaning>();
 export function faqScope(entry: FaqEntry): EvidenceScope {
+  const cached = scopeCache.get(entry);
+  if (cached) return cached;
   const identity = `${entry.answer_en.split("\n")[0]} ${entry.questions.join(" ")}`;
   const identityMeaning = understandQuery(identity);
   // Questions can compare an included and an excluded population. They cannot
@@ -524,11 +533,11 @@ export function faqScope(entry: FaqEntry): EvidenceScope {
     try { const code = new URL(citation.url ?? "").searchParams.get("id"); return code ? courseCodes(code) : []; }
     catch { return []; }
   });
-  return {
+  const scope: EvidenceScope = {
     // The reviewed category is an explicit ownership signal. A policy titled
     // "semester credit load" remains registration evidence even without the
     // literal word registration in its example questions.
-    ...(["admissions", "registration", "calendar", "graduation", "housing", "library"].includes(entry.category) ? { subjects: [entry.category, ...identityMeaning.subjects] } : {}),
+    ...(["admissions", "registration", "calendar", "graduation", "housing", "library", "university"].includes(entry.category) ? { subjects: [entry.category, ...identityMeaning.subjects] } : {}),
     ...(identityMeaning.years.length ? { years: identityMeaning.years } : {}),
     ...(headingMeaning.degreeLevel ? { degreeLevel: headingMeaning.degreeLevel } : {}),
     ...(ownCodes.length || namedCodes.length ? { courseCodes: [...new Set(ownCodes.length ? ownCodes : namedCodes)] } : {}),
@@ -538,14 +547,17 @@ export function faqScope(entry: FaqEntry): EvidenceScope {
     ...(entry.id === "admissions-graduate-application" ? { degreeLevel: "postgraduate" as const } : {}),
     ...entry.scope,
   };
+  scopeCache.set(entry, scope);
+  evidenceMeaningCache.set(entry, understandQuery(`${entry.answer_en}\n${entry.answer_ar ?? ""}`));
+  return scope;
 }
 
-export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
+export function faqScopeAllows(query: string, entry: FaqEntry, interpreted?: QueryMeaning): boolean {
   if (entry.citations.some((citation) => !citation.lastVerified || Date.now() - Date.parse(citation.lastVerified) > CITATION_FRESHNESS_MS)) return false;
   const scope = faqScope(entry);
-  const meaning = understandQuery(query);
+  const meaning = interpreted ?? understandQuery(query);
   if (meaning.codes.length && scope.courseCodes?.length && !meaning.codes.every((code) => scope.courseCodes!.includes(code))) return false;
-  if (!scopeAllows(query, `${entry.answer_en}\n${entry.answer_ar ?? ""}`, scope)) return false;
+  if (!scopeAllows(query, `${entry.answer_en}\n${entry.answer_ar ?? ""}`, scope, {wanted:meaning,evidence:evidenceMeaningCache.get(entry)!})) return false;
   // University-wide calendar facts are not admission/payment/scholarship schedules.
   if (meaning.intents.includes("deadline")) {
     const questionTopics = understandQuery([...entry.questions, ...(entry.matchPhrases ?? [])].join(" ")).subjects;
@@ -587,9 +599,21 @@ export function matchFaq(
   const queryTokens = correctedQueryTokens(query, entries);
   if (!queryTokens.size) return null;
 
+  const meaning = understandQuery(query);
+  const office=meaning.subjects.filter(subject=>["vice-chancellor","chancellor"].includes(subject));
+  const otherOffice=/\b(?:former|previous|next|future|will|secretary|assistant|deputy|office|affairs|academic)\b|\bwho was\b|سابق|القادم|من كان|نائب|مساعد|سكرتير|مكتب|شؤون/u.test(meaning.normalized);
+  const foreignOffice=/\bchancellor of (?!uaeu\b|the university\b|(?:the )?uae university\b|(?:the )?united arab emirates university\b)/u.test(meaning.normalized)
+    || /مدير جامع[ةه] (?!(?:الامارات|uaeu))/u.test(meaning.normalized);
+  if(office.length&&(otherOffice||foreignOffice||meaning.years.length))return null;
+  const officeIdentity=office.length===1&&!meaning.intents.length&&!meaning.years.length
+    && /\b(?:who|name)\b|من هو|اسم/u.test(meaning.normalized);
+  if(officeIdentity){
+    const owned=entries.filter(entry=>entry.category==='university'&&faqScope(entry).subjects?.includes(office[0])&&faqScopeAllows(query,entry,meaning));
+    if(owned.length===1)return {entry:owned[0],score:3000};
+  }
   let best: { entry: FaqEntry; score: number } | null = null;
   for (const entry of entries) {
-    const score = scoreEntry(query, queryTokens, entry);
+    const score = scoreEntry(query, queryTokens, entry, meaning);
     if (score > 0 && (!best || score > best.score)) {
       best = { entry, score };
     }

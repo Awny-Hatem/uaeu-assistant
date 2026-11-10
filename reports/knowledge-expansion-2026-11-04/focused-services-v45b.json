@@ -1,0 +1,1071 @@
+{
+  "startedAt": "2026-11-06T13:49:17.515Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "focused-services-v45b",
+  "fixture": "evals/knowledge-expansion-2026-11-04.json",
+  "fixtureSha256": "c2d2cbcf3863f5643f270f5dab6326948d2c9486a0c2cb1a444dfd99c6118d8a",
+  "methodology": "Expected facts extracted independently from original official HTML; automated scoring is provisional and requires source/semantic review. Each variant is an isolated conversation unless explicit follow-up turns are listed. Duplicate phrasing corrections are audited separately; corrected variants receive a fresh baseline.",
+  "results": [
+    {
+      "id": "KE259",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Through whom should a UAEU student apply for outgoing university exchange?"
+      ],
+      "expected": "Through the college coordinator for the student exchange program; partner agreement governs tuition.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/applicationout.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "coordinator",
+          "any": [
+            "college coordinator",
+            "منسق"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, through whom should a UAEU student apply for outgoing university exchange?",
+        "Through whom should a United Arab Emirates University student apply for outgoing university exchange?",
+        "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟",
+        "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ates university who wish to study abroad for up to two semesters at any partner university can submit their application through the college coordinator for the student exchange program. the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodati",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ],
+      "parentId": "KE259",
+      "conversation": [
+        {
+          "user": "Through whom should a UAEU student apply for outgoing university exchange?",
+          "status": 200,
+          "seconds": 3.49,
+          "payload": {
+            "role": "assistant",
+            "content": "A UAEU student who wants to apply for an outgoing university exchange should submit their application through their college coordinator for the student exchange program.\n\nSpecifically, students from the College of Business and Economics should apply through Mrs. Zeineb Khalfallah, while students from other colleges should apply through Ms. Rana AL Katheeri.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Outgoing Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Nomination and Application"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "student-exchange",
+            "evidenceIds": [
+              "corpus:4dea5fbfc2de699966e9:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "A UAEU student who wants to apply for an outgoing university exchange should submit their application through their college coordinator for the student exchange program.\n\nSpecifically, students from the College of Business and Economics should apply through Mrs. Zeineb Khalfallah, while students from other colleges should apply through Ms. Rana AL Katheeri.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3481,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5049,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 103,
+                  "estimatedUsd": 0.0021844
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1471,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000638
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 6520,
+              "outputTokens": 134,
+              "knownUsageUsd": 0.0028224,
+              "estimatedUsd": 0.0028224,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "coordinator",
+            "passed": true,
+            "patterns": [
+              "college coordinator",
+              "منسق"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE259-V1",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "At UAEU, through whom should a UAEU student apply for outgoing university exchange?"
+      ],
+      "expected": "Through the college coordinator for the student exchange program; partner agreement governs tuition.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/applicationout.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "coordinator",
+          "any": [
+            "college coordinator",
+            "منسق"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, through whom should a UAEU student apply for outgoing university exchange?",
+        "Through whom should a United Arab Emirates University student apply for outgoing university exchange?",
+        "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟",
+        "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ates university who wish to study abroad for up to two semesters at any partner university can submit their application through the college coordinator for the student exchange program. the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodati",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ],
+      "parentId": "KE259",
+      "conversation": [
+        {
+          "user": "At UAEU, through whom should a UAEU student apply for outgoing university exchange?",
+          "status": 200,
+          "seconds": 2.791,
+          "payload": {
+            "role": "assistant",
+            "content": "A UAEU student who wants to apply for an outgoing university exchange should apply through their college coordinator for the student exchange program.\n\nSpecifically, students from the College of Business and Economics should contact Mrs. Zeineb Khalfallah, while students from other colleges should contact Ms. Rana AL Katheeri for their exchange applications.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Outgoing Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Nomination and Application"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "student-exchange",
+            "evidenceIds": [
+              "corpus:4dea5fbfc2de699966e9:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "A UAEU student who wants to apply for an outgoing university exchange should apply through their college coordinator for the student exchange program.\n\nSpecifically, students from the College of Business and Economics should contact Mrs. Zeineb Khalfallah, while students from other colleges should contact Ms. Rana AL Katheeri for their exchange applications.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2785,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5057,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 103,
+                  "estimatedUsd": 0.0016116000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1471,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000638
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 6528,
+              "outputTokens": 134,
+              "knownUsageUsd": 0.0022496,
+              "estimatedUsd": 0.0022496,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "coordinator",
+            "passed": true,
+            "patterns": [
+              "college coordinator",
+              "منسق"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE259-V2",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Through whom should a United Arab Emirates University student apply for outgoing university exchange?"
+      ],
+      "expected": "Through the college coordinator for the student exchange program; partner agreement governs tuition.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/applicationout.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "coordinator",
+          "any": [
+            "college coordinator",
+            "منسق"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, through whom should a UAEU student apply for outgoing university exchange?",
+        "Through whom should a United Arab Emirates University student apply for outgoing university exchange?",
+        "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟",
+        "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ates university who wish to study abroad for up to two semesters at any partner university can submit their application through the college coordinator for the student exchange program. the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodati",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ],
+      "parentId": "KE259",
+      "conversation": [
+        {
+          "user": "Through whom should a United Arab Emirates University student apply for outgoing university exchange?",
+          "status": 200,
+          "seconds": 2.959,
+          "payload": {
+            "role": "assistant",
+            "content": "A United Arab Emirates University student should submit their application for outgoing university exchange through the college coordinator for the student exchange program.\n\nInterested UAEU students who have completed at least 30 credit hours prior to the study abroad semester may apply to their college coordinator to study at a partner university.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Student Exchange Unit",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Student Exchange Unit > Outgoing Students"
+              },
+              {
+                "title": "Outgoing Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Nomination and Application"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "student-exchange",
+            "evidenceIds": [
+              "corpus:b944cbf0eab2b2a8305c:3#E1S1",
+              "corpus:4dea5fbfc2de699966e9:2#E6S1"
+            ],
+            "claims": [
+              {
+                "text": "A United Arab Emirates University student should submit their application for outgoing university exchange through the college coordinator for the student exchange program.",
+                "evidenceIds": [
+                  "corpus:b944cbf0eab2b2a8305c:3#E1S1"
+                ]
+              },
+              {
+                "text": "Interested UAEU students who have completed at least 30 credit hours prior to the study abroad semester may apply to their college coordinator to study at a partner university.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:2#E6S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2953,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5292,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 94,
+                  "estimatedUsd": 0.0022672000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1401,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00061
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1358,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005928000000000001
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 8051,
+              "outputTokens": 156,
+              "knownUsageUsd": 0.0034700000000000004,
+              "estimatedUsd": 0.0034700000000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "coordinator",
+            "passed": true,
+            "patterns": [
+              "college coordinator",
+              "منسق"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE259-V3",
+      "category": "admissions-money",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟"
+      ],
+      "expected": "Through the college coordinator for the student exchange program; partner agreement governs tuition.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/applicationout.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "coordinator",
+          "any": [
+            "college coordinator",
+            "منسق"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, through whom should a UAEU student apply for outgoing university exchange?",
+        "Through whom should a United Arab Emirates University student apply for outgoing university exchange?",
+        "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟",
+        "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ates university who wish to study abroad for up to two semesters at any partner university can submit their application through the college coordinator for the student exchange program. the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodati",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ],
+      "parentId": "KE259",
+      "conversation": [
+        {
+          "user": "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟",
+          "status": 200,
+          "seconds": 5.321,
+          "payload": {
+            "role": "assistant",
+            "content": "يقدم طالب جامعة الإمارات الراغب في التبادل الدراسي الخارجي طلبه من خلال منسق الكلية الخاصة به، مع وجود قائمة بأسماء ومنسقي الكليات المتاحة حسب التخصص.\n\nيمكن للطالب أيضًا تقديم طلبه من خلال منسق الكلية لبرنامج التبادل الطلابي، حيث تتم إجراءات التقديم عبر هذه القنوات الرسمية.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "إجراءات ومتطلبات ومواعيد تسليم طلبات التقديم",
+                "url": "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "وحدة التبادل الطلابي > إجراءات ومتطلبات ومواعيد تسليم طلبات التقديم"
+              },
+              {
+                "title": "وحدة التبادل الطلابي",
+                "url": "https://www.uaeu.ac.ae/ar/admission/studentexchange/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "وحدة التبادل الطلابي > الطلبة المبتعثين"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "student-exchange",
+            "evidenceIds": [
+              "corpus:749e175fc28ab30ecc5d:2#E1S1",
+              "corpus:f0c4decdd8b472cb081b:3#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "يقدم طالب جامعة الإمارات الراغب في التبادل الدراسي الخارجي طلبه من خلال منسق الكلية الخاصة به، مع وجود قائمة بأسماء ومنسقي الكليات المتاحة حسب التخصص.",
+                "evidenceIds": [
+                  "corpus:749e175fc28ab30ecc5d:2#E1S1"
+                ]
+              },
+              {
+                "text": "يمكن للطالب أيضًا تقديم طلبه من خلال منسق الكلية لبرنامج التبادل الطلابي، حيث تتم إجراءات التقديم عبر هذه القنوات الرسمية.",
+                "evidenceIds": [
+                  "corpus:f0c4decdd8b472cb081b:3#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5315,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23092,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.009331200000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5726,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 112,
+                  "estimatedUsd": 0.0018936
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1812,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007744000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1417,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006164000000000001
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 32047,
+              "outputTokens": 233,
+              "knownUsageUsd": 0.012615600000000001,
+              "estimatedUsd": 0.012615600000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "coordinator",
+            "passed": true,
+            "patterns": [
+              "college coordinator",
+              "منسق"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE259-V4",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question."
+      ],
+      "expected": "Through the college coordinator for the student exchange program; partner agreement governs tuition.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/index.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/applicationout.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/studentexchange/outgoing-students.shtml",
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/applicationout.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "coordinator",
+          "any": [
+            "college coordinator",
+            "منسق"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, through whom should a UAEU student apply for outgoing university exchange?",
+        "Through whom should a United Arab Emirates University student apply for outgoing university exchange?",
+        "عن طريق من يقدم طالب جامعة الإمارات على التبادل الدراسي الخارجي؟",
+        "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ates university who wish to study abroad for up to two semesters at any partner university can submit their application through the college coordinator for the student exchange program. the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodati",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "rubricCorrections": [
+        {
+          "date": "2026-11-06",
+          "by": "Claude",
+          "reason": "Arabic definite-article/hyphen/synonym wording or more specific official page containing the same fact; correct bot answers were marked down"
+        }
+      ],
+      "parentId": "KE259",
+      "conversation": [
+        {
+          "user": "Through whom should a UAEU student apply for outgoing university exchange? Please keep the answer focused on this question.",
+          "status": 200,
+          "seconds": 3.183,
+          "payload": {
+            "role": "assistant",
+            "content": "A UAEU student who wishes to apply for an outgoing university exchange should submit their application through their college coordinator for the student exchange program.\n\nInterested students must apply to their college coordinator, with specific contacts provided for the College of Business and Economics and for other colleges.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Outgoing Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Outgoing Students"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "student-exchange",
+            "evidenceIds": [
+              "corpus:4dea5fbfc2de699966e9:1#E1S1",
+              "corpus:4dea5fbfc2de699966e9:2#E3S1"
+            ],
+            "claims": [
+              {
+                "text": "A UAEU student who wishes to apply for an outgoing university exchange should submit their application through their college coordinator for the student exchange program.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:1#E1S1"
+                ]
+              },
+              {
+                "text": "Interested students must apply to their college coordinator, with specific contacts provided for the College of Business and Economics and for other colleges.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:2#E3S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3178,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5142,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 90,
+                  "estimatedUsd": 0.0016248000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1394,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006072
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1346,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000588
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 7882,
+              "outputTokens": 152,
+              "knownUsageUsd": 0.0028200000000000005,
+              "estimatedUsd": 0.0028200000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "coordinator",
+            "passed": true,
+            "patterns": [
+              "college coordinator",
+              "منسق"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "669346317c013310e39b6f1986b96524741d98d63fdec9a2936f2cacc63c965c",
+    "files": 8454,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "knowledge-v45"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/focused-services-v45b-fixture.json",
+  "gradingBefore": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 5,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-06T13:49:37.247Z",
+  "runtimeAfter": {
+    "sha256": "669346317c013310e39b6f1986b96524741d98d63fdec9a2936f2cacc63c965c",
+    "files": 8454,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "knowledge-v45"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 3.183,
+    "p95": 5.321,
+    "max": 5.321
+  },
+  "usage": {
+    "measuredAnswers": 5,
+    "totalAnswers": 5,
+    "estimatedUsd": 0.0239776,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

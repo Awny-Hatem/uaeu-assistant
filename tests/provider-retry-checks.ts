@@ -155,6 +155,18 @@ async function main() {
       await assert.rejects(generateAssistantResponse(args), error => error instanceof AiProviderError && error.providerStatus === 'OPENAI_TIMEOUT');
       assert.equal(requests.length, 1); assert.deepEqual(waits, []);
     });
+    await check('a per-call timeout can recover inside a longer unchanged answer budget',async()=>{
+      handler=attempt=>{if(attempt===1){now+=20_000;throw new DOMException('Synthetic per-call timeout','TimeoutError');}return success();};
+      await generateAssistantResponse({...args,deadlineAt:55_000});
+      assert.equal(requests.length,2);assert.deepEqual(signals,[20_000,20_000]);assert.deepEqual(waits,[625]);
+      assert.deepEqual(requests[0],requests[1]);
+    });
+    await check('cancellation and insufficient remaining timeout budget never allocate another request',async()=>{
+      handler=()=>{throw new DOMException('Synthetic cancellation','AbortError');};
+      await assert.rejects(generateAssistantResponse({...args,deadlineAt:55_000}));assert.equal(requests.length,1);
+      requests=[];waits=[];handler=()=>{now+=20_000;throw new DOMException('Synthetic timeout','TimeoutError');};
+      await assert.rejects(generateAssistantResponse({...args,deadlineAt:35_000}));assert.equal(requests.length,1);assert.deepEqual(waits,[]);
+    });
     await check('malformed successful model output is not retried as a transport failure', async () => {
       handler = () => new Response(JSON.stringify({ output_text: '{broken' }));
       await assert.rejects(generateAssistantResponse({ ...args, evidenceIds: ['E1'] }), error => error instanceof AiProviderError && error.providerStatus === 'INVALID_GROUNDING_OUTPUT');

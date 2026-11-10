@@ -1,0 +1,1663 @@
+{
+  "startedAt": "2026-11-07T11:36:52.509Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "regression-mem10-1-rerun",
+  "fixture": "reports/knowledge-expansion-2026-11-04/regression-mem9-1-fixture.json",
+  "fixtureSha256": "9d44deaba84c751c90b40bd556d7d2afe30f1d68c2dc2271b0691e5f289f4504",
+  "methodology": "One shared 2.3-second request-start limiter, at most3 in flight. Original195 plus329 new scenarios; all alternate phrasings. Automated official-source rubric, then semantic review. Candidate71k snapshot, not full crawl completion.",
+  "results": [
+    {
+      "id": "KE023-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 6 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/creditbearing-microcredential-in-smart-manufacturing-and-robotics.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)6(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics at UAEU: total credit hours?",
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics في جامعة الإمارات؟",
+        "Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 6 hours",
+      "sourceBodySha256": "07ddd11d6b5a98ff42e328caabde206898723d54e41065cac984a8f5348e155a",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE023",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics at uaeu",
+          "status": 200,
+          "seconds": 2.746,
+          "payload": {
+            "role": "assistant",
+            "content": "The Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics at UAEU requires a minimum of 6 credit hours to complete.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/creditbearing-microcredential-in-smart-manufacturing-and-robotics.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics > Degree Requirements > Required Credit Hours : minimum 6 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:1e867479dad46ae8bfec:9#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Credit-Bearing Micro-Credential in Smart Manufacturing and Robotics at UAEU requires a minimum of 6 credit hours to complete.",
+                "evidenceIds": [
+                  "corpus:1e867479dad46ae8bfec:9#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2737,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 23,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.6000000000000004e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4278,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.00122
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1385,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006036
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5686,
+              "outputTokens": 84,
+              "knownUsageUsd": 0.0018240600000000002,
+              "estimatedUsd": 0.0018240600000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)6(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE152-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 6 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/creditbearing-microcredential-in-ai-for-intelligent-energy-systems.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)6(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems at UAEU: total credit hours?",
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems في جامعة الإمارات؟",
+        "Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 6 hours",
+      "sourceBodySha256": "de32c6cad3601d56c3a59c4b81c026561e5344a27ae8fe71daa9f38af3d022ad",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE152",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems at uaeu",
+          "status": 200,
+          "seconds": 2.956,
+          "payload": {
+            "role": "assistant",
+            "content": "You need at least 6 credit hours to complete the Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems at UAEU.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/creditbearing-microcredential-in-ai-for-intelligent-energy-systems.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems > Degree Requirements > Required Credit Hours : minimum 6 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:1cb5b65af4a782f80cde:9#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You need at least 6 credit hours to complete the Credit-Bearing Micro-Credential in AI for Intelligent Energy Systems at UAEU.",
+                "evidenceIds": [
+                  "corpus:1cb5b65af4a782f80cde:9#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2946,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 24,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4205,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 54,
+                  "estimatedUsd": 0.0011924000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1393,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006068000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5622,
+              "outputTokens": 85,
+              "knownUsageUsd": 0.0017996800000000001,
+              "estimatedUsd": 0.0017996800000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)6(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE155-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 9 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/creditbearing-microcredential-in-financial-accounting-auditing-and-taxation.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)9(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation at UAEU: total credit hours?",
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation في جامعة الإمارات؟",
+        "Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 9 hours",
+      "sourceBodySha256": "1ab6942fa10756fc86016547e7eb9518744c4588216f8110272898469954a8a2",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE155",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation at uaeu",
+          "status": 200,
+          "seconds": 2.937,
+          "payload": {
+            "role": "assistant",
+            "content": "You need a minimum of 9 credit hours to complete the Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation at UAEU.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/creditbearing-microcredential-in-financial-accounting-auditing-and-taxation.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation > Degree Requirements > Required Credit Hours : minimum 9 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:59246602ea59df01690c:9#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You need a minimum of 9 credit hours to complete the Credit-Bearing Micro-Credential in Financial Accounting, Auditing, and Taxation at UAEU.",
+                "evidenceIds": [
+                  "corpus:59246602ea59df01690c:9#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2926,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 28,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.6e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4386,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.0012728000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1418,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006168
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5832,
+              "outputTokens": 90,
+              "knownUsageUsd": 0.00189016,
+              "estimatedUsd": 0.00189016,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)9(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE258-V2",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "How long can incoming undergraduate exchange students study at United Arab Emirates University?"
+      ],
+      "expected": "Up to2semesters under exchange agreements and agreement of both institutions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "duration",
+          "any": [
+            "two semesters",
+            "2 semesters",
+            "فصلين\\s+دراسيين",
+            "فصلين"
+          ]
+        },
+        {
+          "name": "agreement",
+          "any": [
+            "agreement",
+            "اتفاقي[ةه]",
+            "المؤسستين"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, how long can incoming undergraduate exchange students study at UAEU?",
+        "How long can incoming undergraduate exchange students study at United Arab Emirates University?",
+        "ما المدة المتاحة لطالب التبادل القادم إلى جامعة الإمارات؟",
+        "How long can incoming undergraduate exchange students study at UAEU? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "nrolled in undergraduate education at universities with exchange agreements with uaeu are eligible to study at uaeu for up to two semesters as specified in the exchange agreement and agreed upon by both institutions. discover more",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE258",
+      "conversation": [
+        {
+          "user": "How long can incoming undergraduate exchange students study at United Arab Emirates University?",
+          "status": 200,
+          "seconds": 2.969,
+          "payload": {
+            "role": "assistant",
+            "content": "Incoming undergraduate exchange students can study at United Arab Emirates University for up to two semesters, as specified in the exchange agreement and agreed upon by both institutions.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Incoming Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/incoming-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Incoming Students"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:8f558e9c0dbebd76cb8c:1#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "Incoming undergraduate exchange students can study at United Arab Emirates University for up to two semesters, as specified in the exchange agreement and agreed upon by both institutions.",
+                "evidenceIds": [
+                  "corpus:8f558e9c0dbebd76cb8c:1#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2958,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 14,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 2.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5398,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.0022488
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1347,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005884000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6759,
+              "outputTokens": 87,
+              "knownUsageUsd": 0.0028374800000000003,
+              "estimatedUsd": 0.0028374800000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "duration",
+            "passed": true,
+            "patterns": [
+              "two semesters",
+              "2 semesters",
+              "فصلين\\s+دراسيين",
+              "فصلين"
+            ]
+          },
+          {
+            "name": "agreement",
+            "passed": true,
+            "patterns": [
+              "agreement",
+              "اتفاقي[ةه]",
+              "المؤسستين"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE258-V4",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "How long can incoming undergraduate exchange students study at UAEU? Please keep the answer focused on this question."
+      ],
+      "expected": "Up to2semesters under exchange agreements and agreement of both institutions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "duration",
+          "any": [
+            "two semesters",
+            "2 semesters",
+            "فصلين\\s+دراسيين",
+            "فصلين"
+          ]
+        },
+        {
+          "name": "agreement",
+          "any": [
+            "agreement",
+            "اتفاقي[ةه]",
+            "المؤسستين"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, how long can incoming undergraduate exchange students study at UAEU?",
+        "How long can incoming undergraduate exchange students study at United Arab Emirates University?",
+        "ما المدة المتاحة لطالب التبادل القادم إلى جامعة الإمارات؟",
+        "How long can incoming undergraduate exchange students study at UAEU? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "nrolled in undergraduate education at universities with exchange agreements with uaeu are eligible to study at uaeu for up to two semesters as specified in the exchange agreement and agreed upon by both institutions. discover more",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE258",
+      "conversation": [
+        {
+          "user": "How long can incoming undergraduate exchange students study at UAEU? Please keep the answer focused on this question.",
+          "status": 200,
+          "seconds": 3.374,
+          "payload": {
+            "role": "assistant",
+            "content": "Incoming undergraduate exchange students can study at UAEU for up to two semesters as specified in the exchange agreement and agreed upon by both institutions.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Incoming Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/incoming-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Incoming Students"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:8f558e9c0dbebd76cb8c:1#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "Incoming undergraduate exchange students can study at UAEU for up to two semesters as specified in the exchange agreement and agreed upon by both institutions.",
+                "evidenceIds": [
+                  "corpus:8f558e9c0dbebd76cb8c:1#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3363,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 21,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5738,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.001804
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1344,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005872000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7103,
+              "outputTokens": 84,
+              "knownUsageUsd": 0.00239162,
+              "estimatedUsd": 0.00239162,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "duration",
+            "passed": true,
+            "patterns": [
+              "two semesters",
+              "2 semesters",
+              "فصلين\\s+دراسيين",
+              "فصلين"
+            ]
+          },
+          {
+            "name": "agreement",
+            "passed": true,
+            "patterns": [
+              "agreement",
+              "اتفاقي[ةه]",
+              "المؤسستين"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE270-V3",
+      "category": "registration-policies",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "هل تدخل درجة P في مساق نجاح/رسوب ضمن المعدل في لائحة AE-04؟"
+      ],
+      "expected": "P is excluded fromGPA, usedforpass/failcoursesonly,60+score.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "excluded",
+          "any": [
+            "exclud|not.*GPA|doesn.t.*GPA",
+            "لا تدخل.*حساب",
+            "مستثناة.*المعدل",
+            "لا\\s+(?:تدخل|يدخل|تحتسب|يحتسب)"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, does a P in a UAEU pass/fail course enter the GPA under AE-04?",
+        "Does a P in a United Arab Emirates University pass/fail course enter the GPA under AE-04?",
+        "هل تدخل درجة P في مساق نجاح/رسوب ضمن المعدل في لائحة AE-04؟",
+        "Does a P in a UAEU pass/fail course enter the GPA under AE-04? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": " pass + d+ 64 –66 1.30 pass d 60 – 63 1.00 fail f 0 – 59 0.00 failure for absence fa 0.0 0.00 incomplete i - - pass (in pass/fail courses only) p 60 and more excl not passing (no credit awarded) np 0 - 59 excl continuing (satisfactory progress cc - excl in a continuing course) passing grade via proficiency or cx - excl challenge exam satisfactory s - excl administrative withdrawa",
+      "sourceBodySha256": "a87db781c5f3ce924521d24bb984cc25963ddcb19efba8bc131b4a97d9e68f5c",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE270",
+      "conversation": [
+        {
+          "user": "هل تدخل درجة P في مساق نجاح/رسوب ضمن المعدل في لائحة AE-04؟",
+          "status": 200,
+          "seconds": 5.915,
+          "payload": {
+            "role": "assistant",
+            "content": "درجة P في مساقات النجاح/الرسوب لا تُحتسب ضمن المعدل التراكمي (GPA) في لائحة AE-04، حيث تُعتبر درجة P علامة نجاح في المساقات التي تعتمد نظام النجاح/الرسوب ولا تؤثر على المعدل.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "4_grades_and_grading-en.pdf",
+                "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/4_grades_and_grading-en.pdf#page=2",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PDF page 2"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "grade",
+            "evidenceIds": [
+              "corpus:d1074919bfa4f8dd40a1:1#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "درجة P في مساقات النجاح/الرسوب لا تُحتسب ضمن المعدل التراكمي (GPA) في لائحة AE-04، حيث تُعتبر درجة P علامة نجاح في المساقات التي تعتمد نظام النجاح/الرسوب ولا تؤثر على المعدل.",
+                "evidenceIds": [
+                  "corpus:d1074919bfa4f8dd40a1:1#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5902,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23105,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 108,
+                  "estimatedUsd": 0.0094148
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 43,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 8.6e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6695,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 82,
+                  "estimatedUsd": 0.0028092
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1896,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008080000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 31739,
+              "outputTokens": 221,
+              "knownUsageUsd": 0.013032859999999999,
+              "estimatedUsd": 0.013032859999999999,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "excluded",
+            "passed": false,
+            "patterns": [
+              "exclud|not.*GPA|doesn.t.*GPA",
+              "لا تدخل.*حساب",
+              "مستثناة.*المعدل",
+              "لا\\s+(?:تدخل|يدخل|تحتسب|يحتسب)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "excluded"
+        ],
+        "requiresHumanReview": true,
+        "originalSourcePass": false,
+        "equivalentSourceEvidence": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf"
+        ],
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE270-V4",
+      "category": "registration-policies",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Does a P in a UAEU pass/fail course enter the GPA under AE-04? Please keep the answer focused on this question."
+      ],
+      "expected": "P is excluded fromGPA, usedforpass/failcoursesonly,60+score.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "excluded",
+          "any": [
+            "exclud|not.*GPA|doesn.t.*GPA",
+            "لا تدخل.*حساب",
+            "مستثناة.*المعدل",
+            "لا\\s+(?:تدخل|يدخل|تحتسب|يحتسب)"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, does a P in a UAEU pass/fail course enter the GPA under AE-04?",
+        "Does a P in a United Arab Emirates University pass/fail course enter the GPA under AE-04?",
+        "هل تدخل درجة P في مساق نجاح/رسوب ضمن المعدل في لائحة AE-04؟",
+        "Does a P in a UAEU pass/fail course enter the GPA under AE-04? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": " pass + d+ 64 –66 1.30 pass d 60 – 63 1.00 fail f 0 – 59 0.00 failure for absence fa 0.0 0.00 incomplete i - - pass (in pass/fail courses only) p 60 and more excl not passing (no credit awarded) np 0 - 59 excl continuing (satisfactory progress cc - excl in a continuing course) passing grade via proficiency or cx - excl challenge exam satisfactory s - excl administrative withdrawa",
+      "sourceBodySha256": "a87db781c5f3ce924521d24bb984cc25963ddcb19efba8bc131b4a97d9e68f5c",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE270",
+      "conversation": [
+        {
+          "user": "Does a P in a UAEU pass/fail course enter the GPA under AE-04? Please keep the answer focused on this question.",
+          "status": 502,
+          "seconds": 13.839,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "unsupported_detail"
+              ]
+            },
+            "clarificationReason": "unsupported_detail",
+            "usage": {
+              "elapsedMs": 13828,
+              "attemptedCalls": 9,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23113,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 108,
+                  "estimatedUsd": 0.0025444000000000005
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 28,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.6e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1103,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 12,
+                  "estimatedUsd": 0.0004604
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3789,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 78,
+                  "estimatedUsd": 0.0010644
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1836,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 52,
+                  "estimatedUsd": 0.0008176000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4264,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 79,
+                  "estimatedUsd": 0.001256
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1837,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.0008244000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4273,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 82,
+                  "estimatedUsd": 0.0012644000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1840,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 52,
+                  "estimatedUsd": 0.0008192000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 42083,
+              "outputTokens": 519,
+              "knownUsageUsd": 0.009051360000000001,
+              "estimatedUsd": 0.009051360000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "excluded",
+            "passed": false,
+            "patterns": [
+              "exclud|not.*GPA|doesn.t.*GPA",
+              "لا تدخل.*حساب",
+              "مستثناة.*المعدل",
+              "لا\\s+(?:تدخل|يدخل|تحتسب|يحتسب)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "excluded"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE285-V3",
+      "category": "student-life-services",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "هل توجد ساحات طعام في حرمي الطلاب والطالبات؟"
+      ],
+      "expected": "Publishedrestaurantsoverviewstatesfoodcourtsinbothcampuses; noliveopeninghoursorpricesverified.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/campus_life/restaurants/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "both",
+          "any": [
+            "both|male and female",
+            "صالتان",
+            "ساحتان",
+            "واحدة.*(?:أخرى|اخرى)"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, are food courts available on both male and female UAEU campuses?",
+        "Are food courts available on both male and female United Arab Emirates University campuses?",
+        "هل توجد ساحات طعام في حرمي الطلاب والطالبات؟",
+        "Are food courts available on both male and female UAEU campuses? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ch in a diverse selection of the restaurants, cafeterias, pizzerias, cafés and other dining facilities. there is also a food court located in both the male and female campuses, which offer a wide selection of healthy and nutritious foods, including oriental, middle-eastern, asian, and european menus. regular health inspections are carried out at all outlets to ensure that food safety",
+      "sourceBodySha256": "ebcafbdb7cc8f09876ebee00ca7a4554ba740c5ea26f5a94f7e3d66ed28d9632",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE285",
+      "conversation": [
+        {
+          "user": "هل توجد ساحات طعام في حرمي الطلاب والطالبات؟",
+          "status": 200,
+          "seconds": 2.78,
+          "payload": {
+            "role": "assistant",
+            "content": "نعم، توجد صالتان رئيسيتان للمطاعم: واحدة في الحرم الجامعي للطلاب وأخرى في الحرم الجامعي للطالبات، وتقدم أطعمة صحية ومغذية تشمل أكلات عربية وآسيوية وعالمية مع رقابة صحية منتظمة لضمان السلامة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "نظرة عامة",
+                "url": "https://www.uaeu.ac.ae/ar/campus_life/restaurants/overview.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "المطاعم والمحلات > نظرة عامة"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:9b6f3247f0ba062647a6:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "نعم، توجد صالتان رئيسيتان للمطاعم: واحدة في الحرم الجامعي للطلاب وأخرى في الحرم الجامعي للطالبات، وتقدم أطعمة صحية ومغذية تشمل أكلات عربية وآسيوية وعالمية مع رقابة صحية منتظمة لضمان السلامة.",
+                "evidenceIds": [
+                  "corpus:9b6f3247f0ba062647a6:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2769,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 31,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 6.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6366,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 90,
+                  "estimatedUsd": 0.0021144000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1537,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006644000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7934,
+              "outputTokens": 121,
+              "knownUsageUsd": 0.0027794200000000003,
+              "estimatedUsd": 0.0027794200000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "both",
+            "passed": true,
+            "patterns": [
+              "both|male and female",
+              "صالتان",
+              "ساحتان",
+              "واحدة.*(?:أخرى|اخرى)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "original": false,
+      "auditResult": null,
+      "focus": "Weakness",
+      "group": "sports",
+      "turns": [
+        "Where can I find the schedule for sports and recreation activities?"
+      ],
+      "expected": "Do not invent a current schedule; give verified facilities/contact or official schedule route with dated-source limits.",
+      "sources": [
+        "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+        "https://map.uaeu.ac.ae/"
+      ],
+      "checks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "schedule|hours|timetable|current|ساعات|جدول"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "NQ190",
+      "suite": "legacy",
+      "parentId": "NQ190",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Where can I find the schedule for sports and recreation activities?",
+          "status": 200,
+          "seconds": 4.936,
+          "payload": {
+            "role": "assistant",
+            "content": "The schedule for sports and recreational activities at UAEU is available through the Student Activities section on the UAEU website, which details various sports programs, fitness courses, and the use of sports facilities.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Student Activities",
+                "url": "https://www.uaeu.ac.ae/en/campus_life/activities/activities.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Student Activities > Student Activities > Sports and Recreational Activities"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:525290e0aab100a1ba2e:6#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The schedule for sports and recreational activities at UAEU is available through the Student Activities section on the UAEU website, which details various sports programs, fitness courses, and the use of sports facilities.",
+                "evidenceIds": [
+                  "corpus:525290e0aab100a1ba2e:6#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4923,
+              "attemptedCalls": 6,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 12,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 2.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6066,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 103,
+                  "estimatedUsd": 0.0020152
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1279,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.0005868000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1852,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007904000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6527,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 65,
+                  "estimatedUsd": 0.0021388
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1888,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008048
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 17624,
+              "outputTokens": 277,
+              "knownUsageUsd": 0.00633624,
+              "estimatedUsd": 0.00633624,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Requested fact or honest scope",
+            "passed": true,
+            "patterns": [
+              "schedule|hours|timetable|current|ساعات|جدول"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "01342fc0c082948291d2d1225cdb94f53ec1b8aec8d9301fbc9d9abeda90871e",
+    "files": 8465,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v10"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/regression-mem10-1-rerun-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 3,
+    "partial": 4,
+    "incorrect": 2
+  },
+  "finishedAt": "2026-11-07T11:37:36.074Z",
+  "runtimeAfter": {
+    "sha256": "01342fc0c082948291d2d1225cdb94f53ec1b8aec8d9301fbc9d9abeda90871e",
+    "files": 8465,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v10"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 2.969,
+    "p95": 13.839,
+    "max": 13.839
+  },
+  "usage": {
+    "measuredAnswers": 9,
+    "totalAnswers": 9,
+    "estimatedUsd": 0.04194288,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

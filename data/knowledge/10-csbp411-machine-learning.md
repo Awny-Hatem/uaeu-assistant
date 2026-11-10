@@ -2,7 +2,7 @@
 status: approved
 title: UAEU Course Catalog — CSBP411 Machine Learning
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP411
-lastVerified: 2026-09-29
+lastVerified: 2026-11-03
 courseCodes: CSBP411
 subjects: machine-learning
 degreeLevel: undergraduate
@@ -14,7 +14,9 @@ CSBP411 is a 3-credit undergraduate course. Its prerequisite is CSBP301 with a m
 
 The catalog covers data preparation and feature selection, supervised and unsupervised methods, and evaluation of machine-learning models. Examples include regression, decision trees, nearest neighbors, Bayesian learning, support-vector machines, neural networks and clustering.
 
-This is the catalog record inspected on 29 September 2026. A published prerequisite does not establish a student's completed credits, cohort equivalencies or a live section's availability.
+The inspected course entry lists CSBP301 only under Prerequisites and shows no separate corequisite or Pre/Co entry. This describes that inspected entry; it is not permission to waive prerequisites or a claim about every historical cohort.
+
+This is the catalog record inspected on 3 November 2026. A published prerequisite does not establish a student's completed credits, cohort equivalencies or a live section's availability.
 
 ## المتطلب السابق
 

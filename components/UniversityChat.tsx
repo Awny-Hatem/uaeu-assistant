@@ -417,6 +417,19 @@ export function UniversityChat() {
     setGuestQuestionsUsed(guestState.questionsUsed);
     setMessages(guestState.messages);
     guestHydratedRef.current = true;
+    if (guestState.messages.length) return;
+    // The server keeps guest memory under an httpOnly cookie. When this browser
+    // has no local copy (storage cleared, another tab profile), show it.
+    const request = ownershipRef.current.begin();
+    fetch("/api/history", { headers: { 'x-chat-account-id': 'guest' }, cache: 'no-store', credentials: 'same-origin', signal: AbortSignal.any([request.signal, AbortSignal.timeout(10_000)]) })
+      .then(async (res) => {
+        if (!res.ok || !request.isCurrent()) return;
+        const data = (await res.json()) as { messages?: unknown };
+        const stored = sanitizeStoredMessages(data.messages);
+        if (stored.length && request.isCurrent()) setMessages((current) => (current.length ? current : stored));
+      })
+      .catch(() => { /* Display falls back to an empty thread; memory still works server-side. */ })
+      .finally(() => request.finish());
   }, []);
 
   const loadAccountConversation = useCallback(async (loggedUser: AuthUser) => {
@@ -690,7 +703,13 @@ export function UniversityChat() {
       }
     } else {
       writeGuestState([], guestQuestionsUsed);
-      setBanner(copy.cleared);
+      try {
+        const result = await fetch("/api/history", { method: "DELETE", headers: { 'x-chat-account-id': 'guest' }, credentials: 'same-origin', signal: request.signal });
+        if (!result.ok) throw new Error("Delete failed");
+        if (request.isCurrent()) { setDeletionPending(false); setBanner(copy.cleared); }
+      } catch {
+        if (request.isCurrent()) { setDeletionPending(true); setBanner(copy.clearFailed); }
+      }
     }
     if (request.isCurrent()) setProfileOpen(false);
     request.finish();
@@ -772,7 +791,8 @@ export function UniversityChat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-chat-account-id': user?.id ?? 'guest' },
-        credentials: user ? 'same-origin' : 'omit',
+        // Guests send cookies too: their conversation memory lives server-side.
+        credentials: 'same-origin',
         body: JSON.stringify(payload),
         signal: request.signal,
       });
@@ -960,6 +980,14 @@ export function UniversityChat() {
             </button>
           )}
           {user ? (
+            <>
+            <a
+              href="/profile"
+              data-testid="edit-profile"
+              className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+            >
+              {uiLocale === "ar" ? "تعديل الملف" : "Edit profile"}
+            </a>
             <button
               type="button"
               onClick={handleLogout}
@@ -970,6 +998,7 @@ export function UniversityChat() {
               <LogOut size={15} />
               {copy.signOut}
             </button>
+            </>
           ) : (
             <div className="grid grid-cols-2 gap-2">
               <button
@@ -1059,6 +1088,10 @@ export function UniversityChat() {
                     </button>
                   )}
                   {user ? (
+                    <>
+                    <a href="/profile" className="flex w-full items-center gap-2 border-b border-zinc-100 px-4 py-3 text-xs font-bold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800">
+                      {uiLocale === "ar" ? "تعديل الملف" : "Edit profile"}
+                    </a>
                     <button
                       type="button"
                       onClick={handleLogout}
@@ -1068,6 +1101,7 @@ export function UniversityChat() {
                       <LogOut size={13} />
                       {copy.signOut}
                     </button>
+                    </>
                   ) : (
                     <div className="grid grid-cols-2 gap-2 p-3">
                       <button

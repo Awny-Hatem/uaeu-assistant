@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import type { EvidenceRow } from "@/lib/knowledge-files";
 import type { Locale } from "@/lib/language";
 import type { ServiceGuide } from "@/lib/prototype-types";
 import { normalizeQuery } from "@/lib/query-understanding";
@@ -30,6 +31,7 @@ function looksLikeGuide(value: unknown): value is ServiceGuide {
       Date.parse(maybe.lastVerified) <= Date.now() + 86_400_000 && Date.now() - Date.parse(maybe.lastVerified) <= 180 * 86_400_000 &&
       Array.isArray(maybe.keywords) &&
       maybe.keywords.every(nonEmpty) &&
+      (maybe.sources === undefined || (Array.isArray(maybe.sources) && maybe.sources.length > 0 && maybe.sources.every(source => officialUrl(source.url) && nonEmpty(source.title) && nonEmpty(source.evidenceText) && nonEmpty(source.lastVerified)))) &&
       (maybe.excludeKeywords === undefined || (Array.isArray(maybe.excludeKeywords) && maybe.excludeKeywords.every(nonEmpty))) &&
       Array.isArray(maybe.audience) && maybe.audience.every(nonEmpty) &&
       Array.isArray(maybe.steps) && maybe.steps.length > 0 && maybe.steps.every((step) => step && nonEmpty(step.title) && nonEmpty(step.instruction) && (step.url === undefined || officialUrl(step.url))),
@@ -126,4 +128,17 @@ export function guideIntro(guide: ServiceGuide, locale: Locale): string {
   }
 
   return `**${localized.title}**\n- ${localized.description}\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.${verification}`;
+}
+
+/** Reviewed workflow facts remain tied to their individual official references.
+ * The UI checklist is optional; factual answers still use the AI writer/checker. */
+export function serviceGuideEvidence(guide: ServiceGuide): EvidenceRow[] {
+  if (guide.sources?.length) return guide.sources.filter(source => source.evidenceText && guide.steps.some(step => (step.url ?? guide.officialUrl) === source.url)).map((citation,index) => ({
+    source: `guide:${guide.id}:${index}`, title: guide.title, score: 100,
+    text: citation.evidenceText!, citations: [citation],
+  }));
+  return [{ source: `guide:${guide.id}`, title: guide.title, score: 100,
+    text: [guide.description, guide.verificationNote ?? "", ...guide.steps.map(step => step.instruction)].join("\n"),
+    citations: [{title:guide.title,url:guide.officialUrl,lastVerified:guide.lastVerified}],
+  }];
 }

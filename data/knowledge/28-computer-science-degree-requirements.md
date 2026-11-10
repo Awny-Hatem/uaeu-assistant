@@ -13,7 +13,9 @@ curriculum: true
 
 The published minimum is 120 credit hours: 21 general education (university requirements), 41 college requirements, 38 major requirements, 6 internship, 12 major electives (four courses), and 2 free elective credit hours. Cohort-specific degree audits govern individual graduation.
 
-## Computer Science required college courses
+## Required college courses — Computer Science degree
+
+Here "college requirements" is a course-category label within the Computer Science degree, not the name of a college. CSBP319 هياكل البيانات مساق إجباري ضمن فئة متطلبات الكلية في خطة بكالوريوس علوم الحاسوب، وليس مساقاً اختيارياً للتخصص.
 
 CSBP219 Object Oriented Programming (3); CSBP119 Algorithms and Problem Solving (3); MATH105 Calculus I (3); PHYS105 General Physics I (3); CENG202 Discrete Mathematics (3); CENG205 Digital Design and Computer Organization (3); CSBP319 Data Structures (3); CSBP315 Operating Systems Fundamentals (3); MATH110 Calculus II (3); STAT210 Probability and Statistics (3); either BIOC100 Basic Biology I or CHEM111 General Chemistry I (3); ITBP270 Professional Responsibility in Information Technology (2); ITBP480 Senior Graduation Project I (3); ITBP481 Senior Graduation Project II (3). CSBP319 is a mandatory college requirement for this major, not a major elective. Check its separate course record for prerequisites.
 

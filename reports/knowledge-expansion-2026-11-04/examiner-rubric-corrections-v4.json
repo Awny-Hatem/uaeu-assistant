@@ -1,0 +1,121 @@
+{
+  "at": "2026-11-04T08:58:40.284420+00:00",
+  "priorFixtureSha256": "1897354dc040ee3ffaef8abb5dbce5263e0d3331c1dc8b07f4e2897f1fe2e209",
+  "revisedFixtureSha256": "0b04efb1d4b590e7929282dd1110d1c8381ec015eeb514195ae6f9593e2d3cf3",
+  "changes": [
+    {
+      "kind": "stronger coverage checks",
+      "ids": [
+        "EX051",
+        "EX081",
+        "EX092",
+        "EX093",
+        "EX096",
+        "EX097"
+      ],
+      "reason": "Check both programme sources where totals require them, both password support sources, and earlier conversation turns; a good final follow-up must not conceal an earlier failure."
+    },
+    {
+      "id": "EX099",
+      "kind": "recommendation rubric correction",
+      "reason": "Computer and Artificial Intelligence Engineering is also a relevant official full degree; the previous rubric wrongly forced CS or DSAI. The student question is unchanged. A minor-only answer still fails.",
+      "officialSource": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+      "sourceSha256": "676f630cc694558f6ac457f835ce6e1293f01655b986014c5e2c3bea1d7d626a",
+      "before": {
+        "turns": [
+          "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?"
+        ],
+        "expected": "Give conditional, source-grounded suggestions such as Computer Science or Data Science and AI based on their published descriptions, distinguish their focus, and state that a suggestion does not establish admission eligibility or a guarantee.",
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml"
+        ],
+        "needsCitation": true,
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "Computer Science|Data Science|علوم الحاسوب|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "not guarantee|does not guarantee|cannot guarantee|no guarantee|لا.{0,25}ضمان|لا.{0,25}يضمن|ليس.{0,25}ضمان"
+            ]
+          }
+        ],
+        "id": "EX099",
+        "category": "Tricky and conversational",
+        "focus": "Examiner",
+        "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+        "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+        "lastResult": "⚠️ Not yet tested",
+        "variants": [
+          "hey, I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "Please explain to a new UAEU student: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "Give a concise advisor checklist: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+          "UAEU — أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟"
+        ],
+        "followUpQuestion": null,
+        "reviewRequired": true
+      },
+      "after": {
+        "turns": [
+          "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?"
+        ],
+        "expected": "Suggest a relevant published full degree, such as Computer Science, Data Science and Artificial Intelligence, or Computer and Artificial Intelligence Engineering, explaining its published AI/programming focus conditionally. A suggestion is not personal admission approval; do not substitute a minor for a major.",
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+          "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+        ],
+        "needsCitation": true,
+        "checks": [
+          {
+            "name": "relevant full-degree option",
+            "any": [
+              "Computer Science",
+              "Data Science",
+              "Computer and Artificial Intelligence Engineering",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر",
+              "علم البيانات",
+              "علوم البيانات",
+              "هندسة الحاسوب"
+            ]
+          },
+          {
+            "name": "published fit with interest",
+            "any": [
+              "programming",
+              "artificial intelligence",
+              "machine learning",
+              "intelligent",
+              "البرمجة",
+              "الذكاء الاصطناعي",
+              "تعلم الآلة"
+            ]
+          }
+        ],
+        "id": "EX099",
+        "category": "Tricky and conversational",
+        "focus": "Examiner",
+        "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+        "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+        "lastResult": "⚠️ Not yet tested",
+        "variants": [
+          "hey, I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "Please explain to a new UAEU student: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "Give a concise advisor checklist: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+          "UAEU — أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟"
+        ],
+        "followUpQuestion": null,
+        "reviewRequired": true
+      }
+    }
+  ]
+}

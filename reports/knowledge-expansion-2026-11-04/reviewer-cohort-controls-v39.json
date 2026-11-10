@@ -1,0 +1,3537 @@
+{
+  "startedAt": "2026-11-05T07:02:14.873Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "examiner-all-v39",
+  "fixture": "examiner-scenarios/examiner_100.json",
+  "fixtureSha256": "817c7d5f73983ac1b52cedfbc5657eca713983194a95c12fe50489442f68f772",
+  "methodology": "100 distinct examiner scenarios, each with five alternate phrasings. Ground truth uses official UAEU primary sources and previously independently reviewed source fixtures; source-fetch and semantic-review states are tracked explicitly. HTTP200 and a matching number alone are not proof. A single-cohort calculus question is not required to explain an unrequested earlier cohort. Boundary notices are measured separately from factual-answer FAQ similarity.",
+  "results": [
+    {
+      "turns": [
+        "Who is the Chancellor of UAEU?"
+      ],
+      "expected": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Zaki|زكي"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Nusseibeh|نسيبة"
+          ]
+        }
+      ],
+      "id": "EX004",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Who is the Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+        "من هو الرئيس الأعلى لجامعة الإمارات؟",
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "50fd7a620fde4ef1153ccc67428cb7dc4849e233b0768111bee4e70e9fa80649"
+      },
+      "parentId": "EX004",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Who is the Chancellor of UAEU?",
+          "status": 200,
+          "seconds": 1.995,
+          "payload": {
+            "role": "assistant",
+            "content": "The Chancellor of UAE University (UAEU) is H.E. Zaki Nusseibeh.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "General Enquiries",
+                "url": "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Chancellor office directory",
+                "evidenceText": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "chancellor",
+            "evidenceIds": [
+              "answer:university-chancellor#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Chancellor of UAE University (UAEU) is H.E. Zaki Nusseibeh.",
+                "evidenceIds": [
+                  "answer:university-chancellor#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 1992,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2902,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.00066
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1297,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005684
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4199,
+              "outputTokens": 78,
+              "knownUsageUsd": 0.0012284000000000002,
+              "estimatedUsd": 0.0012284000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Zaki|زكي"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Nusseibeh|نسيبة"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "hey, Who is the Chancellor of UAEU?"
+      ],
+      "expected": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Zaki|زكي"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Nusseibeh|نسيبة"
+          ]
+        }
+      ],
+      "id": "EX004-V1",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Who is the Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+        "من هو الرئيس الأعلى لجامعة الإمارات؟",
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "50fd7a620fde4ef1153ccc67428cb7dc4849e233b0768111bee4e70e9fa80649"
+      },
+      "parentId": "EX004",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "hey, Who is the Chancellor of UAEU?",
+          "status": 200,
+          "seconds": 2.185,
+          "payload": {
+            "role": "assistant",
+            "content": "The Chancellor of UAE University is H.E. Zaki Nusseibeh.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "General Enquiries",
+                "url": "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Chancellor office directory",
+                "evidenceText": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "chancellor",
+            "evidenceIds": [
+              "answer:university-chancellor#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Chancellor of UAE University is H.E. Zaki Nusseibeh.",
+                "evidenceIds": [
+                  "answer:university-chancellor#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2182,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2911,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 42,
+                  "estimatedUsd": 0.0006556000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1292,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005664000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4203,
+              "outputTokens": 73,
+              "knownUsageUsd": 0.0012220000000000002,
+              "estimatedUsd": 0.0012220000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Zaki|زكي"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Nusseibeh|نسيبة"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?"
+      ],
+      "expected": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Zaki|زكي"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Nusseibeh|نسيبة"
+          ]
+        }
+      ],
+      "id": "EX004-V2",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Who is the Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+        "من هو الرئيس الأعلى لجامعة الإمارات؟",
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "50fd7a620fde4ef1153ccc67428cb7dc4849e233b0768111bee4e70e9fa80649"
+      },
+      "parentId": "EX004",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+          "status": 200,
+          "seconds": 2.179,
+          "payload": {
+            "role": "assistant",
+            "content": "The Chancellor of UAE University is H.E. Zaki Nusseibeh.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "General Enquiries",
+                "url": "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Chancellor office directory",
+                "evidenceText": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "chancellor",
+            "evidenceIds": [
+              "answer:university-chancellor#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Chancellor of UAE University is H.E. Zaki Nusseibeh.",
+                "evidenceIds": [
+                  "answer:university-chancellor#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2177,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2947,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 42,
+                  "estimatedUsd": 0.00067
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1292,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005664000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4239,
+              "outputTokens": 73,
+              "knownUsageUsd": 0.0012364000000000001,
+              "estimatedUsd": 0.0012364000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Zaki|زكي"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Nusseibeh|نسيبة"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?"
+      ],
+      "expected": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Zaki|زكي"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Nusseibeh|نسيبة"
+          ]
+        }
+      ],
+      "id": "EX004-V3",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Who is the Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+        "من هو الرئيس الأعلى لجامعة الإمارات؟",
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "50fd7a620fde4ef1153ccc67428cb7dc4849e233b0768111bee4e70e9fa80649"
+      },
+      "parentId": "EX004",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+          "status": 200,
+          "seconds": 2.175,
+          "payload": {
+            "role": "assistant",
+            "content": "The Chancellor of UAE University (UAEU) is H.E. Zaki Nusseibeh.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "General Enquiries",
+                "url": "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Chancellor office directory",
+                "evidenceText": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "chancellor",
+            "evidenceIds": [
+              "answer:university-chancellor#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Chancellor of UAE University (UAEU) is H.E. Zaki Nusseibeh.",
+                "evidenceIds": [
+                  "answer:university-chancellor#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2173,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2923,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.0006684000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1297,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005684
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4220,
+              "outputTokens": 78,
+              "knownUsageUsd": 0.0012368000000000001,
+              "estimatedUsd": 0.0012368000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Zaki|زكي"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Nusseibeh|نسيبة"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "من هو الرئيس الأعلى لجامعة الإمارات؟"
+      ],
+      "expected": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Zaki|زكي"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Nusseibeh|نسيبة"
+          ]
+        }
+      ],
+      "id": "EX004-V4",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Who is the Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+        "من هو الرئيس الأعلى لجامعة الإمارات؟",
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "50fd7a620fde4ef1153ccc67428cb7dc4849e233b0768111bee4e70e9fa80649"
+      },
+      "parentId": "EX004",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+          "status": 200,
+          "seconds": 2.366,
+          "payload": {
+            "role": "assistant",
+            "content": "الرئيس الأعلى لجامعة الإمارات هو سعادة زكي نسيبة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "General Enquiries",
+                "url": "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Chancellor office directory",
+                "evidenceText": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "chancellor",
+            "evidenceIds": [
+              "answer:university-chancellor#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "الرئيس الأعلى لجامعة الإمارات هو سعادة زكي نسيبة.",
+                "evidenceIds": [
+                  "answer:university-chancellor#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2363,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2902,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 41,
+                  "estimatedUsd": 0.0006504
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1291,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000566
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4193,
+              "outputTokens": 72,
+              "knownUsageUsd": 0.0012163999999999999,
+              "estimatedUsd": 0.0012163999999999999,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Zaki|زكي"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Nusseibeh|نسيبة"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "expected": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Zaki|زكي"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Nusseibeh|نسيبة"
+          ]
+        }
+      ],
+      "id": "EX004-V5",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو الرئيس الأعلى لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Who is the Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Chancellor of UAEU?",
+        "من هو الرئيس الأعلى لجامعة الإمارات؟",
+        "UAEU — من هو الرئيس الأعلى لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "50fd7a620fde4ef1153ccc67428cb7dc4849e233b0768111bee4e70e9fa80649"
+      },
+      "parentId": "EX004",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "UAEU — من هو الرئيس الأعلى لUAEU؟",
+          "status": 200,
+          "seconds": 2.46,
+          "payload": {
+            "role": "assistant",
+            "content": "الرئيس الأعلى لجامعة الإمارات العربية المتحدة هو سعادة زكي نسيبة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "General Enquiries",
+                "url": "https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Chancellor office directory",
+                "evidenceText": "The Chancellor office directory identifies H.E. Zaki Nusseibeh as Chancellor. Its published office email is chancellor.office@uaeu.ac.ae."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "chancellor",
+            "evidenceIds": [
+              "answer:university-chancellor#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "الرئيس الأعلى لجامعة الإمارات العربية المتحدة هو سعادة زكي نسيبة.",
+                "evidenceIds": [
+                  "answer:university-chancellor#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2457,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2937,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 43,
+                  "estimatedUsd": 0.0012435999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1293,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005668000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4230,
+              "outputTokens": 74,
+              "knownUsageUsd": 0.0018104,
+              "estimatedUsd": 0.0018104,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Zaki|زكي"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Nusseibeh|نسيبة"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "What working hours does UAEU’s general Contact page publish?"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "3ff451a5f3bb235ff5bf40a5159230b3439689fb1c75aff04e95b4c926856337"
+      },
+      "parentId": "EX010",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What working hours does UAEU’s general Contact page publish?",
+          "status": 200,
+          "seconds": 2.886,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Working Hours",
+                "evidenceText": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-contact-hours#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+                "evidenceIds": [
+                  "answer:university-contact-hours#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2883,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2919,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0007004000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1331,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000582
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4250,
+              "outputTokens": 99,
+              "knownUsageUsd": 0.0012824000000000002,
+              "estimatedUsd": 0.0012824000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "hey, What working hours does UAEU’s general Contact page publish?"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V1",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "3ff451a5f3bb235ff5bf40a5159230b3439689fb1c75aff04e95b4c926856337"
+      },
+      "parentId": "EX010",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "hey, What working hours does UAEU’s general Contact page publish?",
+          "status": 200,
+          "seconds": 3.058,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Working Hours",
+                "evidenceText": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-contact-hours#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+                "evidenceIds": [
+                  "answer:university-contact-hours#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3056,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2928,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.000704
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1331,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000582
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4259,
+              "outputTokens": 99,
+              "knownUsageUsd": 0.001286,
+              "estimatedUsd": 0.001286,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V2",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "3ff451a5f3bb235ff5bf40a5159230b3439689fb1c75aff04e95b4c926856337"
+      },
+      "parentId": "EX010",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+          "status": 200,
+          "seconds": 1.855,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Working Hours",
+                "evidenceText": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-contact-hours#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+                "evidenceIds": [
+                  "answer:university-contact-hours#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 1854,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2964,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0007184000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1331,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000582
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4295,
+              "outputTokens": 99,
+              "knownUsageUsd": 0.0013004000000000002,
+              "estimatedUsd": 0.0013004000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V3",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "3ff451a5f3bb235ff5bf40a5159230b3439689fb1c75aff04e95b4c926856337"
+      },
+      "parentId": "EX010",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+          "status": 200,
+          "seconds": 4.411,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Working Hours",
+                "evidenceText": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "UAEU general contact working hours",
+            "evidenceIds": [
+              "answer:university-contact-hours#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU's general Contact page publishes working hours as Monday to Thursday from 8:00 AM to 5:00 PM, and Friday from 8:00 AM to 3:00 PM.",
+                "evidenceIds": [
+                  "answer:university-contact-hours#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4409,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22279,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.009006
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2940,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0007088
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1331,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000582
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26550,
+              "outputTokens": 158,
+              "knownUsageUsd": 0.010296800000000002,
+              "estimatedUsd": 0.010296800000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V4",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "3ff451a5f3bb235ff5bf40a5159230b3439689fb1c75aff04e95b4c926856337"
+      },
+      "parentId": "EX010",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+          "status": 200,
+          "seconds": 2.371,
+          "payload": {
+            "role": "assistant",
+            "content": "ساعات العمل في صفحة التواصل العامة للجامعة هي من الإثنين إلى الخميس من الساعة 8:00 صباحًا حتى 5:00 مساءً، ويوم الجمعة من الساعة 8:00 صباحًا حتى 3:00 مساءً.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Working Hours",
+                "evidenceText": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-contact-hours#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "ساعات العمل في صفحة التواصل العامة للجامعة هي من الإثنين إلى الخميس من الساعة 8:00 صباحًا حتى 5:00 مساءً، ويوم الجمعة من الساعة 8:00 صباحًا حتى 3:00 مساءً.",
+                "evidenceIds": [
+                  "answer:university-contact-hours#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2370,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2915,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 76,
+                  "estimatedUsd": 0.0012875999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1339,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005852
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4254,
+              "outputTokens": 107,
+              "knownUsageUsd": 0.0018728,
+              "estimatedUsd": 0.0018728,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V5",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "3ff451a5f3bb235ff5bf40a5159230b3439689fb1c75aff04e95b4c926856337"
+      },
+      "parentId": "EX010",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+          "status": 200,
+          "seconds": 2.789,
+          "payload": {
+            "role": "assistant",
+            "content": "ساعات العمل المنشورة في صفحة التواصل العامة لجامعة الإمارات العربية المتحدة هي من الإثنين إلى الخميس من الساعة 8:00 صباحًا حتى 5:00 مساءً، ويوم الجمعة من الساعة 8:00 صباحًا حتى 3:00 مساءً.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Working Hours",
+                "evidenceText": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-contact-hours#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "ساعات العمل المنشورة في صفحة التواصل العامة لجامعة الإمارات العربية المتحدة هي من الإثنين إلى الخميس من الساعة 8:00 صباحًا حتى 5:00 مساءً، ويوم الجمعة من الساعة 8:00 صباحًا حتى 3:00 مساءً.",
+                "evidenceIds": [
+                  "answer:university-contact-hours#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2787,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2948,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 81,
+                  "estimatedUsd": 0.0007328
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1344,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005872000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4292,
+              "outputTokens": 112,
+              "knownUsageUsd": 0.00132,
+              "estimatedUsd": 0.00132,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "What courses are listed for semester one in the Fall2026–2027 UAEU Mechanical Engineering model, and how many credits total?"
+      ],
+      "expected": "The Fall2026–27 model lists MATH1303,PHYS1053,PHYS1351,GEAE1013,CHEM1113,CHEM1751,GEEM1103;17credits, as a recommended cohort model, not individual registration approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "PHYS\\s*135"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "CHEM\\s*111"
+          ]
+        },
+        {
+          "name": "Required fact 6",
+          "any": [
+            "CHEM\\s*175"
+          ]
+        },
+        {
+          "name": "Required fact 7",
+          "any": [
+            "GEEM\\s*110"
+          ]
+        },
+        {
+          "name": "Required fact 8",
+          "any": [
+            "17"
+          ]
+        },
+        {
+          "name": "Required fact 9",
+          "any": [
+            "2026"
+          ]
+        }
+      ],
+      "id": "EX011",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d6ea0d0dd2fd356ac93012abed2eae5cb5e6357c09113f2f0ea139e1a41b6e45"
+      },
+      "parentId": "EX011",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What courses are listed for semester one in the Fall2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+          "status": 200,
+          "seconds": 3.074,
+          "payload": {
+            "role": "assistant",
+            "content": "The Fall 2026–27 first semester for the UAEU Mechanical Engineering undergraduate model plan includes these courses: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits). The total credit hours for this semester are 17.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Fall 2026–27 first semester for the UAEU Mechanical Engineering undergraduate model plan includes these courses: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits). The total credit hours for this semester are 17.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3072,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3210,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 139,
+                  "estimatedUsd": 0.0009304
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1529,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006612
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4739,
+              "outputTokens": 170,
+              "knownUsageUsd": 0.0015915999999999999,
+              "estimatedUsd": 0.0015915999999999999,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*135"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*111"
+            ]
+          },
+          {
+            "name": "Required fact 6",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*175"
+            ]
+          },
+          {
+            "name": "Required fact 7",
+            "passed": true,
+            "patterns": [
+              "GEEM\\s*110"
+            ]
+          },
+          {
+            "name": "Required fact 8",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          },
+          {
+            "name": "Required fact 9",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?"
+      ],
+      "expected": "The Fall2026–27 model lists MATH1303,PHYS1053,PHYS1351,GEAE1013,CHEM1113,CHEM1751,GEEM1103;17credits, as a recommended cohort model, not individual registration approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "PHYS\\s*135"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "CHEM\\s*111"
+          ]
+        },
+        {
+          "name": "Required fact 6",
+          "any": [
+            "CHEM\\s*175"
+          ]
+        },
+        {
+          "name": "Required fact 7",
+          "any": [
+            "GEEM\\s*110"
+          ]
+        },
+        {
+          "name": "Required fact 8",
+          "any": [
+            "17"
+          ]
+        },
+        {
+          "name": "Required fact 9",
+          "any": [
+            "2026"
+          ]
+        }
+      ],
+      "id": "EX011-V1",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d6ea0d0dd2fd356ac93012abed2eae5cb5e6357c09113f2f0ea139e1a41b6e45"
+      },
+      "parentId": "EX011",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+          "status": 200,
+          "seconds": 3.4,
+          "payload": {
+            "role": "assistant",
+            "content": "For the Fall 2026–27 cohort of the UAEU Mechanical Engineering undergraduate program, the first semester includes these courses totaling 17 credit hours: MATH130 Calculus I for Engineering (3 credits, college requirement), PHYS105 General Physics I (3 credits, college requirement), PHYS135 General Physics Lab I (1 credit, college requirement), GEAE101 Academic English for Humanities and STEM (3 credits, general education), CHEM111 General Chemistry I (3 credits, specialization in model plan), CHEM175 Chemistry Lab I for Engineering (1 credit, college requirement), and GEEM110 Contemporary Emirati Studies (3 credits, general education).",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the Fall 2026–27 cohort of the UAEU Mechanical Engineering undergraduate program, the first semester includes these courses totaling 17 credit hours: MATH130 Calculus I for Engineering (3 credits, college requirement), PHYS105 General Physics I (3 credits, college requirement), PHYS135 General Physics Lab I (1 credit, college requirement), GEAE101 Academic English for Humanities and STEM (3 credits, general education), CHEM111 General Chemistry I (3 credits, specialization in model plan), CHEM175 Chemistry Lab I for Engineering (1 credit, college requirement), and GEEM110 Contemporary Emirati Studies (3 credits, general education).",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3397,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3219,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 160,
+                  "estimatedUsd": 0.0009676
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1550,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006696
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4769,
+              "outputTokens": 191,
+              "knownUsageUsd": 0.0016372000000000001,
+              "estimatedUsd": 0.0016372000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*135"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*111"
+            ]
+          },
+          {
+            "name": "Required fact 6",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*175"
+            ]
+          },
+          {
+            "name": "Required fact 7",
+            "passed": true,
+            "patterns": [
+              "GEEM\\s*110"
+            ]
+          },
+          {
+            "name": "Required fact 8",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          },
+          {
+            "name": "Required fact 9",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?"
+      ],
+      "expected": "The Fall2026–27 model lists MATH1303,PHYS1053,PHYS1351,GEAE1013,CHEM1113,CHEM1751,GEEM1103;17credits, as a recommended cohort model, not individual registration approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "PHYS\\s*135"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "CHEM\\s*111"
+          ]
+        },
+        {
+          "name": "Required fact 6",
+          "any": [
+            "CHEM\\s*175"
+          ]
+        },
+        {
+          "name": "Required fact 7",
+          "any": [
+            "GEEM\\s*110"
+          ]
+        },
+        {
+          "name": "Required fact 8",
+          "any": [
+            "17"
+          ]
+        },
+        {
+          "name": "Required fact 9",
+          "any": [
+            "2026"
+          ]
+        }
+      ],
+      "id": "EX011-V2",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d6ea0d0dd2fd356ac93012abed2eae5cb5e6357c09113f2f0ea139e1a41b6e45"
+      },
+      "parentId": "EX011",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+          "status": 200,
+          "seconds": 2.784,
+          "payload": {
+            "role": "assistant",
+            "content": "For the Fall 2026–27 semester one of the UAEU Mechanical Engineering undergraduate model plan, the courses listed are: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits). The total credit hours for this semester are 17.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the Fall 2026–27 semester one of the UAEU Mechanical Engineering undergraduate model plan, the courses listed are: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits). The total credit hours for this semester are 17.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2781,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3256,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 142,
+                  "estimatedUsd": 0.0009536
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1532,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006624000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4788,
+              "outputTokens": 173,
+              "knownUsageUsd": 0.001616,
+              "estimatedUsd": 0.001616,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*135"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*111"
+            ]
+          },
+          {
+            "name": "Required fact 6",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*175"
+            ]
+          },
+          {
+            "name": "Required fact 7",
+            "passed": true,
+            "patterns": [
+              "GEEM\\s*110"
+            ]
+          },
+          {
+            "name": "Required fact 8",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          },
+          {
+            "name": "Required fact 9",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?"
+      ],
+      "expected": "The Fall2026–27 model lists MATH1303,PHYS1053,PHYS1351,GEAE1013,CHEM1113,CHEM1751,GEEM1103;17credits, as a recommended cohort model, not individual registration approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "PHYS\\s*135"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "CHEM\\s*111"
+          ]
+        },
+        {
+          "name": "Required fact 6",
+          "any": [
+            "CHEM\\s*175"
+          ]
+        },
+        {
+          "name": "Required fact 7",
+          "any": [
+            "GEEM\\s*110"
+          ]
+        },
+        {
+          "name": "Required fact 8",
+          "any": [
+            "17"
+          ]
+        },
+        {
+          "name": "Required fact 9",
+          "any": [
+            "2026"
+          ]
+        }
+      ],
+      "id": "EX011-V3",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d6ea0d0dd2fd356ac93012abed2eae5cb5e6357c09113f2f0ea139e1a41b6e45"
+      },
+      "parentId": "EX011",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+          "status": 200,
+          "seconds": 2.588,
+          "payload": {
+            "role": "assistant",
+            "content": "The Fall 2026–27 first semester for the UAEU Mechanical Engineering model plan includes these courses totaling 17 credit hours: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits).",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Fall 2026–27 first semester for the UAEU Mechanical Engineering model plan includes these courses totaling 17 credit hours: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits).",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2586,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3232,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 133,
+                  "estimatedUsd": 0.0009296000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1523,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006588000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4755,
+              "outputTokens": 164,
+              "knownUsageUsd": 0.0015884000000000002,
+              "estimatedUsd": 0.0015884000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*135"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*111"
+            ]
+          },
+          {
+            "name": "Required fact 6",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*175"
+            ]
+          },
+          {
+            "name": "Required fact 7",
+            "passed": true,
+            "patterns": [
+              "GEEM\\s*110"
+            ]
+          },
+          {
+            "name": "Required fact 8",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          },
+          {
+            "name": "Required fact 9",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly."
+      ],
+      "expected": "The Fall2026–27 model lists MATH1303,PHYS1053,PHYS1351,GEAE1013,CHEM1113,CHEM1751,GEEM1103;17credits, as a recommended cohort model, not individual registration approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "PHYS\\s*135"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "CHEM\\s*111"
+          ]
+        },
+        {
+          "name": "Required fact 6",
+          "any": [
+            "CHEM\\s*175"
+          ]
+        },
+        {
+          "name": "Required fact 7",
+          "any": [
+            "GEEM\\s*110"
+          ]
+        },
+        {
+          "name": "Required fact 8",
+          "any": [
+            "17"
+          ]
+        },
+        {
+          "name": "Required fact 9",
+          "any": [
+            "2026"
+          ]
+        }
+      ],
+      "id": "EX011-V4",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d6ea0d0dd2fd356ac93012abed2eae5cb5e6357c09113f2f0ea139e1a41b6e45"
+      },
+      "parentId": "EX011",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+          "status": 200,
+          "seconds": 2.791,
+          "payload": {
+            "role": "assistant",
+            "content": "The Fall 2026–27 first semester for the UAEU Mechanical Engineering model plan includes these courses with their credit hours: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits), totaling 17 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Fall 2026–27 first semester for the UAEU Mechanical Engineering model plan includes these courses with their credit hours: MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits), totaling 17 credit hours.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2788,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3219,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 137,
+                  "estimatedUsd": 0.0009308000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1527,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006604000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4746,
+              "outputTokens": 168,
+              "knownUsageUsd": 0.0015912,
+              "estimatedUsd": 0.0015912,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*135"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*111"
+            ]
+          },
+          {
+            "name": "Required fact 6",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*175"
+            ]
+          },
+          {
+            "name": "Required fact 7",
+            "passed": true,
+            "patterns": [
+              "GEEM\\s*110"
+            ]
+          },
+          {
+            "name": "Required fact 8",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          },
+          {
+            "name": "Required fact 9",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "expected": "The Fall2026–27 model lists MATH1303,PHYS1053,PHYS1351,GEAE1013,CHEM1113,CHEM1751,GEEM1103;17credits, as a recommended cohort model, not individual registration approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "PHYS\\s*135"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "CHEM\\s*111"
+          ]
+        },
+        {
+          "name": "Required fact 6",
+          "any": [
+            "CHEM\\s*175"
+          ]
+        },
+        {
+          "name": "Required fact 7",
+          "any": [
+            "GEEM\\s*110"
+          ]
+        },
+        {
+          "name": "Required fact 8",
+          "any": [
+            "17"
+          ]
+        },
+        {
+          "name": "Required fact 9",
+          "any": [
+            "2026"
+          ]
+        }
+      ],
+      "id": "EX011-V5",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What courses are listed for semester one in the FALL2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Please explain to a new UAEU student: What courses are listed for semester one in the fall-2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "Give a concise advisor checklist: What courses are listed for semester one in the fall 2026–2027 UAEU Mechanical Engineering model, and how many credits total?",
+        "What courses are listed for semester one in the FALL 2026–2027 UAEU Mechanical Engineering model, and how many credits total? Please answer directly.",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d6ea0d0dd2fd356ac93012abed2eae5cb5e6357c09113f2f0ea139e1a41b6e45"
+      },
+      "parentId": "EX011",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027؟",
+          "status": 200,
+          "seconds": 3.122,
+          "payload": {
+            "role": "assistant",
+            "content": "مساقات الفصل الأول في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027 هي: MATH130 حساب التفاضل والتكامل 1 للهندسة (3 ساعات معتمدة)، PHYS105 الفيزياء العامة 1 (3 ساعات معتمدة)، PHYS135 مختبر الفيزياء العامة 1 (1 ساعة معتمدة)، GEAE101 اللغة الإنجليزية الأكاديمية للعلوم الإنسانية والعلوم التطبيقية (3 ساعات معتمدة)، CHEM111 الكيمياء العامة 1 (3 ساعات معتمدة)، CHEM175 مختبر الكيمياء 1 للهندسة (1 ساعة معتمدة)، وGEEM110 الدراسات الإماراتية المعاصرة (3 ساعات معتمدة). مجموع الساعات المعتمدة لهذا الفصل هو 17 ساعة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "مساقات الفصل الأول في نموذج الهندسة الميكانيكية لدخول خريف 2026–2027 هي: MATH130 حساب التفاضل والتكامل 1 للهندسة (3 ساعات معتمدة)، PHYS105 الفيزياء العامة 1 (3 ساعات معتمدة)، PHYS135 مختبر الفيزياء العامة 1 (1 ساعة معتمدة)، GEAE101 اللغة الإنجليزية الأكاديمية للعلوم الإنسانية والعلوم التطبيقية (3 ساعات معتمدة)، CHEM111 الكيمياء العامة 1 (3 ساعات معتمدة)، CHEM175 مختبر الكيمياء 1 للهندسة (1 ساعة معتمدة)، وGEEM110 الدراسات الإماراتية المعاصرة (3 ساعات معتمدة). مجموع الساعات المعتمدة لهذا الفصل هو 17 ساعة.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3118,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3211,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 189,
+                  "estimatedUsd": 0.0010107999999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1579,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006812000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4790,
+              "outputTokens": 220,
+              "knownUsageUsd": 0.001692,
+              "estimatedUsd": 0.001692,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*135"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*111"
+            ]
+          },
+          {
+            "name": "Required fact 6",
+            "passed": true,
+            "patterns": [
+              "CHEM\\s*175"
+            ]
+          },
+          {
+            "name": "Required fact 7",
+            "passed": true,
+            "patterns": [
+              "GEEM\\s*110"
+            ]
+          },
+          {
+            "name": "Required fact 8",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          },
+          {
+            "name": "Required fact 9",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "982f18b41b855830bb12172f0a87d7932260ddc1848514d6345ac1e48216a52f",
+    "files": 8453,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat-uaeu-knowledge-expansion-v39-qa"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "8946e1b15f80d9d57a86b7b81a1bda26775a5f0e3d918e7fca836809e6ee5a7c",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "3984dc514f13b7288bd77765b128524c837be2e2bd03b0c55193fe8447a511ac",
+        "generatedAt": "2026-11-04T16:56:55.674Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 154,
+      "sourceEvidence": {
+        "mappedReferences": 204,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/examiner-all-v39-fixture.json",
+  "gradingBefore": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 3,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 168,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "derived-selected-actual-responses",
+  "derived": true,
+  "method": "Exact preserved v39 conversations selected to test reviewer improvements only; not new chatbot responses."
+}

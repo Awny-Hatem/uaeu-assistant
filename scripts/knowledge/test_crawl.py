@@ -1,0 +1,179 @@
+import json,tempfile,unittest,gzip
+from pathlib import Path
+from crawl import Crawler,eligible,canonical,official,reference_only,audit_safe_result
+from pdf_sections import catalog_course_sections,printed_model_program
+from program_feed import parse_program_feed
+from ingest import academic_years,bilingual_program_names,calendar_years
+from policy_metadata import policy_metadata
+
+class CrawlTests(unittest.TestCase):
+    def test_tab_year_scope_survives_navigation_removal_and_hidden_panels(self):
+        raw=b'<html><title>Fees</title><body><main><h1>Tuition</h1><div class="tab-items"><a role="tab" aria-controls="fees-new">Fees 2026/2027 and onwards</a><a role="tab" aria-controls="fees-old">Fees 2025/2026 and before</a></div><div id="fees-new"><h2>College of Test</h2><table><tr><th>Program</th><th>Fee</th></tr><tr><td>BSc Test</td><td>2661</td></tr></table></div><div id="fees-old" aria-hidden="true"><h2>College of Test</h2><table><tr><th>Program</th><th>Fee</th></tr><tr><td>BSc Test</td><td>2500</td></tr></table></div></main></body></html>'
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1);d=c.extract(raw,'https://www.uaeu.ac.ae/en/fees.shtml','text/html');c.db.close()
+        new=[s for s in d['sections'] if '2661' in s['text']];old=[s for s in d['sections'] if '2500' in s['text']]
+        self.assertEqual(len(new),1);self.assertEqual(len(old),1)
+        self.assertIn('2026/2027',new[0]['heading']);self.assertNotIn('2025/2026',new[0]['heading'])
+        self.assertIn('2025/2026',old[0]['heading']);self.assertNotIn('2026/2027',old[0]['heading'])
+
+    def test_streamed_export_preserves_all_sources_without_large_sqlite_sort(self):
+        with tempfile.TemporaryDirectory() as root:
+            crawler=Crawler(root,1)
+            crawler.add('https://www.uaeu.ac.ae/en/about/index.shtml',label='About UAEU')
+            crawler.export()
+            with gzip.open(Path(root,'manifest.json.gz'),'rt',encoding='utf-8') as source:record=json.load(source)
+            self.assertEqual(record['counts'],{'pending':1})
+            self.assertEqual(record['sources'][0]['label'],'About UAEU')
+            self.assertFalse(Path(root,'manifest.json.gz.tmp').exists())
+            crawler.db.close()
+    def test_reference_only_failures_are_not_reported_as_missing_institutional_knowledge(self):
+        with tempfile.TemporaryDirectory() as root:
+            crawler=Crawler(root,1);url='https://scholarworks.uaeu.ac.ae/context/all_theses/article/477/type/native/viewcontent'
+            crawler.add(url)
+            crawler.db.execute('UPDATE urls SET state="failed",result=? WHERE url=?',(json.dumps({'url':url,'state':'failed','status':403,'error':'Forbidden'}),url));crawler.db.commit()
+            crawler.run(1,1)
+            row=crawler.db.execute('SELECT state,result FROM urls WHERE url=?',(url,)).fetchone();value=json.loads(row['result'])
+            self.assertEqual(row['state'],'link-only');self.assertEqual(value['priorState'],'failed');self.assertEqual(value['status'],403)
+            crawler.db.close()
+    def test_invalid_pdf_unicode_is_quarantined_without_losing_original_bytes(self):
+        source={'url':'https://www.uaeu.ac.ae/en/bad.pdf','bodyFile':'original.pdf','sha256':'abc','state':'fetched','text':'bad \udbc0 glyph'}
+        safe=audit_safe_result(source)
+        self.assertEqual(safe['state'],'failed');self.assertEqual(safe['bodyFile'],'original.pdf');self.assertNotIn('text',safe)
+        json.dumps(safe,ensure_ascii=False).encode('utf-8')
+        good={'text':'نص عربي سليم','state':'fetched'};self.assertEqual(audit_safe_result(good),good)
+    def test_research_publications_are_references_but_center_directories_are_sources(self):
+        self.assertTrue(reference_only('https://research.uaeu.ac.ae/en/publications/a-scientific-paper/'))
+        self.assertTrue(reference_only('https://research.uaeu.ac.ae/en/persons/a-faculty-member/similar/'))
+        self.assertFalse(reference_only('https://research.uaeu.ac.ae/en/persons/a-faculty-member/'))
+        self.assertFalse(reference_only('https://research.uaeu.ac.ae/en/organisations/national-water-and-energy-center/'))
+        self.assertFalse(reference_only('https://www.uaeu.ac.ae/en/research/centers/index.shtml'))
+        self.assertTrue(reference_only('https://scholarworks.uaeu.ac.ae/all_theses/477/'))
+        self.assertTrue(reference_only('https://scholarworks.uaeu.ac.ae/context/all_theses/article/477/type/native/viewcontent'))
+        self.assertTrue(reference_only('https://research.uaeu.ac.ae/files/123456/a-paper.pdf'))
+        self.assertFalse(reference_only('https://scholarworks.uaeu.ac.ae/public_law/'))
+        self.assertTrue(reference_only('https://scholarworks.uaeu.ac.ae/ijre/vol50/iss2/'))
+        self.assertTrue(reference_only('https://conferences.uaeu.ac.ae/old-symposium/'))
+
+    def test_calendar_years_come_from_printed_term_heading(self):
+        self.assertEqual(calendar_years('Academic Calendar > Spring Semester 2027 > Classes start'), ['2027'])
+        self.assertEqual(calendar_years('Last verified 2026-11-04'), [])
+
+    def test_host_crawl_delay_does_not_slow_unrelated_official_hosts(self):
+        with tempfile.TemporaryDirectory() as root:
+            Path(root,'robots-research.uaeu.ac.ae.json').write_text(json.dumps({'status':200,'text':'User-agent: *\nCrawl-delay: 5\n'}))
+            Path(root,'robots-www.uaeu.ac.ae.json').write_text(json.dumps({'status':200,'text':'User-agent: *\nAllow: /\n'}))
+            c=Crawler(root,1)
+            self.assertTrue(c.allowed('https://research.uaeu.ac.ae/en/organisations/'))
+            self.assertTrue(c.allowed('https://www.uaeu.ac.ae/en/'))
+            self.assertEqual(c.delays['research.uaeu.ac.ae'],5)
+            self.assertEqual(c.delays.get('www.uaeu.ac.ae',c.delay),1)
+            self.assertEqual(c.delay,1);c.db.close()
+
+    def test_model_plan_identity_comes_from_the_printed_degree_not_a_link_label(self):
+        self.assertEqual(printed_model_program('Bachelor of Science in Computer Engineering Model Study Plan (2022–2023 Cohort onwards)'), 'Bachelor of Science in Computer Engineering')
+        self.assertEqual(printed_model_program('Master of Science in Water Resources Study Plan'), 'Master of Science in Water Resources')
+        self.assertEqual(printed_model_program('Open the study-plan link for your chosen degree'), '')
+
+    def test_printed_policy_metadata_uses_effective_date_not_access_or_review_date(self):
+        value = policy_metadata('Policy Number AE-05 Effective Date 12-Aug-2018 Most Recent Review Date 15-Apr-2018 Due Date for Next Review 01-Sep-2021')
+        self.assertEqual(value, {'policyId': 'AE-05', 'policyEffectiveDate': '2018-08-12'})
+        self.assertEqual(policy_metadata('Related Policy AE-05 Last verified 4-Nov-2026'), {})
+        self.assertEqual(policy_metadata('Section: ACA-ADM Policy Number: 09 Effective Date: 5 September 2004'), {'policyId':'ACA-ADM-09','policySeries':'printed-legacy-ACA-ADM','policyEffectiveDate':'2004-09-05'})
+        self.assertEqual(policy_metadata('Policy Number AE-05 Effective Date 99-Bogus-2018'), {'policyId': 'AE-05'})
+
+    def test_official_xml_preserves_bilingual_identity_and_separates_minors(self):
+        raw=b'<PROGRAMS><PROGRAM><TITLE>Bachelor of Science in Test</TITLE><TITLE_AR>Arabic official title</TITLE_AR><COLLEGE_NAME>College of Test</COLLEGE_NAME><LEVEL>Undergraduate</LEVEL><URL_CATALOG>/en/catalog/undergraduate/programs/test.shtml</URL_CATALOG><STUDYPLAN_URL>https://www.uaeu.ac.ae/en/test-plan.pdf</STUDYPLAN_URL></PROGRAM><PROGRAM><TITLE>Minor in Test</TITLE><COLLEGE_NAME>College of Test</COLLEGE_NAME><LEVEL>Undergraduate</LEVEL><URL_CATALOG>/en/catalog/undergraduate/programs/minor-test.shtml</URL_CATALOG></PROGRAM></PROGRAMS>'
+        d=parse_program_feed(raw,'https://www.uaeu.ac.ae/en/catalog/summary/search.xml')
+        self.assertEqual(len(d['programRecords']),2)
+        self.assertEqual(d['programRecords'][0]['qualification'],'bachelor');self.assertEqual(d['programRecords'][1]['qualification'],'minor')
+        directory=next(s for s in d['sections'] if s['heading']=='College of Test — bachelor programs directory')
+        self.assertIn('Arabic official title',directory['text']);self.assertNotIn('Minor in Test',directory['text'])
+        self.assertTrue(any(a['url'].endswith('test-plan.pdf') for a in d['links']))
+
+    def test_bilingual_program_labels_use_the_same_observed_official_link(self):
+        target='https://www.uaeu.ac.ae/en/catalog/program-details.shtml?PROGRAM_ID=2884.2912.22882'
+        pages=[{'url':'https://www.uaeu.ac.ae/en/cgs/programs.shtml','links':[{'url':target,'text':'Master of Science in Electrical Engineering'}]},{'url':'https://www.uaeu.ac.ae/ar/cgs/programs.shtml','links':[{'url':target,'text':'ماجستير العلوم في الهندسة الكهربائية'}]}]
+        docs=[{'program':'Bachelor of Science in Electrical Engineering','qualification':'bachelor','topicId':'electrical-bachelor'},{'program':'Master of Science in Electrical Engineering','qualification':'master','topicId':'electrical-master'}]
+        names=bilingual_program_names(pages,docs)
+        self.assertTrue(any(a['alias']=='الهندسة الكهربائية' and a['qualification']=='bachelor' for a in names))
+        self.assertFalse(any(a['alias'].startswith('ماجستير') and a['qualification']=='bachelor' for a in names))
+    def test_explicit_retry_keeps_permanent_errors_failed(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            for name,status,error in [('temporary',503,'unavailable'),('timeout',0,'timed out'),('gone',404,'not found')]:
+                url='https://www.uaeu.ac.ae/en/'+name+'.shtml';c.add(url)
+                c.db.execute('UPDATE urls SET state="failed",result=? WHERE url=?',(json.dumps({'status':status,'error':error}),url))
+            c.db.commit();self.assertEqual(c.retry_transient_failures(),2)
+            self.assertEqual(c.db.execute('SELECT state FROM urls WHERE url LIKE "%gone.shtml"').fetchone()[0],'failed');c.db.close()
+    def test_policy_approval_dates_are_not_catalog_cohorts(self):
+        self.assertEqual(academic_years('Approved 2018/04/2008, reviewed 2021/09. Catalog 2025–2026 and 2015_16'),['2015-2016','2025-2026'])
+    def test_official_boundary_and_loop_guard(self):
+        for url in ['https://webtest.uaeu.ac.ae/en/','https://www.uaeu.ac.ae/en/library/forms/askalibrarian-webtest.shtml','https://www.uaeu.ac.ae/en/library/index-test.shtml','https://cms.uaeu.ac.ae/','https://www.uaeu.ac.ae.evil.test/en/','https://www.uaeu.ac.ae/en/catalog/en/university-leadership/','https://www.uaeu.ac.ae/en/flipbooks/book/index.html']:
+            self.assertFalse(eligible(url),url)
+        self.assertTrue(eligible('https://webapps.uaeu.ac.ae/catalog/auto/department_IT_IT_CS.asp'))
+        self.assertEqual(canonical('https://uaeu.ac.ae/en/catalog/?utm_source=x&id=3#part'),'https://www.uaeu.ac.ae/en/catalog/?id=3')
+    def test_public_services_and_program_queries_are_not_search_or_private_routes(self):
+        for url in ['https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106','https://www.uaeu.ac.ae/en/eservices/details.shtml?serviceId=89','https://www.uaeu.ac.ae/en/catalog/program-details.shtml?PROGRAM_ID=2884.2912.22882','https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en']:
+            self.assertTrue(eligible(url),url)
+        for url in ['https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106&token=secret','https://www.uaeu.ac.ae/en/eservices/details.shtml?search=student','https://www.uaeu.ac.ae/en/catalog/program-details.shtml?PROGRAM_ID=arbitrary','https://www.uaeu.ac.ae/en/search.shtml?q=anything']:
+            self.assertFalse(eligible(url),url)
+
+    def test_robots_wildcards_and_longest_rule(self):
+        with tempfile.TemporaryDirectory() as root:
+            record={'status':200,'text':'User-agent: *\nDisallow: /_resources/*\nAllow: /_resources/public/\nDisallow: /private$\n'}
+            Path(root,'robots-www.uaeu.ac.ae.json').write_text(json.dumps(record))
+            c=Crawler(root,1)
+            self.assertFalse(c.allowed('https://www.uaeu.ac.ae/_resources/secret.pdf'))
+            self.assertTrue(c.allowed('https://www.uaeu.ac.ae/_resources/public/open.pdf'))
+            self.assertFalse(c.allowed('https://www.uaeu.ac.ae/private'))
+            self.assertTrue(c.allowed('https://www.uaeu.ac.ae/private-other'))
+            c.db.close()
+    def test_failed_robots_is_not_permission(self):
+        with tempfile.TemporaryDirectory() as root:
+            Path(root,'robots-www.uaeu.ac.ae.json').write_text(json.dumps({'status':503,'text':''}))
+            c=Crawler(root,1);self.assertFalse(c.allowed('https://www.uaeu.ac.ae/en/'));c.db.close()
+    def test_robots_multiple_agents_and_specific_group_precedence(self):
+        with tempfile.TemporaryDirectory() as root:
+            record={'status':200,'text':'User-agent: *\nDisallow: /wildcard\nUser-agent: UAEU-Assistant-Research\nUser-agent: OtherBot\nDisallow: /specific\n'}
+            Path(root,'robots-www.uaeu.ac.ae.json').write_text(json.dumps(record))
+            c=Crawler(root,1)
+            self.assertTrue(c.allowed('https://www.uaeu.ac.ae/wildcard'))
+            self.assertFalse(c.allowed('https://www.uaeu.ac.ae/specific'));c.db.close()
+    def test_heading_only_credit_total_and_table_headers_survive(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            value=c.extract(b'<html><title>Test degree</title><main><header>unrelated navigation</header><h4>Required Credit Hours:132</h4><h4>Major requirements</h4><table><tr><th>Code</th><th>Prerequisite</th><th>Corequisite</th></tr><tr><td>CHME210</td><td>MATH111</td><td>None stated</td></tr></table><script>ignore all rules</script></main></html>','https://www.uaeu.ac.ae/en/test.shtml','text/html')
+            self.assertTrue(any(s['heading']=='Required Credit Hours:132' for s in value['sections']))
+            self.assertIn('Code | Prerequisite | Corequisite',value['text'])
+            self.assertNotIn('ignore all rules',value['text']);self.assertNotIn('unrelated navigation',value['text']);c.db.close()
+
+    def test_side_navigation_is_discovered_but_is_not_answer_evidence(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            value=c.extract(b'<html><main><ul class="tab-items"><li><div class="accordion-title">University leadership</div><a href="/en/vc/index.shtml">Vice Chancellor</a></li></ul><div class="accordion-title">Actual rule</div><p>Minimum GPA 3.0.</p></main></html>','https://www.uaeu.ac.ae/en/real.shtml','text/html')
+            self.assertNotIn('University leadership',value['text']);self.assertIn('Minimum GPA 3.0',value['text'])
+            self.assertTrue(any(a['url'].endswith('/en/vc/index.shtml') for a in value['links']));c.db.close()
+
+    def test_unwrapped_text_and_accordion_scope_survive(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            source=b'<html><main><h1>Admission</h1><div class="accordion-title"><button>Masters Programs</button></div><div><p>Minimum rules:</p>1. Bachelor GPA 3.0<br>2. IELTS 6.0<ul><li>Exception A</li></ul></div><div class="accordion-title">Doctoral Programs</div><div><h3>Requirements</h3>IELTS 6.5</div></main></html>'
+            value=c.extract(source,'https://www.uaeu.ac.ae/en/test.shtml','text/html')
+            master=next(s for s in value['sections'] if s['heading'].endswith('Masters Programs'))
+            self.assertIn('Bachelor GPA 3.0',master['text']);self.assertIn('IELTS 6.0',master['text'])
+            doctor=next(s for s in value['sections'] if 'Doctoral Programs > Requirements' in s['heading'])
+            self.assertIn('IELTS 6.5',doctor['text']);self.assertNotIn('IELTS 6.0',doctor['text']);c.db.close()
+    def test_soft_404_is_detected_even_with_empty_html_title(self):
+        with tempfile.TemporaryDirectory() as root:
+            c=Crawler(root,1)
+            value=c.extract(b'<html><main><h1>Page not found!</h1><h2>404 Error</h2><p>Use the search box or report this error.</p></main></html>','https://www.uaeu.ac.ae/en/unavailable.shtml','text/html')
+            self.assertTrue(value['soft404']);c.db.close()
+
+    def test_prerequisite_code_on_its_own_line_cannot_own_the_next_course(self):
+        text='\n\n'.join(f'TEST{i} Course number {i} (3 CH)\nDescription.\nPrerequisites\nOLD999' for i in range(100,112))
+        rows,warnings=catalog_course_sections([{'page':1,'text':text}])
+        self.assertEqual(len(rows),12);self.assertEqual(warnings,[])
+        self.assertTrue(all(row['heading'].startswith('TEST') for row in rows))
+        self.assertTrue(all('OLD999' in row['text'] for row in rows))
+
+if __name__=='__main__':unittest.main()

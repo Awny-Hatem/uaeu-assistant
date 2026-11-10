@@ -1,0 +1,92 @@
+{
+  "at": "2026-11-04T22:15:39.677447+00:00",
+  "newKnowledgeDocuments": 0,
+  "newReviewedEntries": 0,
+  "newStructuredProgramIdentities": 55,
+  "sourceAudit": "program-identity-source-audit-v38.json",
+  "changes": [
+    "Programme identity/college projection uses only its own XML reference, with source-printed EN/AR fields",
+    "Mixed Arabic/English catalog-kind lookups retain exact historical PDFs",
+    "Scholarship guarantee questions retrieve existing complete eligibility/capacity evidence instead of benefits only",
+    "Live seat reads state the application capability boundary",
+    "Undated aggregate credit questions prefer source breakdowns over cohort models; published minimum stays qualified",
+    "Writer and source-derived coverage checks retain all requested parts"
+  ],
+  "liveRetestStatus": "Not verified: provider account credit/usage limit blocks live calibration and final retests",
+  "files": [
+    {
+      "path": "lib/academic-retrieval.ts",
+      "beforeSha256": "daa528550df2e337f561e249c482b56da54488dc412c69aa512e0c5ad686ec07",
+      "stagedSha256": "56580779f08a8fe2a0846eeb8788af94875bd5d8e3ef9ba80bcd76099aad03f6"
+    },
+    {
+      "path": "lib/academic-coverage.ts",
+      "beforeSha256": "a1d5124d4a361a114aefae1a9a56103a0a9dbb18ccc8e90dc7eec401da0909a8",
+      "stagedSha256": "ebd4fa1dd8e2c14dfbce76a682c6ce8ea768a51c3e210940da1d738f09e53a5b"
+    },
+    {
+      "path": "lib/query-understanding.ts",
+      "beforeSha256": "597145af6ba5b73e27684f45ba5e6b8700bfbf2c2e9a6989605177aecc445417",
+      "stagedSha256": "ab88ba81b8fedbcb884ffef3044159b75d6de41dad464ce5a16cf947fa4efd26"
+    },
+    {
+      "path": "lib/semantic-routing.ts",
+      "beforeSha256": "a91be38bb3fcd5e898e9eceb60ad3138efd46dd780d7ace31e679c8151717948",
+      "stagedSha256": "26605c5b1d8eedc4e348f55872e62412b469cde0d9eb4bd720386e9c82466f31"
+    },
+    {
+      "path": "lib/prompts.ts",
+      "beforeSha256": "7b37d857b6cfe61f8e9d94ae3f8d540101cbabe686634a99b24854a745fb6d9f",
+      "stagedSha256": "1813472dadffc6683aeaee2f3f2238a826978c26ba41d342fe17b9b50851e9ae"
+    },
+    {
+      "path": "app/api/chat/route.ts",
+      "beforeSha256": "8af3174056600a626f4e33e9e89d8b15083a05c3bf1c48cf71334e2c03905c7a",
+      "stagedSha256": "3dca51ee340cc6cc8bd96ae4aa192bbb4dc93ab7fe250af6be50890690d9b4a7"
+    },
+    {
+      "path": "data/verified-answers/academic.json",
+      "beforeSha256": "6de6be40a2a70855e8d84f2715110706d89e9cdf2f31ac83e805a50716a5a000",
+      "stagedSha256": "30b4e2b6c277af0a30988a4ed25ed5c7ea4744602b0c1481b005a22844233bef"
+    }
+  ],
+  "lastUpdatedAt": "2026-11-04T22:45:59.047723+00:00",
+  "candidateFiles": [
+    {
+      "path": "lib/academic-retrieval.ts",
+      "sha256": "7de9c382245710eac023493500707ba288dc33cb36d2baa1c3aadd11f103ec76"
+    },
+    {
+      "path": "lib/academic-coverage.ts",
+      "sha256": "018ae94ffbeb5abd37857417fbb93a1bdcf65ae9bf5007be81a1d0d89f78ff61"
+    },
+    {
+      "path": "lib/query-understanding.ts",
+      "sha256": "c74aea418bd06f19e6a43a1cd448c8134dfe109f689616edb0f2ce1aff9d970b"
+    },
+    {
+      "path": "lib/semantic-routing.ts",
+      "sha256": "26605c5b1d8eedc4e348f55872e62412b469cde0d9eb4bd720386e9c82466f31"
+    },
+    {
+      "path": "lib/prompts.ts",
+      "sha256": "907f2fe4c27257ee1806a37f5a7403f74529810d73f884ca87365efcfe0ef136"
+    },
+    {
+      "path": "app/api/chat/route.ts",
+      "sha256": "3dca51ee340cc6cc8bd96ae4aa192bbb4dc93ab7fe250af6be50890690d9b4a7"
+    },
+    {
+      "path": "data/verified-answers/academic.json",
+      "sha256": "96267e22e8fd8927c8e1cd8bdab073f573e8dc8cf8e8f42b4a3663712faf0be0"
+    }
+  ],
+  "validation": {
+    "offline": "npm run test:offline passed, exit 0; work/examiner-offline-v38b.log",
+    "common": "100/100 offline mock routing/evidence checks",
+    "alignment": "80/80 offline mock routing/evidence checks",
+    "sourceScope": "13/13 focused offline checks",
+    "build": "webpack build passed after latest source changes",
+    "live": "blocked by OPENAI_QUOTA_EXHAUSTED; no v38 factual pass claimed"
+  }
+}

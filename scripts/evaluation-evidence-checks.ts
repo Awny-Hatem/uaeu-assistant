@@ -1,5 +1,8 @@
 import { resolveConversation } from "../lib/query-understanding";
+import { retrieveAcademicEvidence } from "../lib/academic-retrieval";
+import { loadFaqEntries } from "../lib/faq";
 import { retrieveVerifiedEvidence } from "../lib/knowledge-files";
+import { findServiceGuide, serviceGuideEvidence } from "../lib/service-guides";
 
 export type EvidenceOnlyExpectation = { source: string; queryTerms: string[] };
 
@@ -23,4 +26,24 @@ export function validateEvidenceOnly(
     errors.push("Procedural source lost its explicit deadline information gap");
   }
   return errors;
+}
+
+/** A generated mock response contains no university facts. Check evidence
+ * availability separately, never score its placeholder as an accurate answer. */
+export function validateGeneratedMockRetrieval(
+  messages: {role:"user"|"assistant";content:string}[],
+  question:string,
+  expectedAnswerId:string,
+):string[]{
+  const resolved=resolveConversation(messages,question);
+  const guide=findServiceGuide(resolved.query);
+  const rows=guide?.id===expectedAnswerId?serviceGuideEvidence(guide):retrieveAcademicEvidence(resolved.query)?.rows ?? retrieveVerifiedEvidence(resolved.query,20);
+  const expected=loadFaqEntries().find(entry=>entry.id===expectedAnswerId);
+  if(!expected&&guide?.id!==expectedAnswerId)return [`Unknown reviewed record ${expectedAnswerId}`];
+  const matching=rows.filter(row=>row.source===`answer:${expectedAnswerId}` || row.source===`guide:${expectedAnswerId}` || row.source.startsWith(`guide:${expectedAnswerId}:`) || row.citations?.some(citation=>expected?.citations.some(reference=>reference.url===citation.url)));
+  if(!matching.length)return [`Expected approved record/source ${expectedAnswerId} was not retrievable for the resolved request`];
+  const citations=matching.flatMap(row=>row.citations ?? []);
+  if(!citations.length)return ["Retrievable evidence lacks an attributed source"];
+  if(citations.some(c=>!c.url||!/^https:\/\/(?:[a-z0-9-]+\.)*(?:uaeu\.ac\.ae|u\.ae|moe\.gov\.ae|mohesr\.gov\.ae)\//i.test(c.url)||/(?:webtest|cms)\./i.test(c.url)))return ["Retrievable evidence has a nonofficial/unapproved source"];
+  return [];
 }

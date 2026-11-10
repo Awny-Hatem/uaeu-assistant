@@ -1,0 +1,25 @@
+{
+  "at": "2026-11-04T22:09:32.072457+00:00",
+  "invalidatedReviewerFiles": [
+    "examiner-primary-review-v36.json",
+    "examiner-primary-review-v37.json",
+    "data-ablation-primary-review-v37.json"
+  ],
+  "reason": "Known bad actual replies were falsely marked correct because the original reviewer graded the reference source instead of the actual reply; all v1 pass counts are excluded from final adjudication.",
+  "replacement": "Quote-backed actual-answer-only reviewer v2, not yet calibrated for positive model cases because of real provider credit/usage-limit failures.",
+  "calibrationArtifact": "primary-review-calibration-v2.json",
+  "preservedResultDigests": [
+    {
+      "file": "examiner-primary-review-v36.json",
+      "resultArraySha256": "af4abe59c53dde00fea36e774b44d7e4c932e37225c825c99c7ab027423ca7a6"
+    },
+    {
+      "file": "examiner-primary-review-v37.json",
+      "resultArraySha256": "cad9ae0e7a15c1d826fbd7ed871e672b267e766274718ad49927acf158d0232f"
+    },
+    {
+      "file": "data-ablation-primary-review-v37.json",
+      "resultArraySha256": "50892e92712380aa6587366f09c2b1d03067c843faa6477f34a7728b157ab335"
+    }
+  ]
+}

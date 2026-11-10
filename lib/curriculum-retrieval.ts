@@ -1,5 +1,5 @@
 import { loadKnowledgeMarkdown, splitIntoSections, type KnowledgeDocument } from "@/lib/knowledge-files";
-import { courseCodes, understandQuery } from "@/lib/query-understanding";
+import { courseCodes, scopeAllows, understandQuery } from "@/lib/query-understanding";
 import type { Citation } from "@/lib/prototype-types";
 
 type CurriculumKind = "first-semester" | "degree-credits" | "course-status" | "semester-placement" | "electives" | "required-courses" | "prerequisites";
@@ -40,7 +40,7 @@ export function retrieveCurriculumAnswer(query: string, documents: KnowledgeDocu
   const matches: { section: string; filename: string; title: string; sourceUrl: string; lastVerified: string }[] = [];
 
   for (const document of documents) {
-    if (!document.curriculum || !document.scope?.subjects?.includes(programs[0])) continue;
+    if (!document.curriculum || !document.scope?.subjects?.includes(programs[0]) || !scopeAllows(query, document.content, document.scope)) continue;
     for (const section of splitIntoSections(document.content)) {
       const heading = section.split("\n", 1)[0].toLowerCase();
       if (!heading.startsWith("## ")) continue;

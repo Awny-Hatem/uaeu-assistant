@@ -1,0 +1,227 @@
+{
+  "summary": {
+    "artifact": "reports/knowledge-expansion-2026-11-04/examiner-focused-v41.json",
+    "completed": true,
+    "runtimeUnchanged": true,
+    "gradingUnchanged": true,
+    "servingContractUnchanged": true,
+    "scenariosSeen": 3,
+    "primaryQuestions": {
+      "correct": 3,
+      "partial": 0,
+      "incorrect": 0
+    },
+    "allSubmissions": {
+      "correct": 18,
+      "partial": 0,
+      "incorrect": 0
+    },
+    "scenariosAllVariantsFactuallyPassing": 3,
+    "scenariosWithoutExactFactualReuseAndAllFactsPassing": 2,
+    "exactFactualReusePairs": 7,
+    "nearIdenticalFactualPairs": 7,
+    "latency": {
+      "mean": 4.695625000000001,
+      "median": 3.137,
+      "p95": 11.394,
+      "max": 15.525,
+      "over20Seconds": 0
+    },
+    "usage": {
+      "measuredAnswers": 24,
+      "totalAnswers": 24,
+      "estimatedUsd": 0.09614806,
+      "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+    },
+    "limitations": [
+      "These automated scores are provisional, not independent proof of every statement.",
+      "Source relevance and material omissions require semantic review.",
+      "Similarity flags identify possible FAQ-like behavior; they are not hidden by formatting changes.",
+      "Deterministic safety/clarification notices are reported separately from factual RAG reuse; this does not claim their wording varies.",
+      "A finite100-scenario pass cannot guarantee all future examiner questions."
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "EX090",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX090-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX090": "1e500036e1a2889a7ccb50d6023b591433f9fbb6eeec0320bbaa8cb312df4eaa",
+        "EX090-V1": "ad5ab5cedaccc5c259a16749e2ea0cf835e50eb4a1582afd7937b2def574815f",
+        "EX090-V2": "818e371facf6993dab55f24fdbc065c3de5e04302b7fa5422d2e357d4eb25e4a",
+        "EX090-V3": "bf4e472fef6e31f63df715af5477964e457156f15b861d39396112710fc5ee98",
+        "EX090-V4": "619ff518fbefc5ee97865d8bdccc27ce768fb9e8ec79bb5876db564335dacf58",
+        "EX090-V5": "0d165220cd13eda0ce001e1d264057c72682376994ffe1d1d24619e83393b442"
+      }
+    },
+    {
+      "id": "EX096",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX096-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX096-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX096-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX096-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX096-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX096",
+          "b": "EX096-V1",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        },
+        {
+          "a": "EX096",
+          "b": "EX096-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        },
+        {
+          "a": "EX096",
+          "b": "EX096-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        },
+        {
+          "a": "EX096-V1",
+          "b": "EX096-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        },
+        {
+          "a": "EX096-V1",
+          "b": "EX096-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        },
+        {
+          "a": "EX096-V2",
+          "b": "EX096-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        },
+        {
+          "a": "EX096-V4",
+          "b": "EX096-V5",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": true
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX096": "e5d42133f9de3798d5a0bc3f1036271845a211b7409486f08aefda0cc4cbe817",
+        "EX096-V1": "06b0e992a603c3610f6ac0478b9205309f5b58c736ebb1063321a36fac0749ff",
+        "EX096-V2": "a809cfeb57743d2d95f75d58e565fcc1c1b90c81639f1004954abf595871a7c3",
+        "EX096-V3": "a7689ccbf206a49ccc1c7ec3b602c616b411aa926eb148eb056a22ca4cd1741a",
+        "EX096-V4": "00112bf3c3ed3970c295cd2eea882f9ab985a0ede515ada9e70abb93446dd8e5",
+        "EX096-V5": "037da3972eba2eb02d07f72e69b27fa2b57bed8d52f72eb6e13ed257f9e806aa"
+      }
+    },
+    {
+      "id": "EX099",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX099-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX099-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX099-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX099-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX099-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX099": "56467a96353aaed82dc3d2c0f1a24784ad8da497f4e94db5edf90802e65f03e9",
+        "EX099-V1": "be3b9ec837fa10c7712b09897c2593d17c9c7ed8408ce7c89285d15a034138d5",
+        "EX099-V2": "367b5c15e2236ae3e83978b911a106ebc18a80733b3ad28394672c946b05d3e3",
+        "EX099-V3": "51df0fb5095f39ee384b7b939c88021d7f3ace23ba1f8b6c5d6d08850b339a4e",
+        "EX099-V4": "3eb5d031a2b71ee0b6f50aa26d9df22fca7d5820219dbd6b6aef28a6de23e01c",
+        "EX099-V5": "096f3a81ad51195d07fca2fcfd2b433d1ef9b148de51e3102fd1415c638b190c"
+      }
+    }
+  ]
+}
