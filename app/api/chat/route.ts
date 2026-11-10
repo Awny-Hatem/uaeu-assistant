@@ -1053,7 +1053,13 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     return respond(payload, latest, locale);
   }
   const majorRecommendation = isProgramRecommendation(routingQuery);
-  const exactPrepared = !majorRecommendation && faqHit && !resolution.usedContext && [...faqHit.entry.questions, ...(faqHit.entry.matchPhrases ?? [])].some(question => normalizeQuery(question) === normalizeQuery(latest));
+  const exactPrepared = !majorRecommendation && faqHit && !resolution.usedContext && [...faqHit.entry.questions, ...(faqHit.entry.matchPhrases ?? [])].some(question => [latest, originalLatest].some(text => normalizeQuery(question) === normalizeQuery(text)));
+  // A reviewed record written for this scenario (its exact question, or one of
+  // its multi-word match phrases in the student's own message) is always given
+  // to the writer alongside any other evidence.
+  const preparedRecord = !majorRecommendation && faqHit && faqHit.score >= 1000 && (exactPrepared ||
+    (faqHit.entry.matchPhrases ?? []).some(phrase => normalizeQuery(phrase).split(" ").length >= 3 && [latest, originalLatest].some(text => ` ${normalizeQuery(text)} `.includes(` ${normalizeQuery(phrase)} `))))
+    ? faqHit.entry : null;
   let academic = exactPrepared || majorRecommendation ? null : retrieveAcademicEvidence(routingQuery);
   const corpusIdentity = expandCorpusQuery(routingQuery);
   const identifiedCourse = requestedCourseTargets(routingQuery).length > 0;
@@ -1169,6 +1175,9 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // not suppress independently retrieved evidence that passes the same hard scope
   // and requested-fact gates. No unapproved or differently scoped facts are added.
   if (semantic && !retrieved.length) retrieved = await retrieveContext(routingQuery, deadlineAt);
+  if (preparedRecord && !retrieved.some(row => row.source === `answer:${preparedRecord.id}`)) {
+    retrieved = [{ source: `answer:${preparedRecord.id}`, title: preparedRecord.answer_en.split("\n")[0], scope: faqScope(preparedRecord), citations: preparedRecord.citations, text: `${preparedRecord.answer_en}\n\n${preparedRecord.answer_ar ?? ""}`, score: 100 }, ...retrieved];
+  }
   let evidenceSources = sourceEvidence(retrieved);
   // A reviewed record written for this exact question is its own evidence when
   // the narrower scope gates find nothing (for example a future target term).

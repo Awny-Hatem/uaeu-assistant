@@ -1,0 +1,648 @@
+{
+  "startedAt": "2026-11-10T10:46:09.064Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "smoke-ex077-b",
+  "fixture": "examiner-scenarios/examiner_100.json",
+  "fixtureSha256": "948047fcbbadd9d92c108471110411a7d0a89bec6988f733d9d42a5620ca55fa",
+  "methodology": "100 distinct examiner scenarios, each with five alternate phrasings. Ground truth uses official UAEU primary sources and previously independently reviewed source fixtures; source-fetch and semantic-review states are tracked explicitly. HTTP200 and a matching number alone are not proof. A single-cohort calculus question is not required to explain an unrequested earlier cohort. Boundary notices are measured separately from factual-answer FAQ similarity.",
+  "results": [
+    {
+      "turns": [
+        "What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?"
+      ],
+      "expected": "15% absence gives FA; accepted valid circumstances can give AW; waived absence may not exceed12.5%; preserve the non-CMHS undergraduate scope.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "15"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "FA"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "AW"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "12\\.5"
+          ]
+        }
+      ],
+      "id": "EX077",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "hey, What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+        "Please explain to a new UAEU student: What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+        "Give a concise advisor checklist: What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+        "ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟",
+        "UAEU — ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "56179e0b4d4b23639545a2945db217a94dcfdf25085b7de664a519a56eb605a0"
+      },
+      "parentId": "EX077",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+          "status": 200,
+          "seconds": 3.527,
+          "payload": {
+            "role": "assistant",
+            "content": "For undergraduate students at UAE University, excluding those in the College of Medicine and Health Sciences, attendance is mandatory for all registered course classes, practicals, seminars, and examinations; missing 15% or more of class meetings leads to a failing grade for absences (FA).\n\nFor undergraduates, excluding the College of Medicine and Health Sciences: Absences approved by the Dean within the semester can result in Administrative Withdrawal with a grade of AW instead of failure, and such Dean-approved absences are not counted toward the 15% absence limit, with a general waiver cap of 12.5% of total class meeting hours.\n\nFor undergraduates, excluding the College of Medicine and Health Sciences: Students are responsible for tracking their attendance through the e-Services system, and the attendance rule excludes allowances such as UAE representation at national events, which is separately waived and not part of the 15% absence limit.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU AE-03 Undergraduate Registration and Enrollment",
+                "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Scope; Procedures section9 Attendance; effective12Aug2018",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "The published UAEU Undergraduate Registration and Enrollment procedures AE-03, effective12August2018, exclude the College of Medicine and Health Sciences. Section9 requires attendance at all registered course classes, practicals, seminars and examinations. Missing15% of class meetings results in FA (Fail for Absences). A valid reason approved by the Dean in the semester of the absence permits Administrative Withdrawal and gradeAW instead. Dean-waived absences are not counted toward that15% requirement, and the stated general waiver cap is12.5% of total class meeting hours. Students track attendance in e-Services. The document separately waives UAE representation at events of national interest; do not turn the general cap into an exception-free rule. This source does not establish the separate Medicine attendance rule."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:undergraduate-attendance-rule#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For undergraduate students at UAE University, excluding those in the College of Medicine and Health Sciences, attendance is mandatory for all registered course classes, practicals, seminars, and examinations; missing 15% or more of class meetings leads to a failing grade for absences (FA).\n\nFor undergraduates, excluding the College of Medicine and Health Sciences: Absences approved by the Dean within the semester can result in Administrative Withdrawal with a grade of AW instead of failure, and such Dean-approved absences are not counted toward the 15% absence limit, with a general waiver cap of 12.5% of total class meeting hours.\n\nFor undergraduates, excluding the College of Medicine and Health Sciences: Students are responsible for tracking their attendance through the e-Services system, and the attendance rule excludes allowances such as UAE representation at national events, which is separately waived and not part of the 15% absence limit.",
+                "evidenceIds": [
+                  "answer:undergraduate-attendance-rule#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3514,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3430,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 206,
+                  "estimatedUsd": 0.0011255999999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1616,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006960000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5046,
+              "outputTokens": 237,
+              "knownUsageUsd": 0.0018216,
+              "estimatedUsd": 0.0018216,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "15"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "FA"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "AW"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "12\\.5"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "dfa444174aba55bdd1244e40714c903b39e78a8dadef95252e3a90758662ee0c",
+    "files": 8468,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "merge-main-2"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9301f3aefb46a514293942206caa8067fed16b04221ac56e92c2b2d90c77b6af",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 174,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-10T10:46:10.806Z",
+        "totalRecords": 252,
+        "domains": {
+          "admissions": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "academics": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-04"
+          },
+          "registration": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-11-04"
+          },
+          "graduation": {
+            "records": 9,
+            "reviewedRecords": 9,
+            "latestVerification": "2026-11-03"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-11-03"
+          },
+          "financial_aid": {
+            "records": 7,
+            "reviewedRecords": 7,
+            "latestVerification": "2026-11-04"
+          },
+          "student_services": {
+            "records": 11,
+            "reviewedRecords": 11,
+            "latestVerification": "2026-11-04"
+          },
+          "housing": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-11-04"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 106
+      },
+      "sourceEvidence": {
+        "mappedReferences": 234,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 51,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/smoke-ex077-b-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-10T10:46:14.355Z",
+  "runtimeAfter": {
+    "sha256": "dfa444174aba55bdd1244e40714c903b39e78a8dadef95252e3a90758662ee0c",
+    "files": 8468,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "merge-main-2"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9301f3aefb46a514293942206caa8067fed16b04221ac56e92c2b2d90c77b6af",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 174,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-10T10:46:16.043Z",
+        "totalRecords": 252,
+        "domains": {
+          "admissions": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "academics": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-04"
+          },
+          "registration": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-11-04"
+          },
+          "graduation": {
+            "records": 9,
+            "reviewedRecords": 9,
+            "latestVerification": "2026-11-03"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-11-03"
+          },
+          "financial_aid": {
+            "records": 7,
+            "reviewedRecords": 7,
+            "latestVerification": "2026-11-04"
+          },
+          "student_services": {
+            "records": 11,
+            "reviewedRecords": 11,
+            "latestVerification": "2026-11-04"
+          },
+          "housing": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-11-04"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 106
+      },
+      "sourceEvidence": {
+        "mappedReferences": 234,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 51,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 3.527,
+    "p95": 3.527,
+    "max": 3.527
+  },
+  "usage": {
+    "measuredAnswers": 1,
+    "totalAnswers": 1,
+    "estimatedUsd": 0.0018216,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}
