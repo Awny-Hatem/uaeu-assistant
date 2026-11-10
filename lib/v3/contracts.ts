@@ -42,11 +42,15 @@ export type EvidenceScopeV3 = {
   eventType?: string;
   programId?: string;
   courseCodes?: string[];
+  degreeLevel?: "undergraduate" | "postgraduate";
   cohort?: string;
   catalogYear?: number;
   term?: string;
   year?: number;
   audience?: string;
+  applicantCategory?: "national" | "international";
+  effectiveFrom?: string;
+  effectiveTo?: string;
 };
 
 export type EvidenceItem = {
@@ -163,8 +167,12 @@ export function isEvidenceItem(value: unknown): value is EvidenceItem {
   const validScope = scope === undefined || (isRecord(scope) &&
     isOptionalString(scope.domain) && isOptionalString(scope.eventType) && isOptionalString(scope.programId) &&
     isOptionalString(scope.cohort) && isOptionalString(scope.term) && isOptionalString(scope.audience) &&
+    (scope.degreeLevel === undefined || isOneOf(scope.degreeLevel, ["undergraduate", "postgraduate"] as const)) &&
+    (scope.applicantCategory === undefined || isOneOf(scope.applicantCategory, ["national", "international"] as const)) &&
     (scope.catalogYear === undefined || (typeof scope.catalogYear === "number" && Number.isInteger(scope.catalogYear))) &&
     (scope.year === undefined || (typeof scope.year === "number" && Number.isInteger(scope.year))) &&
+    (scope.effectiveFrom === undefined || isIsoDate(scope.effectiveFrom)) &&
+    (scope.effectiveTo === undefined || isIsoDate(scope.effectiveTo)) &&
     (scope.courseCodes === undefined || isStringArray(scope.courseCodes)));
   return typeof value.id === "string" && value.id.length > 0 &&
     isOneOf(value.sourceType, ["approved_rule", "approved_document", "verified_answer", "official_web", "official_external", "general"] as const) &&
