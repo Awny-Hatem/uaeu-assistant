@@ -395,6 +395,43 @@ function describeExpression(expression: PrerequisiteExpression, locale: "en" | "
     : `${expression.courseCode} with at least grade ${expression.minimumGrade}`;
 }
 
+function relevantConditionResults(
+  expression: PrerequisiteExpression,
+  path: string,
+  byPath: Map<string, RuleConditionResult>,
+): RuleConditionResult[] {
+  if (!("op" in expression)) {
+    const result = byPath.get(path);
+    return result ? [result] : [];
+  }
+  const children = expression.conditions.map((condition, index) => ({
+    expression: condition,
+    path: `${path}.${index + 1}`,
+  }));
+  if (expression.op === "OR") {
+    const satisfiedAlternatives = children.filter(({ expression: child, path: childPath }) =>
+      evaluateConditionPath(child, childPath, byPath) === "true");
+    if (satisfiedAlternatives.length) {
+      return satisfiedAlternatives.flatMap(({ expression: child, path: childPath }) => relevantConditionResults(child, childPath, byPath));
+    }
+  }
+  return children.flatMap(({ expression: child, path: childPath }) => relevantConditionResults(child, childPath, byPath));
+}
+
+function evaluateConditionPath(
+  expression: PrerequisiteExpression,
+  path: string,
+  byPath: Map<string, RuleConditionResult>,
+): Truth {
+  if (!("op" in expression)) {
+    const status = byPath.get(path)?.status;
+    return status === "SATISFIED" ? "true" : status === "NOT_SATISFIED" ? "false" : "unknown";
+  }
+  const children = expression.conditions.map((condition, index) => evaluateConditionPath(condition, `${path}.${index + 1}`, byPath));
+  if (expression.op === "AND") return children.includes("false") ? "false" : children.includes("unknown") ? "unknown" : "true";
+  return children.includes("true") ? "true" : children.includes("unknown") ? "unknown" : "false";
+}
+
 export function renderPrerequisiteAssessment(
   assessment: PrerequisiteConversationAssessment,
   locale: "en" | "ar",
@@ -402,7 +439,7 @@ export function renderPrerequisiteAssessment(
   const { rule, evaluation } = assessment;
   const relevantConditions = evaluation.status === "ELIGIBLE"
     ? evaluation.conditions.filter((condition) => condition.status === "SATISFIED")
-    : evaluation.conditions;
+    : relevantConditionResults(rule.expression, "1", new Map(evaluation.conditions.map((condition) => [condition.path, condition])));
   if (locale === "ar") {
     const requirement = `المتطلبات المنشورة لمساق ${rule.course.code} (${rule.course.title}): ${describeExpression(rule.expression, locale)}.`;
     const result = evaluation.status === "ELIGIBLE"

@@ -187,6 +187,8 @@ async function main() {
     "the exact reviewed source repair must retain the separately listed PHYS135 prerequisite");
   assert.match(String(chme330PrerequisiteAssessment.payload.content), /CHME300 is listed as current/,
     "a coordinated 'and am taking' clause must preserve current enrollment instead of falsely reporting it missing");
+  assert.doesNotMatch(String(chme330PrerequisiteAssessment.payload.content), /PETE290 is not listed as current|No recognized completed grade was supplied for (?:CHME300|PETE290)/,
+    "a satisfied CHME300 concurrent alternative must not be accompanied by irrelevant missing facts for PETE290 or completed CHME300");
 
   const passGradePrerequisiteAssessment = await askMessages([
     { role: "user", content: "I passed ACCT101 with P." },
