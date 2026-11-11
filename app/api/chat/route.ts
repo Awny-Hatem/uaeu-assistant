@@ -28,7 +28,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
-import { assessProgramCreditConversation, renderProgramCreditAssessment } from "@/lib/academic/program-curricula";
+import { assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
 
@@ -983,6 +983,26 @@ export async function POST(req: Request) {
         content: renderProgramCreditAssessment(programCreditAssessment, locale),
         source: "rag",
         stateLabel: "v3_program_credit_model",
+        resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
+        disposition: curriculum ? "answer" : "clarify",
+        citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+        evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
+        topic: programId,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const programRequirementsAssessment = assessProgramRequirementsConversation(
+      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    );
+    if (programRequirementsAssessment) {
+      const { curriculum, programId, sources } = programRequirementsAssessment;
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: renderProgramRequirementsAssessment(programRequirementsAssessment, locale),
+        source: "rag",
+        stateLabel: "v3_program_requirement_model",
         resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
         disposition: curriculum ? "answer" : "clarify",
         citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),

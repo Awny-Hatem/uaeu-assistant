@@ -125,6 +125,8 @@ export type ProgramCreditAssessment = {
   cohortMatched: boolean;
 };
 
+export type ProgramRequirementsAssessment = ProgramCreditAssessment;
+
 function programIdInText(text: string): string | undefined {
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
@@ -171,6 +173,68 @@ export function assessProgramCreditConversation(
     ...(cohortYear !== undefined ? { cohortYear } : {}),
     cohortMatched: selected?.cohortMatched ?? false,
   };
+}
+
+function asksProgramCourseRequirements(text: string): boolean {
+  if (/\b[A-Z]{2,5}\d{3,4}\b/i.test(text)) return false;
+  return /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
+    /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text);
+}
+
+export function assessProgramRequirementsConversation(
+  messages: { role: "user" | "assistant"; content: string }[],
+): ProgramRequirementsAssessment | null {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const latest = userMessages.at(-1)?.content;
+  if (!latest || !asksProgramCourseRequirements(latest)) return null;
+  const programId = programIdInText(latest) ??
+    [...userMessages.slice(0, -1)].reverse().map(({ content }) => programIdInText(content)).find(Boolean);
+  if (!programId) return null;
+  const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
+  const selected = getProgramCurriculum(programId, cohortYear);
+  const program = selected?.program ?? academicPrograms.find((item) => item.id === programId);
+  if (!program) return null;
+  return {
+    programId,
+    programName: program.name,
+    curriculum: selected?.curriculum ?? null,
+    sources: program.sources,
+    ...(cohortYear !== undefined ? { cohortYear } : {}),
+    cohortMatched: selected?.cohortMatched ?? false,
+  };
+}
+
+export function renderProgramRequirementsAssessment(
+  assessment: ProgramRequirementsAssessment,
+  locale: "en" | "ar",
+): string {
+  const { curriculum, programName, cohortYear } = assessment;
+  if (!curriculum) {
+    return locale === "ar"
+      ? `لا تتوفر لدي متطلبات مقررات معتمدة ومنظمة لدفعة ${cohortYear} في ${programName}. تحقق من الخطة المخصصة لك في Degree Works.`
+      : `I do not have an approved structured course-requirement model for the ${cohortYear} entry cohort in ${programName}. Check the plan assigned to you in Degree Works.`;
+  }
+
+  const groups = curriculum.requirements.map((requirement) => {
+    if (requirement.type === "REQUIRED_COURSE_SET") {
+      return `**${requirement.name}:** ${requirement.courseCodes.join(", ")}`;
+    }
+    if (requirement.type === "ONE_OF_GROUP") {
+      return `**${requirement.name}:** choose ${requirement.chooseCount} from ${requirement.courseCodes.join(" or ")}.`;
+    }
+    if (requirement.type === "ELECTIVE_GROUP") {
+      return `**${requirement.name}:** choose ${requirement.chooseCount} (${requirement.credits} credits) from ${requirement.courseCodes.join(", ")}.`;
+    }
+    return `**${requirement.name ?? requirement.id}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;
+  });
+  const notes = curriculum.limitations.map((note) => `- ${note}`).join("\n");
+  const cohort = cohortYear !== undefined ? `for the ${cohortYear} entry cohort` : "in the currently published curriculum";
+  if (locale === "ar") {
+    return [`**مجموعات المقررات المنشورة — ${programName}**`, `تستند القائمة إلى الخطة ${cohort}، بإجمالي **${curriculum.totalCredits} ساعة معتمدة**.`, ...groups, notes ? `**ملاحظات النطاق:**\n${notes}` : "", "هذه مجموعات متطلبات منشورة وليست تدقيقاً لسجلك أو للمقررات المتبقية. تحقق من خطتك في Degree Works؛ وتُراجع متطلبات المتطلب السابق من سجل المقرر الرسمي."]
+      .filter(Boolean).join("\n\n");
+  }
+  return [`**Published course requirements — ${programName}**`, `The following groups are from the curriculum ${cohort} (**${curriculum.totalCredits} total credits**).`, ...groups, notes ? `**Scope notes:**\n${notes}` : "", "These published requirement groups do not identify which courses remain on your record. Check your assigned plan in Degree Works; verify prerequisites on each official course record."]
+    .filter(Boolean).join("\n\n");
 }
 
 export function renderProgramCreditAssessment(assessment: ProgramCreditAssessment, locale: "en" | "ar"): string {

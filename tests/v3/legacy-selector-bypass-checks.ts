@@ -86,7 +86,26 @@ async function main() {
   assert.match(String(olderDegreeCredits.payload.content), /ITBP495/);
   assert.doesNotMatch(String(olderDegreeCredits.payload.content), /general education.*21 credits/i, "the incomplete 130-credit breakdown must not borrow the newer plan");
 
-  console.log("V3 route checks passed: selector bypass, deadline separation, useful repeat policy, and deterministic prerequisite evaluation from context.");
+  const itCourses = await ask("Which courses are required in Information Technology?", "203.0.113.230");
+  assert.equal(itCourses.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(itCourses.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(itCourses.payload.content), /CSBP340/);
+  assert.match(String(itCourses.payload.content), /choose 1 from BIOC100 or CHEM111/);
+  assert.match(JSON.stringify(itCourses.payload.citations), /Information Technology degree requirements/);
+
+  const mechCourses = await ask("Which courses are required in Mechanical Engineering?", "203.0.113.231");
+  assert.equal(mechCourses.payload.stateLabel, "v3_program_requirement_model");
+  assert.match(String(mechCourses.payload.content), /MECH485/);
+  assert.match(String(mechCourses.payload.content), /MECH490/);
+
+  const courseQuestion = await askMessages([
+    { role: "user", content: "I am studying Computer Science." },
+    { role: "assistant", content: "What do you want to know about the program?" },
+    { role: "user", content: "What are the prerequisites for CSBP340?" },
+  ], "203.0.113.232");
+  assert.notEqual(courseQuestion.payload.stateLabel, "v3_program_requirement_model", "course-level questions must not be answered with the full program course list");
+
+  console.log("V3 route checks passed: selector bypass, deadline separation, repeat policy, and structured prerequisite and program models.");
 }
 
 main().catch((error) => {

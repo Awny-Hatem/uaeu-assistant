@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { assessProgramCreditConversation, getProgramCurriculum, listAcademicPrograms, renderProgramCreditAssessment } from "../lib/academic/program-curricula";
+import { assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
 assert.equal(programs.length, 4, "only four programs with reviewed structured source data are modeled");
@@ -86,5 +86,36 @@ assert.equal(assessProgramCreditConversation([{ role: "user", content: "How many
 assert.equal(assessProgramCreditConversation([{ role: "user", content: "How many credits do I need to graduate?" }]), null, "no degree is inferred when no active program is given");
 assert.equal(assessProgramCreditConversation([{ role: "user", content: "How many credit hours to graduate in Information Technology?" }])?.curriculum?.totalCredits, 120);
 assert.equal(assessProgramCreditConversation([{ role: "user", content: "How many credits to graduate in Mechanical Engineering?" }])?.curriculum?.totalCredits, 132);
+
+const itRequirements = assessProgramRequirementsConversation([
+  { role: "user", content: "Which courses are required in Information Technology?" },
+]);
+assert.ok(itRequirements);
+const itRequirementsText = renderProgramRequirementsAssessment(itRequirements, "en");
+assert.match(itRequirementsText, /CSBP340/);
+assert.match(itRequirementsText, /choose 1 from BIOC100 or CHEM111/);
+assert.match(itRequirementsText, /choose 3 \(9 credits\)/);
+assert.match(itRequirementsText, /do not identify which courses remain/i);
+
+const contextualMechRequirements = assessProgramRequirementsConversation([
+  { role: "user", content: "I am studying Mechanical Engineering." },
+  { role: "assistant", content: "What would you like to know about the degree?" },
+  { role: "user", content: "What courses do I need in my program?" },
+]);
+assert.ok(contextualMechRequirements);
+assert.match(renderProgramRequirementsAssessment(contextualMechRequirements, "en"), /MECH485/);
+assert.match(renderProgramRequirementsAssessment(contextualMechRequirements, "en"), /MECH490/);
+assert.equal(assessProgramRequirementsConversation([
+  { role: "user", content: "I am studying Computer Science." },
+  { role: "assistant", content: "What would you like to know?" },
+  { role: "user", content: "What courses are required for CSBP340?" },
+]), null, "course-level requirement questions must not be mistaken for program course lists");
+const unknownCohortRequirements = assessProgramRequirementsConversation([
+  { role: "user", content: "I am in Computer Science, 2022 cohort." },
+  { role: "assistant", content: "How can I help?" },
+  { role: "user", content: "Which courses are required for my degree?" },
+]);
+assert.ok(unknownCohortRequirements);
+assert.equal(unknownCohortRequirements.curriculum, null, "unknown historical requirements stay unresolved instead of using the current catalog");
 
 console.log("Academic program model passed: 4 sourced programs, credit totals, elective groups, internship constraints, cohort selection, and safe missing versions.");
