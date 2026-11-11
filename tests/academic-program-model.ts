@@ -5,23 +5,54 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 50, "fifty current or historical program records have structured evidence records");
+assert.equal(programs.length, 52, "fifty-two current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
   }
 }
-const unmodeledProgram = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Psychology?" }]);
-assert.ok(unmodeledProgram);
-assert.equal(unmodeledProgram.programId, "psychology");
-assert.equal(unmodeledProgram.curriculum, null);
-assert.match(renderProgramRequirementsAssessment(unmodeledProgram, "en"), /do not yet have an approved structured course-requirement model/i);
-assert.match(JSON.stringify(unmodeledProgram.sources), /bachelor-of-arts-in-psychology/);
-const unmodeledAudit = assessDegreeAuditConversation([{ role: "user", content: "What do I still need to graduate in Psychology?" }]);
-assert.equal(unmodeledAudit?.auditStatus, "PROGRAM_NOT_MODELED");
-assert.equal(unmodeledAudit?.programId, "psychology");
-assert.match(JSON.stringify(unmodeledAudit?.sources), /undergraduate\/programs\/index\.shtml/);
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
+
+const psychology = getProgramCurriculum("psychology");
+assert.ok(psychology);
+assert.equal(psychology.curriculum.totalCredits, 120);
+assert.deepEqual(psychology.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 54, 6, 6, 15, 12]);
+assert.equal(psychology.curriculum.cohortLabel, "Students admitted from Fall or Spring 2025-2026 onwards");
+const psychologyCore = psychology.curriculum.requirements.find((item) => item.id === "psychology-major-required");
+assert.ok(psychologyCore?.type === "REQUIRED_COURSE_SET");
+assert.equal(psychologyCore.courseCodes.length, 18);
+const psychology452 = psychology.curriculum.requirements.find((item) => item.id === "psychology-internship-452");
+assert.ok(psychology452?.type === "INTERNSHIP");
+assert.equal(psychology452.otherCoursesAllowed, false);
+const psychology454 = psychology.curriculum.requirements.find((item) => item.id === "psychology-research-project-454");
+assert.ok(psychology454?.type === "INTERNSHIP");
+assert.equal(psychology454.otherCoursesAllowed, true);
+assert.match(psychology454.name ?? "", /up to 6 additional course credits/);
+const psychologyAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Psychology?" }]);
+assert.equal(psychologyAnswer?.programId, "psychology");
+assert.match(renderProgramRequirementsAssessment(psychologyAnswer!, "en"), /PSYC452/);
+assert.match(renderProgramRequirementsAssessment(psychologyAnswer!, "en"), /maximum of 6 additional course credits/);
+assert.equal(getProgramCurriculum("psychology", 2024), null, "the 2025-2026 Psychology model must not be applied to earlier cohorts");
+
+const translationStudies = getProgramCurriculum("translation-studies");
+assert.ok(translationStudies);
+assert.equal(translationStudies.curriculum.totalCredits, 120);
+assert.deepEqual(translationStudies.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 42, 6, 15, 18, 12]);
+assert.equal(translationStudies.curriculum.cohortLabel, "Students admitted from Fall or Spring 2025-2026 onwards");
+const translationInternship = translationStudies.curriculum.requirements.find((item) => item.id === "translation-studies-internship");
+assert.ok(translationInternship?.type === "INTERNSHIP");
+assert.equal(translationInternship.courseCode, "TRS490");
+assert.equal(translationInternship.credits, 6);
+assert.equal(translationInternship.otherCoursesAllowed, false);
+const thirdLanguage = translationStudies.curriculum.requirements.find((item) => item.id === "translation-studies-third-language");
+assert.ok(thirdLanguage?.type === "PATHWAY_CHOICE");
+assert.equal(thirdLanguage.options.length, 5);
+assert.ok(thirdLanguage.options.every((option) => option.credits === 18 && option.courseCodes.length === 6));
+const translationQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Translation Studies?" }]);
+assert.equal(translationQuestion?.programId, "translation-studies");
+assert.match(renderProgramRequirementsAssessment(translationQuestion!, "en"), /TRS490/);
+assert.match(renderProgramRequirementsAssessment(translationQuestion!, "en"), /earlier cohorts/);
+assert.equal(getProgramCurriculum("translation-studies", 2024), null, "the 2025-2026 model must not be applied to older cohorts");
 
 const socialWork = getProgramCurriculum("social-work");
 assert.ok(socialWork);

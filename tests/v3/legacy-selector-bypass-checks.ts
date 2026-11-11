@@ -313,16 +313,24 @@ async function main() {
   assert.equal(petroleum2023.payload.stateLabel, "v3_program_credit_model");
   assert.match(String(petroleum2023.payload.content), /132 credit hours/);
 
-  const unmodeledPsychology = await ask("What courses are required in Psychology?", "203.0.113.245");
-  assert.equal(unmodeledPsychology.payload.stateLabel, "v3_program_requirement_model");
-  assert.equal(unmodeledPsychology.payload.resolutionState, "UNSUPPORTED");
-  assert.match(String(unmodeledPsychology.payload.content), /do not yet have an approved structured course-requirement model for .*Psychology/i);
-  assert.match(JSON.stringify(unmodeledPsychology.payload.citations), /bachelor-of-arts-in-psychology/);
+  const psychologyRequirements = await ask("What courses are required in Psychology?", "203.0.113.245");
+  assert.equal(psychologyRequirements.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(psychologyRequirements.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(psychologyRequirements.payload.content), /PSYC452/);
+  assert.match(String(psychologyRequirements.payload.content), /maximum of 6 additional course credits/);
+  assert.match(JSON.stringify(psychologyRequirements.payload.citations), /bachelor-of-arts-in-psychology/);
 
-  const unmodeledPsychologyAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.246");
-  assert.equal(unmodeledPsychologyAudit.payload.stateLabel, "v3_degree_audit_preview");
-  assert.equal(unmodeledPsychologyAudit.payload.resolutionState, "UNSUPPORTED");
-  assert.match(String(unmodeledPsychologyAudit.payload.content), /do not have a structured curriculum model for .*Psychology/i);
+  const translationStudies = await ask("What are the requirements for Translation Studies?", "203.0.113.248");
+  assert.equal(translationStudies.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(translationStudies.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(translationStudies.payload.content), /TRS490/);
+  assert.match(String(translationStudies.payload.content), /choose five/);
+  assert.match(JSON.stringify(translationStudies.payload.citations), /bachelor-of-arts-in-translation-studies/);
+
+  const psychologyAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.246");
+  assert.equal(psychologyAudit.payload.stateLabel, "v3_degree_audit_preview");
+  assert.notEqual(psychologyAudit.payload.resolutionState, "UNSUPPORTED");
+  assert.doesNotMatch(String(psychologyAudit.payload.content), /do not have a structured curriculum model for .*Psychology/i);
 
   const partialDegreeAudit = await askMessages([
     { role: "user", content: "I passed CSBP119 with C." },
@@ -354,8 +362,9 @@ async function main() {
 
   const unmodeledDegreeAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.248");
   assert.equal(unmodeledDegreeAudit.payload.stateLabel, "v3_degree_audit_preview");
-  assert.equal(unmodeledDegreeAudit.payload.resolutionState, "UNSUPPORTED");
-  assert.match(String(unmodeledDegreeAudit.payload.content), /structured curriculum model/);
+  assert.equal(unmodeledDegreeAudit.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(unmodeledDegreeAudit.payload.content), /cannot see your academic record/i);
+  assert.match(String(unmodeledDegreeAudit.payload.content), /course codes you passed/i);
   assert.doesNotMatch(String(unmodeledDegreeAudit.payload.content), /remaining courses?:\s+[A-Z]{2,8}\d{3,4}/i);
 
   const networkSecuritySubstitution = await ask(
