@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { assessCatalogPrerequisiteConversation } from "../lib/academic/catalog-prerequisite-assessment";
 import { academicSnapshotFromMessages, asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, evaluateCatalogPrerequisite, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
 
 const courseCodes = new Set(listModeledPrerequisiteCourses().map(({ code }) => code));
@@ -58,6 +59,24 @@ assert.equal(isec421LowGrade.status, "UNDETERMINED", "unknown grade notation can
 
 const isec421Satisfied = evaluatePrerequisite({ targetCourseCode: "ISEC421", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }, { courseCode: "ITBP301", grade: "C" }] } });
 assert.equal(isec421Satisfied.status, "ELIGIBLE", "both required courses at grade D satisfy the modeled rule");
+
+const curr232AtThreshold = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "I passed CURR103 with grade 60. Can I take CURR232?" },
+]);
+assert.ok(curr232AtThreshold, "the official CURR232 record's numeric prerequisite is available to deterministic assessment");
+assert.equal(curr232AtThreshold.evaluation.status, "ELIGIBLE", "a numeric mark equal to the published 60 threshold satisfies CURR232");
+assert.match(renderPrerequisiteAssessment(curr232AtThreshold, "en"), /minimum mark of 60/);
+const curr232BelowThreshold = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "I scored 59 in CURR103. Can I register for CURR232?" },
+]);
+assert.ok(curr232BelowThreshold);
+assert.equal(curr232BelowThreshold.evaluation.status, "NOT_ELIGIBLE", "a numeric mark below the published 60 threshold does not satisfy CURR232");
+assert.match(renderPrerequisiteAssessment(curr232BelowThreshold, "en"), /mark 59 does not meet the minimum mark of 60/);
+const curr232UnknownScale = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "I passed CURR103. Can I take CURR232?" },
+]);
+assert.ok(curr232UnknownScale);
+assert.equal(curr232UnknownScale.evaluation.status, "UNDETERMINED", "completion without a mark cannot satisfy a numeric minimum");
 
 const mech348PreCorequisite = evaluatePrerequisite({ targetCourseCode: "MECH348", snapshot: { completedCourses: [{ courseCode: "MECH210", grade: "D" }], currentCourses: ["MECH340"] } });
 assert.equal(mech348PreCorequisite.status, "ELIGIBLE", "the published pre/corequisite allows a current concurrent course");

@@ -2,7 +2,7 @@ import type { OfficialCourseRecord } from "@/lib/academic/course-catalog";
 import type { Grade, PrerequisiteExpression } from "@/lib/academic/prerequisite-rules";
 
 const COURSE_CODE_PATTERN = /\b([A-Z]{2,8})\s?(\d{3,4}[A-Z]?)\b/giu;
-const GRADE_PATTERN = /(?:with\s+)?(?:a\s+)?minimum\s+grade\s+([A-F](?:[+-])?|pass|p)\b/giu;
+const GRADE_PATTERN = /(?:with\s+)?(?:a\s+)?minimum\s+grade\s+([A-F](?:[+-])?|pass|p|\d{1,3}(?:\.\d+)?)(?![\w.])/giu;
 const VALID_GRADES = new Set<Grade>(["F", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"]);
 
 // The official catalog text for these records omits closing parentheses while
@@ -39,9 +39,13 @@ function parseItem(text: string): PrerequisiteExpression | null {
     const segment = source.slice(start, end);
     const gradeMatch = [...segment.matchAll(GRADE_PATTERN)][0];
     const grade = gradeMatch?.[1]?.toUpperCase();
-    if (grade && !VALID_GRADES.has(grade as Grade) && grade !== "PASS" && grade !== "P") return null;
+    const numericGrade = grade && /^\d{1,3}(?:\.\d+)?$/.test(grade) ? Number(grade) : null;
+    if (numericGrade !== null && (!Number.isFinite(numericGrade) || numericGrade < 0 || numericGrade > 100)) return null;
+    if (grade && numericGrade === null && !VALID_GRADES.has(grade as Grade) && grade !== "PASS" && grade !== "P") return null;
     courses.push(grade === "PASS" || grade === "P"
       ? { type: "COURSE_COMPLETED", courseCode }
+      : numericGrade !== null
+        ? { type: "COURSE_GRADE_AT_LEAST", courseCode, minimumGrade: numericGrade }
       : grade
         ? { type: "COURSE_GRADE_AT_LEAST", courseCode, minimumGrade: grade as Grade }
         : { type: "COURSE_COMPLETED", courseCode });

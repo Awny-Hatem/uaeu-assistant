@@ -1,9 +1,10 @@
 import rulesData from "@/data/academic/prerequisite-rules.json";
 
 export type Grade = "F" | "D" | "D+" | "C-" | "C" | "C+" | "B-" | "B" | "B+" | "A-" | "A";
+export type MinimumGrade = Grade | number;
 
 export type PrerequisiteExpression =
-  | { type: "COURSE_GRADE_AT_LEAST"; courseCode: string; minimumGrade: Grade }
+  | { type: "COURSE_GRADE_AT_LEAST"; courseCode: string; minimumGrade: MinimumGrade }
   | { type: "COURSE_COMPLETED"; courseCode: string }
   | { type: "COURSE_CURRENT"; courseCode: string }
   | { op: "AND" | "OR"; conditions: PrerequisiteExpression[] };
@@ -66,8 +67,10 @@ function isExpression(value: unknown): value is PrerequisiteExpression {
   if (value.type === "COURSE_CURRENT") return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode);
   if (value.type === "COURSE_COMPLETED") return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode);
   if (value.type === "COURSE_GRADE_AT_LEAST") {
-    return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode) &&
-      typeof value.minimumGrade === "string" && VALID_GRADES.has(value.minimumGrade);
+    const validMinimum = typeof value.minimumGrade === "number"
+      ? Number.isFinite(value.minimumGrade) && value.minimumGrade >= 0 && value.minimumGrade <= 100
+      : typeof value.minimumGrade === "string" && VALID_GRADES.has(value.minimumGrade);
+    return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode) && validMinimum;
   }
   return (value.op === "AND" || value.op === "OR") && Array.isArray(value.conditions) &&
     value.conditions.length > 0 && value.conditions.every(isExpression);
@@ -132,6 +135,16 @@ function evaluateExpression(
     }
     const satisfied = grade !== "F";
     results.push({ path, courseCode: code, status: satisfied ? "SATISFIED" : "NOT_SATISFIED", reason: satisfied ? `${code} is recorded with a passing grade.` : `${code} is recorded with a failing grade.` });
+    return satisfied ? "true" : "false";
+  }
+  if (typeof expression.minimumGrade === "number") {
+    const numericGrade = grade && /^\d{1,3}(?:\.\d+)?$/.test(grade) ? Number(grade) : NaN;
+    if (!Number.isFinite(numericGrade) || numericGrade < 0 || numericGrade > 100) {
+      results.push({ path, courseCode: code, status: "UNKNOWN", reason: `A numeric mark from 0 to 100 is required to verify ${code}'s minimum mark of ${expression.minimumGrade}.` });
+      return "unknown";
+    }
+    const satisfied = numericGrade >= expression.minimumGrade;
+    results.push({ path, courseCode: code, status: satisfied ? "SATISFIED" : "NOT_SATISFIED", reason: `${code} mark ${numericGrade} ${satisfied ? "meets" : "does not meet"} the minimum mark of ${expression.minimumGrade}.` });
     return satisfied ? "true" : "false";
   }
   if (!grade || !VALID_GRADES.has(grade)) {
@@ -260,7 +273,7 @@ function courseCodeFromQuestion(question: string): string | undefined {
 export function academicSnapshotFromMessages(messages: { role: "user" | "assistant"; content: string }[]): AcademicSnapshot {
   const completed = new Map<string, Set<string>>();
   const current = new Set<string>();
-  const grades = "(PASS|P|A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F)";
+  const grades = "(PASS|P|A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F|100(?:\\.\\d+)?|[0-9]{1,2}(?:\\.\\d+)?)";
   const code = "([A-Z]{2,8}\\d{3,4}[A-Z]?)";
 
   for (const message of messages) {
@@ -392,7 +405,9 @@ function describeExpression(expression: PrerequisiteExpression, locale: "en" | "
     : `${expression.courseCode} بدرجة لا تقل عن ${expression.minimumGrade}`;
   return expression.type === "COURSE_CURRENT"
     ? `current enrollment in ${expression.courseCode}`
-    : `${expression.courseCode} with at least grade ${expression.minimumGrade}`;
+    : typeof expression.minimumGrade === "number"
+      ? `${expression.courseCode} with a minimum mark of ${expression.minimumGrade}`
+      : `${expression.courseCode} with at least grade ${expression.minimumGrade}`;
 }
 
 function relevantConditionResults(

@@ -268,6 +268,13 @@ async function main() {
   assert.match(String(passGradePrerequisiteAssessment.payload.content), /completion of ACCT101/);
   assert.match(String(passGradePrerequisiteAssessment.payload.content), /modeled prerequisite is satisfied/);
 
+  const numericGradePrerequisite = await ask("I passed CURR103 with grade 60. Can I take CURR232?", "203.0.113.242");
+  assert.equal(numericGradePrerequisite.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(numericGradePrerequisite.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(numericGradePrerequisite.payload.content), /CURR103 with a minimum mark of 60/);
+  assert.match(String(numericGradePrerequisite.payload.content), /modeled prerequisite is satisfied/);
+  assert.match(JSON.stringify(numericGradePrerequisite.payload.citations), /course_2910\.shtml\?id=CURR232/);
+
   const passedWithoutLetterGrade = await ask("I passed PSYC304 and PSYC401. Can I take PSYC413?", "203.0.113.252");
   assert.equal(passedWithoutLetterGrade.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
   assert.equal(passedWithoutLetterGrade.payload.resolutionState, "CONDITIONAL");

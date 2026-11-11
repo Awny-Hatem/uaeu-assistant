@@ -130,7 +130,9 @@ assert.deepEqual(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: 
   type: "COURSE_COMPLETED",
   courseCode: "DBA919",
 });
-assert.equal(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: ["CURR232 with a minimum grade 60"] })), null);
+assert.deepEqual(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: ["CURR232 with a minimum grade 60"] })), {
+  type: "COURSE_GRADE_AT_LEAST", courseCode: "CURR232", minimumGrade: 60,
+}, "an explicit numeric catalog threshold is represented as a numeric mark, not a letter grade");
 assert.equal(parseCatalogPrerequisiteExpression(record({ corequisiteItems: ["MGMT666 or"] })), null, "malformed corequisite rules fail closed");
 assert.equal(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: ["Senior standing and CSBP219 with a minimum grade D"] })), null);
 
@@ -138,7 +140,7 @@ const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
-assert.equal(parsed.length, 1475, "the verified catalog snapshot should safely structure 1,475 of its 1,478 relation records");
+assert.equal(parsed.length, 1476, "the verified catalog snapshot should safely structure 1,476 of its 1,478 relation records");
 const minimumD = (courseCode: string) => ({ type: "COURSE_GRADE_AT_LEAST" as const, courseCode, minimumGrade: "D" as const });
 const reviewedRepairs = [
   {
