@@ -77,12 +77,16 @@ assert.deepEqual(arabicEligibility.entities.courses, ["CSBP340"]);
 const arabicFailureScenario = plan("رسبت في CSBP340 مرتين، ماذا أفعل؟");
 assert.equal(arabicFailureScenario.mode, "COMPLEX_SCENARIO", "Arabic failed-course scenarios receive scenario handling");
 assert.equal(arabicFailureScenario.needs.planning, true);
+assert.ok(arabicFailureScenario.requestedFacts.includes("undergraduate failed course repeat policy"), "Arabic repeated-failure questions retrieve the repeat policy");
 
 const arabicAction = plan("سجلني في CSBP340");
 assert.equal(arabicAction.mode, "UNIVERSITY_TRANSACTION", "Arabic commands that request a portal action require the transaction boundary");
 
 const arabicCurrentDeadline = plan("ما آخر موعد للتقديم في جامعة الإمارات؟");
 assert.equal(arabicCurrentDeadline.mode, "CURRENT_UAEU_RESEARCH", "Arabic current-deadline questions use fresh official research");
+assert.equal(arabicCurrentDeadline.entities.domain, "admissions", "Arabic application wording identifies the admissions deadline domain");
+assert.equal(arabicCurrentDeadline.entities.eventType, "admissions_deadline");
+assert.ok(arabicCurrentDeadline.missingContext.includes("your applicant category"));
 
 const arabicCalendarLocation = plan("أين أجد التقويم الأكاديمي لجامعة الإمارات؟");
 assert.equal(arabicCalendarLocation.mode, "UAEU_FACTUAL");

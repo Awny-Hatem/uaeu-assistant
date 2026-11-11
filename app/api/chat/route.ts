@@ -93,6 +93,22 @@ function cleanLimitedString(value: unknown, maxLength: number): string | undefin
   return cleaned;
 }
 
+function localizeMissingContext(item: string, locale: "ar" | "en"): string {
+  if (locale === "en") return item;
+  const labels: Record<string, string> = {
+    "which deadline process you mean": "نوع الموعد الذي تقصده، مثل موعد القبول أو التقويم الأكاديمي أو المنحة",
+    "the program or service whose deadline you need": "اسم البرنامج أو الخدمة التي تريد معرفة موعدها",
+    "the intake or academic year": "الفصل الدراسي أو السنة الدراسية المقصودة",
+    "your applicant category": "فئة المتقدم (مواطن إماراتي أو ابن مواطنة، أم طالب دولي أو ابن موظف في الجامعة)",
+    "the exact course code or degree program": "رمز المساق أو اسم البرنامج الدراسي",
+    "the exact course code or degree program to check course-specific rules": "رمز المساق أو اسم البرنامج الدراسي للتحقق من القواعد الخاصة به",
+    "your degree program": "اسم برنامجك الدراسي",
+    "authenticated access to your student record for a personal eligibility decision": "الوصول المصرح إلى سجلك الدراسي للتحقق من أهليتك الشخصية",
+    "an approved UAEU portal integration and your explicit confirmation before any submission": "تكامل معتمد مع بوابة الجامعة وتأكيد صريح منك قبل تقديم أي طلب",
+  };
+  return labels[item] ?? "تفاصيل إضافية للتحقق من القاعدة أو المصدر الصحيح";
+}
+
 function sanitizeUserContext(value: unknown): UserContext | undefined {
   if (!value || typeof value !== "object") return undefined;
   const raw = value as Record<string, unknown>;
@@ -955,7 +971,7 @@ export async function POST(req: Request) {
         !(repeatPolicyCanBeAnsweredGenerally && item.includes("exact course code or degree program")));
     if (blockingMissingContext.length) {
       const content = locale === "ar"
-        ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${blockingMissingContext.join("؛ ")}.`
+        ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${blockingMissingContext.map((item) => localizeMissingContext(item, locale)).join("؛ ")}.`
         : `I need one detail before I can verify the right rule: ${blockingMissingContext.join("; ")}.`;
       const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "v3_missing_context", resolutionState: "MISSING_CONTEXT", disposition: "clarify", clarificationReason: "missing_context", citations: [], communications };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);

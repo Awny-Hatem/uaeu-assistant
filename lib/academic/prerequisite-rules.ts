@@ -184,6 +184,7 @@ function courseCodeFromQuestion(question: string): string | undefined {
   const code = "([A-Z]{2,5}\\d{3,4})";
   const patterns = [
     new RegExp(`\\b(?:can i|may i|am i (?:eligible|allowed) to)\\s+(?:take|register for|enroll in|enrol in)\\s+(?:the\\s+)?${code}\\b`, "i"),
+    new RegExp(`(?:هل\\s+(?:أستطيع|استطيع|يمكنني|اقدر)\\s+(?:أن\\s+)?(?:آخذ|اخذ|أسجل|اسجل|تسجيل|التحاق|ادرس|أدرس)|(?:ما\\s+)?(?:المتطلبات السابقة|المتطلب السابق|متطلبات)\\s+(?:مساق\\s+|لمساق\\s+|مادة\\s+|لمادة\\s+)?)\\s+${code}\\b`, "u"),
     new RegExp(`\\b(?:prerequisites?|pre-?requisites?|pre-?reqs?|corequisites?|requirements?)\\s+(?:for|of)\\s+(?:the\\s+)?${code}\\b`, "i"),
     new RegExp(`\\b${code}\\s+(?:prerequisites?|pre-?requisites?|pre-?reqs?|corequisites?)\\b`, "i"),
     new RegExp(`\\bwhat\\s+(?:are|is)\\s+(?:the\\s+)?(?:prerequisites?|requirements?)\\s+(?:for|of|to take)\\s+(?:the\\s+)?${code}\\b`, "i"),
@@ -208,6 +209,7 @@ function userProvidedSnapshot(messages: { role: "user" | "assistant"; content: s
     if (message.role !== "user") continue;
     const clauses = message.content.toUpperCase().split(/[.!?;]|\bBUT\b/);
     for (const clause of clauses) {
+      if (/(?:لم|ما)\s+(?:أجتز|اجتز|نجح|أكمل|اكمل|أنهِ|انهِ)/u.test(clause)) continue;
       if (/\b(?:NOT|NEVER|DIDN'T|DID NOT|HAVEN'T|HAVE NOT|HASN'T|HAS NOT)\s+(?:YET\s+)?(?:PASSED|COMPLETED|FINISHED|EARNED)\b/.test(clause)) continue;
 
       const currentPattern = new RegExp(`\\b(?:(?:I AM|I'M)\\s+(?:CURRENTLY\\s+)?TAKING|CURRENTLY\\s+TAKING|(?:I AM\\s+)?(?:CURRENTLY\\s+)?ENROLLED IN|(?:I AM\\s+)?(?:CURRENTLY\\s+)?REGISTERED IN)\\s+${code}\\b`, "g");
@@ -216,10 +218,27 @@ function userProvidedSnapshot(messages: { role: "user" | "assistant"; content: s
         if (!/\b(?:NOT|NEVER|NO LONGER)\s*$/.test(prefix)) current.add(match[1]);
       }
 
+      const arabicCurrentPattern = new RegExp(`(?:أنا\\s+|انا\\s+)?(?:أدرس|ادرس|أسجل في|اسجل في|مسجل(?:ة)? في|ملتحق(?:ة)? ب?مساق|آخذ|اخذ)\\s+${code}\\b`, "gu");
+      for (const match of clause.matchAll(arabicCurrentPattern)) {
+        const prefix = clause.slice(0, match.index ?? 0);
+        if (!/(?:لا|لست|لم|ما)\s*$/u.test(prefix)) current.add(match[1]);
+      }
+
       const completionPattern = new RegExp(`\\b(?:PASSED|COMPLETED|FINISHED|EARNED)\\s+(?:COURSE\\s+)?${code}\\b`, "g");
       for (const match of clause.matchAll(completionPattern)) {
         const afterCode = clause.slice((match.index ?? 0) + match[0].length, (match.index ?? 0) + match[0].length + 28);
         const gradeMatch = afterCode.match(new RegExp(`^\\s+(?:WITH\\s+)?(?:A\\s+)?(?:GRADE\\s+)?${grades}\\b`));
+        const values = completed.get(match[1]) ?? new Set<string>();
+        values.add(gradeMatch?.[1] ?? "");
+        completed.set(match[1], values);
+      }
+
+      const arabicCompletionPattern = new RegExp(`(?:اجتزت|نجحت في|أنهيت|انهيت|أكملت|اكملت)\\s+(?:المساق\\s+)?${code}\\b`, "gu");
+      for (const match of clause.matchAll(arabicCompletionPattern)) {
+        const prefix = clause.slice(0, match.index ?? 0);
+        if (/(?:لم|ما)\s*$/u.test(prefix)) continue;
+        const afterCode = clause.slice((match.index ?? 0) + match[0].length, (match.index ?? 0) + match[0].length + 28);
+        const gradeMatch = afterCode.match(new RegExp(`^\\s*(?:بدرجة|بتقدير|درجة)\\s*(?:GRADE\\s*)?${grades}\\b`, "u"));
         const values = completed.get(match[1]) ?? new Set<string>();
         values.add(gradeMatch?.[1] ?? "");
         completed.set(match[1], values);
@@ -268,11 +287,15 @@ export function assessPrerequisiteConversation(
   return { rule, evaluation: evaluatePrerequisite({ targetCourseCode: targetCode, snapshot: userProvidedSnapshot(messages) }) };
 }
 
-function describeExpression(expression: PrerequisiteExpression): string {
+function describeExpression(expression: PrerequisiteExpression, locale: "en" | "ar" = "en"): string {
   if ("op" in expression) {
-    const parts = expression.conditions.map(describeExpression);
+    const parts = expression.conditions.map((condition) => describeExpression(condition, locale));
+    if (locale === "ar") return expression.op === "AND" ? parts.join(" و ") : `إما ${parts.join(" أو ")}`;
     return expression.op === "AND" ? parts.join(" and ") : `either ${parts.join(" or ")}`;
   }
+  if (locale === "ar") return expression.type === "COURSE_CURRENT"
+    ? `التسجيل الحالي في ${expression.courseCode}`
+    : `${expression.courseCode} بدرجة لا تقل عن ${expression.minimumGrade}`;
   return expression.type === "COURSE_CURRENT"
     ? `current enrollment in ${expression.courseCode}`
     : `${expression.courseCode} with at least grade ${expression.minimumGrade}`;
@@ -284,18 +307,18 @@ export function renderPrerequisiteAssessment(
 ): string {
   const { rule, evaluation } = assessment;
   if (locale === "ar") {
-    const requirement = `المتطلبات المنشورة لمساق ${rule.course.code} (${rule.course.title}): ${describeExpression(rule.expression)}.`;
+    const requirement = `المتطلبات المنشورة لمساق ${rule.course.code} (${rule.course.title}): ${describeExpression(rule.expression, locale)}.`;
     const result = evaluation.status === "ELIGIBLE"
       ? "استنادًا إلى الدرجات التي ذكرتها، تبدو متطلبات المساق المحددة في القاعدة مستوفاة. هذا ليس تأكيدًا للتسجيل."
       : evaluation.status === "NOT_ELIGIBLE"
         ? "استنادًا إلى المعلومات التي ذكرتها، لا تتحقق متطلبات المساق المحددة في القاعدة. تحقق من معادلة المقررات أو الاستثناءات مع مرشد كليتك."
         : "لا يمكن حسم متطلباتك من المعلومات المتاحة. أرسل درجات المقررات المطلوبة كما تظهر في سجلك الدراسي.";
-    const conditions = evaluation.conditions.map((condition) => `- ${condition.reason}`).join("\n");
+    const conditions = evaluation.conditions.map((condition) => `- ${condition.status === "SATISFIED" ? "المعلومات المدخلة تستوفي الشرط" : condition.status === "NOT_SATISFIED" ? "المعلومات المدخلة لا تستوفي الشرط" : "لا تتوفر معلومات كافية للتحقق من الشرط"} الخاص بـ ${condition.courseCode}.`).join("\n");
     return [requirement, conditions, result, "هذه مقارنة إرشادية مع القاعدة المنشورة باستخدام المعلومات التي أدخلتها؛ لا أستطيع الوصول إلى سجلك، ولا تؤكد النتيجة السماح بالتسجيل أو توفر شعبة. تحقق من Degree Works أو بوابة التسجيل، واسأل مرشدك عن اختلافات الخطة أو المعادلات."]
       .filter(Boolean).join("\n\n");
   }
 
-  const requirement = `The UAEU catalog lists this prerequisite for **${rule.course.code} ${rule.course.title}**: ${describeExpression(rule.expression)}.`;
+  const requirement = `The UAEU catalog lists this prerequisite for **${rule.course.code} ${rule.course.title}**: ${describeExpression(rule.expression, locale)}.`;
   const conditions = evaluation.conditions.map((condition) => `- ${condition.reason}`).join("\n");
   const result = evaluation.status === "ELIGIBLE"
     ? "Based on the grades you provided, the modeled prerequisite is satisfied. This does not confirm registration eligibility."

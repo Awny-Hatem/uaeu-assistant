@@ -79,8 +79,9 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   const mode = executionMode(latest, normalizedRequest);
   const hasResolvedContext = Boolean(input.resolvedRequest && input.resolvedRequest.trim() !== latest) || resolution.usedContext;
   const explicitCourseCodes = latest.match(/\b[A-Z]{2,5}\d{3,4}\b/gi) ?? [];
-  const ambiguousFailedCourse = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b/i.test(normalizedRequest) &&
-    /\bdata structures?\b/i.test(normalizedRequest) && explicitCourseCodes.length === 0;
+  const failedCourseMention = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b|رسبت|يرسب|رسوب|إعادة(?:\s+المساق)?|اعادة(?:\s+المساق)?/iu.test(normalizedRequest);
+  const courseMention = /\bdata structures?\b|مساق|مادة|مقرر|المقررات|المواد/iu.test(normalizedRequest);
+  const ambiguousFailedCourse = failedCourseMention && /\bdata structures?\b|هياكل البيانات/iu.test(normalizedRequest) && explicitCourseCodes.length === 0;
   const resolvedDomain = requestedDomain(latest, normalizedRequest, hasResolvedContext);
   const domain = ambiguousFailedCourse ? { domain: "academics", ambiguous: false } : resolvedDomain;
   const missingContext: string[] = [];
@@ -98,8 +99,7 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   // Personal phrasing does not itself require a portal record. Ask for
   // authenticated access only when the answer depends on private account data.
   const requiresPersonalRecord = /\b(?:my (?:gpa|cgpa|record|transcript|degree audit|completed courses|holds?|registration status)|am i eligible based on my record|can i register right now|can i graduate now|what is my academic standing)\b/i.test(normalizedRequest);
-  const asksRepeatPolicy = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b/i.test(normalizedRequest) &&
-    /\b(?:course|courses|data structures?)\b|\b[A-Z]{2,5}\d{3,4}\b/i.test(normalizedRequest);
+  const asksRepeatPolicy = failedCourseMention && (courseMention || /\b[A-Z]{2,5}\d{3,4}\b/i.test(normalizedRequest));
   if (requiresPersonalRecord && !input.authenticatedScopes?.includes("student-record:read")) {
     missingContext.push("authenticated access to your student record for a personal eligibility decision");
   }

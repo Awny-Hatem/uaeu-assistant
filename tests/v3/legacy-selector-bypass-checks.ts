@@ -9,15 +9,15 @@ process.env.AUTH_COOKIE_SECRET = "test-only-auth-cookie-secret-with-at-least-32-
 async function main() {
   const { POST } = await import("../../app/api/chat/route");
 
-  async function askMessages(messages: { role: "user" | "assistant"; content: string }[], ip: string) {
+  async function askMessages(messages: { role: "user" | "assistant"; content: string }[], ip: string, locale: "en" | "ar" = "en") {
     const response = await POST(new Request("http://localhost/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
-      body: JSON.stringify({ locale: "en", messages }),
+      body: JSON.stringify({ locale, messages }),
     }));
     return { status: response.status, payload: await response.json() as Record<string, unknown> };
   }
-  const ask = (question: string, ip: string) => askMessages([{ role: "user", content: question }], ip);
+  const ask = (question: string, ip: string, locale: "en" | "ar" = "en") => askMessages([{ role: "user", content: question }], ip, locale);
 
   const calendar = await ask("Where can I check UAEU academic calendar deadlines?", "203.0.113.221");
   assert.equal(calendar.status, 200);
@@ -104,6 +104,18 @@ async function main() {
   assert.equal(incompletePrerequisites.payload.stateLabel, "v3_academic_rule_evaluation");
   assert.equal(incompletePrerequisites.payload.resolutionState, "UNSUPPORTED");
   assert.match(String(incompletePrerequisites.payload.content), /STAT210[\s\S]*ITBP301/);
+
+  const arabicPrerequisite = await ask("هل أستطيع تسجيل CSBP319؟", "203.0.113.239", "ar");
+  assert.equal(arabicPrerequisite.payload.stateLabel, "v3_academic_rule_evaluation");
+  assert.equal(arabicPrerequisite.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(arabicPrerequisite.payload.content), /CSBP219[\s\S]*CSBP221/);
+  assert.doesNotMatch(String(arabicPrerequisite.payload.content), /No recognized completed grade|is listed as current/);
+
+  const arabicAdmissionsDeadline = await ask("ما آخر موعد للتقديم في جامعة الإمارات؟", "203.0.113.240", "ar");
+  assert.equal(arabicAdmissionsDeadline.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(arabicAdmissionsDeadline.payload.content), /فئة المتقدم/);
+  assert.match(String(arabicAdmissionsDeadline.payload.content), /الفصل الدراسي أو السنة الدراسية/);
+  assert.doesNotMatch(String(arabicAdmissionsDeadline.payload.content), /applicant category|academic year|deadline process/i);
 
   const currentDegreeCredits = await ask("How many credit hours do I need to graduate from Information Security?", "203.0.113.228");
   assert.equal(currentDegreeCredits.payload.stateLabel, "v3_program_credit_model");

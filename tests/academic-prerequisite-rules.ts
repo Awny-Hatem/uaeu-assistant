@@ -96,6 +96,22 @@ assert.equal(incompleteConversation.evaluation.status, "UNDETERMINED", "a missin
 assert.match(renderPrerequisiteAssessment(incompleteConversation, "en"), /ITBP301/);
 assert.match(renderPrerequisiteAssessment(incompleteConversation, "ar"), /STAT210/);
 
+const arabicPrerequisiteConversation = assessPrerequisiteConversation([
+  { role: "user", content: "اجتزت CSBP219 بدرجة D وأنا أدرس CSBP221 حالياً. هل أستطيع تسجيل CSBP319؟" },
+]);
+assert.ok(arabicPrerequisiteConversation, "Arabic course eligibility wording routes to the modeled prerequisite rule");
+assert.equal(arabicPrerequisiteConversation.evaluation.status, "ELIGIBLE", "Arabic completed-grade and concurrent-course facts are parsed conservatively");
+const arabicPrerequisiteAnswer = renderPrerequisiteAssessment(arabicPrerequisiteConversation, "ar");
+assert.match(arabicPrerequisiteAnswer, /CSBP219.*درجة لا تقل عن D/);
+assert.match(arabicPrerequisiteAnswer, /التسجيل الحالي في CSBP221/);
+assert.doesNotMatch(arabicPrerequisiteAnswer, /No recognized completed grade|is listed as current|grade D meets/i, "Arabic prerequisite output does not leak English condition explanations");
+
+const arabicUnknownPrerequisite = assessPrerequisiteConversation([
+  { role: "user", content: "هل أستطيع تسجيل CSBP319؟" },
+]);
+assert.ok(arabicUnknownPrerequisite);
+assert.equal(arabicUnknownPrerequisite.evaluation.status, "UNDETERMINED", "a target-only Arabic question never invents completed grades");
+
 const explicitlyNotCompleted = assessPrerequisiteConversation([
   { role: "user", content: "I have not completed CSBP319 with D, and I have not completed CSBP323 with D. Can I take CSBP340?" },
 ]);
