@@ -93,6 +93,8 @@ const itRequirements = assessProgramRequirementsConversation([
 assert.ok(itRequirements);
 const itRequirementsText = renderProgramRequirementsAssessment(itRequirements, "en");
 assert.match(itRequirementsText, /CSBP340/);
+assert.match(itRequirementsText, /Internship requirement:\*\* ITBP496/);
+assert.match(itRequirementsText, /currently published curriculum includes these course groups/);
 assert.match(itRequirementsText, /choose 1 from BIOC100 or CHEM111/);
 assert.match(itRequirementsText, /choose 3 \(9 credits\)/);
 assert.match(itRequirementsText, /do not identify which courses remain/i);

@@ -225,15 +225,20 @@ export function renderProgramRequirementsAssessment(
     if (requirement.type === "ELECTIVE_GROUP") {
       return `**${requirement.name}:** choose ${requirement.chooseCount} (${requirement.credits} credits) from ${requirement.courseCodes.join(", ")}.`;
     }
-    return `**${requirement.name ?? requirement.id}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;
+    return `**${requirement.name ?? "Internship requirement"}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;
   });
   const notes = curriculum.limitations.map((note) => `- ${note}`).join("\n");
-  const cohort = cohortYear !== undefined ? `for the ${cohortYear} entry cohort` : "in the currently published curriculum";
+  const courseGroupIntro = cohortYear !== undefined
+    ? `The curriculum for the ${cohortYear} entry cohort includes these groups (**${curriculum.totalCredits} total credits**).`
+    : `The currently published curriculum includes these course groups (**${curriculum.totalCredits} total credits**).`;
   if (locale === "ar") {
-    return [`**مجموعات المقررات المنشورة — ${programName}**`, `تستند القائمة إلى الخطة ${cohort}، بإجمالي **${curriculum.totalCredits} ساعة معتمدة**.`, ...groups, notes ? `**ملاحظات النطاق:**\n${notes}` : "", "هذه مجموعات متطلبات منشورة وليست تدقيقاً لسجلك أو للمقررات المتبقية. تحقق من خطتك في Degree Works؛ وتُراجع متطلبات المتطلب السابق من سجل المقرر الرسمي."]
+    const arabicIntro = cohortYear !== undefined
+      ? `تستند القائمة إلى خطة دفعة الدخول ${cohortYear}، بإجمالي **${curriculum.totalCredits} ساعة معتمدة**.`
+      : `تشمل الخطة المنشورة حالياً مجموعات المقررات التالية (**${curriculum.totalCredits} ساعة معتمدة إجمالاً**).`;
+    return [`**مجموعات المقررات المنشورة — ${programName}**`, arabicIntro, ...groups, notes ? `**ملاحظات النطاق:**\n${notes}` : "", "هذه مجموعات متطلبات منشورة وليست تدقيقاً لسجلك أو للمقررات المتبقية. تحقق من خطتك في Degree Works؛ وتُراجع متطلبات المتطلب السابق من سجل المقرر الرسمي."]
       .filter(Boolean).join("\n\n");
   }
-  return [`**Published course requirements — ${programName}**`, `The following groups are from the curriculum ${cohort} (**${curriculum.totalCredits} total credits**).`, ...groups, notes ? `**Scope notes:**\n${notes}` : "", "These published requirement groups do not identify which courses remain on your record. Check your assigned plan in Degree Works; verify prerequisites on each official course record."]
+  return [`**Published course requirements — ${programName}**`, courseGroupIntro, ...groups, notes ? `**Scope notes:**\n${notes}` : "", "These published requirement groups do not identify which courses remain on your record. Check your assigned plan in Degree Works; verify prerequisites on each official course record."]
     .filter(Boolean).join("\n\n");
 }
 
