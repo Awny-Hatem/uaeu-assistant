@@ -222,6 +222,7 @@ export function AcademicSequencePlanner({
     conditional: "متطلبات مرتبطة باختيار المسار",
     appliesIf: "ينطبق عند اختيار",
     creditBlocks: "متطلبات الساعات التي لا يقيّمها ترتيب المقررات",
+    sources: "مصادر الخطة الدراسية",
     requiredPrompt: "يمكن إضافة المقررات الإلزامية المقترحة أعلاه. أضف المقررات الاختيارية ومقررات المسارات بعد التأكد من انطباقها على خطتك. لا تتحقق الأداة من الساعات الاختيارية أو استيفاء متطلبات الدرجة.",
   } : {
     overview: "Curriculum requirement overview",
@@ -236,6 +237,7 @@ export function AcademicSequencePlanner({
     conditional: "Requirements dependent on a pathway",
     appliesIf: "applies if",
     creditBlocks: "Credit blocks not assessed by course sequencing",
+    sources: "Curriculum sources",
     requiredPrompt: "Mandatory course suggestions can be added above. Select electives and pathway courses only after confirming they apply to your plan. This tool does not validate elective credits or degree completion.",
   };
 
@@ -373,7 +375,7 @@ export function AcademicSequencePlanner({
               </div>}
               {curriculum.requirementSummary.pathwayChoices.length > 0 && <div className="space-y-1 text-sm">
                 <h4 className="font-semibold">{requirementCopy.pathways}</h4>
-                {curriculum.requirementSummary.pathwayChoices.map((pathway) => <p key={pathway.id} className="text-zinc-700"><span className="font-medium">{pathway.name}:</span> {pathway.options.map((option) => option.name).join("; ")}</p>)}
+                {curriculum.requirementSummary.pathwayChoices.map((pathway) => <p key={pathway.id} className="text-zinc-700"><span className="font-medium">{pathway.name}:</span> {pathway.options.map((option) => `${option.name}${option.courseCodes.length ? ` (${option.courseCodes.join(", ")})` : ""}`).join("; ")}</p>)}
               </div>}
               {curriculum.requirementSummary.conditionalGroups.length > 0 && <div className="space-y-1 text-xs leading-5 text-zinc-600">
                 <h4 className="font-semibold text-zinc-700">{requirementCopy.conditional}</h4>
@@ -382,6 +384,10 @@ export function AcademicSequencePlanner({
               {curriculum.requirementSummary.creditBlocksNotAssessed.length > 0 && <div className="space-y-1 text-xs leading-5 text-zinc-600">
                 <h4 className="font-semibold text-zinc-700">{requirementCopy.creditBlocks}</h4>
                 {curriculum.requirementSummary.creditBlocksNotAssessed.map((block) => <p key={block.id}><span className="font-medium">{block.name} ({requirementCopy.credits(block.credits)}):</span> {block.ruleNote}{block.conditionalOn ? ` — ${requirementCopy.appliesIf} ${block.conditionalOn}` : ""}</p>)}
+              </div>}
+              {curriculum.sources.length > 0 && <div className="space-y-1 text-xs leading-5">
+                <h4 className="font-semibold text-zinc-700">{requirementCopy.sources}</h4>
+                {curriculum.sources.map((source) => <p key={source.url}><a className="text-[#B10E23] underline" href={source.url} target="_blank" rel="noreferrer">{source.title}</a> · {source.lastVerified}</p>)}
               </div>}
             </section>
 

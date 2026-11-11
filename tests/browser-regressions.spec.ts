@@ -116,7 +116,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
       cohort: { year: 2025, label: 'Fall 2025 cohort', version: '2025', totalCredits: 120 },
       courses: [{ code: 'CSBP119', title: 'Introduction to Programming', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' } }],
       requirementSummary: { mandatoryCourseCodes: ['CSBP119'], choiceGroups: [], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
-      unavailableCourses: [], sources: [], limitations: [],
+      unavailableCourses: [], sources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }], limitations: [],
     } });
   });
   await page.goto('/');
@@ -126,6 +126,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await dialog.getByLabel('Degree program').selectOption('bsc-computer-science');
   await dialog.getByLabel('Entry cohort year').selectOption('2025');
   await expect(dialog.getByText(/CSBP119.*Introduction to Programming/)).toBeVisible();
+  await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' }).first()).toHaveAttribute('href', /uaeu\.ac\.ae/);
   await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
   await expect(dialog.getByRole('checkbox')).toBeChecked();
   await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105, CSBP119');
@@ -140,7 +141,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await expect(dialog.getByText(/Plan result: CONDITIONAL PLAN/i)).toBeVisible();
   await expect(dialog.getByText(/CSBP119 — Introduction to Programming/)).toBeVisible();
   await expect(dialog.getByText(/No confirmed section offering/)).toBeVisible();
-  await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' })).toHaveAttribute('href', /uaeu\.ac\.ae/);
+  await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' }).last()).toHaveAttribute('href', /uaeu\.ac\.ae/);
 });
 
 for (const hungPath of ['/api/auth/session', '/api/history']) {
