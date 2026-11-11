@@ -23,7 +23,7 @@ export type DegreeAuditAssessment = {
   programId: string;
   programName: string;
   curriculumVersion: string | null;
-  auditStatus: "PRELIMINARY" | "PROGRAM_NOT_SPECIFIED" | "PROGRAM_NOT_MODELED" | "COHORT_MODEL_UNAVAILABLE";
+  auditStatus: "PRELIMINARY" | "PROGRAM_NOT_SPECIFIED" | "PROGRAM_NOT_MODELED" | "COHORT_YEAR_REQUIRED" | "COHORT_MODEL_UNAVAILABLE";
   cohortYear?: number;
   cohortMatched: boolean;
   hasCourseData: boolean;
@@ -247,6 +247,21 @@ export function assessDegreeAuditConversation(
   const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
   const selected = getProgramCurriculum(programId, cohortYear);
   const curriculum = selected?.curriculum;
+  if (cohortYear === undefined && curriculum) {
+    return {
+      programId,
+      programName: program.name,
+      curriculumVersion: curriculum.id,
+      auditStatus: "COHORT_YEAR_REQUIRED",
+      cohortMatched: false,
+      hasCourseData: false,
+      courseGroups: [],
+      courseStatus: {},
+      creditBlocksNotAssessed: [],
+      sources: program.sources,
+      limitations: ["The entry/cohort year is required before comparing reported courses; the newest published model is not assumed to apply to every student cohort."],
+    };
+  }
   if (!curriculum) {
     return {
       programId,
@@ -322,6 +337,11 @@ export function renderDegreeAuditAssessment(assessment: DegreeAuditAssessment, l
     return locale === "ar"
       ? `\u0644\u0627 \u064a\u062a\u0648\u0641\u0631 \u0644\u062f\u064a \u0646\u0645\u0648\u0630\u062c \u0645\u0646\u0647\u062c\u064a \u0645\u0624\u0643\u062f \u0644\u062f\u0641\u0639\u0629 ${assessment.cohortYear} \u0641\u064a ${assessment.programName}. \u0644\u0646 \u0623\u0637\u0628\u0642 \u062e\u0637\u0629 \u062f\u0641\u0639\u0629 \u0623\u062e\u0631\u0649 \u0639\u0644\u0649 \u0633\u062c\u0644\u0643. \u0631\u0627\u062c\u0639 \u062e\u0637\u062a\u0643 \u0641\u064a Degree Works \u0623\u0648 \u0623\u0631\u0633\u0644 \u0633\u0646\u0629 \u0627\u0644\u0645\u0646\u0647\u062c \u0627\u0644\u0638\u0627\u0647\u0631\u0629 \u0641\u064a\u0647\u0627.`
       : `I do not have a verified structured curriculum model for the ${assessment.cohortYear} entry cohort in ${assessment.programName}. I will not apply another cohort's plan to your record. Check your assigned Degree Works plan or provide the catalog year shown there.`;
+  }
+  if (assessment.auditStatus === "COHORT_YEAR_REQUIRED") {
+    return locale === "ar"
+      ? `أحتاج إلى سنة التحاقك أو سنة الخطة الدراسية الظاهرة في Degree Works قبل مقارنة مقرراتك. قد تختلف المتطلبات بين الدفعات، لذلك لن أطبق أحدث خطة منشورة على سجلك دون التحقق من انطباقها. ما سنة التحاقك؟`
+      : `What year did you enter UAEU, or what catalog year is shown in your Degree Works plan? Program requirements can differ by cohort, so I will not compare your courses against the newest published model until I can identify the applicable version.`;
   }
   if (!assessment.hasCourseData) {
     return locale === "ar"

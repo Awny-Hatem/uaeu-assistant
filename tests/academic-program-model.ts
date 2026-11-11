@@ -586,6 +586,7 @@ assert.equal(earlyChildhoodCohortAudit?.auditStatus, "COHORT_MODEL_UNAVAILABLE",
 assert.equal(earlyChildhoodCohortAudit?.curriculumVersion, "early-childhood-education-2025-120-plan-only");
 assert.match(JSON.stringify(earlyChildhoodCohortAudit?.limitations), /detailed cohort course requirements are not structured/i);
 const computerScienceGradeAudit = assessDegreeAuditConversation([
+  { role: "user", content: "I entered Computer Science in the 2027 cohort." },
   { role: "user", content: "I am a Computer Science student." },
   { role: "user", content: "I received 59 in CSBP119. I got a D in CSBP219. I received W in CSBP319." },
   { role: "user", content: "What do I still need to graduate?" },
@@ -598,13 +599,22 @@ assert.equal(computerScienceGradeAudit?.courseStatus.CSBP319, "NEEDS_CONFIRMATIO
   "withdrawal is not interpreted as a completed course");
 assert.match(renderDegreeAuditAssessment(computerScienceGradeAudit!, "en"), /repeat required: CSBP119/i,
   "the preliminary audit explains why a below-threshold course remains outstanding");
+const missingDegreeAuditCohort = assessDegreeAuditConversation([
+  { role: "user", content: "I am a Computer Science student." },
+  { role: "user", content: "I passed CSBP119 with a C. What do I still need to graduate?" },
+]);
+assert.equal(missingDegreeAuditCohort?.auditStatus, "COHORT_YEAR_REQUIRED",
+  "a preliminary course comparison must not apply the newest model when the student's cohort is unknown");
+assert.equal(missingDegreeAuditCohort?.courseGroups.length, 0,
+  "do not disclose a guessed remaining-course list before selecting the applicable cohort");
+assert.match(renderDegreeAuditAssessment(missingDegreeAuditCohort!, "en"), /what year did you enter UAEU/i);
 const dieteticsGradeAudit = assessDegreeAuditConversation([
   { role: "user", content: "I am a Dietetics student." },
   { role: "user", content: "I received 59 in NUTR101." },
   { role: "user", content: "What do I still need to graduate?" },
 ]);
-assert.equal(dieteticsGradeAudit?.courseStatus.NUTR101, "NEEDS_CONFIRMATION",
-  "the general undergraduate grading policy explicitly excludes the College of Medicine and Health Sciences, so its numeric threshold is not applied to Dietetics");
+assert.equal(dieteticsGradeAudit?.auditStatus, "COHORT_YEAR_REQUIRED",
+  "do not assess a College of Medicine and Health Sciences student against the current page without knowing cohort applicability");
 for (const [programId, requirementId, expectedCredits] of [
   ["aerospace-engineering", "aerospace-core", 68],
   ["petroleum-engineering", "petroleum-major", 65],

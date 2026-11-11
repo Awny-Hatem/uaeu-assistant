@@ -1183,7 +1183,7 @@ export async function POST(req: Request) {
     if (degreeAuditAssessment) {
       const auditResolution = degreeAuditAssessment.auditStatus === "PROGRAM_NOT_MODELED"
         ? "UNSUPPORTED"
-        : degreeAuditAssessment.auditStatus === "COHORT_MODEL_UNAVAILABLE" || !degreeAuditAssessment.hasCourseData
+        : degreeAuditAssessment.auditStatus === "COHORT_YEAR_REQUIRED" || degreeAuditAssessment.auditStatus === "COHORT_MODEL_UNAVAILABLE" || !degreeAuditAssessment.hasCourseData
           ? "MISSING_CONTEXT"
           : "CONDITIONAL";
       const payload: AssistantPayload = {
