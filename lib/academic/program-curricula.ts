@@ -175,6 +175,7 @@ export function programIdInText(text: string): string | undefined {
   if (correctedCybersecurity) return "cybersecurity";
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
+  if (/\belectrical engineering\b/i.test(text)) return "electrical-engineering";
   if (/\bcomputer (?:and )?(?:artificial intelligence|AI) engineering\b/i.test(text)) return "bsc-computer-ai-engineering";
   if (/\bcomputer engineering\b/i.test(text)) return "bsc-computer-engineering";
   if (/\bdata science and artificial intelligence\b|\bDSAI\b/i.test(text)) return "data-science-and-artificial-intelligence";

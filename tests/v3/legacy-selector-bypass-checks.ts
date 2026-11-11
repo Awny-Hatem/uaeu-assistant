@@ -67,6 +67,12 @@ async function main() {
   assert.match(String(dsaiCredits.payload.content), /curriculum requires \*\*120 credit hours\*\*/);
   assert.match(JSON.stringify(dsaiCredits.payload.citations), /bachelor-of-science-in-data-science-and-artificial-intelligence/);
 
+  const electricalCredits = await ask("How many credits do I need to graduate from Electrical Engineering?", "203.0.113.249");
+  assert.equal(electricalCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.equal(electricalCredits.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(electricalCredits.payload.content), /curriculum requires \*\*132 credit hours\*\*/);
+  assert.match(JSON.stringify(electricalCredits.payload.citations), /bachelor-of-science-in-electrical-engineering/);
+
   const securityIdentityQuestion = await ask("Did Cybersecurity replace Information Security?", "203.0.113.248");
   assert.equal(securityIdentityQuestion.payload.stateLabel, "academic_program_identity_review");
   assert.equal(securityIdentityQuestion.payload.resolutionState, "MISSING_CONTEXT");

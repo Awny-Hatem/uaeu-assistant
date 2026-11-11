@@ -35,6 +35,7 @@ export type DegreeAuditAssessment = {
 
 const CURRICULUM_PROGRAM_IDS: Record<string, string> = {
   "mechanical-engineering": "bsc-mechanical-engineering",
+  "electrical-engineering": "electrical-engineering",
   "information-technology": "bsc-information-technology",
   "cybersecurity": "cybersecurity",
   "computer-science": "bsc-computer-science",

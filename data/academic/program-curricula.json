@@ -627,5 +627,167 @@
         ]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "electrical-engineering",
+    "name": "Bachelor of Science in Electrical Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Engineering",
+    "sources": [
+      {
+        "documentId": "39-electrical-engineering-curriculum",
+        "title": "UAEU Bachelor of Science in Electrical Engineering degree requirements",
+        "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "electrical-engineering-catalog-2026-11",
+        "version": "catalog-2026-11-09",
+        "status": "approved",
+        "cohortLabel": "Current published Electrical Engineering catalog; confirm individual cohort and assigned Degree Works plan",
+        "effectiveFrom": "2026-11-09",
+        "totalCredits": 132,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General education",
+            "credits": 21
+          },
+          {
+            "id": "college-requirements",
+            "name": "College of Engineering requirements",
+            "credits": 35
+          },
+          {
+            "id": "specialization-requirements",
+            "name": "Electrical Engineering specialization requirements",
+            "credits": 62
+          },
+          {
+            "id": "internship",
+            "name": "Internship",
+            "credits": 2
+          },
+          {
+            "id": "electives",
+            "name": "Elective courses",
+            "credits": 12
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "electrical-engineering-general-education",
+            "name": "General education",
+            "credits": 21,
+            "ruleNote": "The catalog lists 21 general-education credits with theme-specific options; this model does not audit course selections within those themes."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "electrical-engineering-college-required",
+            "name": "Required College of Engineering courses",
+            "courseCodes": [
+              "MATH210",
+              "MATH110",
+              "MATH105",
+              "CHEM111",
+              "GENG315",
+              "STAT210",
+              "GENG215",
+              "MATH140",
+              "MATH275",
+              "PHYS105",
+              "PHYS135",
+              "PHYS110",
+              "PHYS140",
+              "CHEM175"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "electrical-engineering-specialization-required",
+            "name": "Required specialization courses",
+            "courseCodes": [
+              "ELEC585",
+              "ELEC305",
+              "ELEC310",
+              "ELEC315",
+              "ELEC320",
+              "ELEC325",
+              "ELEC335",
+              "ELEC345",
+              "ELEC360",
+              "ELEC370",
+              "ELEC375",
+              "ELEC395",
+              "ELEC411",
+              "ELEC431",
+              "ELEC433",
+              "ELEC451",
+              "ELEC461",
+              "ELEC462",
+              "ELEC472",
+              "ELEC481",
+              "ELEC590",
+              "ECOM360",
+              "ECOM432",
+              "ECOM442",
+              "GENG230",
+              "CHEM270"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "electrical-engineering-internship-courses",
+            "name": "Required internship courses",
+            "courseCodes": [
+              "ELEC485",
+              "ELEC490"
+            ]
+          },
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "electrical-engineering-internship-credit-rule",
+            "name": "Internship credits and timing",
+            "credits": 2,
+            "ruleNote": "The page labels the internship requirement as 2 credits, but its table lists ELEC485 as 1 credit and ELEC490 as 0.00. It says the two courses are taken in different summers or together in a regular Fall or Spring semester. The total is retained as published and is not recomputed from those rows."
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "electrical-engineering-electives",
+            "name": "Elective courses",
+            "chooseCount": 4,
+            "credits": 12,
+            "courseCodes": [
+              "ECOM451",
+              "ELEC512",
+              "ELEC521",
+              "ELEC522",
+              "ELEC523",
+              "ELEC530",
+              "ELEC531",
+              "ELEC533",
+              "ELEC534",
+              "ELEC551",
+              "ELEC561",
+              "ELEC562",
+              "ELEC570",
+              "ELEC580",
+              "ELEC582",
+              "ELEC592",
+              "ECOM412"
+            ]
+          }
+        ],
+        "limitations": [
+          "The program page was last updated 9 November 2026. This is the published catalog model, not an assigned cohort semester plan.",
+          "The internship credit total (2) conflicts with the course rows (ELEC485: 1 credit; ELEC490: 0.00); the inconsistency is disclosed and no missing credit is invented.",
+          "General-education choices are represented as an unassessed credit block. The model does not establish a student?s cohort, completed requirements, course availability, prerequisites beyond the official course catalog, or registration eligibility."
+        ]
+      }
+    ]
   }
 ]
