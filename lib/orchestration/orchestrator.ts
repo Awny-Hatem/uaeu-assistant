@@ -161,7 +161,10 @@ export function evidenceQueryForPlan(plan: ExecutionPlan): EvidenceQuery {
       ...(entities.program ? { programId: entities.program } : {}),
       ...(entities.courses?.length ? { courseCodes: entities.courses } : {}),
       ...(entities.cohort ? { cohort: entities.cohort } : {}),
-      ...(entities.degreeLevel ? { degreeLevel: entities.degreeLevel } : {}),
+      // An exact program identity is more specific than the broad degree-level
+      // label. Applicability evidence may describe whether a policy crosses
+      // that level, so do not filter it out using a level inferred from context.
+      ...(entities.degreeLevel && !entities.program ? { degreeLevel: entities.degreeLevel } : {}),
       ...(!isLocationLookup && entities.term ? { term: entities.term } : {}),
       ...(!isLocationLookup && entities.year !== undefined ? { year: entities.year } : {}),
       ...(entities.applicantCategory === "national" || entities.applicantCategory === "international"

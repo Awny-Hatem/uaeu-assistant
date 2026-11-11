@@ -452,6 +452,13 @@ function containsPhrase(query: string, phrase: string): boolean {
   return ` ${query} `.includes(` ${normalizedPhrase} `);
 }
 
+function removeHarmlessFaqWrappers(query: string): string {
+  return query
+    .replace(/^(?:please tell me|i was wondering|could you explain)\s+/u, "")
+    .replace(/\s+(?:right now|please)$/u, "")
+    .trim();
+}
+
 function similarityScore(
   query: string,
   candidate: string,
@@ -550,13 +557,24 @@ export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
   if (entry.citations.some((citation) => !citation.lastVerified || Date.now() - Date.parse(citation.lastVerified) > CITATION_FRESHNESS_MS)) return false;
   const scope = faqScope(entry);
   const meaning = understandQuery(query);
+  const normalizedQuery = normalizeAnswerText(query);
+  const explicitPolicyScopeQuestion = entry.applicability?.type === "policy-scope" &&
+    [...entry.questions, ...(entry.matchPhrases ?? [])].some((phrase) => containsPhrase(normalizedQuery, phrase));
+  const explicitPolicyScopeFollowUp = entry.applicability?.type === "policy-scope" &&
+    entry.applicability.intents.some((intent) => meaning.intents.includes(intent)) &&
+    /\b(?:apply|applies|applicable|scope|excluded?)\b/iu.test(normalizedQuery) &&
+    understandQuery(entry.applicability.targetProgramId.replaceAll("-", " ")).subjects.some((subject) => meaning.subjects.includes(subject));
   // A course-specific rule needs an identified target. Shared terms such as
   // "prerequisite" or "corequisite" must not make one course's rule answer a
   // general terminology question. Explicit course names are converted to
   // codes by understandQuery, so legitimate named-course questions still work.
   if (entry.category === "courses" && scope.courseCodes?.length &&
     (!meaning.codes.length || !meaning.codes.every((code) => scope.courseCodes!.includes(code)))) return false;
-  if (!scopeAllows(query, `${entry.answer_en}\n${entry.answer_ar ?? ""}`, scope)) return false;
+  const scopeText = `${entry.answer_en}\n${entry.answer_ar ?? ""}`;
+  const scopeMatches = scopeAllows(query, scopeText, scope) || (explicitPolicyScopeQuestion &&
+    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined })) || (explicitPolicyScopeFollowUp &&
+    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined }));
+  if (!scopeMatches) return false;
   // University-wide calendar facts are not admission/payment/scholarship schedules.
   if (meaning.intents.includes("deadline")) {
     const questionTopics = understandQuery([...entry.questions, ...(entry.matchPhrases ?? [])].join(" ")).subjects;
@@ -601,7 +619,7 @@ export function courseIdentityConflict(query: string): { supplied: string; named
 export function matchFaq(
   userMessage: string,
 ): { entry: FaqEntry; score: number } | null {
-  const query = normalizeAnswerText(userMessage);
+  const query = normalizeAnswerText(removeHarmlessFaqWrappers(normalizeAnswerText(userMessage)));
   if (!query) return null;
   const entries = loadFaqEntries();
   const queryTokens = correctedQueryTokens(query, entries);

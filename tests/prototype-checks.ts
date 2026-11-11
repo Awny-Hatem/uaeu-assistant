@@ -792,7 +792,10 @@ async function main() {
         });
         assertFaq(result, "course-prerequisites-database-systems", "clarify");
         assert.match(result.data.content ?? "", /CSBP340/);
-        assert.match(result.data.content ?? "", /CSBP319[\s\S]*minimum grade of D/i);
+        assert.match(result.data.content ?? "", /CSBP319[\s\S]*minimum grade D/i);
+        assert.match(result.data.content ?? "", /CSBP323[\s\S]*minimum grade D/i);
+        assert.match(result.data.content ?? "", /incomplete/i);
+        assert.match(result.data.content ?? "", /does not establish whether both courses, either course, or another alternative is required/i);
         assert.notEqual(result.data.faqId, "library-databases-remote-access");
       },
     },
