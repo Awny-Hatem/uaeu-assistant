@@ -44,6 +44,25 @@ function collectRequirementCourses(requirements: ProgramRequirement[], result = 
   return result;
 }
 
+function collectInternshipConstraints(requirements: ProgramRequirement[], result = new Map<string, { finalTermOnly: boolean; exclusiveTerm: boolean }>()): Map<string, { finalTermOnly: boolean; exclusiveTerm: boolean }> {
+  for (const requirement of requirements) {
+    if (requirement.type === "INTERNSHIP") {
+      const code = requirement.courseCode.toUpperCase();
+      const current = result.get(code) ?? { finalTermOnly: false, exclusiveTerm: false };
+      result.set(code, {
+        finalTermOnly: current.finalTermOnly || requirement.finalSemesterOnly,
+        exclusiveTerm: current.exclusiveTerm || requirement.otherCoursesAllowed === false,
+      });
+    }
+    if (requirement.type === "PATHWAY_CHOICE") {
+      for (const option of requirement.options) {
+        if (option.type === "COMPOSITE" && option.requirements) collectInternshipConstraints(option.requirements, result);
+      }
+    }
+  }
+  return result;
+}
+
 function isFresh(date: string, asOf: string): boolean {
   const ageDays = Math.floor((Date.parse(asOf) - Date.parse(date)) / 86_400_000);
   return Number.isFinite(ageDays) && ageDays >= 0 && ageDays <= MAX_EVIDENCE_AGE_DAYS;
@@ -101,6 +120,7 @@ export async function POST(request: Request): Promise<Response> {
   }
   const { program, curriculum } = selectedCurriculum;
   const allowedCourses = collectRequirementCourses(curriculum.requirements);
+  const internshipConstraints = collectInternshipConstraints(curriculum.requirements);
   const outsideProgram = remainingCourseCodes.filter((code) => !allowedCourses.has(code));
   if (outsideProgram.length) {
     return json({ error: "Some requested courses are not listed in this cohort's modeled requirements.", courses: outsideProgram }, 422);
@@ -131,10 +151,13 @@ export async function POST(request: Request): Promise<Response> {
     const hasListedRule = Boolean(record.prerequisiteText || record.corequisiteText || record.preCorequisiteText) ||
       record.prerequisiteItems.length + record.corequisiteItems.length + record.preCorequisiteItems.length > 0;
     const prerequisiteExpression = hasListedRule ? parseCatalogPrerequisiteExpression(record) : null;
+    const termConstraints = internshipConstraints.get(code);
     courses.push({
       code,
       title: record.title,
       credits: record.creditHours,
+      ...(termConstraints?.finalTermOnly ? { finalTermOnly: true } : {}),
+      ...(termConstraints?.exclusiveTerm ? { exclusiveTerm: true } : {}),
       prerequisiteStatus: !hasListedRule ? "NO_LISTED_RULE" : prerequisiteExpression ? "VERIFIED_RULE" : "UNSUPPORTED",
       ...(prerequisiteExpression ? { prerequisiteExpression } : {}),
       source: { title: record.source.title, url: record.source.url, verifiedAt: record.source.verifiedAt },

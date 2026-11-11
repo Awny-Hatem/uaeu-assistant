@@ -18,6 +18,19 @@ function requirementCodes(requirements: ProgramRequirement[]): string[] {
   return [...codes];
 }
 
+function internshipCodes(requirements: ProgramRequirement[]): Set<string> {
+  const codes = new Set<string>();
+  for (const requirement of requirements) {
+    if (requirement.type === "INTERNSHIP") codes.add(requirement.courseCode);
+    if (requirement.type === "PATHWAY_CHOICE") {
+      for (const option of requirement.options) {
+        if (option.type === "COMPOSITE" && option.requirements) internshipCodes(option.requirements).forEach((code) => codes.add(code));
+      }
+    }
+  }
+  return codes;
+}
+
 const catalog = loadOfficialCourseCatalog();
 assert.ok(catalog);
 const asOf = new Date().toISOString().slice(0, 10);
@@ -32,7 +45,9 @@ const candidate = listAcademicPrograms().flatMap((program) =>
     .flatMap(({ program, cohortYear, selection }) => {
       if (!selection) return [];
       const listed = new Set(requirementCodes(selection.curriculum.requirements));
+      const internships = internshipCodes(selection.curriculum.requirements);
       const course = catalog.courses.find((record) => listed.has(record.code) && (record.creditHours ?? 0) > 0 &&
+        !internships.has(record.code) &&
         !record.prerequisiteText && !record.corequisiteText && !record.preCorequisiteText &&
         record.prerequisiteItems.length === 0 && record.corequisiteItems.length === 0 && record.preCorequisiteItems.length === 0);
       return course ? [{ program, cohortYear, course }] : [];
@@ -70,7 +85,29 @@ async function main() {
   const outsideProgramResponse = await POST(request({ remainingCourseCodes: ["ZZZZ999"] }));
   assert.equal(outsideProgramResponse.status, 422, "a course outside the modeled curriculum is rejected");
 
-  console.log("Academic sequence route passed: cohort scope, catalog-backed course handling, no-store response, explicit planning disclaimer, overlap rejection, and out-of-program rejection.");
+  const internshipResponse = await POST(new Request("http://localhost/api/academic/sequence", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      programId: "bsc-information-security",
+      cohortYear: 2025,
+      remainingCourseCodes: ["ITBP496"],
+      completedCourseCodes: [],
+      currentCourseCodes: [],
+      terms: [
+        { id: "fall", label: "Fall", maxCredits: 18 },
+        { id: "spring", label: "Spring", maxCredits: 18 },
+      ],
+    }),
+  }));
+  assert.equal(internshipResponse.status, 200);
+  const internshipBody = await internshipResponse.json();
+  assert.deepEqual(internshipBody.plan.terms.map((term: { id: string; courses: { code: string }[] }) => ({
+    id: term.id,
+    courses: term.courses.map(({ code }) => code),
+  })), [{ id: "spring", courses: ["ITBP496"] }], "the curriculum internship is restricted to the final term");
+
+  console.log(`Academic sequence route passed for ${candidate.program.id}/${candidate.cohortYear}/${candidate.course.code}: cohort scope, internship constraints, catalog-backed course handling, no-store response, explicit planning disclaimer, overlap rejection, and out-of-program rejection.`);
 }
 
 void main();

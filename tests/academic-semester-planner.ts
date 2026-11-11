@@ -137,6 +137,33 @@ assert.equal(absentCatalogRule.status, "CONDITIONAL_PLAN");
 assert.ok(absentCatalogRule.assumptions.some((assumption) => /no prerequisite wording in the catalog snapshot/i.test(assumption)));
 assert.ok(absentCatalogRule.assumptions.some((assumption) => /not confirmation of registration eligibility/i.test(assumption)));
 
+const finalTermInternship = buildConditionalSemesterPlan({
+  asOf: "2026-11-12",
+  courses: [
+    course("CSBP119", undefined),
+    { ...course("ITBP496", undefined, "NO_LISTED_RULE"), finalTermOnly: true, exclusiveTerm: true },
+  ],
+  completedCourseCodes: [],
+  terms: [
+    { id: "term-1", label: "Term 1", maxCredits: 6 },
+    { id: "term-2", label: "Term 2", maxCredits: 6 },
+  ],
+});
+assert.equal(finalTermInternship.status, "CONDITIONAL_PLAN");
+assert.deepEqual(finalTermInternship.terms.map(({ courses }) => courses.map(({ code }) => code)), [["CSBP119"], ["ITBP496"]]);
+
+const exclusiveFinalTermBlocksOtherCourse = buildConditionalSemesterPlan({
+  asOf: "2026-11-12",
+  courses: [
+    course("CSBP119", undefined),
+    { ...course("ITBP496", undefined, "NO_LISTED_RULE"), finalTermOnly: true, exclusiveTerm: true },
+  ],
+  completedCourseCodes: [],
+  terms: [{ id: "term-1", label: "Term 1", maxCredits: 6 }],
+});
+assert.equal(exclusiveFinalTermBlocksOtherCourse.status, "PARTIAL_PLAN");
+assert.match(exclusiveFinalTermBlocksOtherCourse.unscheduled.find(({ code }) => code === "ITBP496")?.reason ?? "", /taken alone/i);
+
 const capacityBlocked = buildConditionalSemesterPlan({
   asOf: "2026-11-12",
   courses: [course("CSBP119", undefined)],

@@ -7,6 +7,8 @@ export type PlannerCourse = {
   code: string;
   title: string;
   credits: number;
+  finalTermOnly?: boolean;
+  exclusiveTerm?: boolean;
   prerequisiteStatus: PlannerPrerequisiteStatus;
   prerequisiteExpression?: PrerequisiteExpression;
   source: { title: string; url: string; verifiedAt: string };
@@ -153,6 +155,10 @@ function validateInput(input: {
     if (!COURSE_CODE.test(course.code) || !course.title.trim() || !Number.isFinite(course.credits) || course.credits <= 0) {
       errors.push(`Invalid course record: ${course.code || "unknown"}.`);
     }
+    if ((course.finalTermOnly !== undefined && typeof course.finalTermOnly !== "boolean") ||
+        (course.exclusiveTerm !== undefined && typeof course.exclusiveTerm !== "boolean")) {
+      errors.push(`Invalid term constraints for ${course.code || "unknown"}.`);
+    }
     if (!course.source?.title || !isUaeuSourceUrl(course.source?.url) || !isDate(course.source?.verifiedAt)) errors.push(`Invalid official course evidence for ${course.code || "unknown"}.`);
     if (course.prerequisiteStatus === "VERIFIED_RULE" && !course.prerequisiteExpression) errors.push(`${course.code} has a rule status but no prerequisite expression.`);
     if (course.prerequisiteStatus !== "VERIFIED_RULE" && course.prerequisiteExpression) errors.push(`${course.code} has an expression without verified rule status.`);
@@ -237,8 +243,9 @@ export function buildConditionalSemesterPlan(input: {
   }
   for (const code of unscheduled.keys()) remaining.delete(code);
 
-  for (const term of terms) {
+  for (const [termIndex, term] of terms.entries()) {
     let credits = 0;
+    let exclusiveCourseScheduled = false;
     const sameTerm = new Set<string>();
     const plannedInTerm: SemesterPlan["terms"][number]["courses"] = [];
     let madeProgress = true;
@@ -246,6 +253,8 @@ export function buildConditionalSemesterPlan(input: {
       madeProgress = false;
       for (const code of [...remaining].sort()) {
         const course = courseByCode.get(code)!;
+        if ((course.finalTermOnly && termIndex !== terms.length - 1) || exclusiveCourseScheduled ||
+            (course.exclusiveTerm && plannedInTerm.length > 0)) continue;
         if (credits + course.credits > term.maxCredits) continue;
 
         const offering = availability.find((item) => item.courseCode.toUpperCase() === code && item.termId === term.id);
@@ -277,6 +286,7 @@ export function buildConditionalSemesterPlan(input: {
           ...(plannedOffering ? { offeringSource: offering.source, offeringVerifiedAt: offering.verifiedAt } : {}),
           prerequisiteAssumptions: gradeAssumptions,
         });
+        if (course.exclusiveTerm) exclusiveCourseScheduled = true;
         credits += course.credits;
         sameTerm.add(code);
         remaining.delete(code);
@@ -299,11 +309,18 @@ export function buildConditionalSemesterPlan(input: {
     const noTermFits = terms.every((term) => course.credits > term.maxCredits);
     const notOfferedInAnyTerm = terms.length > 0 && terms.every((term) => availability.some((item) =>
       item.courseCode.toUpperCase() === code && item.termId === term.id && item.status === "NOT_OFFERED" && isFreshEvidence(item.verifiedAt, asOf)));
+    const finalTermLimitConflict = course.finalTermOnly && terms.length > 0 && course.credits > terms[terms.length - 1].maxCredits;
+    const exclusiveFinalTermConflict = course.exclusiveTerm && termsOut.some((term) =>
+      term.id === terms[terms.length - 1]?.id && term.courses.length > 0);
     const options = course.prerequisiteStatus === "VERIFIED_RULE" ? prerequisiteOptions(course.prerequisiteExpression!) ?? [] : [];
     const externalDependencies = [...new Set(options.flatMap((option) => [...option.completedBefore, ...option.currentWith]))]
       .filter((dependency) => !completed.has(dependency) && !current.has(dependency) && !courseByCode.has(dependency));
     const reason = noTermFits
       ? `Its ${course.credits}-credit load exceeds every supplied term limit.`
+      : finalTermLimitConflict
+        ? `It is restricted to the final supplied term, whose ${terms[terms.length - 1].maxCredits}-credit limit is too low.`
+      : exclusiveFinalTermConflict
+        ? "It must be taken alone in the final supplied term, which already contains other scheduled courses."
       : notOfferedInAnyTerm
         ? "Verified offering data says this course is unavailable in every supplied term."
       : externalDependencies.length
