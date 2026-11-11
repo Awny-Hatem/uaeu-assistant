@@ -58,6 +58,10 @@ check("current academic curriculum files are approved, scoped, and available to 
     "46-early-childhood-education-curriculum.md",
     "47-health-and-physical-education-curriculum.md",
     "48-special-education-curriculum.md",
+    "49-economics-curriculum.md",
+    "50-human-resources-curriculum.md",
+    "51-supply-chain-curriculum.md",
+    "52-entrepreneurship-curriculum.md",
   ];
   const documents = loadKnowledgeMarkdown().filter(({ filename }) => expected.includes(filename));
   assert.deepEqual(documents.map(({ filename }) => filename).sort(), expected);

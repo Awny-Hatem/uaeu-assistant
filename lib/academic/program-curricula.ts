@@ -12,9 +12,9 @@ export type PathwayOption = {
   selectionNote?: string;
 };
 export type ProgramRequirement =
-  | { type: "REQUIRED_COURSE_SET"; id: string; name: string; courseCodes: string[] }
+  | { type: "REQUIRED_COURSE_SET"; id: string; name: string; courseCodes: string[]; ruleNote?: string }
   | { type: "ONE_OF_GROUP"; id: string; name: string; chooseCount: number; courseCodes: string[] }
-  | { type: "ELECTIVE_GROUP"; id: string; name: string; chooseCount: number; credits: number; courseCodes: string[] }
+  | { type: "ELECTIVE_GROUP"; id: string; name: string; chooseCount: number; credits: number; courseCodes: string[]; selectionNote?: string }
   | { type: "CREDIT_BLOCK"; id: string; name: string; credits: number; ruleNote: string }
   | { type: "PATHWAY_CHOICE"; id: string; name: string; options: PathwayOption[] }
   | { type: "INTERNSHIP"; id: string; name?: string; courseCode: string; credits: number; finalSemesterOnly: boolean; otherCoursesAllowed?: boolean };
@@ -61,11 +61,13 @@ function isCourseCodes(value: unknown): value is string[] {
 
 function isRequirement(value: unknown): value is ProgramRequirement {
   if (!isRecord(value) || typeof value.id !== "string" || !value.id) return false;
-  if (value.type === "REQUIRED_COURSE_SET") return typeof value.name === "string" && isCourseCodes(value.courseCodes);
+  if (value.type === "REQUIRED_COURSE_SET") return typeof value.name === "string" && isCourseCodes(value.courseCodes) &&
+    (value.ruleNote === undefined || typeof value.ruleNote === "string");
   if (value.type === "ONE_OF_GROUP" || value.type === "ELECTIVE_GROUP") {
     return typeof value.name === "string" && Number.isInteger(value.chooseCount) && Number(value.chooseCount) > 0 &&
       isCourseCodes(value.courseCodes) && Number(value.chooseCount) <= value.courseCodes.length &&
-      (value.type === "ONE_OF_GROUP" || (typeof value.credits === "number" && value.credits > 0));
+      (value.type === "ONE_OF_GROUP" || (typeof value.credits === "number" && value.credits > 0 &&
+        (value.selectionNote === undefined || typeof value.selectionNote === "string")));
   }
   if (value.type === "CREDIT_BLOCK") {
     return typeof value.name === "string" && typeof value.credits === "number" && value.credits > 0 && typeof value.ruleNote === "string";
@@ -494,13 +496,13 @@ export function renderProgramRequirementsAssessment(
 
   const groups = curriculum.requirements.map((requirement) => {
     if (requirement.type === "REQUIRED_COURSE_SET") {
-      return `**${requirement.name}:** ${requirement.courseCodes.join(", ")}`;
+      return `**${requirement.name}:** ${requirement.courseCodes.join(", ")}${requirement.ruleNote ? `. ${requirement.ruleNote}` : ""}`;
     }
     if (requirement.type === "ONE_OF_GROUP") {
       return `**${requirement.name}:** choose ${requirement.chooseCount} from ${requirement.courseCodes.join(" or ")}.`;
     }
     if (requirement.type === "ELECTIVE_GROUP") {
-      return `**${requirement.name}:** choose ${requirement.chooseCount} (${requirement.credits} credits) from ${requirement.courseCodes.join(", ")}.`;
+      return `**${requirement.name}:** choose ${requirement.chooseCount} (${requirement.credits} credits) from ${requirement.courseCodes.join(", ")}.${requirement.selectionNote ? ` ${requirement.selectionNote}` : ""}`;
     }
     if (requirement.type === "CREDIT_BLOCK") {
       return `**${requirement.name}:** ${requirement.credits} credits. ${requirement.ruleNote}`;

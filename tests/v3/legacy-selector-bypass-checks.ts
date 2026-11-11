@@ -197,10 +197,14 @@ async function main() {
   assert.match(String(currentDegreeCredits.payload.content), /21 credits/);
   assert.match(String(currentDegreeCredits.payload.content), /older assigned cohort plans may require 130/i);
 
-  for (const [program, course, creditIp, courseIp] of [
-    ["Early Childhood Education", "CURR400", "198.51.100.51", "198.51.100.52"],
-    ["Health and Physical Education", "PHED318", "198.51.100.53", "198.51.100.54"],
-    ["Special Education", "SPED210", "198.51.100.55", "198.51.100.56"],
+  for (const [program, course, creditIp, courseIp, sourceSlug] of [
+    ["Early Childhood Education", "CURR400", "198.51.100.51", "198.51.100.52", "bachelor-of-education"],
+    ["Health and Physical Education", "PHED318", "198.51.100.53", "198.51.100.54", "bachelor-of-education"],
+    ["Special Education", "SPED210", "198.51.100.55", "198.51.100.56", "bachelor-of-education"],
+    ["Economics", "ECON460", "198.51.100.58", "198.51.100.59", "bachelor-of-economics"],
+    ["Human Resources Management and Development", "HRMD430", "198.51.100.60", "198.51.100.61", "human-resources-management-and-development"],
+    ["Supply Chain Management and Logistics", "SCML450", "198.51.100.62", "198.51.100.63", "supply-chain-management-and-logistics"],
+    ["Entrepreneurship", "ENTR480", "198.51.100.64", "198.51.100.65", "bachelor-of-business-administration-in-entrepreneurship"],
   ] as const) {
     const credits = await ask(`How many credits are required to graduate from ${program}?`, creditIp);
     assert.equal(credits.payload.stateLabel, "v3_program_credit_model");
@@ -211,7 +215,7 @@ async function main() {
     assert.equal(courses.payload.stateLabel, "v3_program_requirement_model");
     assert.equal(courses.payload.resolutionState, "CONDITIONAL");
     assert.match(String(courses.payload.content), new RegExp(course));
-    assert.match(JSON.stringify(courses.payload.citations), /bachelor-of-education/);
+    assert.match(JSON.stringify(courses.payload.citations), new RegExp(sourceSlug));
   }
 
   const childhood2025Plan = await askMessages([
@@ -223,6 +227,16 @@ async function main() {
   assert.equal(childhood2025Plan.payload.resolutionState, "CONDITIONAL");
   assert.match(String(childhood2025Plan.payload.content), /course requirements are not structured/i);
   assert.doesNotMatch(String(childhood2025Plan.payload.content), /CURR400/);
+
+  const economics2025Plan = await askMessages([
+    { role: "user", content: "I entered Economics in the 2025 cohort." },
+    { role: "assistant", content: "Which degree requirement would you like to check?" },
+    { role: "user", content: "Which courses are required in my assigned plan?" },
+  ], "198.51.100.66");
+  assert.equal(economics2025Plan.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(economics2025Plan.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(economics2025Plan.payload.content), /course requirements are not structured/i);
+  assert.doesNotMatch(String(economics2025Plan.payload.content), /ECON215/);
 
   const tuitionNeedsProgram = await ask("What is the tuition cost for the program I want?", "203.0.113.242");
   assert.equal(tuitionNeedsProgram.payload.stateLabel, "v3_verified_tuition_answer");

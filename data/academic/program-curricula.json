@@ -1234,5 +1234,219 @@
         "limitations": ["The model-plan PDF identifies 126-credit plans for 2020–2021 and 2022–2023 cohorts. This record supports the published total only; historical course requirements are not fully structured."]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "economics",
+    "name": "Bachelor of Economics",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      { "documentId": "49-economics-curriculum", "title": "UAEU Bachelor of Economics degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-economics.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "49-economics-curriculum", "title": "UAEU Bachelor of Economics model study plans", "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "economics-current-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; applicability to an individual cohort is unresolved",
+        "effectiveFrom": "2026-11-09",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "business-core", "name": "Business core, research skills, and learning in action", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 30 },
+          { "id": "major-requirements", "name": "Economics major requirements", "credits": 30 },
+          { "id": "major-electives", "name": "Economics electives", "credits": 9 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "economics-general-education", "name": "General education", "credits": 21, "ruleNote": "Includes 15 fixed credits and 6 credits selected from four themes, with no more than 3 credits from each selected theme." },
+          { "type": "REQUIRED_COURSE_SET", "id": "economics-business-essentials", "name": "Business essentials", "courseCodes": ["MGMT201", "MKTG205", "BANA200"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "economics-research-skills", "name": "Research skills", "courseCodes": ["STAT102", "STAT202", "GBUS300"] },
+          { "type": "PATHWAY_CHOICE", "id": "economics-learning-in-action", "name": "Choose one 12-credit Learning in Action option", "options": [
+            { "id": "economics-internship", "name": "GBUS460 Internship", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["GBUS460"], "selectionNote": "The page places the internship in the last semester and says no other courses may be taken during the internship." },
+            { "id": "economics-venture", "name": "ENTR415 Developing an Entrepreneurial Venture", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ENTR415"] }
+          ] },
+          { "type": "REQUIRED_COURSE_SET", "id": "economics-supporting", "name": "Supporting requirements", "courseCodes": ["PRVT265", "MATH115", "SCML150", "ECON105", "ACCT111", "ACCT120", "ECON125", "MGMT415", "FINC210", "SCML201"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "economics-major", "name": "Required Economics courses", "courseCodes": ["ECON211", "ECON212", "ECON215", "ECON231", "ECON236", "ECON330", "ECON344", "ECON350", "ECON360", "ECON460"] },
+          { "type": "ELECTIVE_GROUP", "id": "economics-cluster-electives", "name": "Economics cluster electives", "chooseCount": 3, "credits": 9, "courseCodes": ["ECON311", "ECON331", "ECON441", "ECON320", "ECON321", "ECON420"], "selectionNote": "Choose at least 3 credits from each cluster: Global Competitiveness (ECON311/331/441) and Sustainability (ECON320/321/420)." }
+        ],
+        "limitations": [
+          "The current degree page lists 120 credits but does not identify which cohort receives these exact requirement groups.",
+          "The linked 2025-2026 model plan classifies ECON215 as a major elective while the current page lists it as a required major course. Cohort-specific course requirements are therefore not inferred from the current page.",
+          "The page's internship, general-education choices, and elective cluster rules do not establish an individual student's assigned plan, completed courses, or graduation approval."
+        ]
+      },
+      {
+        "id": "economics-2025-plan-total-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; confirm the assigned plan",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": ["The linked model plan identifies a 120-credit plan from Fall 2025 onwards. Its ECON215 classification differs from the current page; this cohort record verifies the total only and does not combine its course list with current-page requirements."]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "human-resources-management-and-development",
+    "name": "Bachelor of Business Administration in Human Resources Management and Development",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      { "documentId": "50-human-resources-curriculum", "title": "UAEU BBA Human Resources Management and Development degree requirements", "url": "https://www.uaeu.ac.ae/en/cbe/programs/undergraduate/bachelor-of-business-administration-in-human-resources-management-and-development.shtml", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "hrmd-current-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; applicability to an individual cohort is unresolved",
+        "effectiveFrom": "2026-09-22",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 9 },
+          { "id": "research-skills", "name": "Research skills", "credits": 9 },
+          { "id": "learning-in-action", "name": "Learning in Action", "credits": 12 },
+          { "id": "major-requirements", "name": "HR major requirements", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 30 },
+          { "id": "business-electives", "name": "Business electives", "credits": 9 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "hrmd-general-education", "name": "General education", "credits": 21, "ruleNote": "Includes 15 fixed credits and 6 credits selected from four themes, with no more than 3 credits from each selected theme." },
+          { "type": "REQUIRED_COURSE_SET", "id": "hrmd-college-requirements", "name": "College requirements", "courseCodes": ["BANA200", "MGMT201", "MKTG205"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "hrmd-research-skills", "name": "Research skills", "courseCodes": ["STAT102", "STAT202", "GBUS300"] },
+          { "type": "PATHWAY_CHOICE", "id": "hrmd-learning-in-action", "name": "Choose one 12-credit Learning in Action option", "options": [
+            { "id": "hrmd-internship", "name": "GBUS460 Internship", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["GBUS460"], "selectionNote": "The page says this internship is in the last semester, lasts 12 weeks after a four-week preparation session, and does not allow other courses during the internship." },
+            { "id": "hrmd-venture", "name": "ENTR415 Developing an Entrepreneurial Venture", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ENTR415"] }
+          ] },
+          { "type": "REQUIRED_COURSE_SET", "id": "hrmd-major", "name": "HR major core", "courseCodes": ["HRMD320", "HRMD330", "HRMD340", "HRMD360", "HRMD370", "HRMD400", "HRMD410", "HRMD420", "HRMD430", "MGMT350"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "hrmd-supporting", "name": "Supporting requirements", "courseCodes": ["ACCT111", "ACCT120", "ECON105", "ECON125", "FINC210", "MATH115", "MGMT415", "PRVT265", "SCML150", "SCML201"] },
+          { "type": "ELECTIVE_GROUP", "id": "hrmd-business-electives", "name": "Business electives", "chooseCount": 3, "credits": 9, "courseCodes": ["MKTG300", "SCML300", "SCML340", "ENTR325", "BANA250", "GBUS201", "PHI226", "PSYC315"] }
+        ],
+        "limitations": [
+          "The current page lists 120 credits and a model-plan link, but the linked plan's cohort applicability and exact alignment were not independently confirmed. This page model is not assigned to a student cohort.",
+          "The internship timing and course restriction are published program information; this model does not establish a student's placement approval, completed credits, or graduation approval."
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "supply-chain-management-and-logistics",
+    "name": "Bachelor of Business Administration in Supply Chain Management and Logistics",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      { "documentId": "51-supply-chain-curriculum", "title": "UAEU BBA Supply Chain Management and Logistics degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-business-administration-in-supply-chain-management-and-logistics.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "51-supply-chain-curriculum", "title": "UAEU Supply Chain Management and Logistics 2025-2026 model plan", "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_scml_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "scml-current-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; applicability to an individual cohort is unresolved",
+        "effectiveFrom": "2026-11-09",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 9 },
+          { "id": "research-skills", "name": "Research skills", "credits": 9 },
+          { "id": "learning-in-action", "name": "Learning in Action", "credits": 12 },
+          { "id": "major-requirements", "name": "Supply Chain major requirements", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 30 },
+          { "id": "business-electives", "name": "Business electives", "credits": 9 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "scml-general-education", "name": "General education", "credits": 21, "ruleNote": "Includes 15 fixed credits and 6 credits selected from four themes, with no more than 3 credits from each selected theme." },
+          { "type": "REQUIRED_COURSE_SET", "id": "scml-college-requirements", "name": "College requirements", "courseCodes": ["BANA200", "MGMT201", "MKTG205"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "scml-research-skills", "name": "Research skills", "courseCodes": ["STAT102", "STAT202", "GBUS300"] },
+          { "type": "PATHWAY_CHOICE", "id": "scml-learning-in-action", "name": "Choose one 12-credit Learning in Action option", "options": [
+            { "id": "scml-internship", "name": "GBUS460 Internship", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["GBUS460"], "selectionNote": "The page says this internship is in the last semester, lasts 12 weeks after a four-week preparation session, and does not allow other courses during the internship." },
+            { "id": "scml-venture", "name": "ENTR415 Developing an Entrepreneurial Venture", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ENTR415"] }
+          ] },
+          { "type": "REQUIRED_COURSE_SET", "id": "scml-major", "name": "Supply Chain major core", "courseCodes": ["SCML300", "SCML310", "SCML320", "SCML340", "SCML400", "SCML450", "BANA250", "BANA310", "STAT240", "CSBP119"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "scml-supporting", "name": "Supporting requirements", "courseCodes": ["ACCT111", "ACCT120", "ECON105", "ECON125", "FINC210", "MATH115", "PRVT265", "MGMT415", "SCML150", "SCML201"] },
+          { "type": "ELECTIVE_GROUP", "id": "scml-business-electives", "name": "Business electives", "chooseCount": 3, "credits": 9, "courseCodes": ["MKTG210", "MKTG300", "HRMD320", "HRMD330", "ENTR310", "ENTR325"] }
+        ],
+        "limitations": [
+          "The current page lists 120 credits. Its grouping places MGMT415 under supporting requirements, while the linked 2025-2026 plan labels it as Learning in Action. The current page is not assigned to an individual cohort.",
+          "The internship restriction and elective list do not establish a student's assigned plan, completed courses, section availability, or graduation approval."
+        ]
+      },
+      {
+        "id": "scml-2025-plan-total-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; confirm the assigned plan",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": ["The linked model plan identifies a 120-credit plan from Fall 2025 onwards. It classifies MGMT415 differently from the current page; this cohort record verifies the total only and does not combine the two classifications."]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "entrepreneurship",
+    "name": "Bachelor of Business Administration in Entrepreneurship",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      { "documentId": "52-entrepreneurship-curriculum", "title": "UAEU BBA Entrepreneurship degree requirements", "url": "https://www.uaeu.ac.ae/en/cbe/programs/undergraduate/bachelor-of-business-administration-in-entrepreneurship.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "52-entrepreneurship-curriculum", "title": "UAEU Entrepreneurship 2025-2026 model plan", "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_entreprenership_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "entrepreneurship-current-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; applicability to an individual cohort is unresolved",
+        "effectiveFrom": "2026-09-22",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 9 },
+          { "id": "research-skills", "name": "Research skills", "credits": 9 },
+          { "id": "learning-in-action", "name": "Learning in Action", "credits": 12 },
+          { "id": "major-requirements", "name": "Entrepreneurship major requirements", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 30 },
+          { "id": "business-electives", "name": "Business electives", "credits": 9 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "entrepreneurship-general-education", "name": "General education", "credits": 21, "ruleNote": "Includes 15 fixed credits and 6 credits selected from four themes, with no more than 3 credits from each selected theme." },
+          { "type": "REQUIRED_COURSE_SET", "id": "entrepreneurship-college-requirements", "name": "College requirements", "courseCodes": ["BANA200", "MGMT201", "MKTG205"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "entrepreneurship-research-skills", "name": "Research skills", "courseCodes": ["STAT102", "STAT202", "GBUS300"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "entrepreneurship-learning-in-action", "name": "Learning in Action", "courseCodes": ["ENTR415"], "ruleNote": "The page states ENTR majors may register only with GPA above 2.0, at least 76 completed credits, and GEIE222 completed with minimum grade D. The student's personal eligibility is not evaluated here." },
+          { "type": "REQUIRED_COURSE_SET", "id": "entrepreneurship-major", "name": "Entrepreneurship major core", "courseCodes": ["ENTR310", "ENTR325", "ENTR355", "ENTR405", "ENTR480", "BANA310", "SCML320", "MKTG300", "HRMD320", "MKTG310"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "entrepreneurship-supporting", "name": "Supporting requirements", "courseCodes": ["MATH115", "ACCT111", "ECON105", "ACCT120", "ECON125", "SCML150", "SCML201", "FINC210", "PRVT265", "MGMT415"] },
+          { "type": "ELECTIVE_GROUP", "id": "entrepreneurship-business-electives", "name": "Business electives", "chooseCount": 3, "credits": 9, "courseCodes": ["MKTG210", "SCML300", "SCML340", "ECON215", "HRMD330", "HRMD340"] }
+        ],
+        "limitations": [
+          "The current degree page lists 120 credits but does not identify which cohort receives these exact requirement groups.",
+          "The linked 2025-2026 model plan labels ENTR415 as an internship, whereas the current degree page describes it as an entrepreneurial venture and specifies a registration gate. Cohort-specific course requirements are therefore not inferred from the page.",
+          "The published ENTR415 gate is not applied to a student's record; GPA, completed credits, and GEIE222 grade require verified student data."
+        ]
+      },
+      {
+        "id": "entrepreneurship-2025-plan-total-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; confirm the assigned plan",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": ["The linked model plan identifies a 120-credit plan from Fall 2025 onwards. It labels ENTR415 as an internship while the current page calls it an entrepreneurial venture; this cohort record verifies the total only and does not combine the course descriptions."]
+      }
+    ]
   }
 ]
