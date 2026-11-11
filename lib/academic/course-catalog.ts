@@ -33,7 +33,10 @@ function isOfficialUrl(value: unknown): value is string {
   if (typeof value !== "string") return false;
   try {
     const url = new URL(value);
-    return url.protocol === "https:" && url.hostname === "www.uaeu.ac.ae" && url.pathname.startsWith("/en/catalog/courses/");
+    const primaryCourseCatalog = url.hostname === "www.uaeu.ac.ae" && url.pathname.startsWith("/en/catalog/courses/");
+    const socialWorkDepartmentCatalog = url.hostname === "webapps.uaeu.ac.ae" &&
+      url.pathname === "/catalog/auto/department_HS_HS_SOCW.asp";
+    return url.protocol === "https:" && (primaryCourseCatalog || socialWorkDepartmentCatalog);
   } catch {
     return false;
   }

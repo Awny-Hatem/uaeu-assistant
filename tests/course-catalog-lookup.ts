@@ -19,6 +19,12 @@ assert.equal(geol654Credits.resolutionState, "VERIFIED");
 assert.match(geol654Credits.content, /Earth Climate Evolution[\s\S]*credit hours: \*\*3\*\*/u);
 assert.equal(geol654Credits.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2929.shtml?id=GEOL654");
 
+const socialWorkIslam = answerOfficialCourseCatalogQuestion("How many credits is SWK380?", "en");
+assert(socialWorkIslam, "SWK380 is present in the official Social Work department course catalog");
+assert.equal(socialWorkIslam.resolutionState, "VERIFIED");
+assert.match(socialWorkIslam.content, /SWK380 Social Work & Islam[\s\S]*credit hours: \*\*3\*\*/u);
+assert.equal(socialWorkIslam.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp");
+
 const prerequisites = answerOfficialCourseCatalogQuestion("What are CSBP319 prerequisites?", "en");
 assert(prerequisites);
 assert.match(prerequisites.content, /Prerequisites as stated in the catalog: CSBP219 with a minimum grade D/u);
