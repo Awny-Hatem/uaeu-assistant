@@ -1,0 +1,98 @@
+[
+  {
+    "schemaVersion": 1,
+    "id": "prereq-csbp219",
+    "version": "2026-09-29",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "CSBP219", "title": "Object Oriented Programming", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-09-29",
+    "source": { "documentId": "09-csbp219-object-oriented-programming.md", "title": "UAEU Course Catalog — CSBP219 Object Oriented Programming", "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219" },
+    "expression": { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP119", "minimumGrade": "D" }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-csbp340",
+    "version": "2026-09-29",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "CSBP340", "title": "Database Systems", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-09-29",
+    "source": { "documentId": "08-csbp340-database-systems.md", "title": "UAEU Course Catalog — CSBP340 Database Systems", "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP340" },
+    "expression": { "op": "OR", "conditions": [
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP319", "minimumGrade": "D" },
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP323", "minimumGrade": "D" }
+    ] }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-csbp411",
+    "version": "2026-09-29",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "CSBP411", "title": "Machine Learning", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-09-29",
+    "source": { "documentId": "10-csbp411-machine-learning.md", "title": "UAEU Course Catalog — CSBP411 Machine Learning", "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP411" },
+    "expression": { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP301", "minimumGrade": "D" }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-isec421",
+    "version": "2026-09-29",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "ISEC421", "title": "Risk Analysis and Management", "credits": 2 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-09-29",
+    "source": { "documentId": "11-isec421-risk-analysis.md", "title": "UAEU Course Catalog — ISEC421 Risk Analysis and Management", "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC421" },
+    "expression": { "op": "AND", "conditions": [
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "STAT210", "minimumGrade": "D" },
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "ITBP301", "minimumGrade": "D" }
+    ] }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-mech305",
+    "version": "2026-10-06",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "MECH305", "title": "Mechanics of Materials", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-10-06",
+    "source": { "documentId": "33-mechanical-engineering-course-prerequisites.md", "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites", "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml" },
+    "expression": { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CIVL240", "minimumGrade": "D" }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-mech340",
+    "version": "2026-10-06",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "MECH340", "title": "Fluid Mechanics", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-10-06",
+    "source": { "documentId": "33-mechanical-engineering-course-prerequisites.md", "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites", "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml" },
+    "expression": { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CIVL240", "minimumGrade": "D" }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-mech348",
+    "version": "2026-10-06",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "MECH348", "title": "Fluid Mechanics Lab", "credits": 1 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-10-06",
+    "source": { "documentId": "33-mechanical-engineering-course-prerequisites.md", "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites", "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml" },
+    "expression": { "op": "AND", "conditions": [
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "MECH210", "minimumGrade": "D" },
+      { "op": "OR", "conditions": [
+        { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "MECH340", "minimumGrade": "D" },
+        { "type": "COURSE_CURRENT", "courseCode": "MECH340" }
+      ] }
+    ] }
+  }
+]

@@ -27,6 +27,7 @@ import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
+import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
 
@@ -950,6 +951,26 @@ export async function POST(req: Request) {
         if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
         return respond(payload, latest, locale);
       }
+    }
+    const prerequisiteAssessment = assessPrerequisiteConversation(
+      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    );
+    if (prerequisiteAssessment) {
+      const { rule, evaluation } = prerequisiteAssessment;
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: renderPrerequisiteAssessment(prerequisiteAssessment, locale),
+        source: "rag",
+        stateLabel: "v3_academic_rule_evaluation",
+        resolutionState: evaluation.resolutionState,
+        disposition: evaluation.status === "UNDETERMINED" ? "clarify" : "answer",
+        citations: [{ title: rule.source.title, url: rule.source.url, lastVerified: rule.version }],
+        evidenceIds: [`academic-rule:${rule.id}`],
+        topic: rule.course.code,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
     }
   }
   const curriculum = !v3EvidenceMode && locale === "en" ? retrieveCurriculumAnswer(routingQuery) : null;

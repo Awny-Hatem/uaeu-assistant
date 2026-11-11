@@ -52,7 +52,24 @@ async function main() {
   assert.notEqual(failedTwice.payload.stateLabel, "v3_missing_context", "a code must not block the general reviewed repeat policy");
   assert.doesNotMatch(String(failedTwice.payload.content), /CSBP319/, "repeat policy guidance must not assume a course code");
 
-  console.log("V3 selector-bypass route checks passed: calendar follow-up, deadline separation, and no legacy canonical or inferred-course answer.");
+  const prerequisiteAssessment = await askMessages([
+    { role: "user", content: "I passed STAT210 with D and ITBP301 with C." },
+    { role: "assistant", content: "What course do you want to check?" },
+    { role: "user", content: "Can I take ISEC421?" },
+  ], "203.0.113.226");
+  assert.equal(prerequisiteAssessment.status, 200);
+  assert.equal(prerequisiteAssessment.payload.stateLabel, "v3_academic_rule_evaluation");
+  assert.equal(prerequisiteAssessment.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(prerequisiteAssessment.payload.content), /STAT210[\s\S]*ITBP301/);
+  assert.match(String(prerequisiteAssessment.payload.content), /does not confirm registration eligibility/i);
+  assert.match(JSON.stringify(prerequisiteAssessment.payload.citations), /ISEC421 Risk Analysis and Management/);
+
+  const incompletePrerequisites = await ask("Can I take ISEC421?", "203.0.113.227");
+  assert.equal(incompletePrerequisites.payload.stateLabel, "v3_academic_rule_evaluation");
+  assert.equal(incompletePrerequisites.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(incompletePrerequisites.payload.content), /STAT210[\s\S]*ITBP301/);
+
+  console.log("V3 route checks passed: selector bypass, deadline separation, useful repeat policy, and deterministic prerequisite evaluation from context.");
 }
 
 main().catch((error) => {
