@@ -205,7 +205,9 @@ check("incomplete database prerequisite wording remains unconfirmed", () => {
   assert.match(record.answer_en, /prerequisite field is incomplete.*CSBP319.*CSBP323.*ends with the word "or"[\s\S]*does not establish whether both courses, either course, or another alternative is required/);
   assert.ok(record.answer_ar.includes("\u0644\u0627 \u064a\u0648\u0636\u062d \u0627\u0644\u0646\u0635 \u0627\u0644\u0645\u0646\u0634\u0648\u0631"), "Arabic answer explains the source cannot resolve the prerequisite relationship");
   assert.match(record.answer_en, /Fall 2025.*places CSBP340 after CSBP319/);
-  assert.match(record.citations[0].evidenceText, /dangling.*or[\s\S]*not established/);
+  const catalogCitation = record.citations[0];
+  assert(catalogCitation);
+  assert.match(catalogCitation.evidenceText, /dangling.*or[\s\S]*not established/);
 });
 
 check("probation preserves AND dismissal and the compound additional-semester exception", () => {
