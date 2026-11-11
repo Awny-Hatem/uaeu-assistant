@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 33, "thirty-three current or historical program records have structured evidence records");
+assert.equal(programs.length, 39, "thirty-nine current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -38,6 +38,18 @@ const biochemistryElectives = assessProgramRequirementsConversation([{ role: "us
 assert.equal(biochemistryElectives?.programId, "biochemistry");
 assert.match(renderProgramRequirementsAssessment(biochemistryElectives!, "en"), /BCHM483/);
 assert.match(renderProgramRequirementsAssessment(biochemistryElectives!, "en"), /CHEM419/);
+for (const programId of ["chemistry", "geosciences", "mathematics-of-data-science", "mathematics", "physics", "space-sciences"]) {
+  const model = getProgramCurriculum(programId);
+  assert.equal(model?.curriculum.totalCredits, 120, `${programId} has the published current-page credit total`);
+  assert.equal(model?.curriculum.cohortMapping, "unresolved", `${programId} does not infer a cohort mapping`);
+  assert.ok((model?.curriculum.requirements.length ?? 0) > 0);
+}
+const spaceDegree = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Space Sciences?" }]);
+assert.equal(spaceDegree?.programId, "space-sciences", "standalone Space Sciences degree is not conflated with Physics concentration");
+assert.match(renderProgramRequirementsAssessment(spaceDegree!, "en"), /CSBP478/);
+const physicsTracks = assessProgramRequirementsConversation([{ role: "user", content: "What are the Physics concentration requirements?" }]);
+assert.equal(physicsTracks?.programId, "physics");
+assert.match(renderProgramRequirementsAssessment(physicsTracks!, "en"), /General Physics/);
 
 assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
