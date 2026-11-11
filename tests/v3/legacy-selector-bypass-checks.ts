@@ -9,14 +9,15 @@ process.env.AUTH_COOKIE_SECRET = "test-only-auth-cookie-secret-with-at-least-32-
 async function main() {
   const { POST } = await import("../../app/api/chat/route");
 
-  async function ask(question: string, ip: string) {
+  async function askMessages(messages: { role: "user" | "assistant"; content: string }[], ip: string) {
     const response = await POST(new Request("http://localhost/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-forwarded-for": ip },
-      body: JSON.stringify({ locale: "en", messages: [{ role: "user", content: question }] }),
+      body: JSON.stringify({ locale: "en", messages }),
     }));
     return { status: response.status, payload: await response.json() as Record<string, unknown> };
   }
+  const ask = (question: string, ip: string) => askMessages([{ role: "user", content: question }], ip);
 
   const calendar = await ask("Where can I check UAEU academic calendar deadlines?", "203.0.113.221");
   assert.equal(calendar.status, 200);
@@ -25,6 +26,20 @@ async function main() {
   assert.match(String(calendar.payload.content), /official UAEU academic calendar/i);
   assert.match(JSON.stringify(calendar.payload.citations), /coreservices\.uaeu\.ac\.ae/);
 
+  const calendarFollowUp = await askMessages([
+    { role: "user", content: "Where can I check UAEU academic calendar deadlines?" },
+    { role: "assistant", content: "Which term, year, and applicant category do you mean?" },
+    { role: "user", content: "year 2026 fall" },
+  ], "203.0.113.223");
+  assert.equal(calendarFollowUp.payload.stateLabel, "v3_verified_source_location");
+  assert.match(String(calendarFollowUp.payload.content), /official UAEU academic calendar/i);
+  assert.doesNotMatch(String(calendarFollowUp.payload.content), /refund|scholarship/i);
+
+  const admissionsDeadline = await ask("When is the admission deadline for Fall 2027?", "203.0.113.224");
+  assert.equal(admissionsDeadline.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(admissionsDeadline.payload.content), /applicant category/i);
+  assert.doesNotMatch(String(admissionsDeadline.payload.content), /scholarship/i);
+
   const failedCourse = await ask("What can I do if I fail Data Structure course?", "203.0.113.222");
   assert.equal(failedCourse.status, 200);
   assert.equal(failedCourse.payload.faqId, undefined, "V3 must not return the legacy canonical FAQ answer");
@@ -32,7 +47,7 @@ async function main() {
   assert.ok(["UNSUPPORTED", "CONDITIONAL"].includes(String(failedCourse.payload.resolutionState)));
   assert.doesNotMatch(String(failedCourse.payload.content), /CSBP319/, "V3 must not apply a guessed course identity");
 
-  console.log("V3 selector-bypass route checks passed: verified calendar location and no legacy canonical answer or inferred course code.");
+  console.log("V3 selector-bypass route checks passed: calendar follow-up, deadline separation, and no legacy canonical or inferred-course answer.");
 }
 
 main().catch((error) => {
