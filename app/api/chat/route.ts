@@ -30,7 +30,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
-import { assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
+import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
 import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
 import type { ResolutionState } from "@/lib/v3/contracts";
@@ -803,6 +803,28 @@ export async function POST(req: Request) {
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
+  }
+  if (isV3Enabled()) {
+    const identityReview = assessAcademicProgramIdentityReview(
+      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+      locale,
+    );
+    if (identityReview) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: identityReview.content,
+        source: "escalated",
+        stateLabel: "academic_program_identity_review",
+        resolutionState: "MISSING_CONTEXT",
+        disposition: "clarify",
+        clarificationReason: identityReview.clarificationReason,
+        topic: identityReview.programId,
+        citations: uniqueCitations(identityReview.citations),
+        evidenceIds: [`program-identity-review:${identityReview.programId}`],
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
   }
   const resolution = resolveConversation(sanitized, latest);
   const routingQuery = buildRoutingQuery(sanitized, latest);

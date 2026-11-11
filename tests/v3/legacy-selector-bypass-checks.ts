@@ -50,6 +50,18 @@ async function main() {
   assert.match(String(programCatalog.payload.content), /Bachelor of Science in Cybersecurity/);
   assert.match(JSON.stringify(programCatalog.payload.citations), /undergraduate\/programs\/index\.shtml/);
 
+  const cybersecurityCredits = await ask("How many credits do I need to graduate from Cybersecurity?", "203.0.113.232");
+  assert.equal(cybersecurityCredits.payload.stateLabel, "academic_program_identity_review");
+  assert.equal(cybersecurityCredits.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(cybersecurityCredits.payload.content), /will not apply the Information Security credit total/i);
+  assert.doesNotMatch(String(cybersecurityCredits.payload.content), /120 credits|130 credits/);
+  assert.match(JSON.stringify(cybersecurityCredits.payload.citations), /bachelor-of-science-in-cybersecurity/);
+
+  const unscopedComputerEngineeringCredits = await ask("How many credit hours to graduate from Computer Engineering?", "203.0.113.233");
+  assert.equal(unscopedComputerEngineeringCredits.payload.stateLabel, "academic_program_identity_review");
+  assert.equal(unscopedComputerEngineeringCredits.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(unscopedComputerEngineeringCredits.payload.content), /entry year/i);
+
   const calendarFollowUp = await askMessages([
     { role: "user", content: "Where can I check UAEU academic calendar deadlines?" },
     { role: "assistant", content: "Which term, year, and applicant category do you mean?" },
@@ -126,19 +138,14 @@ async function main() {
     "In Computer Engineering, take Networking Security instead of Selected Topics in Computer Engineering.",
     "203.0.113.233",
   );
-  assert.equal(networkSecuritySubstitution.payload.stateLabel, "v3_program_substitution_assessment");
-  assert.equal(networkSecuritySubstitution.payload.resolutionState, "CONDITIONAL");
-  assert.match(String(networkSecuritySubstitution.payload.content), /CENG532 Network Security/);
-  assert.match(String(networkSecuritySubstitution.payload.content), /CENG580 Selected Topics in Computer Engineering/);
-  assert.match(String(networkSecuritySubstitution.payload.content), /choosing 4 courses/);
-  assert.doesNotMatch(String(networkSecuritySubstitution.payload.content), /concentration|pathway/i);
-  assert.match(JSON.stringify(networkSecuritySubstitution.payload.citations), /Bachelor of Science in Computer Engineering/);
+  assert.equal(networkSecuritySubstitution.payload.stateLabel, "academic_program_identity_review");
+  assert.equal(networkSecuritySubstitution.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(networkSecuritySubstitution.payload.content), /entry year/i);
 
   const computerEngineeringCredits = await ask("How many credits to graduate in Computer Engineering?", "203.0.113.234");
-  assert.equal(computerEngineeringCredits.payload.stateLabel, "v3_program_credit_model");
-  assert.match(String(computerEngineeringCredits.payload.content), /131 credit hours/);
-  assert.match(String(computerEngineeringCredits.payload.content), /45 credits/);
-  assert.match(JSON.stringify(computerEngineeringCredits.payload.citations), /Bachelor of Science in Computer Engineering/);
+  assert.equal(computerEngineeringCredits.payload.stateLabel, "academic_program_identity_review");
+  assert.equal(computerEngineeringCredits.payload.resolutionState, "MISSING_CONTEXT");
+  assert.doesNotMatch(String(computerEngineeringCredits.payload.content), /131 credit hours|144 credit hours/);
 
   const historicalComputerEngineeringCredits = await askMessages([
     { role: "user", content: "I entered Computer Engineering in 2022." },
@@ -151,11 +158,10 @@ async function main() {
   assert.match(JSON.stringify(historicalComputerEngineeringCredits.payload.citations), /cohort model study plan/);
 
   const computerEngineeringPathways = await ask("Which courses are required in Computer Engineering?", "203.0.113.235");
-  assert.equal(computerEngineeringPathways.payload.stateLabel, "v3_program_requirement_model");
-  assert.match(String(computerEngineeringPathways.payload.content), /Major electives/);
-  assert.match(String(computerEngineeringPathways.payload.content), /choose 4 \(12 credits\)/);
-  assert.match(String(computerEngineeringPathways.payload.content), /CENG532/);
-  assert.match(String(computerEngineeringPathways.payload.content), /CENG580/);
+  assert.equal(computerEngineeringPathways.payload.stateLabel, "academic_program_identity_review");
+  assert.equal(computerEngineeringPathways.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(computerEngineeringPathways.payload.content), /entry year/i);
+  assert.doesNotMatch(String(computerEngineeringPathways.payload.content), /CENG532|CENG580/);
 
   const computerAiCredits = await ask("How many credits to graduate in Computer and AI Engineering?", "203.0.113.236");
   assert.equal(computerAiCredits.payload.stateLabel, "v3_program_credit_model");

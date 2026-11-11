@@ -1,9 +1,57 @@
 import assert from "node:assert/strict";
-import { assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
+import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
 assert.equal(programs.length, 6, "only six programs with reviewed structured source data are modeled");
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
+
+const cybersecurityReview = assessAcademicProgramIdentityReview([
+  { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
+], "en");
+assert.equal(cybersecurityReview?.clarificationReason, "cybersecurity_curriculum_mapping_unverified");
+assert.match(cybersecurityReview?.content ?? "", /do not establish that these program identities/i);
+assert.match(JSON.stringify(cybersecurityReview?.citations), /bachelor-of-science-in-cybersecurity/);
+assert.doesNotMatch(cybersecurityReview?.content ?? "", /120 credits|130 credits/);
+assert.ok(assessAcademicProgramIdentityReview([
+  { role: "user", content: "I am asking about Cybersecurity." },
+  { role: "assistant", content: "Which academic detail do you need?" },
+  { role: "user", content: "Which courses are required?" },
+], "en"), "an unresolved program identity must remain in context for a follow-up");
+assert.equal(assessAcademicProgramIdentityReview([
+  { role: "user", content: "How many credits do I need for BSc Information Security?" },
+], "en"), null, "an explicit Information Security identity can use its own model");
+assert.equal(assessAcademicProgramIdentityReview([
+  { role: "user", content: "How many credits for Cybersecurity? I meant Information Security, not Cybersecurity." },
+], "en"), null, "explicitly corrected program identity overrides the negated prior label");
+assert.equal(assessAcademicProgramIdentityReview([
+  { role: "user", content: "How many credits for Cybersecurity?" },
+  { role: "assistant", content: "I need to check which degree you mean." },
+  { role: "user", content: "How many credits for Information Technology?" },
+], "en"), null, "a new explicit program topic replaces the unresolved prior program");
+const cybersecurityArabicReview = assessAcademicProgramIdentityReview([
+  { role: "user", content: "\u0643\u0645 \u0633\u0627\u0639\u0629 \u0623\u062d\u062a\u0627\u062c \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0627\u0644\u0623\u0645\u0646 \u0627\u0644\u0633\u064a\u0628\u0631\u0627\u0646\u064a\u061f" },
+], "ar");
+assert.equal(cybersecurityArabicReview?.clarificationReason, "cybersecurity_curriculum_mapping_unverified", "Arabic Cybersecurity questions must not inherit the Information Security model");
+assert.ok(cybersecurityArabicReview?.content.includes("\u0644\u0627 \u062a\u062b\u0628\u062a"), "Arabic identity review is readable, not mojibake");
+
+const computerEngineeringIdentityReview = assessAcademicProgramIdentityReview([
+  { role: "user", content: "In Computer Engineering, take Networking Security instead of Selected Topics." },
+], "en");
+assert.equal(computerEngineeringIdentityReview?.clarificationReason, "computer_engineering_cohort_required");
+assert.match(computerEngineeringIdentityReview?.content ?? "", /entry year/i);
+assert.equal(assessAcademicProgramIdentityReview([
+  { role: "user", content: "I entered Computer Engineering in 2022. Which courses are required in my plan?" },
+], "en"), null, "a historic computer-engineering plan can be scoped by its entry cohort");
+assert.equal(assessAcademicProgramIdentityReview([
+  { role: "user", content: "How many credits for Computer and Artificial Intelligence Engineering?" },
+], "en"), null, "the current named Computer and AI Engineering program is distinct from the legacy Computer Engineering record");
+assert.equal(assessAcademicProgramIdentityReview([
+  { role: "user", content: "\u0643\u0645 \u0633\u0627\u0639\u0629 \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0647\u0646\u062f\u0633\u0629 \u0627\u0644\u062d\u0627\u0633\u0648\u0628\u061f" },
+], "ar")?.clarificationReason, "computer_engineering_cohort_required", "Arabic Computer Engineering questions must establish the applicable cohort");
+const computerEngineeringArabicReview = assessAcademicProgramIdentityReview([
+  { role: "user", content: "\u0643\u0645 \u0633\u0627\u0639\u0629 \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0647\u0646\u062f\u0633\u0629 \u0627\u0644\u062d\u0627\u0633\u0648\u0628\u061f" },
+], "ar");
+assert.ok(computerEngineeringArabicReview?.content && /[\u0600-\u06FF]/u.test(computerEngineeringArabicReview.content), "Arabic Computer Engineering identity review is readable");
 
 const isecCurrent = getProgramCurriculum("bsc-information-security");
 assert.ok(isecCurrent);

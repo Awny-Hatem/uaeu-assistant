@@ -1,4 +1,5 @@
 import curriculaData from "@/data/academic/program-curricula.json";
+import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
 
 export type CreditBucket = { id: string; name: string; credits: number };
 export type PathwayOption = {
@@ -182,6 +183,101 @@ function cohortYearInText(text: string): number | undefined {
     text.match(/\bcohort\s+(?:is\s+|of\s+)?(20\d{2})\b/i) ??
     text.match(/\b(20\d{2})\s*(?:cohort|entry|entrant|intake)\b/i);
   return match ? Number(match[1]) : undefined;
+}
+
+type ProgramIdentityMention = "computer-ai-engineering" | "computer-engineering" | "cybersecurity" | "information-security" | "other-program";
+
+export type AcademicProgramIdentityReview = {
+  programId: "bsc-information-security" | "bsc-computer-engineering";
+  content: string;
+  citations: { title: string; url: string; lastVerified: string }[];
+  clarificationReason: "cybersecurity_curriculum_mapping_unverified" | "computer_engineering_cohort_required";
+};
+
+function latestProgramIdentityMention(
+  messages: { role: "user" | "assistant"; content: string }[],
+  catalogPrograms: ReturnType<typeof loadUndergraduateProgramCatalog>["programs"],
+): ProgramIdentityMention | undefined {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const identityPatterns: { value: ProgramIdentityMention; pattern: RegExp }[] = [
+    { value: "computer-ai-engineering", pattern: /\bcomputer\s+(?:and\s+)?(?:artificial intelligence|AI)\s+engineering\b/giu },
+    { value: "computer-ai-engineering", pattern: /\u0647\u0646\u062f\u0633\u0629 \u0627\u0644\u062d\u0627\u0633\u0648\u0628 \u0648\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a/gu },
+    { value: "computer-engineering", pattern: /\bcomputer engineering\b/giu },
+    { value: "computer-engineering", pattern: /\u0647\u0646\u062f\u0633\u0629 (?:\u0627\u0644\u062d\u0627\u0633\u0648\u0628|\u0627\u0644\u0643\u0645\u0628\u064a\u0648\u062a\u0631)/gu },
+    { value: "cybersecurity", pattern: /\bcyber\s?security\b/giu },
+    { value: "cybersecurity", pattern: /\u0627\u0644\u0623\u0645\u0646 \u0627\u0644\u0633\u064a\u0628\u0631\u0627\u0646\u064a/gu },
+    { value: "information-security", pattern: /\binformation security\b/giu },
+    { value: "information-security", pattern: /\u0623\u0645\u0646 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a/gu },
+  ];
+  for (const program of catalogPrograms) {
+    if (program.id === "cybersecurity" || program.id === "computer-and-artificial-intelligence-engineering") continue;
+    const shortTitle = program.title.replace(/^Bachelor of (?:Science|Arts|Business Administration) in /i, "").replace(/^Bachelor of /i, "");
+    for (const title of new Set([program.title, shortTitle])) {
+      if (title.length >= 5) identityPatterns.push({ value: "other-program", pattern: new RegExp(`\\b${title.replace(/[.*+?^${}()|[\\]\\]/g, "\\$&")}\\b`, "giu") });
+    }
+  }
+  let latestMention: { value: ProgramIdentityMention; order: number } | undefined;
+  userMessages.forEach(({ content }, messageIndex) => {
+    for (const candidate of identityPatterns) {
+      candidate.pattern.lastIndex = 0;
+      let match: RegExpExecArray | null;
+      while ((match = candidate.pattern.exec(content)) !== null) {
+        const precedingText = content.slice(Math.max(0, match.index - 32), match.index);
+        if (/(?:\bnot|\binstead of|\brather than|\bnot the)\s*$/iu.test(precedingText) || /(?:ليس|لا أقصد)\s*$/u.test(precedingText)) continue;
+        const order = messageIndex * 10_000 + match.index;
+        if (!latestMention || order >= latestMention.order) latestMention = { value: candidate.value, order };
+      }
+    }
+  });
+  return latestMention?.value;
+}
+
+/** Prevent a legacy curriculum from being applied to a program identity or cohort that the sources do not map. */
+export function assessAcademicProgramIdentityReview(
+  messages: { role: "user" | "assistant"; content: string }[],
+  locale: "ar" | "en",
+): AcademicProgramIdentityReview | null {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const latest = userMessages.at(-1)?.content ?? "";
+  const asksAcademicPlanQuestion = /\b(?:credit hours?|credits?|graduate|graduation|degree requirements?|curricul(?:um|a)|study plan|prerequisites?|course requirements?|required courses?|which courses?|what courses?|instead of|rather than|replace|replacement|substitut(?:e|ion)|cohort|entry year)\b|\u0643\u0645\s+\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u0627\u062a|\u062a\u062e\u0631\u062c|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u062f\u0631\u0627\u0633\u064a\u0629|\u0627\u0644\u0645\u0642\u0631\u0631/iu.test(latest);
+  if (!asksAcademicPlanQuestion) return null;
+
+  const catalog = loadUndergraduateProgramCatalog();
+  const identity = latestProgramIdentityMention(messages, catalog.programs);
+  const currentCatalog = catalog.programs.find(({ id }) => id === "cybersecurity");
+  const computerEngineering = academicPrograms.find(({ id }) => id === "bsc-computer-engineering");
+  const informationSecurity = academicPrograms.find(({ id }) => id === "bsc-information-security");
+  if (identity === "cybersecurity" && currentCatalog && informationSecurity) {
+    return {
+      programId: "bsc-information-security",
+      clarificationReason: "cybersecurity_curriculum_mapping_unverified",
+      content: locale === "ar"
+        ? `يعرض دليل البرامج الحالي **${currentCatalog.title}**، بينما الخطة المنظمة المتاحة لدي مسجلة باسم **Information Security**. لا تثبت المصادر أن البرنامجين أو متطلبات دفعاتهما متطابقة؛ لذلك لن أطبق ساعات أو مقررات خطة Information Security على Cybersecurity. هل تقصد خطة Information Security لدفعة سابقة؟ إذا كان الأمر كذلك، أرسل سنة دخولك والاسم الدقيق الظاهر في Degree Works.`
+        : `The current UAEU catalog lists **${currentCatalog.title}**, while the structured curriculum available here is labelled **Information Security**. The sources do not establish that these program identities or cohort requirements are interchangeable, so I will not apply the Information Security credit total or course plan to Cybersecurity. Are you asking about a historical Information Security plan? If so, share your entry year and the exact program name shown in Degree Works.`,
+      citations: [
+        { title: currentCatalog.title, url: currentCatalog.url, lastVerified: catalog.verifiedAt },
+        ...informationSecurity.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+      ],
+    };
+  }
+
+  if (identity === "computer-engineering" && computerEngineering &&
+      !userMessages.some(({ content }) => cohortYearInText(content) !== undefined)) {
+    const currentCatalogEntry = catalog.programs.find(({ id }) => id === "computer-and-artificial-intelligence-engineering");
+    return {
+      programId: "bsc-computer-engineering",
+      clarificationReason: "computer_engineering_cohort_required",
+      content: locale === "ar"
+        ? `لا يعرض دليل البرامج الحالي درجة مستقلة باسم Computer Engineering؛ بل يعرض برنامج Computer and Artificial Intelligence Engineering باسم مختلف. لدي سجلات أقدم لـ Computer Engineering، لكن لا يمكنني تحديد الخطة المنطبقة دون سنة دخولك. ما اسم البرنامج وسنة الدخول الظاهران في Degree Works؟`
+        : `The current undergraduate catalog lists **${currentCatalogEntry?.title ?? "Computer and Artificial Intelligence Engineering"}**, not a standalone Computer Engineering degree. I do have older standalone Computer Engineering records, but cannot choose the applicable cohort plan without your entry year. What exact program name and entry year appear in your Degree Works plan?`,
+      citations: [
+        { title: "UAEU Undergraduate Programs Catalog", url: catalog.catalogUrl, lastVerified: catalog.verifiedAt },
+        ...computerEngineering.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+      ],
+    };
+  }
+
+  return null;
 }
 
 export function assessProgramCreditConversation(
