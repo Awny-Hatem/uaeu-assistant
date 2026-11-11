@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 28, "twenty-eight current or historical program records have structured evidence records");
+assert.equal(programs.length, 31, "thirty-one current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -233,6 +233,23 @@ const veterinaryRequirementsText = renderProgramRequirementsAssessment(veterinar
 assert.match(veterinaryRequirementsText, /VMED500, VMED505, VMED511/);
 assert.match(veterinaryRequirementsText, /after all Year 1-4 courses and VMED580 Senior Research Project are complete/i);
 assert.match(veterinaryRequirementsText, /must not be double-counted/i);
+for (const [id, degree] of [
+  ["agricultural-resource-management", "Agricultural Resource Management"],
+  ["horticulture", "Horticulture"],
+  ["marine-fisheries-and-animal-science", "Marine Fisheries and Animal Science"],
+] as const) {
+  const credit = assessProgramCreditConversation([{ role: "user", content: `How many credits are required to graduate from ${degree}?` }]);
+  assert.equal(credit?.programId, id, `${degree} is identified from the student's wording`);
+  assert.equal(credit?.curriculum?.totalCredits, 120);
+  assert.match(renderProgramCreditAssessment(credit!, "en"), /120 credit hours/);
+  const requirements = assessProgramRequirementsConversation([{ role: "user", content: `What courses are required for ${degree}?` }]);
+  assert.equal(requirements?.programId, id, `${degree} requirement question does not resolve to another degree`);
+  assert.ok(requirements?.curriculum);
+}
+const horticultureRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Horticulture?" }]);
+assert.match(renderProgramRequirementsAssessment(horticultureRequirements!, "en"), /choose one option/);
+const mfassRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Marine Fisheries and Animal Science?" }]);
+assert.match(renderProgramRequirementsAssessment(mfassRequirements!, "en"), /select 3 courses/);
 const foodCredit = assessProgramCreditConversation([{ role: "user", content: "How many credits are in Food Science?" }]);
 assert.equal(foodCredit?.curriculum?.totalCredits, 120);
 const economicsRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Economics?" }]);
@@ -321,7 +338,7 @@ assert.ok(hpeCurriculum);
 const hpeInternship = hpeCurriculum.curriculum.requirements.find((item) => item.id === "hpe-student-teaching");
 assert.ok(hpeInternship?.type === "INTERNSHIP");
 assert.equal(hpeInternship.credits, 9);
-for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education", "economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics", "architectural-engineering", "communication-engineering", "food-science", "veterinary-medicine"]) {
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education", "economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics", "architectural-engineering", "communication-engineering", "food-science", "veterinary-medicine", "agricultural-resource-management", "horticulture", "marine-fisheries-and-animal-science"]) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
   for (const requirement of modeled.curriculum.requirements) {
@@ -330,7 +347,8 @@ for (const programId of ["cybersecurity", "data-science-and-artificial-intellige
       : requirement.type === "INTERNSHIP" ? [requirement.courseCode]
         : requirement.type === "PATHWAY_CHOICE" ? requirement.options.flatMap(({ courseCodes }) => courseCodes) : [];
     for (const code of codes) {
-      const sourceListedZeroCreditInternship = (programId === "electrical-engineering" || programId === "communication-engineering") && code === "ELEC490";
+      const sourceListedZeroCreditInternship = ((programId === "electrical-engineering" || programId === "communication-engineering") && code === "ELEC490") ||
+        (programId === "marine-fisheries-and-animal-science" && code === "BIOL210");
       assert.ok(officialCourseCodes.has(code) || sourceListedZeroCreditInternship,
         `${programId} requirement ${requirement.id} references catalog course ${code} or an explicitly disclosed program-page-only row`);
     }
@@ -339,6 +357,34 @@ for (const programId of ["cybersecurity", "data-science-and-artificial-intellige
 assert.equal(getProgramCurriculum("petroleum-engineering", 2022)?.curriculum.totalCredits, 147, "the 2022 Petroleum Engineering cohort retains its separately published 147-credit plan");
 assert.equal(getProgramCurriculum("petroleum-engineering", 2022)?.curriculum.requirements.length, 0, "the older Petroleum plan does not claim a structured course list");
 assert.equal(getProgramCurriculum("petroleum-engineering", 2023)?.curriculum.totalCredits, 132, "the 2023 cohort onward uses the separately published 132-credit model");
+
+const arm = getProgramCurriculum("agricultural-resource-management");
+assert.ok(arm);
+assert.equal(arm.curriculum.totalCredits, 120);
+assert.deepEqual(arm.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 12, 59, 4, 18, 6]);
+assert.equal(getProgramCurriculum("agricultural-resource-management", 2025)?.curriculum.requirements.length, 0,
+  "do not merge the older study plan course sequence with changed current page requirements");
+assert.match(arm.curriculum.limitations.join(" "), /displayed coded Agribusiness rows sum to 53 credits/);
+
+const horticulture = getProgramCurriculum("horticulture");
+assert.ok(horticulture);
+assert.equal(horticulture.curriculum.totalCredits, 120);
+assert.deepEqual(horticulture.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 12, 45, 3, 21, 12, 6]);
+const horticulturePathways = horticulture.curriculum.requirements.find((item) => item.id === "horticulture-concentration");
+assert.ok(horticulturePathways?.type === "PATHWAY_CHOICE");
+assert.equal(horticulturePathways.options.length, 2);
+assert.ok(horticulturePathways.options.every((option) => option.credits === 21));
+assert.equal(getProgramCurriculum("horticulture", 2025)?.curriculum.requirements.length, 0,
+  "do not apply the current page's alternatives to a cohort when source plan details differ");
+
+const marineFisheries = getProgramCurriculum("marine-fisheries-and-animal-science");
+assert.ok(marineFisheries);
+assert.equal(marineFisheries.curriculum.totalCredits, 120);
+assert.deepEqual(marineFisheries.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 12, 45, 3, 21, 12, 6]);
+assert.match(marineFisheries.curriculum.limitations.join(" "), /displayed coded rows total 42 credits/);
+assert.match(marineFisheries.curriculum.limitations.join(" "), /select 3 courses/);
+assert.equal(getProgramCurriculum("marine-fisheries-and-animal-science", 2025)?.curriculum.requirements.length, 0,
+  "keep the linked historical plan separate from the current page requirements");
 const cybersecurityAssessment = assessProgramCreditConversation([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
 ]);
