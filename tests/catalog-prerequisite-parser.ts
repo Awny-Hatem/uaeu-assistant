@@ -71,6 +71,21 @@ assert.deepEqual(parseCatalogPrerequisiteExpression(record({
     ] },
   ],
 }, "an explicit Pre/Co marker inside the catalog's Pre/Co group preserves OR and concurrent enrollment semantics");
+assert.deepEqual(parseCatalogPrerequisiteExpression(record({
+  prerequisiteItems: ["LNG100 with a minimum grade D or Pre/Co SLP106"],
+})), {
+  op: "OR",
+  conditions: [
+    { type: "COURSE_GRADE_AT_LEAST", courseCode: "LNG100", minimumGrade: "D" },
+    { op: "OR", conditions: [
+      { type: "COURSE_COMPLETED", courseCode: "SLP106" },
+      { type: "COURSE_CURRENT", courseCode: "SLP106" },
+    ] },
+  ],
+}, "an inline Pre/Co marker makes only its explicitly marked course eligible for concurrent enrollment");
+assert.equal(parseCatalogPrerequisiteExpression(record({
+  prerequisiteItems: ["LNG100 with a minimum grade D or Pre/Co"],
+})), null, "a dangling inline Pre/Co marker remains unsupported");
 assert.equal(parseCatalogPrerequisiteExpression(record({
   preCorequisiteItems: ["PETE290 with a minimum grade D or Pre/Co"],
 })), null, "an incomplete Pre/Co alternative remains unsupported");
@@ -119,6 +134,11 @@ const chme330 = catalog.courses.find((course) => course.code === "CHME330");
 assert.ok(chme330);
 assert.equal(parseCatalogPrerequisiteExpression(chme330), null,
   "the malformed official CHME330 page includes a visible orphan prerequisite and must remain unsupported");
+for (const code of ["LNG450", "LNG460"]) {
+  const course = catalog.courses.find((candidate) => candidate.code === code);
+  assert.ok(course);
+  assert.ok(parseCatalogPrerequisiteExpression(course), `${code}'s inline Pre/Co alternative should parse explicitly`);
+}
 const incompleteCsbp340 = catalog.courses.find((course) => course.code === "CSBP340");
 assert.ok(incompleteCsbp340);
 assert.equal(parseCatalogPrerequisiteExpression(incompleteCsbp340), null,

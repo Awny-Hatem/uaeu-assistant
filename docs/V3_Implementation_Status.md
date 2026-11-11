@@ -10,7 +10,7 @@ This status follows the six phases and the Phase 1 completion checklist in `UAEU
 
 - The V3 answer path uses resolution states, source evidence, applicability checks, and deterministic academic models. Route checks verify legacy selector bypass for covered cases, deadline-topic separation, source citations, fail-safe handling, and contextual prerequisite assessment when a student mentions the target, completed, and current courses across turns.
 - All 55 degrees in the current official undergraduate catalog have structured current curriculum evidence. This does not mean all historical cohorts, changed degree versions, personal audits, or course offerings are fully modeled.
-- The deterministic prerequisite parser now recognizes explicit `Pre/Co` labels inside catalog pre/corequisite alternatives. The importer also preserves visible course requirements that appear outside malformed HTML list items, so they cannot be silently dropped. It safely structures 1,449 of 1,478 course relation records (98.0%); the remaining 29 still fail closed. CSBP340's official catalog row ends with a dangling `or`, and CHME330 has an orphaned PHYS135 requirement in the official markup, so neither rule is guessed.
+- The deterministic prerequisite parser recognizes explicit `Pre/Co` labels both in catalog pre/corequisite alternatives and when embedded in a prerequisite expression. The importer also preserves visible course requirements outside malformed HTML list items, so they cannot be silently dropped. It safely structures 1,451 of 1,478 course relation records (98.2%); the remaining 27 fail closed. CSBP340's official catalog row ends with a dangling `or`, and CHME330 has an orphaned PHYS135 requirement in the official markup, so neither rule is guessed.
 - Recently added program records cover Arabic Language and Literature, Visual Studies and Creative Industries, Geography, Applied Sociology and Social Data Analytics, and Doctor of Medicine. Each record carries explicit source caveats and applicability limits where the official pages conflict or leave gaps.
 - Dark-mode controls and styles are absent from the current `app`, `components`, and `lib` source search. A live visual accessibility audit remains outstanding.
 
@@ -20,7 +20,7 @@ This status follows the six phases and the Phase 1 completion checklist in `UAEU
 | --- | --- | --- |
 | 0. Stabilize and establish baseline | Substantially complete | Reconfirm the reproducible production/V2 fingerprint and close the release baseline review. |
 | 1. Trusted UAEU Information Assistant | Substantially implemented; incomplete | Finish the full independent benchmark, verify deployed identity and configuration, and demonstrate improvement across novel and time-sensitive questions. |
-| 2. Academic Intelligence | Partial | Validate all course rules and cohort versions; resolve unsupported prerequisite records; expand deterministic rule coverage and test cross-program edge cases. A current-page curriculum record for each catalog degree is not complete cohort coverage. |
+| 2. Academic Intelligence | Partial | Validate all course rules and cohort versions; resolve the remaining unsupported prerequisite records where official wording is unambiguous; expand deterministic rule coverage and test cross-program edge cases. A current-page curriculum record for each catalog degree is not complete cohort coverage. |
 | 3. Authorized Student Personalization | Not implemented | Requires UAEU-approved SSO, student-record APIs, permissions, privacy and retention rules, and institutional testing. |
 | 4. Advanced Academic Planning | Partial foundation | Complete a constraint-based semester planner, prerequisite-aware course sequencing, alternative plans, and live offering/availability integration. No personal degree audit is available without authorized student data. |
 | 5. University Actions | Not implemented | Requires approved university transaction APIs, write authorization, preview/confirmation, execution receipts, audit, and kill switches. |
@@ -33,7 +33,7 @@ The root checkout's `node_modules` could not be safely refreshed because Windows
 
 - `npm run test:academic-model` — 57 curriculum evidence records.
 - `npm run test:academic-catalog` — 55/55 catalog degrees have current structured curriculum evidence.
-- `npm run test:catalog-import` — catalog import checks passed; 1,449/1,478 prerequisite relations parse, including explicit Pre/Co alternatives, while incomplete or malformed source relations remain unsupported.
+- `npm run test:catalog-import` — catalog import checks passed; 1,451/1,478 prerequisite relations parse, including explicit inline and field-level Pre/Co alternatives, while incomplete or malformed source relations remain unsupported.
 - `npm run test:academic-rules` — deterministic grade, AND/OR, concurrency, freshness, provenance, and unknown-state checks passed.
 - `npm run test:content` — academic, service, and portability checks passed.
 - `npm run test:v3` — V3 route and selector-bypass checks passed, including a contextual course-prerequisite follow-up with a prior target course and multiple completed/current course codes.

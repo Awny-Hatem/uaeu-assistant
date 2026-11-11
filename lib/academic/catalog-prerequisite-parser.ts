@@ -87,6 +87,31 @@ function parseItem(text: string): PrerequisiteExpression | null {
   return expression && position === tokens.length ? expression : null;
 }
 
+/** Honor an explicit inline Pre/Co marker without relaxing other catalog grammar. */
+function parsePrerequisiteItem(text: string): PrerequisiteExpression | null {
+  const concurrentCodes: string[] = [];
+  const normalized = text.replace(
+    /\bpre\s*[\/&]\s*co(?:requisites?)?\s+([A-Z]{2,8}\s?\d{3,4}[A-Z]?)\b/giu,
+    (_marker, code: string) => {
+      concurrentCodes.push(code.replace(/\s+/g, "").toUpperCase());
+      return code;
+    },
+  );
+  const parsed = parseItem(normalized);
+  if (!parsed || !concurrentCodes.length) return parsed;
+  const makeConcurrent = (expression: PrerequisiteExpression): PrerequisiteExpression => {
+    if ("op" in expression) {
+      return { op: expression.op, conditions: expression.conditions.map(makeConcurrent) };
+    }
+    if (!concurrentCodes.includes(expression.courseCode)) return expression;
+    return {
+      op: "OR",
+      conditions: [expression, { type: "COURSE_CURRENT", courseCode: expression.courseCode }],
+    };
+  };
+  return makeConcurrent(parsed);
+}
+
 /** A listed pre/corequisite may be completed earlier or taken concurrently. */
 function mapPriorOrCurrent(expression: PrerequisiteExpression): PrerequisiteExpression | null {
   if ("op" in expression) {
@@ -108,7 +133,7 @@ function combineAnd(expressions: PrerequisiteExpression[]): PrerequisiteExpressi
 
 /** Parse only complete, explicit catalog list items; unknown grammar fails closed. */
 export function parseCatalogPrerequisiteExpression(record: OfficialCourseRecord): PrerequisiteExpression | null {
-  const required = record.prerequisiteItems.map(parseItem);
+  const required = record.prerequisiteItems.map(parsePrerequisiteItem);
   if (required.some((expression) => !expression)) return null;
   const corequisites = record.corequisiteItems.map((item) => {
     const parsed = parseItem(item);
