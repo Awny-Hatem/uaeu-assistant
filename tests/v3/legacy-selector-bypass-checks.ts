@@ -53,6 +53,12 @@ async function main() {
   assert.equal((transcriptFeeFollowUp.payload.guide as { id?: string } | undefined)?.id, "current-student-official-transcript");
   assert.match(String(transcriptFeeFollowUp.payload.content), /free/i);
 
+  const enrollmentLetter = await ask("New topic: I need a letter proving I'm enrolled.", "203.0.113.255");
+  assert.equal(enrollmentLetter.payload.stateLabel, "guided_service");
+  assert.equal((enrollmentLetter.payload.guide as { id?: string } | undefined)?.id, "to-whom-it-may-concern");
+  assert.match(String(enrollmentLetter.payload.content), /enrolled UAEU students/i);
+  assert.match(JSON.stringify(enrollmentLetter.payload.citations), /serviceId=92/);
+
   const parkingPermit = await ask("How do I apply for a university parking permit?", "203.0.113.254");
   assert.equal(parkingPermit.payload.stateLabel, "guided_service");
   assert.equal((parkingPermit.payload.guide as { id?: string } | undefined)?.id, "al-ain-female-student-campus-parking-permit");
