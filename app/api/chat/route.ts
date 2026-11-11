@@ -766,12 +766,36 @@ export async function POST(req: Request) {
   if (!latest) {
     return jsonNoStore({ error: "A user message is required." }, { status: 400 });
   }
+  const locale = resolveLocale(latest, localePref);
+
+  const tuitionCostRequest = /\b(?:tuition|tuition fee|tuition cost|tuition rate|program cost|education cost)\b/iu.test(latest) &&
+    /\b(?:cost|how much|price|rate|fee)\b/iu.test(latest);
+  if (isV3Enabled() && tuitionCostRequest) {
+    const tuitionRecord = loadFaqEntries().find((entry) => entry.id === "tuition-program-cost");
+    if (tuitionRecord) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: faqAnswer(tuitionRecord, locale),
+        source: "faq",
+        responseMode: "canonical",
+        stateLabel: "v3_verified_tuition_answer",
+        resolutionState: "MISSING_CONTEXT",
+        faqId: tuitionRecord.id,
+        disposition: "clarify",
+        topic: "tuition",
+        evidenceIds: [`answer:${tuitionRecord.id}`],
+        citations: citationsForFaq(tuitionRecord),
+        communications: matchCommunications(latest),
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+  }
 
   if (shouldPersistServerSide && userId) {
     saveMessage(userId, "user", latest, undefined, undefined, expectedHistoryGeneration);
   }
 
-  const locale = resolveLocale(latest, localePref);
   if (asksPreviousQuestion(latest)) {
     const previousQuestion = previousUserMessage(sanitized);
     const content = previousQuestion

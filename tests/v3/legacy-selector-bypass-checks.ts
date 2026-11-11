@@ -130,6 +130,13 @@ async function main() {
   assert.match(String(currentDegreeCredits.payload.content), /21 credits/);
   assert.match(String(currentDegreeCredits.payload.content), /older assigned cohort plans may require 130/i);
 
+  const tuitionNeedsProgram = await ask("What is the tuition cost for the program I want?", "203.0.113.242");
+  assert.equal(tuitionNeedsProgram.payload.stateLabel, "v3_verified_tuition_answer");
+  assert.equal(tuitionNeedsProgram.payload.faqId, "tuition-program-cost");
+  assert.equal(tuitionNeedsProgram.payload.resolutionState, "MISSING_CONTEXT");
+  assert.equal(tuitionNeedsProgram.payload.disposition, "clarify");
+  assert.match(String(tuitionNeedsProgram.payload.content), /tuition/i);
+
   const olderDegreeCredits = await askMessages([
     { role: "user", content: "I entered the Information Security program in the 2022 cohort." },
     { role: "assistant", content: "Which requirement do you want to check?" },
