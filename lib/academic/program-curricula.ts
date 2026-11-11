@@ -345,6 +345,7 @@ export function assessProgramCreditConversation(
     /^\s*(?:and\s+)?how many\s+(?:credit hours?|credits?)\s*[?!.]*$/i.test(latest) ||
     (/^\s*(?:and\s+)?how many\s*[?!.]*$/i.test(latest) && /\b(?:credits?|credit hours?)\b/i.test(latestAssistantText))
   ));
+  if (latest && /\b(?:degree|program|major)\s+requirements?\b/i.test(latest) && !/\b(?:credit hours?|credits?)\b/i.test(latest)) return null;
   if (!latest || (!shortCreditFollowUp && !/\b(?:credit hours?|credits?|graduate|graduation|degree|bachelor|bsc|curriculum)\b|كم\s+ساعة|ساعات\s+التخرج/u.test(latest))) return null;
 
   const directProgram = programIdInText(latest);

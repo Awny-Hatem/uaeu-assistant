@@ -59,6 +59,9 @@ assert.match(renderProgramRequirementsAssessment(geoscienceElectiveChoices!, "en
 const mdsDegreeRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What are the Mathematics of Data Science degree requirements?" }]);
 assert.equal(mdsDegreeRequirements?.programId, "mathematics-of-data-science");
 assert.match(renderProgramRequirementsAssessment(mdsDegreeRequirements!, "en"), /MATH497/);
+assert.equal(assessProgramCreditConversation([{ role: "user", content: "What are the Mathematics of Data Science degree requirements?" }]), null,
+  "general degree requirements must not be mistaken for a credit-total request");
+assert.equal(assessProgramCreditConversation([{ role: "user", content: "How many credits do I need to graduate from Mathematics of Data Science?" }])?.programId, "mathematics-of-data-science");
 
 assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
