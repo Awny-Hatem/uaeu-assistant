@@ -101,6 +101,10 @@ async function main() {
       const cohortBody = await cohortResponse.json();
       assert.equal(cohortBody.cohort.year, entry.cohorts[0]);
       assert.ok(cohortBody.courses.length > 0, `${entry.id} exposes courses for a selectable cohort`);
+      assert.ok(cohortBody.requirementSummary, `${entry.id} exposes a requirement summary for planner guidance`);
+      const availableCodes = new Set((cohortBody.courses as { code: string }[]).map(({ code }) => code));
+      assert.ok(cohortBody.requirementSummary.mandatoryCourseCodes.every((code: string) => availableCodes.has(code) || cohortBody.unavailableCourses.includes(code)), `${entry.id} mandatory suggestions must correspond to a curriculum course`);
+      assert.ok(Array.isArray(cohortBody.requirementSummary.choiceGroups) && Array.isArray(cohortBody.requirementSummary.pathwayChoices), `${entry.id} distinguishes elective groups and pathways`);
     }
   }
 
@@ -113,6 +117,13 @@ async function main() {
   assert.equal(courseOptionsResponse.status, 200);
   const courseOptions = await courseOptionsResponse.json();
   assert.ok(courseOptions.courses.some((course: { code: string }) => course.code === candidate.course.code));
+  assert.ok(courseOptions.requirementSummary.mandatoryCourseCodes.every((code: string) => /^[A-Z0-9]+$/u.test(code)));
+  const candidateCurriculum = getProgramCurriculum(candidate.program.id, candidate.cohortYear);
+  assert.ok(candidateCurriculum);
+  const candidatePathwayCodes = new Set(candidateCurriculum!.curriculum.requirements
+    .filter((requirement) => requirement.type === "PATHWAY_CHOICE")
+    .flatMap((requirement) => requirement.options.flatMap((option) => option.courseCodes.map((code) => code.toUpperCase()))));
+  assert.ok(courseOptions.requirementSummary.mandatoryCourseCodes.every((code: string) => !candidatePathwayCodes.has(code)), "pathway alternatives must never be auto-classified as mandatory");
 
   const validResponse = await POST(request());
   assert.equal(validResponse.status, 200);

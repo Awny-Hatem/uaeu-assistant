@@ -13,10 +13,27 @@ type CourseOption = {
   groups: { id: string; name: string; type: string; chooseCount?: number; credits?: number }[];
   source: { title: string; url: string; verifiedAt: string };
 };
+type PlanningChoice = {
+  id: string;
+  name: string;
+  type: string;
+  courseCodes: string[];
+  chooseCount?: number;
+  credits?: number;
+  selectionNote?: string;
+  conditionalOn?: string;
+};
 type CurriculumOptions = {
   program: { id: string; name: string; college: string };
   cohort: { year: number; label: string; version: string; totalCredits: number };
   courses: CourseOption[];
+  requirementSummary: {
+    mandatoryCourseCodes: string[];
+    choiceGroups: PlanningChoice[];
+    conditionalGroups: PlanningChoice[];
+    pathwayChoices: { id: string; name: string; options: PlanningChoice[] }[];
+    creditBlocksNotAssessed: { id: string; name: string; credits: number; ruleNote: string; conditionalOn?: string }[];
+  };
   unavailableCourses: string[];
   sources: { title: string; url: string; lastVerified: string }[];
   limitations: string[];
@@ -181,6 +198,17 @@ export function AcademicSequencePlanner({
 
   const selectedProgram = useMemo(() => programs.find((program) => program.id === programId), [programId, programs]);
   const terms = useMemo(() => termText.split("\n").map((term) => term.trim()).filter(Boolean), [termText]);
+  const completedAndCurrent = useMemo(() => new Set([...parseCodes(completedText), ...parseCodes(currentText)]), [completedText, currentText]);
+  const mandatoryRemaining = useMemo(() => {
+    if (!curriculum) return [];
+    const available = new Set(curriculum.courses.map((course) => course.code));
+    return curriculum.requirementSummary.mandatoryCourseCodes.filter((code) => available.has(code) && !completedAndCurrent.has(code));
+  }, [completedAndCurrent, curriculum]);
+  const unavailableMandatory = useMemo(() => {
+    if (!curriculum) return [];
+    const available = new Set(curriculum.courses.map((course) => course.code));
+    return curriculum.requirementSummary.mandatoryCourseCodes.filter((code) => !available.has(code) && !completedAndCurrent.has(code));
+  }, [completedAndCurrent, curriculum]);
 
   async function createSequence(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -218,6 +246,10 @@ export function AcademicSequencePlanner({
 
   function toggleCourse(code: string) {
     setSelectedCodes((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
+  }
+
+  function addOutstandingRequiredCourses() {
+    setSelectedCodes((current) => [...new Set([...current, ...mandatoryRemaining])]);
   }
 
   return (
@@ -285,9 +317,39 @@ export function AcademicSequencePlanner({
               {curriculum.limitations.map((limitation) => <p key={limitation} className="mt-1">{limitation}</p>)}
             </div>
 
+            <section aria-label="Curriculum requirement overview" className="space-y-3 rounded-lg border border-zinc-200 p-4">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h3 className="font-bold text-zinc-900">Curriculum requirement overview</h3>
+                <button type="button" onClick={addOutstandingRequiredCourses} disabled={!mandatoryRemaining.length} className="rounded-md border border-[#E0182D] px-3 py-1.5 text-sm font-bold text-[#B10E23] hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50">
+                  Add outstanding required courses ({mandatoryRemaining.length})
+                </button>
+              </div>
+              <p className="text-xs leading-5 text-zinc-600">This comparison uses course codes you enter yourself. It is not connected to Degree Works and does not confirm that requirements are complete.</p>
+              {unavailableMandatory.length > 0 && <p className="text-xs leading-5 text-amber-800">Required course codes without selectable catalog records: {unavailableMandatory.join(", ")}</p>}
+              {curriculum.requirementSummary.choiceGroups.length > 0 && <div className="space-y-1 text-sm">
+                <h4 className="font-semibold">Elective and choice groups</h4>
+                {curriculum.requirementSummary.choiceGroups.map((group) => {
+                  const reported = group.courseCodes.filter((code) => completedAndCurrent.has(code)).length;
+                  return <p key={group.id} className="text-zinc-700"><span className="font-medium">{group.name}:</span> {reported} listed option(s) reported completed or current{group.chooseCount !== undefined ? `; choose ${group.chooseCount}` : ""}{group.credits !== undefined ? `; ${group.credits} credits` : ""}. {group.selectionNote}</p>;
+                })}
+              </div>}
+              {curriculum.requirementSummary.pathwayChoices.length > 0 && <div className="space-y-1 text-sm">
+                <h4 className="font-semibold">Pathway choices (not auto-selected)</h4>
+                {curriculum.requirementSummary.pathwayChoices.map((pathway) => <p key={pathway.id} className="text-zinc-700"><span className="font-medium">{pathway.name}:</span> {pathway.options.map((option) => option.name).join("; ")}</p>)}
+              </div>}
+              {curriculum.requirementSummary.conditionalGroups.length > 0 && <div className="space-y-1 text-xs leading-5 text-zinc-600">
+                <h4 className="font-semibold text-zinc-700">Requirements dependent on a pathway</h4>
+                {curriculum.requirementSummary.conditionalGroups.map((group) => <p key={`${group.id}:${group.conditionalOn}`}><span className="font-medium">{group.name}:</span> {group.courseCodes.join(", ")} — applies if {group.conditionalOn}</p>)}
+              </div>}
+              {curriculum.requirementSummary.creditBlocksNotAssessed.length > 0 && <div className="space-y-1 text-xs leading-5 text-zinc-600">
+                <h4 className="font-semibold text-zinc-700">Credit blocks not assessed by course sequencing</h4>
+                {curriculum.requirementSummary.creditBlocksNotAssessed.map((block) => <p key={block.id}><span className="font-medium">{block.name} ({block.credits} credits):</span> {block.ruleNote}{block.conditionalOn ? ` — applies if ${block.conditionalOn}` : ""}</p>)}
+              </div>}
+            </section>
+
             <fieldset className="rounded-lg border border-zinc-200 p-4">
               <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({selectedCodes.length} {labels.selected})</legend>
-              <p className="mb-3 text-xs leading-5 text-zinc-600">The catalog lists alternatives and elective groups. Select only courses Degree Works or your advisor has identified as remaining; this form does not validate group completion.</p>
+              <p className="mb-3 text-xs leading-5 text-zinc-600">Mandatory course suggestions can be added above. Select electives and pathway courses only after confirming they apply to your plan. This tool does not validate elective credits or degree completion.</p>
               <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
                 {curriculum.courses.map((course) => (
                   <label key={course.code} className="flex cursor-pointer items-start gap-3 rounded-md px-2 py-2 hover:bg-zinc-50">

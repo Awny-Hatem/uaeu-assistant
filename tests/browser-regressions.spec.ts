@@ -115,6 +115,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
       program: { id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology' },
       cohort: { year: 2025, label: 'Fall 2025 cohort', version: '2025', totalCredits: 120 },
       courses: [{ code: 'CSBP119', title: 'Introduction to Programming', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' } }],
+      requirementSummary: { mandatoryCourseCodes: ['CSBP119'], choiceGroups: [], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
       unavailableCourses: [], sources: [], limitations: [],
     } });
   });
@@ -125,7 +126,8 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await dialog.getByLabel('Degree program').selectOption('bsc-computer-science');
   await dialog.getByLabel('Entry cohort year').selectOption('2025');
   await expect(dialog.getByText(/CSBP119.*Introduction to Programming/)).toBeVisible();
-  await dialog.getByRole('checkbox').check();
+  await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
+  await expect(dialog.getByRole('checkbox')).toBeChecked();
   await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105');
   await dialog.getByLabel('Courses you are currently taking').fill('CSBP219');
   await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');

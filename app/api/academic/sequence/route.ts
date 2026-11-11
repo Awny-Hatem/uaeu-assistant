@@ -14,6 +14,16 @@ const MAX_TERMS = 8;
 const MAX_EVIDENCE_AGE_DAYS = 180;
 
 type RequirementGroup = { id: string; name: string; type: string; chooseCount?: number; credits?: number };
+type PlanningChoice = {
+  id: string;
+  name: string;
+  type: string;
+  courseCodes: string[];
+  chooseCount?: number;
+  credits?: number;
+  selectionNote?: string;
+  conditionalOn?: string;
+};
 
 function json(body: unknown, status = 200): Response {
   return Response.json(body, {
@@ -136,6 +146,86 @@ function collectCourseGroups(
   return groups;
 }
 
+function summarizePlanningRequirements(requirements: ProgramRequirement[]) {
+  const mandatoryCourseCodes = new Set<string>();
+  const choiceGroups: PlanningChoice[] = [];
+  const conditionalGroups: PlanningChoice[] = [];
+  const pathwayChoices: { id: string; name: string; options: PlanningChoice[] }[] = [];
+  const creditBlocksNotAssessed: { id: string; name: string; credits: number; ruleNote: string; conditionalOn?: string }[] = [];
+
+  const visit = (items: ProgramRequirement[], conditionalOn?: string) => {
+    for (const requirement of items) {
+      if (requirement.type === "REQUIRED_COURSE_SET") {
+        if (conditionalOn) conditionalGroups.push({
+          id: requirement.id,
+          name: requirement.name,
+          type: requirement.type,
+          courseCodes: requirement.courseCodes,
+          ...(requirement.ruleNote ? { selectionNote: requirement.ruleNote } : {}),
+          conditionalOn,
+        });
+        else requirement.courseCodes.forEach((code) => mandatoryCourseCodes.add(code.toUpperCase()));
+      } else if (requirement.type === "ONE_OF_GROUP" || requirement.type === "ELECTIVE_GROUP") {
+        const group = {
+          id: requirement.id,
+          name: requirement.name,
+          type: requirement.type,
+          courseCodes: requirement.courseCodes,
+          chooseCount: requirement.chooseCount,
+          ...(requirement.type === "ELECTIVE_GROUP" ? { credits: requirement.credits } : {}),
+          ...(requirement.type === "ELECTIVE_GROUP" && requirement.selectionNote ? { selectionNote: requirement.selectionNote } : {}),
+          ...(conditionalOn ? { conditionalOn } : {}),
+        };
+        (conditionalOn ? conditionalGroups : choiceGroups).push(group);
+      } else if (requirement.type === "CREDIT_BLOCK") {
+        creditBlocksNotAssessed.push({
+          id: requirement.id,
+          name: requirement.name,
+          credits: requirement.credits,
+          ruleNote: requirement.ruleNote,
+          ...(conditionalOn ? { conditionalOn } : {}),
+        });
+      } else if (requirement.type === "INTERNSHIP") {
+        if (conditionalOn) conditionalGroups.push({
+          id: requirement.id,
+          name: requirement.name ?? "Internship requirement",
+          type: requirement.type,
+          courseCodes: [requirement.courseCode.toUpperCase()],
+          chooseCount: 1,
+          credits: requirement.credits,
+          conditionalOn,
+        });
+        else mandatoryCourseCodes.add(requirement.courseCode.toUpperCase());
+      } else {
+        const options = requirement.options.map((option) => ({
+          id: option.id,
+          name: option.name,
+          type: option.type,
+          courseCodes: option.courseCodes.map((code) => code.toUpperCase()),
+          ...(option.chooseCount !== undefined ? { chooseCount: option.chooseCount } : {}),
+          credits: option.credits,
+          ...(option.selectionNote ? { selectionNote: option.selectionNote } : {}),
+        }));
+        pathwayChoices.push({ id: requirement.id, name: requirement.name, options });
+        for (const option of requirement.options) {
+          if (option.type === "COMPOSITE" && option.requirements) {
+            visit(option.requirements, [conditionalOn, `${requirement.name}: ${option.name}`].filter(Boolean).join(" / "));
+          }
+        }
+      }
+    }
+  };
+
+  visit(requirements);
+  return {
+    mandatoryCourseCodes: [...mandatoryCourseCodes].sort(),
+    choiceGroups,
+    conditionalGroups,
+    pathwayChoices,
+    creditBlocksNotAssessed,
+  };
+}
+
 /** Public, catalog-only options for the guided course-sequence form. */
 export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -182,6 +272,7 @@ export async function GET(request: Request): Promise<Response> {
   if (!catalog) return json({ error: "The official course catalog snapshot is unavailable." }, 503);
   const catalogByCode = new Map(catalog.courses.map((course) => [course.code.toUpperCase(), course]));
   const courseGroups = collectCourseGroups(selection.curriculum.requirements);
+  const requirementSummary = summarizePlanningRequirements(selection.curriculum.requirements);
   const courseOptions = [...courseGroups.entries()].map(([code, groups]) => {
     const record = catalogByCode.get(code);
     return record && record.creditHours !== null && record.creditHours > 0
@@ -193,6 +284,7 @@ export async function GET(request: Request): Promise<Response> {
     program: { id: program.id, name: program.name, college: program.college },
     cohort: { year: cohortYear, label: selection.curriculum.cohortLabel, version: selection.curriculum.version, totalCredits: selection.curriculum.totalCredits },
     courses: courseOptions,
+    requirementSummary,
     unavailableCourses,
     sources: program.sources,
     limitations: selection.curriculum.limitations,
