@@ -34,6 +34,8 @@ export type DegreeAuditAssessment = {
 };
 
 const CURRICULUM_PROGRAM_IDS: Record<string, string> = {
+  "accounting": "accounting",
+  "finance-and-banking": "finance-and-banking",
   "mechanical-engineering": "bsc-mechanical-engineering",
   "electrical-engineering": "electrical-engineering",
   "civil-engineering": "civil-engineering",

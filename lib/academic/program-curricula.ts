@@ -505,7 +505,7 @@ export function renderProgramRequirementsAssessment(
     if (requirement.type === "PATHWAY_CHOICE") {
       const options = requirement.options.map((option) => option.type === "ELECTIVE_GROUP"
         ? `- ${option.name}: choose ${option.chooseCount} courses (${option.credits} credits) from ${option.courseCodes.join(", ")}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`
-        : `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).`).join("\n");
+        : `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).${option.selectionNote ? ` ${option.selectionNote}` : ""}`).join("\n");
       return `**${requirement.name}:** choose one option:\n${options}`;
     }
     return `**${requirement.name ?? "Internship requirement"}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;

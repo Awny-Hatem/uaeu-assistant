@@ -937,5 +937,104 @@
         "The catalog permits CIVL485 and CIVL490 in different summers or together in Fall or Spring. General-education options are not audited, and the model does not establish a student's cohort, completed requirements, course availability, prerequisites, or registration eligibility."
       ]
     }]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "accounting",
+    "name": "Bachelor of Accounting",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      { "documentId": "44-accounting-curriculum", "title": "UAEU Bachelor of Accounting degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-accounting.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "44-accounting-curriculum", "title": "UAEU Bachelor of Accounting Model Study Plan (2025–2026 cohort onwards)", "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_accounting_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "accounting-2025-2026-120",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; confirm the assigned Degree Works plan",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-core", "name": "College core requirements", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 30 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 27 },
+          { "id": "track-requirements", "name": "One accounting track", "credits": 12 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "accounting-general-education", "name": "General education", "credits": 21, "ruleNote": "The program requires 15 fixed credits and 6 credits across four themes, with no more than 3 credits from each selected theme; individual theme choices are not audited here." },
+          { "type": "REQUIRED_COURSE_SET", "id": "accounting-college-core", "name": "Business essentials and research skills", "courseCodes": ["BANA200", "MGMT201", "MKTG205", "STAT102", "STAT202", "GBUS300"] },
+          { "type": "PATHWAY_CHOICE", "id": "accounting-learning-in-action", "name": "Choose one 12-credit learning-in-action option", "options": [
+            { "id": "accounting-internship", "name": "GBUS460 Internship", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["GBUS460"], "selectionNote": "Scheduled in semester six; the program requires 75 completed credits before joining and does not allow other courses during the internship." },
+            { "id": "accounting-venture", "name": "ENTR415 Entrepreneurial Venture", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ENTR415"] }
+          ] },
+          { "type": "REQUIRED_COURSE_SET", "id": "accounting-supporting", "name": "Supporting requirements", "courseCodes": ["MATH115", "ACCT111", "ACCT120", "ECON105", "ECON125", "FINC210", "SCML150", "SCML201", "MGMT415", "PRVT265"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "accounting-major", "name": "Required Accounting courses", "courseCodes": ["ACCT210", "ACCT212", "ACCT220", "ACCT240", "ACCT330", "ACCT340", "ACCT341", "ACCT410", "ACCT440"] },
+          { "type": "PATHWAY_CHOICE", "id": "accounting-track", "name": "Choose one 12-credit professional track", "options": [
+            { "id": "professional-management-accounting", "name": "Professional Management Accounting", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ACCT420", "ACCT421", "ACCT441", "FINC341"] },
+            { "id": "professional-auditing", "name": "Professional Auditing", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ACCT431", "ACCT432", "ACCT441", "ACCT442"] }
+          ] }
+        ],
+        "limitations": [
+          "The model plan identifies Fall 2025 entrants and later cohorts; students must confirm their assigned Degree Works plan and any college-approved exception.",
+          "The program page shows SCML150 as 0.00 in its requirements table, while the official course catalog and 2025–2026 model study plan list it as a 3-credit course. This model follows the plan and catalog credit value; UAEU must resolve the page inconsistency before using this row for an official audit.",
+          "The page says the internship is a 12-credit, 13-week placement after two weeks of preparation, in semester six, with no other courses during it; Accounting students must have at least 75 credits before joining. The requirement-choice model does not validate a student's completed-credit threshold or placement approval.",
+          "The official PDF also contains 2022–2023 and 2023–2024 plans with different course codes. This model does not assert those plans apply to older cohorts; the 120-credit total alone is not a cohort mapping.",
+          "General-education choice rules are represented as a credit block. The model does not establish course availability, personal completion status, or registration eligibility."
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "finance-and-banking",
+    "name": "Bachelor of Finance and Banking",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      { "documentId": "45-finance-and-banking-curriculum", "title": "UAEU Bachelor of Finance and Banking degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-finance-and-banking.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "45-finance-and-banking-curriculum", "title": "UAEU Bachelor of Finance and Banking Model Study Plan", "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_finance_and_banking_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "finance-and-banking-catalog-2026-11",
+        "version": "catalog-2026-11-09",
+        "status": "approved",
+        "cohortLabel": "Current published Finance and Banking catalog; confirm its applicability against the student's assigned Degree Works plan",
+        "effectiveFrom": "2026-11-09",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 24 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 24 },
+          { "id": "concentration", "name": "One concentration", "credits": 15 },
+          { "id": "major-electives", "name": "Major electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "finance-general-education", "name": "General education", "credits": 21, "ruleNote": "The page specifies 15 fixed credits and 6 credits chosen from Themes 7–10, with no more than 3 credits from a theme; this model does not audit theme selections." },
+          { "type": "REQUIRED_COURSE_SET", "id": "finance-college-core", "name": "Business essentials and research skills", "courseCodes": ["CSBP119", "MGMT201", "MKTG205", "STAT102", "STAT202", "GBUS300"] },
+          { "type": "PATHWAY_CHOICE", "id": "finance-learning-in-action", "name": "Choose one 12-credit learning-in-action option", "options": [
+            { "id": "finance-internship", "name": "GBUS460 Internship", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["GBUS460"], "selectionNote": "Scheduled in the final semester; the program does not allow other courses during the internship." },
+            { "id": "finance-venture", "name": "ENTR415 Entrepreneurial Venture", "type": "REQUIRED_COURSE_SET", "credits": 12, "courseCodes": ["ENTR415"] }
+          ] },
+          { "type": "REQUIRED_COURSE_SET", "id": "finance-supporting", "name": "Supporting requirements", "courseCodes": ["ACCT111", "ACCT120", "ECON105", "ECON125", "FINC210", "MATH115", "MGMT415", "SCML201"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "finance-major", "name": "Required Finance and Banking courses", "courseCodes": ["ECON215", "ECON231", "FINC341", "FINC348", "FINC378", "FINC380", "FINC434", "FINC475"] },
+          { "type": "PATHWAY_CHOICE", "id": "finance-concentration", "name": "Choose one 15-credit concentration", "options": [
+            { "id": "financial-management", "name": "Financial Management", "type": "REQUIRED_COURSE_SET", "credits": 15, "courseCodes": ["FINC344", "FINC351", "FINC474", "FINC477", "FINC480"] },
+            { "id": "financial-technologies", "name": "Financial Technologies (FinTech)", "type": "REQUIRED_COURSE_SET", "credits": 15, "courseCodes": ["FINC340", "FINC370", "FINC440", "FINC470", "FINC481"] }
+          ] },
+          { "type": "ELECTIVE_GROUP", "id": "finance-electives", "name": "Finance and Banking electives", "chooseCount": 2, "credits": 6, "courseCodes": ["FINC422", "FINC463", "ECON211", "ECON212", "ACCT210", "ACCT240", "STAT240"] }
+        ],
+        "limitations": [
+          "The page was last updated 9 November 2026 and describes a 120-credit current catalog. It does not identify the first cohort to which this version applies; confirm the assigned Degree Works plan before planning a student's degree.",
+          "The linked model-plan PDF includes older 2020–2021 and 2025–2026 cohort layouts whose course sequence and course codes differ from the current page. This record models the current page requirements and does not map those historic plans to individual students.",
+          "The page states the internship is 12 credits in the last semester, lasts 14 weeks after a two-week preparation session, and allows no other courses during the internship. The model does not establish a student's placement approval or completed-credit status.",
+          "General-education choices are represented as a credit block. The model does not establish personal completion status, section availability, prerequisites beyond the official course catalog, or registration eligibility."
+        ]
+      }
+    ]
   }
 ]

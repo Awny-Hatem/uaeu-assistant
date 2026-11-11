@@ -304,7 +304,7 @@ async function main() {
   assert.match(String(inProgressDegreeRequirement.payload.content), /Choose one science course/);
   assert.match(String(inProgressDegreeRequirement.payload.content), /IN_PROGRESS/);
 
-  const unmodeledDegreeAudit = await ask("What do I still need to graduate in Finance?", "203.0.113.248");
+  const unmodeledDegreeAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.248");
   assert.equal(unmodeledDegreeAudit.payload.stateLabel, "v3_degree_audit_preview");
   assert.equal(unmodeledDegreeAudit.payload.resolutionState, "UNSUPPORTED");
   assert.match(String(unmodeledDegreeAudit.payload.content), /structured curriculum model/);
@@ -349,6 +349,23 @@ async function main() {
   assert.match(String(computerAiPathways.payload.content), /AI Systems Engineering concentration/);
   assert.match(String(computerAiPathways.payload.content), /Robotics and Autonomous Systems concentration/);
   assert.match(String(computerAiPathways.payload.content), /General Computer and AI Engineering Pathway/);
+
+  const accountingCredits = await ask("How many credits to graduate with a Bachelor of Accounting?", "203.0.113.253");
+  assert.equal(accountingCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.match(String(accountingCredits.payload.content), /120 credit hours/);
+  assert.match(JSON.stringify(accountingCredits.payload.citations), /bachelor-of-accounting/);
+
+  const accountingTracks = await ask("Which courses are required in Accounting?", "203.0.113.254");
+  assert.equal(accountingTracks.payload.stateLabel, "v3_program_requirement_model");
+  assert.match(String(accountingTracks.payload.content), /Professional Management Accounting/);
+  assert.match(String(accountingTracks.payload.content), /Professional Auditing/);
+  assert.match(String(accountingTracks.payload.content), /75 completed credits before joining/i);
+
+  const financeConcentrations = await ask("Which courses are required for Finance and Banking?", "203.0.113.255");
+  assert.equal(financeConcentrations.payload.stateLabel, "v3_program_requirement_model");
+  assert.match(String(financeConcentrations.payload.content), /Financial Management/);
+  assert.match(String(financeConcentrations.payload.content), /Financial Technologies \(FinTech\)/);
+  assert.match(String(financeConcentrations.payload.content), /FINC422/);
 
   const courseQuestion = await askMessages([
     { role: "user", content: "I am studying Computer Science." },

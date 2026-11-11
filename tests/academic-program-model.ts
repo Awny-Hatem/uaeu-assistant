@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 13, "thirteen current or historical program versions have structured evidence records");
+assert.equal(programs.length, 15, "fifteen current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -150,6 +150,8 @@ for (const [programId, expectedBuckets] of [
   ["civil-engineering", [21, 35, 65, 2, 9]],
   ["aerospace-engineering", [21, 35, 68, 2, 6]],
   ["petroleum-engineering", [21, 35, 65, 2, 9]],
+  ["accounting", [21, 30, 30, 27, 12]],
+  ["finance-and-banking", [21, 30, 24, 24, 15, 6]],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled, `${programId} has a current official curriculum model`);
@@ -162,6 +164,10 @@ for (const [programId, expectedBuckets] of [
 for (const [programId, requirementId, expectedCredits] of [
   ["aerospace-engineering", "aerospace-core", 68],
   ["petroleum-engineering", "petroleum-major", 65],
+  ["accounting", "accounting-supporting", 30],
+  ["accounting", "accounting-major", 27],
+  ["finance-and-banking", "finance-supporting", 24],
+  ["finance-and-banking", "finance-major", 24],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
@@ -170,7 +176,23 @@ for (const [programId, requirementId, expectedCredits] of [
   const listedCredits = group.courseCodes.reduce((sum, code) => sum + (officialCourseCredits.get(code) ?? 0), 0);
   assert.equal(listedCredits, expectedCredits, `${programId} course rows sum to the published ${expectedCredits}-credit requirement`);
 }
-for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering"]) {
+for (const [programId, requirementId, expectedCredits] of [
+  ["accounting", "accounting-learning-in-action", 12],
+  ["finance-and-banking", "finance-learning-in-action", 12],
+  ["accounting", "accounting-track", 12],
+  ["finance-and-banking", "finance-concentration", 15],
+] as const) {
+  const modeled = getProgramCurriculum(programId);
+  assert.ok(modeled);
+  const pathway = modeled.curriculum.requirements.find((item) => item.id === requirementId);
+  assert.ok(pathway?.type === "PATHWAY_CHOICE");
+  for (const option of pathway.options) {
+    const listedCredits = option.courseCodes.reduce((sum, code) => sum + (officialCourseCredits.get(code) ?? 0), 0);
+    assert.equal(option.credits, expectedCredits);
+    assert.equal(listedCredits, expectedCredits, `${programId} ${option.name} courses sum to ${expectedCredits} credits`);
+  }
+}
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking"]) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
   for (const requirement of modeled.curriculum.requirements) {
@@ -368,4 +390,4 @@ assert.equal(oldCohortSubstitution.curriculum?.totalCredits, 144);
 assert.equal(oldCohortSubstitution.sharedOption, undefined, "do not apply the newer elective list to the historical cohort");
 assert.match(renderProgramCourseSubstitutionAssessment(oldCohortSubstitution, "en"), /cannot verify replacing CENG580 with CENG532/);
 
-console.log("Academic program model passed: 13 sourced program versions, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");
+console.log(`Academic program model passed: ${programs.length} sourced program records, credit totals, elective and pathway groups, cohort selection, and safe missing versions.`);

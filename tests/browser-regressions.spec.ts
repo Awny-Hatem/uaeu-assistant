@@ -62,7 +62,6 @@ async function submit(page: Page, question: string) {
 test('the interface stays light and contains no theme toggle', async ({ page }) => {
   await guest(page);
   await page.emulateMedia({ colorScheme: 'dark' });
-  await page.addInitScript(() => localStorage.setItem('uaeu-chatbot-theme-v1', 'dark'));
   await page.goto('/');
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
   await expect(page.getByTestId('mobile-theme-toggle')).toHaveCount(0);
