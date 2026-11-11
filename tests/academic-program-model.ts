@@ -43,6 +43,9 @@ assert.equal(it.curriculum.requirements.find((item) => item.type === "ONE_OF_GRO
 assert.equal(it.curriculum.requirements.find((item) => item.type === "ELECTIVE_GROUP")?.chooseCount, 3);
 assert.match(it.curriculum.limitations.join(" "), /130 credits/,
   "the IT catalog/model-plan conflict is disclosed alongside the modeled catalog total");
+const itAssessment = assessProgramCreditConversation([{ role: "user", content: "How many credit hours to graduate in Information Technology?" }]);
+assert.ok(itAssessment);
+assert.match(renderProgramCreditAssessment(itAssessment, "en"), /The currently published curriculum requires \*\*120 credit hours\*\*/);
 
 const mech = getProgramCurriculum("bsc-mechanical-engineering");
 assert.ok(mech);
@@ -52,6 +55,10 @@ assert.equal(mech.curriculum.requirements.filter((item) => item.type === "INTERN
 assert.equal(mech.curriculum.requirements.find((item) => item.type === "ELECTIVE_GROUP")?.chooseCount, 2);
 assert.match(mech.curriculum.limitations.join(" "), /MATH130\/MATH135/,
   "the cohort-specific math sequence is explicitly noted");
+const mechAssessment = assessProgramCreditConversation([{ role: "user", content: "How many credits to graduate in Mechanical Engineering?" }]);
+assert.ok(mechAssessment);
+assert.match(renderProgramCreditAssessment(mechAssessment, "en"), /MECH485: 1 credit;/);
+assert.doesNotMatch(renderProgramCreditAssessment(mechAssessment, "en"), /MECH\d+: 1 credits/);
 
 const currentQuestion = assessProgramCreditConversation([
   { role: "user", content: "How many credit hours do I need to graduate from Information Security?" },

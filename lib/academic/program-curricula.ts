@@ -184,7 +184,7 @@ export function renderProgramCreditAssessment(assessment: ProgramCreditAssessmen
   const total = curriculum.totalCredits;
   const buckets = curriculum.creditBuckets?.map(({ name, credits }) => `- ${name}: **${credits} credits**`).join("\n") ?? "";
   const internships = curriculum.requirements.filter((item) => item.type === "INTERNSHIP")
-    .map((item) => `- ${item.courseCode}: ${item.credits} credits${item.finalSemesterOnly ? "; scheduled in the final semester" : ""}${item.otherCoursesAllowed === false ? "; no other courses during the internship" : item.otherCoursesAllowed === true ? "; other courses are allowed during the internship" : "; the source does not specify other-course enrollment during the internship"}.`).join("\n");
+    .map((item) => `- ${item.courseCode}: ${item.credits} ${item.credits === 1 ? "credit" : "credits"}${item.finalSemesterOnly ? "; scheduled in the final semester" : ""}${item.otherCoursesAllowed === false ? "; no other courses during the internship" : item.otherCoursesAllowed === true ? "; other courses are allowed during the internship" : "; the source does not specify other-course enrollment during the internship"}.`).join("\n");
   const notes = curriculum.limitations.map((note) => `- ${note}`).join("\n");
 
   if (locale === "ar") {
@@ -193,7 +193,9 @@ export function renderProgramCreditAssessment(assessment: ProgramCreditAssessmen
       .filter(Boolean).join("\n\n");
   }
 
-  const cohortLabel = cohortYear !== undefined ? `for the ${cohortYear} entry cohort` : "in the currently published curriculum";
-  return [`**Published credit requirements — ${programName}**`, `${cohortLabel}, the curriculum requires **${total} credit hours**.`, buckets ? `Breakdown:\n${buckets}` : "The approved source available here does not establish a complete credit-bucket breakdown for this older plan.", internships ? `Internship requirement:\n${internships}` : "", notes ? `Scope notes:\n${notes}` : "", "This describes a published curriculum, not the credits remaining on your student record. Your assigned study plan and Degree Works control your personal graduation requirements."]
+  const creditSentence = cohortYear !== undefined
+    ? `For the ${cohortYear} entry cohort, the curriculum requires **${total} credit hours**.`
+    : `The currently published curriculum requires **${total} credit hours**.`;
+  return [`**Published credit requirements — ${programName}**`, creditSentence, buckets ? `Breakdown:\n${buckets}` : "The approved source available here does not establish a complete credit-bucket breakdown for this older plan.", internships ? `Internship requirement:\n${internships}` : "", notes ? `Scope notes:\n${notes}` : "", "This describes a published curriculum, not the credits remaining on your student record. Your assigned study plan and Degree Works control your personal graduation requirements."]
     .filter(Boolean).join("\n\n");
 }
