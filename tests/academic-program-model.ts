@@ -59,6 +59,10 @@ assert.ok(englishLanguage.options.every((option) => option.type === "COMPOSITE" 
 const englishAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in English Literature?" }]);
 assert.equal(englishAnswer?.programId, "english-literature");
 assert.match(renderProgramRequirementsAssessment(englishAnswer!, "en"), /ENG490/);
+const englishRequirementsWording = assessProgramRequirementsConversation([{ role: "user", content: "What are the requirements for English Literature?" }]);
+assert.equal(englishRequirementsWording?.programId, "english-literature");
+assert.equal(assessProgramRequirementsConversation([{ role: "user", content: "What are the admission requirements for English Literature?" }]), null,
+  "degree-course requirements routing must not consume admissions questions");
 assert.match(JSON.stringify(englishLiterature.program.sources), /bachelor-of-arts-in-english-literature\.shtml/);
 
 const tourism = getProgramCurriculum("tourism-studies");
@@ -79,6 +83,8 @@ assert.equal(tourismInternship.otherCoursesAllowed, false);
 const tourismAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Tourism Studies?" }]);
 assert.equal(tourismAnswer?.programId, "tourism-studies");
 assert.match(renderProgramRequirementsAssessment(tourismAnswer!, "en"), /TOR440/);
+const tourismRequirementsWording = assessProgramRequirementsConversation([{ role: "user", content: "What are the requirements for Tourism Studies?" }]);
+assert.equal(tourismRequirementsWording?.programId, "tourism-studies");
 assert.match(JSON.stringify(tourism.program.sources), /bachelor-of-arts-in-tourism-studies\.shtml/);
 
 for (const programId of ["biology", "biochemistry"]) {

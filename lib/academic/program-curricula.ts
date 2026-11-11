@@ -374,12 +374,14 @@ export function assessProgramCreditConversation(
 
 function asksProgramCourseRequirements(text: string): boolean {
   if (/\b[A-Z]{2,5}\d{3,4}\b/i.test(text)) return false;
+  if (/\b(?:admission|admissions|entry|applicant)\b.{0,50}\b(?:requirements?|criteria)\b|\b(?:requirements?|criteria)\b.{0,50}\b(?:admission|admissions|entry)\b/i.test(text)) return false;
   return /\b(?:degree|course|program|major)\s+requirements?\b/i.test(text) ||
     /\b(?:what|which)\b.{0,100}\b(?:courses?|classes?|electives?|concentrations?)\b/i.test(text) ||
     /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
     /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text) ||
     /\b(?:electives?|concentrations?|credit requirements?|prerequisites?|internships?|clinical training|practic(?:um|a))\b.{0,60}\b(?:requirements?|rules?|credits?|courses?|hours?)\b/i.test(text) ||
-    /\b(?:requirements?|rules?)\b.{0,60}\b(?:electives?|concentrations?|internships?|clinical training|practic(?:um|a))\b/i.test(text);
+    /\b(?:requirements?|rules?)\b.{0,60}\b(?:electives?|concentrations?|internships?|clinical training|practic(?:um|a))\b/i.test(text) ||
+    /\b(?:requirements?|rules?)\s+(?:for|of)\s+(?:the\s+)?[\p{L}\p{N}][\p{L}\p{N}\s&'-]{1,80}/iu.test(text);
 }
 
 export function assessProgramRequirementsConversation(
