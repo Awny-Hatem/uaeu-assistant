@@ -104,6 +104,8 @@ assert.equal(arabicPrerequisiteConversation.evaluation.status, "ELIGIBLE", "Arab
 const arabicPrerequisiteAnswer = renderPrerequisiteAssessment(arabicPrerequisiteConversation, "ar");
 assert.match(arabicPrerequisiteAnswer, /CSBP219.*درجة لا تقل عن D/);
 assert.match(arabicPrerequisiteAnswer, /التسجيل الحالي في CSBP221/);
+assert.doesNotMatch(arabicPrerequisiteAnswer, /لا تتوفر معلومات كافية للتحقق من الشرط الخاص بـ CSBP221/,
+  "a satisfied concurrent-course alternative does not show the irrelevant incomplete completed-course alternative");
 assert.doesNotMatch(arabicPrerequisiteAnswer, /No recognized completed grade|is listed as current|grade D meets/i, "Arabic prerequisite output does not leak English condition explanations");
 
 const arabicUnknownPrerequisite = assessPrerequisiteConversation([

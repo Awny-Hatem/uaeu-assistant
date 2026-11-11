@@ -306,22 +306,25 @@ export function renderPrerequisiteAssessment(
   locale: "en" | "ar",
 ): string {
   const { rule, evaluation } = assessment;
+  const relevantConditions = evaluation.status === "ELIGIBLE"
+    ? evaluation.conditions.filter((condition) => condition.status === "SATISFIED")
+    : evaluation.conditions;
   if (locale === "ar") {
     const requirement = `المتطلبات المنشورة لمساق ${rule.course.code} (${rule.course.title}): ${describeExpression(rule.expression, locale)}.`;
     const result = evaluation.status === "ELIGIBLE"
-      ? "استنادًا إلى الدرجات التي ذكرتها، تبدو متطلبات المساق المحددة في القاعدة مستوفاة. هذا ليس تأكيدًا للتسجيل."
+      ? "استنادًا إلى معلومات المقررات التي ذكرتها، تبدو متطلبات المساق المحددة في القاعدة مستوفاة. هذا ليس تأكيدًا للتسجيل."
       : evaluation.status === "NOT_ELIGIBLE"
         ? "استنادًا إلى المعلومات التي ذكرتها، لا تتحقق متطلبات المساق المحددة في القاعدة. تحقق من معادلة المقررات أو الاستثناءات مع مرشد كليتك."
         : "لا يمكن حسم متطلباتك من المعلومات المتاحة. أرسل درجات المقررات المطلوبة كما تظهر في سجلك الدراسي.";
-    const conditions = evaluation.conditions.map((condition) => `- ${condition.status === "SATISFIED" ? "المعلومات المدخلة تستوفي الشرط" : condition.status === "NOT_SATISFIED" ? "المعلومات المدخلة لا تستوفي الشرط" : "لا تتوفر معلومات كافية للتحقق من الشرط"} الخاص بـ ${condition.courseCode}.`).join("\n");
+    const conditions = relevantConditions.map((condition) => `- ${condition.status === "SATISFIED" ? "المعلومات المدخلة تستوفي الشرط" : condition.status === "NOT_SATISFIED" ? "المعلومات المدخلة لا تستوفي الشرط" : "لا تتوفر معلومات كافية للتحقق من الشرط"} الخاص بـ ${condition.courseCode}.`).join("\n");
     return [requirement, conditions, result, "هذه مقارنة إرشادية مع القاعدة المنشورة باستخدام المعلومات التي أدخلتها؛ لا أستطيع الوصول إلى سجلك، ولا تؤكد النتيجة السماح بالتسجيل أو توفر شعبة. تحقق من Degree Works أو بوابة التسجيل، واسأل مرشدك عن اختلافات الخطة أو المعادلات."]
       .filter(Boolean).join("\n\n");
   }
 
   const requirement = `The UAEU catalog lists this prerequisite for **${rule.course.code} ${rule.course.title}**: ${describeExpression(rule.expression, locale)}.`;
-  const conditions = evaluation.conditions.map((condition) => `- ${condition.reason}`).join("\n");
+  const conditions = relevantConditions.map((condition) => `- ${condition.reason}`).join("\n");
   const result = evaluation.status === "ELIGIBLE"
-    ? "Based on the grades you provided, the modeled prerequisite is satisfied. This does not confirm registration eligibility."
+    ? "Based on the course information you provided, the modeled prerequisite is satisfied. This does not confirm registration eligibility."
     : evaluation.status === "NOT_ELIGIBLE"
       ? "Based on the information you provided, the modeled prerequisite is not satisfied. Check transfer equivalencies or exceptions with your college advisor."
       : "I cannot determine your result from the details available. Share the grades for the required courses as they appear in your record.";
