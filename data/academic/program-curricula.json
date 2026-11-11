@@ -82,5 +82,77 @@
         "limitations": ["The Fall 2025 semester sequence is a cohort model plan, not a substitute for the student's assigned plan or individual degree audit.", "The model plan and current course catalog can differ for course relationships; use the current approved course-level rule."]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bsc-information-technology",
+    "name": "Bachelor of Science in Information Technology",
+    "degreeLevel": "undergraduate",
+    "college": "College of Computing and Artificial Intelligence",
+    "sources": [
+      { "documentId": "30-information-technology-degree-requirements.md", "title": "UAEU Information Technology degree requirements and electives", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml", "lastVerified": "2026-10-06" },
+      { "documentId": "16-information-technology-study-plan.md", "title": "UAEU Bachelor of Science in Information Technology study plan", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml", "lastVerified": "2026-09-30" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "it-catalog-2026-10",
+        "version": "catalog-2026-10-06",
+        "status": "approved",
+        "cohortLabel": "Currently published catalog requirements; cohort plan and individual degree audit control",
+        "effectiveFrom": "2026-10-06",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 41 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 37 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "major-electives", "name": "Major electives", "credits": 9 },
+          { "id": "free-electives", "name": "Free electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "information-technology-college", "name": "Required college courses", "courseCodes": ["CENG202", "CENG205", "CSBP119", "CSBP219", "CSBP315", "CSBP319", "STAT210", "MATH105", "MATH110", "PHYS105", "ITBP270", "ITBP480", "ITBP481"] },
+          { "type": "ONE_OF_GROUP", "id": "information-technology-science-choice", "name": "Choose one science course", "chooseCount": 1, "courseCodes": ["BIOC100", "CHEM111"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "information-technology-major", "name": "Required major courses", "courseCodes": ["CSBP121", "CSBP221", "CSBP316", "CSBP340", "CSBP301", "CSBP320", "CENG210", "CENG530", "CENG529", "ITBP280", "ITBP301", "ITBP321", "ITBP322", "ITBP323", "ITBP324"] },
+          { "type": "ELECTIVE_GROUP", "id": "information-technology-major-electives", "name": "Major electives", "chooseCount": 3, "credits": 9, "courseCodes": ["CSBP483", "ISEC411", "ITBP410", "ITBP420", "ITBP421", "ITBP430"] },
+          { "type": "INTERNSHIP", "id": "information-technology-internship", "courseCode": "ITBP496", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false }
+        ],
+        "limitations": ["The catalog specifies 120 credits, while the separate 2025–26 cohort model plan is labelled 130 credits; do not apply this catalog total to a student without checking the assigned cohort plan and Degree Works.", "This model does not establish personal remaining credits, course availability, prerequisites, or registration eligibility."]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bsc-mechanical-engineering",
+    "name": "Bachelor of Science in Mechanical Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Engineering",
+    "sources": [
+      { "documentId": "26-mechanical-engineering-degree-requirements.md", "title": "UAEU Mechanical Engineering degree requirements and electives", "url": "https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml", "lastVerified": "2026-10-06" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "mech-catalog-2026-10",
+        "version": "catalog-2026-10-06",
+        "status": "approved",
+        "cohortLabel": "Currently published catalog requirements; assigned cohort plan controls individual requirements",
+        "effectiveFrom": "2026-10-06",
+        "totalCredits": 132,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 35 },
+          { "id": "major-requirements", "name": "Mechanical Engineering specialization requirements", "credits": 68 },
+          { "id": "internships", "name": "Internships", "credits": 2 },
+          { "id": "major-electives", "name": "Specialization electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "mechanical-engineering-college", "name": "Required college courses", "courseCodes": ["CHEM111", "CHEM175", "MATH105", "MATH110", "MATH210", "MATH140", "MATH275", "STAT210", "PHYS105", "PHYS110", "PHYS135", "PHYS140", "GENG215", "GENG315"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "mechanical-engineering-major", "name": "Required major courses", "courseCodes": ["MECH200", "CIVL240", "MECH210", "MECH240", "MECH305", "MECH306", "MECH395", "MECH310", "MECH311", "MECH315", "MECH340", "MECH348", "MECH350", "MECH390", "MECH407", "MECH409", "MECH411", "MECH412", "MECH417", "MECH426", "MECH430", "MECH433", "MECH450", "MECH585", "MECH590", "ELEC372", "GENG220", "GENG230"] },
+          { "type": "INTERNSHIP", "id": "mechanical-engineering-internship-i", "name": "Internship I", "courseCode": "MECH485", "credits": 1, "finalSemesterOnly": false },
+          { "type": "INTERNSHIP", "id": "mechanical-engineering-internship-ii", "name": "Internship II", "courseCode": "MECH490", "credits": 1, "finalSemesterOnly": false },
+          { "type": "ELECTIVE_GROUP", "id": "mechanical-engineering-electives", "name": "Mechanical Engineering specialization electives", "chooseCount": 2, "credits": 6, "courseCodes": ["MECH520", "MECH541", "MECH547", "MECH540", "MECH545", "MECH510", "MECH513", "MECH514", "MECH516", "MECH517", "MECH515", "MECH530", "MECH531", "MECH532", "MECH533", "AERO562", "AERO563"] }
+        ],
+        "limitations": ["The 2026–27 model plan lists MATH130/MATH135 instead of MATH105/MATH110; follow the student's assigned cohort plan.", "The 21-credit general-education block includes approved choice groups; the listed options are not all individually mandatory.", "The catalog describes MECH485 and MECH490 as 1 credit each; they may be taken in separate summers or during regular Fall/Spring semesters.", "This model does not establish personal remaining credits, course availability, prerequisites, or registration eligibility."]
+      }
+    ]
   }
 ]

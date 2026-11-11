@@ -126,6 +126,8 @@ export type ProgramCreditAssessment = {
 };
 
 function programIdInText(text: string): string | undefined {
+  if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
+  if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
   if (/\b(?:information security|cyber ?security)\b/i.test(text) || /أمن\s+المعلومات/u.test(text)) return "bsc-information-security";
   if (/\bcomputer science\b/i.test(text) || /علوم\s+الحاسوب/u.test(text)) return "bsc-computer-science";
   return undefined;
