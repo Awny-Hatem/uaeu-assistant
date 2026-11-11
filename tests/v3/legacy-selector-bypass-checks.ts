@@ -107,7 +107,7 @@ async function main() {
 
   const incompletePrerequisites = await ask("Can I take ISEC421?", "203.0.113.227");
   assert.equal(incompletePrerequisites.payload.stateLabel, "v3_academic_rule_evaluation");
-  assert.equal(incompletePrerequisites.payload.resolutionState, "UNSUPPORTED");
+  assert.equal(incompletePrerequisites.payload.resolutionState, "MISSING_CONTEXT");
   assert.match(String(incompletePrerequisites.payload.content), /STAT210[\s\S]*ITBP301/);
 
   const catalogPrerequisiteAssessment = await askMessages([
@@ -132,10 +132,11 @@ async function main() {
 
   const unsupportedPrerequisiteAssessment = await ask("Can I take STAT488?", "203.0.113.244");
   assert.equal(unsupportedPrerequisiteAssessment.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
-  assert.equal(unsupportedPrerequisiteAssessment.payload.resolutionState, "UNSUPPORTED");
+  assert.equal(unsupportedPrerequisiteAssessment.payload.resolutionState, "MISSING_CONTEXT");
   assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /STAT480/);
   assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /STAT482/);
   assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /cannot determine/i);
+  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /completion of, or current enrollment in, either STAT480 or STAT482/i);
 
   const completedCorequisite = await askMessages([
     { role: "user", content: "I passed STAT480 with B." },
@@ -163,7 +164,7 @@ async function main() {
 
   const arabicPrerequisite = await ask("هل أستطيع تسجيل CSBP319؟", "203.0.113.239", "ar");
   assert.equal(arabicPrerequisite.payload.stateLabel, "v3_academic_rule_evaluation");
-  assert.equal(arabicPrerequisite.payload.resolutionState, "UNSUPPORTED");
+  assert.equal(arabicPrerequisite.payload.resolutionState, "MISSING_CONTEXT");
   assert.match(String(arabicPrerequisite.payload.content), /CSBP219[\s\S]*CSBP221/);
   assert.doesNotMatch(String(arabicPrerequisite.payload.content), /No recognized completed grade|is listed as current/);
 

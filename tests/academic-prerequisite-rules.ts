@@ -66,7 +66,7 @@ assert.equal(mech348PreCorequisite.status, "ELIGIBLE", "the published pre/corequ
 
 const missingData = evaluatePrerequisite({ targetCourseCode: "CSBP219", snapshot: { completedCourses: [] } });
 assert.equal(missingData.status, "UNDETERMINED");
-assert.equal(missingData.resolutionState, "UNSUPPORTED");
+assert.equal(missingData.resolutionState, "MISSING_CONTEXT", "known rules with absent student details ask for context rather than claiming unsupported policy");
 
 const unknownTarget = evaluatePrerequisite({ targetCourseCode: "CENG999", snapshot: { completedCourses: [] } });
 assert.equal(unknownTarget.status, "UNDETERMINED", "an unmodeled course never receives a guessed rule");
@@ -76,6 +76,7 @@ const beforeVerification = evaluatePrerequisite({ targetCourseCode: "MECH305", a
 assert.equal(beforeVerification.status, "UNDETERMINED", "a current catalog snapshot cannot establish a historic prerequisite rule");
 const staleSnapshot = evaluatePrerequisite({ targetCourseCode: "MECH305", asOf: "2027-04-10", snapshot: { completedCourses: [{ courseCode: "CIVL240", grade: "A" }] } });
 assert.equal(staleSnapshot.status, "UNDETERMINED", "a catalog snapshot older than the 180-day freshness window requires re-verification");
+assert.equal(staleSnapshot.resolutionState, "UNSUPPORTED", "stale rule evidence is unsupported rather than a student-context gap");
 const noInventedEffectiveDate = evaluatePrerequisite({ targetCourseCode: "CSBP320", asOf: "2026-11-12", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }] } });
 assert.equal(noInventedEffectiveDate.status, "ELIGIBLE", "the source observation date is tracked without claiming it is the rule's official effective date");
 

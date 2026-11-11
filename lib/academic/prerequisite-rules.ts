@@ -35,7 +35,7 @@ export type RuleConditionResult = {
 export type PrerequisiteEvaluation = {
   targetCourse: { code: string; title: string; credits: number };
   status: "ELIGIBLE" | "NOT_ELIGIBLE" | "UNDETERMINED";
-  resolutionState: "CONDITIONAL" | "UNSUPPORTED";
+  resolutionState: "CONDITIONAL" | "MISSING_CONTEXT" | "UNSUPPORTED";
   decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT";
   ruleId?: string;
   ruleVersion?: string;
@@ -170,7 +170,7 @@ export function evaluateCatalogPrerequisite(input: {
   return {
     targetCourse: input.targetCourse,
     status,
-    resolutionState: truth === "unknown" ? "UNSUPPORTED" : "CONDITIONAL",
+    resolutionState: truth === "unknown" ? "MISSING_CONTEXT" : "CONDITIONAL",
     decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT",
     ruleId: `course-catalog:${input.targetCourse.code}`,
     ruleVersion: input.version,
@@ -218,7 +218,7 @@ export function evaluatePrerequisite(input: {
   return {
     targetCourse: rule.course,
     status,
-    resolutionState: truth === "unknown" ? "UNSUPPORTED" : "CONDITIONAL",
+    resolutionState: truth === "unknown" ? "MISSING_CONTEXT" : "CONDITIONAL",
     decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT",
     ruleId: rule.id,
     ruleVersion: rule.version,
@@ -345,8 +345,28 @@ export function assessPrerequisiteConversation(
   return { rule, evaluation: evaluatePrerequisite({ targetCourseCode: targetCode, snapshot: academicSnapshotFromMessages(messages) }) };
 }
 
+function completedOrCurrentPair(expression: PrerequisiteExpression): string | null {
+  if (!("op" in expression) || expression.op !== "OR" || expression.conditions.length !== 2) return null;
+  const current = expression.conditions.find((condition) => !("op" in condition) && condition.type === "COURSE_CURRENT");
+  const completed = expression.conditions.find((condition) => !("op" in condition) && condition.type !== "COURSE_CURRENT");
+  if (!current || !completed || "op" in current || "op" in completed || current.courseCode !== completed.courseCode) return null;
+  return current.courseCode;
+}
+
 function describeExpression(expression: PrerequisiteExpression, locale: "en" | "ar" = "en"): string {
   if ("op" in expression) {
+    if (expression.op === "OR") {
+      const codes = expression.conditions.map(completedOrCurrentPair);
+      if (codes.every((code): code is string => code !== null)) {
+        return codes.length === 1
+          ? locale === "ar"
+            ? `\u0625\u062a\u0645\u0627\u0645 \u0623\u0648 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062d\u0627\u0644\u064a \u0641\u064a ${codes[0]}`
+            : `completion or current enrollment in ${codes[0]}`
+          : locale === "ar"
+            ? `\u0625\u062a\u0645\u0627\u0645 \u0623\u062d\u062f \u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a ${codes.join(" \u0623\u0648 ")} \u0623\u0648 \u0627\u0644\u062a\u0633\u062c\u064a\u0644 \u0627\u0644\u062d\u0627\u0644\u064a \u0641\u064a \u0623\u062d\u062f\u0647\u0627`
+            : `completion of, or current enrollment in, either ${codes.join(" or ")}`;
+      }
+    }
     const parts = expression.conditions.map((condition) => describeExpression(condition, locale));
     if (locale === "ar") return expression.op === "AND" ? parts.join(" و ") : `إما ${parts.join(" أو ")}`;
     return expression.op === "AND" ? parts.join(" and ") : `either ${parts.join(" or ")}`;
@@ -382,7 +402,7 @@ export function renderPrerequisiteAssessment(
       .filter(Boolean).join("\n\n");
   }
 
-  const requirement = `The UAEU catalog lists this prerequisite for **${rule.course.code} ${rule.course.title}**: ${describeExpression(rule.expression, locale)}.`;
+  const requirement = `The UAEU catalog lists this course requirement for **${rule.course.code} ${rule.course.title}**: ${describeExpression(rule.expression, locale)}.`;
   const conditions = relevantConditions.map((condition) => `- ${condition.reason}`).join("\n");
   const result = evaluation.status === "ELIGIBLE"
     ? "Based on the course information you provided, the modeled prerequisite is satisfied. This does not confirm registration eligibility."
