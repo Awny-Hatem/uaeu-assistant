@@ -1,0 +1,1314 @@
+{
+  "schemaVersion": 1,
+  "label": "v3-service-regressions-fa60ce0-20261111",
+  "baseUrl": "https://uaeu-assistant-9x76rlll3-awnyhatem40-gmailcoms-projects.vercel.app",
+  "startedAt": "2026-11-11T18:28:59.699Z",
+  "fixtureSha256": "9da1503eab261e4202e01f5a95eb20d38aba462080f5278294a42ecec47c78ea",
+  "seed": 29092026,
+  "methodology": "Questions authored independently before repair results. Topic-stratified coverage with seeded random group execution order; conversational groups retain turn order. Not a statistical sample of all possible user questions and not copied from FAQ aliases. Expectations are reviewer rubrics, not asserted proof of source truth.",
+  "commit": "fa60ce037d86c13220521c78370fc13c98f5c0d8",
+  "workingTree": "?? docs/diagrams/\n?? maintenance-check.png\n?? reports/independent/v3-branch-phase1-20261111-2c06265.json\n?? reports/independent/v3-branch-phase1-20261111-e34abd4.json\n?? reports/independent/v3-branch-phase1-20261111.json\n?? reports/independent/v3-context-bound-followup-e34abd4.json\n?? reports/sophisticated/release-gate-20261104.json\n?? reports/sophisticated/release-gate-20261104.md",
+  "localSourceSha256": "4df5143bd3b3288bbbe258c6465de3e576c1de59e450cd0f711890cb23c2ecfa",
+  "revisionNote": "Local checkout metadata is not proof of the revision served by a remote deployment. Compare the endpoint health build metadata separately.",
+  "captureNote": "JSON answer text is retained unchanged. Non-JSON failure bodies retain at most 1000 characters; original length and SHA256 are recorded explicitly.",
+  "health": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "fa60ce037d86c13220521c78370fc13c98f5c0d8"
+    },
+    "agent": {
+      "architecture": "v3-evidence-first",
+      "v3Enabled": true,
+      "legacySelectorBypassedForUniversityModes": true
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "academicCatalog": {
+      "status": "verified-undergraduate-degree-inventory",
+      "programs": 55,
+      "colleges": 9,
+      "verifiedAt": "2026-11-11",
+      "curriculumCoverage": {
+        "modelled": 55,
+        "legacy_model_review_required": 0,
+        "not_modelled": 0
+      },
+      "curriculumRecordsRequiringIdentityReview": 2
+    },
+    "courseCatalog": {
+      "status": "official-course-catalog-snapshot",
+      "courses": 2791,
+      "verifiedAt": "2026-11-11",
+      "entriesWithoutDescription": 1,
+      "entriesWithoutCreditValue": 1,
+      "prerequisiteEntries": 1393,
+      "corequisiteEntries": 150,
+      "preCorequisiteEntries": 62,
+      "prerequisiteParsing": {
+        "relationRecords": 1478,
+        "structuredRecords": 1475,
+        "unsupportedRecords": 3,
+        "structuredCoveragePercent": 99.8
+      },
+      "degreeApplicability": "course records do not establish program requirements"
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "0af4f39f16ed71fc808b31dfde02cb3999bb62a48e99bcd042c33efe0d649102",
+      "retrieval": {
+        "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+        "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+        "embedding": "disabled",
+        "semanticCatalog": "disabled-v3-evidence-first",
+        "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "v3-orchestrator-evidence-research-verified-generation"
+      },
+      "approvedMarkdownFiles": 60,
+      "verifiedAnswers": 137,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-11T18:28:52.772Z",
+        "totalRecords": 202,
+        "domains": {
+          "admissions": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-09-29"
+          },
+          "academics": {
+            "records": 43,
+            "reviewedRecords": 43,
+            "latestVerification": "2026-11-11"
+          },
+          "registration": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "graduation": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "financial_aid": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "student_services": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "housing": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 18,
+            "reviewedRecords": 18,
+            "latestVerification": "2026-10-06"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 59
+      },
+      "sourceEvidence": {
+        "mappedReferences": 197,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-11",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 50,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-10-06",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 5,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "b4b890befa7f196be29f93c814f74a6f6a83a046a46b8013481b6ec480ef52d8"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "mode": "real HTTP configuration",
+  "initialHealthStatus": 200,
+  "initialEndpointIdentity": {
+    "url": "https://uaeu-assistant-9x76rlll3-awnyhatem40-gmailcoms-projects.vercel.app/api/health",
+    "revision": "fa60ce037d86c13220521c78370fc13c98f5c0d8",
+    "contentFingerprint": "0af4f39f16ed71fc808b31dfde02cb3999bb62a48e99bcd042c33efe0d649102",
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "crossProviderFallback": false,
+    "retrieval": {
+      "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+      "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+      "embedding": "disabled",
+      "semanticCatalog": "disabled-v3-evidence-first",
+      "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+      "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+      "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+      "groundingIsolation": {
+        "claimsPerRequest": 1,
+        "concurrency": 4,
+        "maxClaims": 16,
+        "totalAnswerBudgetMs": 54000,
+        "routeMaxDurationSeconds": 60
+      },
+      "activePath": "v3-orchestrator-evidence-research-verified-generation"
+    },
+    "deploymentMode": "prototype"
+  },
+  "scope": "partial-diagnostic-run",
+  "selectedCaseIds": [
+    "Q005",
+    "Q006",
+    "Q017",
+    "Q018",
+    "Q019",
+    "Q020",
+    "Q034",
+    "Q069"
+  ],
+  "expectedCount": 8,
+  "completed": true,
+  "results": [
+    {
+      "id": "Q034",
+      "category": "registration",
+      "question": "What's the difference between dropping and withdrawing from a course?",
+      "expectation": "Explain deadline/transcript/consequence distinctions from applicable policy.",
+      "executionNumber": 1,
+      "askedAt": "2026-11-11T18:28:59.825Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "What's the difference between dropping and withdrawing from a course?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 1107,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:00.932Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Dropping vs. Withdrawing from a Course**\n- UAEU's registration guide describes dropping a registered section through Student Registration. A course or university withdrawal is a separate eServices request under Student Accounts. Stopping attendance does not submit either request. The term deadline, fees/refund effects, and transcript treatment depend on the applicable policy and your request date.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "registration",
+        "evidenceIds": [
+          "guide:course-drop-vs-withdrawal"
+        ],
+        "guide": {
+          "id": "course-drop-vs-withdrawal",
+          "title": "Dropping vs. Withdrawing from a Course",
+          "description": "UAEU's registration guide describes dropping a registered section through Student Registration. A course or university withdrawal is a separate eServices request under Student Accounts. Stopping attendance does not submit either request. The term deadline, fees/refund effects, and transcript treatment depend on the applicable policy and your request date.",
+          "officialUrl": "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "UAEU students"
+          ],
+          "keywords": [
+            "difference between dropping and withdrawing from a course",
+            "difference between drop and withdrawal course",
+            "dropping versus withdrawing from a course",
+            "drop vs withdraw a course",
+            "withdrawal versus dropping a class",
+            "what is the difference between a course drop and withdrawal"
+          ],
+          "excludeKeywords": [
+            "university withdrawal",
+            "withdraw from UAEU",
+            "withdrawal refund deadline",
+            "withdrawal after graduation"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Drop a registered section",
+              "instruction": "In Student Registration, open the section's Action menu, choose Drop-Web, submit, and verify the result in your schedule. A drop action is not complete until submitted.",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf"
+            },
+            {
+              "title": "Submit a withdrawal request when required",
+              "instruction": "For a formal course-withdrawal request, use the UAEU eServices process published by Student Accounts. Do not assume that leaving a class or using Drop-Web completes a formal withdrawal request.",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml"
+            },
+            {
+              "title": "Check the consequences for your term",
+              "instruction": "Confirm the term-specific last date, fee/refund effect, and transcript treatment before acting. They vary by request type, course format, term, and submission date; the labels drop and withdraw alone do not establish the outcome."
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Dropping vs. Withdrawing from a Course",
+            "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q017",
+      "category": "it",
+      "question": "I've forgotten the password for my university account. What should I do?",
+      "expectation": "Give the specific password-reset route and relevant support, no credentials requested.",
+      "conversation": "topic-thread",
+      "executionNumber": 2,
+      "askedAt": "2026-11-11T18:29:01.978Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I've forgotten the password for my university account. What should I do?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 4305,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:06.283Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "If you have forgotten your UAEU university account password, you should use the UAEU Password Self-Service portal which offers an 'I Forget My Password' option to reset it.\n\nFor further assistance with your account, you can contact the UITS Help Desk by phone at +971 3 713 6111 or by email at Helpdesk@uaeu.ac.ae.",
+        "source": "rag",
+        "responseMode": "grounded_generation",
+        "stateLabel": "local_db",
+        "resolutionState": "VERIFIED",
+        "citations": [
+          {
+            "title": "UAEU Password Self-Service",
+            "url": "https://selfservice.uaeu.ac.ae/",
+            "lastVerified": "2026-09-16",
+            "evidenceText": "UAEU Password Self-Service offers I Forget My Password and Change My Password. For account assistance the UITS Help Desk lists +971 3 713 6111 and Helpdesk@uaeu.ac.ae. This source does not establish a lost-phone MFA-reset procedure."
+          }
+        ],
+        "disposition": "answer",
+        "communications": [],
+        "provider": "openai",
+        "model": "gpt-4.1-mini",
+        "topic": "password",
+        "evidenceIds": [
+          "evidence:81ec8339d75fe0a2#E1S1"
+        ],
+        "claims": [
+          {
+            "text": "If you have forgotten your UAEU university account password, you should use the UAEU Password Self-Service portal which offers an 'I Forget My Password' option to reset it.",
+            "evidenceIds": [
+              "evidence:81ec8339d75fe0a2#E1S1"
+            ]
+          },
+          {
+            "text": "For further assistance with your account, you can contact the UITS Help Desk by phone at +971 3 713 6111 or by email at Helpdesk@uaeu.ac.ae.",
+            "evidenceIds": [
+              "evidence:81ec8339d75fe0a2#E1S1"
+            ]
+          }
+        ],
+        "grounding": {
+          "status": "checked",
+          "rewriteCount": 0,
+          "reasonCodes": []
+        }
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q018",
+      "category": "documents",
+      "question": "New topic: I need a letter proving I'm enrolled.",
+      "expectation": "Switch away from IT; give the enrolled-student letter service.",
+      "conversation": "topic-thread",
+      "executionNumber": 3,
+      "askedAt": "2026-11-11T18:29:06.293Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I've forgotten the password for my university account. What should I do?"
+        },
+        {
+          "role": "assistant",
+          "content": "If you have forgotten your UAEU university account password, you should use the UAEU Password Self-Service portal which offers an 'I Forget My Password' option to reset it.\n\nFor further assistance with your account, you can contact the UITS Help Desk by phone at +971 3 713 6111 or by email at Helpdesk@uaeu.ac.ae."
+        },
+        {
+          "role": "user",
+          "content": "New topic: I need a letter proving I'm enrolled."
+        }
+      ],
+      "status": 200,
+      "durationMs": 1006,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:07.298Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**To Whom It May Concern Letter / Student Document Request**\n- Enrolled UAEU students can request a To Whom It May Concern letter through the Current Students Documents service in the UAEU portal or mobile app. The official service lists it as free, normally processed in 10 minutes, and valid for three months.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "enrollment-document",
+        "evidenceIds": [
+          "guide:to-whom-it-may-concern"
+        ],
+        "guide": {
+          "id": "to-whom-it-may-concern",
+          "title": "To Whom It May Concern Letter / Student Document Request",
+          "titleAr": "طلب شهادة لمن يهمه الأمر / وثائق الطالب",
+          "description": "Enrolled UAEU students can request a To Whom It May Concern letter through the Current Students Documents service in the UAEU portal or mobile app. The official service lists it as free, normally processed in 10 minutes, and valid for three months.",
+          "descriptionAr": "يمكن للطلبة المسجلين في جامعة الإمارات طلب رسالة إلى من يهمه الأمر عبر خدمة وثائق الطلبة الحاليين في بوابة الجامعة أو تطبيق الهاتف. الخدمة مجانية، ومدة الإنجاز المعتادة 10 دقائق، وتظل الرسالة صالحة لمدة ثلاثة أشهر.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+          "lastVerified": "2026-09-16",
+          "audience": [
+            "current-student",
+            "continuing-student"
+          ],
+          "keywords": [
+            "to whom it may concern",
+            "student document",
+            "document request",
+            "proof of enrollment letter",
+            "letter proving i m enrolled",
+            "letter confirming enrollment",
+            "enrollment status letter",
+            "certificate",
+            "letter",
+            "enrolled student",
+            "continuing student",
+            "official letter",
+            "transcript",
+            "شهادة",
+            "خطاب",
+            "إفادة",
+            "وثيقة",
+            "وثيقة طالب",
+            "طلب وثيقة",
+            "طلب شهادة",
+            "لمن يهمه الأمر",
+            "لمن يهمه الامر",
+            "شهادة لمن يهمه الأمر",
+            "شهادة لمن يهمه الامر",
+            "ابا شهادة",
+            "أبغى شهادة",
+            "اريد شهادة"
+          ],
+          "excludeKeywords": [
+            "alumni",
+            "alumnus",
+            "graduated",
+            "graduate transcript",
+            "recommendation letter",
+            "reference letter",
+            "letter grade",
+            "visa document",
+            "visa documents"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Open the Current Students Documents service",
+              "titleAr": "افتح خدمة وثائق الطلبة الحاليين",
+              "instruction": "Open the official UAEU service page, then use the UAEU portal or mobile application to start the request.",
+              "instructionAr": "افتح صفحة الخدمة الرسمية لجامعة الإمارات، ثم استخدم بوابة الجامعة أو تطبيق الهاتف لبدء الطلب.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+            },
+            {
+              "title": "Sign in with your UAEU account",
+              "titleAr": "سجّل الدخول بحساب جامعة الإمارات",
+              "instruction": "Authenticate only on an official UAEU portal or in the official mobile application. The service is for enrolled students.",
+              "instructionAr": "سجّل الدخول فقط عبر بوابة رسمية لجامعة الإمارات أو تطبيقها الرسمي. هذه الخدمة مخصصة للطلبة المسجلين."
+            },
+            {
+              "title": "Choose the document request",
+              "titleAr": "اختر طلب الوثيقة",
+              "instruction": "Select the Current Students Documents service and choose the To Whom It May Concern letter option.",
+              "instructionAr": "اختر خدمة وثائق الطلبة الحاليين، ثم اختر رسالة إلى من يهمه الأمر."
+            },
+            {
+              "title": "Review and submit",
+              "titleAr": "راجع الطلب وأرسله",
+              "instruction": "Review the request details and submit them through the official portal or app. The service is listed as free.",
+              "instructionAr": "راجع تفاصيل الطلب ثم أرسله عبر البوابة أو التطبيق الرسمي. الخدمة مدرجة بوصفها مجانية."
+            },
+            {
+              "title": "Receive and check the letter",
+              "titleAr": "استلم الرسالة وتحقق منها",
+              "instruction": "UAEU says the document is sent by email and normally takes about 10 minutes. Check the details when it arrives; a To Whom It May Concern letter is valid for three months.",
+              "instructionAr": "توضح جامعة الإمارات أن الوثيقة تُرسل بالبريد الإلكتروني وتستغرق عادةً نحو 10 دقائق. تحقق من بياناتها عند وصولها؛ وتظل رسالة إلى من يهمه الأمر صالحة لمدة ثلاثة أشهر."
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "To Whom It May Concern Letter / Student Document Request",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+            "lastVerified": "2026-09-16"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q019",
+      "category": "documents",
+      "question": "How long does that take?",
+      "expectation": "Refer to the enrollment letter, not the password-reset process.",
+      "conversation": "topic-thread",
+      "executionNumber": 4,
+      "askedAt": "2026-11-11T18:29:08.448Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I've forgotten the password for my university account. What should I do?"
+        },
+        {
+          "role": "assistant",
+          "content": "If you have forgotten your UAEU university account password, you should use the UAEU Password Self-Service portal which offers an 'I Forget My Password' option to reset it.\n\nFor further assistance with your account, you can contact the UITS Help Desk by phone at +971 3 713 6111 or by email at Helpdesk@uaeu.ac.ae."
+        },
+        {
+          "role": "user",
+          "content": "New topic: I need a letter proving I'm enrolled."
+        },
+        {
+          "role": "assistant",
+          "content": "**To Whom It May Concern Letter / Student Document Request**\n- Enrolled UAEU students can request a To Whom It May Concern letter through the Current Students Documents service in the UAEU portal or mobile app. The official service lists it as free, normally processed in 10 minutes, and valid for three months.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page."
+        },
+        {
+          "role": "user",
+          "content": "How long does that take?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 3884,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:12.332Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "The processing time for the To Whom It May Concern letter, which proves current enrollment, is published as ten minutes after submission through the UAEU portal or app.",
+        "source": "rag",
+        "responseMode": "grounded_generation",
+        "stateLabel": "local_db",
+        "resolutionState": "VERIFIED",
+        "citations": [
+          {
+            "title": "UAEU Current Students Documents Service",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+            "lastVerified": "2026-09-29",
+            "evidenceText": "For enrolled students, Current Students Documents is accessed through UAEU portal/app with UAE Pass or university credentials. Select the needed document and submit. The service lists Arabic and English academic transcripts, To Whom It May Concern, Student Official Schedule Letter and account letter. Free, no supporting documents required; published delivery target ten minutes. TWIMC validity is three months. This is not the alumni service."
+          }
+        ],
+        "disposition": "answer",
+        "communications": [],
+        "provider": "openai",
+        "model": "gpt-4.1-mini",
+        "topic": "enrollment-document",
+        "evidenceIds": [
+          "evidence:e59f6b0914c4ef77#E1S1"
+        ],
+        "claims": [
+          {
+            "text": "The processing time for the To Whom It May Concern letter, which proves current enrollment, is published as ten minutes after submission through the UAEU portal or app.",
+            "evidenceIds": [
+              "evidence:e59f6b0914c4ef77#E1S1"
+            ]
+          }
+        ],
+        "grounding": {
+          "status": "checked",
+          "rewriteCount": 0,
+          "reasonCodes": []
+        }
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q020",
+      "category": "conversation",
+      "question": "Thanks, that answers my question.",
+      "expectation": "Acknowledge without replaying a long answer or inventing new service facts.",
+      "conversation": "topic-thread",
+      "executionNumber": 5,
+      "askedAt": "2026-11-11T18:29:12.338Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I've forgotten the password for my university account. What should I do?"
+        },
+        {
+          "role": "assistant",
+          "content": "If you have forgotten your UAEU university account password, you should use the UAEU Password Self-Service portal which offers an 'I Forget My Password' option to reset it.\n\nFor further assistance with your account, you can contact the UITS Help Desk by phone at +971 3 713 6111 or by email at Helpdesk@uaeu.ac.ae."
+        },
+        {
+          "role": "user",
+          "content": "New topic: I need a letter proving I'm enrolled."
+        },
+        {
+          "role": "assistant",
+          "content": "**To Whom It May Concern Letter / Student Document Request**\n- Enrolled UAEU students can request a To Whom It May Concern letter through the Current Students Documents service in the UAEU portal or mobile app. The official service lists it as free, normally processed in 10 minutes, and valid for three months.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page."
+        },
+        {
+          "role": "user",
+          "content": "How long does that take?"
+        },
+        {
+          "role": "assistant",
+          "content": "The processing time for the To Whom It May Concern letter, which proves current enrollment, is published as ten minutes after submission through the UAEU portal or app."
+        },
+        {
+          "role": "user",
+          "content": "Thanks, that answers my question."
+        }
+      ],
+      "status": 200,
+      "durationMs": 947,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:13.285Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "You're welcome. Ask another UAEU question whenever you are ready.",
+        "source": "conversation",
+        "stateLabel": "conversation_acknowledgement",
+        "faqId": "conversation-thanks",
+        "disposition": "answer",
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q069",
+      "category": "transport",
+      "question": "How do I apply for a university parking permit?",
+      "expectation": "Give supported vehicle-access permit process and applicable documents.",
+      "executionNumber": 6,
+      "askedAt": "2026-11-11T18:29:14.504Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a university parking permit?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 2905,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:17.409Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Campus Parking Access — Eligible Female Students from Al Ain**\n- The published UAEU vehicle-access permit applies specifically to admitted female students from Al Ain who need access to designated campus parking. UAEU does not establish this service as a general permit for every student, visitor, or employee.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "parking",
+        "evidenceIds": [
+          "guide:al-ain-female-student-campus-parking-permit"
+        ],
+        "guide": {
+          "id": "al-ain-female-student-campus-parking-permit",
+          "title": "Campus Parking Access — Eligible Female Students from Al Ain",
+          "description": "The published UAEU vehicle-access permit applies specifically to admitted female students from Al Ain who need access to designated campus parking. UAEU does not establish this service as a general permit for every student, visitor, or employee.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "admitted female UAEU students from Al Ain"
+          ],
+          "keywords": [
+            "university parking permit",
+            "campus parking permit",
+            "UAEU parking permit",
+            "parking permit for students",
+            "apply for a university parking permit",
+            "campus vehicle access permit",
+            "parking access for female students from Al Ain",
+            "female student parking permit Al Ain"
+          ],
+          "excludeKeywords": [
+            "visitor parking",
+            "employee parking",
+            "staff parking",
+            "parking fine",
+            "parking violation",
+            "parking hours",
+            "parking location"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Check the service eligibility",
+              "instruction": "The published permit service is for admitted female UAEU students from Al Ain. The public service page does not establish a general permit route for other student categories, visitors, or employees.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"
+            },
+            {
+              "title": "Check for the activation notification",
+              "instruction": "For eligible students, UAEU describes this as a proactive service: watch for the activation notification, then download the authorized mobile application. The service is listed as free and immediate; the page does not list required documents."
+            },
+            {
+              "title": "Contact UAEU if you are eligible but not activated",
+              "instruction": "If you meet the published eligibility but have not received activation, contact UAEU at 800-8238. For other parking categories, ask the Campus Supervision Office because this source does not define their rules."
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Campus Parking Access — Eligible Female Students from Al Ain",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q005",
+      "category": "documents",
+      "question": "I'm currently enrolled. How do I download an official transcript?",
+      "expectation": "Provide the current-student document service, concrete steps, timing and source.",
+      "conversation": "transcript-thread",
+      "executionNumber": 7,
+      "askedAt": "2026-11-11T18:29:17.426Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I'm currently enrolled. How do I download an official transcript?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 1002,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:18.428Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Request an Official Transcript — Current Student**\n- Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "transcript",
+        "evidenceIds": [
+          "guide:current-student-official-transcript"
+        ],
+        "guide": {
+          "id": "current-student-official-transcript",
+          "title": "Request an Official Transcript — Current Student",
+          "description": "Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "currently enrolled UAEU students"
+          ],
+          "keywords": [
+            "currently enrolled official transcript",
+            "currently enrolled how do i download an official transcript",
+            "currently enrolled download official transcript",
+            "currently enrolled student transcript",
+            "current student academic transcript",
+            "transcript current student",
+            "download my official transcript",
+            "request an official transcript",
+            "official transcript for a current student",
+            "current student transcript fee",
+            "transcript cost for enrolled student",
+            "transcript request for enrolled student",
+            "academic transcript current student"
+          ],
+          "excludeKeywords": [
+            "alumni",
+            "alumnus",
+            "graduate transcript",
+            "graduated",
+            "former student",
+            "request it for me",
+            "submit it for me"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Open Current Students Documents",
+              "instruction": "Sign in through the official UAEU portal or mobile app and open the Current Students Documents service.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+            },
+            {
+              "title": "Choose the transcript",
+              "instruction": "Select Academic Transcript and choose Arabic or English, then submit the request in the portal or app."
+            },
+            {
+              "title": "Check your UAEU email",
+              "instruction": "The published service lists the transcript as free and gives a normal email delivery target of 10 minutes. Check the delivered document; actual processing can vary. If you are an alumnus or no longer enrolled, use the separate alumni transcript service instead.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Request an Official Transcript — Current Student",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q006",
+      "category": "documents",
+      "question": "Will I be charged anything for it?",
+      "expectation": "Retain current-student transcript context and give the applicable free-service fact.",
+      "conversation": "transcript-thread",
+      "executionNumber": 8,
+      "askedAt": "2026-11-11T18:29:19.577Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I'm currently enrolled. How do I download an official transcript?"
+        },
+        {
+          "role": "assistant",
+          "content": "**Request an Official Transcript — Current Student**\n- Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page."
+        },
+        {
+          "role": "user",
+          "content": "Will I be charged anything for it?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 9592,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:29:29.169Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Request an Official Transcript — Current Student**\n- Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "transcript",
+        "evidenceIds": [
+          "guide:current-student-official-transcript"
+        ],
+        "guide": {
+          "id": "current-student-official-transcript",
+          "title": "Request an Official Transcript — Current Student",
+          "description": "Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "currently enrolled UAEU students"
+          ],
+          "keywords": [
+            "currently enrolled official transcript",
+            "currently enrolled how do i download an official transcript",
+            "currently enrolled download official transcript",
+            "currently enrolled student transcript",
+            "current student academic transcript",
+            "transcript current student",
+            "download my official transcript",
+            "request an official transcript",
+            "official transcript for a current student",
+            "current student transcript fee",
+            "transcript cost for enrolled student",
+            "transcript request for enrolled student",
+            "academic transcript current student"
+          ],
+          "excludeKeywords": [
+            "alumni",
+            "alumnus",
+            "graduate transcript",
+            "graduated",
+            "former student",
+            "request it for me",
+            "submit it for me"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Open Current Students Documents",
+              "instruction": "Sign in through the official UAEU portal or mobile app and open the Current Students Documents service.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+            },
+            {
+              "title": "Choose the transcript",
+              "instruction": "Select Academic Transcript and choose Arabic or English, then submit the request in the portal or app."
+            },
+            {
+              "title": "Check your UAEU email",
+              "instruction": "The published service lists the transcript as free and gives a normal email delivery target of 10 minutes. Check the delivered document; actual processing can vary. If you are an alumnus or no longer enrolled, use the separate alumni transcript service instead.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Request an Official Transcript — Current Student",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    }
+  ],
+  "finishedAt": "2026-11-11T18:29:29.185Z",
+  "localSourceUnchangedDuringRun": true,
+  "finalHealthStatus": 200,
+  "finalHealth": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "fa60ce037d86c13220521c78370fc13c98f5c0d8"
+    },
+    "agent": {
+      "architecture": "v3-evidence-first",
+      "v3Enabled": true,
+      "legacySelectorBypassedForUniversityModes": true
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "academicCatalog": {
+      "status": "verified-undergraduate-degree-inventory",
+      "programs": 55,
+      "colleges": 9,
+      "verifiedAt": "2026-11-11",
+      "curriculumCoverage": {
+        "modelled": 55,
+        "legacy_model_review_required": 0,
+        "not_modelled": 0
+      },
+      "curriculumRecordsRequiringIdentityReview": 2
+    },
+    "courseCatalog": {
+      "status": "official-course-catalog-snapshot",
+      "courses": 2791,
+      "verifiedAt": "2026-11-11",
+      "entriesWithoutDescription": 1,
+      "entriesWithoutCreditValue": 1,
+      "prerequisiteEntries": 1393,
+      "corequisiteEntries": 150,
+      "preCorequisiteEntries": 62,
+      "prerequisiteParsing": {
+        "relationRecords": 1478,
+        "structuredRecords": 1475,
+        "unsupportedRecords": 3,
+        "structuredCoveragePercent": 99.8
+      },
+      "degreeApplicability": "course records do not establish program requirements"
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "0af4f39f16ed71fc808b31dfde02cb3999bb62a48e99bcd042c33efe0d649102",
+      "retrieval": {
+        "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+        "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+        "embedding": "disabled",
+        "semanticCatalog": "disabled-v3-evidence-first",
+        "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "v3-orchestrator-evidence-research-verified-generation"
+      },
+      "approvedMarkdownFiles": 60,
+      "verifiedAnswers": 137,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-11T18:29:22.986Z",
+        "totalRecords": 202,
+        "domains": {
+          "admissions": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-09-29"
+          },
+          "academics": {
+            "records": 43,
+            "reviewedRecords": 43,
+            "latestVerification": "2026-11-11"
+          },
+          "registration": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "graduation": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "financial_aid": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "student_services": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "housing": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 18,
+            "reviewedRecords": 18,
+            "latestVerification": "2026-10-06"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 59
+      },
+      "sourceEvidence": {
+        "mappedReferences": 197,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-11",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 50,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-10-06",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 5,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "b4b890befa7f196be29f93c814f74a6f6a83a046a46b8013481b6ec480ef52d8"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "finalEndpointIdentity": {
+    "url": "https://uaeu-assistant-9x76rlll3-awnyhatem40-gmailcoms-projects.vercel.app/api/health",
+    "revision": "fa60ce037d86c13220521c78370fc13c98f5c0d8",
+    "contentFingerprint": "0af4f39f16ed71fc808b31dfde02cb3999bb62a48e99bcd042c33efe0d649102",
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "crossProviderFallback": false,
+    "retrieval": {
+      "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+      "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+      "embedding": "disabled",
+      "semanticCatalog": "disabled-v3-evidence-first",
+      "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+      "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+      "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+      "groundingIsolation": {
+        "claimsPerRequest": 1,
+        "concurrency": 4,
+        "maxClaims": 16,
+        "totalAnswerBudgetMs": 54000,
+        "routeMaxDurationSeconds": 60
+      },
+      "activePath": "v3-orchestrator-evidence-research-verified-generation"
+    },
+    "deploymentMode": "prototype"
+  },
+  "endpointIdentityComparison": {
+    "unchanged": true,
+    "verifiable": true,
+    "reason": "Reported endpoint identity stayed stable"
+  },
+  "runIntegrityIssues": []
+}
