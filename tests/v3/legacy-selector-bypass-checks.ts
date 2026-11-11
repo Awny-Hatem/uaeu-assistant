@@ -44,7 +44,7 @@ async function main() {
   assert.equal(failedCourse.status, 200);
   assert.equal(failedCourse.payload.faqId, undefined, "V3 must not return the legacy canonical FAQ answer");
   assert.notEqual(failedCourse.payload.stateLabel, "verified_answer");
-  assert.ok(["UNSUPPORTED", "CONDITIONAL"].includes(String(failedCourse.payload.resolutionState)));
+  assert.ok(["UNSUPPORTED", "CONDITIONAL"].includes(String(failedCourse.payload.resolutionState)), "mock provider output is not an answer-quality evaluation");
   assert.doesNotMatch(String(failedCourse.payload.content), /CSBP319/, "V3 must not apply a guessed course identity");
 
   console.log("V3 selector-bypass route checks passed: calendar follow-up, deadline separation, and no legacy canonical or inferred-course answer.");

@@ -51,7 +51,6 @@ type UiMessage = AnswerMetadata & {
   source?: AssistantSource;
 };
 type LocalePref = "auto" | "ar" | "en";
-type ThemePreference = "light" | "dark";
 type AuthUser = {
   id: string;
   username: string;
@@ -87,7 +86,6 @@ const GUEST_STATE_KEY = "uaeu-chatbot-guest-v4";
 const ACCOUNT_USAGE_KEY = "uaeu-chatbot-account-usage-v1";
 const ACCOUNT_MESSAGES_KEY = "uaeu-chatbot-account-messages-v1";
 const LANGUAGE_KEY = "uaeu-chatbot-language-v1";
-const THEME_KEY = "uaeu-chatbot-theme-v1";
 
 const SUGGESTIONS = [
   {
@@ -118,17 +116,6 @@ function genId() {
 
 function todayKey() {
   return uaeDateKey();
-}
-
-function readThemePreference(): ThemePreference {
-  if (typeof window === "undefined") return "light";
-  try {
-    const stored = localStorage.getItem(THEME_KEY);
-    if (stored === "light" || stored === "dark") return stored;
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-  } catch {
-    return "light";
-  }
 }
 
 function safeMarkdownUrl(url: string): string {
@@ -362,7 +349,6 @@ export function UniversityChat() {
     try { const value = localStorage.getItem(LANGUAGE_KEY); return value === "en" || value === "ar" ? value : "auto"; }
     catch { return "auto"; }
   });
-  const [theme, setTheme] = useState<ThemePreference>(() => readThemePreference());
   const reduceMotion = useReducedMotion();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<UiMessage[]>([]);
@@ -389,12 +375,6 @@ export function UniversityChat() {
   useEffect(() => {
     try { localStorage.setItem(LANGUAGE_KEY, locale); } catch { /* Optional preference storage. */ }
   }, [locale]);
-
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-    document.documentElement.style.colorScheme = theme;
-    try { localStorage.setItem(THEME_KEY, theme); } catch { /* Optional preference storage. */ }
-  }, [theme]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -862,7 +842,7 @@ export function UniversityChat() {
 
   if (authLoading) {
     return (
-      <div className="flex h-screen w-full items-center justify-center bg-zinc-50 dark:bg-zinc-950">
+      <div className="flex h-screen w-full items-center justify-center bg-zinc-50">
         <div className="flex flex-col items-center gap-4">
           <Image
             src="/uaeu-chatbot-logo.png"
@@ -872,7 +852,7 @@ export function UniversityChat() {
             className="h-auto w-56 object-contain"
             priority
           />
-          <p className="text-sm font-medium text-zinc-500 dark:text-zinc-400">
+          <p className="text-sm font-medium text-zinc-500">
             {copy.checkingSession}
           </p>
         </div>
@@ -886,7 +866,7 @@ export function UniversityChat() {
     : copy.browserSession;
 
   return (
-    <div lang={uiLocale} dir={uiLocale === "ar" ? "rtl" : "ltr"} className="flex h-full w-full bg-white text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
+    <div lang={uiLocale} dir={uiLocale === "ar" ? "rtl" : "ltr"} className="flex h-full w-full bg-white text-zinc-900">
       <a
         href="#main-content"
         tabIndex={0}
@@ -894,8 +874,8 @@ export function UniversityChat() {
       >
         {copy.skipToConversation}
       </a>
-      <aside aria-label={copy.assistantSettings} className="hidden h-full w-72 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/80 dark:border-zinc-800 dark:bg-zinc-950 md:flex lg:w-80">
-        <div className="border-b border-zinc-200 px-7 py-7 dark:border-zinc-800">
+      <aside aria-label={copy.assistantSettings} className="hidden h-full w-72 shrink-0 flex-col border-r border-zinc-200 bg-zinc-50/80 md:flex lg:w-80">
+        <div className="border-b border-zinc-200 px-7 py-7">
           <Image
             src="/uaeu-chatbot-logo.png"
             alt="UAEU Chatbot Logo"
@@ -907,44 +887,44 @@ export function UniversityChat() {
         </div>
 
         <div className="flex-1 overflow-y-auto px-5 py-5">
-          <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm dark:border-zinc-800 dark:bg-zinc-900">
+          <div className="rounded-lg border border-zinc-200 bg-white p-4 shadow-sm">
             <div className="flex items-start gap-3">
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#E0182D]/10 text-[#E0182D]">
                 {plan === "uaeu" ? <ShieldCheck size={19} /> : <User size={18} />}
               </div>
               <div className="min-w-0">
-                <p className="truncate text-sm font-bold text-zinc-900 dark:text-zinc-100">
+                <p className="truncate text-sm font-bold text-zinc-900">
                   {profileTitle}
                 </p>
-                <p className="mt-0.5 truncate text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                <p className="mt-0.5 truncate text-xs font-medium text-zinc-500">
                   {profileSubtitle || planName(plan, uiLocale)}
                 </p>
               </div>
             </div>
 
-            <div className="mt-4 rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/70">
+            <div className="mt-4 rounded-lg bg-zinc-50 p-3">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-xs font-bold text-zinc-700 dark:text-zinc-200">
+                <p className="text-xs font-bold text-zinc-700">
                   {planName(plan, uiLocale)}
                 </p>
-                <p className="text-xs font-semibold text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs font-semibold text-zinc-500">
                   {quotaRemaining} {copy.left}
                 </p>
               </div>
-              <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+              <div className="mt-3 h-2 overflow-hidden rounded-full bg-zinc-200">
                 <div
                   className="h-full rounded-full bg-[#E0182D] transition-all duration-300"
                   style={{ width: `${quotaPercent}%` }}
                 />
               </div>
-              <p className="mt-2 text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+              <p className="mt-2 text-[11px] font-medium text-zinc-500">
                 {quotaUsed} {copy.of} {quotaLimit} {copy.used}
               </p>
             </div>
           </div>
 
           <div className="mt-5 space-y-3">
-            <label htmlFor="desktop-language" className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+            <label htmlFor="desktop-language" className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400">
               {copy.language}
             </label>
             <select
@@ -952,7 +932,7 @@ export function UniversityChat() {
               data-testid="desktop-language"
               value={locale}
               onChange={(event) => setLocale(event.target.value as LocalePref)}
-              className="w-full appearance-none rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 outline-none transition focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+              className="w-full appearance-none rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 outline-none transition focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20"
             >
               <option value="auto">{copy.auto}</option>
               <option value="en">{copy.english}</option>
@@ -961,14 +941,14 @@ export function UniversityChat() {
           </div>
         </div>
 
-        <div className="border-t border-zinc-200 p-4 dark:border-zinc-800">
+        <div className="border-t border-zinc-200 p-4">
           {(hasUserMessages || deletionPending) && (
             <button
               type="button"
               onClick={() => void handleClearConversation()}
               data-testid="clear-conversation"
               disabled={authTransition}
-              className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300"
+              className="mb-2 flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600"
             >
               <Trash2 size={15} />
               {copy.clear}
@@ -980,7 +960,7 @@ export function UniversityChat() {
               onClick={handleLogout}
               data-testid="sign-out"
               disabled={authTransition}
-              className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:border-rose-900 dark:hover:text-rose-400"
+              className="flex w-full items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-bold text-zinc-600 transition hover:border-rose-200 hover:text-rose-600"
             >
               <LogOut size={15} />
               {copy.signOut}
@@ -990,7 +970,7 @@ export function UniversityChat() {
               <button
                 type="button"
                 onClick={() => openAuthPrompt("login")}
-                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm font-bold text-zinc-700 transition hover:border-zinc-300 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200"
+                className="flex items-center justify-center gap-2 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm font-bold text-zinc-700 transition hover:border-zinc-300"
               >
                 <LogIn size={14} />
                 {copy.signIn}
@@ -1008,8 +988,8 @@ export function UniversityChat() {
         </div>
       </aside>
 
-      <section id="main-content" role="main" tabIndex={-1} aria-label={copy.conversation} className="flex h-full min-w-0 flex-1 flex-col bg-white dark:bg-[#111111]">
-        <header className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 shadow-sm dark:border-zinc-800 dark:bg-zinc-900 md:hidden">
+      <section id="main-content" role="main" tabIndex={-1} aria-label={copy.conversation} className="flex h-full min-w-0 flex-1 flex-col bg-white">
+        <header className="flex items-center justify-between border-b border-zinc-200 bg-zinc-50 px-4 py-3 shadow-sm md:hidden">
           <Image
             src="/uaeu-chatbot-logo.png"
             alt="UAEU Chatbot"
@@ -1023,7 +1003,7 @@ export function UniversityChat() {
             aria-label={copy.language}
             value={locale}
             onChange={(event) => setLocale(event.target.value as LocalePref)}
-            className="mx-2 max-w-28 rounded-lg border border-zinc-200 bg-white px-2 py-2 text-xs dark:bg-zinc-900"
+            className="mx-2 max-w-28 rounded-lg border border-zinc-200 bg-white px-2 py-2 text-xs"
           >
             <option value="auto">{copy.auto}</option>
             <option value="en">{copy.english}</option>
@@ -1035,7 +1015,7 @@ export function UniversityChat() {
               onClick={() => setProfileOpen((open) => !open)}
               aria-expanded={profileOpen}
               aria-controls="mobile-profile-menu"
-              className="flex max-w-[190px] items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-bold text-zinc-700 shadow-sm dark:bg-zinc-800 dark:text-zinc-200"
+              className="flex max-w-[190px] items-center gap-2 rounded-lg bg-white px-3 py-2 text-xs font-bold text-zinc-700 shadow-sm"
             >
               {plan === "uaeu" ? (
                 <ShieldCheck size={14} className="shrink-0 text-[#E0182D]" />
@@ -1052,10 +1032,10 @@ export function UniversityChat() {
                   initial={{ opacity: 0, y: -8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
-                  className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-700 dark:bg-zinc-900"
+                  className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-lg"
                 >
-                  <div className="border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
-                    <p className="truncate text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                  <div className="border-b border-zinc-100 px-4 py-3">
+                    <p className="truncate text-xs font-bold text-zinc-900">
                       {profileTitle}
                     </p>
                     <p className="mt-1 text-[11px] text-zinc-500">
@@ -1067,7 +1047,7 @@ export function UniversityChat() {
                       type="button"
                       onClick={() => void handleClearConversation()}
                       disabled={authTransition}
-                      className="flex w-full items-center gap-2 border-b border-zinc-100 px-4 py-3 text-xs font-bold text-zinc-600 transition hover:bg-zinc-50 dark:border-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-800"
+                      className="flex w-full items-center gap-2 border-b border-zinc-100 px-4 py-3 text-xs font-bold text-zinc-600 transition hover:bg-zinc-50"
                     >
                       <Trash2 size={13} />
                       {copy.clear}
@@ -1078,7 +1058,7 @@ export function UniversityChat() {
                       type="button"
                       onClick={handleLogout}
                       disabled={authTransition}
-                      className="flex w-full items-center gap-2 px-4 py-3 text-xs font-bold text-rose-600 transition hover:bg-rose-50 dark:text-rose-400 dark:hover:bg-rose-900/20"
+                      className="flex w-full items-center gap-2 px-4 py-3 text-xs font-bold text-rose-600 transition hover:bg-rose-50"
                     >
                       <LogOut size={13} />
                       {copy.signOut}
@@ -1088,7 +1068,7 @@ export function UniversityChat() {
                       <button
                         type="button"
                         onClick={() => openAuthPrompt("login")}
-                        className="rounded-lg border border-zinc-200 px-3 py-2 text-xs font-bold text-zinc-700 dark:border-zinc-700 dark:text-zinc-200"
+                        className="rounded-lg border border-zinc-200 px-3 py-2 text-xs font-bold text-zinc-700"
                       >
                         {copy.signIn}
                       </button>
@@ -1112,7 +1092,7 @@ export function UniversityChat() {
             role="status"
             initial={reduceMotion ? false : { opacity: 0, y: -8 }}
             animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
-            className="border-b border-rose-200 bg-rose-50 px-4 py-3 text-center text-sm font-semibold text-rose-900 dark:border-rose-900/60 dark:bg-rose-950/40 dark:text-rose-100"
+            className="border-b border-rose-200 bg-rose-50 px-4 py-3 text-center text-sm font-semibold text-rose-900"
           >
             {banner}
             {sessionUncertain && (
@@ -1141,8 +1121,8 @@ export function UniversityChat() {
                   <div
                     className={`mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
                       message.role === "user"
-                        ? "bg-zinc-100 text-zinc-500 dark:bg-zinc-800"
-                        : "border border-zinc-200 bg-white text-[#E0182D] shadow-sm dark:border-zinc-800 dark:bg-zinc-900"
+                        ? "bg-zinc-100 text-zinc-500 "
+                        : "border border-zinc-200 bg-white text-[#E0182D] shadow-sm  "
                     }`}
                   >
                     {message.role === "user" ? (
@@ -1160,8 +1140,8 @@ export function UniversityChat() {
                     <div
                       className={`break-words rounded-2xl px-5 py-3.5 text-[0.96rem] leading-7 ${
                         message.role === "user"
-                          ? "rounded-tr-md bg-zinc-950 font-medium text-white shadow-sm dark:bg-zinc-100 dark:text-zinc-950"
-                          : "rounded-tl-md bg-zinc-50 text-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
+                          ? "rounded-tr-md bg-zinc-950 font-medium text-white shadow-sm  "
+                          : "rounded-tl-md bg-zinc-50 text-zinc-800  "
                       }`}
                       dir={textLanguage(message.content) === "ar" ? "rtl" : "ltr"}
                       lang={textLanguage(message.content)}
@@ -1178,11 +1158,11 @@ export function UniversityChat() {
                     </div>
 
                     {message.source && (
-                      <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400 dark:text-zinc-600">
+                      <div className="flex items-center gap-1.5 px-2 text-[10px] font-bold uppercase tracking-wider text-zinc-400">
                         {sourceIcon(message.source)}
                         {sourceLabel(message.source, message.disposition, textLanguage(message.content))}
                         {message.provider && message.model && (
-                          <span className="normal-case tracking-normal text-zinc-300 dark:text-zinc-700">
+                          <span className="normal-case tracking-normal text-zinc-300">
                             {message.provider} / {message.model}
                           </span>
                         )}
@@ -1190,7 +1170,7 @@ export function UniversityChat() {
                     )}
 
                     {message.resolutionState && (
-                      <div className="px-2 text-[11px] font-medium text-zinc-500 dark:text-zinc-400" role="status">
+                      <div className="px-2 text-[11px] font-medium text-zinc-500" role="status">
                         {resolutionLabel(message.resolutionState, textLanguage(message.content))}
                       </div>
                     )}
@@ -1252,11 +1232,11 @@ export function UniversityChat() {
                 animate={{ opacity: 1 }}
                 className="mx-auto mb-8 flex w-full max-w-4xl gap-4"
               >
-                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-400 dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-zinc-200 bg-white text-zinc-400">
                   <Search size={16} className="animate-spin" />
                 </div>
                 <div className="flex items-center py-2">
-                  <p className="text-sm font-semibold tracking-wide text-zinc-500 dark:text-zinc-400">
+                  <p className="text-sm font-semibold tracking-wide text-zinc-500">
                     {historyLoading ? copy.historyLoading : copy.checkingSources}
                   </p>
                 </div>
@@ -1270,15 +1250,15 @@ export function UniversityChat() {
           )}
         </div>
 
-        <footer className="border-t border-zinc-200 bg-white px-4 py-4 dark:border-zinc-800 dark:bg-[#111111] sm:px-8 lg:px-14">
+        <footer className="border-t border-zinc-200 bg-white px-4 py-4 sm:px-8 lg:px-14">
           <div className="mx-auto max-w-4xl">
             {!user && quotaRemaining <= 2 && (
-              <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900 dark:border-amber-900/60 dark:bg-amber-950/30 dark:text-amber-100">
+              <div className="mb-3 flex flex-wrap items-center justify-between gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-900">
                 <span>{quotaRemaining} {copy.remaining}</span>
                 <button
                   type="button"
                   onClick={() => openAuthPrompt("signup")}
-                  className="inline-flex items-center gap-1.5 rounded-md bg-amber-900 px-2.5 py-1.5 text-white transition hover:bg-amber-800 dark:bg-amber-100 dark:text-amber-950"
+                  className="inline-flex items-center gap-1.5 rounded-md bg-amber-900 px-2.5 py-1.5 text-white transition hover:bg-amber-800"
                 >
                   <GraduationCap size={13} />
                   {copy.create}
@@ -1293,7 +1273,7 @@ export function UniversityChat() {
                 aria-describedby="chat-hint"
                 data-testid="chat-input"
                 ref={inputRef}
-                className="max-h-40 min-h-[58px] w-full resize-none rounded-2xl border border-zinc-200 bg-white px-5 py-4 pr-16 text-[1rem] font-medium text-zinc-900 shadow-sm outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 disabled:bg-zinc-50 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-50 dark:placeholder-zinc-500 dark:disabled:bg-zinc-900/60"
+                className="max-h-40 min-h-[58px] w-full resize-none rounded-2xl border border-zinc-200 bg-white px-5 py-4 pr-16 text-[1rem] font-medium text-zinc-900 shadow-sm outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-4 focus:ring-[#E0182D]/10 disabled:bg-zinc-50 disabled:text-zinc-400"
                 maxLength={6000}
                 rows={1}
                 placeholder={
@@ -1317,7 +1297,7 @@ export function UniversityChat() {
                 type="button"
                 onClick={() => void send()}
                 disabled={loading || historyLoading || authTransition || !input.trim() || quotaBlocked}
-                className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white shadow-md transition hover:bg-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:shadow-none dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white dark:disabled:bg-zinc-800 dark:disabled:text-zinc-600"
+                className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white shadow-md transition hover:bg-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:shadow-none"
                 aria-label={copy.send}
                 data-testid="send-message"
               >
@@ -1337,7 +1317,7 @@ export function UniversityChat() {
                 setLoading(false);
               }}>{copy.cancel}</button>
             )}
-            <p id="chat-hint" className="mt-2 text-center text-[11px] font-medium text-zinc-500 dark:text-zinc-400">
+            <p id="chat-hint" className="mt-2 text-center text-[11px] font-medium text-zinc-500">
               {copy.historyNotice}
             </p>
           </div>

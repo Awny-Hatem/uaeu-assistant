@@ -59,16 +59,18 @@ async function submit(page: Page, question: string) {
   await input.press('Enter');
 }
 
-test('dark mode implementation remains available while its UI control is hidden', async ({ page }) => {
+test('the interface stays light and contains no theme toggle', async ({ page }) => {
   await guest(page);
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.addInitScript(() => localStorage.setItem('uaeu-chatbot-theme-v1', 'dark'));
   await page.goto('/');
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
   await expect(page.getByTestId('mobile-theme-toggle')).toHaveCount(0);
-  await expect(page.locator('html')).toHaveClass(/dark/);
+  await expect(page.locator('html')).not.toHaveClass(/dark/);
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe('light');
   await page.reload();
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
-  await expect(page.locator('html')).toHaveClass(/dark/);
+  await expect(page.locator('html')).not.toHaveClass(/dark/);
 });
 
 test('keyboard skip link and reduced-motion accessibility hooks are available', async ({ page }) => {

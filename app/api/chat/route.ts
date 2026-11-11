@@ -775,9 +775,9 @@ export async function POST(req: Request) {
   const executionPlan = v3Enabled ? createExecutionPlan({
     conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
     latest,
-    resolvedRequest: routingQuery,
   }) : null;
   const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH", "PERSONALIZED_ACADEMIC", "COMPLEX_SCENARIO"].includes(executionPlan.mode));
+  const answerRequest = v3EvidenceMode && executionPlan ? executionPlan.normalizedRequest : routingQuery;
   const communications = matchCommunications(routingQuery);
   const standaloneFaq = matchFaq(latest);
   const needsPreviousSubject = requiresPreviousSubject(latest) || (resolution.needsClarification && !standaloneFaq);
@@ -1129,13 +1129,13 @@ export async function POST(req: Request) {
   // and requested-fact gates. No unapproved or differently scoped facts are added.
   if (semantic && !retrieved.length) retrieved = await retrieveContext(routingQuery, deadlineAt);
   const evidenceSources = sourceEvidence(retrieved);
-  if (!evidenceSources.length || (looksSensitiveWithoutEvidence(routingQuery) && !hasDirectSensitiveEvidence(routingQuery, retrieved))) {
-    const escalationReason: EscalationReason = looksSensitiveWithoutEvidence(routingQuery)
+  if (!evidenceSources.length || (looksSensitiveWithoutEvidence(answerRequest) && !hasDirectSensitiveEvidence(answerRequest, retrieved))) {
+    const escalationReason: EscalationReason = looksSensitiveWithoutEvidence(answerRequest)
       ? "sensitive_policy"
       : "low_confidence";
     const payload: AssistantPayload = {
       role: "assistant",
-      content: handoffContent(escalationReason, locale, routingQuery),
+      content: handoffContent(escalationReason, locale, answerRequest),
       source: "escalated",
       stateLabel: "no_verified_context",
       citations: [],
@@ -1143,7 +1143,9 @@ export async function POST(req: Request) {
       escalationReason,
       disposition: "clarify",
       clarificationReason: "missing_official_evidence",
-      topic: semantic?.subject || resolution.subject?.key,
+      topic: v3EvidenceMode
+        ? executionPlan?.entities.courses?.[0] ?? executionPlan?.entities.program ?? executionPlan?.entities.domain
+        : semantic?.subject || resolution.subject?.key,
       evidenceIds: [],
     };
     if (shouldPersistServerSide && userId) {
@@ -1157,7 +1159,7 @@ export async function POST(req: Request) {
   const unresolvedScope = v3EvidenceMode && executionPlan?.missingContext.length
     ? `\n\nUNRESOLVED STUDENT CONTEXT (not evidence): ${executionPlan.missingContext.join("; ")}. Give only general rules supported by the evidence, state which case-specific conclusion cannot yet be established, and ask for the missing detail.`
     : "";
-  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}${unresolvedScope}\n\n${context}`;
+  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${answerRequest}${unresolvedScope}\n\n${context}`;
   const history = trimHistory(sanitized, 12);
   let groundingTrace: AssistantPayload["grounding"];
 
@@ -1166,12 +1168,12 @@ export async function POST(req: Request) {
     for (const attempt of [0, 1] as const) {
       if (!result.grounded) break;
       result.grounded = preserveEvidenceQualifications(result.grounded, evidenceSources, locale);
-      let violations = sourceClaimViolations(result.grounded, evidenceSources, routingQuery);
+      let violations = sourceClaimViolations(result.grounded, evidenceSources, answerRequest);
       let reasonCodes: AnswerGrounding["reasonCodes"] = violations.length
         ? [violations.some((violation) => violation.includes("exclusion from this policy")) ? "unsupported_detail" : "unsupported_critical_token"] : [];
       if (!violations.length) {
         groundingTrace = { status: "rejected", rewriteCount: attempt, reasonCodes: ["verification_unavailable"] };
-        const verdict = await verifySourceClaims(result.grounded, evidenceSources, routingQuery, deadlineAt);
+        const verdict = await verifySourceClaims(result.grounded, evidenceSources, answerRequest, deadlineAt);
         reasonCodes = verdict.reasonCodes;
         if (!verdict.valid) violations = verdict.verdicts.filter(({ status }) => status !== "supported").map(({ claimIndex, evidenceId, status }) => `Claim ${claimIndex + 1} under ${evidenceId}: ${status}.`);
         if (!verdict.valid && !violations.length) violations = ["Verification contract invalid or incomplete."];
@@ -1190,9 +1192,9 @@ export async function POST(req: Request) {
         result.grounded.clarification = "";
       }
       if (result.grounded.claims.length && result.grounded.clarification === "unverified_fact") {
-        result.grounded.clarification = understandQuery(routingQuery).codes.length ? "individual_record" : "";
+        result.grounded.clarification = understandQuery(answerRequest).codes.length ? "individual_record" : "";
       }
-      result.text = [...result.grounded.claims.map(({ text }) => text), groundedClarification(result.grounded.clarification, routingQuery, locale)].filter(Boolean).join("\n\n");
+      result.text = [...result.grounded.claims.map(({ text }) => text), groundedClarification(result.grounded.clarification, answerRequest, locale)].filter(Boolean).join("\n\n");
       if (result.text.length > 5800) throw new Error("Qualified answer exceeds the safe output limit.");
     }
     const finalized = finalizeProviderResponse(
@@ -1207,7 +1209,7 @@ export async function POST(req: Request) {
       : undefined;
     const usedOfficialWebResearch = selectedSources.some(({ row }) => row.source.startsWith("official-web:"));
     const remainingClarification = result.grounded && result.grounded.clarification !== "individual_record"
-      ? groundedClarification(result.grounded.clarification, routingQuery, locale) : "";
+      ? groundedClarification(result.grounded.clarification, answerRequest, locale) : "";
     const needsCourseIdentity = executionPlan?.mode === "COMPLEX_SCENARIO" &&
       executionPlan.missingContext.some((item) => item.includes("exact course code or degree program"));
     const courseIdentityClarification = needsCourseIdentity
@@ -1219,7 +1221,7 @@ export async function POST(req: Request) {
     const hasClarification = Boolean(remainingClarification || courseIdentityClarification);
     const payload: AssistantPayload = {
       role: "assistant",
-      content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, routingQuery) : [finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), responseClarification].filter(Boolean).join("\n\n"), latest, locale),
+      content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, answerRequest) : [finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), responseClarification].filter(Boolean).join("\n\n"), latest, locale),
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
       stateLabel: escalationReason ? "model_escalation" : usedOfficialWebResearch ? "official_web_research" : "local_db",
