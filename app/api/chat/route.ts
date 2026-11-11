@@ -28,6 +28,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import type { ResolutionState } from "@/lib/v3/contracts";
+import { isV3Enabled } from "@/lib/v3/runtime";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -752,8 +753,7 @@ export async function POST(req: Request) {
   }
   const resolution = resolveConversation(sanitized, latest);
   const routingQuery = buildRoutingQuery(sanitized, latest);
-  const v3Enabled = process.env.UAEU_AGENT_V3_ENABLED === "enabled" ||
-    ((process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development") && process.env.UAEU_AGENT_V3_ENABLED !== "disabled");
+  const v3Enabled = isV3Enabled();
   const executionPlan = v3Enabled ? createExecutionPlan({
     conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
     latest,

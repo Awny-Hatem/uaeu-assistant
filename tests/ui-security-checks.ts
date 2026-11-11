@@ -290,6 +290,7 @@ async function main() {
     const { GET } = await import("../app/api/health/route");
     process.env.AI_PROVIDER = "intentionally-unconfigured";
     process.env.CHATBOT_BUILD_REVISION = "test-build-revision";
+    process.env.UAEU_AGENT_V3_ENABLED = "disabled";
     delete process.env.VERCEL_GIT_COMMIT_SHA;
     delete process.env.GEMINI_EMBEDDING_SEARCH;
     const response = await GET();
@@ -301,6 +302,14 @@ async function main() {
     assert.equal(health.knowledge.retrieval.activePath, "curriculum-extract-then-lexical");
     assert.equal(health.knowledge.retrieval.embedding, "disabled");
     assert.equal(health.deployment.productionReady, false);
+    assert.equal(health.agent.v3Enabled, false);
+    process.env.UAEU_AGENT_V3_ENABLED = "enabled";
+    const v3Response = await GET();
+    const v3Health = await v3Response.json();
+    assert.equal(v3Health.agent.architecture, "v3-evidence-first");
+    assert.equal(v3Health.agent.legacySelectorBypassedForUniversityModes, true);
+    assert.equal(v3Health.knowledge.retrieval.activePath, "v3-orchestrator-evidence-research-verified-generation");
+    delete process.env.UAEU_AGENT_V3_ENABLED;
     delete process.env.AI_PROVIDER;
     delete process.env.CHATBOT_BUILD_REVISION;
   });

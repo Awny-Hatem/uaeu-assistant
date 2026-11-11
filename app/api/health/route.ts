@@ -9,6 +9,7 @@ import { loadEmbeddingChunks } from "@/lib/vector-rag";
 import { runtimeContract } from "@/lib/runtime-contract";
 import { sourceCoverageSnapshot } from "@/lib/source-registry";
 import { createHash } from "node:crypto";
+import { isV3Enabled } from "@/lib/v3/runtime";
 
 export const runtime = "nodejs";
 
@@ -21,6 +22,7 @@ export async function GET() {
   const embeddings = loadEmbeddingChunks(embeddingModel());
   const authConfigured = authCookieSecretConfigured();
   const contract = runtimeContract();
+  const v3Enabled = isV3Enabled();
   const sourceCoverage = sourceCoverageSnapshot();
   const coreKnowledgeReady =
     answerPacks.complete && knowledgeFiles.length >= 7 && serviceGuides.length >= 1;
@@ -38,6 +40,7 @@ export async function GET() {
     ok: ready,
     live: true,
     build: { revision },
+    agent: { architecture: v3Enabled ? "v3-evidence-first" : "legacy", v3Enabled, legacySelectorBypassedForUniversityModes: v3Enabled },
     readiness: { knowledge: coreKnowledgeReady, accounts: authConfigured, generation: generationReady, configuration: contract.allowed },
     deployment: contract,
     provider: {
@@ -53,15 +56,15 @@ export async function GET() {
     knowledge: {
       contentFingerprint,
       retrieval: {
-        primary: semanticCatalogEnabled ? "scoped-canonical-answers-with-closed-catalog-semantic-selection" : "lexical-approved-documents-and-verified-answers",
+        primary: v3Enabled ? "v3-scoped-evidence-retrieval-and-controlled-official-research" : semanticCatalogEnabled ? "scoped-canonical-answers-with-closed-catalog-semantic-selection" : "lexical-approved-documents-and-verified-answers",
         curriculumExtract: "approved-curriculum-markdown-sections-for-matched-english-questions",
         embedding: !embeddingOptIn ? "disabled" : embeddingAvailable ? "ready" : "unavailable",
-        semanticCatalog: semanticCatalogEnabled ? "enabled-same-configured-provider-closed-record-ids" : "disabled-no-live-provider",
+        semanticCatalog: v3Enabled ? "disabled-v3-evidence-first" : semanticCatalogEnabled ? "enabled-same-configured-provider-closed-record-ids" : "disabled-no-live-provider",
         canonicalRendering: "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
         generationEvidence: "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
         groundingChecks: "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
         groundingIsolation: { claimsPerRequest: 1, concurrency: 4, maxClaims: 16, totalAnswerBudgetMs: 54000, routeMaxDurationSeconds: 60 },
-        activePath: semanticCatalogEnabled ? "curriculum-extract-then-canonical-selection-and-guarded-generation-fallback" : embeddingAvailable ? "curriculum-extract-then-lexical-with-optional-embedding-candidates" : "curriculum-extract-then-lexical",
+        activePath: v3Enabled ? "v3-orchestrator-evidence-research-verified-generation" : semanticCatalogEnabled ? "curriculum-extract-then-canonical-selection-and-guarded-generation-fallback" : embeddingAvailable ? "curriculum-extract-then-lexical-with-optional-embedding-candidates" : "curriculum-extract-then-lexical",
       },
       approvedMarkdownFiles: knowledgeFiles.length,
       verifiedAnswers: verifiedAnswers.length,
