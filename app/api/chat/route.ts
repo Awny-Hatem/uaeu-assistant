@@ -1201,13 +1201,18 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
 
-  const guide = v3EvidenceMode || semantic ? null : findServiceGuide(routingQuery);
+  // V3 can execute a reviewed service workflow as structured guidance. This is
+  // a typed source-backed procedure, not a semantic selector returning a nearby
+  // canonical answer. Guides needing further verification remain on research.
+  const candidateGuide = semantic ? null : findServiceGuide(v3EvidenceMode ? answerRequest : routingQuery);
+  const guide = candidateGuide && (!v3EvidenceMode || !candidateGuide.requiresVerification) ? candidateGuide : null;
   if (guide) {
     const payload: AssistantPayload = {
       role: "assistant",
       content: withActionBoundary(guideIntro(guide, locale), latest, locale),
       source: "guide",
       stateLabel: "guided_service",
+      ...(v3EvidenceMode ? { resolutionState: "VERIFIED" as const } : {}),
       disposition: "answer",
       topic: resolution.subject?.key,
       evidenceIds: [`guide:${guide.id}`],

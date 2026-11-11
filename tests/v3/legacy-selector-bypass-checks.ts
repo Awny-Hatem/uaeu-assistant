@@ -26,6 +26,15 @@ async function main() {
   assert.match(String(calendar.payload.content), /official UAEU academic calendar/i);
   assert.match(JSON.stringify(calendar.payload.citations), /coreservices\.uaeu\.ac\.ae/);
 
+  const studentDocument = await ask("How do I request a To Whom It May Concern letter?", "203.0.113.229");
+  assert.equal(studentDocument.status, 200);
+  assert.equal(studentDocument.payload.stateLabel, "guided_service");
+  assert.equal(studentDocument.payload.resolutionState, "VERIFIED");
+  assert.equal(studentDocument.payload.faqId, undefined, "a V3 service workflow must not use canonical answer selection");
+  assert.equal((studentDocument.payload.guide as { id?: string } | undefined)?.id, "to-whom-it-may-concern");
+  assert.match(String(studentDocument.payload.content), /Current Students Documents/i);
+  assert.match(JSON.stringify(studentDocument.payload.citations), /serviceId=92/);
+
   const calendarFollowUp = await askMessages([
     { role: "user", content: "Where can I check UAEU academic calendar deadlines?" },
     { role: "assistant", content: "Which term, year, and applicant category do you mean?" },
