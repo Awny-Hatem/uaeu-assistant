@@ -108,4 +108,25 @@ assert.ok(majorChangeEvidence.evidence.every((item) => item.scope?.domain === "a
 assert.ok(majorChangeEvidence.evidence.some((item) => /change a major/i.test(item.excerpt)));
 assert.ok(!majorChangeEvidence.evidence.some((item) => /Academic Calendar/i.test(item.title)), "a secondary calendar citation must not be substituted for major-change policy");
 
+const twimcEvidence = createEvidenceService({ now: () => now }).search({
+  request: "How do I request a To Whom It May Concern letter?",
+  requestedFacts: ["apply"],
+  scope: {},
+  freshnessRequirement: "normal",
+});
+assert.equal(twimcEvidence.status, "FOUND", "the student-document alias should retrieve its reviewed evidence");
+assert.ok(twimcEvidence.evidence.some((item) => /Current Students Documents Service/i.test(item.title)));
+assert.ok(twimcEvidence.evidence.some((item) => /serviceId=92/.test(item.url ?? "")));
+assert.ok(twimcEvidence.evidence.every((item) => item.scope?.domain === "student_services"));
+
+const libraryHelpEvidence = createEvidenceService({ now: () => now }).search({
+  request: "How can UAEU students get library or research help?",
+  requestedFacts: ["answer the user's question"],
+  scope: { domain: "library" },
+  freshnessRequirement: "normal",
+});
+assert.equal(libraryHelpEvidence.status, "FOUND");
+assert.ok(libraryHelpEvidence.evidence.some((item) => /Ask[- ]a[- ]Librarian/i.test(item.excerpt)));
+assert.ok(libraryHelpEvidence.evidence.some((item) => /serviceId=98/.test(item.url ?? "")));
+
 console.log("V3 Evidence Service checks passed: hard domain and course identity filters, source-specific citations, event metadata gate, freshness, and policy recall.");

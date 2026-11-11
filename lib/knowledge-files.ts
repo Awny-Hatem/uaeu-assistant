@@ -282,7 +282,9 @@ export function evidenceIsRelevant(query: string, text: string, identity: string
   if (!wanted.codes.length && relevantSubjects.length && !relevantSubjects.some((subject) => subjects.includes(subject))) return false;
   // Explicit policy relationships must be evidenced together, not by separate unrelated words.
   for (const concept of ["violation", "suspension", "gpa", "professor", "library"]) {
-    if (new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(query) && !new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(text)) return false;
+    const conceptIsInSource = new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(text);
+    const explicitlyScopedToLibrary = concept === "library" && scope.subjects?.includes("library");
+    if (new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(query) && !conceptIsInSource && !explicitlyScopedToLibrary) return false;
   }
   if (wanted.intents.includes("deadline")) {
     const domain = wanted.subjects.filter((subject) => ["admissions", "graduation", "tuition", "scholarship", "visa", "housing"].includes(subject));
@@ -369,7 +371,11 @@ export function retrieveVerifiedEvidence(query: string, topK = 5): EvidenceRow[]
     const codeMatch = meaning.codes.some((code) => scope.courseCodes?.includes(code));
     const coverage = matched.length / Math.max(1, qTokens.size);
     if (!codeMatch && (matched.length < 2 || coverage < (topicMatch ? 0.2 : 0.65))) continue;
-    rows.push({ text, title, scope, source: `answer:${entry.id}`, score: matched.length * 2 + (codeMatch ? 8 : 0) + 4, citations: entry.citations });
+    const normalizedQuery = normalizeForLexical(query);
+    const exactReviewedPhrase = [...entry.questions, ...(entry.matchPhrases ?? [])]
+      .map(normalizeForLexical)
+      .some((phrase) => phrase.length >= 12 && normalizedQuery.includes(phrase));
+    rows.push({ text, title, scope, source: `answer:${entry.id}`, score: matched.length * 2 + (codeMatch ? 8 : 0) + 4 + (exactReviewedPhrase ? 12 : 0), citations: entry.citations });
   }
   rows.sort((a, b) => b.score - a.score);
   // The fact guard runs on the assembled relevant evidence so a compound request can
