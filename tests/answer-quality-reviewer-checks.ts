@@ -25,14 +25,17 @@ assert.deepEqual(parseAnswerQualityReview('{"decision":"REPAIR","issueCodes":["w
 });
 assert.equal(parseAnswerQualityReview('{"decision":"PASS","issueCodes":["wrong_topic"]}').valid, false, "inconsistent review output fails closed");
 assert.equal(parseAnswerQualityReview('{"decision":"PASS","issueCodes":["looks_good"]}').valid, false, "unknown issue codes fail closed");
+assert.equal(parseAnswerQualityReview('{"decision":"REPAIR","issueCodes":["wrong_topic","wrong_topic"]}').valid, false, "duplicate issue codes are rejected by the local contract parser");
 
 let capturedSchema = "";
+let capturedJsonSchema: Record<string, unknown> | undefined;
 let modelOutput = '{"decision":"PASS","issueCodes":[]}';
 let capturedInput: unknown;
 globalThis.fetch = async (input, init) => {
   assert.equal(String(input), "https://api.openai.com/v1/responses");
   const request = JSON.parse(String(init?.body));
   capturedSchema = request.text?.format?.name;
+  capturedJsonSchema = request.text?.format?.schema;
   capturedInput = JSON.parse(request.input?.[0]?.content ?? "{}");
   return new Response(JSON.stringify({ status: "completed", output_text: modelOutput }), { status: 200 });
 };
@@ -40,6 +43,9 @@ globalThis.fetch = async (input, init) => {
 async function main() {
   const reviewed = await reviewAnswerQuality(plan, answer, Date.now() + 10_000);
   assert.equal(capturedSchema, "uaeu_answer_quality_review");
+  const issueCodesSchema = ((capturedJsonSchema?.properties as Record<string, { type?: string; uniqueItems?: boolean }>).issueCodes);
+  assert.equal(issueCodesSchema.type, "array");
+  assert.equal(issueCodesSchema.uniqueItems, undefined, "provider schema uses only supported keywords; uniqueness is enforced locally");
   assert.equal(reviewed.valid, true);
   assert.deepEqual(capturedInput, {
     request: plan.normalizedRequest,
