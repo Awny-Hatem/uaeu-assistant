@@ -115,7 +115,13 @@ export function parseCatalogPrerequisiteExpression(record: OfficialCourseRecord)
     return parsed ? mapPriorOrCurrent(parsed) : null;
   });
   const preCorequisites = record.preCorequisiteItems.map((item) => {
-    const parsed = parseItem(item);
+    // UAEU's catalog can include the literal "Pre/Co" marker inside a
+    // Pre/Co relation item (for example, "A or Pre/Co B"). The containing
+    // field already establishes that each listed alternative may be taken
+    // before or concurrently, so remove only that explicit marker before
+    // parsing the Boolean expression. Unknown surrounding text still fails
+    // closed in parseItem.
+    const parsed = parseItem(item.replace(/\bpre\s*[\/&]\s*co(?:requisites?)?\b\s*/giu, " "));
     return parsed ? mapPriorOrCurrent(parsed) : null;
   });
   if ([...corequisites, ...preCorequisites].some((expression) => !expression)) return null;

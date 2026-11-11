@@ -143,6 +143,27 @@ async function main() {
   assert.match(String(catalogPrerequisiteAssessment.payload.content), /completion of FINC110/);
   assert.match(String(catalogPrerequisiteAssessment.payload.content), /modeled prerequisite is satisfied/);
 
+  const contextualCatalogPrerequisite = await askMessages([
+    { role: "user", content: "Can I register for FINC210?" },
+    { role: "assistant", content: "Share the relevant completed and current courses." },
+    { role: "user", content: "I passed ACCT111 with grade D, and I'm currently taking ECON105. Can I take that course?" },
+  ], "203.0.113.253");
+  assert.equal(contextualCatalogPrerequisite.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(contextualCatalogPrerequisite.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(contextualCatalogPrerequisite.payload.content), /ACCT111/);
+  assert.match(String(contextualCatalogPrerequisite.payload.content), /modeled prerequisite is satisfied/i);
+  assert.match(JSON.stringify(contextualCatalogPrerequisite.payload.citations), /course_2911\.shtml\?id=FINC210/);
+
+  const malformedSourcePrerequisite = await askMessages([
+    { role: "user", content: "Can I register for CHME330? I passed PHYS105 with grade D, and I'm currently taking CHME300." },
+  ], "203.0.113.254");
+  assert.equal(malformedSourcePrerequisite.payload.stateLabel, "v3_official_course_catalog_lookup");
+  assert.equal(malformedSourcePrerequisite.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(malformedSourcePrerequisite.payload.content), /PHYS135/,
+    "visible prerequisite text outside malformed HTML list items is retained in the catalog response");
+  assert.match(String(malformedSourcePrerequisite.payload.content), /cannot safely calculate eligibility/i,
+    "an incomplete imported rule must fail closed rather than reach generated eligibility advice");
+
   const passGradePrerequisiteAssessment = await askMessages([
     { role: "user", content: "I passed ACCT101 with P." },
     { role: "assistant", content: "Which course do you want to check?" },

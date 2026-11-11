@@ -30,7 +30,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
-import { assessCatalogPrerequisiteConversation } from "@/lib/academic/catalog-prerequisite-assessment";
+import { assessCatalogPrerequisiteConversation, catalogTargetCodeFromMessages } from "@/lib/academic/catalog-prerequisite-assessment";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import { assessDegreeAuditConversation, renderDegreeAuditAssessment } from "@/lib/academic/degree-audit";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
@@ -1158,7 +1158,10 @@ export async function POST(req: Request) {
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
-    const courseCatalogAnswer = answerOfficialCourseCatalogQuestion(latest, locale);
+    const catalogTargetCode = asksPersonalPrerequisiteEligibility(latestUserQuestion)
+      ? catalogTargetCodeFromMessages(prerequisiteMessages)
+      : undefined;
+    const courseCatalogAnswer = answerOfficialCourseCatalogQuestion(latest, locale, catalogTargetCode);
     if (courseCatalogAnswer) {
       const payload: AssistantPayload = {
         role: "assistant",

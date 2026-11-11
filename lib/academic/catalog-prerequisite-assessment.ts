@@ -2,15 +2,35 @@ import { loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
 import { parseCatalogPrerequisiteExpression } from "@/lib/academic/catalog-prerequisite-parser";
 import { academicSnapshotFromMessages, evaluateCatalogPrerequisite, type PrerequisiteConversationAssessment } from "@/lib/academic/prerequisite-rules";
 
+function codesIn(text: string): string[] {
+  const matches = [...text.matchAll(/\b([A-Z]{2,8})\s?(\d{3,4}[A-Z]?)\b/giu)];
+  return [...new Set(matches.map((match) => `${match[1]}${match[2]}`.toUpperCase()))];
+}
+
+function explicitTargetCode(text: string): string | undefined {
+  const code = "([A-Z]{2,8}\\s?\\d{3,4}[A-Z]?)";
+  const patterns = [
+    new RegExp(`\\b(?:take|register\\s+(?:for|in)|enroll\\s+(?:in|for)|enrol\\s+(?:in|for)|eligible\\s+for|allowed\\s+to\\s+take)\\s+(?:the\\s+)?${code}\\b`, "iu"),
+    new RegExp(`\\b(?:prerequisites?|corequisites?)\\s+(?:for|of)\\s+(?:the\\s+)?${code}\\b`, "iu"),
+    new RegExp(`\\b${code}\\s+(?:prerequisites?|corequisites?)\\b`, "iu"),
+  ];
+  for (const pattern of patterns) {
+    const match = text.match(pattern);
+    if (match?.[1]) return match[1].replace(/\s/gu, "").toUpperCase();
+  }
+  return undefined;
+}
+
 export function assessCatalogPrerequisiteConversation(
   messages: { role: "user" | "assistant"; content: string }[],
 ): PrerequisiteConversationAssessment | null {
   const latestQuestion = [...messages].reverse().find((message) => message.role === "user")?.content;
   if (!latestQuestion) return null;
-  const codes = [...latestQuestion.matchAll(/\b([A-Z]{2,8})\s?(\d{3,4}[A-Z]?)\b/giu)]
-    .map((match) => `${match[1]}${match[2]}`.toUpperCase());
-  if (new Set(codes).size !== 1) return null;
-  const record = loadOfficialCourseCatalog()?.courses.find((course) => course.code === codes[0]);
+  const catalog = loadOfficialCourseCatalog();
+  if (!catalog) return null;
+  const targetCode = catalogTargetCodeFromMessages(messages);
+  if (!targetCode) return null;
+  const record = catalog.courses.find((course) => course.code === targetCode);
   if (!record || record.creditHours === null) return null;
   const expression = parseCatalogPrerequisiteExpression(record);
   if (!expression) return null;
@@ -27,4 +47,25 @@ export function assessCatalogPrerequisiteConversation(
     rule: { id: `official-course-catalog-${record.code}`, course, expression, source, version: record.source.verifiedAt },
     evaluation,
   };
+}
+
+/** Resolve only a clearly named target or a short, explicit course follow-up. */
+export function catalogTargetCodeFromMessages(
+  messages: { role: "user" | "assistant"; content: string }[],
+): string | undefined {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const latestQuestion = userMessages.at(-1)?.content;
+  if (!latestQuestion) return undefined;
+  const catalog = loadOfficialCourseCatalog();
+  if (!catalog) return undefined;
+
+  let candidate = explicitTargetCode(latestQuestion);
+  if (!candidate && /\b(?:it|that course|this course|the same course)\b/iu.test(latestQuestion)) {
+    candidate = userMessages.slice(-4, -1).reverse().map(({ content }) => explicitTargetCode(content)).find(Boolean);
+  }
+  if (!candidate) {
+    const currentCodes = codesIn(latestQuestion);
+    if (currentCodes.length === 1) candidate = currentCodes[0];
+  }
+  return candidate && catalog.courses.some((course) => course.code === candidate) ? candidate : undefined;
 }

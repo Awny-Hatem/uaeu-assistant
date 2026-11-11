@@ -32,7 +32,12 @@ function relationBlockItems(section, headingName) {
   const body = section.match(regex)?.[1];
   if (!body) return [];
   const items = [...body.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)].map((match) => stripHtml(match[1])).filter(Boolean);
-  return items.length ? items : [stripHtml(body)].filter(Boolean);
+  if (!items.length) return [stripHtml(body)].filter(Boolean);
+  // Some UAEU course pages contain visible linked requirements outside the
+  // surrounding <li> elements. Keep that residual text so downstream rule
+  // parsing fails closed instead of silently dropping a prerequisite.
+  const unlistedText = stripHtml(body.replace(/<li\b[^>]*>[\s\S]*?<\/li>/gi, " "));
+  return unlistedText ? [...items, unlistedText] : items;
 }
 
 export function extractCourseCodes(indexHtml) {

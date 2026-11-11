@@ -39,6 +39,17 @@ assert.equal(combined.prerequisiteText, "CSBP219 with a minimum grade D");
 assert.deepEqual(combined.prerequisiteItems, ["CSBP219 with a minimum grade D"]);
 assert.equal(combined.preCorequisiteText, "CSBP221 with a minimum grade D");
 
+const orphanedRequirement = parseCoursePage(`
+  <div id="CSBP319"><h1>Data Structures (CSBP319)</h1><p>Lists.</p>
+  <h3>Credit Hours : 3</h3><h3>Prerequisites</h3><ul>
+  <li>CSBP219 with a minimum grade D</li><a href="https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=CSBP221">CSBP221</a> with a minimum grade D)</ul>
+  <h3>Course Learning Outcomes</h3></div>
+`, links[0], "2026-11-11");
+assert.deepEqual(orphanedRequirement.prerequisiteItems, [
+  "CSBP219 with a minimum grade D",
+  "CSBP221 with a minimum grade D)",
+], "visible course text outside malformed list items must be retained for fail-closed evaluation");
+
 const sparse = parseCoursePage('<div id="ENVE850"><h1>Special Topics (ENVE850)</h1></div>', {
   code: "ENVE850", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=ENVE850",
 }, "2026-11-11");

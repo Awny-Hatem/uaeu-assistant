@@ -69,14 +69,14 @@ function targetCode(question: string): string | null {
   return new Set(codes).size === 1 ? codes[0] : null;
 }
 
-export function answerOfficialCourseCatalogQuestion(question: string, locale: "en" | "ar") {
+export function answerOfficialCourseCatalogQuestion(question: string, locale: "en" | "ar", targetCourseCode?: string) {
   const normalized = question.toLowerCase();
   const asksCourseEligibility = asksPersonalPrerequisiteEligibility(question) ||
     /\b(?:eligible to (?:take|enroll|register)|meet (?:the )?prerequisites?)\b/u.test(normalized);
   const asksProgramDecision = /\b(?:will this count|counts? toward|degree requirement|major requirement|graduate|my degree|study plan|cohort|waiver|exception)\b/u.test(normalized);
   const asksCatalogFact = /\b(?:course|credits?|credit hours?|prerequisites?|corequisites?|pre\s*[/&-]?\s*co|description|what is|tell me about|catalog)\b/u.test(normalized);
   if ((!asksCatalogFact && !asksCourseEligibility) || asksProgramDecision) return null;
-  const code = targetCode(question);
+  const code = targetCourseCode ?? targetCode(question);
   if (!code) return null;
   const catalog = loadOfficialCourseCatalog();
   if (!catalog) return null;

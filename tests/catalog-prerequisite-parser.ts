@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { assessCatalogPrerequisiteConversation } from "@/lib/academic/catalog-prerequisite-assessment";
 import { parseCatalogPrerequisiteExpression } from "@/lib/academic/catalog-prerequisite-parser";
 import type { OfficialCourseRecord } from "@/lib/academic/course-catalog";
 import { loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
@@ -55,6 +56,24 @@ assert.deepEqual(parseCatalogPrerequisiteExpression(record({
     { type: "COURSE_CURRENT", courseCode: "CSBP221" },
   ],
 });
+assert.deepEqual(parseCatalogPrerequisiteExpression(record({
+  preCorequisiteItems: ["PETE290 with a minimum grade D or Pre/Co CHME300 with a minimum grade D"],
+})), {
+  op: "OR",
+  conditions: [
+    { op: "OR", conditions: [
+      { type: "COURSE_GRADE_AT_LEAST", courseCode: "PETE290", minimumGrade: "D" },
+      { type: "COURSE_CURRENT", courseCode: "PETE290" },
+    ] },
+    { op: "OR", conditions: [
+      { type: "COURSE_GRADE_AT_LEAST", courseCode: "CHME300", minimumGrade: "D" },
+      { type: "COURSE_CURRENT", courseCode: "CHME300" },
+    ] },
+  ],
+}, "an explicit Pre/Co marker inside the catalog's Pre/Co group preserves OR and concurrent enrollment semantics");
+assert.equal(parseCatalogPrerequisiteExpression(record({
+  preCorequisiteItems: ["PETE290 with a minimum grade D or Pre/Co"],
+})), null, "an incomplete Pre/Co alternative remains unsupported");
 
 assert.deepEqual(parseCatalogPrerequisiteExpression(record({
   corequisiteItems: ["STAT480 or STAT482"],
@@ -96,4 +115,31 @@ assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
 assert(parsed.length > 1298, "parsing explicit corequisite records should expand supported course-rule coverage");
+const chme330 = catalog.courses.find((course) => course.code === "CHME330");
+assert.ok(chme330);
+assert.equal(parseCatalogPrerequisiteExpression(chme330), null,
+  "the malformed official CHME330 page includes a visible orphan prerequisite and must remain unsupported");
+const incompleteCsbp340 = catalog.courses.find((course) => course.code === "CSBP340");
+assert.ok(incompleteCsbp340);
+assert.equal(parseCatalogPrerequisiteExpression(incompleteCsbp340), null,
+  "the official CSBP340 catalog row ends with a dangling OR and must remain unsupported");
+const multipleCourseCodes = assessCatalogPrerequisiteConversation([{ role: "user", content:
+  "Can I register for FINC210? I passed ACCT111 with grade D, and I'm currently taking ECON105." }]);
+assert.equal(multipleCourseCodes?.evaluation.status, "ELIGIBLE",
+  "explicit target-course language must remain identifiable when the student also names completed and current courses");
+const contextualFollowup = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "Can I register for FINC210?" },
+  { role: "assistant", content: "Share the relevant completed and current courses." },
+  { role: "user", content: "I passed ACCT111 with grade D, and I'm currently taking ECON105. Can I take that course?" },
+]);
+assert.equal(contextualFollowup?.evaluation.status, "ELIGIBLE",
+  "a clear follow-up reference must retain the previously named target while evaluating the newly supplied course history");
+const singleCodeFollowup = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "Can I register for FINC210?" },
+  { role: "assistant", content: "Share the relevant completed course." },
+  { role: "user", content: "I passed ACCT111 with grade D. Can I take that course?" },
+]);
+assert.equal(singleCodeFollowup?.rule.course.code, "FINC210",
+  "a single course code in the transcript must not overwrite an explicit prior target when the student refers to 'that course'");
+assert.equal(singleCodeFollowup?.evaluation.status, "ELIGIBLE");
 console.log(`Catalog prerequisite parser checks passed; safely parsed ${parsed.length}/${relationRecords.length} records with relation text; unsupported formats remain unstructured.`);
