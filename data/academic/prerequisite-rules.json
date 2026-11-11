@@ -28,6 +28,24 @@
   },
   {
     "schemaVersion": 1,
+    "id": "prereq-csbp319",
+    "version": "2026-11-11",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "CSBP319", "title": "Data Structures", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "verifiedAt": "2026-11-11",
+    "source": { "documentId": "02-csbp319-data-structures.md", "title": "UAEU Course Catalog — CSBP319 Data Structures", "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319" },
+    "expression": { "op": "AND", "conditions": [
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP219", "minimumGrade": "D" },
+      { "op": "OR", "conditions": [
+        { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP221", "minimumGrade": "D" },
+        { "type": "COURSE_CURRENT", "courseCode": "CSBP221" }
+      ] }
+    ] }
+  },
+  {
+    "schemaVersion": 1,
     "id": "prereq-csbp411",
     "version": "2026-09-29",
     "status": "approved",

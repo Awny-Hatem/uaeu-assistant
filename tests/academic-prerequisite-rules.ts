@@ -2,7 +2,28 @@ import assert from "node:assert/strict";
 import { assessPrerequisiteConversation, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
 
 const courseCodes = new Set(listModeledPrerequisiteCourses().map(({ code }) => code));
-assert.equal(courseCodes.size, 9);
+assert.equal(courseCodes.size, 10);
+
+const csbp319CompletedPrereqs = evaluatePrerequisite({ targetCourseCode: "CSBP319", snapshot: { completedCourses: [
+  { courseCode: "CSBP219", grade: "D" }, { courseCode: "CSBP221", grade: "D" },
+] } });
+assert.equal(csbp319CompletedPrereqs.status, "ELIGIBLE", "CSBP319 accepts both completed prerequisites at minimum grade D");
+assert.equal(csbp319CompletedPrereqs.source?.documentId, "02-csbp319-data-structures.md");
+
+const csbp319ConcurrentLab = evaluatePrerequisite({ targetCourseCode: "CSBP319", snapshot: {
+  completedCourses: [{ courseCode: "CSBP219", grade: "D" }], currentCourses: ["CSBP221"],
+} });
+assert.equal(csbp319ConcurrentLab.status, "ELIGIBLE", "CSBP221 may satisfy the catalog pre/corequisite while currently enrolled");
+
+const csbp319MissingLab = evaluatePrerequisite({ targetCourseCode: "CSBP319", snapshot: { completedCourses: [
+  { courseCode: "CSBP219", grade: "D" },
+] } });
+assert.equal(csbp319MissingLab.status, "UNDETERMINED", "missing CSBP221 information is not assumed satisfied");
+
+const csbp319FailedRequiredCourse = evaluatePrerequisite({ targetCourseCode: "CSBP319", snapshot: { completedCourses: [
+  { courseCode: "CSBP219", grade: "F" }, { courseCode: "CSBP221", grade: "A" },
+] } });
+assert.equal(csbp319FailedRequiredCourse.status, "NOT_ELIGIBLE", "passing CSBP221 does not override a failed CSBP219 prerequisite");
 
 const csbp320 = evaluatePrerequisite({ targetCourseCode: "CSBP320", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }] } });
 assert.equal(csbp320.status, "ELIGIBLE", "CSBP320 accepts the catalog-listed STAT210 minimum grade D");
@@ -91,4 +112,4 @@ assert.equal(notTakingCourse.evaluation.status, "UNDETERMINED", "a negated enrol
 
 assert.equal(assessPrerequisiteConversation([{ role: "user", content: "What can I do if I fail Data Structures twice?" }]), null, "failed-course policy questions are not misrouted as registration eligibility");
 
-console.log("Academic prerequisite rules passed: 9 approved records, grade thresholds, AND/OR, concurrency, snapshot dating/freshness, conversation assessment, provenance, unknowns, and deterministic results.");
+console.log("Academic prerequisite rules passed: 10 approved records, grade thresholds, AND/OR, concurrency, snapshot dating/freshness, conversation assessment, provenance, unknowns, and deterministic results.");
