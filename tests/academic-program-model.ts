@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 24, "twenty-four current or historical program records have structured evidence records");
+assert.equal(programs.length, 26, "twenty-six current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -161,6 +161,8 @@ for (const [programId, expectedBuckets] of [
   ["entrepreneurship", [21, 9, 9, 12, 30, 30, 9]],
   ["marketing", [21, 9, 9, 12, 30, 30, 9]],
   ["statistics-and-data-analytics", [21, 30, 12, 40, 15, 3]],
+  ["architectural-engineering", [21, 35, 65, 2, 9]],
+  ["communication-engineering", [21, 35, 62, 2, 12]],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled, `${programId} has a current official curriculum model`);
@@ -184,7 +186,7 @@ for (const programId of ["early-childhood-education", "health-and-physical-educa
   assert.equal(cohort2022Model?.curriculum.requirements.length, 0, "older plans expose only verified totals when their detailed rows are not structured");
 }
 assert.equal(getProgramCurriculum("finance-and-banking", 2027), null, "a current page without an established cohort mapping is not applied to an individual cohort");
-for (const programId of ["economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics"]) {
+for (const programId of ["economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics", "architectural-engineering", "communication-engineering"]) {
   const currentPage = getProgramCurriculum(programId);
   assert.ok(currentPage?.curriculum.cohortMapping === "unresolved", `${programId} current-page requirements are not silently assigned to a cohort`);
   assert.ok(currentPage.curriculum.requirements.length > 0, `${programId} current-page model supports general requirement questions`);
@@ -202,6 +204,14 @@ assert.deepEqual(getProgramCurriculum("marketing", 2025)?.curriculum.requirement
 assert.equal(getProgramCurriculum("statistics-and-data-analytics", 2024)?.curriculum.totalCredits, 121);
 assert.equal(getProgramCurriculum("statistics-and-data-analytics", 2022)?.curriculum.totalCredits, 121);
 assert.equal(getProgramCurriculum("statistics-and-data-analytics", 2025), null, "current Statistics page details are not silently mapped onto an unsupported cohort");
+assert.equal(getProgramCurriculum("architectural-engineering", 2023)?.curriculum.totalCredits, 132);
+assert.equal(getProgramCurriculum("architectural-engineering", 2025)?.curriculum.totalCredits, 132);
+assert.equal(getProgramCurriculum("architectural-engineering", 2022)?.curriculum.totalCredits, 147);
+assert.equal(getProgramCurriculum("communication-engineering", 2023)?.curriculum.totalCredits, 132);
+assert.equal(getProgramCurriculum("communication-engineering", 2025)?.curriculum.totalCredits, 132);
+assert.equal(getProgramCurriculum("communication-engineering", 2022)?.curriculum.totalCredits, 147);
+assert.deepEqual(getProgramCurriculum("architectural-engineering", 2025)?.curriculum.requirements, [], "Architectural Engineering cohort plan confirms the total but not the current page's course mapping");
+assert.deepEqual(getProgramCurriculum("communication-engineering", 2025)?.curriculum.requirements, [], "Communication Engineering cohort plan confirms the total but not the current page's course mapping");
 const statsRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Statistics and Data Analytics?" }]);
 assert.ok(statsRequirements?.curriculum);
 const statsRequirementsText = renderProgramRequirementsAssessment(statsRequirements, "en");
@@ -295,7 +305,7 @@ assert.ok(hpeCurriculum);
 const hpeInternship = hpeCurriculum.curriculum.requirements.find((item) => item.id === "hpe-student-teaching");
 assert.ok(hpeInternship?.type === "INTERNSHIP");
 assert.equal(hpeInternship.credits, 9);
-for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education", "economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics"]) {
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education", "economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics", "architectural-engineering", "communication-engineering"]) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
   for (const requirement of modeled.curriculum.requirements) {
@@ -304,7 +314,7 @@ for (const programId of ["cybersecurity", "data-science-and-artificial-intellige
       : requirement.type === "INTERNSHIP" ? [requirement.courseCode]
         : requirement.type === "PATHWAY_CHOICE" ? requirement.options.flatMap(({ courseCodes }) => courseCodes) : [];
     for (const code of codes) {
-      const sourceListedZeroCreditInternship = programId === "electrical-engineering" && code === "ELEC490";
+      const sourceListedZeroCreditInternship = (programId === "electrical-engineering" || programId === "communication-engineering") && code === "ELEC490";
       assert.ok(officialCourseCodes.has(code) || sourceListedZeroCreditInternship,
         `${programId} requirement ${requirement.id} references catalog course ${code} or an explicitly disclosed program-page-only row`);
     }
