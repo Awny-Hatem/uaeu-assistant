@@ -522,6 +522,13 @@ async function main() {
     "CSBP340's malformed catalog prerequisite must be disclosed instead of presented as a verified OR rule");
   assert.doesNotMatch(String(courseQuestion.payload.content), /one accepted catalog alternative/i);
 
+  const naturalCoursePrerequisite = await ask("What must I complete before csbp 219?", "203.0.113.239");
+  assert.equal(naturalCoursePrerequisite.payload.stateLabel, "v3_official_course_catalog_lookup");
+  assert.equal(naturalCoursePrerequisite.payload.resolutionState, "VERIFIED");
+  assert.match(String(naturalCoursePrerequisite.payload.content), /CSBP119 with a minimum grade D/i);
+  assert.match(JSON.stringify(naturalCoursePrerequisite.payload.citations), /course_2968\.shtml\?id=CSBP219/);
+  assert.equal(naturalCoursePrerequisite.payload.provider, undefined, "a direct catalog fact must not invoke the language model");
+
   console.log("V3 route checks passed: selector bypass, deadline separation, repeat policy, and structured prerequisite and program models.");
 }
 

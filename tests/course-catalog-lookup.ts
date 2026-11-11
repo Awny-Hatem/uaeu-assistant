@@ -13,6 +13,12 @@ assert(prerequisites);
 assert.match(prerequisites.content, /Prerequisites as stated in the catalog: CSBP219 with a minimum grade D/u);
 assert.match(prerequisites.content, /Pre\/Co requirement as labeled by the catalog: CSBP221 with a minimum grade D/u);
 
+const completeBefore = answerOfficialCourseCatalogQuestion("What must I complete before csbp 219?", "en");
+assert(completeBefore, "natural-language 'complete before <course code>' questions use the catalog record");
+assert.equal(completeBefore.resolutionState, "VERIFIED");
+assert.match(completeBefore.content, /CSBP119 with a minimum grade D/u);
+assert.equal(completeBefore.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219");
+
 const malformedPrerequisites = answerOfficialCourseCatalogQuestion("What are the prerequisites for CSBP340?", "en");
 assert(malformedPrerequisites);
 assert.equal(malformedPrerequisites.resolutionState, "UNSUPPORTED");
