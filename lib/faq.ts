@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import type { Locale } from "@/lib/language";
 import type { Citation } from "@/lib/prototype-types";
-import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope } from "@/lib/query-understanding";
+import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope, type FactIntent } from "@/lib/query-understanding";
 
 export type AnswerDisposition =
   | "answer"
@@ -18,7 +18,7 @@ export type FaqEntry = {
     type: "policy-scope";
     policyDomain: string;
     targetProgramId: string;
-    intents: string[];
+    intents: FactIntent[];
   };
   questions: string[];
   matchPhrases?: string[];

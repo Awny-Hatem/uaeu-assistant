@@ -908,7 +908,7 @@ export async function POST(req: Request) {
       stateLabel: "v3_reviewed_policy_applicability",
       resolutionState: "CONDITIONAL",
       disposition: "clarify",
-      topic: resolution.subject.key,
+      topic: resolution.subject?.key,
       evidenceIds: [`answer:${reviewedApplicabilityEntry.id}`],
       citations: uniqueCitations(citationsForFaq(reviewedApplicabilityEntry)),
       communications,
