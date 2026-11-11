@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { boundOutgoingMessages, ConversationOwnership, dailyUsage, sanitizeAnswerMetadata, uaeDateKey, type ConversationMessage } from "../lib/chat-contract";
+import { boundEvaluationMessages } from "../scripts/evaluation-request-contract.mjs";
 import { passwordError } from "../lib/auth-validation";
 import { runtimeContract } from "../lib/runtime-contract";
 import { getQuotaPlan } from "../lib/access";
@@ -52,6 +53,8 @@ async function main() {
         }));
         messages[count - 1].content = "What are the prerequisites for the first course I asked about?";
         const bounded = boundOutgoingMessages(messages);
+        assert.deepEqual(boundEvaluationMessages(messages), bounded,
+          "the HTTP evaluation harness sends the same bounded context as the browser chat");
         assert.ok(bounded.length <= 30);
         assert.ok(Buffer.byteLength(JSON.stringify({ locale: "ar", messages: bounded }), "utf8") < 96 * 1024);
         assert.match(bounded[0].content, /CSBP319/);
@@ -61,11 +64,14 @@ async function main() {
   });
 
   await check("large generated answer cannot poison the next request", () => {
-    const bounded = boundOutgoingMessages([
+    const thread = [
       { role: "user", content: "Tell me about housing" },
       { role: "assistant", content: "x".repeat(12000) },
       { role: "user", content: "How much does it cost?" },
-    ]);
+    ] satisfies ConversationMessage[];
+    const bounded = boundOutgoingMessages(thread);
+    assert.deepEqual(boundEvaluationMessages(thread), bounded,
+      "the benchmark applies the same assistant-history truncation as the UI");
     assert.ok(bounded.every((message) => message.content.length <= 6000));
     assert.throws(() => boundOutgoingMessages([{ role: "user", content: "x".repeat(6001) }]));
   });

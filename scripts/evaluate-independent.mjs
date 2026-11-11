@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { execFileSync } from 'node:child_process';
 import { selectEvaluationCases, sourceSnapshotHash, endpointIdentity, compareEndpointIdentity, captureResponseBody } from './evaluation-integrity.mjs';
+import { boundEvaluationMessages } from './evaluation-request-contract.mjs';
 
 // This runner uses the actual HTTP API. It never enables mock mode, changes
 // fixtures to match answers, spoofs an address, or interprets HTTP 200 as truth.
@@ -75,11 +76,12 @@ for (const group of ordered) {
     let responseCapture = null;
     let status = 0;
     let error = null;
+    const requestMessages = boundEvaluationMessages(messages);
     for (let attempt = 0; attempt < 3; attempt++) {
       try {
         const response = await fetch(`${baseUrl}/api/chat`, {
           method: 'POST', headers: { 'Content-Type': 'application/json; charset=utf-8' },
-          body: JSON.stringify({ locale: 'auto', messages }), signal: AbortSignal.timeout(90000),
+          body: JSON.stringify({ locale: 'auto', messages: requestMessages }), signal: AbortSignal.timeout(90000),
         });
         status = response.status;
         const text = await response.text();
@@ -114,7 +116,7 @@ for (const group of ordered) {
     }
     run.results.push({
       ...c, executionNumber: run.results.length + 1, askedAt: new Date(started).toISOString(),
-      requestMessages: structuredClone(messages), status, durationMs: Date.now() - started,
+      requestMessages: structuredClone(requestMessages), status, durationMs: Date.now() - started,
       attempts, payload, responseCapture, error, automatedIssues,
       review: { status: 'pending', note: 'Factual correctness and source support require independent review.' },
     });
