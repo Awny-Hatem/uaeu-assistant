@@ -193,6 +193,15 @@ const incompleteCsbp340 = catalog.courses.find((course) => course.code === "CSBP
 assert.ok(incompleteCsbp340);
 assert.equal(parseCatalogPrerequisiteExpression(incompleteCsbp340), null,
   "the official CSBP340 catalog row ends with a dangling OR and must remain unsupported");
+const unresolvedPrerequisiteSources = [
+  { code: "BMSC711", reason: "the official BMSC711 prerequisite list ends with a dangling OR" },
+  { code: "SWK200", reason: "the SWK200 source includes an unmodeled benchmark condition rather than a recognized course code" },
+];
+for (const { code, reason } of unresolvedPrerequisiteSources) {
+  const course = catalog.courses.find((candidate) => candidate.code === code);
+  assert.ok(course, `${code} remains in the official catalog snapshot`);
+  assert.equal(parseCatalogPrerequisiteExpression(course), null, `${reason}; it must remain unsupported`);
+}
 const aero490 = catalog.courses.find((course) => course.code === "AERO490");
 assert.ok(aero490);
 assert.deepEqual(parseCatalogPrerequisiteExpression(aero490), {
