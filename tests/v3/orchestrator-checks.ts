@@ -76,6 +76,9 @@ assert.equal(unspecifiedFailedCourse.entities.courses, undefined, "a course titl
 assert.equal(unspecifiedFailedCourse.needs.studentData, false, "general next-step guidance does not require access to a private student record");
 assert.ok(unspecifiedFailedCourse.missingContext.some((item) => item.includes("exact course code or degree program")));
 assert.ok(unspecifiedFailedCourse.requestedFacts.includes("undergraduate failed course repeat policy"));
+const failedTwice = plan("What can I do if I fail Data Structures twice?");
+assert.ok(failedTwice.requestedFacts.includes("undergraduate failed course repeat policy"), "ordinary failure phrasing still retrieves the general repeat rule");
+assert.ok(failedTwice.missingContext.some((item) => item.includes("exact course code or degree program")), "course-specific decisions still require program identity");
 
 assert.equal(plan("Submit my course withdrawal.").mode, "UNIVERSITY_TRANSACTION");
 assert.equal(plan("Explain recursion.").mode, "GENERAL_EXPLANATION");

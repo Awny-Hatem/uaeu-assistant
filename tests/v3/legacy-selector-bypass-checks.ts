@@ -47,6 +47,11 @@ async function main() {
   assert.ok(["UNSUPPORTED", "CONDITIONAL"].includes(String(failedCourse.payload.resolutionState)), "mock provider output is not an answer-quality evaluation");
   assert.doesNotMatch(String(failedCourse.payload.content), /CSBP319/, "V3 must not apply a guessed course identity");
 
+  const failedTwice = await ask("What can I do if I fail Data Structures twice?", "203.0.113.225");
+  assert.equal(failedTwice.status, 200);
+  assert.notEqual(failedTwice.payload.stateLabel, "v3_missing_context", "a code must not block the general reviewed repeat policy");
+  assert.doesNotMatch(String(failedTwice.payload.content), /CSBP319/, "repeat policy guidance must not assume a course code");
+
   console.log("V3 selector-bypass route checks passed: calendar follow-up, deadline separation, and no legacy canonical or inferred-course answer.");
 }
 

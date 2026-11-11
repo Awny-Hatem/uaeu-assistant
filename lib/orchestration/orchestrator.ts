@@ -98,7 +98,8 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   // Personal phrasing does not itself require a portal record. Ask for
   // authenticated access only when the answer depends on private account data.
   const requiresPersonalRecord = /\b(?:my (?:gpa|cgpa|record|transcript|degree audit|completed courses|holds?|registration status)|am i eligible based on my record|can i register right now|can i graduate now|what is my academic standing)\b/i.test(normalizedRequest);
-  const asksRepeatPolicy = mode === "COMPLEX_SCENARIO" && /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b/i.test(normalizedRequest);
+  const asksRepeatPolicy = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b/i.test(normalizedRequest) &&
+    /\b(?:course|courses|data structures?)\b|\b[A-Z]{2,5}\d{3,4}\b/i.test(normalizedRequest);
   if (requiresPersonalRecord && !input.authenticatedScopes?.includes("student-record:read")) {
     missingContext.push("authenticated access to your student record for a personal eligibility decision");
   }

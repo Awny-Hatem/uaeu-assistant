@@ -891,9 +891,11 @@ export async function POST(req: Request) {
   }
   let v3EvidenceRows: EvidenceRow[] | undefined;
   if (v3EvidenceMode && executionPlan) {
+    const repeatPolicyCanBeAnsweredGenerally = executionPlan.requestedFacts.includes("undergraduate failed course repeat policy");
     const blockingMissingContext = executionPlan.mode === "COMPLEX_SCENARIO"
       ? executionPlan.missingContext.filter((item) => item.startsWith("authenticated access"))
-      : executionPlan.missingContext;
+      : executionPlan.missingContext.filter((item) =>
+        !(repeatPolicyCanBeAnsweredGenerally && item.includes("exact course code or degree program")));
     if (blockingMissingContext.length) {
       const content = locale === "ar"
         ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${blockingMissingContext.join("؛ ")}.`
