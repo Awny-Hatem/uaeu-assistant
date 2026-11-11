@@ -50,6 +50,15 @@ assert.match(renderProgramRequirementsAssessment(spaceDegree!, "en"), /CSBP478/)
 const physicsTracks = assessProgramRequirementsConversation([{ role: "user", content: "What are the Physics concentration requirements?" }]);
 assert.equal(physicsTracks?.programId, "physics");
 assert.match(renderProgramRequirementsAssessment(physicsTracks!, "en"), /General Physics/);
+const chemistryRequiredCourses = assessProgramRequirementsConversation([{ role: "user", content: "What are the required Chemistry major courses?" }]);
+assert.equal(chemistryRequiredCourses?.programId, "chemistry");
+assert.match(renderProgramRequirementsAssessment(chemistryRequiredCourses!, "en"), /CHEM331/);
+const geoscienceElectiveChoices = assessProgramRequirementsConversation([{ role: "user", content: "What Geosciences elective choices are listed?" }]);
+assert.equal(geoscienceElectiveChoices?.programId, "geosciences");
+assert.match(renderProgramRequirementsAssessment(geoscienceElectiveChoices!, "en"), /GEOL488/);
+const mdsDegreeRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What are the Mathematics of Data Science degree requirements?" }]);
+assert.equal(mdsDegreeRequirements?.programId, "mathematics-of-data-science");
+assert.match(renderProgramRequirementsAssessment(mdsDegreeRequirements!, "en"), /MATH497/);
 
 assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },

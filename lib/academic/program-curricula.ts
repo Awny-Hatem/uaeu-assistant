@@ -373,7 +373,9 @@ export function assessProgramCreditConversation(
 
 function asksProgramCourseRequirements(text: string): boolean {
   if (/\b[A-Z]{2,5}\d{3,4}\b/i.test(text)) return false;
-  return /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
+  return /\b(?:degree|course|program|major)\s+requirements?\b/i.test(text) ||
+    /\b(?:what|which)\b.{0,100}\b(?:courses?|classes?|electives?|concentrations?)\b/i.test(text) ||
+    /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
     /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text) ||
     /\b(?:electives?|concentrations?|credit requirements?|prerequisites?)\b.{0,60}\brequirements?\b/i.test(text);
 }
