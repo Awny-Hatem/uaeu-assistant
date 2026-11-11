@@ -5,10 +5,11 @@ export type CreditBucket = { id: string; name: string; credits: number };
 export type PathwayOption = {
   id: string;
   name: string;
-  type: "REQUIRED_COURSE_SET" | "ELECTIVE_GROUP";
+  type: "REQUIRED_COURSE_SET" | "ELECTIVE_GROUP" | "COMPOSITE";
   credits: number;
   chooseCount?: number;
   courseCodes: string[];
+  requirements?: ProgramRequirement[];
   selectionNote?: string;
 };
 export type ProgramRequirement =
@@ -74,12 +75,16 @@ function isRequirement(value: unknown): value is ProgramRequirement {
   }
   if (value.type === "PATHWAY_CHOICE") {
     if (typeof value.name !== "string" || !Array.isArray(value.options) || value.options.length < 2) return false;
-    const optionsValid = value.options.every((option) => isRecord(option) && typeof option.id === "string" && Boolean(option.id) &&
-      typeof option.name === "string" && (option.type === "REQUIRED_COURSE_SET" || option.type === "ELECTIVE_GROUP") &&
-      typeof option.credits === "number" && option.credits > 0 && isCourseCodes(option.courseCodes) &&
-      (option.type === "REQUIRED_COURSE_SET" ? option.chooseCount === undefined : Number.isInteger(option.chooseCount) &&
-        Number(option.chooseCount) > 0 && Number(option.chooseCount) <= option.courseCodes.length) &&
-      (option.selectionNote === undefined || typeof option.selectionNote === "string"));
+    const optionsValid = value.options.every((option) => {
+      if (!isRecord(option) || typeof option.id !== "string" || !option.id || typeof option.name !== "string" ||
+          typeof option.credits !== "number" || option.credits <= 0 ||
+          (option.selectionNote !== undefined && typeof option.selectionNote !== "string")) return false;
+      if (option.type === "COMPOSITE") return Array.isArray(option.requirements) && option.requirements.length > 0 && option.requirements.every(isRequirement) &&
+        Array.isArray(option.courseCodes) && option.courseCodes.every((code) => typeof code === "string" && COURSE_CODE.test(code));
+      if (option.type === "REQUIRED_COURSE_SET") return isCourseCodes(option.courseCodes) && option.chooseCount === undefined && option.requirements === undefined;
+      return option.type === "ELECTIVE_GROUP" && isCourseCodes(option.courseCodes) && option.requirements === undefined && Number.isInteger(option.chooseCount) &&
+        Number(option.chooseCount) > 0 && Number(option.chooseCount) <= option.courseCodes.length;
+    });
     return optionsValid && new Set(value.options.map((option) => (option as Record<string, unknown>).id)).size === value.options.length;
   }
   if (value.type === "INTERNSHIP") {
@@ -166,6 +171,13 @@ export type ProgramCreditAssessment = {
 };
 
 export type ProgramRequirementsAssessment = ProgramCreditAssessment;
+
+function pathwayCourseCodes(option: PathwayOption): string[] {
+  if (option.type !== "COMPOSITE" || !option.requirements) return option.courseCodes;
+  return [...option.courseCodes, ...option.requirements.flatMap((requirement) => requirement.type === "PATHWAY_CHOICE"
+    ? requirement.options.flatMap(pathwayCourseCodes)
+    : "courseCodes" in requirement ? requirement.courseCodes : requirement.type === "INTERNSHIP" ? [requirement.courseCode] : [])];
+}
 
 export type ProgramCourseSubstitutionAssessment = ProgramCreditAssessment & {
   replacement: { code: string; title: string };
@@ -418,7 +430,7 @@ export function assessProgramCourseSubstitutionConversation(
   const selected = getProgramCurriculum(programId, cohortYear);
   const curriculum = selected?.curriculum ?? null;
   const pathChoice = curriculum?.requirements.find((item): item is Extract<ProgramRequirement, { type: "PATHWAY_CHOICE" }> => item.type === "PATHWAY_CHOICE");
-  const sharedOption = pathChoice?.options.find((option) => option.courseCodes.includes(replacementCourse.code) && option.courseCodes.includes(replacedCourse.code)) ??
+  const sharedOption = pathChoice?.options.find((option) => pathwayCourseCodes(option).includes(replacementCourse.code) && pathwayCourseCodes(option).includes(replacedCourse.code)) ??
     curriculum?.requirements.find((item): item is Extract<ProgramRequirement, { type: "ELECTIVE_GROUP" }> =>
       item.type === "ELECTIVE_GROUP" && item.courseCodes.includes(replacementCourse.code) && item.courseCodes.includes(replacedCourse.code));
   return {
@@ -508,9 +520,21 @@ export function renderProgramRequirementsAssessment(
       return `**${requirement.name}:** ${requirement.credits} credits. ${requirement.ruleNote}`;
     }
     if (requirement.type === "PATHWAY_CHOICE") {
-      const options = requirement.options.map((option) => option.type === "ELECTIVE_GROUP"
-        ? `- ${option.name}: choose ${option.chooseCount} courses (${option.credits} credits) from ${option.courseCodes.join(", ")}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`
-        : `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).${option.selectionNote ? ` ${option.selectionNote}` : ""}`).join("\n");
+      const options = requirement.options.map((option) => {
+        if (option.type === "COMPOSITE" && option.requirements) {
+          const nested = option.requirements.map((child) => {
+            if (child.type === "REQUIRED_COURSE_SET") return `${child.name}: ${child.courseCodes.join(", ")}${child.ruleNote ? `. ${child.ruleNote}` : ""}`;
+            if (child.type === "ELECTIVE_GROUP") return `${child.name}: choose ${child.chooseCount} (${child.credits} credits) from ${child.courseCodes.join(", ")}.${child.selectionNote ? ` ${child.selectionNote}` : ""}`;
+            if (child.type === "ONE_OF_GROUP") return `${child.name}: choose ${child.chooseCount} from ${child.courseCodes.join(" or ")}.`;
+            if (child.type === "CREDIT_BLOCK") return `${child.name}: ${child.credits} credits. ${child.ruleNote}`;
+            if (child.type === "INTERNSHIP") return `${child.name ?? "Internship"}: ${child.courseCode}, ${child.credits} credits.`;
+            return `${child.name}: choose one of ${child.options.map(({ name }) => name).join(" or ")}.`;
+          }).join("; ");
+          return `- ${option.name} (${option.credits} credits): ${nested}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
+        }
+        if (option.type === "ELECTIVE_GROUP") return `- ${option.name}: choose ${option.chooseCount} courses (${option.credits} credits) from ${option.courseCodes.join(", ")}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
+        return `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
+      }).join("\n");
       return `**${requirement.name}:** choose one option:\n${options}`;
     }
     return `**${requirement.name ?? "Internship requirement"}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;

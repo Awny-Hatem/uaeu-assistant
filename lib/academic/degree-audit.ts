@@ -153,16 +153,19 @@ function summarizeRequirement(requirement: ProgramRequirement, snapshot: Academi
   }
 
   const options = requirement.options.map((option) => {
+    if (option.type === "COMPOSITE") return `${option.name}: the structured model contains nested course rules; verify the selected plan in Degree Works before treating this pathway as complete`;
     const summary = option.type === "REQUIRED_COURSE_SET"
       ? summarizeRequirement({ type: "REQUIRED_COURSE_SET", id: option.id, name: option.name, courseCodes: option.courseCodes }, snapshot)
       : summarizeCourseChoice(option.name, "ELECTIVE_GROUP", option.courseCodes, option.chooseCount ?? option.courseCodes.length, snapshot, option.credits);
     return `${option.name}: ${summary.completedCount ?? 0}/${summary.requiredCount ?? option.courseCodes.length} recorded complete`;
   });
   const completeOptions = requirement.options.filter((option) => {
+    if (option.type === "COMPOSITE") return false;
     if (option.type === "REQUIRED_COURSE_SET") return option.courseCodes.every((code) => statusForCourse(code, snapshot) === "COMPLETE");
     return option.courseCodes.filter((code) => statusForCourse(code, snapshot) === "COMPLETE").length >= (option.chooseCount ?? option.courseCodes.length);
   });
   const inProgressOption = requirement.options.some((option) => {
+    if (option.type === "COMPOSITE") return false;
     const completed = option.courseCodes.filter((code) => statusForCourse(code, snapshot) === "COMPLETE").length;
     const current = option.courseCodes.filter((code) => statusForCourse(code, snapshot) === "IN_PROGRESS").length;
     const required = option.type === "ELECTIVE_GROUP" ? (option.chooseCount ?? option.courseCodes.length) : option.courseCodes.length;
@@ -171,7 +174,9 @@ function summarizeRequirement(requirement: ProgramRequirement, snapshot: Academi
   return {
     name: requirement.name,
     requirementType: requirement.type,
-    status: completeOptions.length ? "COMPLETE" : inProgressOption ? "IN_PROGRESS" : "PATHWAY_SELECTION_REQUIRED",
+    status: requirement.options.some((option) => option.type === "COMPOSITE")
+      ? "NOT_ASSESSED"
+      : completeOptions.length ? "COMPLETE" : inProgressOption ? "IN_PROGRESS" : "PATHWAY_SELECTION_REQUIRED",
     notes: [...options, ...requirement.options.flatMap((option) => option.selectionNote ? [option.selectionNote] : [])],
   };
 }

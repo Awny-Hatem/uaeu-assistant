@@ -1448,5 +1448,458 @@
         "limitations": ["The linked model plan identifies a 120-credit plan from Fall 2025 onwards. It labels ENTR415 as an internship while the current page calls it an entrepreneurial venture; this cohort record verifies the total only and does not combine the course descriptions."]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "marketing",
+    "name": "Bachelor of Business Administration in Marketing",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      {
+        "documentId": "53-marketing-curriculum.md",
+        "title": "UAEU BBA Marketing Published Degree Requirements",
+        "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-business-administration-in-marketing.shtml",
+        "lastVerified": "2026-11-11"
+      },
+      {
+        "documentId": "53-marketing-curriculum.md",
+        "title": "UAEU BBA Marketing 2025-2026 Model Plan",
+        "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_mktg_study_plan.pdf",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "marketing-current-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; entry-cohort applicability unresolved",
+        "cohortMapping": "unresolved",
+        "effectiveFrom": "2026-11-06",
+        "totalCredits": 120,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General Education",
+            "credits": 21
+          },
+          {
+            "id": "college-requirements",
+            "name": "College requirements",
+            "credits": 9
+          },
+          {
+            "id": "research-skills",
+            "name": "Research skills",
+            "credits": 9
+          },
+          {
+            "id": "learning-in-action",
+            "name": "Learning in Action",
+            "credits": 12
+          },
+          {
+            "id": "major-core",
+            "name": "Major core",
+            "credits": 30
+          },
+          {
+            "id": "supporting-requirements",
+            "name": "Supporting requirements",
+            "credits": 30
+          },
+          {
+            "id": "major-electives",
+            "name": "Major electives",
+            "credits": 9
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "marketing-general-education",
+            "name": "General Education",
+            "credits": 21,
+            "ruleNote": "The degree page does not enumerate a single fixed course set for these credits."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "marketing-college",
+            "name": "College requirements",
+            "courseCodes": [
+              "BANA200",
+              "MGMT201",
+              "MKTG205"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "marketing-research",
+            "name": "Research skills",
+            "courseCodes": [
+              "STAT102",
+              "STAT202",
+              "GBUS300"
+            ]
+          },
+          {
+            "type": "PATHWAY_CHOICE",
+            "id": "marketing-learning-in-action",
+            "name": "Learning in Action (12 credits)",
+            "options": [
+              {
+                "id": "marketing-entr415",
+                "name": "ENTR415",
+                "type": "REQUIRED_COURSE_SET",
+                "credits": 12,
+                "courseCodes": [
+                  "ENTR415"
+                ],
+                "selectionNote": "The current page describes ENTR415 as an entrepreneurial venture."
+              },
+              {
+                "id": "marketing-gbus460",
+                "name": "GBUS460 internship",
+                "type": "REQUIRED_COURSE_SET",
+                "credits": 12,
+                "courseCodes": [
+                  "GBUS460"
+                ],
+                "selectionNote": "The current page says the internship is in the final semester and does not allow other courses during the internship."
+              }
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "marketing-major-core",
+            "name": "Marketing major core",
+            "courseCodes": [
+              "MKTG210",
+              "MKTG300",
+              "MKTG305",
+              "MKTG310",
+              "MKTG360",
+              "MKTG405",
+              "MKTG350",
+              "MKTG410",
+              "MKTG420"
+            ]
+          },
+          {
+            "type": "ONE_OF_GROUP",
+            "id": "marketing-core-choice",
+            "name": "Major core choice",
+            "chooseCount": 1,
+            "courseCodes": [
+              "ENTR310",
+              "BANA310"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "marketing-supporting",
+            "name": "Supporting requirements",
+            "courseCodes": [
+              "ACCT111",
+              "ACCT120",
+              "ECON105",
+              "ECON125",
+              "FINC210",
+              "MATH115",
+              "SCML150",
+              "SCML201",
+              "PRVT265",
+              "MGMT415"
+            ]
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "marketing-major-electives",
+            "name": "Major electives",
+            "chooseCount": 3,
+            "credits": 9,
+            "courseCodes": [
+              "MKTG355",
+              "MKTG365",
+              "MKTG400",
+              "SCML300",
+              "SCML340",
+              "HRMD330",
+              "HRMD340"
+            ]
+          }
+        ],
+        "limitations": [
+          "The current page groups SCML201 as supporting and permits either ENTR310 or BANA310; the linked 2025-2026 plan classifies some courses differently and does not show both choice alternatives. Current-page requirements are not assigned to a student cohort.",
+          "This is a published degree model, not a personal audit of completed credits, prerequisites, offered sections, or remaining requirements."
+        ]
+      },
+      {
+        "id": "marketing-2025-plan-total-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts covered by the model plan; confirm assigned plan",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": [
+          "The linked plan confirms 120 total credits. Because course groupings differ from the current degree page, this cohort record reports the total only."
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "statistics-and-data-analytics",
+    "name": "Bachelor of Science in Statistics and Data Analytics",
+    "degreeLevel": "undergraduate",
+    "college": "College of Business and Economics",
+    "sources": [
+      {
+        "documentId": "54-statistics-and-data-analytics-curriculum.md",
+        "title": "UAEU BSc Statistics and Data Analytics Published Degree Requirements",
+        "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-statistics-and-data-analytics.shtml",
+        "lastVerified": "2026-11-11"
+      },
+      {
+        "documentId": "54-statistics-and-data-analytics-curriculum.md",
+        "title": "UAEU Statistics and Data Analytics Study Plans",
+        "url": "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_statistics_and_data_analytics_study_plan.pdf",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "statistics-data-analytics-current-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; entry-cohort applicability unresolved",
+        "cohortMapping": "unresolved",
+        "effectiveFrom": "2026-11-09",
+        "totalCredits": 121,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General Education",
+            "credits": 21
+          },
+          {
+            "id": "college-requirements",
+            "name": "College requirements",
+            "credits": 30
+          },
+          {
+            "id": "supporting-requirements",
+            "name": "Supporting requirements",
+            "credits": 12
+          },
+          {
+            "id": "major-requirements",
+            "name": "Major requirements",
+            "credits": 40
+          },
+          {
+            "id": "concentration",
+            "name": "Concentration",
+            "credits": 15
+          },
+          {
+            "id": "free-elective",
+            "name": "Free elective",
+            "credits": 3
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "statistics-general-education",
+            "name": "General Education",
+            "credits": 21,
+            "ruleNote": "The degree page does not enumerate a single fixed course set for these credits."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "statistics-college-business",
+            "name": "Business essentials",
+            "courseCodes": [
+              "BANA200",
+              "MGMT201",
+              "MKTG205"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "statistics-research-skills",
+            "name": "Research skills",
+            "courseCodes": [
+              "STAT102",
+              "STAT202",
+              "GBUS300"
+            ]
+          },
+          {
+            "type": "PATHWAY_CHOICE",
+            "id": "statistics-learning-in-action",
+            "name": "Learning in Action (12 credits)",
+            "options": [
+              {
+                "id": "statistics-entr415",
+                "name": "ENTR415",
+                "type": "REQUIRED_COURSE_SET",
+                "credits": 12,
+                "courseCodes": [
+                  "ENTR415"
+                ]
+              },
+              {
+                "id": "statistics-gbus460",
+                "name": "GBUS460 internship",
+                "type": "REQUIRED_COURSE_SET",
+                "credits": 12,
+                "courseCodes": [
+                  "GBUS460"
+                ],
+                "selectionNote": "The page describes the internship as a final-semester activity with no other courses during the internship."
+              }
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "statistics-supporting",
+            "name": "Supporting requirements",
+            "courseCodes": [
+              "BANA220",
+              "MATH105",
+              "ECON105",
+              "CSBP119"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "statistics-major",
+            "name": "Major requirements",
+            "courseCodes": [
+              "BANA250",
+              "BANA310",
+              "MATH110",
+              "MATH140",
+              "STAT230",
+              "STAT240",
+              "STAT300",
+              "STAT330",
+              "STAT360",
+              "STAT380",
+              "STAT400",
+              "STAT470",
+              "STAT430",
+              "STAT488"
+            ]
+          },
+          {
+            "type": "PATHWAY_CHOICE",
+            "id": "statistics-concentration",
+            "name": "Concentration (15 credits)",
+            "options": [
+              {
+                "id": "statistics-concentration-option",
+                "name": "Statistics concentration",
+              "type": "COMPOSITE",
+              "credits": 15,
+              "courseCodes": ["STAT250", "STAT370", "STAT410", "STAT475"],
+                "requirements": [
+                  {
+                    "type": "CREDIT_BLOCK",
+                    "id": "statistics-concentration-core",
+                    "name": "Required concentration courses",
+                    "credits": 9,
+                    "ruleNote": "The published summary establishes the required-credit block; use the assigned plan for course names."
+                  },
+                  {
+                    "type": "ELECTIVE_GROUP",
+                    "id": "statistics-concentration-electives",
+                    "name": "Statistics concentration electives",
+                    "chooseCount": 2,
+                    "credits": 6,
+                    "courseCodes": [
+                      "STAT250",
+                      "STAT370",
+                      "STAT410",
+                      "STAT475"
+                    ]
+                  }
+                ]
+              },
+              {
+                "id": "analytics-concentration-option",
+                "name": "Analytics for Business concentration",
+              "type": "COMPOSITE",
+              "credits": 15,
+              "courseCodes": ["BANA410", "BANA420", "BANA430"],
+                "requirements": [
+                  {
+                    "type": "CREDIT_BLOCK",
+                    "id": "analytics-concentration-core",
+                    "name": "Required concentration courses",
+                    "credits": 9,
+                    "ruleNote": "The published summary establishes the required-credit block; use the assigned plan for course names."
+                  },
+                  {
+                    "type": "ELECTIVE_GROUP",
+                    "id": "analytics-concentration-electives",
+                    "name": "Analytics for Business concentration electives",
+                    "chooseCount": 2,
+                    "credits": 6,
+                    "courseCodes": [
+                      "BANA410",
+                      "BANA420",
+                      "BANA430"
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "statistics-free-elective",
+            "name": "Free elective",
+            "credits": 3,
+            "ruleNote": "Use the assigned degree plan to confirm an eligible course."
+          }
+        ],
+        "limitations": [
+          "The current degree page is dated 9 November 2026. The linked 2022-2023 and 2024-2025 study plans use different course sets and credit details, including CSBP121 or CSBP123 instead of STAT488. Current-page course groups are not assigned to an entry cohort.",
+          "The concentration model preserves each concentration?s own elective list; it does not mix Statistics electives with Analytics for Business electives.",
+          "The published requirements do not establish which courses remain on an individual student?s audit or which sections will be offered."
+        ]
+      },
+      {
+        "id": "statistics-data-analytics-2024-plan-total-only",
+        "version": "2024-2025-model-plan",
+        "status": "approved",
+        "cohortLabel": "Students whose assigned plan matches the published 2024-2025 model plan",
+        "effectiveFrom": "2024-08-01",
+        "effectiveTo": "2025-07-31",
+        "totalCredits": 121,
+        "requirements": [],
+        "limitations": [
+          "The linked study plan confirms the 121-credit total but has course details that differ from the current page; only the total is structured here."
+        ]
+      },
+      {
+        "id": "statistics-data-analytics-2022-plan-total-only",
+        "version": "2022-2023-model-plan",
+        "status": "approved",
+        "cohortLabel": "Students whose assigned plan matches the published 2022-2023 model plan",
+        "effectiveFrom": "2022-08-01",
+        "effectiveTo": "2023-07-31",
+        "totalCredits": 121,
+        "requirements": [],
+        "limitations": [
+          "The linked study plan confirms the 121-credit total but has course details that differ from the current page; only the total is structured here."
+        ]
+      }
+    ]
   }
 ]
