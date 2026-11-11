@@ -332,9 +332,12 @@ export function renderDegreeAuditAssessment(assessment: DegreeAuditAssessment, l
     const count = group.requiredCount !== undefined ? ` (${group.completedCount ?? 0}/${group.requiredCount} recorded complete${group.inProgressCount ? `, ${group.inProgressCount} in progress` : ""})` : "";
     const completed = group.completedCourseCodes?.length ? `; recorded complete: ${group.completedCourseCodes.join(", ")}` : "";
     const inProgress = group.inProgressCourseCodes?.length ? `; in progress: ${group.inProgressCourseCodes.join(", ")}` : "";
-    const remaining = group.remainingCourseCodes?.length ? `; remaining/not confirmed: ${group.remainingCourseCodes.join(", ")}` : "";
+    const repeatRequired = group.remainingCourseCodes?.filter((code) => assessment.courseStatus[code] === "REPEAT_REQUIRED") ?? [];
+    const remainingCodes = group.remainingCourseCodes?.filter((code) => assessment.courseStatus[code] !== "REPEAT_REQUIRED") ?? [];
+    const repeat = repeatRequired.length ? `; repeat required: ${repeatRequired.join(", ")}` : "";
+    const remaining = remainingCodes.length ? `; remaining/not confirmed: ${remainingCodes.join(", ")}` : "";
     const notes = group.notes?.length ? `\n  ${group.notes.join("; ")}` : "";
-    return `- **${group.name}** - ${group.status}${count}${completed}${inProgress}${remaining}${notes}`;
+    return `- **${group.name}** - ${group.status}${count}${completed}${inProgress}${repeat}${remaining}${notes}`;
   }).join("\n");
   const version = assessment.cohortYear !== undefined
     ? `Entry year ${assessment.cohortYear}; selected model ${assessment.curriculumVersion}.`

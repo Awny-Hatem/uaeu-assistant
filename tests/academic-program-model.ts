@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { loadOfficialCourseCatalog } from "../lib/academic/course-catalog";
-import { assessDegreeAuditConversation } from "../lib/academic/degree-audit";
+import { assessDegreeAuditConversation, renderDegreeAuditAssessment } from "../lib/academic/degree-audit";
 import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-program-catalog";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
@@ -596,6 +596,8 @@ assert.equal(computerScienceGradeAudit?.courseStatus.CSBP219, "COMPLETE",
   "a recognized passing letter grade remains complete in a program covered by the general undergraduate grading policy");
 assert.equal(computerScienceGradeAudit?.courseStatus.CSBP319, "NEEDS_CONFIRMATION",
   "withdrawal is not interpreted as a completed course");
+assert.match(renderDegreeAuditAssessment(computerScienceGradeAudit!, "en"), /repeat required: CSBP119/i,
+  "the preliminary audit explains why a below-threshold course remains outstanding");
 const dieteticsGradeAudit = assessDegreeAuditConversation([
   { role: "user", content: "I am a Dietetics student." },
   { role: "user", content: "I received 59 in NUTR101." },
