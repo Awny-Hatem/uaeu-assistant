@@ -25,6 +25,24 @@ assert.equal(socialWorkIslam.resolutionState, "VERIFIED");
 assert.match(socialWorkIslam.content, /SWK380 Social Work & Islam[\s\S]*credit hours: \*\*3\*\*/u);
 assert.equal(socialWorkIslam.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp");
 
+const animalBiology = answerOfficialCourseCatalogQuestion("How many credits is BIOL210?", "en");
+assert(animalBiology, "BIOL210 is included from the official Biology department catalog");
+assert.equal(animalBiology.resolutionState, "VERIFIED");
+assert.match(animalBiology.content, /BIOL210 Animal Biology[\s\S]*credit hours: \*\*3\*\*/u);
+assert.equal(animalBiology.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_SC_SC_BIOL.asp");
+
+const socialWelfare = answerOfficialCourseCatalogQuestion("How many credits is SWK200?", "en");
+assert(socialWelfare, "SWK200 is included from the official Social Work department catalog");
+assert.equal(socialWelfare.resolutionState, "VERIFIED");
+assert.match(socialWelfare.content, /SWK200 Introduction to Social Welfare[\s\S]*credit hours: \*\*3\*\*/u);
+assert.equal(socialWelfare.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp");
+
+const socialWelfareEligibility = answerOfficialCourseCatalogQuestion("Can I register for SWK200?", "en");
+assert(socialWelfareEligibility);
+assert.equal(socialWelfareEligibility.resolutionState, "UNSUPPORTED",
+  "non-course language-test prerequisite is preserved but not guessed as an evaluable course rule");
+assert.match(socialWelfareEligibility.content, /BNCHFORMIN\.SCOREOF5\.0/u);
+
 const prerequisites = answerOfficialCourseCatalogQuestion("What are CSBP319 prerequisites?", "en");
 assert(prerequisites);
 assert.match(prerequisites.content, /Prerequisites as stated in the catalog: CSBP219 with a minimum grade D/u);

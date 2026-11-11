@@ -36,7 +36,9 @@ function isOfficialUrl(value: unknown): value is string {
     const primaryCourseCatalog = url.hostname === "www.uaeu.ac.ae" && url.pathname.startsWith("/en/catalog/courses/");
     const socialWorkDepartmentCatalog = url.hostname === "webapps.uaeu.ac.ae" &&
       url.pathname === "/catalog/auto/department_HS_HS_SOCW.asp";
-    return url.protocol === "https:" && (primaryCourseCatalog || socialWorkDepartmentCatalog);
+    const biologyDepartmentCatalog = url.hostname === "webapps.uaeu.ac.ae" &&
+      url.pathname === "/catalog/auto/department_SC_SC_BIOL.asp";
+    return url.protocol === "https:" && (primaryCourseCatalog || socialWorkDepartmentCatalog || biologyDepartmentCatalog);
   } catch {
     return false;
   }

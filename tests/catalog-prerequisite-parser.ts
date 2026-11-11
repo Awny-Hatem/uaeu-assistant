@@ -140,7 +140,7 @@ const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
-assert.equal(parsed.length, 1476, "the verified catalog snapshot should safely structure 1,476 of its 1,478 relation records");
+assert.equal(parsed.length, 1477, "the verified catalog snapshot should safely structure 1,477 of its 1,480 relation records");
 const minimumD = (courseCode: string) => ({ type: "COURSE_GRADE_AT_LEAST" as const, courseCode, minimumGrade: "D" as const });
 const reviewedRepairs = [
   {

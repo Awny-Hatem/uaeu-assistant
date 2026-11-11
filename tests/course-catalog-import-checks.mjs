@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { extractCourseCodes, groupCoursesByPage, parseCoursePage } from "../scripts/import-official-course-catalog.mjs";
+import { extractCourseCodes, groupCoursesByPage, mergeCourseCatalogSupplements, parseCoursePage } from "../scripts/import-official-course-catalog.mjs";
 
 const links = extractCourseCodes(`
   <a href="https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=CSBP319 ">CSBP319</a>
@@ -18,6 +18,18 @@ const groupedPages = groupCoursesByPage([
 assert.equal(groupedPages.length, 2, "courses sharing a catalog page should be fetched together");
 assert.deepEqual(groupedPages[0].courses.map(({ code }) => code), ["CSBP319", "CSBP221"]);
 assert.equal(groupedPages[0].url, links[0].url, "page fetch retains a representative official URL");
+const supplement = {
+  code: "SWK200", title: "Introduction to Social Welfare", creditHours: 3,
+  prerequisiteItems: [], corequisiteItems: [], preCorequisiteItems: [],
+  source: { url: "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp", verifiedAt: "2026-11-12" },
+};
+assert.deepEqual(mergeCourseCatalogSupplements([{ code: "CSBP319" }], [supplement]).map(({ code }) => code), ["CSBP319", "SWK200"]);
+assert.throws(() => mergeCourseCatalogSupplements([{ code: "SWK200" }], [supplement]), /duplicate/u,
+  "supplements cannot shadow central course-catalog records");
+assert.throws(() => mergeCourseCatalogSupplements([], [{ ...supplement, source: undefined }]), /unsourced/u,
+  "supplements require provenance");
+assert.throws(() => mergeCourseCatalogSupplements([], [{ ...supplement, source: { ...supplement.source, url: "https://attacker.example/course" } }]), /unsourced/u,
+  "supplement provenance must use an explicitly approved UAEU catalog source");
 
 const record = parseCoursePage(`
   <div id="CSBP319 "><h1>Data Structures (CSBP319)</h1>

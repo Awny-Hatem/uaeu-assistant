@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 
 const ROOT = "https://www.uaeu.ac.ae/en/catalog/courses/";
 const OUTPUT = path.join(process.cwd(), "data", "academic", "course-catalog.json");
+const SUPPLEMENTS = path.join(process.cwd(), "data", "academic", "course-catalog-supplements.json");
 const CACHE = path.join(tmpdir(), "uaeu-course-catalog-import-cache-v3.json");
 const CODE = /^[A-Z]{2,8}\s?\d{3,4}[A-Z]?$/;
 
@@ -85,6 +86,33 @@ export function groupCoursesByPage(courses) {
     groups.set(key, group);
   }
   return [...groups.values()];
+}
+
+export function mergeCourseCatalogSupplements(records, supplements) {
+  if (!Array.isArray(supplements)) throw new Error("Course catalog supplements must be a JSON array.");
+  const merged = [...records];
+  const mergedCodes = new Set(records.map(({ code }) => code));
+  for (const record of supplements) {
+    let officialSource = false;
+    try {
+      const sourceUrl = new URL(record?.source?.url);
+      officialSource = sourceUrl.protocol === "https:" && (
+        (sourceUrl.hostname === "www.uaeu.ac.ae" && sourceUrl.pathname.startsWith("/en/catalog/courses/")) ||
+        (sourceUrl.hostname === "webapps.uaeu.ac.ae" && [
+          "/catalog/auto/department_HS_HS_SOCW.asp",
+          "/catalog/auto/department_SC_SC_BIOL.asp",
+        ].includes(sourceUrl.pathname))
+      );
+    } catch { /* Invalid source URLs are rejected below. */ }
+    if (!record || !CODE.test(record.code) || mergedCodes.has(record.code) || !record.title || !officialSource || !record.source?.verifiedAt ||
+      (record.creditHours !== null && (!Number.isFinite(record.creditHours) || record.creditHours < 0)) ||
+      !Array.isArray(record.prerequisiteItems) || !Array.isArray(record.corequisiteItems) || !Array.isArray(record.preCorequisiteItems)) {
+      throw new Error(`Invalid, duplicate, or unsourced course catalog supplement: ${record?.code ?? "unknown"}`);
+    }
+    merged.push(record);
+    mergedCodes.add(record.code);
+  }
+  return merged;
 }
 
 function getSection(html, code) {
@@ -219,11 +247,13 @@ async function main() {
     console.error(JSON.stringify({ listed: links.length, parsed: records.filter(Boolean).length, pages: pages.length, failures }, null, 2));
     throw new Error(`Course catalog import incomplete: ${failures.length} failures`);
   }
-  const output = { schemaVersion: 1, title: "UAEU official course catalog snapshot", verifiedAt, sourceIndex: ROOT, courseCount: records.length, courses: records };
+  const supplements = JSON.parse(await readFile(SUPPLEMENTS, "utf8"));
+  const merged = mergeCourseCatalogSupplements(records, supplements);
+  const output = { schemaVersion: 1, title: "UAEU official course catalog snapshot", verifiedAt, sourceIndex: ROOT, courseCount: merged.length, courses: merged };
   await mkdir(path.dirname(OUTPUT), { recursive: true });
   await writeFile(OUTPUT, `${JSON.stringify(output, null, 2)}\n`, "utf8");
   await rm(CACHE, { force: true });
-  console.log(`Wrote ${records.length} official course records to ${OUTPUT}`);
+  console.log(`Wrote ${records.length} central catalog records and ${supplements.length} governed supplements to ${OUTPUT}`);
 }
 
 if (import.meta.url === `file://${process.argv[1]?.replaceAll("\\", "/")}` || process.argv[1]?.endsWith("import-official-course-catalog.mjs")) {

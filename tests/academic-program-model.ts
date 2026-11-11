@@ -689,8 +689,7 @@ for (const programId of ["cybersecurity", "data-science-and-artificial-intellige
       : requirement.type === "INTERNSHIP" ? [requirement.courseCode]
         : requirement.type === "PATHWAY_CHOICE" ? requirement.options.flatMap(({ courseCodes }) => courseCodes) : [];
     for (const code of codes) {
-      const sourceListedZeroCreditInternship = ((programId === "electrical-engineering" || programId === "communication-engineering") && code === "ELEC490") ||
-        (programId === "marine-fisheries-and-animal-science" && code === "BIOL210");
+      const sourceListedZeroCreditInternship = (programId === "electrical-engineering" || programId === "communication-engineering") && code === "ELEC490";
       assert.ok(officialCourseCodes.has(code) || sourceListedZeroCreditInternship,
         `${programId} requirement ${requirement.id} references catalog course ${code} or an explicitly disclosed program-page-only row`);
     }
