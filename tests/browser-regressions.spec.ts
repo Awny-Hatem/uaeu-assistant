@@ -87,6 +87,56 @@ test('keyboard skip link and reduced-motion accessibility hooks are available', 
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
 });
 
+test('guided academic planner selects a cohort and displays a sourced conditional sequence', async ({ page }) => {
+  await guest(page);
+  await page.route('**/api/academic/sequence**', async route => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (request.method() === 'POST') {
+      return route.fulfill({ json: {
+        plan: {
+          status: 'CONDITIONAL_PLAN',
+          terms: [{ id: 'term-1', label: 'Fall 2026', creditLimit: 18, credits: 3, courses: [{ code: 'CSBP119', title: 'Introduction to Programming', credits: 3, availability: 'ASSUMED_FUTURE_OFFERING', prerequisiteAssumptions: [] }] }],
+          unscheduled: [], assumptions: ['No confirmed section offering was supplied.'], blockers: [],
+        },
+        courseSources: [{ code: 'CSBP119', title: 'Introduction to Programming', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' }],
+        scope: {
+          programName: 'Bachelor of Science in Computer Science', cohortYear: 2025, cohortLabel: 'Fall 2025 cohort',
+          curriculumVersion: '2025', curriculumCredits: 120, curriculumSources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }],
+          disclaimer: 'This is a conditional sequence, not a degree audit or registration approval.',
+        },
+      } });
+    }
+    if (!url.searchParams.has('programId')) {
+      return route.fulfill({ json: { programs: [{ id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology', cohorts: [2025] }] } });
+    }
+    if (!url.searchParams.has('cohortYear')) return route.fulfill({ json: { programId: 'bsc-computer-science', cohorts: [2025] } });
+    return route.fulfill({ json: {
+      program: { id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology' },
+      cohort: { year: 2025, label: 'Fall 2025 cohort', version: '2025', totalCredits: 120 },
+      courses: [{ code: 'CSBP119', title: 'Introduction to Programming', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' } }],
+      unavailableCourses: [], sources: [], limitations: [],
+    } });
+  });
+  await page.goto('/');
+  await page.getByTestId('open-academic-planner').click();
+  const dialog = page.getByTestId('academic-sequence-planner');
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel('Degree program').selectOption('bsc-computer-science');
+  await dialog.getByLabel('Entry cohort year').selectOption('2025');
+  await expect(dialog.getByText(/CSBP119.*Introduction to Programming/)).toBeVisible();
+  await dialog.getByRole('checkbox').check();
+  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105');
+  await dialog.getByLabel('Courses you are currently taking').fill('CSBP219');
+  await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');
+  await dialog.getByLabel('Maximum credits per term').fill('18');
+  await dialog.getByRole('button', { name: 'Create conditional sequence' }).click();
+  await expect(dialog.getByText(/Plan result: CONDITIONAL PLAN/i)).toBeVisible();
+  await expect(dialog.getByText(/CSBP119 — Introduction to Programming/)).toBeVisible();
+  await expect(dialog.getByText(/No confirmed section offering/)).toBeVisible();
+  await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' })).toHaveAttribute('href', /uaeu\.ac\.ae/);
+});
+
 for (const hungPath of ['/api/auth/session', '/api/history']) {
   test(`never-settling ${hungPath} stops loading at its bounded timeout`, async ({ page }) => {
     await page.addInitScript(({ hungPath, user }) => {

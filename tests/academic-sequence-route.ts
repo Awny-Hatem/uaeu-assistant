@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { loadOfficialCourseCatalog } from "../lib/academic/course-catalog";
 import { listAcademicPrograms, getProgramCurriculum, type ProgramRequirement } from "../lib/academic/program-curricula";
-import { POST } from "../app/api/academic/sequence/route";
+import { GET, POST } from "../app/api/academic/sequence/route";
 
 function requirementCodes(requirements: ProgramRequirement[]): string[] {
   const codes = new Set<string>();
@@ -70,6 +70,21 @@ const request = (overrides: Record<string, unknown> = {}) => new Request("http:/
 });
 
 async function main() {
+  const programListResponse = await GET(new Request("http://localhost/api/academic/sequence"));
+  assert.equal(programListResponse.status, 200);
+  const programList = await programListResponse.json();
+  assert.equal(programList.programs.length, 55, "the picker covers the complete undergraduate degree inventory");
+
+  const programCohortResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${candidate.program.id}`));
+  assert.equal(programCohortResponse.status, 200);
+  const programCohorts = await programCohortResponse.json();
+  assert.ok(programCohorts.cohorts.includes(candidate.cohortYear));
+
+  const courseOptionsResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${candidate.program.id}&cohortYear=${candidate.cohortYear}`));
+  assert.equal(courseOptionsResponse.status, 200);
+  const courseOptions = await courseOptionsResponse.json();
+  assert.ok(courseOptions.courses.some((course: { code: string }) => course.code === candidate.course.code));
+
   const validResponse = await POST(request());
   assert.equal(validResponse.status, 200);
   const validBody = await validResponse.json();
@@ -78,6 +93,7 @@ async function main() {
   assert.equal(validBody.plan.terms.flatMap((term: { courses: { code: string }[] }) => term.courses).some(({ code }: { code: string }) => code === candidate.course.code), true);
   assert.ok(validBody.plan.assumptions.some((assumption: string) => /no prerequisite wording in the catalog snapshot/i.test(assumption)));
   assert.equal(validResponse.headers.get("cache-control"), "no-store, max-age=0");
+  assert.ok(validBody.courseSources.some((source: { code: string }) => source.code === candidate.course.code));
 
   const overlapResponse = await POST(request({ completedCourseCodes: [candidate.course.code] }));
   assert.equal(overlapResponse.status, 400, "a course cannot be both completed and remaining");
@@ -107,7 +123,7 @@ async function main() {
     courses: term.courses.map(({ code }) => code),
   })), [{ id: "spring", courses: ["ITBP496"] }], "the curriculum internship is restricted to the final term");
 
-  console.log(`Academic sequence route passed for ${candidate.program.id}/${candidate.cohortYear}/${candidate.course.code}: cohort scope, internship constraints, catalog-backed course handling, no-store response, explicit planning disclaimer, overlap rejection, and out-of-program rejection.`);
+  console.log(`Academic sequence API passed for ${candidate.program.id}/${candidate.cohortYear}/${candidate.course.code}: 55-program picker, cohort/curriculum lookup, catalog-backed course options, sequence constraints, no-store response, overlap rejection, and out-of-program rejection.`);
 }
 
 void main();

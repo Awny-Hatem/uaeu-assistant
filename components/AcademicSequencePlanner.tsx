@@ -1,0 +1,364 @@
+"use client";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { FormEvent } from "react";
+import { GraduationCap, LoaderCircle, X } from "lucide-react";
+import type { UiLocale } from "@/lib/ui-copy";
+
+type ProgramOption = { id: string; name: string; college: string; cohorts: number[] };
+type CourseOption = {
+  code: string;
+  title: string;
+  credits: number;
+  groups: { id: string; name: string; type: string; chooseCount?: number; credits?: number }[];
+  source: { title: string; url: string; verifiedAt: string };
+};
+type CurriculumOptions = {
+  program: { id: string; name: string; college: string };
+  cohort: { year: number; label: string; version: string; totalCredits: number };
+  courses: CourseOption[];
+  unavailableCourses: string[];
+  sources: { title: string; url: string; lastVerified: string }[];
+  limitations: string[];
+};
+type SequenceResult = {
+  plan: {
+    status: "CONDITIONAL_PLAN" | "PARTIAL_PLAN" | "NO_PLAN";
+    terms: { id: string; label: string; credits: number; creditLimit: number; courses: { code: string; title: string; credits: number; availability: string; prerequisiteAssumptions: string[] }[] }[];
+    unscheduled: { code: string; reason: string }[];
+    assumptions: string[];
+    blockers: string[];
+  };
+  courseSources: { code: string; title: string; url: string; verifiedAt: string }[];
+  scope: {
+    programName: string;
+    cohortYear: number;
+    cohortLabel: string;
+    curriculumVersion: string;
+    curriculumCredits: number;
+    curriculumSources: { title: string; url: string; lastVerified: string }[];
+    disclaimer: string;
+  };
+};
+
+function parseCodes(value: string): string[] {
+  return [...new Set(value.split(/[\n,;]+/u).map((part) => part.trim().replace(/[\s-]+/gu, "").toUpperCase()).filter(Boolean))];
+}
+
+export function AcademicSequencePlanner({
+  open,
+  language,
+  onClose,
+  onUse,
+}: {
+  open: boolean;
+  language: UiLocale;
+  onClose: () => void;
+  onUse: () => void;
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null);
+  const [programs, setPrograms] = useState<ProgramOption[]>([]);
+  const [programId, setProgramId] = useState("");
+  const [cohortYear, setCohortYear] = useState("");
+  const [curriculum, setCurriculum] = useState<CurriculumOptions | null>(null);
+  const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
+  const [completedText, setCompletedText] = useState("");
+  const [currentText, setCurrentText] = useState("");
+  const [termText, setTermText] = useState("");
+  const [creditLimit, setCreditLimit] = useState("");
+  const [result, setResult] = useState<SequenceResult | null>(null);
+  const [error, setError] = useState("");
+  const [loadingPrograms, setLoadingPrograms] = useState(false);
+  const [loadingCurriculum, setLoadingCurriculum] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+
+  const labels = language === "ar" ? {
+    title: "تخطيط تسلسل المقررات",
+    intro: "هذه أداة تخطيط مشروط للمقررات التي تختارها. لا تؤكد استيفاء متطلبات التخرج أو الأهلية للتسجيل أو توفر الشعب.",
+    program: "البرنامج الدراسي",
+    chooseProgram: "اختر البرنامج",
+    cohort: "سنة الالتحاق",
+    chooseCohort: "اختر سنة الالتحاق",
+    courses: "المقررات المتبقية التي تريد ترتيبها",
+    completed: "المقررات المجتازة (رموز المقررات مفصولة بفواصل)",
+    current: "المقررات المسجل فيها حالياً",
+    terms: "الفصول المخطط لها (فصل واحد في كل سطر)",
+    termsHint: "مثال: خريف 2026 ثم ربيع 2027. لا تتجاوز 8 فصول.",
+    limit: "الحد الأعلى للساعات في كل فصل",
+    submit: "إنشاء تسلسل مشروط",
+    close: "إغلاق مخطط المقررات",
+    loading: "جارٍ تحميل بيانات المنهج…",
+    loadingPrograms: "جارٍ تحميل البرامج…",
+    noCohorts: "لا تتوفر سنة دفعة مرتبطة بمنهج موثوق لهذا البرنامج حالياً.",
+    result: "النتيجة",
+    scheduled: "المقررات المجدولة",
+    assumptions: "الافتراضات",
+    blockers: "العوائق",
+    unscheduled: "المقررات غير المجدولة",
+    sources: "المصادر الرسمية",
+    noPlan: "تعذر إنشاء تسلسل كامل بهذه البيانات.",
+    selected: "المحدد",
+    cancel: "إلغاء",
+  } : {
+    title: "Plan a course sequence",
+    intro: "This creates a conditional sequence for the courses you select. It does not confirm degree completion, registration eligibility, or section availability.",
+    program: "Degree program",
+    chooseProgram: "Choose a program",
+    cohort: "Entry cohort year",
+    chooseCohort: "Choose your entry year",
+    courses: "Remaining courses to sequence",
+    completed: "Completed course codes (comma separated)",
+    current: "Courses you are currently taking",
+    terms: "Planning terms (one term per line)",
+    termsHint: "For example: Fall 2026, then Spring 2027. Use up to 8 terms.",
+    limit: "Maximum credits per term",
+    submit: "Create conditional sequence",
+    close: "Close course planner",
+    loading: "Loading curriculum…",
+    loadingPrograms: "Loading programs…",
+    noCohorts: "No cohort-matched curriculum is currently available for this program.",
+    result: "Plan result",
+    scheduled: "Scheduled courses",
+    assumptions: "Assumptions",
+    blockers: "Blockers",
+    unscheduled: "Unscheduled courses",
+    sources: "Official sources",
+    noPlan: "A complete sequence could not be created from these inputs.",
+    selected: "selected",
+    cancel: "Cancel",
+  };
+
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (!dialog) return;
+    if (open && !dialog.open) dialog.showModal();
+    if (!open && dialog.open) dialog.close();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const controller = new AbortController();
+    setLoadingPrograms(true);
+    setError("");
+    fetch("/api/academic/sequence", { cache: "no-store", signal: controller.signal })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error ?? "Could not load program list.");
+        setPrograms(data.programs);
+      })
+      .catch((reason: unknown) => {
+        if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : "Could not load program list.");
+      })
+      .finally(() => { if (!controller.signal.aborted) setLoadingPrograms(false); });
+    return () => controller.abort();
+  }, [open]);
+
+  useEffect(() => {
+    if (!open || !programId || !cohortYear) {
+      setCurriculum(null);
+      setSelectedCodes([]);
+      return;
+    }
+    const controller = new AbortController();
+    setLoadingCurriculum(true);
+    setError("");
+    setResult(null);
+    fetch(`/api/academic/sequence?programId=${encodeURIComponent(programId)}&cohortYear=${encodeURIComponent(cohortYear)}`, {
+      cache: "no-store",
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.error ?? "Could not load this cohort curriculum.");
+        setCurriculum(data);
+      })
+      .catch((reason: unknown) => {
+        if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : "Could not load this cohort curriculum.");
+      })
+      .finally(() => { if (!controller.signal.aborted) setLoadingCurriculum(false); });
+    return () => controller.abort();
+  }, [open, programId, cohortYear]);
+
+  const selectedProgram = useMemo(() => programs.find((program) => program.id === programId), [programId, programs]);
+  const terms = useMemo(() => termText.split("\n").map((term) => term.trim()).filter(Boolean), [termText]);
+
+  async function createSequence(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!curriculum || selectedCodes.length === 0 || terms.length === 0 || terms.length > 8 || !Number(creditLimit)) {
+      setError("Choose at least one remaining course, one planning term, and a valid credit limit.");
+      return;
+    }
+    setSubmitting(true);
+    setError("");
+    setResult(null);
+    try {
+      const response = await fetch("/api/academic/sequence", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        cache: "no-store",
+        body: JSON.stringify({
+          programId,
+          cohortYear: Number(cohortYear),
+          remainingCourseCodes: selectedCodes,
+          completedCourseCodes: parseCodes(completedText),
+          currentCourseCodes: parseCodes(currentText),
+          terms: terms.map((label, index) => ({ id: `term-${index + 1}`, label, maxCredits: Number(creditLimit) })),
+        }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error ?? "Could not create a sequence.");
+      setResult(data);
+      onUse();
+    } catch (reason) {
+      setError(reason instanceof Error ? reason.message : "Could not create a sequence.");
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  function toggleCourse(code: string) {
+    setSelectedCodes((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
+  }
+
+  return (
+    <dialog
+      ref={dialogRef}
+      aria-labelledby="academic-sequence-title"
+      aria-describedby="academic-sequence-description"
+      onCancel={(event) => { event.preventDefault(); onClose(); }}
+      onClick={(event) => { if (event.target === event.currentTarget) onClose(); }}
+      className="m-auto max-h-[92dvh] w-[min(96vw,54rem)] overflow-y-auto rounded-2xl border border-zinc-200 bg-white p-0 text-zinc-900 shadow-2xl backdrop:bg-zinc-950/50"
+      dir={language === "ar" ? "rtl" : "ltr"}
+      data-testid="academic-sequence-planner"
+    >
+      <div className="sticky top-0 z-10 flex items-start justify-between gap-4 border-b border-zinc-200 bg-white p-5 sm:p-6">
+        <div>
+          <h2 id="academic-sequence-title" className="flex items-center gap-2 text-xl font-bold">
+            <GraduationCap className="text-[#E0182D]" aria-hidden="true" />{labels.title}
+          </h2>
+          <p id="academic-sequence-description" className="mt-2 max-w-3xl text-sm leading-6 text-zinc-600">{labels.intro}</p>
+        </div>
+        <button type="button" onClick={onClose} aria-label={labels.close} className="rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 focus-visible:outline-offset-2">
+          <X size={20} aria-hidden="true" />
+        </button>
+      </div>
+
+      <div className="space-y-5 p-5 sm:p-6">
+        {error && <p role="alert" className="rounded-lg border border-rose-200 bg-rose-50 p-3 text-sm font-semibold text-rose-800">{error}</p>}
+        <form onSubmit={createSequence} aria-busy={submitting} className="space-y-5">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <label className="block text-sm font-bold text-zinc-700">
+              {labels.program}
+              <select
+                autoFocus
+                value={programId}
+                onChange={(event) => { setProgramId(event.target.value); setCohortYear(""); setCurriculum(null); setResult(null); }}
+                className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20"
+                required
+              >
+                <option value="">{loadingPrograms ? labels.loadingPrograms : labels.chooseProgram}</option>
+                {programs.map((program) => <option key={program.id} value={program.id}>{program.name} — {program.college}</option>)}
+              </select>
+            </label>
+            <label className="block text-sm font-bold text-zinc-700">
+              {labels.cohort}
+              <select
+                value={cohortYear}
+                onChange={(event) => { setCohortYear(event.target.value); setResult(null); }}
+                disabled={!selectedProgram?.cohorts.length || loadingPrograms}
+                className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20 disabled:bg-zinc-100 disabled:text-zinc-500"
+                required
+              >
+                <option value="">{labels.chooseCohort}</option>
+                {selectedProgram?.cohorts.map((year) => <option key={year} value={year}>{year}</option>)}
+              </select>
+              {selectedProgram && !selectedProgram.cohorts.length && <span className="mt-1 block text-xs font-medium text-amber-800">{labels.noCohorts}</span>}
+            </label>
+          </div>
+
+          {loadingCurriculum && <p role="status" className="flex items-center gap-2 text-sm text-zinc-600"><LoaderCircle size={16} className="animate-spin" aria-hidden="true" />{labels.loading}</p>}
+
+          {curriculum && <>
+            <div className="rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm leading-6 text-sky-950">
+              <p className="font-bold">{curriculum.program.name} · {curriculum.cohort.year} · {curriculum.cohort.totalCredits} credits</p>
+              <p>{curriculum.cohort.label}</p>
+              {curriculum.limitations.map((limitation) => <p key={limitation} className="mt-1">{limitation}</p>)}
+            </div>
+
+            <fieldset className="rounded-lg border border-zinc-200 p-4">
+              <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({selectedCodes.length} {labels.selected})</legend>
+              <p className="mb-3 text-xs leading-5 text-zinc-600">The catalog lists alternatives and elective groups. Select only courses Degree Works or your advisor has identified as remaining; this form does not validate group completion.</p>
+              <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
+                {curriculum.courses.map((course) => (
+                  <label key={course.code} className="flex cursor-pointer items-start gap-3 rounded-md px-2 py-2 hover:bg-zinc-50">
+                    <input type="checkbox" checked={selectedCodes.includes(course.code)} onChange={() => toggleCourse(course.code)} className="mt-1 h-4 w-4 accent-[#E0182D]" />
+                    <span className="min-w-0 text-sm">
+                      <span className="font-bold">{course.code}</span> · {course.title} <span className="text-zinc-500">({course.credits} cr)</span>
+                      <span className="block text-xs text-zinc-500">{course.groups.map((group) => group.name).join(" · ")}</span>
+                    </span>
+                  </label>
+                ))}
+              </div>
+              {curriculum.unavailableCourses.length > 0 && <p className="mt-3 text-xs text-amber-800">Some curriculum codes lack usable catalog credit records and are not selectable: {curriculum.unavailableCourses.join(", ")}</p>}
+            </fieldset>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-bold text-zinc-700">
+                {labels.completed}
+                <textarea value={completedText} onChange={(event) => setCompletedText(event.target.value)} rows={2} placeholder="CSBP119, MATH105" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+              </label>
+              <label className="block text-sm font-bold text-zinc-700">
+                {labels.current}
+                <textarea value={currentText} onChange={(event) => setCurrentText(event.target.value)} rows={2} placeholder="CSBP219" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+              </label>
+            </div>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-bold text-zinc-700">
+                {labels.terms}
+                <textarea value={termText} onChange={(event) => setTermText(event.target.value)} rows={3} placeholder={language === "ar" ? "خريف 2026\nربيع 2027" : "Fall 2026\nSpring 2027"} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <span className="mt-1 block text-xs font-normal text-zinc-500">{labels.termsHint}</span>
+              </label>
+              <label className="block text-sm font-bold text-zinc-700">
+                {labels.limit}
+                <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={creditLimit} onChange={(event) => setCreditLimit(event.target.value)} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+              </label>
+            </div>
+
+            <div className="flex flex-wrap justify-end gap-2">
+              <button type="button" onClick={onClose} className="rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-bold text-zinc-700 hover:bg-zinc-50">{labels.cancel}</button>
+              <button type="submit" disabled={submitting || !selectedCodes.length || !terms.length || terms.length > 8 || !creditLimit} className="inline-flex items-center gap-2 rounded-lg bg-[#E0182D] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-zinc-300">
+                {submitting && <LoaderCircle size={16} className="animate-spin" aria-hidden="true" />}{labels.submit}
+              </button>
+            </div>
+          </>}
+        </form>
+
+        {result && <section aria-live="polite" className="space-y-4 border-t border-zinc-200 pt-5">
+          <div>
+            <h3 className="text-lg font-bold">{labels.result}: {result.plan.status.replaceAll("_", " ")}</h3>
+            <p className="mt-1 text-sm text-zinc-600">{result.scope.programName} · {result.scope.cohortLabel}</p>
+            {result.plan.status === "NO_PLAN" && <p className="mt-2 text-sm font-semibold text-amber-800">{labels.noPlan}</p>}
+          </div>
+          {result.plan.terms.map((term) => <section key={term.id} className="rounded-lg border border-zinc-200 p-4">
+            <h4 className="font-bold">{term.label} · {term.credits}/{term.creditLimit} credits</h4>
+            <ul className="mt-2 list-disc space-y-1 ps-5 text-sm">
+              {term.courses.map((course) => <li key={course.code}><strong>{course.code}</strong> — {course.title} ({course.credits} cr){course.availability === "ASSUMED_FUTURE_OFFERING" ? <span className="text-amber-800"> · offering unconfirmed</span> : null}</li>)}
+            </ul>
+          </section>)}
+          {result.plan.unscheduled.length > 0 && <section><h4 className="font-bold">{labels.unscheduled}</h4><ul className="mt-1 list-disc ps-5 text-sm">{result.plan.unscheduled.map((item) => <li key={item.code}><strong>{item.code}</strong>: {item.reason}</li>)}</ul></section>}
+          {result.plan.assumptions.length > 0 && <section><h4 className="font-bold">{labels.assumptions}</h4><ul className="mt-1 list-disc ps-5 text-sm">{result.plan.assumptions.map((item) => <li key={item}>{item}</li>)}</ul></section>}
+          {result.plan.blockers.length > 0 && <section><h4 className="font-bold">{labels.blockers}</h4><ul className="mt-1 list-disc ps-5 text-sm">{result.plan.blockers.map((item) => <li key={item}>{item}</li>)}</ul></section>}
+          <section>
+            <h4 className="font-bold">{labels.sources}</h4>
+            <ul className="mt-1 list-disc ps-5 text-sm">
+              {result.scope.curriculumSources.map((source) => <li key={source.url}><a className="text-[#B10E23] underline" href={source.url} target="_blank" rel="noreferrer">{source.title}</a> · {source.lastVerified}</li>)}
+              {result.courseSources.map((source) => <li key={source.code}><a className="text-[#B10E23] underline" href={source.url} target="_blank" rel="noreferrer">{source.code} course record</a> · {source.verifiedAt}</li>)}
+            </ul>
+          </section>
+          <p className="rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-950">{result.scope.disclaimer}</p>
+        </section>}
+      </div>
+    </dialog>
+  );
+}

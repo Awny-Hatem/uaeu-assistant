@@ -1,6 +1,7 @@
 import { loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
 import { parseCatalogPrerequisiteExpression } from "@/lib/academic/catalog-prerequisite-parser";
-import { getProgramCurriculum, type ProgramRequirement } from "@/lib/academic/program-curricula";
+import { getProgramCurriculum, listAcademicPrograms, type AcademicProgram, type ProgramRequirement } from "@/lib/academic/program-curricula";
+import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
 import {
   buildConditionalSemesterPlan,
   type PlannerCourse,
@@ -11,6 +12,8 @@ const COURSE_CODE = /^[A-Z]{2,8}\d{3,4}[A-Z]?$/u;
 const MAX_COURSES = 80;
 const MAX_TERMS = 8;
 const MAX_EVIDENCE_AGE_DAYS = 180;
+
+type RequirementGroup = { id: string; name: string; type: string; chooseCount?: number; credits?: number };
 
 function json(body: unknown, status = 200): Response {
   return Response.json(body, {
@@ -66,6 +69,112 @@ function collectInternshipConstraints(requirements: ProgramRequirement[], result
 function isFresh(date: string, asOf: string): boolean {
   const ageDays = Math.floor((Date.parse(asOf) - Date.parse(date)) / 86_400_000);
   return Number.isFinite(ageDays) && ageDays >= 0 && ageDays <= MAX_EVIDENCE_AGE_DAYS;
+}
+
+function availableCohorts(program: AcademicProgram, asOf: string): number[] {
+  const years: number[] = [];
+  const lastYear = Number(asOf.slice(0, 4));
+  for (let year = 1990; year <= lastYear; year += 1) {
+    const selected = getProgramCurriculum(program.id, year);
+    if (selected?.cohortMatched && selected.curriculum.cohortMapping !== "unresolved" &&
+        program.sources.every((source) => isFresh(source.lastVerified, asOf))) years.push(year);
+  }
+  return years;
+}
+
+function collectCourseGroups(
+  requirements: ProgramRequirement[],
+  groups = new Map<string, RequirementGroup[]>(),
+  inherited: RequirementGroup[] = [],
+): Map<string, RequirementGroup[]> {
+  const add = (code: string, group: RequirementGroup) => {
+    const prior = groups.get(code) ?? [];
+    if (!prior.some(({ id }) => id === group.id)) groups.set(code, [...prior, group]);
+  };
+  for (const requirement of requirements) {
+    const group: RequirementGroup = {
+      id: requirement.id,
+      name: requirement.name ?? "Internship",
+      type: requirement.type,
+      ...(requirement.type === "ONE_OF_GROUP" || requirement.type === "ELECTIVE_GROUP" ? { chooseCount: requirement.chooseCount } : {}),
+      ...(requirement.type === "ELECTIVE_GROUP" ? { credits: requirement.credits } : {}),
+    };
+    const path = [...inherited, group];
+    if ("courseCodes" in requirement) requirement.courseCodes.forEach((code) => path.forEach((item) => add(code.toUpperCase(), item)));
+    if (requirement.type === "INTERNSHIP") add(requirement.courseCode.toUpperCase(), group);
+    if (requirement.type === "PATHWAY_CHOICE") {
+      for (const option of requirement.options) {
+        const optionGroup: RequirementGroup = {
+          id: `${requirement.id}:${option.id}`,
+          name: `${requirement.name}: ${option.name}`,
+          type: option.type,
+          ...(option.type === "ELECTIVE_GROUP" ? { chooseCount: option.chooseCount, credits: option.credits } : {}),
+        };
+        option.courseCodes.forEach((code) => [...path, optionGroup].forEach((item) => add(code.toUpperCase(), item)));
+        if (option.type === "COMPOSITE" && option.requirements) collectCourseGroups(option.requirements, groups, [...path, optionGroup]);
+      }
+    }
+  }
+  return groups;
+}
+
+/** Public, catalog-only options for the guided course-sequence form. */
+export async function GET(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const programId = url.searchParams.get("programId");
+  const cohortValue = url.searchParams.get("cohortYear");
+  const asOf = new Date().toISOString().slice(0, 10);
+  const catalogPrograms = loadUndergraduateProgramCatalog().programs;
+  const curriculumById = new Map(listAcademicPrograms().map((program) => [program.id, program]));
+
+  if (!programId) {
+    if (cohortValue) return json({ error: "programId is required when cohortYear is supplied." }, 400);
+    const programs = catalogPrograms.map((catalogProgram) => {
+      const model = curriculumById.get(catalogProgram.id);
+      return {
+        id: catalogProgram.id,
+        name: model?.name ?? catalogProgram.title,
+        college: catalogProgram.college,
+        cohorts: model ? availableCohorts(model, asOf) : [],
+      };
+    });
+    return json({ programs, asOf });
+  }
+
+  if (!/^[a-z0-9-]{2,80}$/u.test(programId)) return json({ error: "Invalid programId." }, 400);
+  const catalogProgram = catalogPrograms.find((program) => program.id === programId);
+  const program = curriculumById.get(programId);
+  if (!catalogProgram || !program) return json({ error: "That program is not in the undergraduate curriculum catalog." }, 404);
+  const cohorts = availableCohorts(program, asOf);
+  if (!cohortValue) return json({ programId, cohorts });
+  if (!/^\d{4}$/u.test(cohortValue)) return json({ error: "cohortYear must be a four-digit entry year." }, 400);
+  const cohortYear = Number(cohortValue);
+  if (!cohorts.includes(cohortYear)) {
+    return json({ error: "No fresh, cohort-matched curriculum is available for this program and entry year.", resolutionState: "NEEDS_COHORT_CONFIRMATION", cohorts }, 409);
+  }
+  const selection = getProgramCurriculum(programId, cohortYear);
+  if (!selection) return json({ error: "The cohort curriculum could not be resolved." }, 409);
+
+  const catalog = loadOfficialCourseCatalog();
+  if (!catalog) return json({ error: "The official course catalog snapshot is unavailable." }, 503);
+  const catalogByCode = new Map(catalog.courses.map((course) => [course.code.toUpperCase(), course]));
+  const courseGroups = collectCourseGroups(selection.curriculum.requirements);
+  const courseOptions = [...courseGroups.entries()].map(([code, groups]) => {
+    const record = catalogByCode.get(code);
+    return record && record.creditHours !== null && record.creditHours > 0
+      ? { code, title: record.title, credits: record.creditHours, groups, source: record.source }
+      : null;
+  }).filter((course): course is NonNullable<typeof course> => course !== null).sort((a, b) => a.code.localeCompare(b.code));
+  const unavailableCourses = [...courseGroups.keys()].filter((code) => !courseOptions.some((course) => course.code === code));
+  return json({
+    program: { id: program.id, name: program.name, college: program.college },
+    cohort: { year: cohortYear, label: selection.curriculum.cohortLabel, version: selection.curriculum.version, totalCredits: selection.curriculum.totalCredits },
+    courses: courseOptions,
+    unavailableCourses,
+    sources: program.sources,
+    limitations: selection.curriculum.limitations,
+    asOf,
+  });
 }
 
 /**
@@ -173,6 +282,7 @@ export async function POST(request: Request): Promise<Response> {
   });
   return json({
     plan,
+    courseSources: courses.map(({ code, title, source }) => ({ code, title, url: source.url, verifiedAt: source.verifiedAt })),
     scope: {
       programId: program.id,
       programName: program.name,
@@ -181,6 +291,7 @@ export async function POST(request: Request): Promise<Response> {
       cohortLabel: curriculum.cohortLabel,
       curriculumVersion: curriculum.version,
       curriculumCredits: curriculum.totalCredits,
+      curriculumLimitations: curriculum.limitations,
       curriculumSources: program.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
       selectedCoursesOnly: true,
       disclaimer: "This is a conditional sequence for the course codes supplied, not a degree audit or registration approval. Elective/pathway choices, unlisted rules, personal standing, live sections, timetable conflicts, and university records are not verified. Confirm your Degree Works plan and current offerings with your advisor before registering. Course-code inputs are processed for this response and are not stored by this route.",

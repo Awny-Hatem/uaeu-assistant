@@ -27,6 +27,7 @@ import {
   UserPlus,
 } from "lucide-react";
 import { AuthModal } from "@/components/AuthModal";
+import { AcademicSequencePlanner } from "@/components/AcademicSequencePlanner";
 import {
   CitationList,
   CommunicationList,
@@ -358,6 +359,7 @@ export function UniversityChat() {
   const [guestQuestionsUsed, setGuestQuestionsUsed] = useState(0);
   const [accountQuestionsUsed, setAccountQuestionsUsed] = useState(0);
   const [activeGuide, setActiveGuide] = useState<ServiceGuide | null>(null);
+  const [plannerOpen, setPlannerOpen] = useState(false);
   const guestHydratedRef = useRef(false);
   const historyOwnerRef = useRef<string | null>(null);
   const ownershipRef = useRef(new ConversationOwnership());
@@ -713,6 +715,16 @@ export function UniversityChat() {
     setInput(prompt);
     window.requestAnimationFrame(() => inputRef.current?.focus());
   }, []);
+
+  const openAcademicPlanner = useCallback(() => {
+    const currentUsage = user ? readAccountUsage(user.id) : guestQuestionsUsed;
+    if (currentUsage >= quotaLimit) {
+      if (!user) openAuthPrompt("login", false, copy.allowanceTitle, copy.allowanceNotice);
+      else setBanner(copy.dailyLimit);
+      return;
+    }
+    setPlannerOpen(true);
+  }, [user, guestQuestionsUsed, quotaLimit, openAuthPrompt, copy]);
 
   const send = useCallback(async () => {
     const trimmed = input.trim();
@@ -1320,8 +1332,25 @@ export function UniversityChat() {
             <p id="chat-hint" className="mt-2 text-center text-[11px] font-medium text-zinc-500">
               {copy.historyNotice}
             </p>
+            <button
+              type="button"
+              onClick={openAcademicPlanner}
+              disabled={loading || historyLoading || authTransition}
+              aria-haspopup="dialog"
+              className="mx-auto mt-2 flex min-h-10 items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold text-[#B10E23] underline decoration-transparent underline-offset-2 hover:bg-rose-50 hover:decoration-current focus-visible:outline-2 focus-visible:outline-offset-2 disabled:text-zinc-400"
+              data-testid="open-academic-planner"
+            >
+              <GraduationCap size={16} aria-hidden="true" />
+              {uiLocale === "ar" ? "خطط تسلسل مقرراتك" : "Plan a course sequence"}
+            </button>
           </div>
         </footer>
+        <AcademicSequencePlanner
+          open={plannerOpen}
+          language={uiLocale}
+          onClose={() => setPlannerOpen(false)}
+          onUse={incrementUsage}
+        />
       </section>
 
       <AnimatePresence>
