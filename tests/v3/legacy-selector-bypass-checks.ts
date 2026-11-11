@@ -43,6 +43,13 @@ async function main() {
   assert.match(String(libraryResearchHelp.payload.content), /one-hour email-response target/i);
   assert.match(JSON.stringify(libraryResearchHelp.payload.citations), /serviceId=98/);
 
+  const animalScienceElectives = await ask("What are the Animal Science concentration elective requirements?", "203.0.113.251");
+  assert.equal(animalScienceElectives.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(animalScienceElectives.payload.topic, "marine-fisheries-and-animal-science");
+  assert.equal(animalScienceElectives.payload.faqId, undefined, "an incomplete degree-title mention must not trigger a legacy canonical answer");
+  assert.match(String(animalScienceElectives.payload.content), /cannot be established safely/);
+  assert.doesNotMatch(String(animalScienceElectives.payload.content), /Computer Science/i, "course rules from another degree must not leak into the answer");
+
   const staffHandoff = await ask("I want to speak to a human advisor.", "203.0.113.246");
   assert.equal(staffHandoff.payload.stateLabel, "human_handoff");
   assert.equal(staffHandoff.payload.escalationReason, "student_requested_person");

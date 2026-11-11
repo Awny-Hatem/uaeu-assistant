@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { createExecutionPlan, evidenceQueryForPlan } from "../../lib/orchestration/orchestrator";
+import { loadUndergraduateProgramCatalog } from "../../lib/academic/undergraduate-program-catalog";
+import { programIdInText } from "../../lib/academic/program-curricula";
 import { isExecutionPlan } from "../../lib/v3/contracts";
 
 const plan = (latest: string, prior: string[] = []) => createExecutionPlan({
@@ -59,6 +61,15 @@ assert.deepEqual(personal.missingContext, [], "the answer can state the publishe
 const electricalRequirements = plan("What courses are required in Electrical Engineering?");
 assert.equal(electricalRequirements.mode, "UAEU_FACTUAL", "named-degree course requirements must bypass the legacy selector even without a UAEU keyword");
 assert.equal(electricalRequirements.needs.evidence, true);
+
+const animalScienceConcentration = plan("What are the Animal Science concentration elective requirements?");
+assert.equal(animalScienceConcentration.mode, "UAEU_FACTUAL", "a named program concentration must use V3 even when the full degree name is omitted");
+assert.equal(animalScienceConcentration.entities.program, "marine-fisheries-and-animal-science");
+for (const program of loadUndergraduateProgramCatalog().programs) {
+  const academicProgramQuestion = plan(`What are the curriculum requirements for ${program.title}?`);
+  assert.equal(academicProgramQuestion.mode, "UAEU_FACTUAL", `${program.title} must bypass legacy answer selection`);
+  assert.equal(academicProgramQuestion.entities.program, programIdInText(`What are the curriculum requirements for ${program.title}?`), `${program.title} must retain the recognized program identity`);
+}
 
 const majorChangeEligibility = plan("Can I change my major from business administration to finance after my third year?");
 assert.equal(majorChangeEligibility.mode, "PERSONALIZED_ACADEMIC", "asking whether a policy permits a change is not a request to submit the change");

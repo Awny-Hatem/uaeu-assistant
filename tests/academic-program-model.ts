@@ -250,6 +250,9 @@ const horticultureRequirements = assessProgramRequirementsConversation([{ role: 
 assert.match(renderProgramRequirementsAssessment(horticultureRequirements!, "en"), /choose one option/);
 const mfassRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Marine Fisheries and Animal Science?" }]);
 assert.match(renderProgramRequirementsAssessment(mfassRequirements!, "en"), /select 3 courses/);
+const animalScienceConcentrationRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What are the Animal Science concentration elective requirements?" }]);
+assert.equal(animalScienceConcentrationRequirements?.programId, "marine-fisheries-and-animal-science");
+assert.match(renderProgramRequirementsAssessment(animalScienceConcentrationRequirements!, "en"), /cannot be established safely/);
 const foodCredit = assessProgramCreditConversation([{ role: "user", content: "How many credits are in Food Science?" }]);
 assert.equal(foodCredit?.curriculum?.totalCredits, 120);
 const economicsRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Economics?" }]);

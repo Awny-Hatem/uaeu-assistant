@@ -186,6 +186,9 @@ export type ProgramCourseSubstitutionAssessment = ProgramCreditAssessment & {
 };
 
 export function programIdInText(text: string): string | undefined {
+  // UAEU uses these concentration names under a longer degree title; students
+  // commonly refer to the pathway alone when asking a follow-up question.
+  if (/\b(?:animal science|marine fisheries) concentration\b/i.test(text)) return "marine-fisheries-and-animal-science";
   const correctedInformationSecurity = /\b(?:i mean|i meant|actually|sorry[, ]+i mean|correction)\s+(?:the\s+)?(?:bsc\s+)?information security\b/i.test(text);
   const correctedCybersecurity = /\b(?:i mean|i meant|actually|sorry[, ]+i mean|correction)\s+(?:the\s+)?(?:bsc\s+)?cyber\s?security\b/i.test(text);
   if (correctedInformationSecurity) return "bsc-information-security";
@@ -371,7 +374,8 @@ export function assessProgramCreditConversation(
 function asksProgramCourseRequirements(text: string): boolean {
   if (/\b[A-Z]{2,5}\d{3,4}\b/i.test(text)) return false;
   return /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
-    /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text);
+    /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text) ||
+    /\b(?:electives?|concentrations?|credit requirements?|prerequisites?)\b.{0,60}\brequirements?\b/i.test(text);
 }
 
 export function assessProgramRequirementsConversation(

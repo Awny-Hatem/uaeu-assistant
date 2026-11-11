@@ -1,4 +1,5 @@
 import { courseCodes, namedSubjects, normalizeQuery, resolveConversation, understandQuery } from "@/lib/query-understanding";
+import { programIdInText } from "@/lib/academic/program-curricula";
 import type { EvidenceQuery, ExecutionMode, ExecutionPlan } from "@/lib/v3/contracts";
 
 export type OrchestratorMessage = { role: "user" | "assistant"; content: string };
@@ -19,6 +20,7 @@ const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|
 const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|الموعد النهائي|آخر موعد|اخر موعد|مواعيد التقديم|موعد الإغلاق|موعد الاغلاق/u;
 const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b|اين (?:اجد|اتحقق من)|وين (?:القى|اتحقق)|اين التقويم الاكاديمي/u;
 const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
+const ACADEMIC_PROGRAM_REQUEST = /\b(?:degrees?|majors?|programmes?|programs?|curricul(?:um|a)|study plans?|concentrations?|electives?|course requirements|courses? required|credit requirements|graduation requirements|prerequisites?)\b/i;
 const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science"]);
 
 const SUBJECT_TO_DOMAIN: Record<string, string> = {
@@ -37,13 +39,15 @@ function executionMode(latest: string, query: string): ExecutionMode {
   if (ACTION_TERMS.test(text)) return "UNIVERSITY_TRANSACTION";
   if (COMPLEX_TERMS.test(text) && (UAEU_TERMS.test(request) || courseCodes(query).length > 0)) return "COMPLEX_SCENARIO";
   const subjects = namedSubjects(query).map(({ key }) => key);
+  const academicProgramRequest = Boolean(programIdInText(query)) || ACADEMIC_PROGRAM_REQUEST.test(request);
   // Any recognized UAEU subject belongs to the evidence-first path. Keeping
   // this allowlist narrow sent ordinary university questions back to the legacy
   // answer selector even though they had already been identified as UAEU topics.
-  const academicOrServiceTarget = courseCodes(query).length > 0 || subjects.length > 0;
+  const academicOrServiceTarget = courseCodes(query).length > 0 || subjects.length > 0 || academicProgramRequest;
   const processQuestion = /^(?:how (?:do|can) i|where can i|where do i)\b/u.test(text);
   if (PERSONALIZED_TERMS.test(text) && academicOrServiceTarget && !LOCATION_LOOKUP.test(request) && !processQuestion) return "PERSONALIZED_ACADEMIC";
   if (CURRENT_TERMS.test(request) && UAEU_TERMS.test(request) && !LOCATION_LOOKUP.test(request)) return "CURRENT_UAEU_RESEARCH";
+  if (academicProgramRequest) return "UAEU_FACTUAL";
   if (UAEU_TERMS.test(request) || courseCodes(query).length > 0 || subjects.length > 0) return "UAEU_FACTUAL";
   return "GENERAL_EXPLANATION";
 }
@@ -108,6 +112,7 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   const codes = [...new Set(explicitCourseCodes.map((code) => code.toUpperCase()))];
   const subjects = namedSubjects(normalizedRequest);
   const programSubject = subjects.find(({ key }) => PROGRAM_KEYS.has(key));
+  const recognizedProgram = programIdInText(normalizedRequest);
   const needs = {
     evidence: mode === "UAEU_FACTUAL" || mode === "CURRENT_UAEU_RESEARCH" || mode === "PERSONALIZED_ACADEMIC" || mode === "COMPLEX_SCENARIO",
     liveResearch: mode === "CURRENT_UAEU_RESEARCH",
@@ -124,7 +129,7 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
     requestedFacts: [...(asksRepeatPolicy ? ["undergraduate failed course repeat policy"] : []), ...(meaning.intents.length ? meaning.intents : ["answer the user's question"])],
     entities: {
       ...(codes.length ? { courses: codes } : {}),
-      ...(programSubject ? { program: programSubject.key } : resolution.subject && PROGRAM_KEYS.has(resolution.subject.key) ? { program: resolution.subject.key } : {}),
+      ...(recognizedProgram ? { program: recognizedProgram } : programSubject ? { program: programSubject.key } : resolution.subject && PROGRAM_KEYS.has(resolution.subject.key) ? { program: resolution.subject.key } : {}),
       ...(meaning.degreeLevel ? { degreeLevel: meaning.degreeLevel } : {}),
       ...(meaning.terms.length === 1 ? { term: meaning.terms[0] } : {}),
       ...(meaning.years.length === 1 ? { year: meaning.years[0] } : {}),
