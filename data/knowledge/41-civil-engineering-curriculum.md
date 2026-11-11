@@ -1,8 +1,11 @@
 ---
+status: approved
 title: UAEU Civil Engineering degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-civil-engineering.shtml
 lastVerified: 2026-11-11
-subjects: civil-engineering, engineering, curriculum
+degreeLevel: undergraduate
+curriculum: true
+subjects: academics, civil-engineering, engineering, curriculum
 ---
 
 # UAEU Civil Engineering degree requirements

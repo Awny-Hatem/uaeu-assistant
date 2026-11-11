@@ -1,8 +1,11 @@
 ---
+status: approved
 title: UAEU Chemical Engineering degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-chemical-engineering.shtml
 lastVerified: 2026-11-11
-subjects: chemical-engineering, engineering, curriculum
+degreeLevel: undergraduate
+curriculum: true
+subjects: academics, chemical-engineering, engineering, curriculum
 ---
 
 # UAEU Chemical Engineering degree requirements

@@ -1,8 +1,11 @@
 ---
+status: approved
 title: UAEU Bachelor of Finance and Banking degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-finance-and-banking.shtml
 lastVerified: 2026-11-11
-subjects: finance, banking, business, curriculum
+degreeLevel: undergraduate
+curriculum: true
+subjects: academics, finance, banking, business, curriculum
 ---
 
 # Bachelor of Finance and Banking

@@ -1,8 +1,11 @@
 ---
+status: approved
 title: UAEU Aerospace Engineering degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-aerospace-engineering.shtml
 lastVerified: 2026-11-11
-subjects: aerospace-engineering, engineering, curriculum
+degreeLevel: undergraduate
+curriculum: true
+subjects: academics, aerospace-engineering, engineering, curriculum
 ---
 
 # UAEU Aerospace Engineering degree requirements

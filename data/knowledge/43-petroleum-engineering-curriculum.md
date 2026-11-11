@@ -1,8 +1,11 @@
 ---
+status: approved
 title: UAEU Petroleum Engineering degree requirements and cohort plans
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml
 lastVerified: 2026-11-11
-subjects: petroleum-engineering, engineering, curriculum
+degreeLevel: undergraduate
+curriculum: true
+subjects: academics, petroleum-engineering, engineering, curriculum
 ---
 
 # UAEU Petroleum Engineering degree requirements and cohort plans

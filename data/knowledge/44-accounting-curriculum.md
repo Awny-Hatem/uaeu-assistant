@@ -1,8 +1,11 @@
 ---
+status: approved
 title: UAEU Bachelor of Accounting degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-accounting.shtml
 lastVerified: 2026-11-11
-subjects: accounting, business, curriculum
+degreeLevel: undergraduate
+curriculum: true
+subjects: academics, accounting, business, curriculum
 ---
 
 # Bachelor of Accounting

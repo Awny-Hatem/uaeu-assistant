@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { loadKnowledgeMarkdown } from "../lib/knowledge-files";
 
 type Citation = { url: string; evidenceText?: string; sourceSection?: string; sourceVersion?: string };
 type Entry = {
@@ -44,6 +45,26 @@ check("academic records remain bilingual, unique, bounded and officially sourced
       if (item.citations.length > 1) assert.ok(citation.evidenceText && citation.evidenceText.length > 30, `${item.id}: ${citation.url}`);
     }
   }
+});
+
+check("current academic curriculum files are approved, scoped, and available to retrieval", () => {
+  const expected = [
+    "40-chemical-engineering-curriculum.md",
+    "41-civil-engineering-curriculum.md",
+    "42-aerospace-engineering-curriculum.md",
+    "43-petroleum-engineering-curriculum.md",
+    "44-accounting-curriculum.md",
+    "45-finance-and-banking-curriculum.md",
+  ];
+  const documents = loadKnowledgeMarkdown().filter(({ filename }) => expected.includes(filename));
+  assert.deepEqual(documents.map(({ filename }) => filename).sort(), expected);
+  for (const document of documents) {
+    assert.equal(document.curriculum, true, document.filename);
+    assert.ok(document.scope?.subjects?.includes("academics"), document.filename);
+    assert.equal(new URL(document.sourceUrl).hostname, "www.uaeu.ac.ae");
+    assert.equal(document.lastVerified, "2026-11-11");
+  }
+  assert.match(documents.find(({ filename }) => filename.startsWith("44-"))?.content ?? "", /SCML150 as 0\.00/i);
 });
 
 check("shared school equivalency does not require a nationality-specific scope", () => {
