@@ -85,3 +85,11 @@ The full 100-case live HTTP rerun on revision `6014a9a` is recorded at `reports/
 ## External dependencies
 
 Phases 3 and 5 cannot be completed from public web evidence or this repository alone. UAEU must provide approved identity, student-record, and transactional interfaces together with authorization, privacy, retention, and audit requirements. Phase 4 also needs authoritative course offering and section availability data before it can promise feasible term plans.
+
+### Contextual policy-scope regression (2026-11-11)
+
+The cross-subject follow-up “Would that also be the rule for medicine?” initially lost the relationship to the user's preceding graduation-GPA question. The deterministic resolver now carries the requested GPA intent and the prior **user question** as context; assistant text is never used as policy evidence. The orchestrator keeps the evidence domain anchored to the policy being checked (graduation) while retaining Doctor of Medicine as the target program. The reviewed applicability answer now carries explicit Medicine/MD scope, source-domain metadata, and the program scope needed by the evidence service's hard filters.
+
+Verification: `tests/v3/orchestrator-checks.ts` confirms both official source excerpts survive evidence search under the MD program scope; `tests/v3/legacy-selector-bypass-checks.ts` confirms context resolution and that a mock provider abstains without repeating the unsupported 2.00 claim. `npm run test:v3`, `npm run test:content`, `npm run test:academic-model`, `npm run test:academic-catalog`, and `npm run test:catalog-import` passed locally. The route answer itself still needs a live configured provider check; these mock-provider tests do not establish generated-answer quality. The Vercel Preview remains on `fa60ce0`; the newer branch changes have not been previewed because the latest Vercel response reported a deployment rate limit. Production remains untouched.
+
+The Next.js webpack compilation for this change completed, but the local build's TypeScript phase could not resolve Next.js and React types from the root checkout's incomplete/locked `node_modules` tree. This is not counted as a successful production build; a clean dependency-tree build remains required before calling the preview ready.

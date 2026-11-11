@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { catalogTargetCodeFromMessages, isCoursePrerequisiteFollowUp } from "../../lib/academic/catalog-prerequisite-assessment";
+import { retrieveVerifiedEvidence } from "../../lib/knowledge-files";
+import { resolveConversation } from "../../lib/query-understanding";
 
 process.env.AI_PROVIDER = "mock";
 process.env.UAEU_AGENT_V3_ENABLED = "enabled";
@@ -142,6 +144,27 @@ async function main() {
   assert.equal(calendarFollowUp.payload.stateLabel, "v3_verified_source_location");
   assert.match(String(calendarFollowUp.payload.content), /official UAEU academic calendar/i);
   assert.doesNotMatch(String(calendarFollowUp.payload.content), /refund|scholarship/i);
+
+  const medicineScopeFollowUp = resolveConversation([
+    { role: "user", content: "What minimum CGPA does a bachelor's student need to graduate?" },
+    { role: "assistant", content: "A bachelor's student needs a 2.00 CGPA, excluding the College of Medicine and Health Sciences." },
+    { role: "user", content: "Would that also be the rule for medicine?" },
+  ], "Would that also be the rule for medicine?");
+  assert.equal(medicineScopeFollowUp.usedContext, true);
+  assert.equal(medicineScopeFollowUp.subject?.key, "medicine");
+  assert.match(medicineScopeFollowUp.query, /Requested fact: gpa/i);
+  assert.doesNotMatch(medicineScopeFollowUp.query, /2\.00/);
+  assert.ok(retrieveVerifiedEvidence(medicineScopeFollowUp.query, 6).some((row) => row.source === "answer:graduation-policy-applicability"),
+    "a reviewed applicability answer must be retrievable when the student asks about medicine");
+  const medicineScopeAnswer = await askMessages([
+    { role: "user", content: "What minimum CGPA does a bachelor's student need to graduate?" },
+    { role: "assistant", content: "A bachelor's student needs a 2.00 CGPA, excluding the College of Medicine and Health Sciences." },
+    { role: "user", content: "Would that also be the rule for medicine?" },
+  ], "203.0.113.226");
+  assert.equal(medicineScopeAnswer.status, 200);
+  assert.equal(medicineScopeAnswer.payload.stateLabel, "model_escalation", "the mock provider cannot synthesize the grounded answer and must fail closed");
+  assert.doesNotMatch(String(medicineScopeAnswer.payload.content), /2\.00/);
+  assert.deepEqual(medicineScopeAnswer.payload.citations, [], "an ungrounded mock response must not present citations as if it answered");
 
   const admissionsDeadline = await ask("When is the admission deadline for Fall 2027?", "203.0.113.224");
   assert.equal(admissionsDeadline.payload.resolutionState, "MISSING_CONTEXT");

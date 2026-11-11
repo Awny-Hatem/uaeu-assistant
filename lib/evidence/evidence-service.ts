@@ -69,6 +69,7 @@ function itemScope(row: EvidenceRow, domain: string | null): EvidenceScopeV3 | u
   if (!scope && !domain) return undefined;
   return {
     ...(domain ? { domain } : {}),
+    ...(scope?.programId ? { programId: scope.programId } : {}),
     ...(scope?.courseCodes?.length ? { courseCodes: scope.courseCodes } : {}),
     ...(scope?.applicantCategory ? { applicantCategory: scope.applicantCategory } : {}),
     ...(scope?.degreeLevel ? { degreeLevel: scope.degreeLevel } : {}),

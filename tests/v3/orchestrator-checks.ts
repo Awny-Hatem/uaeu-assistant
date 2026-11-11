@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createExecutionPlan, evidenceQueryForPlan } from "../../lib/orchestration/orchestrator";
+import { createEvidenceService } from "../../lib/evidence/evidence-service";
 import { loadUndergraduateProgramCatalog } from "../../lib/academic/undergraduate-program-catalog";
 import { programIdInText } from "../../lib/academic/program-curricula";
 import { isExecutionPlan } from "../../lib/v3/contracts";
@@ -30,6 +31,22 @@ assert.deepEqual(scholarship.missingContext, []);
 
 const correctedContext = plan("Where can I check UAEU academic calendar deadlines?", ["When is the scholarship deadline for Fall 2027?"]);
 assert.equal(correctedContext.entities.domain, "calendar", "latest explicit target takes precedence over the earlier domain");
+
+const medicinePolicyApplicability = createExecutionPlan({
+  conversation: [
+    { role: "user", content: "What minimum CGPA does a bachelor's student need to graduate?" },
+    { role: "assistant", content: "A bachelor's student needs a 2.00 CGPA, excluding the College of Medicine and Health Sciences." },
+    { role: "user", content: "Would that also be the rule for medicine?" },
+  ],
+  latest: "Would that also be the rule for medicine?",
+  resolvedRequest: "Doctor of Medicine program\nRequested fact: GPA\nPrior comparison topic (user context only): What minimum CGPA does a bachelor's student need to graduate?\nFollow-up question: Would that also be the rule for medicine?",
+});
+assert.equal(medicinePolicyApplicability.entities.domain, "graduation", "a cross-subject applicability follow-up stays in the domain of the policy being checked");
+const medicinePolicyEvidenceQuery = evidenceQueryForPlan(medicinePolicyApplicability);
+assert.equal(medicinePolicyEvidenceQuery.scope.domain, "graduation");
+const medicinePolicyEvidence = createEvidenceService().search(medicinePolicyEvidenceQuery);
+assert.equal(medicinePolicyEvidence.status, "FOUND", "the current MD scope record and the general graduation policy must survive hard evidence filters");
+assert.equal(medicinePolicyEvidence.evidence.length, 2, "each policy and program claim must have its own source evidence");
 
 const calendarFollowUp = createExecutionPlan({
   conversation: [

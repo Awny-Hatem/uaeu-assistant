@@ -21,12 +21,12 @@ const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application
 const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b|اين (?:اجد|اتحقق من)|وين (?:القى|اتحقق)|اين التقويم الاكاديمي/u;
 const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
 const ACADEMIC_PROGRAM_REQUEST = /\b(?:degrees?|majors?|programmes?|programs?|curricul(?:um|a)|study plans?|concentrations?|electives?|course requirements|courses? required|credit requirements|graduation requirements|prerequisites?)\b/i;
-const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science"]);
+const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science", "medicine"]);
 
 const SUBJECT_TO_DOMAIN: Record<string, string> = {
   admissions: "admissions", calendar: "calendar", registration: "registration",
   scholarship: "financial_aid", tuition: "finance", housing: "housing", visa: "visa",
-  graduation: "graduation", library: "library", password: "it", wifi: "it", parking: "campus",
+  graduation: "graduation", medicine: "academics", library: "library", password: "it", wifi: "it", parking: "campus",
   counseling: "wellbeing", medical: "wellbeing", internship: "careers", "student-document": "student_services",
   "major-change": "academics", "computer-engineering": "academics", "computer-ai-engineering": "academics", "information-security": "academics",
   "information-technology": "academics", "mechanical-engineering": "academics", "computer-science": "academics", "data-structures": "academics",
@@ -52,7 +52,14 @@ function executionMode(latest: string, query: string): ExecutionMode {
   return "GENERAL_EXPLANATION";
 }
 
-function requestedDomain(latest: string, resolvedQuery: string, contextUsed: boolean): { domain?: string; ambiguous: boolean } {
+function requestedDomain(latest: string, resolvedQuery: string, contextUsed: boolean, previousUserRequest: string): { domain?: string; ambiguous: boolean } {
+  const asksCrossSubjectApplicability = contextUsed && /\b(?:would|does|do|is) (?:that|it|the same (?:rule|requirement))\b[^.!?]{0,100}\b(?:also )?(?:apply|hold|be the rule)\b|\bsame (?:rule|requirement) for\b/i.test(latest);
+  if (asksCrossSubjectApplicability) {
+    const priorDomains = [...new Set(namedSubjects(previousUserRequest)
+      .map(({ key }) => SUBJECT_TO_DOMAIN[key]).filter((domain): domain is string => Boolean(domain)))];
+    if (priorDomains.length === 1) return { domain: priorDomains[0], ambiguous: false };
+    if (priorDomains.length > 1) return { ambiguous: true };
+  }
   const latestSubjects = namedSubjects(latest).map(({ key }) => key);
   const resolvedSubjects = namedSubjects(resolvedQuery).map(({ key }) => key);
   const relevantLatest = [...new Set(latestSubjects.map((subject) => SUBJECT_TO_DOMAIN[subject]).filter(Boolean))];
@@ -86,7 +93,7 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   const failedCourseMention = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b|رسبت|يرسب|رسوب|إعادة(?:\s+المساق)?|اعادة(?:\s+المساق)?/iu.test(normalizedRequest);
   const courseMention = /\bdata structures?\b|مساق|مادة|مقرر|المقررات|المواد/iu.test(normalizedRequest);
   const ambiguousFailedCourse = failedCourseMention && /\bdata structures?\b|هياكل البيانات/iu.test(normalizedRequest) && explicitCourseCodes.length === 0;
-  const resolvedDomain = requestedDomain(latest, normalizedRequest, hasResolvedContext);
+  const resolvedDomain = requestedDomain(latest, normalizedRequest, hasResolvedContext, previousUserRequest);
   const domain = ambiguousFailedCourse ? { domain: "academics", ambiguous: false } : resolvedDomain;
   const missingContext: string[] = [];
   const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(normalizedRequest));

@@ -40,6 +40,7 @@ const SUBJECTS = [
   ["twimc", "to whom it may concern letter", /to whom it may concern|\btwimc\b|لمن يهمه الامر/u],
   ["reference-letter", "recommendation letter", /\b(?:recommendation|reference) letter\b|رسالة توصية|خطاب توصية/u],
   ["graduation", "graduation", /\bgraduation\b|\bgraduate from\b|\bto graduate\b|التخرج|للتخرج|اتخرج/u],
+  ["medicine", "Doctor of Medicine program", /\b(?:medicine|doctor of medicine|medical degree|college of medicine and health sciences)\b/u],
   ["admissions", "admission", /\badmissions?\b|\bapply (?:to|as) (?:a |an |the )?(?:uaeu|university|college|undergraduate|bachelor|postgraduate|master|phd|doctoral|international|emirati|national)\b|\bapply for (?:fall|spring|summer|autumn|winter)\b|\bundergraduate application|القبول|للقبول|قبول|التقديم|تقديم|البكالوريوس/u],
   ["transfer", "external academic credit transfer", /\b(?:transfer(?:red)? credits?|credit transfer|credit recognition|credit evaluation|course equivalenc(?:y|ies)|advanced standing)\b/u],
   ["housing", "student housing", /\b(?:housing|dorms?|dormitory|accommodation|room assignment)\b|السكن|سكن|وحدات السكن/u],
@@ -262,7 +263,9 @@ export function resolveConversation(
     else if (active.length === 1) subject = active[0];
     else ambiguous = active.length > 1;
   }
-  const inheritsIntent = meaning.codes.length > 0 && !directFacts.length && /\bwhat about\b|ماذا عن|وماذا|وبالنسب[ةه]/u.test(meaning.normalized);
+  const crossSubjectApplicabilityFollowUp = named.length === 1 &&
+    /\b(?:would (?:that|it) (?:also )?(?:be|apply)|does (?:that|it) (?:also )?apply|same (?:rule|requirement) (?:for|in)|also (?:apply|hold) for)\b/u.test(meaning.normalized);
+  const inheritsIntent = (meaning.codes.length > 0 && !directFacts.length && /\bwhat about\b|ماذا عن|وماذا|وبالنسب[ةه]/u.test(meaning.normalized)) || crossSubjectApplicabilityFollowUp;
   const verification = meaning.intents.includes("verify") && !directFacts.length;
   const intents = (!directFacts.length && (refers || inheritsIntent || verification || correctionOnly)) ? lastIntent : meaning.intents;
   const sameSubjectReference = named.length === 1 && active.length === 1 &&
@@ -288,13 +291,17 @@ export function resolveConversation(
   const correctedPriorRequest = correctionOnly && previous
     ? `Corrected subject: ${subject?.label ?? ""}\nPrevious user request, interpreted under the corrected subject: ${correctedPriorRequestText}`
     : `Follow-up question: ${normalizeCourseCodes(latest)}`;
+  const comparisonTopic = crossSubjectApplicabilityFollowUp && previous
+    ? `Prior comparison topic (user context only): ${normalizeCourseCodes(previous)}`
+    : "";
   const query = usedContext && subject
-    ? `${subject.label} ${inheritedScope}\nRequested fact: ${intents.map((intent) => intentText[intent] ?? intent).join(" ")}\n${correctedPriorRequest}`
+    ? `${subject.label} ${inheritedScope}\nRequested fact: ${intents.map((intent) => intentText[intent] ?? intent).join(" ")}\n${comparisonTopic}\n${correctedPriorRequest}`
     : normalizeCourseCodes(latest);
   return { query, subject, intents, usedContext, corrected, ambiguous, candidates: ambiguous ? active : [], needsClarification: !subject && refers && !named.length };
 }
 
 export type EvidenceScope = {
+  programId?: string;
   courseCodes?: string[];
   subjects?: string[];
   applicantCategory?: "national" | "international";
