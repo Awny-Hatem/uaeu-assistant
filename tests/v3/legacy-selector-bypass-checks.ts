@@ -72,6 +72,13 @@ async function main() {
   assert.match(JSON.stringify(dropVersusWithdrawal.payload.guide), /Drop-Web/);
   assert.match(JSON.stringify(dropVersusWithdrawal.payload.citations), /course-registration-service\.pdf/);
 
+  const finalExamConflict = await ask("Two final exams are scheduled at the same time. What do I do?", "203.0.113.227");
+  assert.equal(finalExamConflict.payload.stateLabel, "guided_service");
+  assert.equal((finalExamConflict.payload.guide as { id?: string } | undefined)?.id, "final-exam-time-conflict");
+  assert.match(String(finalExamConflict.payload.content), /College Advising Unit immediately/i);
+  assert.match(String(finalExamConflict.payload.content), /does not state that the same-day overload rule automatically grants/i);
+  assert.match(JSON.stringify(finalExamConflict.payload.citations), /final-exams-schedule-for-fall-semester-april-2026\.pdf/);
+
   const libraryResearchHelp = await ask("How can UAEU students get library or research help?", "203.0.113.230");
   assert.equal(libraryResearchHelp.payload.stateLabel, "guided_service");
   assert.equal(libraryResearchHelp.payload.resolutionState, "VERIFIED");
