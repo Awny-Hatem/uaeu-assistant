@@ -82,6 +82,12 @@ async function main() {
     assert.equal(response.status, 200);
     return response.json();
   };
+  await check("generic prerequisite terminology cannot borrow a course-specific policy", () => {
+    const question = "Explain the difference between a prerequisite and a corequisite using a simple hypothetical example.";
+    selected = route({ resolvedQuery: question, primaryRecordIds: ["course-prerequisites-data-structures"], targetCourseCodes: [] });
+    assert.equal(matchFaq(question), null);
+    assert.deepEqual(canonicalEntriesForSemanticRoute(selected as SemanticRoute), []);
+  });
   await check("English canonical body is byte-faithful with honest record provenance", async () => {
     selected = route({ recordIds: ["academic-advisor-contact"] });
     const payload = await ask("How do I check a blocking hold before trying to enroll?");

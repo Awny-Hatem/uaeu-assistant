@@ -544,7 +544,12 @@ export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
   if (entry.citations.some((citation) => !citation.lastVerified || Date.now() - Date.parse(citation.lastVerified) > CITATION_FRESHNESS_MS)) return false;
   const scope = faqScope(entry);
   const meaning = understandQuery(query);
-  if (meaning.codes.length && scope.courseCodes?.length && !meaning.codes.every((code) => scope.courseCodes!.includes(code))) return false;
+  // A course-specific rule needs an identified target. Shared terms such as
+  // "prerequisite" or "corequisite" must not make one course's rule answer a
+  // general terminology question. Explicit course names are converted to
+  // codes by understandQuery, so legitimate named-course questions still work.
+  if (entry.category === "courses" && scope.courseCodes?.length &&
+    (!meaning.codes.length || !meaning.codes.every((code) => scope.courseCodes!.includes(code)))) return false;
   if (!scopeAllows(query, `${entry.answer_en}\n${entry.answer_ar ?? ""}`, scope)) return false;
   // University-wide calendar facts are not admission/payment/scholarship schedules.
   if (meaning.intents.includes("deadline")) {
