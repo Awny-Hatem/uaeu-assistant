@@ -19,14 +19,14 @@ const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|
 const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|Ø§Ù„Ù…ÙˆØ¹Ø¯ Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ|Ø¢Ø®Ø± Ù…ÙˆØ¹Ø¯/u;
 const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b/u;
 const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
-const PROGRAM_KEYS = new Set(["computer-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science"]);
+const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science"]);
 
 const SUBJECT_TO_DOMAIN: Record<string, string> = {
   admissions: "admissions", calendar: "calendar", registration: "registration",
   scholarship: "financial_aid", tuition: "finance", housing: "housing", visa: "visa",
   graduation: "graduation", library: "library", password: "it", wifi: "it", parking: "campus",
   counseling: "wellbeing", medical: "wellbeing", internship: "careers", "student-document": "student_services",
-  "major-change": "academics", "computer-engineering": "academics", "information-security": "academics",
+  "major-change": "academics", "computer-engineering": "academics", "computer-ai-engineering": "academics", "information-security": "academics",
   "information-technology": "academics", "mechanical-engineering": "academics", "computer-science": "academics", "data-structures": "academics",
 };
 

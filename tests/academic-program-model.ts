@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import { assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 5, "only five programs with reviewed structured source data are modeled");
+assert.equal(programs.length, 6, "only six programs with reviewed structured source data are modeled");
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
 
 const isecCurrent = getProgramCurriculum("bsc-information-security");
@@ -120,12 +120,12 @@ const unknownCohortRequirements = assessProgramRequirementsConversation([
 assert.ok(unknownCohortRequirements);
 assert.equal(unknownCohortRequirements.curriculum, null, "unknown historical requirements stay unresolved instead of using the current catalog");
 
-const computerEngineering = getProgramCurriculum("bsc-computer-ai-engineering");
-assert.ok(computerEngineering);
-assert.equal(computerEngineering.curriculum.totalCredits, 130);
-assert.deepEqual(computerEngineering.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 41, 44, 6, 15, 3]);
-assert.equal(computerEngineering.curriculum.creditBuckets?.reduce((sum, bucket) => sum + bucket.credits, 0), 130);
-const pathways = computerEngineering.curriculum.requirements.find((item) => item.type === "PATHWAY_CHOICE");
+const computerAiEngineering = getProgramCurriculum("bsc-computer-ai-engineering");
+assert.ok(computerAiEngineering);
+assert.equal(computerAiEngineering.curriculum.totalCredits, 130);
+assert.deepEqual(computerAiEngineering.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 41, 44, 6, 15, 3]);
+assert.equal(computerAiEngineering.curriculum.creditBuckets?.reduce((sum, bucket) => sum + bucket.credits, 0), 130);
+const pathways = computerAiEngineering.curriculum.requirements.find((item) => item.type === "PATHWAY_CHOICE");
 assert.ok(pathways);
 const generalPathway = pathways.options.find((option) => option.id === "general-computer-ai-engineering");
 assert.ok(generalPathway);
@@ -134,7 +134,7 @@ assert.ok(generalPathway.courseCodes.includes("CENG532"));
 assert.ok(generalPathway.courseCodes.includes("CENG580"));
 const substitution = assessProgramCourseSubstitutionConversation([{
   role: "user",
-  content: "In Computer Engineering, take Network Security instead of Selected Topics in Computer Engineering.",
+  content: "In Computer and AI Engineering, take Network Security instead of Selected Topics in Computer Engineering.",
 }]);
 assert.ok(substitution);
 assert.equal(substitution.replacement.code, "CENG532");
@@ -144,9 +144,31 @@ const substitutionAnswer = renderProgramCourseSubstitutionAssessment(substitutio
 assert.match(substitutionAnswer, /permits choosing CENG532 in place of CENG580/);
 assert.match(substitutionAnswer, /does not establish that the substitution applies to either named concentration/);
 assert.equal(assessProgramCourseSubstitutionConversation([
-  { role: "user", content: "I entered the Computer Engineering program in 2022." },
+  { role: "user", content: "I entered the Computer and AI Engineering program in 2022." },
   { role: "assistant", content: "What would you like to check?" },
-  { role: "user", content: "In Computer Engineering, take Networking Security instead of Selected Topics." },
+  { role: "user", content: "In Computer and AI Engineering, take Networking Security instead of Selected Topics." },
 ])?.curriculum, null, "do not project the current pathway model onto unmodeled cohorts");
 
-console.log("Academic program model passed: 5 sourced programs, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");
+const legacyComputerEngineering = getProgramCurriculum("bsc-computer-engineering");
+assert.ok(legacyComputerEngineering);
+assert.equal(legacyComputerEngineering.curriculum.totalCredits, 131);
+assert.deepEqual(legacyComputerEngineering.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 41, 45, 6, 12, 6]);
+const computerElectives = legacyComputerEngineering.curriculum.requirements.find((item) => item.id === "computer-engineering-major-electives");
+assert.equal(computerElectives?.type, "ELECTIVE_GROUP");
+assert.equal(computerElectives?.chooseCount, 4);
+assert.ok(computerElectives?.courseCodes.includes("CENG532"));
+assert.ok(computerElectives?.courseCodes.includes("CENG580"));
+assert.equal(getProgramCurriculum("bsc-computer-engineering", 2022), null, "a current catalog snapshot is not proof of the historic Computer Engineering cohort plan");
+const computerDegreeSubstitution = assessProgramCourseSubstitutionConversation([{
+  role: "user", content: "In Computer Engineering, take Networking Security instead of Selected Topics in Computer Engineering.",
+}]);
+assert.ok(computerDegreeSubstitution);
+assert.equal(computerDegreeSubstitution.programId, "bsc-computer-engineering");
+assert.equal(computerDegreeSubstitution.sharedOption?.id, "computer-engineering-major-electives");
+const computerDegreeSubstitutionAnswer = renderProgramCourseSubstitutionAssessment(computerDegreeSubstitution, "en");
+assert.match(computerDegreeSubstitutionAnswer, /choosing 4 courses/);
+assert.doesNotMatch(computerDegreeSubstitutionAnswer, /concentration/);
+const computerDegreeArabic = renderProgramCourseSubstitutionAssessment(computerDegreeSubstitution, "ar");
+assert.ok(computerDegreeArabic.includes("يعرض"));
+
+console.log("Academic program model passed: 6 sourced programs, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");

@@ -170,7 +170,8 @@ export type ProgramCourseSubstitutionAssessment = ProgramCreditAssessment & {
 function programIdInText(text: string): string | undefined {
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
-  if (/\b(?:computer and (?:artificial intelligence|AI) engineering|computer engineering)\b/i.test(text)) return "bsc-computer-ai-engineering";
+  if (/\bcomputer (?:and )?(?:artificial intelligence|AI) engineering\b/i.test(text)) return "bsc-computer-ai-engineering";
+  if (/\bcomputer engineering\b/i.test(text)) return "bsc-computer-engineering";
   if (/\b(?:information security|cyber ?security)\b/i.test(text) || /أمن\s+المعلومات/u.test(text)) return "bsc-information-security";
   if (/\bcomputer science\b/i.test(text) || /علوم\s+الحاسوب/u.test(text)) return "bsc-computer-science";
   return undefined;
@@ -275,7 +276,9 @@ export function assessProgramCourseSubstitutionConversation(
   const selected = getProgramCurriculum(programId, cohortYear);
   const curriculum = selected?.curriculum ?? null;
   const pathChoice = curriculum?.requirements.find((item): item is Extract<ProgramRequirement, { type: "PATHWAY_CHOICE" }> => item.type === "PATHWAY_CHOICE");
-  const sharedOption = pathChoice?.options.find((option) => option.courseCodes.includes(replacementCourse.code) && option.courseCodes.includes(replacedCourse.code));
+  const sharedOption = pathChoice?.options.find((option) => option.courseCodes.includes(replacementCourse.code) && option.courseCodes.includes(replacedCourse.code)) ??
+    curriculum?.requirements.find((item): item is Extract<ProgramRequirement, { type: "ELECTIVE_GROUP" }> =>
+      item.type === "ELECTIVE_GROUP" && item.courseCodes.includes(replacementCourse.code) && item.courseCodes.includes(replacedCourse.code));
   return {
     programId,
     programName: program.name,
@@ -300,14 +303,21 @@ export function renderProgramCourseSubstitutionAssessment(
       : `I cannot verify replacing ${replaced.code} with ${replacement.code} for the ${cohortYear} entry cohort in ${programName}; I do not have an approved pathway model for that cohort. Check the plan assigned to you in Degree Works.`;
   }
   const permitted = sharedOption?.type === "ELECTIVE_GROUP";
+  const isConcentrationPathway = Boolean(sharedOption && curriculum.requirements.some((requirement) =>
+    requirement.type === "PATHWAY_CHOICE" && requirement.options.some(({ id }) => id === sharedOption.id)));
   if (locale === "ar") {
     if (permitted && sharedOption) {
+      if (!isConcentrationPathway) {
+        return `\u064a\u0639\u0631\u0636 \u0643\u062a\u0627\u0644\u0648\u062c ${programName} \u0643\u0644\u0627\u064b \u0645\u0646 ${replacement.code} ${replacement.title} \u0648${replaced.code} ${replaced.title} \u0636\u0645\u0646 \u0645\u062c\u0645\u0648\u0639\u0629 **${sharedOption.name}**. \u062a\u062a\u0637\u0644\u0628 \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629 \u0627\u062e\u062a\u064a\u0627\u0631 ${sharedOption.chooseCount} \u0645\u0642\u0631\u0631\u0627\u062a \u0645\u0646 \u0627\u0644\u0642\u0627\u0626\u0645\u0629\u060c \u0644\u0630\u0644\u0643 \u064a\u0633\u0645\u062d \u0627\u0644\u0645\u0635\u062f\u0631 \u0628\u0627\u062e\u062a\u064a\u0627\u0631 ${replacement.code} \u0628\u062f\u0644\u0627\u064b \u0645\u0646 ${replaced.code} \u0636\u0645\u0646 \u0647\u0630\u0647 \u0627\u0644\u0645\u062c\u0645\u0648\u0639\u0629\u060c \u0628\u0634\u0631\u0637 \u0623\u0646 \u062a\u062a\u0636\u0645\u0646\u0647\u0627 \u062e\u0637\u062a\u0643 \u0627\u0644\u0645\u062e\u0635\u0635\u0629.\n\n\u062a\u062d\u0642\u0642 \u0645\u0646 \u062e\u0637\u062a\u0643 \u0641\u064a Degree Works \u0648\u0645\u0646 \u062a\u0648\u0627\u0641\u0631 \u0627\u0644\u0634\u0639\u0628\u0629.`;
+      }
       return `تدرج الخطة المنشورة لمقرر ${programName} كلاً من ${replacement.code} ${replacement.title} و${replaced.code} ${replaced.title} ضمن خيارات **${sharedOption.name}**. تتطلب هذه المسار اختيار ${sharedOption.chooseCount} مقررات من القائمة؛ لذلك تسمح القائمة المنشورة باختيار ${replacement.code} بدلاً من ${replaced.code} ضمن هذا المسار، بشرط أن تكون خطتك المخصصة تتضمن هذا المسار. إذا كنت في أحد التخصصين، فلا تفترض أن هذا الاستبدال ينطبق عليه.\n\nتحقق من المسار المعتمد في Degree Works ومن توافر الشعبة.`;
     }
     return `لا تعرض الخطة المنشورة ${replacement.code} و${replaced.code} كخيارين ضمن مجموعة اختيار واحدة؛ لذلك لا أستطيع تأكيد هذا الاستبدال. تحقق من مسارك المحدد في Degree Works واسأل مرشدك الأكاديمي.`;
   }
   if (permitted && sharedOption) {
-    return `In the published **${sharedOption.name}** for ${programName}, both **${replacement.code} ${replacement.title}** and **${replaced.code} ${replaced.title}** are listed options. The pathway requires choosing ${sharedOption.chooseCount} courses from its list, so the published list permits choosing ${replacement.code} in place of ${replaced.code} **within this pathway**, provided your assigned plan uses it. This does not establish that the substitution applies to either named concentration.\n\nConfirm your assigned pathway in Degree Works and check current section availability.`;
+    const groupType = isConcentrationPathway ? "pathway" : "elective group";
+    const concentrationCaveat = isConcentrationPathway ? " This does not establish that the substitution applies to either named concentration." : "";
+    return `In the published **${sharedOption.name}** for ${programName}, both **${replacement.code} ${replacement.title}** and **${replaced.code} ${replaced.title}** are listed options. The ${groupType} requires choosing ${sharedOption.chooseCount} courses from its list, so the published list permits choosing ${replacement.code} in place of ${replaced.code} **within this ${groupType}**, provided your assigned plan uses it.${concentrationCaveat}\n\nConfirm your assigned plan in Degree Works and check current section availability.`;
   }
   if (sharedOption?.type === "REQUIRED_COURSE_SET") {
     return `The published **${sharedOption.name}** lists both **${replacement.code} ${replacement.title}** and **${replaced.code} ${replaced.title}** as required courses, not alternatives. The catalog does not support replacing one with the other in this pathway. Confirm your assigned plan and any approved exception with your academic advisor.`;

@@ -201,5 +201,52 @@
         "limitations": ["The catalog page was last updated 9 November 2026; no historic cohort model is encoded here.", "CENG532 Network Security and CENG580 Selected Topics in Computer Engineering are both choices in the General Pathway, which requires five courses from its listed six-course pool.", "The General Pathway choice is not interchangeable with a required course in either named concentration; do not claim CENG532 is part of the AI Systems or Robotics concentration requirement set.", "This model does not establish a student's assigned pathway, cohort, completed requirements, course availability, prerequisites, or registration eligibility."]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bsc-computer-engineering",
+    "name": "Bachelor of Science in Computer Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Information Technology",
+    "sources": [
+      { "documentId": "35-computer-engineering-curriculum.md", "title": "UAEU Bachelor of Science in Computer Engineering catalog requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-engineering.shtml", "lastVerified": "2026-11-11" }
+    ],
+    "courseTitles": [
+      { "code": "CENG532", "title": "Network Security", "aliases": ["Networking Security"] },
+      { "code": "CENG580", "title": "Selected Topics in Computer Engineering", "aliases": ["Selected Topics"] }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "computer-engineering-catalog-2026-08",
+        "version": "catalog-2026-08-18",
+        "status": "approved",
+        "cohortLabel": "Published catalog snapshot; personal and historic cohort applicability must be confirmed in the assigned plan",
+        "effectiveFrom": "2026-08-18",
+        "totalCredits": 131,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 41 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 45 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "major-electives", "name": "Major electives", "credits": 12 },
+          { "id": "free-electives", "name": "Free electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "computer-engineering-general-education", "name": "General education", "credits": 21, "ruleNote": "The catalog lists 21 credits of general education, including choice groups and theme-specific conditions." },
+          { "type": "REQUIRED_COURSE_SET", "id": "computer-engineering-college", "name": "Required college courses", "courseCodes": ["CENG202", "CENG205", "MATH105", "MATH110", "PHYS105", "STAT210", "CSBP119", "CSBP219", "CSBP315", "CSBP319", "ITBP270", "ITBP480", "ITBP481"] },
+          { "type": "ONE_OF_GROUP", "id": "computer-engineering-college-science-choice", "name": "College science course choice", "chooseCount": 1, "courseCodes": ["BIOC100", "CHEM111"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "computer-engineering-major", "name": "Required major courses", "courseCodes": ["CENG201", "CENG210", "CENG221", "CENG231", "CENG320", "CENG324", "CENG325", "CENG328", "CENG329", "CENG340", "CENG341", "CENG529", "MATH275", "MATH140", "SWEB300", "PHYS110", "PHYS135", "PHYS140", "CSBP121", "CSBP221", "ITBP301"] },
+          { "type": "INTERNSHIP", "id": "computer-engineering-internship", "name": "Internship", "courseCode": "ITBP496", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false },
+          { "type": "ELECTIVE_GROUP", "id": "computer-engineering-major-electives", "name": "Major electives", "chooseCount": 4, "credits": 12, "courseCodes": ["CENG513", "CENG521", "CENG530", "CENG531", "CENG532", "CENG533", "CENG580", "CENG420"] },
+          { "type": "CREDIT_BLOCK", "id": "computer-engineering-free-elective", "name": "Free elective", "credits": 6, "ruleNote": "The catalog lists 6 free-elective credits." }
+        ],
+        "limitations": [
+          "The catalog page was last updated 18 August 2026 and states a minimum of 131 credits; it does not establish which historic cohort plan applies to an individual student.",
+          "The source lists CENG400, CENG410, CENG430 and CENG440 at 0.00 credits with blank titles. They are not treated as selectable positive-credit electives in this structured model.",
+          "CENG532 Network Security and CENG580 Selected Topics in Computer Engineering are both listed among the major-elective choices; the requirement is to select four courses from the published list.",
+          "This model does not establish personal remaining credits, course availability, prerequisites, or registration eligibility."
+        ]
+      }
+    ]
   }
 ]

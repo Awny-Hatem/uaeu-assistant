@@ -106,23 +106,33 @@ async function main() {
   assert.equal(networkSecuritySubstitution.payload.resolutionState, "CONDITIONAL");
   assert.match(String(networkSecuritySubstitution.payload.content), /CENG532 Network Security/);
   assert.match(String(networkSecuritySubstitution.payload.content), /CENG580 Selected Topics in Computer Engineering/);
-  assert.match(String(networkSecuritySubstitution.payload.content), /General Computer and AI Engineering Pathway/);
-  assert.match(String(networkSecuritySubstitution.payload.content), /does not establish that the substitution applies to either named concentration/);
-  assert.match(JSON.stringify(networkSecuritySubstitution.payload.citations), /Computer and Artificial Intelligence Engineering/);
+  assert.match(String(networkSecuritySubstitution.payload.content), /choosing 4 courses/);
+  assert.doesNotMatch(String(networkSecuritySubstitution.payload.content), /concentration|pathway/i);
+  assert.match(JSON.stringify(networkSecuritySubstitution.payload.citations), /Bachelor of Science in Computer Engineering/);
 
   const computerEngineeringCredits = await ask("How many credits to graduate in Computer Engineering?", "203.0.113.234");
   assert.equal(computerEngineeringCredits.payload.stateLabel, "v3_program_credit_model");
-  assert.match(String(computerEngineeringCredits.payload.content), /130 credit hours/);
-  assert.match(String(computerEngineeringCredits.payload.content), /44 credits/);
-  assert.match(JSON.stringify(computerEngineeringCredits.payload.citations), /Computer and Artificial Intelligence Engineering/);
+  assert.match(String(computerEngineeringCredits.payload.content), /131 credit hours/);
+  assert.match(String(computerEngineeringCredits.payload.content), /45 credits/);
+  assert.match(JSON.stringify(computerEngineeringCredits.payload.citations), /Bachelor of Science in Computer Engineering/);
 
   const computerEngineeringPathways = await ask("Which courses are required in Computer Engineering?", "203.0.113.235");
   assert.equal(computerEngineeringPathways.payload.stateLabel, "v3_program_requirement_model");
-  assert.match(String(computerEngineeringPathways.payload.content), /AI Systems Engineering concentration/);
-  assert.match(String(computerEngineeringPathways.payload.content), /Robotics and Autonomous Systems concentration/);
-  assert.match(String(computerEngineeringPathways.payload.content), /General Computer and AI Engineering Pathway/);
+  assert.match(String(computerEngineeringPathways.payload.content), /Major electives/);
+  assert.match(String(computerEngineeringPathways.payload.content), /choose 4 \(12 credits\)/);
   assert.match(String(computerEngineeringPathways.payload.content), /CENG532/);
   assert.match(String(computerEngineeringPathways.payload.content), /CENG580/);
+
+  const computerAiCredits = await ask("How many credits to graduate in Computer and AI Engineering?", "203.0.113.236");
+  assert.equal(computerAiCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.match(String(computerAiCredits.payload.content), /130 credit hours/);
+  assert.match(JSON.stringify(computerAiCredits.payload.citations), /Computer and Artificial Intelligence Engineering/);
+
+  const computerAiPathways = await ask("Which courses are required in Computer and AI Engineering?", "203.0.113.237");
+  assert.equal(computerAiPathways.payload.stateLabel, "v3_program_requirement_model");
+  assert.match(String(computerAiPathways.payload.content), /AI Systems Engineering concentration/);
+  assert.match(String(computerAiPathways.payload.content), /Robotics and Autonomous Systems concentration/);
+  assert.match(String(computerAiPathways.payload.content), /General Computer and AI Engineering Pathway/);
 
   const courseQuestion = await askMessages([
     { role: "user", content: "I am studying Computer Science." },

@@ -31,6 +31,7 @@ function isExternalAcademicCreditRequest(text: string): boolean {
 }
 
 const SUBJECTS = [
+  ["computer-ai-engineering", "Computer and Artificial Intelligence Engineering study plan", /\bcomputer (?:and )?(?:artificial intelligence|ai) engineering\b/u],
   ["computer-engineering", "Computer Engineering study plan", /\bcomputer engineering\b/u],
   ["transcript", "official transcript", /\btranscripts?\b|كشف\s+(?:الدرجات|درجات)/u],
   ["certificate", "graduation certificate", /\b(?:graduation|degree) (?:certificate|diploma)|\bdiploma\b|شهاد[ةه]\s+(?:التخرج|الدرج[ةه])/u],

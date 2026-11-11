@@ -3,7 +3,7 @@ status: approved
 title: UAEU Computer and Artificial Intelligence Engineering curriculum and pathways
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml
 lastVerified: 2026-11-11
-subjects: computer-ai-engineering, computer-engineering, curriculum, pathways
+subjects: computer-ai-engineering, curriculum, pathways
 degreeLevel: undergraduate
 curriculum: true
 ---
