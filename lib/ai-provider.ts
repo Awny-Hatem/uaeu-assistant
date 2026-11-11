@@ -32,6 +32,7 @@ export class AiProviderError extends Error {
   diagnosticCode?: string;
   diagnosticParam?: string;
   diagnosticType?: string;
+  diagnosticSchemaIssue?: string;
 
   constructor(args: {
     status: number;
@@ -43,6 +44,7 @@ export class AiProviderError extends Error {
     diagnosticCode?: string;
     diagnosticParam?: string;
     diagnosticType?: string;
+    diagnosticSchemaIssue?: string;
   }) {
     super(args.publicMessage);
     this.name = "AiProviderError";
@@ -54,6 +56,7 @@ export class AiProviderError extends Error {
     this.diagnosticCode = args.diagnosticCode;
     this.diagnosticParam = args.diagnosticParam;
     this.diagnosticType = args.diagnosticType;
+    this.diagnosticSchemaIssue = args.diagnosticSchemaIssue;
     if (args.cause) {
       this.cause = args.cause;
     }
@@ -86,8 +89,17 @@ function retryAfterMs(header: string | null): number | undefined {
 
 function openAiHttpError(response: Response, data: Record<string, unknown>): AiProviderError {
   const detail = data.error && typeof data.error === 'object'
-    ? data.error as { code?: unknown; type?: unknown; param?: unknown } : {};
+    ? data.error as { code?: unknown; type?: unknown; param?: unknown; message?: unknown } : {};
   const safeDiagnostic = (value: unknown) => typeof value === "string" && /^[A-Za-z0-9_.\[\]-]{1,100}$/.test(value) ? value : undefined;
+  const schemaTokens = new Set(["properties", "claims", "items", "text", "evidenceIds", "clarification", "disposition", "type", "required", "additionalProperties", "enum", "minItems", "maxItems", "strict", "format"]);
+  let diagnosticSchemaIssue: string | undefined;
+  if (detail.code === "invalid_json_schema" && typeof detail.message === "string") {
+    const pathText = detail.message.match(/(?:In )?context\s*=\s*\(([^)]*)\)/i)?.[1] ?? "";
+    const path = [...pathText.matchAll(/[A-Za-z][A-Za-z0-9_-]*/g)].map(([token]) => token).filter((token) => schemaTokens.has(token));
+    const messageWithoutPath = detail.message.replace(/(?:In )?context\s*=\s*\([^)]*\)/ig, "");
+    const issue = [...schemaTokens].find((token) => new RegExp(`\\b${token}\\b`, "i").test(messageWithoutPath));
+    diagnosticSchemaIssue = `${issue ?? "schema_validation"}${path.length ? ` at ${path.join(".")}` : ""}`.slice(0, 180);
+  }
   const quotaCodes = new Set([
     'insufficient_quota', 'credit_balance_exhausted', 'organization_spend_limit_exceeded',
     'project_spend_limit_exceeded', 'organization_usage_limit_exceeded', 'billing_hard_limit_reached',
@@ -112,6 +124,7 @@ function openAiHttpError(response: Response, data: Record<string, unknown>): AiP
     diagnosticCode: safeDiagnostic(detail.code),
     diagnosticParam: safeDiagnostic(detail.param),
     diagnosticType: safeDiagnostic(detail.type),
+    diagnosticSchemaIssue,
   });
 }
 
@@ -489,6 +502,7 @@ export function describeAiProviderError(error: unknown): {
   diagnosticCode?: string;
   diagnosticParam?: string;
   diagnosticType?: string;
+  diagnosticSchemaIssue?: string;
 } {
   if (error instanceof AiProviderError) {
     return {
@@ -498,6 +512,7 @@ export function describeAiProviderError(error: unknown): {
       ...(error.diagnosticCode ? { diagnosticCode: error.diagnosticCode } : {}),
       ...(error.diagnosticParam ? { diagnosticParam: error.diagnosticParam } : {}),
       ...(error.diagnosticType ? { diagnosticType: error.diagnosticType } : {}),
+      ...(error.diagnosticSchemaIssue ? { diagnosticSchemaIssue: error.diagnosticSchemaIssue } : {}),
     };
   }
 

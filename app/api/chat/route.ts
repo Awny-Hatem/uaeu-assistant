@@ -1367,7 +1367,7 @@ export async function POST(req: Request) {
     const providerError = describeAiProviderError(error);
     console.error(
       "AI generation error:",
-      JSON.stringify({ status: providerError.status, providerStatus: providerError.providerStatus, code: providerError.diagnosticCode, type: providerError.diagnosticType, param: providerError.diagnosticParam }),
+      JSON.stringify({ status: providerError.status, providerStatus: providerError.providerStatus, code: providerError.diagnosticCode, type: providerError.diagnosticType, param: providerError.diagnosticParam, schemaIssue: providerError.diagnosticSchemaIssue }),
     );
     const supportRejected = groundingTrace?.status === "rejected" && !groundingTrace.reasonCodes.includes("verification_unavailable");
     const payload: AssistantPayload = {
