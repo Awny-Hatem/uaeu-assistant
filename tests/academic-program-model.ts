@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 46, "forty-six current or historical program records have structured evidence records");
+assert.equal(programs.length, 48, "forty-eight current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -86,6 +86,42 @@ assert.match(renderProgramRequirementsAssessment(tourismAnswer!, "en"), /TOR440/
 const tourismRequirementsWording = assessProgramRequirementsConversation([{ role: "user", content: "What are the requirements for Tourism Studies?" }]);
 assert.equal(tourismRequirementsWording?.programId, "tourism-studies");
 assert.match(JSON.stringify(tourism.program.sources), /bachelor-of-arts-in-tourism-studies\.shtml/);
+
+const historyArchaeology = getProgramCurriculum("history-and-archaeology");
+assert.ok(historyArchaeology);
+assert.equal(historyArchaeology.curriculum.totalCredits, 120);
+assert.deepEqual(historyArchaeology.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 42, 18, 6, 9, 6, 12]);
+assert.equal(historyArchaeology.curriculum.cohortMapping, "unresolved");
+const historyArchaeologyConcentration = historyArchaeology.curriculum.requirements.find((item) => item.id === "history-archaeology-concentrations");
+assert.ok(historyArchaeologyConcentration?.type === "PATHWAY_CHOICE");
+assert.equal(historyArchaeologyConcentration.options.length, 2);
+assert.deepEqual(historyArchaeologyConcentration.options.map(({ credits }) => credits), [18, 18]);
+const historyInternship = historyArchaeology.curriculum.requirements.find((item) => item.id === "history-archaeology-internship");
+assert.ok(historyInternship?.type === "INTERNSHIP");
+assert.equal(historyInternship.courseCode, "HIS402");
+assert.equal(historyInternship.otherCoursesAllowed, false);
+const historyQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in History and Archaeology?" }]);
+assert.equal(historyQuestion?.programId, "history-and-archaeology");
+assert.match(renderProgramRequirementsAssessment(historyQuestion!, "en"), /HIS311/);
+assert.match(JSON.stringify(historyArchaeology.program.sources), /bachelor-of-arts-in-history-and-archaeology\.shtml/);
+
+const politicalScience = getProgramCurriculum("political-science");
+assert.ok(politicalScience);
+assert.equal(politicalScience.curriculum.totalCredits, 120);
+assert.deepEqual(politicalScience.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 45, 3, 12, 15, 18]);
+assert.equal(politicalScience.curriculum.cohortMapping, "unresolved");
+const politicalSupport = politicalScience.curriculum.requirements.find((item) => item.id === "political-science-supporting-pathway");
+assert.ok(politicalSupport?.type === "PATHWAY_CHOICE");
+assert.equal(politicalSupport.options.length, 2);
+assert.equal(politicalSupport.options[0].type, "ELECTIVE_GROUP");
+assert.equal(politicalSupport.options[0].chooseCount, 5);
+assert.equal(politicalSupport.options[1].type, "COMPOSITE");
+assert.ok(politicalSupport.options[1].requirements?.some((item) => item.type === "ELECTIVE_GROUP" && item.chooseCount === 3));
+assert.ok(politicalSupport.options[1].requirements?.some((item) => item.type === "PATHWAY_CHOICE"));
+const politicalQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Political Science?" }]);
+assert.equal(politicalQuestion?.programId, "political-science");
+assert.match(renderProgramRequirementsAssessment(politicalQuestion!, "en"), /PSG440/);
+assert.match(JSON.stringify(politicalScience.program.sources), /bachelor-of-arts-in-political-science\.shtml/);
 
 for (const programId of ["biology", "biochemistry"]) {
   const program = getProgramCurriculum(programId);
