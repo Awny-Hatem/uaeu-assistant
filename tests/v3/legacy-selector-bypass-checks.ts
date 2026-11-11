@@ -35,6 +35,14 @@ async function main() {
   assert.match(String(studentDocument.payload.content), /Current Students Documents/i);
   assert.match(JSON.stringify(studentDocument.payload.citations), /serviceId=92/);
 
+  const libraryResearchHelp = await ask("How can UAEU students get library or research help?", "203.0.113.230");
+  assert.equal(libraryResearchHelp.payload.stateLabel, "guided_service");
+  assert.equal(libraryResearchHelp.payload.resolutionState, "VERIFIED");
+  assert.equal(libraryResearchHelp.payload.faqId, undefined, "the V3 service guide is not canonical answer selection");
+  assert.equal((libraryResearchHelp.payload.guide as { id?: string } | undefined)?.id, "ask-a-librarian-research-help");
+  assert.match(String(libraryResearchHelp.payload.content), /one-hour email-response target/i);
+  assert.match(JSON.stringify(libraryResearchHelp.payload.citations), /serviceId=98/);
+
   const calendarFollowUp = await askMessages([
     { role: "user", content: "Where can I check UAEU academic calendar deadlines?" },
     { role: "assistant", content: "Which term, year, and applicant category do you mean?" },
