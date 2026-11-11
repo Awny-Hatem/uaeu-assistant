@@ -138,7 +138,7 @@ const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
-assert.equal(parsed.length, 1473, "the verified catalog snapshot should safely structure 1,473 of its 1,478 relation records");
+assert.equal(parsed.length, 1474, "the verified catalog snapshot should safely structure 1,474 of its 1,478 relation records");
 const minimumD = (courseCode: string) => ({ type: "COURSE_GRADE_AT_LEAST" as const, courseCode, minimumGrade: "D" as const });
 const reviewedRepairs = [
   {
@@ -171,8 +171,17 @@ for (const { code, expected } of reviewedRepairs) {
 }
 const chme330 = catalog.courses.find((course) => course.code === "CHME330");
 assert.ok(chme330);
-assert.equal(parseCatalogPrerequisiteExpression(chme330), null,
-  "the malformed official CHME330 page includes a visible orphan prerequisite and must remain unsupported");
+assert.deepEqual(parseCatalogPrerequisiteExpression(chme330), {
+  op: "AND",
+  conditions: [
+    minimumD("PHYS105"),
+    minimumD("PHYS135"),
+    { op: "OR", conditions: [
+      { op: "OR", conditions: [minimumD("PETE290"), { type: "COURSE_CURRENT", courseCode: "PETE290" }] },
+      { op: "OR", conditions: [minimumD("CHME300"), { type: "COURSE_CURRENT", courseCode: "CHME300" }] },
+    ] },
+  ],
+}, "CHME330's orphaned PHYS135 line is a separate explicit minimum-grade requirement; only its stray trailing parenthesis is repaired");
 for (const code of ["LNG450", "LNG460"]) {
   const course = catalog.courses.find((candidate) => candidate.code === code);
   assert.ok(course);

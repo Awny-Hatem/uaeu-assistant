@@ -9,11 +9,12 @@ const VALID_GRADES = new Set<Grade>(["F", "D", "D+", "C-", "C", "C+", "B-", "B",
 // otherwise spelling out every course, grade, and Boolean operator. Apply a
 // repair only to the exact source fragments reviewed against the UAEU pages;
 // any source wording change continues to fail closed.
-const REVIEWED_PARENTHESIS_REPAIRS: Record<string, Record<string, number>> = {
-  MECH350: { "( MECH210 with a minimum grade D or ( AERO220 with a minimum grade D)": 1 },
-  CHEM355: { "( CHEM251 with a minimum grade D or ( CHME322 with a minimum grade D and GENG220 with a minimum grade D)": 1 },
-  GEOL300: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": 1 },
-  GEOL400: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": 1 },
+const REVIEWED_CATALOG_ITEM_REPAIRS: Record<string, Record<string, string>> = {
+  MECH350: { "( MECH210 with a minimum grade D or ( AERO220 with a minimum grade D)": "( MECH210 with a minimum grade D or ( AERO220 with a minimum grade D))" },
+  CHEM355: { "( CHEM251 with a minimum grade D or ( CHME322 with a minimum grade D and GENG220 with a minimum grade D)": "( CHEM251 with a minimum grade D or ( CHME322 with a minimum grade D and GENG220 with a minimum grade D))" },
+  GEOL300: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D))" },
+  GEOL400: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D))" },
+  CHME330: { "PHYS135 with a minimum grade D)": "PHYS135 with a minimum grade D" },
 };
 
 type Token = { kind: "course"; expression: PrerequisiteExpression } | { kind: "and" | "or" | "left" | "right" };
@@ -100,8 +101,7 @@ function parseItem(text: string): PrerequisiteExpression | null {
 
 /** Honor an explicit inline Pre/Co marker without relaxing other catalog grammar. */
 function parsePrerequisiteItem(text: string, courseCode: string): PrerequisiteExpression | null {
-  const missingClosures = REVIEWED_PARENTHESIS_REPAIRS[courseCode]?.[text];
-  const sourceText = missingClosures ? `${text}${")".repeat(missingClosures)}` : text;
+  const sourceText = REVIEWED_CATALOG_ITEM_REPAIRS[courseCode]?.[text] ?? text;
   const concurrentCodes: string[] = [];
   const normalized = sourceText.replace(
     /\bpre\s*[\/&]\s*co(?:requisites?)?\s+([A-Z]{2,8}\s?\d{3,4}[A-Z]?)\b/giu,
