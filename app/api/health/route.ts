@@ -11,6 +11,7 @@ import { sourceCoverageSnapshot } from "@/lib/source-registry";
 import { createHash } from "node:crypto";
 import { isV3Enabled } from "@/lib/v3/runtime";
 import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
+import { listAcademicPrograms } from "@/lib/academic/program-curricula";
 import { loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
 import { parseCatalogPrerequisiteExpression } from "@/lib/academic/catalog-prerequisite-parser";
 
@@ -28,6 +29,8 @@ export async function GET() {
   const v3Enabled = isV3Enabled();
   const sourceCoverage = sourceCoverageSnapshot();
   const programCatalog = loadUndergraduateProgramCatalog();
+  const curriculumVersions = listAcademicPrograms().flatMap((program) => program.curriculumVersions);
+  const explicitlyUnresolvedCohortMappings = curriculumVersions.filter((version) => version.cohortMapping === "unresolved").length;
   const courseCatalog = loadOfficialCourseCatalog();
   const relationCourses = courseCatalog?.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length) ?? [];
   const structuredRelationCount = relationCourses.filter((course) => parseCatalogPrerequisiteExpression(course)).length;
@@ -67,6 +70,11 @@ export async function GET() {
       verifiedAt: programCatalog.verifiedAt,
       curriculumCoverage,
       curriculumRecordsRequiringIdentityReview: programCatalog.curriculumRecordsRequiringIdentityReview.length,
+      cohortApplicability: {
+        curriculumVersions: curriculumVersions.length,
+        explicitlyUnresolvedMappings: explicitlyUnresolvedCohortMappings,
+        versionsWithoutUnresolvedFlag: curriculumVersions.length - explicitlyUnresolvedCohortMappings,
+      },
     },
     courseCatalog: {
       status: courseCatalog ? "official-course-catalog-snapshot" : "not-loaded",

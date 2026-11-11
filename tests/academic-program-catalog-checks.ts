@@ -29,3 +29,19 @@ assert.equal(answerProgramCatalogQuestion("Can I change my major after third yea
 assert.equal(answerProgramCatalogQuestion("What is the tuition cost for the program I want?", "en"), null, "a program tuition question must not trigger the degree inventory response");
 
 console.log("UAEU program catalog checks passed: all 55 official degrees across 9 colleges have structured curriculum evidence, catalog-only coverage states, college filtering, and scope guards.");
+
+void import("../app/api/health/route").then(async ({ GET }) => {
+  const response = await GET();
+  const payload = await response.json();
+  const versions = (await import("../lib/academic/program-curricula")).listAcademicPrograms().flatMap((program) => program.curriculumVersions);
+  const unresolved = versions.filter((version) => version.cohortMapping === "unresolved").length;
+  assert.deepEqual(payload.academicCatalog.cohortApplicability, {
+    curriculumVersions: versions.length,
+    explicitlyUnresolvedMappings: unresolved,
+    versionsWithoutUnresolvedFlag: versions.length - unresolved,
+  }, "health reports cohort scope gaps instead of implying every current curriculum is student-applicable");
+  console.log("Health cohort applicability checks passed: explicitly unresolved curriculum versions are counted.");
+}).catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
