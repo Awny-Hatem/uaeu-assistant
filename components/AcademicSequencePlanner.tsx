@@ -209,6 +209,35 @@ export function AcademicSequencePlanner({
     const available = new Set(curriculum.courses.map((course) => course.code));
     return curriculum.requirementSummary.mandatoryCourseCodes.filter((code) => !available.has(code) && !completedAndCurrent.has(code));
   }, [completedAndCurrent, curriculum]);
+  const requirementCopy = language === "ar" ? {
+    overview: "ملخص متطلبات الخطة الدراسية",
+    addRequired: (count: number) => `أضف المقررات الإلزامية المتبقية (${count})`,
+    selfReported: "تعتمد هذه المقارنة على رموز المقررات التي تُدخلها بنفسك. لا يرتبط النموذج بنظام Degree Works ولا يؤكد استيفاء متطلبات التخرج.",
+    unavailable: "رموز مقررات إلزامية لا تتوفر لها سجلات قابلة للاختيار:",
+    choiceGroups: "مجموعات الاختيار والمقررات الاختيارية",
+    completedCurrent: "خيار/خيارات مدرجة مذكورة كمجتازة أو قيد الدراسة",
+    choose: (count: number) => `المطلوب اختيار ${count}`,
+    credits: (count: number) => `${count} ساعات معتمدة`,
+    pathways: "خيارات المسار (لا تُضاف تلقائياً)",
+    conditional: "متطلبات مرتبطة باختيار المسار",
+    appliesIf: "ينطبق عند اختيار",
+    creditBlocks: "متطلبات الساعات التي لا يقيّمها ترتيب المقررات",
+    requiredPrompt: "يمكن إضافة المقررات الإلزامية المقترحة أعلاه. أضف المقررات الاختيارية ومقررات المسارات بعد التأكد من انطباقها على خطتك. لا تتحقق الأداة من الساعات الاختيارية أو استيفاء متطلبات الدرجة.",
+  } : {
+    overview: "Curriculum requirement overview",
+    addRequired: (count: number) => `Add outstanding required courses (${count})`,
+    selfReported: "This comparison uses course codes you enter yourself. It is not connected to Degree Works and does not confirm that requirements are complete.",
+    unavailable: "Required course codes without selectable catalog records:",
+    choiceGroups: "Elective and choice groups",
+    completedCurrent: "listed option(s) reported completed or current",
+    choose: (count: number) => `choose ${count}`,
+    credits: (count: number) => `${count} credits`,
+    pathways: "Pathway choices (not auto-selected)",
+    conditional: "Requirements dependent on a pathway",
+    appliesIf: "applies if",
+    creditBlocks: "Credit blocks not assessed by course sequencing",
+    requiredPrompt: "Mandatory course suggestions can be added above. Select electives and pathway courses only after confirming they apply to your plan. This tool does not validate elective credits or degree completion.",
+  };
 
   async function createSequence(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -319,37 +348,37 @@ export function AcademicSequencePlanner({
 
             <section aria-label="Curriculum requirement overview" className="space-y-3 rounded-lg border border-zinc-200 p-4">
               <div className="flex flex-wrap items-center justify-between gap-2">
-                <h3 className="font-bold text-zinc-900">Curriculum requirement overview</h3>
+                <h3 className="font-bold text-zinc-900">{requirementCopy.overview}</h3>
                 <button type="button" onClick={addOutstandingRequiredCourses} disabled={!mandatoryRemaining.length} className="rounded-md border border-[#E0182D] px-3 py-1.5 text-sm font-bold text-[#B10E23] hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-50">
-                  Add outstanding required courses ({mandatoryRemaining.length})
+                  {requirementCopy.addRequired(mandatoryRemaining.length)}
                 </button>
               </div>
-              <p className="text-xs leading-5 text-zinc-600">This comparison uses course codes you enter yourself. It is not connected to Degree Works and does not confirm that requirements are complete.</p>
-              {unavailableMandatory.length > 0 && <p className="text-xs leading-5 text-amber-800">Required course codes without selectable catalog records: {unavailableMandatory.join(", ")}</p>}
+              <p className="text-xs leading-5 text-zinc-600">{requirementCopy.selfReported}</p>
+              {unavailableMandatory.length > 0 && <p className="text-xs leading-5 text-amber-800">{requirementCopy.unavailable} {unavailableMandatory.join(", ")}</p>}
               {curriculum.requirementSummary.choiceGroups.length > 0 && <div className="space-y-1 text-sm">
-                <h4 className="font-semibold">Elective and choice groups</h4>
+                <h4 className="font-semibold">{requirementCopy.choiceGroups}</h4>
                 {curriculum.requirementSummary.choiceGroups.map((group) => {
                   const reported = group.courseCodes.filter((code) => completedAndCurrent.has(code)).length;
-                  return <p key={group.id} className="text-zinc-700"><span className="font-medium">{group.name}:</span> {reported} listed option(s) reported completed or current{group.chooseCount !== undefined ? `; choose ${group.chooseCount}` : ""}{group.credits !== undefined ? `; ${group.credits} credits` : ""}. {group.selectionNote}</p>;
+                  return <p key={group.id} className="text-zinc-700"><span className="font-medium">{group.name}:</span> {reported} {requirementCopy.completedCurrent}{group.chooseCount !== undefined ? `; ${requirementCopy.choose(group.chooseCount)}` : ""}{group.credits !== undefined ? `; ${requirementCopy.credits(group.credits)}` : ""}. {group.selectionNote}</p>;
                 })}
               </div>}
               {curriculum.requirementSummary.pathwayChoices.length > 0 && <div className="space-y-1 text-sm">
-                <h4 className="font-semibold">Pathway choices (not auto-selected)</h4>
+                <h4 className="font-semibold">{requirementCopy.pathways}</h4>
                 {curriculum.requirementSummary.pathwayChoices.map((pathway) => <p key={pathway.id} className="text-zinc-700"><span className="font-medium">{pathway.name}:</span> {pathway.options.map((option) => option.name).join("; ")}</p>)}
               </div>}
               {curriculum.requirementSummary.conditionalGroups.length > 0 && <div className="space-y-1 text-xs leading-5 text-zinc-600">
-                <h4 className="font-semibold text-zinc-700">Requirements dependent on a pathway</h4>
-                {curriculum.requirementSummary.conditionalGroups.map((group) => <p key={`${group.id}:${group.conditionalOn}`}><span className="font-medium">{group.name}:</span> {group.courseCodes.join(", ")} — applies if {group.conditionalOn}</p>)}
+                <h4 className="font-semibold text-zinc-700">{requirementCopy.conditional}</h4>
+                {curriculum.requirementSummary.conditionalGroups.map((group) => <p key={`${group.id}:${group.conditionalOn}`}><span className="font-medium">{group.name}:</span> {group.courseCodes.join(", ")} — {requirementCopy.appliesIf} {group.conditionalOn}</p>)}
               </div>}
               {curriculum.requirementSummary.creditBlocksNotAssessed.length > 0 && <div className="space-y-1 text-xs leading-5 text-zinc-600">
-                <h4 className="font-semibold text-zinc-700">Credit blocks not assessed by course sequencing</h4>
-                {curriculum.requirementSummary.creditBlocksNotAssessed.map((block) => <p key={block.id}><span className="font-medium">{block.name} ({block.credits} credits):</span> {block.ruleNote}{block.conditionalOn ? ` — applies if ${block.conditionalOn}` : ""}</p>)}
+                <h4 className="font-semibold text-zinc-700">{requirementCopy.creditBlocks}</h4>
+                {curriculum.requirementSummary.creditBlocksNotAssessed.map((block) => <p key={block.id}><span className="font-medium">{block.name} ({requirementCopy.credits(block.credits)}):</span> {block.ruleNote}{block.conditionalOn ? ` — ${requirementCopy.appliesIf} ${block.conditionalOn}` : ""}</p>)}
               </div>}
             </section>
 
             <fieldset className="rounded-lg border border-zinc-200 p-4">
               <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({selectedCodes.length} {labels.selected})</legend>
-              <p className="mb-3 text-xs leading-5 text-zinc-600">Mandatory course suggestions can be added above. Select electives and pathway courses only after confirming they apply to your plan. This tool does not validate elective credits or degree completion.</p>
+              <p className="mb-3 text-xs leading-5 text-zinc-600">{requirementCopy.requiredPrompt}</p>
               <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
                 {curriculum.courses.map((course) => (
                   <label key={course.code} className="flex cursor-pointer items-start gap-3 rounded-md px-2 py-2 hover:bg-zinc-50">
