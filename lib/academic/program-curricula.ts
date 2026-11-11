@@ -1,10 +1,21 @@
 import curriculaData from "@/data/academic/program-curricula.json";
 
 export type CreditBucket = { id: string; name: string; credits: number };
+export type PathwayOption = {
+  id: string;
+  name: string;
+  type: "REQUIRED_COURSE_SET" | "ELECTIVE_GROUP";
+  credits: number;
+  chooseCount?: number;
+  courseCodes: string[];
+  selectionNote?: string;
+};
 export type ProgramRequirement =
   | { type: "REQUIRED_COURSE_SET"; id: string; name: string; courseCodes: string[] }
   | { type: "ONE_OF_GROUP"; id: string; name: string; chooseCount: number; courseCodes: string[] }
   | { type: "ELECTIVE_GROUP"; id: string; name: string; chooseCount: number; credits: number; courseCodes: string[] }
+  | { type: "CREDIT_BLOCK"; id: string; name: string; credits: number; ruleNote: string }
+  | { type: "PATHWAY_CHOICE"; id: string; name: string; options: PathwayOption[] }
   | { type: "INTERNSHIP"; id: string; name?: string; courseCode: string; credits: number; finalSemesterOnly: boolean; otherCoursesAllowed?: boolean };
 
 export type CurriculumVersion = {
@@ -26,6 +37,7 @@ export type AcademicProgram = {
   name: string;
   degreeLevel: "undergraduate" | "postgraduate";
   college: string;
+  courseTitles?: { code: string; title: string; aliases?: string[] }[];
   sources: { documentId: string; title: string; url: string; lastVerified: string }[];
   curriculumVersions: CurriculumVersion[];
 };
@@ -51,6 +63,19 @@ function isRequirement(value: unknown): value is ProgramRequirement {
     return typeof value.name === "string" && Number.isInteger(value.chooseCount) && Number(value.chooseCount) > 0 &&
       isCourseCodes(value.courseCodes) && Number(value.chooseCount) <= value.courseCodes.length &&
       (value.type === "ONE_OF_GROUP" || (typeof value.credits === "number" && value.credits > 0));
+  }
+  if (value.type === "CREDIT_BLOCK") {
+    return typeof value.name === "string" && typeof value.credits === "number" && value.credits > 0 && typeof value.ruleNote === "string";
+  }
+  if (value.type === "PATHWAY_CHOICE") {
+    if (typeof value.name !== "string" || !Array.isArray(value.options) || value.options.length < 2) return false;
+    const optionsValid = value.options.every((option) => isRecord(option) && typeof option.id === "string" && Boolean(option.id) &&
+      typeof option.name === "string" && (option.type === "REQUIRED_COURSE_SET" || option.type === "ELECTIVE_GROUP") &&
+      typeof option.credits === "number" && option.credits > 0 && isCourseCodes(option.courseCodes) &&
+      (option.type === "REQUIRED_COURSE_SET" ? option.chooseCount === undefined : Number.isInteger(option.chooseCount) &&
+        Number(option.chooseCount) > 0 && Number(option.chooseCount) <= option.courseCodes.length) &&
+      (option.selectionNote === undefined || typeof option.selectionNote === "string"));
+    return optionsValid && new Set(value.options.map((option) => (option as Record<string, unknown>).id)).size === value.options.length;
   }
   if (value.type === "INTERNSHIP") {
     return COURSE_CODE.test(String(value.courseCode)) && typeof value.credits === "number" && value.credits > 0 &&
@@ -88,6 +113,15 @@ function isProgram(value: unknown): value is AcademicProgram {
     } catch { return false; }
   });
   const versions = value.curriculumVersions;
+  if (value.courseTitles !== undefined) {
+    if (!Array.isArray(value.courseTitles)) return false;
+    const rows = value.courseTitles as unknown[];
+    const titleRowsValid = rows.every((course) => isRecord(course) && typeof course.code === "string" && COURSE_CODE.test(course.code) &&
+      typeof course.title === "string" && (course.aliases === undefined ||
+        (Array.isArray(course.aliases) && course.aliases.every((alias) => typeof alias === "string"))));
+    const uniqueTitles = rows.every(isRecord) && new Set(rows.map((course) => course.code)).size === rows.length;
+    if (!titleRowsValid || !uniqueTitles) return false;
+  }
   return sourcesValid && versions.every(isCurriculumVersion) && new Set(versions.map((version) => (version as Record<string, unknown>).id)).size === versions.length;
 }
 
@@ -127,9 +161,16 @@ export type ProgramCreditAssessment = {
 
 export type ProgramRequirementsAssessment = ProgramCreditAssessment;
 
+export type ProgramCourseSubstitutionAssessment = ProgramCreditAssessment & {
+  replacement: { code: string; title: string };
+  replaced: { code: string; title: string };
+  sharedOption?: PathwayOption;
+};
+
 function programIdInText(text: string): string | undefined {
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
+  if (/\b(?:computer and (?:artificial intelligence|AI) engineering|computer engineering)\b/i.test(text)) return "bsc-computer-ai-engineering";
   if (/\b(?:information security|cyber ?security)\b/i.test(text) || /أمن\s+المعلومات/u.test(text)) return "bsc-information-security";
   if (/\bcomputer science\b/i.test(text) || /علوم\s+الحاسوب/u.test(text)) return "bsc-computer-science";
   return undefined;
@@ -204,6 +245,76 @@ export function assessProgramRequirementsConversation(
   };
 }
 
+function normalizeCoursePhrase(value: string): string {
+  return value.toLocaleLowerCase("en").replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+export function assessProgramCourseSubstitutionConversation(
+  messages: { role: "user" | "assistant"; content: string }[],
+): ProgramCourseSubstitutionAssessment | null {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const latest = userMessages.at(-1)?.content;
+  if (!latest || !/\b(?:instead of|rather than|replace|replacement|substitut(?:e|ion))\b/i.test(latest)) return null;
+  const programId = programIdInText(latest) ??
+    [...userMessages.slice(0, -1)].reverse().map(({ content }) => programIdInText(content)).find(Boolean);
+  if (!programId) return null;
+  const program = academicPrograms.find((item) => item.id === programId);
+  if (!program) return null;
+  const mentions = program.courseTitles ?? [];
+  const [replacementText, replacedText] = latest.split(/\b(?:instead of|rather than)\b/i);
+  if (!replacementText || !replacedText) return null;
+  const courseForText = (text: string) => {
+    const normalized = normalizeCoursePhrase(text);
+    return mentions.find((course) => [course.title, ...(course.aliases ?? [])]
+      .some((phrase) => normalizeCoursePhrase(phrase).length >= 5 && normalized.includes(normalizeCoursePhrase(phrase))));
+  };
+  const replacementCourse = courseForText(replacementText);
+  const replacedCourse = courseForText(replacedText);
+  if (!replacementCourse || !replacedCourse || replacementCourse.code === replacedCourse.code) return null;
+  const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
+  const selected = getProgramCurriculum(programId, cohortYear);
+  const curriculum = selected?.curriculum ?? null;
+  const pathChoice = curriculum?.requirements.find((item): item is Extract<ProgramRequirement, { type: "PATHWAY_CHOICE" }> => item.type === "PATHWAY_CHOICE");
+  const sharedOption = pathChoice?.options.find((option) => option.courseCodes.includes(replacementCourse.code) && option.courseCodes.includes(replacedCourse.code));
+  return {
+    programId,
+    programName: program.name,
+    curriculum,
+    sources: program.sources,
+    ...(cohortYear !== undefined ? { cohortYear } : {}),
+    cohortMatched: selected?.cohortMatched ?? false,
+    replacement: { code: replacementCourse.code, title: replacementCourse.title },
+    replaced: { code: replacedCourse.code, title: replacedCourse.title },
+    ...(sharedOption ? { sharedOption } : {}),
+  };
+}
+
+export function renderProgramCourseSubstitutionAssessment(
+  assessment: ProgramCourseSubstitutionAssessment,
+  locale: "en" | "ar",
+): string {
+  const { curriculum, programName, replacement, replaced, sharedOption, cohortYear } = assessment;
+  if (!curriculum) {
+    return locale === "ar"
+      ? `لا أستطيع التحقق من استبدال ${replacement.code} بـ${replaced.code} لدفعة ${cohortYear} في ${programName}؛ لا تتوفر لدي خطة معتمدة لهذه الدفعة. تحقق من خطتك في Degree Works.`
+      : `I cannot verify replacing ${replaced.code} with ${replacement.code} for the ${cohortYear} entry cohort in ${programName}; I do not have an approved pathway model for that cohort. Check the plan assigned to you in Degree Works.`;
+  }
+  const permitted = sharedOption?.type === "ELECTIVE_GROUP";
+  if (locale === "ar") {
+    if (permitted && sharedOption) {
+      return `تدرج الخطة المنشورة لمقرر ${programName} كلاً من ${replacement.code} ${replacement.title} و${replaced.code} ${replaced.title} ضمن خيارات **${sharedOption.name}**. تتطلب هذه المسار اختيار ${sharedOption.chooseCount} مقررات من القائمة؛ لذلك تسمح القائمة المنشورة باختيار ${replacement.code} بدلاً من ${replaced.code} ضمن هذا المسار، بشرط أن تكون خطتك المخصصة تتضمن هذا المسار. إذا كنت في أحد التخصصين، فلا تفترض أن هذا الاستبدال ينطبق عليه.\n\nتحقق من المسار المعتمد في Degree Works ومن توافر الشعبة.`;
+    }
+    return `لا تعرض الخطة المنشورة ${replacement.code} و${replaced.code} كخيارين ضمن مجموعة اختيار واحدة؛ لذلك لا أستطيع تأكيد هذا الاستبدال. تحقق من مسارك المحدد في Degree Works واسأل مرشدك الأكاديمي.`;
+  }
+  if (permitted && sharedOption) {
+    return `In the published **${sharedOption.name}** for ${programName}, both **${replacement.code} ${replacement.title}** and **${replaced.code} ${replaced.title}** are listed options. The pathway requires choosing ${sharedOption.chooseCount} courses from its list, so the published list permits choosing ${replacement.code} in place of ${replaced.code} **within this pathway**, provided your assigned plan uses it. This does not establish that the substitution applies to either named concentration.\n\nConfirm your assigned pathway in Degree Works and check current section availability.`;
+  }
+  if (sharedOption?.type === "REQUIRED_COURSE_SET") {
+    return `The published **${sharedOption.name}** lists both **${replacement.code} ${replacement.title}** and **${replaced.code} ${replaced.title}** as required courses, not alternatives. The catalog does not support replacing one with the other in this pathway. Confirm your assigned plan and any approved exception with your academic advisor.`;
+  }
+  return `The published plan does not list ${replacement.code} and ${replaced.code} together as choices in the same pathway, so I cannot verify that substitution. Check your assigned pathway in Degree Works and confirm with your academic advisor.`;
+}
+
 export function renderProgramRequirementsAssessment(
   assessment: ProgramRequirementsAssessment,
   locale: "en" | "ar",
@@ -224,6 +335,15 @@ export function renderProgramRequirementsAssessment(
     }
     if (requirement.type === "ELECTIVE_GROUP") {
       return `**${requirement.name}:** choose ${requirement.chooseCount} (${requirement.credits} credits) from ${requirement.courseCodes.join(", ")}.`;
+    }
+    if (requirement.type === "CREDIT_BLOCK") {
+      return `**${requirement.name}:** ${requirement.credits} credits. ${requirement.ruleNote}`;
+    }
+    if (requirement.type === "PATHWAY_CHOICE") {
+      const options = requirement.options.map((option) => option.type === "ELECTIVE_GROUP"
+        ? `- ${option.name}: choose ${option.chooseCount} courses (${option.credits} credits) from ${option.courseCodes.join(", ")}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`
+        : `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).`).join("\n");
+      return `**${requirement.name}:** choose one option:\n${options}`;
     }
     return `**${requirement.name ?? "Internship requirement"}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;
   });

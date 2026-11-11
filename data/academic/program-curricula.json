@@ -154,5 +154,52 @@
         "limitations": ["The 2026–27 model plan lists MATH130/MATH135 instead of MATH105/MATH110; follow the student's assigned cohort plan.", "The 21-credit general-education block includes approved choice groups; the listed options are not all individually mandatory.", "The catalog describes MECH485 and MECH490 as 1 credit each; they may be taken in separate summers or during regular Fall/Spring semesters.", "This model does not establish personal remaining credits, course availability, prerequisites, or registration eligibility."]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bsc-computer-ai-engineering",
+    "name": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Computing and Artificial Intelligence",
+    "sources": [
+      { "documentId": "34-computer-ai-engineering-curriculum.md", "title": "UAEU Computer and Artificial Intelligence Engineering curriculum and pathways", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml", "lastVerified": "2026-11-11" }
+    ],
+    "courseTitles": [
+      { "code": "CENG532", "title": "Network Security", "aliases": ["Networking Security"] },
+      { "code": "CENG580", "title": "Selected Topics in Computer Engineering", "aliases": ["Selected Topics"] }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "cai-engineering-catalog-2026-11",
+        "version": "catalog-2026-11-09",
+        "status": "approved",
+        "cohortLabel": "Currently published catalog; individual cohort plan and Degree Works control personal requirements",
+        "effectiveFrom": "2026-11-09",
+        "totalCredits": 130,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 41 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 44 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "pathway", "name": "Concentration or General Pathway", "credits": 15 },
+          { "id": "free-elective", "name": "Free elective", "credits": 3 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "cai-general-education-fixed", "name": "Required general-education courses", "courseCodes": ["GEEM110", "GEAE101", "CENG110", "ITBP218", "GESU121"] },
+          { "type": "CREDIT_BLOCK", "id": "cai-general-education-themes", "name": "General-education theme choices", "credits": 6, "ruleNote": "Choose 6 credits from Themes 6–11, maximum 3 credits from each theme; a Theme 11 language course requires its complementary course." },
+          { "type": "REQUIRED_COURSE_SET", "id": "cai-college-required", "name": "Required college courses", "courseCodes": ["CENG202", "CENG205", "MATH105", "MATH110", "PHYS105", "STAT210", "CSBP119", "CSBP219", "CSBP315", "CSBP319", "ITBP270", "ITBP480", "ITBP481"] },
+          { "type": "ONE_OF_GROUP", "id": "cai-college-science-choice", "name": "College science course choice", "chooseCount": 1, "courseCodes": ["BIOC100", "CHEM111"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "cai-major-required", "name": "Required major courses", "courseCodes": ["CENG201", "CENG210", "CENG221", "CENG231", "CENG320", "CENG310", "CENG324", "CENG325", "CENG328", "CENG329", "CENG340", "CENG341", "CENG529", "MATH140", "MATH275", "PHYS110", "PHYS135", "PHYS140", "CENG315", "ITBP301"] },
+          { "type": "INTERNSHIP", "id": "cai-internship", "name": "Internship", "courseCode": "ITBP496", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false },
+          { "type": "PATHWAY_CHOICE", "id": "cai-concentration-or-general-pathway", "name": "Choose one 15-credit pathway", "options": [
+            { "id": "ai-systems-engineering", "name": "AI Systems Engineering concentration", "type": "REQUIRED_COURSE_SET", "credits": 15, "courseCodes": ["CENG500", "CENG510", "CENG525", "CENG540", "CENG550"] },
+            { "id": "robotics-autonomous-systems", "name": "Robotics and Autonomous Systems concentration", "type": "REQUIRED_COURSE_SET", "credits": 15, "courseCodes": ["CENG560", "CENG570", "CENG585", "CENG590", "CENG595"] },
+            { "id": "general-computer-ai-engineering", "name": "General Computer and AI Engineering Pathway", "type": "ELECTIVE_GROUP", "credits": 15, "chooseCount": 5, "courseCodes": ["SWEB300", "CENG530", "CENG531", "CENG532", "CENG533", "CENG580"], "selectionNote": "The five-course selection may also include up to two courses from each of the two concentration course sets." }
+          ] },
+          { "type": "CREDIT_BLOCK", "id": "cai-free-elective", "name": "Free elective", "credits": 3, "ruleNote": "The catalog lists 3 free-elective credits." }
+        ],
+        "limitations": ["The catalog page was last updated 9 November 2026; no historic cohort model is encoded here.", "CENG532 Network Security and CENG580 Selected Topics in Computer Engineering are both choices in the General Pathway, which requires five courses from its listed six-course pool.", "The General Pathway choice is not interchangeable with a required course in either named concentration; do not claim CENG532 is part of the AI Systems or Robotics concentration requirement set.", "This model does not establish a student's assigned pathway, cohort, completed requirements, course availability, prerequisites, or registration eligibility."]
+      }
+    ]
   }
 ]

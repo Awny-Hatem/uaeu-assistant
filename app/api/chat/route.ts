@@ -28,7 +28,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
-import { assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
+import { assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
 
@@ -968,6 +968,27 @@ export async function POST(req: Request) {
         citations: [{ title: rule.source.title, url: rule.source.url, lastVerified: rule.version }],
         evidenceIds: [`academic-rule:${rule.id}`],
         topic: rule.course.code,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const programCourseSubstitutionAssessment = assessProgramCourseSubstitutionConversation(
+      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    );
+    if (programCourseSubstitutionAssessment) {
+      const { curriculum, programId, sources, sharedOption } = programCourseSubstitutionAssessment;
+      const supportedChoice = sharedOption?.type === "ELECTIVE_GROUP";
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: renderProgramCourseSubstitutionAssessment(programCourseSubstitutionAssessment, locale),
+        source: "rag",
+        stateLabel: "v3_program_substitution_assessment",
+        resolutionState: !curriculum ? "UNSUPPORTED" : supportedChoice ? "CONDITIONAL" : "MISSING_CONTEXT",
+        disposition: !curriculum || !supportedChoice ? "clarify" : "answer",
+        citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+        evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
+        topic: programId,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
