@@ -69,6 +69,23 @@ async function main() {
   assert.equal(incompletePrerequisites.payload.resolutionState, "UNSUPPORTED");
   assert.match(String(incompletePrerequisites.payload.content), /STAT210[\s\S]*ITBP301/);
 
+  const currentDegreeCredits = await ask("How many credit hours do I need to graduate from Information Security?", "203.0.113.228");
+  assert.equal(currentDegreeCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.equal(currentDegreeCredits.payload.resolutionState, "CONDITIONAL", "a published total is not a personal degree audit");
+  assert.match(String(currentDegreeCredits.payload.content), /120 credit hours/);
+  assert.match(String(currentDegreeCredits.payload.content), /21 credits/);
+  assert.match(String(currentDegreeCredits.payload.content), /older assigned cohort plans may require 130/i);
+
+  const olderDegreeCredits = await askMessages([
+    { role: "user", content: "I entered the Information Security program in the 2022 cohort." },
+    { role: "assistant", content: "Which requirement do you want to check?" },
+    { role: "user", content: "How many credits do I need to graduate?" },
+  ], "203.0.113.229");
+  assert.equal(olderDegreeCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.match(String(olderDegreeCredits.payload.content), /130 credit hours/);
+  assert.match(String(olderDegreeCredits.payload.content), /ITBP495/);
+  assert.doesNotMatch(String(olderDegreeCredits.payload.content), /general education.*21 credits/i, "the incomplete 130-credit breakdown must not borrow the newer plan");
+
   console.log("V3 route checks passed: selector bypass, deadline separation, useful repeat policy, and deterministic prerequisite evaluation from context.");
 }
 

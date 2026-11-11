@@ -1,0 +1,86 @@
+[
+  {
+    "schemaVersion": 1,
+    "id": "bsc-information-security",
+    "name": "Bachelor of Science in Information Security",
+    "degreeLevel": "undergraduate",
+    "college": "College of Computing and Artificial Intelligence",
+    "sources": [
+      { "documentId": "12-information-security-curriculum.md", "title": "UAEU BSc Information Security — Published Degree Requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml", "lastVerified": "2026-09-29" },
+      { "documentId": "13-information-security-cohort-plans.md", "title": "UAEU BSc Information Security Model Plans", "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf", "lastVerified": "2026-09-29" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "isec-2025-2026-fall-120",
+        "version": "2025-2026-fall",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the current plan",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 41 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 46 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "major-electives", "name": "Major electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "information-security-major", "name": "Required major courses", "courseCodes": ["CSBP320", "CSBP121", "CENG210", "ITBP301", "CSBP221", "CSBP340", "ISEC311", "ISEC321", "ISEC312", "ISEC322", "ISEC323", "ISEC324", "ISEC411", "ISEC412", "ISEC413", "ISEC414", "ISEC421", "ISEC422", "ISEC423"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "college-senior-projects", "name": "College senior projects", "courseCodes": ["ITBP480", "ITBP481"] },
+          { "type": "ELECTIVE_GROUP", "id": "information-security-electives", "name": "Major electives", "chooseCount": 2, "credits": 6, "courseCodes": ["ISEC416", "ISEC417", "ISEC424", "ISEC428", "ITBP280"] },
+          { "type": "INTERNSHIP", "id": "information-security-internship", "courseCode": "ITBP496", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false }
+        ],
+        "limitations": ["Older assigned cohort plans may require 130 credits.", "The listed model sequence does not establish course availability or personal registration eligibility."]
+      },
+      {
+        "id": "isec-2022-2023-older-130",
+        "version": "2022-2023-model-plan",
+        "status": "approved",
+        "cohortLabel": "Older Fall-entry and Spring-entry plans labelled 2022–2023 onwards",
+        "effectiveFrom": "2022-08-01",
+        "totalCredits": 130,
+        "requirements": [
+          { "type": "INTERNSHIP", "id": "older-information-security-internship", "name": "Older-plan internship", "courseCode": "ITBP495", "credits": 12, "finalSemesterOnly": true }
+        ],
+        "limitations": ["The available approved source establishes the 130-credit total and 12-credit ITBP495 internship but does not establish a complete structured requirement breakdown for this older plan."]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "bsc-computer-science",
+    "name": "Bachelor of Science in Computer Science",
+    "degreeLevel": "undergraduate",
+    "college": "College of Computing and Artificial Intelligence",
+    "sources": [
+      { "documentId": "28-computer-science-degree-requirements.md", "title": "UAEU Computer Science degree requirements and major electives", "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml", "lastVerified": "2026-10-06" },
+      { "documentId": "07-computer-science-study-plan-fall-2025.md", "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort", "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf", "lastVerified": "2026-09-16" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "cs-catalog-2026-10",
+        "version": "catalog-2026-10-06",
+        "status": "approved",
+        "cohortLabel": "Published catalog requirements; individual cohort audit controls",
+        "effectiveFrom": "2026-10-06",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 41 },
+          { "id": "major-requirements", "name": "Major requirements", "credits": 38 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "major-electives", "name": "Major electives", "credits": 12 },
+          { "id": "free-electives", "name": "Free electives", "credits": 2 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "computer-science-college", "name": "Required college courses", "courseCodes": ["CSBP219", "CSBP119", "MATH105", "PHYS105", "CENG202", "CENG205", "CSBP319", "CSBP315", "MATH110", "STAT210", "ITBP270", "ITBP480", "ITBP481"] },
+          { "type": "ONE_OF_GROUP", "id": "computer-science-science-elective", "name": "Science course choice", "chooseCount": 1, "courseCodes": ["BIOC100", "CHEM111"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "computer-science-major", "name": "Required major courses", "courseCodes": ["CENG210", "ITBP301", "CSBP316", "ITBP321", "CSBP340", "CSBP301", "CSBP400", "CSBP411", "MATH140", "CSBP421", "CSBP461", "PHYS135", "SWEB450", "SWEB300"] },
+          { "type": "ELECTIVE_GROUP", "id": "computer-science-major-electives", "name": "Major electives", "chooseCount": 4, "credits": 12, "courseCodes": ["CSBP320", "CSBP431", "CSBP476", "CSBP483", "CSBP487", "CSBP491", "CSBP499", "SWEB451", "CSBP441", "CSBP477"] },
+          { "type": "INTERNSHIP", "id": "computer-science-internship", "name": "Internship", "courseCode": "ITBP496", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false }
+        ],
+        "limitations": ["The Fall 2025 semester sequence is a cohort model plan, not a substitute for the student's assigned plan or individual degree audit.", "The model plan and current course catalog can differ for course relationships; use the current approved course-level rule."]
+      }
+    ]
+  }
+]

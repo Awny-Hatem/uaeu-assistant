@@ -28,6 +28,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
+import { assessProgramCreditConversation, renderProgramCreditAssessment } from "@/lib/academic/program-curricula";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
 
@@ -967,6 +968,26 @@ export async function POST(req: Request) {
         citations: [{ title: rule.source.title, url: rule.source.url, lastVerified: rule.version }],
         evidenceIds: [`academic-rule:${rule.id}`],
         topic: rule.course.code,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const programCreditAssessment = assessProgramCreditConversation(
+      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    );
+    if (programCreditAssessment) {
+      const { curriculum, programId, sources } = programCreditAssessment;
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: renderProgramCreditAssessment(programCreditAssessment, locale),
+        source: "rag",
+        stateLabel: "v3_program_credit_model",
+        resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
+        disposition: curriculum ? "answer" : "clarify",
+        citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+        evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
+        topic: programId,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
