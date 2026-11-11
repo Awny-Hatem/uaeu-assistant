@@ -56,6 +56,10 @@ assert.equal(personal.mode, "PERSONALIZED_ACADEMIC");
 assert.equal(personal.needs.studentData, false, "public prerequisites can be explained without accessing a student's record");
 assert.deepEqual(personal.missingContext, [], "the answer can state the published prerequisite rule and explain what personal details affect it");
 
+const electricalRequirements = plan("What courses are required in Electrical Engineering?");
+assert.equal(electricalRequirements.mode, "UAEU_FACTUAL", "named-degree course requirements must bypass the legacy selector even without a UAEU keyword");
+assert.equal(electricalRequirements.needs.evidence, true);
+
 const majorChangeEligibility = plan("Can I change my major from business administration to finance after my third year?");
 assert.equal(majorChangeEligibility.mode, "PERSONALIZED_ACADEMIC", "asking whether a policy permits a change is not a request to submit the change");
 assert.equal(majorChangeEligibility.needs.universityAction, false);

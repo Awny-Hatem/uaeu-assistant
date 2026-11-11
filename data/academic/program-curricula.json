@@ -790,4 +790,73 @@
       }
     ]
   }
+,
+  {
+    "schemaVersion": 1,
+    "id": "chemical-engineering",
+    "name": "Bachelor of Science in Chemical Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Engineering",
+    "sources": [{ "documentId": "40-chemical-engineering-curriculum", "title": "UAEU Bachelor of Science in Chemical Engineering degree requirements", "url": "https://www.uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-chemical-engineering.shtml", "lastVerified": "2026-11-11" }],
+    "curriculumVersions": [{
+      "id": "chemical-engineering-catalog-2026-11", "version": "catalog-2026-11-09", "status": "approved",
+      "cohortLabel": "Current published Chemical Engineering catalog; confirm individual cohort and assigned Degree Works plan", "effectiveFrom": "2026-11-09", "totalCredits": 132,
+      "creditBuckets": [
+        { "id": "general-education", "name": "General education", "credits": 21 },
+        { "id": "college-requirements", "name": "College of Engineering requirements", "credits": 35 },
+        { "id": "major-requirements", "name": "Chemical Engineering requirements", "credits": 45 },
+        { "id": "graduation-project", "name": "Graduation project", "credits": 6 },
+        { "id": "internship", "name": "Internship", "credits": 2 },
+        { "id": "supporting-courses", "name": "Compulsory supporting courses", "credits": 17 },
+        { "id": "major-electives", "name": "Chemical Engineering electives", "credits": 6 }
+      ],
+      "requirements": [
+        { "type": "CREDIT_BLOCK", "id": "chemical-engineering-general-education", "name": "General education", "credits": 21, "ruleNote": "The catalog specifies 21 general-education credits with theme-based options; this model does not audit individual theme choices." },
+        { "type": "REQUIRED_COURSE_SET", "id": "chemical-engineering-college", "name": "Required College of Engineering courses", "courseCodes": ["MATH105", "MATH110", "MATH210", "MATH275", "MATH140", "CHEM111", "CHEM175", "STAT210", "PHYS105", "PHYS135", "PHYS110", "PHYS140", "GENG215", "GENG315"] },
+        { "type": "REQUIRED_COURSE_SET", "id": "chemical-engineering-major", "name": "Required Chemical Engineering courses", "courseCodes": ["CHME320", "CHME455", "CHME300", "CHME322", "CHME330", "CHME357", "CHME360", "CHME390", "CHME411", "CHME413", "CHME415", "CHME417", "CHME421", "CHME506", "CHME508", "CHME510", "CHME517", "CHME528"] },
+        { "type": "REQUIRED_COURSE_SET", "id": "chemical-engineering-supporting", "name": "Compulsory supporting courses", "courseCodes": ["CHEM113", "CHEM351", "CHEM282", "CHEM355", "CHEM377", "GENG220", "GENG230"] },
+        { "type": "REQUIRED_COURSE_SET", "id": "chemical-engineering-project", "name": "Graduation project", "courseCodes": ["CHME585", "CHME590"] },
+        { "type": "INTERNSHIP", "id": "chemical-engineering-internship-i", "name": "Internship I", "courseCode": "CHME485", "credits": 1, "finalSemesterOnly": false },
+        { "type": "INTERNSHIP", "id": "chemical-engineering-internship-ii", "name": "Internship II", "courseCode": "CHME490", "credits": 1, "finalSemesterOnly": false },
+        { "type": "ELECTIVE_GROUP", "id": "chemical-engineering-electives", "name": "Chemical Engineering electives", "chooseCount": 2, "credits": 6, "courseCodes": ["CHME555", "CHME560", "CHME565", "CHME533", "CHME541", "CHME542", "CHME544", "CHME561", "CHME562", "CHME564", "PETE424"] }
+      ],
+      "limitations": [
+        "The published page was last updated 9 November 2026. This is a catalog model, not an assigned cohort semester plan.",
+        "The catalog allows Internship I and II in different summers or together in Fall or Spring; the model does not infer student availability or placement.",
+        "General-education options are represented as an unassessed credit block. The model does not establish a student's cohort, completed requirements, prerequisites beyond the official course catalog, course availability, or registration eligibility."
+      ]
+    }]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "civil-engineering",
+    "name": "Bachelor of Science in Civil Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Engineering",
+    "sources": [{ "documentId": "41-civil-engineering-curriculum", "title": "UAEU Bachelor of Science in Civil Engineering degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-civil-engineering.shtml", "lastVerified": "2026-11-11" }],
+    "curriculumVersions": [{
+      "id": "civil-engineering-catalog-2026-11", "version": "catalog-2026-11-06", "status": "approved",
+      "cohortLabel": "Current published Civil Engineering catalog; confirm individual cohort and assigned Degree Works plan", "effectiveFrom": "2026-11-06", "totalCredits": 132,
+      "creditBuckets": [
+        { "id": "general-education", "name": "General education", "credits": 21 },
+        { "id": "college-requirements", "name": "General Engineering requirements", "credits": 35 },
+        { "id": "major-requirements", "name": "Civil Engineering core", "credits": 65 },
+        { "id": "internship", "name": "Internship", "credits": 2 },
+        { "id": "specialization-electives", "name": "Civil Engineering specialization electives", "credits": 9 }
+      ],
+      "requirements": [
+        { "type": "CREDIT_BLOCK", "id": "civil-engineering-general-education", "name": "General education", "credits": 21, "ruleNote": "The catalog specifies 21 general-education credits with theme-based options; this model does not audit individual theme choices." },
+        { "type": "REQUIRED_COURSE_SET", "id": "civil-engineering-college", "name": "Required General Engineering courses", "courseCodes": ["MATH105", "MATH110", "MATH210", "CHEM111", "CHEM175", "GENG215", "MATH140", "MATH275", "STAT210", "PHYS105", "PHYS110", "PHYS135", "PHYS140", "GENG315"] },
+        { "type": "REQUIRED_COURSE_SET", "id": "civil-engineering-core", "name": "Required Civil Engineering core courses", "courseCodes": ["CIVL200", "CIVL240", "CIVL270", "CIVL305", "MECH305", "CIVL310", "CIVL330", "CIVL335", "CIVL340", "CIVL345", "CIVL361", "CIVL362", "CIVL365", "CIVL375", "CIVL400", "CIVL412", "CIVL417", "CIVL433", "CIVL442", "CIVL445", "CIVL585", "CIVL590", "GENG230"] },
+        { "type": "INTERNSHIP", "id": "civil-engineering-internship-i", "name": "Internship I", "courseCode": "CIVL485", "credits": 1, "finalSemesterOnly": false },
+        { "type": "INTERNSHIP", "id": "civil-engineering-internship-ii", "name": "Internship II", "courseCode": "CIVL490", "credits": 1, "finalSemesterOnly": false },
+        { "type": "ELECTIVE_GROUP", "id": "civil-engineering-specialization-electives", "name": "Civil Engineering specialization electives (choose across baskets)", "chooseCount": 3, "credits": 9, "courseCodes": ["CIVL540", "CIVL541", "CIVL547", "CIVL548", "CIVL510", "CIVL515", "CIVL517", "CIVL552", "CIVL530", "CIVL531", "CIVL534", "CIVL538", "CIVL539", "CIVL520", "CIVL522", "CIVL526", "CIVL525", "CIVL529"] }
+      ],
+      "limitations": [
+        "The published page was last updated 6 November 2026. This is a catalog model, not an assigned cohort semester plan.",
+        "The catalog requires 9 elective credits across four baskets, with 0–9 credits allowed from each basket; the model preserves the combined choice and does not encode an assumed basket distribution.",
+        "The catalog permits CIVL485 and CIVL490 in different summers or together in Fall or Spring. General-education options are not audited, and the model does not establish a student's cohort, completed requirements, course availability, prerequisites, or registration eligibility."
+      ]
+    }]
+  }
 ]

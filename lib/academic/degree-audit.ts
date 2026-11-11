@@ -36,6 +36,8 @@ export type DegreeAuditAssessment = {
 const CURRICULUM_PROGRAM_IDS: Record<string, string> = {
   "mechanical-engineering": "bsc-mechanical-engineering",
   "electrical-engineering": "electrical-engineering",
+  "civil-engineering": "civil-engineering",
+  "chemical-engineering": "chemical-engineering",
   "information-technology": "bsc-information-technology",
   "cybersecurity": "cybersecurity",
   "computer-science": "bsc-computer-science",
@@ -208,7 +210,23 @@ export function assessDegreeAuditConversation(
     };
   }
   const program = listAcademicPrograms().find((item) => item.id === programId);
-  if (!program) return null;
+  if (!program) {
+    if (!namedCatalogProgram) return null;
+    const catalog = loadUndergraduateProgramCatalog();
+    return {
+      programId: namedCatalogProgram.id,
+      programName: namedCatalogProgram.title,
+      curriculumVersion: null,
+      auditStatus: "PROGRAM_NOT_MODELED",
+      cohortMatched: false,
+      hasCourseData: false,
+      courseGroups: [],
+      courseStatus: {},
+      creditBlocksNotAssessed: [],
+      sources: [{ title: "UAEU Undergraduate Programs Catalog", url: catalog.catalogUrl, lastVerified: catalog.verifiedAt }],
+      limitations: ["No structured curriculum is available for this program in this assistant; check the assigned plan in Degree Works."],
+    };
+  }
   const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
   const selected = getProgramCurriculum(programId, cohortYear);
   const curriculum = selected?.curriculum;

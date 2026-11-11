@@ -176,13 +176,38 @@ export function programIdInText(text: string): string | undefined {
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
   if (/\belectrical engineering\b/i.test(text)) return "electrical-engineering";
+  if (/\bcivil engineering\b/i.test(text)) return "civil-engineering";
+  if (/\bchemical engineering\b/i.test(text)) return "chemical-engineering";
   if (/\bcomputer (?:and )?(?:artificial intelligence|AI) engineering\b/i.test(text)) return "bsc-computer-ai-engineering";
   if (/\bcomputer engineering\b/i.test(text)) return "bsc-computer-engineering";
   if (/\bdata science and artificial intelligence\b|\bDSAI\b/i.test(text)) return "data-science-and-artificial-intelligence";
   if (/\bcyber\s?security\b/i.test(text) || /الأمن السيبراني/u.test(text)) return "cybersecurity";
   if (/\binformation security\b/i.test(text) || /أمن\s+المعلومات/u.test(text)) return "bsc-information-security";
   if (/\bcomputer science\b/i.test(text) || /علوم\s+الحاسوب/u.test(text)) return "bsc-computer-science";
-  return undefined;
+  const normalized = text.toLocaleLowerCase("en").replace(/[^a-z0-9]+/g, " ").trim();
+  const candidates = loadUndergraduateProgramCatalog().programs.flatMap((program) => {
+    const shortTitle = program.title
+      .replace(/^Bachelor of (?:Science|Arts|Business Administration) in /i, "")
+      .replace(/^Bachelor of /i, "")
+      .toLocaleLowerCase("en").replace(/[^a-z0-9]+/g, " ").trim();
+    const idTitle = program.id.replace(/-/g, " ");
+    return [...new Set([shortTitle, idTitle])]
+      .filter((alias) => alias.length >= 3 && ` ${normalized} `.includes(` ${alias} `))
+      .map((alias) => ({ id: program.id, alias }));
+  }).sort((a, b) => b.alias.length - a.alias.length);
+  if (!candidates.length || (candidates[1] && candidates[0].alias.length === candidates[1].alias.length && candidates[0].id !== candidates[1].id)) return undefined;
+  return candidates[0].id;
+}
+
+function catalogProgramSource(programId: string): AcademicProgram["sources"] {
+  const catalog = loadUndergraduateProgramCatalog();
+  const program = catalog.programs.find((item) => item.id === programId);
+  return program ? [{
+    documentId: `undergraduate-program:${program.id}`,
+    title: program.title,
+    url: program.url,
+    lastVerified: catalog.verifiedAt,
+  }] : [];
 }
 
 export function cohortYearInText(text: string): number | undefined {
@@ -312,12 +337,15 @@ export function assessProgramCreditConversation(
   const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
   const selected = getProgramCurriculum(programId, cohortYear);
   const program = selected?.program ?? academicPrograms.find((item) => item.id === programId);
-  if (!program) return null;
+  const catalogRecord = loadUndergraduateProgramCatalog().programs.find((item) => item.id === programId);
+  const programName = program?.name ?? catalogRecord?.title;
+  const sources = program?.sources ?? catalogProgramSource(programId);
+  if (!programName) return null;
   return {
     programId,
-    programName: program.name,
+    programName,
     curriculum: selected?.curriculum ?? null,
-    sources: program.sources,
+    sources,
     ...(cohortYear !== undefined ? { cohortYear } : {}),
     cohortMatched: selected?.cohortMatched ?? false,
   };
@@ -341,12 +369,15 @@ export function assessProgramRequirementsConversation(
   const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
   const selected = getProgramCurriculum(programId, cohortYear);
   const program = selected?.program ?? academicPrograms.find((item) => item.id === programId);
-  if (!program) return null;
+  const catalogRecord = loadUndergraduateProgramCatalog().programs.find((item) => item.id === programId);
+  const programName = program?.name ?? catalogRecord?.title;
+  const sources = program?.sources ?? catalogProgramSource(programId);
+  if (!programName) return null;
   return {
     programId,
-    programName: program.name,
+    programName,
     curriculum: selected?.curriculum ?? null,
-    sources: program.sources,
+    sources,
     ...(cohortYear !== undefined ? { cohortYear } : {}),
     cohortMatched: selected?.cohortMatched ?? false,
   };
@@ -442,6 +473,11 @@ export function renderProgramRequirementsAssessment(
 ): string {
   const { curriculum, programName, cohortYear } = assessment;
   if (!curriculum) {
+    if (cohortYear === undefined) {
+      return locale === "ar"
+        ? `لا أملك حالياً نموذجاً منظماً ومعتمداً لمتطلبات المقررات في ${programName}. راجع صفحة البرنامج الرسمية وخطتك المخصصة في Degree Works.`
+        : `I do not yet have an approved structured course-requirement model for ${programName}. Check the official program page and your assigned Degree Works plan.`;
+    }
     return locale === "ar"
       ? `لا تتوفر لدي متطلبات مقررات معتمدة ومنظمة لدفعة ${cohortYear} في ${programName}. تحقق من الخطة المخصصة لك في Degree Works.`
       : `I do not have an approved structured course-requirement model for the ${cohortYear} entry cohort in ${programName}. Check the plan assigned to you in Degree Works.`;
@@ -492,6 +528,11 @@ export function renderProgramRequirementsAssessment(
 export function renderProgramCreditAssessment(assessment: ProgramCreditAssessment, locale: "en" | "ar"): string {
   const { programName, curriculum, cohortYear } = assessment;
   if (!curriculum) {
+    if (cohortYear === undefined) {
+      return locale === "ar"
+        ? `لم أتحقق بعد من نموذج منهجي منظم ومعتمد لبرنامج ${programName}، لذلك لن أخمّن عدد الساعات. راجع صفحة البرنامج الرسمية وخطتك في Degree Works.`
+        : `I do not yet have a verified structured curriculum model for ${programName}, so I will not guess its graduation credit total. Check the official program page and your Degree Works plan.`;
+    }
     return locale === "ar"
       ? `لا أملك خطة منهجية موثقة لدفعة ${cohortYear} في ${programName}. إجمالي المنهج الحالي المنشور لا يثبت المتطلبات المطبقة على دفعتك. تحقق من Degree Works أو أرسل سنة المنهج المعيّن لك.`
       : `I do not have an approved structured curriculum for the ${cohortYear} entry cohort in ${programName}. The current published total does not establish which requirements apply to your cohort. Check Degree Works or share the catalog year assigned to your plan.`;

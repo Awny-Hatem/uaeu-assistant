@@ -11,7 +11,7 @@ export type OrchestratorInput = {
   authenticatedScopes?: string[];
 };
 
-const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|course|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar)\b|جامعة|الجامعة|كلية|الكلية|القبول|التسجيل|الفصل الدراسي|مساق|مقرر|مادة|منحة|منح|السكن|كشف الدرجات|التخرج|البوابة|الخدمات الطلابية|التقويم الأكاديمي/u;
+const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|courses?|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar|credits?|credit hours?|curricul(?:um|a)|study plans?|majors?|engineering)\b|جامعة|الجامعة|كلية|الكلية|القبول|التسجيل|الفصل الدراسي|مساق|مقرر|مادة|منحة|منح|السكن|كشف الدرجات|التخرج|البوابة|الخدمات الطلابية|التقويم الأكاديمي/u;
 const CURRENT_TERMS = /\b(?:current|currently|today|latest|upcoming|this (?:term|semester|year)|deadlines?|due dates?|last days?|closing dates?|when does .* open|when does .* close|start dates?|exam dates?)\b|حالي(?:اً|ا)?|اليوم|احدث|القادم|هذا الفصل|المواعيد النهائية|الموعد النهائي|اخر موعد|مواعيد التقديم|موعد الاغلاق|متى يبدأ|متى ينتهي|تاريخ البدء|مواعيد الاختبارات/u;
 const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major for me|switch my major for me|cancel my course)\b|قدّم(?:ي)? طلب(?:ي)?|انسحب لي|سجلني|سجّلني|ادفع لي|غيّر تخصصي لي|بدّل تخصصي لي|ألغِ مساقي|احذف مساقي/u;
 const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|delay(?:ed)?|graduate|graduation plan|what should i do|options|scenario|because|although|but)\b|رسبت|يرسب|رسوب|مرتين|للمرة الثالثة|متأخر|خطة التخرج|ماذا أفعل|ما الحل|خيارات|سيناريو|بسبب|رغم|لكن/u;

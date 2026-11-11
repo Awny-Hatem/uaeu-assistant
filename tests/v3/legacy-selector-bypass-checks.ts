@@ -226,6 +226,29 @@ async function main() {
   assert.match(String(mechCourses.payload.content), /MECH485/);
   assert.match(String(mechCourses.payload.content), /MECH490/);
 
+  const electricalCourses = await ask("What courses are required in Electrical Engineering?", "203.0.113.242");
+  assert.equal(electricalCourses.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(electricalCourses.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(electricalCourses.payload.content), /ELEC585/);
+  assert.match(String(electricalCourses.payload.content), /ELEC485/);
+  assert.doesNotMatch(String(electricalCourses.payload.content), /ISEC|Information Security/i, "a program-specific question must not receive another degree's canonical answer");
+  assert.match(JSON.stringify(electricalCourses.payload.citations), /bachelor-of-science-in-electrical-engineering/);
+
+  for (const [program, course, ip] of [["Chemical Engineering", "CHME455", "203.0.113.243"], ["Civil Engineering", "CIVL585", "203.0.113.244"]] as const) {
+    const requiredCourses = await ask(`What courses are required in ${program}?`, ip);
+    assert.equal(requiredCourses.payload.stateLabel, "v3_program_requirement_model");
+    assert.equal(requiredCourses.payload.resolutionState, "CONDITIONAL");
+    assert.match(String(requiredCourses.payload.content), new RegExp(course));
+    assert.doesNotMatch(String(requiredCourses.payload.content), /ISEC|Information Security/i, "a named engineering degree must not receive an unrelated canonical record");
+    assert.match(JSON.stringify(requiredCourses.payload.citations), new RegExp(program.toLowerCase().replaceAll(" ", "-")));
+  }
+
+  const unmodeledPsychology = await ask("What courses are required in Psychology?", "203.0.113.245");
+  assert.equal(unmodeledPsychology.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(unmodeledPsychology.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(unmodeledPsychology.payload.content), /do not yet have an approved structured course-requirement model for .*Psychology/i);
+  assert.match(JSON.stringify(unmodeledPsychology.payload.citations), /bachelor-of-arts-in-psychology/);
+
   const partialDegreeAudit = await askMessages([
     { role: "user", content: "I passed CSBP119 with C." },
     { role: "user", content: "I passed MATH105 with B." },
