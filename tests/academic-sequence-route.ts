@@ -80,6 +80,16 @@ async function main() {
   const programList = await programListResponse.json();
   assert.equal(programList.programs.length, 55, "the picker covers the complete undergraduate degree inventory");
   assert.ok(programList.programs.every((program: { curriculumAvailable: boolean }) => program.curriculumAvailable), "all 55 catalog degrees resolve to one curriculum model");
+  const publishedPageOnlyProgramIds = [
+    "chemical-engineering", "civil-engineering", "electrical-engineering", "mechanical-engineering",
+    "aerospace-engineering", "information-technology", "cybersecurity",
+    "computer-and-artificial-intelligence-engineering", "computer-science", "data-science-and-artificial-intelligence",
+  ];
+  for (const id of publishedPageOnlyProgramIds) {
+    const entry = (programList.programs as { id: string; cohorts: number[] }[]).find((program) => program.id === id);
+    assert.ok(entry, `${id} is present in the undergraduate program inventory`);
+    assert.deepEqual(entry.cohorts, [], `${id} must not offer a cohort until a published model or assigned-plan mapping establishes applicability`);
+  }
   for (const entry of programList.programs as { id: string; curriculumAvailable: boolean; cohorts: number[] }[]) {
     const response = await GET(new Request(`http://localhost/api/academic/sequence?programId=${entry.id}`));
     assert.equal(response.status, 200, `${entry.id} resolves through the student-facing catalog ID`);
