@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 39, "thirty-nine current or historical program records have structured evidence records");
+assert.equal(programs.length, 43, "forty-three current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -44,6 +44,31 @@ for (const programId of ["chemistry", "geosciences", "mathematics-of-data-scienc
   assert.equal(model?.curriculum.cohortMapping, "unresolved", `${programId} does not infer a cohort mapping`);
   assert.ok((model?.curriculum.requirements.length ?? 0) > 0);
 }
+for (const [programId, totalCredits, bucketCredits] of [
+  ["law", 130, [21, 96, 9, 4]],
+  ["nutritional-science", 120, [21, 75, 3, 15, 6]],
+  ["dietetics", 120, [21, 81, 6, 6, 6]],
+  ["speech-language-pathology", 120, [21, 75, 24]],
+] as const) {
+  const model = getProgramCurriculum(programId);
+  assert.equal(model?.curriculum.totalCredits, totalCredits, `${programId} uses the official current-page total`);
+  assert.equal(model?.curriculum.cohortMapping, "unresolved", `${programId} is not silently mapped to a student's cohort`);
+  assert.deepEqual(model?.curriculum.creditBuckets?.map(({ credits }) => credits), bucketCredits);
+  assert.ok(model?.curriculum.requirements.length);
+  assert.equal(programIdInText(programId.replace(/-/g, " ")), programId);
+}
+const lawElectives = getProgramCurriculum("law")?.curriculum.requirements.filter((item) => item.type === "ELECTIVE_GROUP");
+assert.deepEqual(lawElectives?.map(({ chooseCount, credits }) => [chooseCount, credits]), [[2, 6], [1, 3]], "Law preserves the separate Arabic and English elective groups");
+const dieteticsInternship = getProgramCurriculum("dietetics")?.curriculum.requirements.find((item) => item.id === "diet-internship");
+assert.ok(dieteticsInternship?.type === "INTERNSHIP");
+assert.equal(dieteticsInternship.courseCode, "NUTR490");
+assert.equal(dieteticsInternship.otherCoursesAllowed, false);
+const nutritionInternship = getProgramCurriculum("nutritional-science")?.curriculum.requirements.find((item) => item.id === "ns-internship");
+assert.ok(nutritionInternship?.type === "INTERNSHIP");
+assert.equal(nutritionInternship.courseCode, "NUTR491");
+const slpClinical = getProgramCurriculum("speech-language-pathology")?.curriculum.requirements.find((item) => item.id === "slp-clinical");
+assert.ok(slpClinical?.type === "REQUIRED_COURSE_SET");
+assert.match(slpClinical.ruleNote ?? "", /200 clinical hours[\s\S]*no concurrent courses[\s\S]*300 clinical hours/i);
 const spaceDegree = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Space Sciences?" }]);
 assert.equal(spaceDegree?.programId, "space-sciences", "standalone Space Sciences degree is not conflated with Physics concentration");
 assert.match(renderProgramRequirementsAssessment(spaceDegree!, "en"), /CSBP478/);
@@ -381,7 +406,7 @@ assert.ok(hpeCurriculum);
 const hpeInternship = hpeCurriculum.curriculum.requirements.find((item) => item.id === "hpe-student-teaching");
 assert.ok(hpeInternship?.type === "INTERNSHIP");
 assert.equal(hpeInternship.credits, 9);
-for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education", "economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics", "architectural-engineering", "communication-engineering", "food-science", "veterinary-medicine", "agricultural-resource-management", "horticulture", "marine-fisheries-and-animal-science"]) {
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education", "economics", "human-resources-management-and-development", "supply-chain-management-and-logistics", "entrepreneurship", "marketing", "statistics-and-data-analytics", "architectural-engineering", "communication-engineering", "food-science", "veterinary-medicine", "agricultural-resource-management", "horticulture", "marine-fisheries-and-animal-science", "law", "nutritional-science", "dietetics", "speech-language-pathology"]) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
   for (const requirement of modeled.curriculum.requirements) {
