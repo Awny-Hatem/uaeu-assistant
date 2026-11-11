@@ -9,6 +9,7 @@ This status follows the six phases and the Phase 1 completion checklist in `UAEU
 ## Current implementation
 
 - The V3 answer path uses resolution states, source evidence, applicability checks, and deterministic academic models. Route checks verify legacy selector bypass for covered cases, deadline-topic separation, source citations, fail-safe handling, and contextual prerequisite assessment when a student mentions the target, completed, and current courses across turns.
+- Course prerequisite follow-ups now resolve explicit course codes with spaces or hyphens, carry forward a clearly established prerequisite intent for short follow-ups, and distinguish the nearest course from the first course mentioned. Deterministic catalog facts are answered before the generic missing-context gate, while personal eligibility requests remain on the assessment path.
 - Course-history parsing preserves an explicit “passed” result when a student omits the letter grade. Completion-only prerequisites can use it; a minimum-grade rule remains undetermined without the actual grade.
 - All 55 degrees in the current official undergraduate catalog have structured current curriculum evidence. This does not mean all historical cohorts, changed degree versions, personal audits, or course offerings are fully modeled.
 - The deterministic prerequisite parser recognizes explicit `Pre/Co` labels in catalog pre/corequisite alternatives and inline prerequisite expressions. For each official list item, the importer makes adjacent course codes an explicit AND only when the intervening text is empty or an explicit minimum-grade phrase and there is no `and`, `or`, or `Pre/Co` marker; explicit alternatives remain intact. It safely structures 1,469 of 1,478 course relation records (99.4%); the remaining 9 fail closed, including malformed parentheses, numeric grade thresholds, trailing `or`, and CHME330's orphaned PHYS135 requirement.
@@ -20,7 +21,7 @@ This status follows the six phases and the Phase 1 completion checklist in `UAEU
 | Phase | Status | Remaining acceptance work |
 | --- | --- | --- |
 | 0. Stabilize and establish baseline | Substantially complete | Reconfirm the reproducible production/V2 fingerprint and close the release baseline review. |
-| 1. Trusted UAEU Information Assistant | Substantially implemented; incomplete | Finish the full independent benchmark, verify deployed identity and configuration, and demonstrate improvement across novel and time-sensitive questions. |
+| 1. Trusted UAEU Information Assistant | Substantially implemented; incomplete | Re-run the independent benchmark against the updated preview, complete all 100 factual reviews, verify deployment identity/configuration, and demonstrate improvement across novel and time-sensitive questions. |
 | 2. Academic Intelligence | Partial | Validate all course rules and cohort versions; resolve the remaining nine unsupported prerequisite records where official wording is unambiguous; expand deterministic rule coverage and test cross-program edge cases. A current-page curriculum record for each catalog degree is not complete cohort coverage. |
 | 3. Authorized Student Personalization | Not implemented | Requires UAEU-approved SSO, student-record APIs, permissions, privacy and retention rules, and institutional testing. |
 | 4. Advanced Academic Planning | Partial foundation | Complete a constraint-based semester planner, prerequisite-aware course sequencing, alternative plans, and live offering/availability integration. No personal degree audit is available without authorized student data. |
@@ -38,6 +39,9 @@ The root checkout's `node_modules` could not be safely refreshed because Windows
 - `npm run test:academic-rules` — deterministic grade, AND/OR, concurrency, freshness, provenance, and unknown-state checks passed.
 - `npm run test:content` — academic, service, and portability checks passed.
 - `npm run test:v3` — V3 route and selector-bypass checks passed, including a contextual course-prerequisite follow-up with a prior target course and multiple completed/current course codes.
+- `tests/v3/legacy-selector-bypass-checks.ts` — passed after adding a four-turn course-thread regression for “pass before CSBP 319,” “what about CSBP-411,” “that one,” and “the first course I mentioned.” Each turn returned the expected official catalog course and prerequisite details.
+- `tests/catalog-prerequisite-parser.ts` — passed, including the existing guard that completed-course codes do not displace a prior target course.
+- The 100-case run against commit `2c06265` completed with 100 HTTP 200 responses and no run-integrity issues, but every factual review remains pending. It found the context failure addressed above; this is not an accuracy pass.
 - `tests/ui-security-checks.ts` — 20/20 UI, auth, and security checks passed, including live health metric assertions.
 - `npm run build` — Next.js production build passed.
 

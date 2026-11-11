@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { catalogTargetCodeFromMessages, isCoursePrerequisiteFollowUp } from "../../lib/academic/catalog-prerequisite-assessment";
 
 process.env.AI_PROVIDER = "mock";
 process.env.UAEU_AGENT_V3_ENABLED = "enabled";
@@ -153,6 +154,29 @@ async function main() {
   assert.match(String(contextualCatalogPrerequisite.payload.content), /ACCT111/);
   assert.match(String(contextualCatalogPrerequisite.payload.content), /modeled prerequisite is satisfied/i);
   assert.match(JSON.stringify(contextualCatalogPrerequisite.payload.citations), /course_2911\.shtml\?id=FINC210/);
+
+  const courseThread: { role: "user" | "assistant"; content: string }[] = [];
+  const courseThreadTurns = [
+    { question: "Which classes do I need to pass before CSBP 319?", expectedCode: /CSBP319[\s\S]*CSBP219[\s\S]*CSBP221/ },
+    { question: "And what about csbp-411?", expectedCode: /CSBP411[\s\S]*CSBP301.*minimum grade D/ },
+    { question: "Does that one need a minimum grade?", expectedCode: /CSBP411[\s\S]*CSBP301.*minimum grade D/ },
+    { question: "Remind me of the requirements for the first course I mentioned.", expectedCode: /CSBP319[\s\S]*CSBP219[\s\S]*CSBP221/ },
+  ];
+  const firstCourseFollowUp = [...courseThread, { role: "user" as const, content: courseThreadTurns[0].question }, { role: "assistant" as const, content: "verified" }, { role: "user" as const, content: courseThreadTurns[1].question }, { role: "assistant" as const, content: "verified" }, { role: "user" as const, content: courseThreadTurns[2].question }, { role: "assistant" as const, content: "verified" }, { role: "user" as const, content: courseThreadTurns[3].question }];
+  assert.equal(isCoursePrerequisiteFollowUp(firstCourseFollowUp), true);
+  assert.equal(catalogTargetCodeFromMessages(firstCourseFollowUp), "CSBP319");
+  for (const [index, turn] of courseThreadTurns.entries()) {
+    const requestMessages = [...courseThread, { role: "user" as const, content: turn.question }];
+    if (index > 0) assert.equal(isCoursePrerequisiteFollowUp(requestMessages), true, `course-thread turn ${index + 1} should inherit the prerequisite request`);
+    if (index === 1) assert.equal(catalogTargetCodeFromMessages(requestMessages), "CSBP411", "the hyphenated follow-up course code must be recognized");
+    const answer = await askMessages(requestMessages, `203.0.113.${180 + index}`);
+    assert.equal(answer.status, 200);
+    assert.equal(answer.payload.stateLabel, "v3_official_course_catalog_lookup", `course-thread turn ${index + 1} should use the official course catalog`);
+    assert.equal(answer.payload.resolutionState, "VERIFIED");
+    assert.match(String(answer.payload.content), turn.expectedCode, `course-thread turn ${index + 1} should preserve the intended course reference`);
+    assert.match(JSON.stringify(answer.payload.citations), /uaeu\.ac\.ae\/en\/catalog\/courses\//);
+    courseThread.push({ role: "user", content: turn.question }, { role: "assistant", content: String(answer.payload.content) });
+  }
 
   const malformedSourcePrerequisite = await askMessages([
     { role: "user", content: "Can I register for CHME330? I passed PHYS105 with grade D, and I'm currently taking CHME300." },

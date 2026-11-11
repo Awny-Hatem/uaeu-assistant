@@ -30,7 +30,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
-import { assessCatalogPrerequisiteConversation, catalogTargetCodeFromMessages } from "@/lib/academic/catalog-prerequisite-assessment";
+import { assessCatalogPrerequisiteConversation, catalogTargetCodeFromMessages, isCoursePrerequisiteFollowUp } from "@/lib/academic/catalog-prerequisite-assessment";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import { assessDegreeAuditConversation, renderDegreeAuditAssessment } from "@/lib/academic/degree-audit";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
@@ -989,6 +989,36 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
+  if (v3EvidenceMode && executionPlan) {
+    const latestUserQuestion = [...sanitized].reverse().find((message) => message.role === "user")?.content ?? latest;
+    const prerequisiteMessages = sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant");
+    const inheritedCatalogPrerequisiteQuestion = isCoursePrerequisiteFollowUp(prerequisiteMessages);
+    const catalogTargetCode = inheritedCatalogPrerequisiteQuestion
+      ? catalogTargetCodeFromMessages(prerequisiteMessages)
+      : undefined;
+    const catalogQuestion = inheritedCatalogPrerequisiteQuestion && catalogTargetCode
+      ? `What are the prerequisites for ${catalogTargetCode}?`
+      : latest;
+    const courseCatalogAnswer = asksPersonalPrerequisiteEligibility(latestUserQuestion)
+      ? null
+      : answerOfficialCourseCatalogQuestion(catalogQuestion, locale, catalogTargetCode);
+    if (courseCatalogAnswer) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: courseCatalogAnswer.content,
+        source: "rag",
+        stateLabel: "v3_official_course_catalog_lookup",
+        resolutionState: courseCatalogAnswer.resolutionState,
+        disposition: courseCatalogAnswer.resolutionState === "UNSUPPORTED" ? "clarify" : "answer",
+        citations: courseCatalogAnswer.source ? [courseCatalogAnswer.source] : [],
+        evidenceIds: courseCatalogAnswer.source ? [`official-course-catalog:${courseCatalogAnswer.code}`] : [],
+        topic: courseCatalogAnswer.code,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+  }
   let v3EvidenceRows: EvidenceRow[] | undefined;
   if (v3EvidenceMode && executionPlan) {
     const repeatPolicyCanBeAnsweredGenerally = executionPlan.requestedFacts.includes("undergraduate failed course repeat policy");
@@ -1053,6 +1083,7 @@ export async function POST(req: Request) {
     }
     const latestUserQuestion = [...sanitized].reverse().find((message) => message.role === "user")?.content ?? latest;
     const prerequisiteMessages = sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant");
+    const inheritedCatalogPrerequisiteQuestion = isCoursePrerequisiteFollowUp(prerequisiteMessages);
     const prerequisiteAssessment = asksPersonalPrerequisiteEligibility(latestUserQuestion)
       ? assessPrerequisiteConversation(prerequisiteMessages) ?? assessCatalogPrerequisiteConversation(prerequisiteMessages)
       : null;
@@ -1068,6 +1099,29 @@ export async function POST(req: Request) {
         citations: [{ title: rule.source.title, url: rule.source.url, lastVerified: rule.version }],
         evidenceIds: [`academic-rule:${rule.id}`],
         topic: rule.course.code,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const catalogTargetCode = (asksPersonalPrerequisiteEligibility(latestUserQuestion) || inheritedCatalogPrerequisiteQuestion)
+      ? catalogTargetCodeFromMessages(prerequisiteMessages)
+      : undefined;
+    const catalogQuestion = inheritedCatalogPrerequisiteQuestion && catalogTargetCode
+      ? `What are the prerequisites for ${catalogTargetCode}?`
+      : latest;
+    const courseCatalogAnswer = answerOfficialCourseCatalogQuestion(catalogQuestion, locale, catalogTargetCode);
+    if (courseCatalogAnswer) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: courseCatalogAnswer.content,
+        source: "rag",
+        stateLabel: "v3_official_course_catalog_lookup",
+        resolutionState: courseCatalogAnswer.resolutionState,
+        disposition: courseCatalogAnswer.resolutionState === "UNSUPPORTED" ? "clarify" : "answer",
+        citations: courseCatalogAnswer.source ? [courseCatalogAnswer.source] : [],
+        evidenceIds: courseCatalogAnswer.source ? [`official-course-catalog:${courseCatalogAnswer.code}`] : [],
+        topic: courseCatalogAnswer.code,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
@@ -1153,26 +1207,6 @@ export async function POST(req: Request) {
         citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
         evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
         topic: programId,
-        communications,
-      };
-      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
-      return respond(payload, latest, locale);
-    }
-    const catalogTargetCode = asksPersonalPrerequisiteEligibility(latestUserQuestion)
-      ? catalogTargetCodeFromMessages(prerequisiteMessages)
-      : undefined;
-    const courseCatalogAnswer = answerOfficialCourseCatalogQuestion(latest, locale, catalogTargetCode);
-    if (courseCatalogAnswer) {
-      const payload: AssistantPayload = {
-        role: "assistant",
-        content: courseCatalogAnswer.content,
-        source: "rag",
-        stateLabel: "v3_official_course_catalog_lookup",
-        resolutionState: courseCatalogAnswer.resolutionState,
-        disposition: courseCatalogAnswer.resolutionState === "UNSUPPORTED" ? "clarify" : "answer",
-        citations: courseCatalogAnswer.source ? [courseCatalogAnswer.source] : [],
-        evidenceIds: courseCatalogAnswer.source ? [`official-course-catalog:${courseCatalogAnswer.code}`] : [],
-        topic: courseCatalogAnswer.code,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);

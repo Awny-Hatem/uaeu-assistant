@@ -74,7 +74,8 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
   const asksCourseEligibility = asksPersonalPrerequisiteEligibility(question) ||
     /\b(?:eligible to (?:take|enroll|register)|meet (?:the )?prerequisites?)\b/u.test(normalized);
   const asksProgramDecision = /\b(?:will this count|counts? toward|degree requirement|major requirement|graduate|my degree|study plan|cohort|waiver|exception)\b/u.test(normalized);
-  const asksCatalogFact = /\b(?:course|credits?|credit hours?|prerequisites?|corequisites?|pre\s*[/&-]?\s*co|description|what is|tell me about|catalog)\b/u.test(normalized);
+  const asksCatalogFact = /\b(?:course|classes|credits?|credit hours?|prerequisites?|corequisites?|pre\s*[/&-]?\s*co|description|what is|tell me about|catalog)\b/u.test(normalized) ||
+    /\b(?:classes|courses)\b.{0,60}\b(?:pass|complete|take)\b.{0,30}\bbefore\b/u.test(normalized);
   if ((!asksCatalogFact && !asksCourseEligibility) || asksProgramDecision) return null;
   const code = targetCourseCode ?? targetCode(question);
   if (!code) return null;
