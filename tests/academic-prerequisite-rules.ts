@@ -2,7 +2,18 @@ import assert from "node:assert/strict";
 import { assessPrerequisiteConversation, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
 
 const courseCodes = new Set(listModeledPrerequisiteCourses().map(({ code }) => code));
-assert.equal(courseCodes.size, 7);
+assert.equal(courseCodes.size, 9);
+
+const csbp320 = evaluatePrerequisite({ targetCourseCode: "CSBP320", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }] } });
+assert.equal(csbp320.status, "ELIGIBLE", "CSBP320 accepts the catalog-listed STAT210 minimum grade D");
+assert.equal(csbp320.source?.documentId, "37-csbp320-data-mining-prerequisite.md");
+
+const isec313MissingItbp = evaluatePrerequisite({ targetCourseCode: "ISEC313", snapshot: { completedCourses: [{ courseCode: "CSBP320", grade: "B" }] } });
+assert.equal(isec313MissingItbp.status, "UNDETERMINED", "ISEC313 requires evidence for both catalog-listed prerequisites");
+const isec313Satisfied = evaluatePrerequisite({ targetCourseCode: "ISEC313", snapshot: { completedCourses: [{ courseCode: "CSBP320", grade: "D" }, { courseCode: "ITBP301", grade: "D" }] } });
+assert.equal(isec313Satisfied.status, "ELIGIBLE");
+assert.equal(isec313Satisfied.conditions.length, 2);
+assert.equal(isec313Satisfied.source?.documentId, "38-isec313-ai-for-cybersecurity-prerequisite.md");
 
 const csbp340ByFirstPath = evaluatePrerequisite({ targetCourseCode: "csbp340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } });
 assert.equal(csbp340ByFirstPath.status, "ELIGIBLE", "either catalog-listed prerequisite path satisfies CSBP340");
@@ -76,4 +87,4 @@ assert.equal(notTakingCourse.evaluation.status, "UNDETERMINED", "a negated enrol
 
 assert.equal(assessPrerequisiteConversation([{ role: "user", content: "What can I do if I fail Data Structures twice?" }]), null, "failed-course policy questions are not misrouted as registration eligibility");
 
-console.log("Academic prerequisite rules passed: 7 approved records, grade thresholds, AND/OR, concurrency, conversation assessment, provenance, unknowns, and deterministic results.");
+console.log("Academic prerequisite rules passed: 9 approved records, grade thresholds, AND/OR, concurrency, conversation assessment, provenance, unknowns, and deterministic results.");

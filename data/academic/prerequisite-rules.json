@@ -94,5 +94,32 @@
         { "type": "COURSE_CURRENT", "courseCode": "MECH340" }
       ] }
     ] }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-csbp320",
+    "version": "2026-11-11",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "CSBP320", "title": "Data Mining", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-11-11",
+    "source": { "documentId": "37-csbp320-data-mining-prerequisite.md", "title": "UAEU Course Catalog — CSBP320 Data Mining", "url": "https://uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320" },
+    "expression": { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "STAT210", "minimumGrade": "D" }
+  },
+  {
+    "schemaVersion": 1,
+    "id": "prereq-isec313",
+    "version": "2026-11-11",
+    "status": "approved",
+    "ruleType": "PREREQUISITE",
+    "course": { "code": "ISEC313", "title": "AI for Cybersecurity", "credits": 3 },
+    "degreeLevel": "undergraduate",
+    "effectiveFrom": "2026-11-11",
+    "source": { "documentId": "38-isec313-ai-for-cybersecurity-prerequisite.md", "title": "UAEU Course Catalog — ISEC313 AI for Cybersecurity", "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC313" },
+    "expression": { "op": "AND", "conditions": [
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "CSBP320", "minimumGrade": "D" },
+      { "type": "COURSE_GRADE_AT_LEAST", "courseCode": "ITBP301", "minimumGrade": "D" }
+    ] }
   }
 ]
