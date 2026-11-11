@@ -585,6 +585,24 @@ const earlyChildhoodCohortAudit = assessDegreeAuditConversation([
 assert.equal(earlyChildhoodCohortAudit?.auditStatus, "COHORT_MODEL_UNAVAILABLE", "a verified total without course details must not appear as an empty preliminary degree audit");
 assert.equal(earlyChildhoodCohortAudit?.curriculumVersion, "early-childhood-education-2025-120-plan-only");
 assert.match(JSON.stringify(earlyChildhoodCohortAudit?.limitations), /detailed cohort course requirements are not structured/i);
+const computerScienceGradeAudit = assessDegreeAuditConversation([
+  { role: "user", content: "I am a Computer Science student." },
+  { role: "user", content: "I received 59 in CSBP119. I got a D in CSBP219. I received W in CSBP319." },
+  { role: "user", content: "What do I still need to graduate?" },
+]);
+assert.equal(computerScienceGradeAudit?.courseStatus.CSBP119, "REPEAT_REQUIRED",
+  "a numeric mark below the published 60-point pass threshold is not counted as a completed course in a program covered by the general undergraduate grading policy");
+assert.equal(computerScienceGradeAudit?.courseStatus.CSBP219, "COMPLETE",
+  "a recognized passing letter grade remains complete in a program covered by the general undergraduate grading policy");
+assert.equal(computerScienceGradeAudit?.courseStatus.CSBP319, "NEEDS_CONFIRMATION",
+  "withdrawal is not interpreted as a completed course");
+const dieteticsGradeAudit = assessDegreeAuditConversation([
+  { role: "user", content: "I am a Dietetics student." },
+  { role: "user", content: "I received 59 in NUTR101." },
+  { role: "user", content: "What do I still need to graduate?" },
+]);
+assert.equal(dieteticsGradeAudit?.courseStatus.NUTR101, "NEEDS_CONFIRMATION",
+  "the general undergraduate grading policy explicitly excludes the College of Medicine and Health Sciences, so its numeric threshold is not applied to Dietetics");
 for (const [programId, requirementId, expectedCredits] of [
   ["aerospace-engineering", "aerospace-core", 68],
   ["petroleum-engineering", "petroleum-major", 65],

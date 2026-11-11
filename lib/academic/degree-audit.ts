@@ -4,6 +4,7 @@ import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-pr
 
 type CourseStatus = "COMPLETE" | "IN_PROGRESS" | "REPEAT_REQUIRED" | "NEEDS_CONFIRMATION" | "NOT_REPORTED";
 type AuditGroupStatus = "COMPLETE" | "IN_PROGRESS" | "REMAINING" | "PATHWAY_SELECTION_REQUIRED" | "NOT_ASSESSED";
+const PASSING_LETTER_GRADES = new Set(["A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D"]);
 
 type CourseGroupResult = {
   name: string;
@@ -74,13 +75,16 @@ function isDegreeAuditRequest(question: string): boolean {
   return /\b(?:what (?:courses? |requirements? )?(?:do i still need|are left|remain)|what do i still need (?:to graduate|for my degree)|what remains? (?:for me )?(?:to graduate|for my degree)|what(?:'s| is) left for (?:me to )?(?:graduate|my degree)|what am i missing (?:to graduate|for my degree)|what requirements? remain|audit my (?:degree|study plan)|degree audit|how far am i (?:from|to) graduation|based on (?:the )?courses? i (?:passed|completed),? what (?:do i need|remains?))\b/iu.test(question);
 }
 
-function statusForCourse(code: string, snapshot: AcademicSnapshot): CourseStatus {
+function statusForCourse(code: string, snapshot: AcademicSnapshot, gradePolicyApplies: boolean): CourseStatus {
   const grades = [...new Set(snapshot.completedCourses
     .filter((item) => item.courseCode.toUpperCase() === code)
     .map((item) => item.grade.trim().toUpperCase()))];
-  if (grades.some((grade) => grade && grade !== "F")) return "COMPLETE";
+  if (grades.includes("PASS") || (gradePolicyApplies && grades.includes("P"))) return "COMPLETE";
+  if (gradePolicyApplies && grades.some((grade) => PASSING_LETTER_GRADES.has(grade) || grade === "S" || grade === "CX")) return "COMPLETE";
+  const numericGrades = grades.map((grade) => /^\d{1,3}(?:\.\d+)?$/.test(grade) ? Number(grade) : Number.NaN);
+  if (gradePolicyApplies && numericGrades.some((grade) => Number.isFinite(grade) && grade >= 60 && grade <= 100)) return "COMPLETE";
   if (snapshot.currentCourses?.some((item) => item.toUpperCase() === code)) return "IN_PROGRESS";
-  if (grades.includes("F")) return "REPEAT_REQUIRED";
+  if (gradePolicyApplies && (grades.some((grade) => ["F", "FA", "NP"].includes(grade)) || numericGrades.some((grade) => Number.isFinite(grade) && grade >= 0 && grade < 60))) return "REPEAT_REQUIRED";
   if (grades.length) return "NEEDS_CONFIRMATION";
   return "NOT_REPORTED";
 }
@@ -91,9 +95,10 @@ function summarizeCourseChoice(
   codes: string[],
   chooseCount: number,
   snapshot: AcademicSnapshot,
+  gradePolicyApplies: boolean,
   credits?: number,
 ): CourseGroupResult {
-  const statuses = codes.map((code) => statusForCourse(code, snapshot));
+  const statuses = codes.map((code) => statusForCourse(code, snapshot, gradePolicyApplies));
   const completedCount = statuses.filter((status) => status === "COMPLETE").length;
   const inProgressCount = statuses.filter((status) => status === "IN_PROGRESS").length;
   const outstanding = Math.max(0, chooseCount - completedCount - inProgressCount);
@@ -104,19 +109,19 @@ function summarizeCourseChoice(
     requiredCount: chooseCount,
     completedCount,
     inProgressCount,
-    completedCourseCodes: codes.filter((code) => statusForCourse(code, snapshot) === "COMPLETE"),
-    inProgressCourseCodes: codes.filter((code) => statusForCourse(code, snapshot) === "IN_PROGRESS"),
-    remainingCourseCodes: codes.filter((code) => !["COMPLETE", "IN_PROGRESS"].includes(statusForCourse(code, snapshot))).slice(0, outstanding),
+    completedCourseCodes: codes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "COMPLETE"),
+    inProgressCourseCodes: codes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "IN_PROGRESS"),
+    remainingCourseCodes: codes.filter((code) => !["COMPLETE", "IN_PROGRESS"].includes(statusForCourse(code, snapshot, gradePolicyApplies))).slice(0, outstanding),
     notes: [credits ? `${credits} credit hours are specified for this group; confirm earned credits in Degree Works.` : ""].filter(Boolean),
   };
 }
 
-function summarizeRequirement(requirement: ProgramRequirement, snapshot: AcademicSnapshot): CourseGroupResult {
+function summarizeRequirement(requirement: ProgramRequirement, snapshot: AcademicSnapshot, gradePolicyApplies: boolean): CourseGroupResult {
   if (requirement.type === "REQUIRED_COURSE_SET") {
-    const statuses = requirement.courseCodes.map((code) => statusForCourse(code, snapshot));
+    const statuses = requirement.courseCodes.map((code) => statusForCourse(code, snapshot, gradePolicyApplies));
     const completedCount = statuses.filter((status) => status === "COMPLETE").length;
     const inProgressCount = statuses.filter((status) => status === "IN_PROGRESS").length;
-    const remainingCourseCodes = requirement.courseCodes.filter((code) => !["COMPLETE", "IN_PROGRESS"].includes(statusForCourse(code, snapshot)));
+    const remainingCourseCodes = requirement.courseCodes.filter((code) => !["COMPLETE", "IN_PROGRESS"].includes(statusForCourse(code, snapshot, gradePolicyApplies)));
     return {
       name: requirement.name,
       requirementType: requirement.type,
@@ -124,17 +129,17 @@ function summarizeRequirement(requirement: ProgramRequirement, snapshot: Academi
       requiredCount: requirement.courseCodes.length,
       completedCount,
       inProgressCount,
-      completedCourseCodes: requirement.courseCodes.filter((code) => statusForCourse(code, snapshot) === "COMPLETE"),
-      inProgressCourseCodes: requirement.courseCodes.filter((code) => statusForCourse(code, snapshot) === "IN_PROGRESS"),
+      completedCourseCodes: requirement.courseCodes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "COMPLETE"),
+      inProgressCourseCodes: requirement.courseCodes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "IN_PROGRESS"),
       remainingCourseCodes,
     };
   }
   if (requirement.type === "ONE_OF_GROUP" || requirement.type === "ELECTIVE_GROUP") {
-    return summarizeCourseChoice(requirement.name, requirement.type, requirement.courseCodes, requirement.chooseCount, snapshot,
+    return summarizeCourseChoice(requirement.name, requirement.type, requirement.courseCodes, requirement.chooseCount, snapshot, gradePolicyApplies,
       requirement.type === "ELECTIVE_GROUP" ? requirement.credits : undefined);
   }
   if (requirement.type === "INTERNSHIP") {
-    const status = statusForCourse(requirement.courseCode, snapshot);
+    const status = statusForCourse(requirement.courseCode, snapshot, gradePolicyApplies);
     return {
       name: requirement.name ?? "Internship requirement",
       requirementType: requirement.type,
@@ -155,19 +160,19 @@ function summarizeRequirement(requirement: ProgramRequirement, snapshot: Academi
   const options = requirement.options.map((option) => {
     if (option.type === "COMPOSITE") return `${option.name}: the structured model contains nested course rules; verify the selected plan in Degree Works before treating this pathway as complete`;
     const summary = option.type === "REQUIRED_COURSE_SET"
-      ? summarizeRequirement({ type: "REQUIRED_COURSE_SET", id: option.id, name: option.name, courseCodes: option.courseCodes }, snapshot)
-      : summarizeCourseChoice(option.name, "ELECTIVE_GROUP", option.courseCodes, option.chooseCount ?? option.courseCodes.length, snapshot, option.credits);
+      ? summarizeRequirement({ type: "REQUIRED_COURSE_SET", id: option.id, name: option.name, courseCodes: option.courseCodes }, snapshot, gradePolicyApplies)
+      : summarizeCourseChoice(option.name, "ELECTIVE_GROUP", option.courseCodes, option.chooseCount ?? option.courseCodes.length, snapshot, gradePolicyApplies, option.credits);
     return `${option.name}: ${summary.completedCount ?? 0}/${summary.requiredCount ?? option.courseCodes.length} recorded complete`;
   });
   const completeOptions = requirement.options.filter((option) => {
     if (option.type === "COMPOSITE") return false;
-    if (option.type === "REQUIRED_COURSE_SET") return option.courseCodes.every((code) => statusForCourse(code, snapshot) === "COMPLETE");
-    return option.courseCodes.filter((code) => statusForCourse(code, snapshot) === "COMPLETE").length >= (option.chooseCount ?? option.courseCodes.length);
+    if (option.type === "REQUIRED_COURSE_SET") return option.courseCodes.every((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "COMPLETE");
+    return option.courseCodes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "COMPLETE").length >= (option.chooseCount ?? option.courseCodes.length);
   });
   const inProgressOption = requirement.options.some((option) => {
     if (option.type === "COMPOSITE") return false;
-    const completed = option.courseCodes.filter((code) => statusForCourse(code, snapshot) === "COMPLETE").length;
-    const current = option.courseCodes.filter((code) => statusForCourse(code, snapshot) === "IN_PROGRESS").length;
+    const completed = option.courseCodes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "COMPLETE").length;
+    const current = option.courseCodes.filter((code) => statusForCourse(code, snapshot, gradePolicyApplies) === "IN_PROGRESS").length;
     const required = option.type === "ELECTIVE_GROUP" ? (option.chooseCount ?? option.courseCodes.length) : option.courseCodes.length;
     return completed + current >= required;
   });
@@ -278,13 +283,14 @@ export function assessDegreeAuditConversation(
     };
   }
   const snapshot = academicSnapshotFromMessages(messages);
+  const gradePolicyApplies = program.degreeLevel === "undergraduate" && program.college !== "College of Medicine and Health Sciences";
   const courseStatus = Object.fromEntries([...new Set([
     ...snapshot.completedCourses.map(({ courseCode }) => courseCode.toUpperCase()),
     ...(snapshot.currentCourses ?? []).map((code) => code.toUpperCase()),
     ...curriculum.requirements.flatMap((requirement) => requirement.type === "REQUIRED_COURSE_SET" || requirement.type === "ONE_OF_GROUP" || requirement.type === "ELECTIVE_GROUP"
       ? requirement.courseCodes
       : requirement.type === "INTERNSHIP" ? [requirement.courseCode] : requirement.type === "PATHWAY_CHOICE" ? requirement.options.flatMap((option) => option.courseCodes) : []),
-  ])].map((code) => [code, statusForCourse(code, snapshot)]));
+  ])].map((code) => [code, statusForCourse(code, snapshot, gradePolicyApplies)]));
   return {
     programId,
     programName: program.name,
@@ -293,7 +299,7 @@ export function assessDegreeAuditConversation(
     ...(cohortYear !== undefined ? { cohortYear } : {}),
     cohortMatched: selected?.cohortMatched ?? false,
     hasCourseData: snapshot.completedCourses.length > 0 || Boolean(snapshot.currentCourses?.length),
-    courseGroups: curriculum.requirements.map((requirement) => summarizeRequirement(requirement, snapshot)),
+    courseGroups: curriculum.requirements.map((requirement) => summarizeRequirement(requirement, snapshot, gradePolicyApplies)),
     courseStatus,
     creditBlocksNotAssessed: curriculum.requirements.filter((requirement) => requirement.type === "CREDIT_BLOCK").map(({ name }) => name),
     sources: program.sources,

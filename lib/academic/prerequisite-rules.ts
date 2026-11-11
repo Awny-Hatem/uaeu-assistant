@@ -273,7 +273,7 @@ function courseCodeFromQuestion(question: string): string | undefined {
 export function academicSnapshotFromMessages(messages: { role: "user" | "assistant"; content: string }[]): AcademicSnapshot {
   const completed = new Map<string, Set<string>>();
   const current = new Set<string>();
-  const grades = "(PASS|P|A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F|100(?:\\.\\d+)?|[0-9]{1,2}(?:\\.\\d+)?)";
+  const grades = "(PASS|FA|NP|AW|CC|CX|I|W|P|S|A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F|100(?:\\.\\d+)?|[0-9]{1,2}(?:\\.\\d+)?)";
   const code = "([A-Z]{2,8}\\d{3,4}[A-Z]?)";
 
   for (const message of messages) {
