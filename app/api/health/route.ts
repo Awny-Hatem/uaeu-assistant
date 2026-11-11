@@ -10,6 +10,7 @@ import { runtimeContract } from "@/lib/runtime-contract";
 import { sourceCoverageSnapshot } from "@/lib/source-registry";
 import { createHash } from "node:crypto";
 import { isV3Enabled } from "@/lib/v3/runtime";
+import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
 
 export const runtime = "nodejs";
 
@@ -24,6 +25,11 @@ export async function GET() {
   const contract = runtimeContract();
   const v3Enabled = isV3Enabled();
   const sourceCoverage = sourceCoverageSnapshot();
+  const programCatalog = loadUndergraduateProgramCatalog();
+  const curriculumCoverage = programCatalog.programs.reduce((counts, program) => {
+    counts[program.curriculumStatus] += 1;
+    return counts;
+  }, { modelled: 0, legacy_model_review_required: 0, not_modelled: 0 });
   const coreKnowledgeReady =
     answerPacks.complete && knowledgeFiles.length >= 7 && serviceGuides.length >= 1;
 
@@ -48,6 +54,14 @@ export async function GET() {
       configured: provider.provider !== "none",
       model: provider.model,
       crossProviderFallback: provider.crossProviderFallback,
+    },
+    academicCatalog: {
+      status: "verified-undergraduate-degree-inventory",
+      programs: programCatalog.programs.length,
+      colleges: new Set(programCatalog.programs.map((program) => program.college)).size,
+      verifiedAt: programCatalog.verifiedAt,
+      curriculumCoverage,
+      curriculumRecordsRequiringIdentityReview: programCatalog.curriculumRecordsRequiringIdentityReview.length,
     },
     auth: {
       encryptedCookies: true,

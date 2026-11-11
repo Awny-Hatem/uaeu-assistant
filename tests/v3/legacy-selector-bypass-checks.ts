@@ -43,6 +43,13 @@ async function main() {
   assert.match(String(libraryResearchHelp.payload.content), /one-hour email-response target/i);
   assert.match(JSON.stringify(libraryResearchHelp.payload.citations), /serviceId=98/);
 
+  const programCatalog = await ask("Which degrees does UAEU offer?", "203.0.113.231");
+  assert.equal(programCatalog.payload.stateLabel, "undergraduate_program_catalog");
+  assert.equal(programCatalog.payload.resolutionState, "VERIFIED");
+  assert.match(String(programCatalog.payload.content), /55 degree programs across 9 colleges/i);
+  assert.match(String(programCatalog.payload.content), /Bachelor of Science in Cybersecurity/);
+  assert.match(JSON.stringify(programCatalog.payload.citations), /undergraduate\/programs\/index\.shtml/);
+
   const calendarFollowUp = await askMessages([
     { role: "user", content: "Where can I check UAEU academic calendar deadlines?" },
     { role: "assistant", content: "Which term, year, and applicant category do you mean?" },

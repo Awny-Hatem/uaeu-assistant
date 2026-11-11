@@ -31,6 +31,7 @@ import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/o
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
+import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
 import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
@@ -783,6 +784,22 @@ export async function POST(req: Request) {
       stateLabel: "general_academic_concept",
       disposition: "answer",
       citations: [],
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  const programCatalogAnswer = answerProgramCatalogQuestion(latest, locale);
+  if (programCatalogAnswer) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: programCatalogAnswer.content,
+      source: "rag",
+      stateLabel: "undergraduate_program_catalog",
+      ...(isV3Enabled() ? { resolutionState: "VERIFIED" as const } : {}),
+      disposition: "answer",
+      topic: "undergraduate-program-catalog",
+      evidenceIds: [`program-catalog:${programCatalogAnswer.college ?? "all"}`],
+      citations: [programCatalogAnswer.citation],
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
