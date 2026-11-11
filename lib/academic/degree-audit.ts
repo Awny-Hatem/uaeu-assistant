@@ -36,6 +36,9 @@ export type DegreeAuditAssessment = {
 const CURRICULUM_PROGRAM_IDS: Record<string, string> = {
   "accounting": "accounting",
   "finance-and-banking": "finance-and-banking",
+  "early-childhood-education": "early-childhood-education",
+  "health-and-physical-education": "health-and-physical-education",
+  "special-education": "special-education",
   "mechanical-engineering": "bsc-mechanical-engineering",
   "electrical-engineering": "electrical-engineering",
   "civil-engineering": "civil-engineering",
@@ -248,6 +251,25 @@ export function assessDegreeAuditConversation(
       creditBlocksNotAssessed: [],
       sources: program.sources,
       limitations: ["No structured curriculum version in this dataset matches the supplied entry year."],
+    };
+  }
+  if (!curriculum.requirements.length) {
+    return {
+      programId,
+      programName: program.name,
+      curriculumVersion: curriculum.id,
+      auditStatus: "COHORT_MODEL_UNAVAILABLE",
+      ...(cohortYear !== undefined ? { cohortYear } : {}),
+      cohortMatched: selected?.cohortMatched ?? false,
+      hasCourseData: false,
+      courseGroups: [],
+      courseStatus: {},
+      creditBlocksNotAssessed: [],
+      sources: program.sources,
+      limitations: [
+        ...curriculum.limitations,
+        "The published credit total is verified, but detailed cohort course requirements are not structured; do not treat an empty comparison as a completed degree audit.",
+      ],
     };
   }
   const snapshot = academicSnapshotFromMessages(messages);

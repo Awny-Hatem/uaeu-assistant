@@ -1002,6 +1002,7 @@
         "id": "finance-and-banking-catalog-2026-11",
         "version": "catalog-2026-11-09",
         "status": "approved",
+        "cohortMapping": "unresolved",
         "cohortLabel": "Current published Finance and Banking catalog; confirm its applicability against the student's assigned Degree Works plan",
         "effectiveFrom": "2026-11-09",
         "totalCredits": 120,
@@ -1034,6 +1035,203 @@
           "The page states the internship is 12 credits in the last semester, lasts 14 weeks after a two-week preparation session, and allows no other courses during the internship. The model does not establish a student's placement approval or completed-credit status.",
           "General-education choices are represented as a credit block. The model does not establish personal completion status, section availability, prerequisites beyond the official course catalog, or registration eligibility."
         ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "early-childhood-education",
+    "name": "Bachelor of Education in Early Childhood Education",
+    "degreeLevel": "undergraduate",
+    "college": "College of Education",
+    "sources": [
+      { "documentId": "46-early-childhood-education-curriculum", "title": "UAEU Bachelor of Education in Early Childhood Education degree requirements", "url": "https://www.uaeu.ac.ae/en/cedu/programs/undergraduate/bachelor-of-education-in-early-childhood-education.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "46-early-childhood-education-study-plan", "title": "UAEU Early Childhood Education model study plans", "url": "https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_early_childhood_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "early-childhood-education-2025-120",
+        "version": "current-published-degree-page",
+        "status": "approved",
+        "cohortMapping": "unresolved",
+        "cohortLabel": "Current published degree-page requirements; the page's cohort applicability is not established by the source",
+        "effectiveFrom": "2026-08-18",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "early-childhood-required", "name": "Early Childhood Education requirements", "credits": 57 },
+          { "id": "internship", "name": "Student teaching internship", "credits": 9 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 30 },
+          { "id": "elective", "name": "Elective", "credits": 3 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "early-childhood-general-education", "name": "General education", "credits": 21, "ruleNote": "The page specifies 15 fixed credits and 6 credits selected across Themes 6–10, with a maximum of 3 credits from any one theme. This model does not audit individual theme choices." },
+          { "type": "REQUIRED_COURSE_SET", "id": "early-childhood-core", "name": "Required Early Childhood Education courses", "courseCodes": ["CURR101", "CURR103", "CURR211", "CURR212", "CURR233", "CURR311", "CURR312", "CURR314", "CURR317", "CURR319", "CURR320", "CURR324", "CURR400", "CURR414", "CURR416", "FOED350", "SPED101", "CURR425", "FOED102"] },
+          { "type": "INTERNSHIP", "id": "early-childhood-student-teaching", "name": "Student Teaching in Early Childhood Education", "courseCode": "CURR465", "credits": 9, "finalSemesterOnly": true },
+          { "type": "REQUIRED_COURSE_SET", "id": "early-childhood-supporting", "name": "Supporting required courses", "courseCodes": ["ARB210", "GEO432", "PHED200", "PHED206", "CURR231", "CURR114", "SPED210", "SPED313", "SPED321", "LNG220"] },
+          { "type": "ONE_OF_GROUP", "id": "early-childhood-elective", "name": "Early Childhood Education elective", "chooseCount": 1, "courseCodes": ["CURR411", "FOED101"] }
+        ],
+        "limitations": [
+          "The 2025–2026 model plan identifies a 120-credit Fall 2025 plan, but its listed course sequence differs from the current degree page. This current-page course model is not mapped to that or any other cohort; check Degree Works for the assigned requirements.",
+          "The official degree page says CURR425 capstone should be taken during the CURR465 internship semester. This timing is disclosed here but cannot be enforced by the current requirement model.",
+          "The study plan contains multiple historical and current tables with different courses and credit totals. This model uses the current degree-requirement page's named required groups and the separately labelled 2025–2026 120-credit version; it does not substitute the older 126-credit plan.",
+          "General education is represented as a credit block. This does not establish individual completion, term availability, prerequisites beyond the official course catalog, or registration eligibility."
+        ]
+      },
+      {
+        "id": "early-childhood-education-2025-120-plan-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; assigned plan controls",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": ["The model plan identifies a 120-credit Fall 2025 cohort plan, but its course sequence differs from the current degree page's requirement groups. This record verifies the total only; it intentionally does not combine the two course lists."]
+      },
+      {
+        "id": "early-childhood-education-2020-2024-126",
+        "version": "2020-2021-and-2022-2023-model-plans",
+        "status": "approved",
+        "cohortLabel": "Older cohorts covered by the 2020-2021 and 2022-2023 model-plan versions; verify the assigned plan",
+        "effectiveFrom": "2020-08-01",
+        "effectiveTo": "2025-07-31",
+        "totalCredits": 126,
+        "requirements": [],
+        "limitations": ["The source publishes 126-credit model plans for 2020–2021 and 2022–2023 cohorts, but the older requirements have not been fully structured. This record supports the published total only; do not use the 120-credit course groups for these cohorts."]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "health-and-physical-education",
+    "name": "Bachelor of Education in Health and Physical Education",
+    "degreeLevel": "undergraduate",
+    "college": "College of Education",
+    "sources": [
+      { "documentId": "47-health-and-physical-education-curriculum", "title": "UAEU Bachelor of Education in Health and Physical Education degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-education-in-health-and-physical-education.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "47-health-and-physical-education-study-plan", "title": "UAEU Health and Physical Education model study plans", "url": "https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_health_and_physical_education_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "health-and-physical-education-2025-120",
+        "version": "current-published-degree-page",
+        "status": "approved",
+        "cohortMapping": "unresolved",
+        "cohortLabel": "Current published degree-page requirements; the page's cohort applicability is not established by the source",
+        "effectiveFrom": "2026-11-09",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "professional-requirements", "name": "Compulsory professional requirements", "credits": 33 },
+          { "id": "professional-electives", "name": "Professional electives", "credits": 6 },
+          { "id": "field-experience", "name": "Field experiences", "credits": 15 },
+          { "id": "major-requirements", "name": "Academic major requirements", "credits": 39 },
+          { "id": "major-electives", "name": "Major electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "hpe-general-education", "name": "General education", "credits": 21, "ruleNote": "The page specifies 15 fixed credits and 6 credits selected across Themes 6–10, with a maximum of 3 credits from any one theme. This model does not audit individual theme choices." },
+          { "type": "REQUIRED_COURSE_SET", "id": "hpe-professional-core", "name": "Compulsory professional requirements", "courseCodes": ["CURR101", "FOED102", "FOED350", "PHED200", "PHED205", "PHED206", "PHED305", "PHED312", "PHED314", "PHED318", "PHED402"] },
+          { "type": "ELECTIVE_GROUP", "id": "hpe-professional-electives", "name": "Professional electives", "chooseCount": 2, "credits": 6, "courseCodes": ["FOED101", "PHED211", "PHED403", "SPED321"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "hpe-early-field-experiences", "name": "Early practicum courses", "courseCodes": ["PHED212", "PHED303"] },
+          { "type": "INTERNSHIP", "id": "hpe-student-teaching", "name": "Student Teaching in Health and Physical Education", "courseCode": "PHED409", "credits": 9, "finalSemesterOnly": true },
+          { "type": "REQUIRED_COURSE_SET", "id": "hpe-major", "name": "Academic major requirements", "courseCodes": ["PHED202", "PHED203", "PHED204", "PHED207", "PHED208", "PHED209", "PHED302", "PHED306", "PHED308", "PHED309", "PHED315", "PHED407", "PHED408", "PSYC206"] },
+          { "type": "ELECTIVE_GROUP", "id": "hpe-major-electives", "name": "Major electives", "chooseCount": 2, "credits": 6, "courseCodes": ["PHED304", "PHED400", "PHED404", "PHED405"] }
+        ],
+        "limitations": [
+          "The 2025–2026 model plan identifies a 120-credit Fall 2025 plan, but its course list differs from the current degree page. This current-page course model is not mapped to that or any other cohort; use Degree Works for an assigned course plan. Older 2020–2021 and 2022–2023 model-plan headings state 126 credits.",
+          "The official page says PHED408 capstone should be taken during the PHED409 student-teaching semester. This timing is disclosed here but cannot be enforced by the current requirement model.",
+          "The page's named course requirements are modeled. General-education choices, student-record completion, term availability, and registration eligibility are not audited."
+        ]
+      },
+      {
+        "id": "health-and-physical-education-2025-120-plan-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; assigned plan controls",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": ["The model plan identifies a 120-credit Fall 2025 cohort plan, but its course sequence differs from the current degree page's course requirements. This record verifies the total only; it intentionally does not merge the two course lists."]
+      },
+      {
+        "id": "health-and-physical-education-2020-2024-126",
+        "version": "2020-2021-and-2022-2023-model-plans",
+        "status": "approved",
+        "cohortLabel": "Older cohorts covered by the 2020-2021 and 2022-2023 model-plan versions; verify the assigned plan",
+        "effectiveFrom": "2020-08-01",
+        "effectiveTo": "2025-07-31",
+        "totalCredits": 126,
+        "requirements": [],
+        "limitations": ["The model-plan PDF identifies 126-credit plans for 2020–2021 and 2022–2023 cohorts. This record supports the published total only; historical course requirements are not fully structured."]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "special-education",
+    "name": "Bachelor of Education in Special Education",
+    "degreeLevel": "undergraduate",
+    "college": "College of Education",
+    "sources": [
+      { "documentId": "48-special-education-curriculum", "title": "UAEU Bachelor of Education in Special Education degree requirements", "url": "https://www.uaeu.ac.ae/en/cedu/programs/undergraduate/bachelor-of-education-in-special-education.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "48-special-education-study-plan", "title": "UAEU Special Education model study plans", "url": "https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_special_education_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "special-education-2025-120",
+        "version": "current-published-degree-page",
+        "status": "approved",
+        "cohortMapping": "unresolved",
+        "cohortLabel": "Current published degree-page requirements; the page's cohort applicability is not established by the source",
+        "effectiveFrom": "2026-09-22",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College of Education requirements", "credits": 18 },
+          { "id": "major-requirements", "name": "Special Education major requirements", "credits": 30 },
+          { "id": "supporting-requirements", "name": "Supporting requirements", "credits": 24 },
+          { "id": "concentration", "name": "One Special Education concentration", "credits": 21 },
+          { "id": "free-electives", "name": "Free electives", "credits": 6 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "special-education-general-education", "name": "General education", "credits": 21, "ruleNote": "The page specifies 15 fixed credits and 6 credits selected across Themes 6–10, with a maximum of 3 credits from any one theme. This model does not audit individual theme choices." },
+          { "type": "REQUIRED_COURSE_SET", "id": "special-education-college-core", "name": "College of Education requirements", "courseCodes": ["CURR101", "CURR102", "FOED101", "FOED350", "SPED101", "FOED102"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "special-education-major", "name": "Required Special Education courses", "courseCodes": ["SPED210", "SPED211", "SPED220", "SPED221", "SPED222", "SPED313", "SPED314", "SPED321", "SPED332", "SPED400"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "special-education-supporting", "name": "Supporting required courses", "courseCodes": ["CURR317", "PHED205", "CURR324", "ENG310", "HIS373", "MATH305", "PSYC100", "PSYC307"] },
+          { "type": "PATHWAY_CHOICE", "id": "special-education-concentrations", "name": "Choose one 21-credit concentration including its student-teaching internship", "options": [
+            { "id": "mild-moderate-disabilities", "name": "Mild/Moderate Disabilities", "type": "REQUIRED_COURSE_SET", "credits": 21, "courseCodes": ["SPED312", "SPED361", "SPED415", "SPED441", "SPED461"], "selectionNote": "SPED461 is a 9-credit final-semester internship; the associated SPED441 capstone should be taken during the internship semester." },
+            { "id": "gifted-and-talented", "name": "Gifted and Talented", "type": "REQUIRED_COURSE_SET", "credits": 21, "courseCodes": ["SPED331", "SPED326", "SPED416", "SPED444", "SPED464"], "selectionNote": "SPED464 is a 9-credit final-semester internship; the associated SPED444 capstone should be taken during the internship semester." },
+            { "id": "sensory-impairments", "name": "Sensory Impairments", "type": "REQUIRED_COURSE_SET", "credits": 21, "courseCodes": ["SPED315", "SPED322", "SPED412", "SPED442", "SPED462"], "selectionNote": "SPED462 is a 9-credit final-semester internship; the associated SPED442 capstone should be taken during the internship semester." },
+            { "id": "severe-disabilities", "name": "Severe Disabilities", "type": "REQUIRED_COURSE_SET", "credits": 21, "courseCodes": ["SPED330", "SPED324", "SPED413", "SPED443", "SPED463"], "selectionNote": "SPED463 is a 9-credit final-semester internship; the associated SPED443 capstone should be taken during the internship semester." }
+          ] },
+          { "type": "CREDIT_BLOCK", "id": "special-education-free-electives", "name": "Free electives", "credits": 6, "ruleNote": "The page requires 6 free-elective credits but does not list course choices in this section." }
+        ],
+        "limitations": [
+          "The 2025–2026 model plan identifies a 120-credit Fall 2025 plan, but its course sequence differs from the current degree page. This current-page course model is not mapped to that or any other cohort. The older 2020–2021 and 2022–2023 plans state 126 credits.",
+          "Each concentration includes a distinct 9-credit student-teaching course in the last semester. The associated concentration capstone should be taken during that internship semester; the model does not enforce term scheduling.",
+          "General education and free-elective course choices are represented as credit blocks. This model does not establish personal completion, course availability, or registration eligibility."
+        ]
+      },
+      {
+        "id": "special-education-2025-120-plan-only",
+        "version": "2025-2026-model-plan",
+        "status": "approved",
+        "cohortLabel": "Fall 2025 entrants and later cohorts identified by the published model plan; assigned plan controls",
+        "effectiveFrom": "2025-08-01",
+        "totalCredits": 120,
+        "requirements": [],
+        "limitations": ["The model plan identifies a 120-credit Fall 2025 cohort plan, but its course sequence differs from the current degree page's requirement groups. This record verifies the total only; it intentionally does not combine the two course lists."]
+      },
+      {
+        "id": "special-education-2020-2024-126",
+        "version": "2020-2021-and-2022-2023-model-plans",
+        "status": "approved",
+        "cohortLabel": "Older cohorts covered by the 2020-2021 and 2022-2023 model-plan versions; verify the assigned plan",
+        "effectiveFrom": "2020-08-01",
+        "effectiveTo": "2025-07-31",
+        "totalCredits": 126,
+        "requirements": [],
+        "limitations": ["The model-plan PDF identifies 126-credit plans for 2020–2021 and 2022–2023 cohorts. This record supports the published total only; historical course requirements are not fully structured."]
       }
     ]
   }

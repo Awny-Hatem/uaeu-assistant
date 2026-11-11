@@ -26,6 +26,8 @@ export type CurriculumVersion = {
   cohortLabel: string;
   effectiveFrom: string;
   effectiveTo?: string;
+  /** Current page summaries can be useful for general questions without proving cohort applicability. */
+  cohortMapping?: "unresolved";
   totalCredits: number;
   creditBuckets?: CreditBucket[];
   requirements: ProgramRequirement[];
@@ -91,6 +93,7 @@ function isCurriculumVersion(value: unknown): value is CurriculumVersion {
       typeof value.totalCredits !== "number" || value.totalCredits <= 0 || !Array.isArray(value.requirements) ||
       !value.requirements.every(isRequirement) || !Array.isArray(value.limitations) || !value.limitations.every((item) => typeof item === "string")) return false;
   if (value.effectiveTo !== undefined && (!isDate(value.effectiveTo) || value.effectiveTo < value.effectiveFrom)) return false;
+  if (value.cohortMapping !== undefined && value.cohortMapping !== "unresolved") return false;
   if (value.creditBuckets !== undefined) {
     if (!Array.isArray(value.creditBuckets) || !value.creditBuckets.every((bucket) => isRecord(bucket) &&
       typeof bucket.id === "string" && typeof bucket.name === "string" && typeof bucket.credits === "number" && bucket.credits > 0)) return false;
@@ -147,7 +150,7 @@ export function getProgramCurriculum(programId: string, cohortYear?: number): {
   const ordered = [...program.curriculumVersions].sort((a, b) => b.effectiveFrom.localeCompare(a.effectiveFrom));
   if (cohortYear === undefined) return { program, curriculum: ordered[0], cohortMatched: false };
   const asOf = `${cohortYear.toString().padStart(4, "0")}-08-01`;
-  const applicable = ordered.find((item) => item.effectiveFrom <= asOf && (!item.effectiveTo || item.effectiveTo >= asOf));
+  const applicable = ordered.find((item) => item.cohortMapping !== "unresolved" && item.effectiveFrom <= asOf && (!item.effectiveTo || item.effectiveTo >= asOf));
   return applicable ? { program, curriculum: applicable, cohortMatched: true } : null;
 }
 

@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 15, "fifteen current or historical program records have structured evidence records");
+assert.equal(programs.length, 18, "eighteen current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -152,6 +152,9 @@ for (const [programId, expectedBuckets] of [
   ["petroleum-engineering", [21, 35, 65, 2, 9]],
   ["accounting", [21, 30, 30, 27, 12]],
   ["finance-and-banking", [21, 30, 24, 24, 15, 6]],
+  ["early-childhood-education", [21, 57, 9, 30, 3]],
+  ["health-and-physical-education", [21, 33, 6, 15, 39, 6]],
+  ["special-education", [21, 18, 30, 24, 21, 6]],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled, `${programId} has a current official curriculum model`);
@@ -161,6 +164,28 @@ for (const [programId, expectedBuckets] of [
   assert.equal(modeled.curriculum.creditBuckets?.reduce((sum, bucket) => sum + bucket.credits, 0), bucketTotal);
   assert.ok(modeled.curriculum.requirements.some(({ type }) => type === "CREDIT_BLOCK"), "general-education choice rules remain explicitly unassessed rather than being guessed course by course");
 }
+for (const programId of ["early-childhood-education", "health-and-physical-education", "special-education"]) {
+  assert.equal(programIdInText(programId.replace(/-/g, " ")), programId, `${programId} resolves from a student-facing program name`);
+  const currentPublished = getProgramCurriculum(programId);
+  assert.equal(currentPublished?.curriculum.totalCredits, 120, `${programId} has a current 120-credit published total`);
+  assert.ok(currentPublished?.curriculum.requirements.length, `${programId} has structured current-page requirements for general questions`);
+  const cohort2025Model = getProgramCurriculum(programId, 2025);
+  assert.equal(cohort2025Model?.curriculum.totalCredits, 120, `${programId} preserves the 2025-cohort published total`);
+  assert.equal(cohort2025Model?.curriculum.requirements.length, 0, "cohort plan codes that conflict with the current page stay unstructured until assigned-plan reconciliation");
+  assert.equal(getProgramCurriculum(programId, 2024)?.curriculum.totalCredits, 126, `${programId} preserves the older 126-credit plan`);
+  const cohort2022Model = getProgramCurriculum(programId, 2022);
+  assert.equal(cohort2022Model?.curriculum.totalCredits, 126);
+  assert.equal(cohort2022Model?.curriculum.requirements.length, 0, "older plans expose only verified totals when their detailed rows are not structured");
+}
+assert.equal(getProgramCurriculum("finance-and-banking", 2027), null, "a current page without an established cohort mapping is not applied to an individual cohort");
+const earlyChildhoodCohortAudit = assessDegreeAuditConversation([
+  { role: "user", content: "I entered Early Childhood Education in the 2025 cohort." },
+  { role: "assistant", content: "What would you like to audit?" },
+  { role: "user", content: "What do I still need to graduate?" },
+]);
+assert.equal(earlyChildhoodCohortAudit?.auditStatus, "COHORT_MODEL_UNAVAILABLE", "a verified total without course details must not appear as an empty preliminary degree audit");
+assert.equal(earlyChildhoodCohortAudit?.curriculumVersion, "early-childhood-education-2025-120-plan-only");
+assert.match(JSON.stringify(earlyChildhoodCohortAudit?.limitations), /detailed cohort course requirements are not structured/i);
 for (const [programId, requirementId, expectedCredits] of [
   ["aerospace-engineering", "aerospace-core", 68],
   ["petroleum-engineering", "petroleum-major", 65],
@@ -168,6 +193,11 @@ for (const [programId, requirementId, expectedCredits] of [
   ["accounting", "accounting-major", 27],
   ["finance-and-banking", "finance-supporting", 24],
   ["finance-and-banking", "finance-major", 24],
+  ["early-childhood-education", "early-childhood-core", 57],
+  ["early-childhood-education", "early-childhood-supporting", 30],
+  ["health-and-physical-education", "hpe-major", 39],
+  ["special-education", "special-education-major", 30],
+  ["special-education", "special-education-supporting", 24],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
@@ -181,6 +211,7 @@ for (const [programId, requirementId, expectedCredits] of [
   ["finance-and-banking", "finance-learning-in-action", 12],
   ["accounting", "accounting-track", 12],
   ["finance-and-banking", "finance-concentration", 15],
+  ["special-education", "special-education-concentrations", 21],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
@@ -192,7 +223,12 @@ for (const [programId, requirementId, expectedCredits] of [
     assert.equal(listedCredits, expectedCredits, `${programId} ${option.name} courses sum to ${expectedCredits} credits`);
   }
 }
-for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking"]) {
+const hpeCurriculum = getProgramCurriculum("health-and-physical-education");
+assert.ok(hpeCurriculum);
+const hpeInternship = hpeCurriculum.curriculum.requirements.find((item) => item.id === "hpe-student-teaching");
+assert.ok(hpeInternship?.type === "INTERNSHIP");
+assert.equal(hpeInternship.credits, 9);
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering", "accounting", "finance-and-banking", "early-childhood-education", "health-and-physical-education", "special-education"]) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
   for (const requirement of modeled.curriculum.requirements) {
