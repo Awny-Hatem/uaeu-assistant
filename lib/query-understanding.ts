@@ -193,7 +193,7 @@ export function namedSubjects(text: string): QuerySubject[] {
 
 const CANCEL = /^(?:never mind|nevermind|forget it|cancel that|ignore that|stop that|خلاص|انس[ىي] الموضوع)$/u;
 const REFERENCE = /\b(?:it|its|that|this|them|those|these|same|first|previous(?! (?:university|college|institution)\b)|earlier|last one|what about|how long|how much|am i eligible|the (?:application )?deadline|the source)\b|هذا|هذه|ذلك|لها|له|الاول|السابق|كم يستغرق|كم تكلف|هل انا موهل/u;
-const SLOT_FRAGMENT = /\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|printed|digital|paper copy|hard copy)\b|الاثنين|الثلاثاء|الاربعاء|الخميس|الجمع[ةه]|السبت|الاحد|مطبوع|رقمي/u;
+const SLOT_FRAGMENT = /\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|printed|digital|paper copy|hard copy|(?:year\s*)?20\d{2}|(?:fall|spring|summer|winter)(?:\s+20\d{2})?)\b|الاثنين|الثلاثاء|الاربعاء|الخميس|الجمع[ةه]|السبت|الاحد|مطبوع|رقمي/u;
 const GENERIC_FOLLOW_UP = /^(?:(?:what|which) (?:are|is) (?:the )?(?:requirements|documents|criteria)|what documents|what do i need|which documents)|^(?:ما|اي) (?:المستندات|الوثائق|المتطلبات|الشروط)/u;
 
 export type ConversationResolution = {

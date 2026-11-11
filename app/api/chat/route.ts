@@ -26,6 +26,7 @@ import { verifySourceClaims } from "@/lib/claim-verifier";
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
+import { researchOfficialUaeu } from "@/lib/research/official-research";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -750,12 +751,13 @@ export async function POST(req: Request) {
   const resolution = resolveConversation(sanitized, latest);
   const routingQuery = buildRoutingQuery(sanitized, latest);
   const v3Enabled = process.env.UAEU_AGENT_V3_ENABLED === "enabled" ||
-    (process.env.VERCEL_ENV !== "production" && process.env.UAEU_AGENT_V3_ENABLED !== "disabled");
+    ((process.env.VERCEL_ENV === "preview" || process.env.NODE_ENV === "development") && process.env.UAEU_AGENT_V3_ENABLED !== "disabled");
   const executionPlan = v3Enabled ? createExecutionPlan({
     conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
     latest,
+    resolvedRequest: routingQuery,
   }) : null;
-  const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH"].includes(executionPlan.mode));
+  const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH", "PERSONALIZED_ACADEMIC", "COMPLEX_SCENARIO"].includes(executionPlan.mode));
   const communications = matchCommunications(routingQuery);
   const standaloneFaq = matchFaq(latest);
   const needsPreviousSubject = requiresPreviousSubject(latest) || (resolution.needsClarification && !standaloneFaq);
@@ -869,22 +871,63 @@ export async function POST(req: Request) {
   }
   let v3EvidenceRows: EvidenceRow[] | undefined;
   if (v3EvidenceMode && executionPlan) {
-    if (executionPlan.missingContext.length) {
+    const blockingMissingContext = executionPlan.mode === "COMPLEX_SCENARIO"
+      ? executionPlan.missingContext.filter((item) => item.startsWith("authenticated access"))
+      : executionPlan.missingContext;
+    if (blockingMissingContext.length) {
       const content = locale === "ar"
-        ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${executionPlan.missingContext.join("؛ ")}.`
-        : `I need one detail before I can verify the right rule: ${executionPlan.missingContext.join("; ")}.`;
+        ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${blockingMissingContext.join("؛ ")}.`
+        : `I need one detail before I can verify the right rule: ${blockingMissingContext.join("; ")}.`;
       const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "v3_missing_context", disposition: "clarify", clarificationReason: "missing_context", citations: [], communications };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
-    const evidenceResult = createEvidenceService().search(evidenceQueryForPlan(executionPlan));
-    v3EvidenceRows = evidenceResult.evidence.map((item) => ({
-      source: item.id,
+    const evidenceQuery = evidenceQueryForPlan(executionPlan);
+    const evidenceResult = createEvidenceService().search(evidenceQuery);
+    let evidenceItems = evidenceResult.evidence;
+    if (executionPlan.needs.liveResearch || evidenceResult.status === "NOT_FOUND" || evidenceResult.status === "STALE" || evidenceResult.status === "PARTIAL") {
+      const liveEvidence = await researchOfficialUaeu(evidenceQuery);
+      evidenceItems = [...evidenceItems, ...liveEvidence];
+    }
+    v3EvidenceRows = evidenceItems.map((item) => ({
+      source: item.sourceType === "official_web" ? `official-web:${item.id}` : item.id,
       text: item.excerpt,
       score: 1,
       title: item.title,
+      ...(item.scope ? { scope: {
+        ...(item.scope.domain ? { subjects: [item.scope.domain] } : {}),
+        ...(item.scope.courseCodes?.length ? { courseCodes: item.scope.courseCodes } : {}),
+        ...(item.scope.degreeLevel ? { degreeLevel: item.scope.degreeLevel } : {}),
+        ...(item.scope.year !== undefined ? { years: [item.scope.year] } : {}),
+        ...(item.scope.term ? { terms: [item.scope.term] } : {}),
+        ...(item.scope.applicantCategory ? { applicantCategory: item.scope.applicantCategory } : {}),
+      } } : {}),
       citations: [{ title: item.title, url: item.url, lastVerified: item.lastVerified, evidenceText: item.excerpt }],
     }));
+    if (executionPlan.mode === "UAEU_FACTUAL" && /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b/i.test(executionPlan.normalizedRequest)) {
+      const calendarSource = evidenceItems.find((item) => {
+        if (item.scope?.domain !== "calendar" || !item.url) return false;
+        try {
+          const url = new URL(item.url);
+          return url.protocol === "https:" && (url.hostname === "uaeu.ac.ae" || url.hostname.endsWith(".uaeu.ac.ae"));
+        } catch { return false; }
+      });
+      if (calendarSource?.url) {
+        const payload: AssistantPayload = {
+          role: "assistant",
+          content: locale === "ar" ? `يمكنك فتح **التقويم الأكاديمي الرسمي لجامعة الإمارات** من هنا: [التقويم الأكاديمي](${calendarSource.url}).` : `You can check the **official UAEU academic calendar** here: [${calendarSource.title}](${calendarSource.url}).`,
+          source: "rag",
+          stateLabel: "v3_verified_source_location",
+          disposition: "answer",
+          citations: [{ title: calendarSource.title, url: calendarSource.url, lastVerified: calendarSource.lastVerified }],
+          evidenceIds: [calendarSource.id],
+          topic: "academic-calendar",
+          communications,
+        };
+        if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+        return respond(payload, latest, locale);
+      }
+    }
   }
   const curriculum = !v3EvidenceMode && locale === "en" ? retrieveCurriculumAnswer(routingQuery) : null;
   if (curriculum) {
@@ -1090,7 +1133,10 @@ export async function POST(req: Request) {
 
   const context = buildContextBlock(evidenceSources, userContext);
   const responseLanguage = locale === "ar" ? "Arabic" : "English";
-  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}\n\n${context}`;
+  const unresolvedScope = v3EvidenceMode && executionPlan?.missingContext.length
+    ? `\n\nUNRESOLVED STUDENT CONTEXT (not evidence): ${executionPlan.missingContext.join("; ")}. Give only general rules supported by the evidence, state which case-specific conclusion cannot yet be established, and ask for the missing detail.`
+    : "";
+  const system = `${SYSTEM_PROMPT}\n\nCURRENT DATE: ${new Date().toISOString().slice(0, 10)}.\nRESPONSE LANGUAGE: ${responseLanguage}.\nRESOLVED REQUEST (context only, not evidence): ${routingQuery}${unresolvedScope}\n\n${context}`;
   const history = trimHistory(sanitized, 12);
   let groundingTrace: AssistantPayload["grounding"];
 
@@ -1131,22 +1177,31 @@ export async function POST(req: Request) {
     );
     const referenced = new Set(result.grounded?.claims.flatMap((claim) => claim.evidenceIds) ?? []);
     const selectedSources = evidenceSources.filter(({ id }) => referenced.has(id));
-    const missingSupport = result.provider !== "mock" && !result.grounded;
+    const missingSupport = !result.grounded && (result.provider !== "mock" || v3EvidenceMode);
     const escalationReason: EscalationReason | undefined = finalized.escalated || missingSupport || result.grounded?.claims.length === 0
       ? "low_confidence"
       : undefined;
+    const usedOfficialWebResearch = selectedSources.some(({ row }) => row.source.startsWith("official-web:"));
     const remainingClarification = result.grounded && result.grounded.clarification !== "individual_record"
       ? groundedClarification(result.grounded.clarification, routingQuery, locale) : "";
+    const needsCourseIdentity = executionPlan?.mode === "COMPLEX_SCENARIO" &&
+      executionPlan.missingContext.some((item) => item.includes("exact course code or degree program"));
+    const courseIdentityClarification = needsCourseIdentity
+      ? locale === "ar"
+        ? "لتطبيق القاعدة على مقررك تحديدًا، أرسل رمز المقرر وبرنامجك الدراسي، واذكر ما إذا كان المقرر إجباريًا أم اختياريًا."
+        : "To apply this to your specific course, share its course code and your degree program, and say whether it is required or elective."
+      : "";
+    const responseClarification = [remainingClarification, courseIdentityClarification].filter(Boolean).join("\n\n");
     const payload: AssistantPayload = {
       role: "assistant",
-      content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, routingQuery) : finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), latest, locale),
+      content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, routingQuery) : [finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), responseClarification].filter(Boolean).join("\n\n"), latest, locale),
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
-      stateLabel: escalationReason ? "model_escalation" : "local_db",
+      stateLabel: escalationReason ? "model_escalation" : usedOfficialWebResearch ? "official_web_research" : "local_db",
       citations: escalationReason
         ? []
         : uniqueCitations(selectedSources.map(({ citation }) => citation)),
-      disposition: escalationReason || remainingClarification ? "clarify" : "answer",
+      disposition: escalationReason || responseClarification ? "clarify" : "answer",
       communications,
       escalationReason,
       provider: result.provider,
@@ -1158,7 +1213,7 @@ export async function POST(req: Request) {
         return `${source.row.source}#${id}`;
       }) })),
       grounding: groundingTrace,
-      clarificationReason: escalationReason ? "missing_official_evidence" : remainingClarification ? "additional_scope_needed" : undefined,
+      clarificationReason: escalationReason ? "missing_official_evidence" : responseClarification ? "additional_scope_needed" : undefined,
     };
 
     if (shouldPersistServerSide && userId) {

@@ -12,7 +12,7 @@ const DOMAIN_ALIASES: Record<string, string> = {
   registration: "registration", "course-registration": "registration",
   scholarship: "financial_aid", scholarships: "financial_aid", "financial-aid": "financial_aid", financial_aid: "financial_aid",
   tuition: "finance", fees: "finance", finance: "finance",
-  academic: "academics", academics: "academics", course: "academics", courses: "academics",
+  academic: "academics", academics: "academics", course: "academics", courses: "academics", grading: "academics", "academic-standing": "academics", "data-structures": "academics",
   graduation: "graduation", housing: "housing", visa: "visa", library: "library", it: "it",
   wellbeing: "wellbeing", careers: "careers", campus: "campus", "student-services": "student_services",
   student_services: "student_services", "student-services-general": "student_services",
@@ -84,11 +84,19 @@ function toEvidenceItems(row: EvidenceRow, now: Date, faqIndex: Map<string, Retu
   const verifiedDates = citations.map(({ lastVerified }) => lastVerified).filter((date): date is string => Boolean(date));
   const baseFreshness = freshness(verifiedDates.sort().at(-1), now);
   const evidenceScope = itemScope(row, metadata.domain);
-  const text = row.text.trim();
   const refs = citations.length ? citations : [{ title: metadata.title }];
-  return refs.map((citation, index) => {
+  return refs.flatMap((citation, index): EvidenceItem[] => {
+    const citationEvidence = citation.evidenceText?.trim();
+    const citationDomains = understandQuery(`${citation.title}\n${citationEvidence ?? ""}`).subjects.map(canonicalDomain).filter((domain): domain is string => Boolean(domain));
+    const citationDomain = citationDomains.length === 1 ? citationDomains[0] : null;
+    // A multi-source answer without source-specific facts cannot be split
+    // safely into independently attributable evidence items.
+    if (citations.length > 1 && !citationEvidence) return [];
+    if (citations.length > 1 && !citationDomain) return [];
+    const text = citationEvidence || row.text.trim();
+    const scopedEvidence = itemScope(row, citationDomain ?? metadata.domain);
     const lastVerified = citation.lastVerified ?? verifiedDates[index];
-    return {
+    return [{
       id: evidenceId(row.source, text, index),
       sourceType,
       title: citation.title || metadata.title,
@@ -97,14 +105,14 @@ function toEvidenceItems(row: EvidenceRow, now: Date, faqIndex: Map<string, Retu
       retrievedAt: now.toISOString(),
       ...(lastVerified ? { lastVerified } : {}),
       ...(sourceAuthority(citation.url) ? { authority: sourceAuthority(citation.url) } : {}),
-      ...(evidenceScope ? { scope: evidenceScope } : {}),
+      ...(scopedEvidence ?? evidenceScope ? { scope: scopedEvidence ?? evidenceScope } : {}),
       freshnessStatus: freshness(lastVerified, now) === "unknown" ? baseFreshness : freshness(lastVerified, now),
       trustStatus: "approved",
-    } satisfies EvidenceItem;
+    } satisfies EvidenceItem];
   });
 }
 
-function matchesHardScope(item: EvidenceItem, required: EvidenceScopeV3): boolean {
+function matchesHardScope(item: EvidenceItem, required: EvidenceScopeV3, request: string): boolean {
   const actual = item.scope;
   if (required.domain) {
     const expectedDomain = canonicalDomain(required.domain);
@@ -123,6 +131,11 @@ function matchesHardScope(item: EvidenceItem, required: EvidenceScopeV3): boolea
   if (required.audience && actual?.audience !== required.audience) return false;
   if (required.applicantCategory && actual?.applicantCategory !== required.applicantCategory) return false;
   if (required.courseCodes?.length && !required.courseCodes.every((code) => actual?.courseCodes?.includes(code))) return false;
+  const explicitlyNamedCourse = /\b[A-Z]{2,5}\d{3,4}\b/i.test(request);
+  // A course title alone is not enough to apply a course-specific record. In
+  // programs with similarly named courses, require the student-supplied code or
+  // a program scope before letting that record support a claim.
+  if (!explicitlyNamedCourse && !required.programId && actual?.courseCodes?.length) return false;
   return true;
 }
 
@@ -142,9 +155,18 @@ export function createEvidenceService(options: { retrieve?: EvidenceRetriever; n
   return {
     search(query) {
       const capturedAt = now();
-      const rows = retrieve(query.request, Math.max(1, Math.min(query.maxItems ?? 6, 20)));
-      const candidates = rows.flatMap((row) => toEvidenceItems(row, capturedAt, faqIndex, documentIndex));
-      const inScope = candidates.filter((item) => matchesHardScope(item, query.scope));
+      const retrievalRequest = [query.request, ...query.requestedFacts].filter(Boolean).join("\n");
+      const topK = Math.max(1, Math.min((query.maxItems ?? 6) * 3, 20));
+      const rows = retrieve(retrievalRequest, topK);
+      // Course-title matches can crowd out the general repeat-course rule.
+      // Retrieve that reviewed rule by the requested policy intent, then let
+      // the same applicability and source-scope gates decide if it is usable.
+      if (query.requestedFacts.some((fact) => /failed course repeat policy/i.test(fact))) {
+        rows.push(...retrieve("failed course must be repeated grading", topK).filter((row) => row.source === "answer:course-repeat-grades"));
+      }
+      const candidates = [...new Map(rows.map((row) => [`${row.source}\0${row.text}`, row])).values()]
+        .flatMap((row) => toEvidenceItems(row, capturedAt, faqIndex, documentIndex));
+      const inScope = candidates.filter((item) => matchesHardScope(item, query.scope, query.request));
       const current = inScope.filter((item) => item.freshnessStatus === "current");
       const unknown = inScope.filter((item) => item.freshnessStatus === "unknown");
       const usable = query.freshnessRequirement === "current"

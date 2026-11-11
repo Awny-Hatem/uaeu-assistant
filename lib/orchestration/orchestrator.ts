@@ -6,6 +6,8 @@ export type OrchestratorMessage = { role: "user" | "assistant"; content: string 
 export type OrchestratorInput = {
   conversation: OrchestratorMessage[];
   latest: string;
+  /** Context-resolved request assembled by the API; latest explicit topic still wins. */
+  resolvedRequest?: string;
   authenticatedScopes?: string[];
 };
 
@@ -16,6 +18,7 @@ const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|dela
 const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|record|progress|graduation)|i have completed|i failed|i passed|i am a student)\b|Ù‡Ù„ Ø£Ø³ØªØ·ÙŠØ¹|Ù‡Ù„ Ø£Ù†Ø§|Ù…Ù‚Ø±Ø±Ø§ØªÙŠ|Ù…Ø¹Ø¯Ù„ÙŠ/u;
 const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|Ø§Ù„Ù…ÙˆØ¹Ø¯ Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ|Ø¢Ø®Ø± Ù…ÙˆØ¹Ø¯/u;
 const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b/u;
+const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
 const PROGRAM_KEYS = new Set(["computer-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science"]);
 
 const SUBJECT_TO_DOMAIN: Record<string, string> = {
@@ -24,20 +27,23 @@ const SUBJECT_TO_DOMAIN: Record<string, string> = {
   graduation: "graduation", library: "library", password: "it", wifi: "it", parking: "campus",
   counseling: "wellbeing", medical: "wellbeing", internship: "careers", "student-document": "student_services",
   "major-change": "academics", "computer-engineering": "academics", "information-security": "academics",
-  "information-technology": "academics", "mechanical-engineering": "academics", "computer-science": "academics",
+  "information-technology": "academics", "mechanical-engineering": "academics", "computer-science": "academics", "data-structures": "academics",
 };
 
 function executionMode(latest: string, query: string): ExecutionMode {
   const text = normalizeQuery(latest);
+  const request = normalizeQuery(query);
   if (/^(?:hi|hello|hey|thanks|thank you|good morning|good afternoon|مرحبا|شكرا)[!. ]*$/u.test(text)) return "SIMPLE_CONVERSATION";
   if (ACTION_TERMS.test(text)) return "UNIVERSITY_TRANSACTION";
-  if (COMPLEX_TERMS.test(text) && (UAEU_TERMS.test(text) || courseCodes(query).length > 0)) return "COMPLEX_SCENARIO";
+  if (COMPLEX_TERMS.test(text) && (UAEU_TERMS.test(request) || courseCodes(query).length > 0)) return "COMPLEX_SCENARIO";
   const subjects = namedSubjects(query).map(({ key }) => key);
-  const academicOrServiceTarget = courseCodes(query).length > 0 || subjects.some((subject) =>
-    ["admissions", "registration", "graduation", "major-change", ...PROGRAM_KEYS, "scholarship", "housing"].includes(subject));
-  if (PERSONALIZED_TERMS.test(text) && academicOrServiceTarget) return "PERSONALIZED_ACADEMIC";
-  if (CURRENT_TERMS.test(text) && UAEU_TERMS.test(text) && !LOCATION_LOOKUP.test(text)) return "CURRENT_UAEU_RESEARCH";
-  if (UAEU_TERMS.test(text) || courseCodes(query).length > 0) return "UAEU_FACTUAL";
+  // Any recognized UAEU subject belongs to the evidence-first path. Keeping
+  // this allowlist narrow sent ordinary university questions back to the legacy
+  // answer selector even though they had already been identified as UAEU topics.
+  const academicOrServiceTarget = courseCodes(query).length > 0 || subjects.length > 0;
+  if (PERSONALIZED_TERMS.test(text) && academicOrServiceTarget && !LOCATION_LOOKUP.test(request)) return "PERSONALIZED_ACADEMIC";
+  if (CURRENT_TERMS.test(request) && UAEU_TERMS.test(request) && !LOCATION_LOOKUP.test(request)) return "CURRENT_UAEU_RESEARCH";
+  if (UAEU_TERMS.test(request) || courseCodes(query).length > 0) return "UAEU_FACTUAL";
   return "GENERAL_EXPLANATION";
 }
 
@@ -61,13 +67,23 @@ function requestedDomain(latest: string, resolvedQuery: string, contextUsed: boo
 export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   const latest = input.latest.trim();
   const resolution = resolveConversation(input.conversation, latest);
-  const normalizedRequest = resolution.usedContext ? resolution.query : latest;
+  const priorUserMessages = input.conversation.filter((message) => message.role === "user").slice(0, -1);
+  const previousUserRequest = priorUserMessages.at(-1)?.content ?? "";
+  const continuesCalendarLocation = SCOPE_ONLY_FOLLOW_UP.test(normalizeQuery(latest)) && LOCATION_LOOKUP.test(normalizeQuery(previousUserRequest));
+  const normalizedRequest = continuesCalendarLocation
+    ? `${previousUserRequest}\nFollow-up detail: ${latest}`
+    : input.resolvedRequest?.trim() || (resolution.usedContext ? resolution.query : latest);
   const meaning = understandQuery(normalizedRequest);
   const latestMeaning = understandQuery(latest);
   const mode = executionMode(latest, normalizedRequest);
-  const domain = requestedDomain(latest, normalizedRequest, resolution.usedContext);
+  const hasResolvedContext = Boolean(input.resolvedRequest && input.resolvedRequest.trim() !== latest) || resolution.usedContext;
+  const explicitCourseCodes = latest.match(/\b[A-Z]{2,5}\d{3,4}\b/gi) ?? [];
+  const ambiguousFailedCourse = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b/i.test(normalizedRequest) &&
+    /\bdata structures?\b/i.test(normalizedRequest) && explicitCourseCodes.length === 0;
+  const resolvedDomain = requestedDomain(latest, normalizedRequest, hasResolvedContext);
+  const domain = ambiguousFailedCourse ? { domain: "academics", ambiguous: false } : resolvedDomain;
   const missingContext: string[] = [];
-  const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(latest));
+  const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(normalizedRequest));
   const deadlineQuestion = DEADLINE_TERMS.test(normalizeQuery(normalizedRequest)) || latestMeaning.intents.includes("deadline");
   const asksDeadlineValue = deadlineQuestion && !isLocationLookup;
 
@@ -75,20 +91,25 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   else if (deadlineQuestion && !domain.domain) missingContext.push("the program or service whose deadline you need");
   if (asksDeadlineValue && !meaning.years.length && !meaning.terms.length) missingContext.push("the intake or academic year");
   if (asksDeadlineValue && domain.domain === "admissions" && !meaning.applicantCategory && !meaning.applicantCategories.length) missingContext.push("your applicant category");
-  if (meaning.intents.includes("prerequisites") && !meaning.codes.length && !resolution.subject) missingContext.push("the course code");
+  if (meaning.intents.includes("prerequisites") && !explicitCourseCodes.length) missingContext.push("the exact course code or degree program");
+  if (ambiguousFailedCourse) missingContext.push("the exact course code or degree program to check course-specific rules");
   if (meaning.intents.includes("courses") && /\b(?:degree plan|study plan|graduation plan|plan my courses)\b/u.test(meaning.normalized) && !resolution.subject) missingContext.push("your degree program");
-  if (["PERSONALIZED_ACADEMIC", "COMPLEX_SCENARIO"].includes(mode) && !input.authenticatedScopes?.includes("student-record:read")) {
+  // Personal phrasing does not itself require a portal record. Ask for
+  // authenticated access only when the answer depends on private account data.
+  const requiresPersonalRecord = /\b(?:my (?:gpa|cgpa|record|transcript|degree audit|completed courses|holds?|registration status)|am i eligible based on my record|can i register right now|can i graduate now|what is my academic standing)\b/i.test(normalizedRequest);
+  const asksRepeatPolicy = mode === "COMPLEX_SCENARIO" && /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b/i.test(normalizedRequest);
+  if (requiresPersonalRecord && !input.authenticatedScopes?.includes("student-record:read")) {
     missingContext.push("authenticated access to your student record for a personal eligibility decision");
   }
   if (mode === "UNIVERSITY_TRANSACTION") missingContext.push("an approved UAEU portal integration and your explicit confirmation before any submission");
 
-  const codes = [...new Set([...meaning.codes, ...latestMeaning.codes])];
+  const codes = [...new Set(explicitCourseCodes.map((code) => code.toUpperCase()))];
   const subjects = namedSubjects(normalizedRequest);
   const programSubject = subjects.find(({ key }) => PROGRAM_KEYS.has(key));
   const needs = {
     evidence: mode === "UAEU_FACTUAL" || mode === "CURRENT_UAEU_RESEARCH" || mode === "PERSONALIZED_ACADEMIC" || mode === "COMPLEX_SCENARIO",
     liveResearch: mode === "CURRENT_UAEU_RESEARCH",
-    studentData: mode === "PERSONALIZED_ACADEMIC" || mode === "COMPLEX_SCENARIO",
+    studentData: requiresPersonalRecord,
     academicRules: mode === "PERSONALIZED_ACADEMIC" || mode === "COMPLEX_SCENARIO",
     planning: mode === "COMPLEX_SCENARIO" || /\b(?:degree plan|study plan|graduation plan|plan my courses)\b/u.test(meaning.normalized),
     universityAction: mode === "UNIVERSITY_TRANSACTION",
@@ -98,7 +119,7 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
     schemaVersion: 1,
     mode,
     normalizedRequest,
-    requestedFacts: meaning.intents.length ? meaning.intents : ["answer the user's question"],
+    requestedFacts: [...(asksRepeatPolicy ? ["undergraduate failed course repeat policy"] : []), ...(meaning.intents.length ? meaning.intents : ["answer the user's question"])],
     entities: {
       ...(codes.length ? { courses: codes } : {}),
       ...(programSubject ? { program: programSubject.key } : resolution.subject && PROGRAM_KEYS.has(resolution.subject.key) ? { program: resolution.subject.key } : {}),
@@ -116,9 +137,10 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
 
 export function evidenceQueryForPlan(plan: ExecutionPlan): EvidenceQuery {
   const { entities } = plan;
+  const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(plan.normalizedRequest));
   return {
-    request: plan.normalizedRequest,
-    requestedFacts: plan.requestedFacts,
+    request: isLocationLookup ? "Where can I check the official UAEU academic calendar webpage?" : plan.normalizedRequest,
+    requestedFacts: isLocationLookup ? ["official academic calendar location and URL"] : plan.requestedFacts,
     scope: {
       ...(entities.domain ? { domain: entities.domain } : {}),
       ...(entities.eventType ? { eventType: entities.eventType } : {}),
@@ -126,13 +148,13 @@ export function evidenceQueryForPlan(plan: ExecutionPlan): EvidenceQuery {
       ...(entities.courses?.length ? { courseCodes: entities.courses } : {}),
       ...(entities.cohort ? { cohort: entities.cohort } : {}),
       ...(entities.degreeLevel ? { degreeLevel: entities.degreeLevel } : {}),
-      ...(entities.term ? { term: entities.term } : {}),
-      ...(entities.year !== undefined ? { year: entities.year } : {}),
+      ...(!isLocationLookup && entities.term ? { term: entities.term } : {}),
+      ...(!isLocationLookup && entities.year !== undefined ? { year: entities.year } : {}),
       ...(entities.applicantCategory === "national" || entities.applicantCategory === "international"
         ? { applicantCategory: entities.applicantCategory }
         : {}),
     },
-    freshnessRequirement: plan.needs.liveResearch ? "current" : "normal",
+    freshnessRequirement: plan.needs.liveResearch && !isLocationLookup ? "current" : "normal",
     maxItems: 6,
   };
 }
