@@ -249,6 +249,11 @@ async function main() {
   assert.match(String(unmodeledPsychology.payload.content), /do not yet have an approved structured course-requirement model for .*Psychology/i);
   assert.match(JSON.stringify(unmodeledPsychology.payload.citations), /bachelor-of-arts-in-psychology/);
 
+  const unmodeledPsychologyAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.246");
+  assert.equal(unmodeledPsychologyAudit.payload.stateLabel, "v3_degree_audit_preview");
+  assert.equal(unmodeledPsychologyAudit.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(unmodeledPsychologyAudit.payload.content), /do not have a structured curriculum model for .*Psychology/i);
+
   const partialDegreeAudit = await askMessages([
     { role: "user", content: "I passed CSBP119 with C." },
     { role: "user", content: "I passed MATH105 with B." },

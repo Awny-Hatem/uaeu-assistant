@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { loadOfficialCourseCatalog } from "../lib/academic/course-catalog";
+import { assessDegreeAuditConversation } from "../lib/academic/degree-audit";
 import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-program-catalog";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
@@ -16,6 +17,10 @@ assert.equal(unmodeledProgram.programId, "psychology");
 assert.equal(unmodeledProgram.curriculum, null);
 assert.match(renderProgramRequirementsAssessment(unmodeledProgram, "en"), /do not yet have an approved structured course-requirement model/i);
 assert.match(JSON.stringify(unmodeledProgram.sources), /bachelor-of-arts-in-psychology/);
+const unmodeledAudit = assessDegreeAuditConversation([{ role: "user", content: "What do I still need to graduate in Psychology?" }]);
+assert.equal(unmodeledAudit?.auditStatus, "PROGRAM_NOT_MODELED");
+assert.equal(unmodeledAudit?.programId, "psychology");
+assert.match(JSON.stringify(unmodeledAudit?.sources), /undergraduate\/programs\/index\.shtml/);
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
 
 assert.equal(assessAcademicProgramIdentityReview([
