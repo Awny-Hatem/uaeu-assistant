@@ -33,7 +33,7 @@ function internshipCodes(requirements: ProgramRequirement[]): Set<string> {
 }
 
 const catalog = loadOfficialCourseCatalog();
-assert.ok(catalog);
+if (!catalog) throw new Error("The official course catalog is required for sequence route checks.");
 const undergraduatePrograms = loadUndergraduateProgramCatalog().programs;
 const normalizeProgramName = (name: string) => name.normalize("NFKC").replace(/[^\p{L}\p{N}]/gu, "").toLocaleLowerCase("en");
 const asOf = new Date().toISOString().slice(0, 10);
