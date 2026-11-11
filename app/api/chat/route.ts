@@ -31,6 +31,7 @@ import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/o
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
+import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
 
@@ -771,6 +772,19 @@ export async function POST(req: Request) {
       citations: [],
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  const academicConceptExplanation = explainPrerequisiteCorequisite(latest, locale);
+  if (academicConceptExplanation) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: academicConceptExplanation,
+      source: "conversation",
+      stateLabel: "general_academic_concept",
+      disposition: "answer",
+      citations: [],
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
   const resolution = resolveConversation(sanitized, latest);

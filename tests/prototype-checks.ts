@@ -1062,6 +1062,20 @@ async function main() {
       },
     },
     {
+      name: "generic prerequisite and corequisite question receives a direct concept explanation",
+      run: async () => {
+        const result = await postJson({
+          locale: "en",
+          messages: [{ role: "user", content: "Explain the difference between a prerequisite and a corequisite using a simple hypothetical example." }],
+        });
+        assert.equal(result.data.stateLabel, "general_academic_concept");
+        assert.match(result.data.content ?? "", /A \*\*prerequisite\*\*/);
+        assert.match(result.data.content ?? "", /A \*\*corequisite\*\*/);
+        assert.match(result.data.content ?? "", /hypothetical example/i);
+        assert.doesNotMatch(result.data.content ?? "", /CSBP319|CSBP219|CSBP221/);
+      },
+    },
+    {
       name: "national curriculum equivalency keeps applicant routes separate",
       run: async () => {
         const result = await postJson({
