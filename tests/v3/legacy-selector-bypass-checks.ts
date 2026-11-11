@@ -234,7 +234,12 @@ async function main() {
   assert.doesNotMatch(String(electricalCourses.payload.content), /ISEC|Information Security/i, "a program-specific question must not receive another degree's canonical answer");
   assert.match(JSON.stringify(electricalCourses.payload.citations), /bachelor-of-science-in-electrical-engineering/);
 
-  for (const [program, course, ip] of [["Chemical Engineering", "CHME455", "203.0.113.243"], ["Civil Engineering", "CIVL585", "203.0.113.244"]] as const) {
+  for (const [program, course, ip] of [
+    ["Chemical Engineering", "CHME455", "203.0.113.243"],
+    ["Civil Engineering", "CIVL585", "203.0.113.244"],
+    ["Aerospace Engineering", "AERO585", "203.0.113.247"],
+    ["Petroleum Engineering", "PETE585", "203.0.113.248"],
+  ] as const) {
     const requiredCourses = await ask(`What courses are required in ${program}?`, ip);
     assert.equal(requiredCourses.payload.stateLabel, "v3_program_requirement_model");
     assert.equal(requiredCourses.payload.resolutionState, "CONDITIONAL");
@@ -242,6 +247,23 @@ async function main() {
     assert.doesNotMatch(String(requiredCourses.payload.content), /ISEC|Information Security/i, "a named engineering degree must not receive an unrelated canonical record");
     assert.match(JSON.stringify(requiredCourses.payload.citations), new RegExp(program.toLowerCase().replaceAll(" ", "-")));
   }
+
+  const petroleum2022 = await askMessages([
+    { role: "user", content: "I entered Petroleum Engineering in 2022." },
+    { role: "assistant", content: "Which requirement would you like to check?" },
+    { role: "user", content: "How many credits do I need to graduate?" },
+  ], "203.0.113.249");
+  assert.equal(petroleum2022.payload.stateLabel, "v3_program_credit_model");
+  assert.match(String(petroleum2022.payload.content), /147 credit hours/);
+  assert.match(String(petroleum2022.payload.content), /course list is not fully structured/i);
+
+  const petroleum2023 = await askMessages([
+    { role: "user", content: "I entered Petroleum Engineering in 2023." },
+    { role: "assistant", content: "Which requirement would you like to check?" },
+    { role: "user", content: "How many credits do I need to graduate?" },
+  ], "203.0.113.250");
+  assert.equal(petroleum2023.payload.stateLabel, "v3_program_credit_model");
+  assert.match(String(petroleum2023.payload.content), /132 credit hours/);
 
   const unmodeledPsychology = await ask("What courses are required in Psychology?", "203.0.113.245");
   assert.equal(unmodeledPsychology.payload.stateLabel, "v3_program_requirement_model");

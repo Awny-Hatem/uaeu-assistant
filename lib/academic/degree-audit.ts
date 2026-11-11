@@ -38,6 +38,8 @@ const CURRICULUM_PROGRAM_IDS: Record<string, string> = {
   "electrical-engineering": "electrical-engineering",
   "civil-engineering": "civil-engineering",
   "chemical-engineering": "chemical-engineering",
+  "aerospace-engineering": "aerospace-engineering",
+  "petroleum-engineering": "petroleum-engineering",
   "information-technology": "bsc-information-technology",
   "cybersecurity": "cybersecurity",
   "computer-science": "bsc-computer-science",

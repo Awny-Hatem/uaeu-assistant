@@ -789,8 +789,87 @@
         ]
       }
     ]
-  }
-,
+  },
+  {
+    "schemaVersion": 1,
+    "id": "aerospace-engineering",
+    "name": "Bachelor of Science in Aerospace Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Engineering",
+    "sources": [
+      { "documentId": "42-aerospace-engineering-curriculum", "title": "UAEU Bachelor of Science in Aerospace Engineering degree requirements", "url": "https://www.uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-aerospace-engineering.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "42-aerospace-engineering-curriculum", "title": "UAEU Aerospace Engineering Model Study Plan (2022–2023 and 2023–2024 cohorts)", "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_aerospace_engineering_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [{
+      "id": "aerospace-engineering-catalog-2026-11", "version": "catalog-2026-11-06", "status": "approved",
+      "cohortLabel": "Current published Aerospace Engineering catalog; confirm an earlier cohort against its linked model plan and assigned Degree Works plan", "effectiveFrom": "2026-11-06", "totalCredits": 132,
+      "creditBuckets": [
+        { "id": "general-education", "name": "General education", "credits": 21 },
+        { "id": "college-requirements", "name": "College of Engineering requirements", "credits": 35 },
+        { "id": "major-requirements", "name": "Aerospace Engineering core", "credits": 68 },
+        { "id": "internship", "name": "Internship", "credits": 2 },
+        { "id": "electives", "name": "Elective courses", "credits": 6 }
+      ],
+      "requirements": [
+        { "type": "CREDIT_BLOCK", "id": "aerospace-general-education", "name": "General education", "credits": 21, "ruleNote": "The catalog specifies 21 general-education credits with theme-based options; this model does not audit individual theme choices." },
+        { "type": "REQUIRED_COURSE_SET", "id": "aerospace-college", "name": "Required College of Engineering courses", "courseCodes": ["CHEM111", "CHEM175", "MATH105", "MATH110", "MATH210", "MATH140", "MATH275", "STAT210", "PHYS105", "PHYS110", "PHYS135", "PHYS140", "GENG215", "GENG315"] },
+        { "type": "REQUIRED_COURSE_SET", "id": "aerospace-core", "name": "Required Aerospace Engineering core courses", "courseCodes": ["CIVL240", "MECH200", "AERO280", "MECH305", "MECH310", "MECH315", "MECH350", "ELEC372", "MECH390", "MECH409", "AERO301", "AERO215", "AERO220", "AERO300", "AERO305", "AERO310", "AERO315", "AERO350", "AERO402", "AERO411", "AERO496", "AERO450", "AERO585", "AERO590", "GENG220", "GENG230"] },
+        { "type": "INTERNSHIP", "id": "aerospace-internship-i", "name": "Internship I", "courseCode": "AERO485", "credits": 1, "finalSemesterOnly": false },
+        { "type": "INTERNSHIP", "id": "aerospace-internship-ii", "name": "Internship II", "courseCode": "AERO490", "credits": 1, "finalSemesterOnly": false },
+        { "type": "ELECTIVE_GROUP", "id": "aerospace-electives", "name": "Aerospace Engineering electives", "chooseCount": 2, "credits": 6, "courseCodes": ["AERO505", "AERO506", "AERO515", "AERO500", "AERO501", "AERO520", "MECH515", "AERO511", "AERO562", "AERO563"] }
+      ],
+      "limitations": [
+        "The program page was last updated 6 November 2026. The model represents its current published catalog, not a student's assigned cohort plan.",
+        "The linked 2022–2023 and 2023–2024 cohort plans both list 132 total credits but differ in course-code versions and theme assignments. Cohort-specific course selections must be checked against the assigned Degree Works plan.",
+        "The catalog states two elective courses (6 credits) from named baskets; the model lists their combined choices and does not encode basket-specific capacity or distribution rules.",
+        "The catalog's internship rows list AERO485 and AERO490 at 1 credit each. This model does not infer availability, prerequisites beyond the official course catalog, or registration eligibility."
+      ]
+    }]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "petroleum-engineering",
+    "name": "Bachelor of Science in Petroleum Engineering",
+    "degreeLevel": "undergraduate",
+    "college": "College of Engineering",
+    "sources": [
+      { "documentId": "43-petroleum-engineering-curriculum", "title": "UAEU Bachelor of Science in Petroleum Engineering degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "43-petroleum-engineering-curriculum", "title": "UAEU Petroleum Engineering Model Study Plan", "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_petroleum_engineering_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "petroleum-engineering-2022-plan-147", "version": "2022-2023-model-plan", "status": "approved",
+        "cohortLabel": "The official 2022–2023 Petroleum Engineering model plan; use only for the entry cohort it identifies", "effectiveFrom": "2022-08-01", "effectiveTo": "2023-07-31", "totalCredits": 147,
+        "requirements": [],
+        "limitations": ["The official model plan states 147 total credits for 2022–2023 entrants. Its course list is not fully structured in this assistant, so no cohort-specific required-course list is asserted; verify the assigned Degree Works plan."]
+      },
+      {
+        "id": "petroleum-engineering-2023-plan-132", "version": "2023-2024-model-plan-and-current-catalog", "status": "approved",
+        "cohortLabel": "The official model plan identifies the 2023–2024 cohort onward at 132 credits; the current program page also lists a 132-credit minimum", "effectiveFrom": "2023-08-01", "totalCredits": 132,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education", "credits": 21 },
+          { "id": "college-requirements", "name": "College of Engineering requirements", "credits": 35 },
+          { "id": "major-requirements", "name": "Petroleum Engineering requirements", "credits": 65 },
+          { "id": "internship", "name": "Internship", "credits": 2 },
+          { "id": "electives", "name": "Electives", "credits": 9 }
+        ],
+        "requirements": [
+          { "type": "CREDIT_BLOCK", "id": "petroleum-general-education", "name": "General education", "credits": 21, "ruleNote": "The catalog specifies 21 general-education credits with theme-based options; this model does not audit individual theme choices." },
+          { "type": "REQUIRED_COURSE_SET", "id": "petroleum-college", "name": "Required College of Engineering courses", "courseCodes": ["MATH105", "MATH110", "MATH210", "CHEM111", "CHEM175", "GENG215", "GENG315", "MATH140", "MATH275", "STAT210", "PHYS105", "PHYS110", "PHYS135", "PHYS140"] },
+          { "type": "REQUIRED_COURSE_SET", "id": "petroleum-major", "name": "Required Petroleum Engineering courses", "courseCodes": ["GEOL100", "CHEM282", "CHME330", "CHME390", "PETE290", "PETE305", "PETE308", "PETE315", "PETE320", "PETE362", "PETE403", "PETE413", "PETE419", "PETE422", "PETE507", "PETE512", "PETE519", "PETE520", "PETE542", "PETE585", "PETE590", "PETE407", "GENG220", "GENG230"] },
+          { "type": "INTERNSHIP", "id": "petroleum-internship-i", "name": "Internship I", "courseCode": "PETE485", "credits": 1, "finalSemesterOnly": false },
+          { "type": "INTERNSHIP", "id": "petroleum-internship-ii", "name": "Internship II", "courseCode": "PETE490", "credits": 1, "finalSemesterOnly": false },
+          { "type": "ELECTIVE_GROUP", "id": "petroleum-electives", "name": "Petroleum Engineering electives", "chooseCount": 3, "credits": 9, "courseCodes": ["CHME542", "PETE410", "PETE424", "PETE443", "PETE526", "PETE547", "PETE557", "PETE570"] }
+        ],
+        "limitations": [
+          "The official 2023–2024 model plan identifies this 132-credit structure from that cohort onward; the current catalog page also lists a 132-credit minimum.",
+          "The 2022–2023 model plan is a separate 147-credit version; do not apply this 132-credit plan to 2022 entrants.",
+          "The current catalog and model plan include different theme/course code variants. Check the student's assigned Degree Works plan for specific cohort requirements.",
+          "The page allows PETE485 and PETE490 in separate summers or together in Fall or Spring. General-education choices, course availability, prerequisites beyond the official course catalog, and personal registration eligibility are not determined here."
+        ]
+      }
+    ]
+  },
   {
     "schemaVersion": 1,
     "id": "chemical-engineering",

@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 11, "eleven programs have structured curriculum records based on official catalog sources");
+assert.equal(programs.length, 13, "thirteen current or historical program versions have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -54,6 +54,8 @@ assert.equal(programIdInText("How many credits for Data Science and Artificial I
 assert.equal(programIdInText("How many credits in Electrical Engineering?"), "electrical-engineering");
 assert.equal(programIdInText("What courses are required in Civil Engineering?"), "civil-engineering");
 assert.equal(programIdInText("What courses are required in Chemical Engineering?"), "chemical-engineering");
+assert.equal(programIdInText("What courses are required in Aerospace Engineering?"), "aerospace-engineering");
+assert.equal(programIdInText("What courses are required in Petroleum Engineering?"), "petroleum-engineering");
 assert.equal(programIdInText("\u0643\u0645 \u0633\u0627\u0639\u0629 \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0627\u0644\u0623\u0645\u0646 \u0627\u0644\u0633\u064a\u0628\u0631\u0627\u0646\u064a\u061f"), "cybersecurity", "Arabic Cybersecurity queries map to the current Cybersecurity curriculum");
 
 const computerEngineeringIdentityReview = assessAcademicProgramIdentityReview([
@@ -138,12 +140,16 @@ assert.equal(currentQuestion.curriculum?.totalCredits, 120);
 assert.match(renderProgramCreditAssessment(currentQuestion, "en"), /21 credits/);
 assert.match(renderProgramCreditAssessment(currentQuestion, "en"), /assigned study plan/i);
 
+const officialCourseCredits = new Map(loadOfficialCourseCatalog()?.courses.map(({ code, creditHours }) => [code, creditHours] as const));
+const officialCourseCodes = new Set(officialCourseCredits.keys());
 for (const [programId, expectedBuckets] of [
   ["cybersecurity", [21, 41, 46, 6, 6]],
   ["data-science-and-artificial-intelligence", [21, 54, 6, 15, 9, 6, 9]],
   ["electrical-engineering", [21, 35, 62, 2, 12]],
   ["chemical-engineering", [21, 35, 45, 6, 2, 17, 6]],
   ["civil-engineering", [21, 35, 65, 2, 9]],
+  ["aerospace-engineering", [21, 35, 68, 2, 6]],
+  ["petroleum-engineering", [21, 35, 65, 2, 9]],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled, `${programId} has a current official curriculum model`);
@@ -153,8 +159,18 @@ for (const [programId, expectedBuckets] of [
   assert.equal(modeled.curriculum.creditBuckets?.reduce((sum, bucket) => sum + bucket.credits, 0), bucketTotal);
   assert.ok(modeled.curriculum.requirements.some(({ type }) => type === "CREDIT_BLOCK"), "general-education choice rules remain explicitly unassessed rather than being guessed course by course");
 }
-const officialCourseCodes = new Set(loadOfficialCourseCatalog()?.courses.map(({ code }) => code));
-for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering"]) {
+for (const [programId, requirementId, expectedCredits] of [
+  ["aerospace-engineering", "aerospace-core", 68],
+  ["petroleum-engineering", "petroleum-major", 65],
+] as const) {
+  const modeled = getProgramCurriculum(programId);
+  assert.ok(modeled);
+  const group = modeled.curriculum.requirements.find((item) => item.id === requirementId);
+  assert.ok(group && (group.type === "REQUIRED_COURSE_SET" || group.type === "ELECTIVE_GROUP"));
+  const listedCredits = group.courseCodes.reduce((sum, code) => sum + (officialCourseCredits.get(code) ?? 0), 0);
+  assert.equal(listedCredits, expectedCredits, `${programId} course rows sum to the published ${expectedCredits}-credit requirement`);
+}
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence", "electrical-engineering", "chemical-engineering", "civil-engineering", "aerospace-engineering", "petroleum-engineering"]) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);
   for (const requirement of modeled.curriculum.requirements) {
@@ -169,6 +185,9 @@ for (const programId of ["cybersecurity", "data-science-and-artificial-intellige
     }
   }
 }
+assert.equal(getProgramCurriculum("petroleum-engineering", 2022)?.curriculum.totalCredits, 147, "the 2022 Petroleum Engineering cohort retains its separately published 147-credit plan");
+assert.equal(getProgramCurriculum("petroleum-engineering", 2022)?.curriculum.requirements.length, 0, "the older Petroleum plan does not claim a structured course list");
+assert.equal(getProgramCurriculum("petroleum-engineering", 2023)?.curriculum.totalCredits, 132, "the 2023 cohort onward uses the separately published 132-credit model");
 const cybersecurityAssessment = assessProgramCreditConversation([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
 ]);
@@ -212,6 +231,8 @@ assert.match(renderProgramRequirementsAssessment(electricalRequirements, "en"), 
 for (const [programId, title, course] of [
   ["chemical-engineering", "Chemical Engineering", "CHME455"],
   ["civil-engineering", "Civil Engineering", "CIVL585"],
+  ["aerospace-engineering", "Aerospace Engineering", "AERO585"],
+  ["petroleum-engineering", "Petroleum Engineering", "PETE585"],
 ] as const) {
   const credits = assessProgramCreditConversation([{ role: "user", content: `How many credits to graduate in ${title}?` }]);
   assert.ok(credits);
@@ -347,4 +368,4 @@ assert.equal(oldCohortSubstitution.curriculum?.totalCredits, 144);
 assert.equal(oldCohortSubstitution.sharedOption, undefined, "do not apply the newer elective list to the historical cohort");
 assert.match(renderProgramCourseSubstitutionAssessment(oldCohortSubstitution, "en"), /cannot verify replacing CENG580 with CENG532/);
 
-console.log("Academic program model passed: 11 sourced programs, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");
+console.log("Academic program model passed: 13 sourced program versions, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");
