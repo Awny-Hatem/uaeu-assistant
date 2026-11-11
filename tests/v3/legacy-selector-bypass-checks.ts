@@ -518,6 +518,9 @@ async function main() {
     { role: "user", content: "What are the prerequisites for CSBP340?" },
   ], "203.0.113.232");
   assert.notEqual(courseQuestion.payload.stateLabel, "v3_program_requirement_model", "course-level questions must not be answered with the full program course list");
+  assert.match(String(courseQuestion.payload.content), /prerequisite field is incomplete[\s\S]*does not establish/i,
+    "CSBP340's malformed catalog prerequisite must be disclosed instead of presented as a verified OR rule");
+  assert.doesNotMatch(String(courseQuestion.payload.content), /one accepted catalog alternative/i);
 
   console.log("V3 route checks passed: selector bypass, deadline separation, repeat policy, and structured prerequisite and program models.");
 }

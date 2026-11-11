@@ -13,6 +13,18 @@ assert(prerequisites);
 assert.match(prerequisites.content, /Prerequisites as stated in the catalog: CSBP219 with a minimum grade D/u);
 assert.match(prerequisites.content, /Pre\/Co requirement as labeled by the catalog: CSBP221 with a minimum grade D/u);
 
+const malformedPrerequisites = answerOfficialCourseCatalogQuestion("What are the prerequisites for CSBP340?", "en");
+assert(malformedPrerequisites);
+assert.equal(malformedPrerequisites.resolutionState, "UNSUPPORTED");
+assert.match(malformedPrerequisites.content, /prerequisite field is incomplete[\s\S]*does not establish/i);
+assert.doesNotMatch(malformedPrerequisites.content, /Prerequisites as stated in the catalog:/u,
+  "an incomplete prerequisite relation is labeled and surfaced as ambiguous, not copied as an ordinary verified rule");
+
+const malformedEligibility = answerOfficialCourseCatalogQuestion("Can I register for CSBP340?", "en");
+assert(malformedEligibility);
+assert.equal(malformedEligibility.resolutionState, "UNSUPPORTED");
+assert.match(malformedEligibility.content, /dangling AND\/OR[\s\S]*cannot assess eligibility/i);
+
 const eligibility = answerOfficialCourseCatalogQuestion("Am I eligible to take CSBP319?", "en");
 assert(eligibility);
 assert.equal(eligibility.resolutionState, "UNSUPPORTED");

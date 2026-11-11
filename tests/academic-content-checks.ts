@@ -200,12 +200,12 @@ check("risk-analysis prerequisites preserve AND and minimum grade in both langua
   assert.match(record.answer_ar, /ساعتين معتمدتين/);
 });
 
-check("database prerequisite alternatives remain OR, separately scoped from the cohort plan", () => {
+check("incomplete database prerequisite wording remains unconfirmed", () => {
   const record = entry("course-prerequisites-database-systems");
-  assert.match(record.answer_en, /CSBP319.*minimum grade of D or CSBP323.*minimum grade of D/);
-  assert.match(record.answer_ar, /CSBP319.*بدرجة D على الأقل أو CSBP323.*بدرجة D على الأقل/);
-  assert.match(record.answer_en, /Fall 2025.*specifically places CSBP340 after CSBP319/);
-  assert.match(record.answer_ar, /خريف 2025 تضع CSBP340 بعد CSBP319 تحديداً/);
+  assert.match(record.answer_en, /prerequisite field is incomplete.*CSBP319.*CSBP323.*ends with the word "or"[\s\S]*does not establish whether both courses, either course, or another alternative is required/);
+  assert.ok(record.answer_ar.includes("\u0644\u0627 \u064a\u0648\u0636\u062d \u0627\u0644\u0646\u0635 \u0627\u0644\u0645\u0646\u0634\u0648\u0631"), "Arabic answer explains the source cannot resolve the prerequisite relationship");
+  assert.match(record.answer_en, /Fall 2025.*places CSBP340 after CSBP319/);
+  assert.match(record.citations[0].evidenceText, /dangling.*or[\s\S]*not established/);
 });
 
 check("probation preserves AND dismissal and the compound additional-semester exception", () => {

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { asksPersonalPrerequisiteEligibility } from "@/lib/academic/prerequisite-rules";
+import { parseCatalogPrerequisiteExpression } from "@/lib/academic/catalog-prerequisite-parser";
 
 export type OfficialCourseRecord = {
   code: string;
@@ -88,12 +89,21 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
       : `I could not find **${code}** in the available official UAEU course-catalog snapshot. Check the course code in the UAEU portal or provide the catalog year.`;
     return { content, code, source: null, resolutionState: "UNSUPPORTED" as const };
   }
+  const hasPrerequisiteEvidence = record.prerequisiteItems.length > 0;
+  const prerequisiteExpression = hasPrerequisiteEvidence ? parseCatalogPrerequisiteExpression(record) : null;
+  const prerequisiteUnsupported = hasPrerequisiteEvidence && !prerequisiteExpression;
+  const danglingPrerequisiteOperator = Boolean(record.prerequisiteText && /\b(?:and|or)\s*[.)]*$/iu.test(record.prerequisiteText));
   if (asksCourseEligibility) {
     const listedRequirements = [
       record.prerequisiteText ? `- ${locale === "ar" ? "نص المتطلب السابق في الفهرس" : "Catalog prerequisite wording"}: ${record.prerequisiteText}.` : locale === "ar" ? "- لا يتضمن سجل الفهرس المتاح نصاً لمتطلب سابق لهذا المقرر." : "- The catalog snapshot does not provide prerequisite wording for this course.",
       record.corequisiteText ? `- ${locale === "ar" ? "نص المتطلب المصاحب في الفهرس" : "Catalog corequisite wording"}: ${record.corequisiteText}.` : "",
       record.preCorequisiteText ? `- ${locale === "ar" ? "نص متطلب السابق/المصاحب في الفهرس" : "Catalog Pre/Co wording"}: ${record.preCorequisiteText}.` : "",
     ].filter(Boolean);
+    if (prerequisiteUnsupported) listedRequirements.push(locale === "ar"
+      ? "صياغة المتطلب السابق غير مكتملة أو غير قابلة للتفسير بأمان. لا أستطيع تحديد أهليتك؛ راجع خطتك المعتمدة أو وحدة الإرشاد الأكاديمي."
+      : danglingPrerequisiteOperator
+        ? "The prerequisite wording ends with a dangling AND/OR, so it is incomplete and does not establish which courses or alternatives are required. I cannot assess eligibility from it. Ask your College Advising Unit to confirm the rule before registering."
+        : "The prerequisite wording cannot be safely interpreted by the assistant. Ask your College Advising Unit to confirm the rule before relying on it.");
     return {
       content: [
         `**${record.code} ${record.title} — ${locale === "ar" ? "لم يتم التحقق من أهلية التسجيل" : "eligibility not verified"}**`,
@@ -110,7 +120,18 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
   const lines = [`**${record.code} ${record.title}**`];
   if (record.creditHours !== null) lines.push(locale === "ar" ? `- الساعات المعتمدة في الفهرس: **${record.creditHours}**.` : `- Catalog credit hours: **${record.creditHours}**.`);
   else lines.push(locale === "ar" ? "- لا يعرض هذا السجل عدد الساعات." : "- This catalog entry does not display a credit-hour value.");
-  if (record.prerequisiteText) lines.push(locale === "ar" ? `- المتطلبات السابقة كما وردت في الفهرس: ${record.prerequisiteText}.` : `- Prerequisites as stated in the catalog: ${record.prerequisiteText}.`);
+  if (record.prerequisiteText) {
+    if (prerequisiteUnsupported) {
+      lines.push(`- ${locale === "ar" ? "نص المتطلب السابق في الفهرس" : "Catalog prerequisite wording"}: ${record.prerequisiteText}.`);
+      lines.push(locale === "ar"
+        ? "صياغة المتطلب السابق غير مكتملة أو غير قابلة للتفسير بأمان؛ راجع وحدة الإرشاد الأكاديمي قبل الاعتماد عليها."
+        : danglingPrerequisiteOperator
+          ? "The prerequisite field is incomplete: it ends with a dangling AND/OR and does not establish the required relationship or whether an additional alternative is missing. Confirm the rule with your College Advising Unit before relying on it."
+          : "This prerequisite wording cannot be safely interpreted by the assistant. Confirm the applicable rule with your College Advising Unit before relying on it.");
+    } else {
+      lines.push(locale === "ar" ? `- المتطلبات السابقة كما وردت في الفهرس: ${record.prerequisiteText}.` : `- Prerequisites as stated in the catalog: ${record.prerequisiteText}.`);
+    }
+  }
   else lines.push(locale === "ar" ? "- لا يعرض هذا السجل قسماً للمتطلبات السابقة؛ وهذا لا يثبت عدم وجود قيود تسجيل أخرى." : "- This catalog entry does not show a prerequisite section; that does not establish that no other registration restrictions apply.");
   if (record.corequisiteText) lines.push(locale === "ar" ? `- المتطلبات المصاحبة: ${record.corequisiteText}.` : `- Corequisites: ${record.corequisiteText}.`);
   if (record.preCorequisiteText) lines.push(locale === "ar" ? `- متطلب سابق/مصاحب كما يسميه الفهرس: ${record.preCorequisiteText}.` : `- Pre/Co requirement as labeled by the catalog: ${record.preCorequisiteText}.`);
@@ -122,6 +143,6 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     content: lines.join("\n"),
     code,
     source: { title: record.source.title, url: record.source.url, lastVerified: record.source.verifiedAt },
-    resolutionState: "VERIFIED" as const,
+    resolutionState: prerequisiteUnsupported && /\b(?:prerequisites?|pre-?reqs?|المتطلبات السابقة)\b/iu.test(normalized) ? "UNSUPPORTED" as const : "VERIFIED" as const,
   };
 }
