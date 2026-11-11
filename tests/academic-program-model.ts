@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 52, "fifty-two current or historical program records have structured evidence records");
+assert.equal(programs.length, 57, "fifty-seven current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -53,6 +53,75 @@ assert.equal(translationQuestion?.programId, "translation-studies");
 assert.match(renderProgramRequirementsAssessment(translationQuestion!, "en"), /TRS490/);
 assert.match(renderProgramRequirementsAssessment(translationQuestion!, "en"), /earlier cohorts/);
 assert.equal(getProgramCurriculum("translation-studies", 2024), null, "the 2025-2026 model must not be applied to older cohorts");
+
+const arabicLiterature = getProgramCurriculum("arabic-language-and-literature");
+assert.ok(arabicLiterature);
+assert.equal(arabicLiterature.curriculum.totalCredits, 120);
+assert.deepEqual(arabicLiterature.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 6, 51, 6, 18, 12]);
+assert.equal(arabicLiterature.curriculum.cohortLabel, "Students admitted from Fall or Spring 2025-2026 onwards");
+const arabicMajor = arabicLiterature.curriculum.requirements.find((item) => item.id === "arabic-language-and-literature-major");
+assert.ok(arabicMajor?.type === "REQUIRED_COURSE_SET");
+assert.equal(arabicMajor.courseCodes.length, 17);
+const arabicInternship = arabicLiterature.curriculum.requirements.find((item) => item.id === "arabic-language-and-literature-internship");
+assert.ok(arabicInternship?.type === "INTERNSHIP");
+assert.equal(arabicInternship.courseCode, "ARB490");
+assert.equal(arabicInternship.otherCoursesAllowed, false);
+const arabicAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Arabic Language and Literature?" }]);
+assert.equal(arabicAnswer?.programId, "arabic-language-and-literature");
+assert.match(renderProgramRequirementsAssessment(arabicAnswer!, "en"), /ARB490/);
+assert.match(renderProgramRequirementsAssessment(arabicAnswer!, "en"), /introductory summary on the same degree page conflicts with those detailed tables/i);
+assert.equal(getProgramCurriculum("arabic-language-and-literature", 2024), null, "the 2025-2026 Arabic model must not be applied to earlier cohorts");
+
+const visualStudies = getProgramCurriculum("visual-studies-and-creative-industries");
+assert.ok(visualStudies);
+assert.equal(visualStudies.curriculum.totalCredits, 120);
+assert.deepEqual(visualStudies.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 54, 6, 21, 12]);
+const visualElectives = visualStudies.curriculum.requirements.filter((item) => item.type === "ELECTIVE_GROUP");
+assert.deepEqual(visualElectives.map(({ chooseCount }) => chooseCount), [2, 2, 3]);
+assert.match(visualStudies.curriculum.limitations.join(" "), /six major electives overall.*2 \+ 2 \+ 3 courses/i);
+const visualAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Visual Studies and Creative Industries?" }]);
+assert.equal(visualAnswer?.programId, "visual-studies-and-creative-industries");
+assert.match(renderProgramRequirementsAssessment(visualAnswer!, "en"), /says to select six major electives overall, but its three explicit group requirements require 2 \+ 2 \+ 3 courses/i);
+
+const geography = getProgramCurriculum("geography");
+assert.ok(geography);
+assert.equal(geography.curriculum.totalCredits, 120);
+assert.deepEqual(geography.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 24, 57, 12]);
+const geographyConcentrations = geography.curriculum.requirements.find((item) => item.id === "geography-concentrations");
+assert.ok(geographyConcentrations?.type === "PATHWAY_CHOICE");
+assert.equal(geographyConcentrations.options.length, 3);
+assert.ok(geographyConcentrations.options.every(({ credits, requirements }) => credits === 57 && requirements?.some((item) => item.type === "INTERNSHIP" && item.otherCoursesAllowed === false)));
+const geographyAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What concentrations are available in Geography?" }]);
+assert.equal(geographyAnswer?.programId, "geography");
+assert.match(renderProgramRequirementsAssessment(geographyAnswer!, "en"), /Environmental Geography/);
+assert.match(renderProgramRequirementsAssessment(geographyAnswer!, "en"), /Geoinformatics/);
+assert.match(renderProgramRequirementsAssessment(geographyAnswer!, "en"), /Urban Planning/);
+
+const appliedSociology = getProgramCurriculum("applied-sociology-and-social-data-analytics");
+assert.ok(appliedSociology);
+assert.equal(appliedSociology.curriculum.totalCredits, 120);
+assert.deepEqual(appliedSociology.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 48, 6, 3, 33, 3]);
+const appliedSociologyConcentrations = appliedSociology.curriculum.requirements.find((item) => item.id === "applied-sociology-concentrations");
+assert.ok(appliedSociologyConcentrations?.type === "PATHWAY_CHOICE");
+assert.equal(appliedSociologyConcentrations.options.length, 3);
+assert.ok(appliedSociologyConcentrations.options.every(({ credits, requirements }) => credits === 33 && requirements?.some((item) => item.type === "ELECTIVE_GROUP" && item.chooseCount === 5)));
+const appliedSociologyAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What concentrations are in Applied Sociology and Social Data Analytics?" }]);
+assert.equal(appliedSociologyAnswer?.programId, "applied-sociology-and-social-data-analytics");
+assert.match(renderProgramRequirementsAssessment(appliedSociologyAnswer!, "en"), /Sociology of Consumption/);
+assert.match(renderProgramRequirementsAssessment(appliedSociologyAnswer!, "en"), /Social Policy Analysis/);
+assert.match(renderProgramRequirementsAssessment(appliedSociologyAnswer!, "en"), /Quality of Life Analysis/);
+
+const doctorOfMedicine = getProgramCurriculum("doctor-of-medicine");
+assert.ok(doctorOfMedicine);
+assert.equal(doctorOfMedicine.curriculum.totalCredits, 233);
+assert.deepEqual(doctorOfMedicine.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 212]);
+const medicineMajor = doctorOfMedicine.curriculum.requirements.find((item) => item.id === "doctor-of-medicine-major");
+assert.ok(medicineMajor?.type === "REQUIRED_COURSE_SET");
+assert.equal(medicineMajor.courseCodes.length, 43);
+assert.equal(getProgramCurriculum("doctor-of-medicine", 2025), null, "an unresolved current MD page is not applied to an earlier cohort");
+const medicineAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Doctor of Medicine?" }]);
+assert.equal(medicineAnswer?.programId, "doctor-of-medicine");
+assert.match(renderProgramRequirementsAssessment(medicineAnswer!, "en"), /cross-counting/i);
 
 const socialWork = getProgramCurriculum("social-work");
 assert.ok(socialWork);
@@ -537,6 +606,11 @@ for (const [programId, requirementId, expectedCredits] of [
   ["supply-chain-management-and-logistics", "scml-supporting", 30],
   ["entrepreneurship", "entrepreneurship-major", 30],
   ["entrepreneurship", "entrepreneurship-supporting", 30],
+  ["arabic-language-and-literature", "arabic-language-and-literature-major", 51],
+  ["visual-studies-and-creative-industries", "visual-studies-core", 54],
+  ["geography", "geography-core", 24],
+  ["applied-sociology-and-social-data-analytics", "applied-sociology-core", 48],
+  ["doctor-of-medicine", "doctor-of-medicine-major", 212],
 ] as const) {
   const modeled = getProgramCurriculum(programId);
   assert.ok(modeled);

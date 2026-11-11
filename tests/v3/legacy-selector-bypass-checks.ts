@@ -327,6 +327,35 @@ async function main() {
   assert.match(String(translationStudies.payload.content), /choose five/);
   assert.match(JSON.stringify(translationStudies.payload.citations), /bachelor-of-arts-in-translation-studies/);
 
+  const arabicRequirements = await ask("What courses are required in Arabic Language and Literature?", "203.0.113.251");
+  assert.equal(arabicRequirements.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(arabicRequirements.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(arabicRequirements.payload.content), /ARB490/);
+  assert.match(String(arabicRequirements.payload.content), /introductory summary on the same degree page conflicts with those detailed tables/i);
+  assert.match(JSON.stringify(arabicRequirements.payload.citations), /bachelor-of-arts-in-arabic-language-and-literature/);
+
+  const geographyConcentrations = await ask("What concentrations are available in Geography?", "203.0.113.252");
+  assert.equal(geographyConcentrations.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(geographyConcentrations.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(geographyConcentrations.payload.content), /Environmental Geography/);
+  assert.match(String(geographyConcentrations.payload.content), /Geoinformatics/);
+  assert.match(String(geographyConcentrations.payload.content), /Urban Planning/);
+  assert.match(JSON.stringify(geographyConcentrations.payload.citations), /bachelor-of-arts-in-geography/);
+
+  const appliedSociologyRequirements = await ask("What concentrations are in Applied Sociology and Social Data Analytics?", "203.0.113.253");
+  assert.equal(appliedSociologyRequirements.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(appliedSociologyRequirements.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(appliedSociologyRequirements.payload.content), /Sociology of Consumption/);
+  assert.match(String(appliedSociologyRequirements.payload.content), /Theme 9 is not listed/i);
+  assert.match(JSON.stringify(appliedSociologyRequirements.payload.citations), /bachelor-of-science-in-applied-sociology-and-social-data-analytics/);
+
+  const medicineRequirements = await ask("What courses are required in Doctor of Medicine?", "203.0.113.254");
+  assert.equal(medicineRequirements.payload.stateLabel, "v3_program_requirement_model");
+  assert.equal(medicineRequirements.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(medicineRequirements.payload.content), /233 total credits/);
+  assert.match(String(medicineRequirements.payload.content), /cross-counting affects the individual degree audit/i);
+  assert.match(JSON.stringify(medicineRequirements.payload.citations), /doctor-of-medicine\.shtml/);
+
   const psychologyAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.246");
   assert.equal(psychologyAudit.payload.stateLabel, "v3_degree_audit_preview");
   assert.notEqual(psychologyAudit.payload.resolutionState, "UNSUPPORTED");

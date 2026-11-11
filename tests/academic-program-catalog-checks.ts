@@ -6,7 +6,7 @@ assert.equal(catalog.programs.length, 55, "the official snapshot lists 55 underg
 assert.equal(new Set(catalog.programs.map(({ college }) => college)).size, 9);
 assert.equal(new Set(catalog.programs.map(({ id }) => id)).size, catalog.programs.length);
 assert.ok(catalog.programs.every(({ url }) => new URL(url).hostname.endsWith("uaeu.ac.ae")));
-assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "modelled").length, 50);
+assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "modelled").length, 55);
 assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "legacy_model_review_required").length, 0);
 assert.equal(catalog.curriculumRecordsRequiringIdentityReview.length, 2);
 
@@ -28,4 +28,4 @@ assert.equal(answerProgramCatalogQuestion("What courses does the Computer Scienc
 assert.equal(answerProgramCatalogQuestion("Can I change my major after third year?", "en"), null, "personal major-change questions must not trigger the inventory response");
 assert.equal(answerProgramCatalogQuestion("What is the tuition cost for the program I want?", "en"), null, "a program tuition question must not trigger the degree inventory response");
 
-console.log("UAEU program catalog checks passed: 55 official degrees across 9 colleges, catalog-only coverage states, college filtering, and scope guards.");
+console.log("UAEU program catalog checks passed: all 55 official degrees across 9 colleges have structured curriculum evidence, catalog-only coverage states, college filtering, and scope guards.");
