@@ -216,6 +216,7 @@ export function AcademicSequencePlanner({
     unavailable: "رموز مقررات إلزامية لا تتوفر لها سجلات قابلة للاختيار:",
     choiceGroups: "مجموعات الاختيار والمقررات الاختيارية",
     completedCurrent: "خيار/خيارات مدرجة مذكورة كمجتازة أو قيد الدراسة",
+    selectedForSequence: "خيار/خيارات محددة لهذا التسلسل",
     choose: (count: number) => `المطلوب اختيار ${count}`,
     credits: (count: number) => `${count} ساعات معتمدة`,
     pathways: "خيارات المسار (لا تُضاف تلقائياً)",
@@ -231,6 +232,7 @@ export function AcademicSequencePlanner({
     unavailable: "Required course codes without selectable catalog records:",
     choiceGroups: "Elective and choice groups",
     completedCurrent: "listed option(s) reported completed or current",
+    selectedForSequence: "listed option(s) selected for this sequence",
     choose: (count: number) => `choose ${count}`,
     credits: (count: number) => `${count} credits`,
     pathways: "Pathway choices (not auto-selected)",
@@ -370,7 +372,8 @@ export function AcademicSequencePlanner({
                 <h4 className="font-semibold">{requirementCopy.choiceGroups}</h4>
                 {curriculum.requirementSummary.choiceGroups.map((group) => {
                   const reported = group.courseCodes.filter((code) => completedAndCurrent.has(code)).length;
-                  return <p key={group.id} className="text-zinc-700"><span className="font-medium">{group.name}:</span> {reported} {requirementCopy.completedCurrent}{group.chooseCount !== undefined ? `; ${requirementCopy.choose(group.chooseCount)}` : ""}{group.credits !== undefined ? `; ${requirementCopy.credits(group.credits)}` : ""}. {group.selectionNote}</p>;
+                  const selected = group.courseCodes.filter((code) => selectedCodes.includes(code) && !completedAndCurrent.has(code)).length;
+                  return <p key={group.id} className="text-zinc-700"><span className="font-medium">{group.name}:</span> {reported} {requirementCopy.completedCurrent}; {selected} {requirementCopy.selectedForSequence}{group.chooseCount !== undefined ? `; ${requirementCopy.choose(group.chooseCount)}` : ""}{group.credits !== undefined ? `; ${requirementCopy.credits(group.credits)}` : ""}. {group.selectionNote}</p>;
                 })}
               </div>}
               {curriculum.requirementSummary.pathwayChoices.length > 0 && <div className="space-y-1 text-sm">

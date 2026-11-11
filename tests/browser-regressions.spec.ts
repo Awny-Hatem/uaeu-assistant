@@ -114,8 +114,11 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
     return route.fulfill({ json: {
       program: { id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology' },
       cohort: { year: 2025, label: 'Fall 2025 cohort', version: '2025', totalCredits: 120 },
-      courses: [{ code: 'CSBP119', title: 'Introduction to Programming', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' } }],
-      requirementSummary: { mandatoryCourseCodes: ['CSBP119'], choiceGroups: [], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
+      courses: [
+        { code: 'CSBP119', title: 'Introduction to Programming', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' } },
+        { code: 'CHEM111', title: 'General Chemistry I', credits: 3, groups: [{ id: 'science-choice', name: 'Science course choice', type: 'ONE_OF_GROUP', chooseCount: 1 }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_2000.shtml', verifiedAt: '2026-11-12' } },
+      ],
+      requirementSummary: { mandatoryCourseCodes: ['CSBP119'], choiceGroups: [{ id: 'science-choice', name: 'Science course choice', type: 'ONE_OF_GROUP', courseCodes: ['BIOC100', 'CHEM111'], chooseCount: 1 }], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
       unavailableCourses: [], sources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }], limitations: [],
     } });
   });
@@ -128,12 +131,18 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await expect(dialog.getByText(/CSBP119.*Introduction to Programming/)).toBeVisible();
   await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' }).first()).toHaveAttribute('href', /uaeu\.ac\.ae/);
   await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
-  await expect(dialog.getByRole('checkbox')).toBeChecked();
-  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105, CSBP119');
-  await expect(dialog.getByRole('checkbox')).not.toBeChecked();
+  const requiredCourse = dialog.getByRole('checkbox', { name: /CSBP119/ });
+  const electiveCourse = dialog.getByRole('checkbox', { name: /CHEM111/ });
+  await expect(requiredCourse).toBeChecked();
+  await electiveCourse.check();
+  await expect(dialog.getByText(/Science course choice: 0 listed option\(s\) reported completed or current; 1 listed option\(s\) selected for this sequence/i)).toBeVisible();
+  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105, CSBP119, CHEM111');
+  await expect(requiredCourse).not.toBeChecked();
+  await expect(electiveCourse).not.toBeChecked();
   await expect(dialog.getByRole('button', { name: 'Create conditional sequence' })).toBeDisabled();
   await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105');
   await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
+  await electiveCourse.check();
   await dialog.getByLabel('Courses you are currently taking').fill('CSBP219');
   await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');
   await dialog.getByLabel('Maximum credits per term').fill('18');
