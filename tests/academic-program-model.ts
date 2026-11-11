@@ -1,22 +1,25 @@
 import assert from "node:assert/strict";
-import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
+import { loadOfficialCourseCatalog } from "../lib/academic/course-catalog";
+import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 6, "only six programs with reviewed structured source data are modeled");
+assert.equal(programs.length, 8, "eight programs have structured curriculum records, including two current catalog programs added from official pages");
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
 
-const cybersecurityReview = assessAcademicProgramIdentityReview([
+assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
-], "en");
-assert.equal(cybersecurityReview?.clarificationReason, "cybersecurity_curriculum_mapping_unverified");
-assert.match(cybersecurityReview?.content ?? "", /do not establish that these program identities/i);
-assert.match(JSON.stringify(cybersecurityReview?.citations), /bachelor-of-science-in-cybersecurity/);
-assert.doesNotMatch(cybersecurityReview?.content ?? "", /120 credits|130 credits/);
-assert.ok(assessAcademicProgramIdentityReview([
+], "en"), null, "a current Cybersecurity question must use its own catalog model, not be blocked by the older Information Security record");
+assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "I am asking about Cybersecurity." },
   { role: "assistant", content: "Which academic detail do you need?" },
   { role: "user", content: "Which courses are required?" },
-], "en"), "an unresolved program identity must remain in context for a follow-up");
+], "en"), null, "a Cybersecurity follow-up uses the current program model");
+const securityIdentityReview = assessAcademicProgramIdentityReview([
+  { role: "user", content: "Did Cybersecurity replace Information Security?" },
+], "en");
+assert.equal(securityIdentityReview?.clarificationReason, "cybersecurity_curriculum_mapping_unverified");
+assert.match(securityIdentityReview?.content ?? "", /cannot claim one replaced the other/i);
+assert.match(JSON.stringify(securityIdentityReview?.citations), /bachelor-of-science-in-cybersecurity/);
 assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "How many credits do I need for BSc Information Security?" },
 ], "en"), null, "an explicit Information Security identity can use its own model");
@@ -28,11 +31,10 @@ assert.equal(assessAcademicProgramIdentityReview([
   { role: "assistant", content: "I need to check which degree you mean." },
   { role: "user", content: "How many credits for Information Technology?" },
 ], "en"), null, "a new explicit program topic replaces the unresolved prior program");
-const cybersecurityArabicReview = assessAcademicProgramIdentityReview([
-  { role: "user", content: "\u0643\u0645 \u0633\u0627\u0639\u0629 \u0623\u062d\u062a\u0627\u062c \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0627\u0644\u0623\u0645\u0646 \u0627\u0644\u0633\u064a\u0628\u0631\u0627\u0646\u064a\u061f" },
-], "ar");
-assert.equal(cybersecurityArabicReview?.clarificationReason, "cybersecurity_curriculum_mapping_unverified", "Arabic Cybersecurity questions must not inherit the Information Security model");
-assert.ok(cybersecurityArabicReview?.content.includes("\u0644\u0627 \u062a\u062b\u0628\u062a"), "Arabic identity review is readable, not mojibake");
+assert.equal(programIdInText("How many credits for Cybersecurity? I meant Information Security, not Cybersecurity."), "bsc-information-security", "an explicit correction preserves the corrected degree identity");
+assert.equal(programIdInText("How many credits for Cybersecurity?"), "cybersecurity");
+assert.equal(programIdInText("How many credits for Data Science and Artificial Intelligence?"), "data-science-and-artificial-intelligence");
+assert.equal(programIdInText("\u0643\u0645 \u0633\u0627\u0639\u0629 \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0627\u0644\u0623\u0645\u0646 \u0627\u0644\u0633\u064a\u0628\u0631\u0627\u0646\u064a\u061f"), "cybersecurity", "Arabic Cybersecurity queries map to the current Cybersecurity curriculum");
 
 const computerEngineeringIdentityReview = assessAcademicProgramIdentityReview([
   { role: "user", content: "In Computer Engineering, take Networking Security instead of Selected Topics." },
@@ -115,6 +117,57 @@ assert.ok(currentQuestion);
 assert.equal(currentQuestion.curriculum?.totalCredits, 120);
 assert.match(renderProgramCreditAssessment(currentQuestion, "en"), /21 credits/);
 assert.match(renderProgramCreditAssessment(currentQuestion, "en"), /assigned study plan/i);
+
+for (const [programId, expectedBuckets] of [
+  ["cybersecurity", [21, 41, 46, 6, 6]],
+  ["data-science-and-artificial-intelligence", [21, 54, 6, 15, 9, 6, 9]],
+] as const) {
+  const modeled = getProgramCurriculum(programId);
+  assert.ok(modeled, `${programId} has a current official curriculum model`);
+  assert.equal(modeled.curriculum.totalCredits, 120);
+  assert.deepEqual(modeled.curriculum.creditBuckets?.map(({ credits }) => credits), expectedBuckets);
+  assert.equal(modeled.curriculum.creditBuckets?.reduce((sum, bucket) => sum + bucket.credits, 0), 120);
+  assert.ok(modeled.curriculum.requirements.some(({ type }) => type === "CREDIT_BLOCK"), "general-education choice rules remain explicitly unassessed rather than being guessed course by course");
+}
+const officialCourseCodes = new Set(loadOfficialCourseCatalog()?.courses.map(({ code }) => code));
+for (const programId of ["cybersecurity", "data-science-and-artificial-intelligence"]) {
+  const modeled = getProgramCurriculum(programId);
+  assert.ok(modeled);
+  for (const requirement of modeled.curriculum.requirements) {
+    const codes = requirement.type === "REQUIRED_COURSE_SET" || requirement.type === "ONE_OF_GROUP" || requirement.type === "ELECTIVE_GROUP"
+      ? requirement.courseCodes
+      : requirement.type === "INTERNSHIP" ? [requirement.courseCode]
+        : requirement.type === "PATHWAY_CHOICE" ? requirement.options.flatMap(({ courseCodes }) => courseCodes) : [];
+    for (const code of codes) assert.ok(officialCourseCodes.has(code), `${programId} requirement ${requirement.id} references official catalog course ${code}`);
+  }
+}
+const cybersecurityAssessment = assessProgramCreditConversation([
+  { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },
+]);
+assert.ok(cybersecurityAssessment);
+assert.equal(cybersecurityAssessment.programId, "cybersecurity");
+assert.match(renderProgramCreditAssessment(cybersecurityAssessment, "en"), /curriculum requires \*\*120 credit hours\*\*/);
+assert.match(JSON.stringify(cybersecurityAssessment.sources), /bachelor-of-science-in-cybersecurity/);
+const cybersecurityRequirements = assessProgramRequirementsConversation([
+  { role: "user", content: "I am in Cybersecurity." },
+  { role: "assistant", content: "What would you like to know?" },
+  { role: "user", content: "Which courses are required?" },
+]);
+assert.ok(cybersecurityRequirements);
+assert.match(renderProgramRequirementsAssessment(cybersecurityRequirements, "en"), /ISEC313/);
+assert.match(renderProgramRequirementsAssessment(cybersecurityRequirements, "en"), /ITBP496/);
+const dsaiAssessment = assessProgramCreditConversation([
+  { role: "user", content: "How many credits to graduate in Data Science and Artificial Intelligence?" },
+]);
+assert.ok(dsaiAssessment);
+assert.equal(dsaiAssessment.programId, "data-science-and-artificial-intelligence");
+assert.equal(dsaiAssessment.curriculum?.creditBuckets?.reduce((sum, bucket) => sum + bucket.credits, 0), 120);
+const dsaiRequirements = assessProgramRequirementsConversation([
+  { role: "user", content: "What are the required courses for Data Science and Artificial Intelligence?" },
+]);
+assert.ok(dsaiRequirements);
+assert.match(renderProgramRequirementsAssessment(dsaiRequirements, "en"), /CSBP323/);
+assert.match(renderProgramRequirementsAssessment(dsaiRequirements, "en"), /CSBP495/);
 
 const contextualCohortQuestion = assessProgramCreditConversation([
   { role: "user", content: "I entered the Information Security program in Fall 2022." },
@@ -241,4 +294,4 @@ assert.equal(oldCohortSubstitution.curriculum?.totalCredits, 144);
 assert.equal(oldCohortSubstitution.sharedOption, undefined, "do not apply the newer elective list to the historical cohort");
 assert.match(renderProgramCourseSubstitutionAssessment(oldCohortSubstitution, "en"), /cannot verify replacing CENG580 with CENG532/);
 
-console.log("Academic program model passed: 6 sourced programs, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");
+console.log("Academic program model passed: 8 sourced programs, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");

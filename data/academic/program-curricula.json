@@ -264,5 +264,368 @@
         ]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "cybersecurity",
+    "name": "Bachelor of Science in Cybersecurity",
+    "degreeLevel": "undergraduate",
+    "college": "College of Information Technology",
+    "courseTitles": [
+      {
+        "code": "ITBP301",
+        "title": "Cybersecurity Fundamentals"
+      },
+      {
+        "code": "ISEC313",
+        "title": "AI for Cybersecurity"
+      },
+      {
+        "code": "ISEC412",
+        "title": "Digital Forensics and Incident Response"
+      },
+      {
+        "code": "ISEC425",
+        "title": "Cyber Risk Modeling"
+      }
+    ],
+    "sources": [
+      {
+        "documentId": "37-cybersecurity-curriculum",
+        "title": "UAEU Bachelor of Science in Cybersecurity degree requirements",
+        "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-cybersecurity.shtml",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "cybersecurity-catalog-2026-11",
+        "version": "catalog-2026-11-09",
+        "status": "approved",
+        "cohortLabel": "Current published Cybersecurity catalog; confirm individual cohort and assigned Degree Works plan",
+        "effectiveFrom": "2026-11-09",
+        "totalCredits": 120,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General education",
+            "credits": 21
+          },
+          {
+            "id": "college-requirements",
+            "name": "College requirements",
+            "credits": 41
+          },
+          {
+            "id": "major-requirements",
+            "name": "Major requirements",
+            "credits": 46
+          },
+          {
+            "id": "internship",
+            "name": "Internship",
+            "credits": 6
+          },
+          {
+            "id": "major-electives",
+            "name": "Major electives",
+            "credits": 6
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "cybersecurity-general-education",
+            "name": "General education",
+            "credits": 21,
+            "ruleNote": "The catalog requires 21 credits. Themes 1?5 account for 15 credits; students choose 6 credits across Themes 6?11, with no more than 3 credits from a theme except the 6-credit language sequence in Theme 11."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "cybersecurity-college-required",
+            "name": "Required college courses",
+            "courseCodes": [
+              "MATH105",
+              "MATH140",
+              "CENG221",
+              "CENG202",
+              "CENG205",
+              "CSBP119",
+              "CSBP219",
+              "CSBP315",
+              "CSBP319",
+              "STAT210",
+              "ITBP270",
+              "ITBP480",
+              "ITBP481"
+            ]
+          },
+          {
+            "type": "ONE_OF_GROUP",
+            "id": "cybersecurity-college-science-choice",
+            "name": "Choose one college science course",
+            "chooseCount": 1,
+            "courseCodes": [
+              "CHEM111",
+              "BIOC100",
+              "PHYS105"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "cybersecurity-major-required",
+            "name": "Required major courses",
+            "courseCodes": [
+              "CENG210",
+              "ITBP301",
+              "CSBP340",
+              "ISEC312",
+              "ISEC313",
+              "ISEC321",
+              "ISEC322",
+              "ISEC323",
+              "ISEC324",
+              "ISEC411",
+              "ISEC412",
+              "ISEC413",
+              "ISEC414",
+              "ISEC415",
+              "ISEC425",
+              "ISEC422",
+              "ISEC423"
+            ]
+          },
+          {
+            "type": "ONE_OF_GROUP",
+            "id": "cybersecurity-data-course-choice",
+            "name": "Choose STAT240 or CSBP320",
+            "chooseCount": 1,
+            "courseCodes": [
+              "STAT240",
+              "CSBP320"
+            ]
+          },
+          {
+            "type": "INTERNSHIP",
+            "id": "cybersecurity-internship",
+            "name": "Internship",
+            "courseCode": "ITBP496",
+            "credits": 6,
+            "finalSemesterOnly": true,
+            "otherCoursesAllowed": false
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "cybersecurity-major-electives",
+            "name": "Major electives",
+            "chooseCount": 2,
+            "credits": 6,
+            "courseCodes": [
+              "ITBP420",
+              "ISEC417",
+              "ISEC424",
+              "ISEC428",
+              "ISEC430"
+            ]
+          }
+        ],
+        "limitations": [
+          "The program page was last updated 9 November 2026. This Cybersecurity model is separate from the older Information Security model; no equivalence or cohort transition is assumed.",
+          "General-education choice rules are represented as a credit block and are not audited course by course.",
+          "This published catalog model does not establish a student?s assigned cohort, completed requirements, course availability, prerequisites beyond the official course catalog, or registration eligibility."
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "data-science-and-artificial-intelligence",
+    "name": "Bachelor of Science in Data Science and Artificial Intelligence",
+    "degreeLevel": "undergraduate",
+    "college": "College of Information Technology",
+    "courseTitles": [
+      {
+        "code": "CSBP270",
+        "title": "Responsible Artificial Intelligence"
+      },
+      {
+        "code": "CSBP323",
+        "title": "Data Structures and Algorithms"
+      },
+      {
+        "code": "CSBP224",
+        "title": "Introduction to Data Science"
+      },
+      {
+        "code": "STAT470",
+        "title": "Introduction to Statistical Computing"
+      },
+      {
+        "code": "CSBP495",
+        "title": "Internship"
+      }
+    ],
+    "sources": [
+      {
+        "documentId": "38-data-science-ai-curriculum",
+        "title": "UAEU Bachelor of Science in Data Science and Artificial Intelligence degree requirements",
+        "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "data-science-ai-catalog-2026-11",
+        "version": "catalog-2026-11-06",
+        "status": "approved",
+        "cohortLabel": "Current published Data Science and Artificial Intelligence catalog; confirm individual cohort and assigned Degree Works plan",
+        "effectiveFrom": "2026-11-06",
+        "totalCredits": 120,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General education",
+            "credits": 21
+          },
+          {
+            "id": "major-requirements",
+            "name": "Major requirements",
+            "credits": 54
+          },
+          {
+            "id": "internship",
+            "name": "Internship",
+            "credits": 6
+          },
+          {
+            "id": "advanced-computing",
+            "name": "Advanced Computing Thinking compulsory requirements",
+            "credits": 15
+          },
+          {
+            "id": "specialization-electives",
+            "name": "Specialization electives",
+            "credits": 9
+          },
+          {
+            "id": "supporting-group-one",
+            "name": "Supporting requirements group 1",
+            "credits": 6
+          },
+          {
+            "id": "supporting-group-two",
+            "name": "Supporting requirements group 2",
+            "credits": 9
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "dsai-general-education",
+            "name": "General education",
+            "credits": 21,
+            "ruleNote": "The catalog requires 21 credits: 12 fixed credits across Themes 1, 2, 4, and 5, plus 9 credits chosen from Themes 6?11 with a maximum of 3 credits per theme, except the 6-credit language sequence in Theme 11."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "dsai-major-required",
+            "name": "Required major courses",
+            "courseCodes": [
+              "CSBP270",
+              "CSBP119",
+              "CSBP219",
+              "CSBP323",
+              "CSBP320",
+              "CSBP301",
+              "CSBP411",
+              "CSBP224",
+              "STAT210",
+              "STAT240",
+              "STAT470",
+              "MATH105",
+              "MATH110",
+              "MATH140",
+              "MATH240",
+              "MATH290",
+              "CENG202"
+            ]
+          },
+          {
+            "type": "ONE_OF_GROUP",
+            "id": "dsai-major-science-choice",
+            "name": "Choose one major science course",
+            "chooseCount": 1,
+            "courseCodes": [
+              "CHEM111",
+              "BIOC100",
+              "PHYS105"
+            ]
+          },
+          {
+            "type": "INTERNSHIP",
+            "id": "dsai-internship",
+            "name": "Internship",
+            "courseCode": "CSBP495",
+            "credits": 6,
+            "finalSemesterOnly": true,
+            "otherCoursesAllowed": false
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "dsai-advanced-computing-required",
+            "name": "Advanced Computing Thinking compulsory courses",
+            "courseCodes": [
+              "SWEB450",
+              "CSBP340",
+              "ITBP324",
+              "ITBP480",
+              "ITBP481"
+            ]
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "dsai-specialization-electives",
+            "name": "Specialization electives",
+            "chooseCount": 3,
+            "credits": 9,
+            "courseCodes": [
+              "CSBP441",
+              "CSBP475",
+              "CSBP477",
+              "CSBP476",
+              "CSBP325"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "dsai-supporting-group-one",
+            "name": "Supporting requirements group 1",
+            "courseCodes": [
+              "MATH350",
+              "ISEC411"
+            ]
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "dsai-supporting-group-two",
+            "name": "Supporting requirements group 2",
+            "chooseCount": 3,
+            "credits": 9,
+            "courseCodes": [
+              "MGMT201",
+              "BANA200",
+              "MKTG200",
+              "MKTG320",
+              "PHI440"
+            ]
+          }
+        ],
+        "limitations": [
+          "The program page was last updated 6 November 2026. The current catalog record is not a cohort-specific semester sequence.",
+          "General-education course and theme choices are represented as a credit block and are not audited course by course.",
+          "This model does not establish a student?s assigned cohort, completed requirements, course availability, prerequisites beyond the official course catalog, or registration eligibility."
+        ]
+      }
+    ]
   }
 ]

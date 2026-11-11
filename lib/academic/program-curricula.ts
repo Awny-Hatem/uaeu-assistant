@@ -169,11 +169,17 @@ export type ProgramCourseSubstitutionAssessment = ProgramCreditAssessment & {
 };
 
 export function programIdInText(text: string): string | undefined {
+  const correctedInformationSecurity = /\b(?:i mean|i meant|actually|sorry[, ]+i mean|correction)\s+(?:the\s+)?(?:bsc\s+)?information security\b/i.test(text);
+  const correctedCybersecurity = /\b(?:i mean|i meant|actually|sorry[, ]+i mean|correction)\s+(?:the\s+)?(?:bsc\s+)?cyber\s?security\b/i.test(text);
+  if (correctedInformationSecurity) return "bsc-information-security";
+  if (correctedCybersecurity) return "cybersecurity";
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
   if (/\bcomputer (?:and )?(?:artificial intelligence|AI) engineering\b/i.test(text)) return "bsc-computer-ai-engineering";
   if (/\bcomputer engineering\b/i.test(text)) return "bsc-computer-engineering";
-  if (/\b(?:information security|cyber ?security)\b/i.test(text) || /أمن\s+المعلومات/u.test(text)) return "bsc-information-security";
+  if (/\bdata science and artificial intelligence\b|\bDSAI\b/i.test(text)) return "data-science-and-artificial-intelligence";
+  if (/\bcyber\s?security\b/i.test(text) || /الأمن السيبراني/u.test(text)) return "cybersecurity";
+  if (/\binformation security\b/i.test(text) || /أمن\s+المعلومات/u.test(text)) return "bsc-information-security";
   if (/\bcomputer science\b/i.test(text) || /علوم\s+الحاسوب/u.test(text)) return "bsc-computer-science";
   return undefined;
 }
@@ -239,7 +245,7 @@ export function assessAcademicProgramIdentityReview(
 ): AcademicProgramIdentityReview | null {
   const userMessages = messages.filter((message) => message.role === "user");
   const latest = userMessages.at(-1)?.content ?? "";
-  const asksAcademicPlanQuestion = /\b(?:credit hours?|credits?|graduate|graduation|degree requirements?|curricul(?:um|a)|study plan|prerequisites?|course requirements?|required courses?|which courses?|what courses?|instead of|rather than|replace|replacement|substitut(?:e|ion)|cohort|entry year)\b|\u0643\u0645\s+\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u0627\u062a|\u062a\u062e\u0631\u062c|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u062f\u0631\u0627\u0633\u064a\u0629|\u0627\u0644\u0645\u0642\u0631\u0631/iu.test(latest);
+  const asksAcademicPlanQuestion = /\b(?:credit hours?|credits?|graduate|graduation|degree requirements?|curricul(?:um|a)|study plan|prerequisites?|course requirements?|required courses?|which courses?|what courses?|instead of|rather than|replace(?:d|ment)?|substitut(?:e|ion)|cohort|entry year)\b|\u0643\u0645\s+\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u0627\u062a|\u062a\u062e\u0631\u062c|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u062f\u0631\u0627\u0633\u064a\u0629|\u0627\u0644\u0645\u0642\u0631\u0631/iu.test(latest);
   if (!asksAcademicPlanQuestion) return null;
 
   const catalog = loadUndergraduateProgramCatalog();
@@ -247,13 +253,16 @@ export function assessAcademicProgramIdentityReview(
   const currentCatalog = catalog.programs.find(({ id }) => id === "cybersecurity");
   const computerEngineering = academicPrograms.find(({ id }) => id === "bsc-computer-engineering");
   const informationSecurity = academicPrograms.find(({ id }) => id === "bsc-information-security");
-  if (identity === "cybersecurity" && currentCatalog && informationSecurity) {
+  const asksSecurityProgramRelationship = /\bcyber\s?security\b/i.test(latest) &&
+    /\binformation security\b/i.test(latest) &&
+    /\b(?:same|equivalent|replace(?:d|ment)?|renamed|transition|difference|map(?:ped|ping)?|instead of)\b/i.test(latest);
+  if (asksSecurityProgramRelationship && currentCatalog && informationSecurity) {
     return {
       programId: "bsc-information-security",
       clarificationReason: "cybersecurity_curriculum_mapping_unverified",
       content: locale === "ar"
         ? `يعرض دليل البرامج الحالي **${currentCatalog.title}**، بينما الخطة المنظمة المتاحة لدي مسجلة باسم **Information Security**. لا تثبت المصادر أن البرنامجين أو متطلبات دفعاتهما متطابقة؛ لذلك لن أطبق ساعات أو مقررات خطة Information Security على Cybersecurity. هل تقصد خطة Information Security لدفعة سابقة؟ إذا كان الأمر كذلك، أرسل سنة دخولك والاسم الدقيق الظاهر في Degree Works.`
-        : `The current UAEU catalog lists **${currentCatalog.title}**, while the structured curriculum available here is labelled **Information Security**. The sources do not establish that these program identities or cohort requirements are interchangeable, so I will not apply the Information Security credit total or course plan to Cybersecurity. Are you asking about a historical Information Security plan? If so, share your entry year and the exact program name shown in Degree Works.`,
+        : `UAEU publishes a current **${currentCatalog.title}** page and a separate **Information Security** curriculum record. The available sources do not establish that the programs or their cohort requirements are interchangeable, so I will answer each using its own published record and cannot claim one replaced the other. Which exact program name and entry year appear in your Degree Works plan?`,
       citations: [
         { title: currentCatalog.title, url: currentCatalog.url, lastVerified: catalog.verifiedAt },
         ...informationSecurity.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),

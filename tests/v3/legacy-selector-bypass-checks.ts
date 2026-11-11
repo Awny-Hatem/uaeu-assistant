@@ -56,11 +56,21 @@ async function main() {
   assert.match(JSON.stringify(programCatalog.payload.citations), /undergraduate\/programs\/index\.shtml/);
 
   const cybersecurityCredits = await ask("How many credits do I need to graduate from Cybersecurity?", "203.0.113.232");
-  assert.equal(cybersecurityCredits.payload.stateLabel, "academic_program_identity_review");
-  assert.equal(cybersecurityCredits.payload.resolutionState, "MISSING_CONTEXT");
-  assert.match(String(cybersecurityCredits.payload.content), /will not apply the Information Security credit total/i);
-  assert.doesNotMatch(String(cybersecurityCredits.payload.content), /120 credits|130 credits/);
+  assert.equal(cybersecurityCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.equal(cybersecurityCredits.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(cybersecurityCredits.payload.content), /curriculum requires \*\*120 credit hours\*\*/);
   assert.match(JSON.stringify(cybersecurityCredits.payload.citations), /bachelor-of-science-in-cybersecurity/);
+
+  const dsaiCredits = await ask("How many credits do I need to graduate from Data Science and Artificial Intelligence?", "203.0.113.247");
+  assert.equal(dsaiCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.equal(dsaiCredits.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(dsaiCredits.payload.content), /curriculum requires \*\*120 credit hours\*\*/);
+  assert.match(JSON.stringify(dsaiCredits.payload.citations), /bachelor-of-science-in-data-science-and-artificial-intelligence/);
+
+  const securityIdentityQuestion = await ask("Did Cybersecurity replace Information Security?", "203.0.113.248");
+  assert.equal(securityIdentityQuestion.payload.stateLabel, "academic_program_identity_review");
+  assert.equal(securityIdentityQuestion.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(securityIdentityQuestion.payload.content), /cannot claim one replaced the other/i);
 
   const unscopedComputerEngineeringCredits = await ask("How many credit hours to graduate from Computer Engineering?", "203.0.113.233");
   assert.equal(unscopedComputerEngineeringCredits.payload.stateLabel, "academic_program_identity_review");
