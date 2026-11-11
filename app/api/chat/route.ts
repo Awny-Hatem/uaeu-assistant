@@ -185,6 +185,7 @@ function needsConversationContext(query: string): boolean {
     /\b(?:what about (?:this|that|it|them|those|these)|which one|same (?:course|program|service)|are you sure|what(?:'s| is) (?:the )?(?:source|citation))\b/i.test(
       query,
     ) ||
+    /\b(?:will i be charged(?: anything)?(?: for it| for that)?|is it free|how much does (?:it|that) cost|what(?:'s| is) the fee for it|how long (?:does|will) it take|where will (?:it|that) be sent|can i download it)\b/i.test(query) ||
     /\b(?:can you |please )?verify (?:this|that|it|the (?:answer|information|prerequisite|requirements?))(?:\s+from\s+(?:the\s+)?official page)?\b/i.test(
       query,
     ) ||
@@ -265,7 +266,8 @@ function focusedConversationSubject(message: string): string {
 
 function buildRoutingQuery(messages: ChatMessage[], latest: string): string {
   const resolved = resolveConversation(messages, latest);
-  if (resolved.usedContext || resolved.needsClarification) return resolved.query;
+  if (resolved.usedContext) return resolved.query;
+  if (resolved.needsClarification && !needsConversationContext(latest)) return resolved.query;
   // Retain the legacy narrow path for existing service forms while the structured
   // resolver handles entity/intent references and explicit course switches.
   if (!needsConversationContext(latest)) return resolved.query;
@@ -875,6 +877,7 @@ export async function POST(req: Request) {
   const executionPlan = v3Enabled ? createExecutionPlan({
     conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
     latest,
+    resolvedRequest: routingQuery,
   }) : null;
   const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH", "PERSONALIZED_ACADEMIC", "COMPLEX_SCENARIO"].includes(executionPlan.mode));
   const answerRequest = v3EvidenceMode && executionPlan ? executionPlan.normalizedRequest : routingQuery;
@@ -1343,9 +1346,9 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  // Prefer a directly matched, reviewed service guide over a broader FAQ answer
-  // when both match a concrete process request.
-  const candidateGuide = semantic ? null : findServiceGuide(v3EvidenceMode ? answerRequest : routingQuery);
+  // Prefer directly matched, reviewed service guidance over broader synthesis
+  // after exact canonical answers have already had a chance to resolve the turn.
+  const candidateGuide = findServiceGuide(v3EvidenceMode ? `${answerRequest}\n${routingQuery}` : routingQuery);
   const guide = candidateGuide && (!v3EvidenceMode || !candidateGuide.requiresVerification) ? candidateGuide : null;
   if (guide) {
     const payload: AssistantPayload = {

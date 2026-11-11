@@ -273,7 +273,7 @@ export function resolveConversation(
   const inheritedCategory = meaning.applicantCategory ?? origin?.applicantCategory;
   const inheritedScope = origin ? [inheritedCategory === "national" ? "UAE national" : inheritedCategory, meaning.degreeLevel ?? origin.degreeLevel, ...(meaning.years.length ? meaning.years : origin.years), ...(meaning.terms.length ? meaning.terms : origin.terms),
     /\b(?:alumni|alumnus|former student)\b|الخريجين|خريج/u.test(origin.normalized) ? "alumni" : undefined,
-    /\bcurrent student\b|طالب حالي/u.test(origin.normalized) ? "current student" : undefined,
+    /\b(?:current student|currently enrolled|currently studying)\b|طالب حالي/u.test(origin.normalized) ? "current student" : undefined,
   ].filter(Boolean).join(" ") : "";
   // Preserve the identity and applicability, not an old request verb. Otherwise
   // "apply to CSBP319" keeps outscoring a later request for its prerequisites.

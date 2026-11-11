@@ -36,6 +36,29 @@ async function main() {
   assert.match(String(studentDocument.payload.content), /Current Students Documents/i);
   assert.match(JSON.stringify(studentDocument.payload.citations), /serviceId=92/);
 
+  const currentStudentTranscript = await ask("I'm currently enrolled. How do I download an official transcript?", "203.0.113.252");
+  assert.equal(currentStudentTranscript.payload.stateLabel, "guided_service");
+  assert.equal(currentStudentTranscript.payload.resolutionState, "VERIFIED");
+  assert.equal((currentStudentTranscript.payload.guide as { id?: string } | undefined)?.id, "current-student-official-transcript");
+  assert.match(String(currentStudentTranscript.payload.content), /free/i);
+  assert.match(String(currentStudentTranscript.payload.content), /10 minutes/i);
+  assert.match(JSON.stringify(currentStudentTranscript.payload.citations), /serviceId=92/);
+
+  const transcriptFeeFollowUp = await askMessages([
+    { role: "user", content: "I'm currently enrolled. How do I download an official transcript?" },
+    { role: "assistant", content: "Use Current Students Documents." },
+    { role: "user", content: "Will I be charged anything for it?" },
+  ], "203.0.113.253");
+  assert.equal(transcriptFeeFollowUp.payload.stateLabel, "guided_service");
+  assert.equal((transcriptFeeFollowUp.payload.guide as { id?: string } | undefined)?.id, "current-student-official-transcript");
+  assert.match(String(transcriptFeeFollowUp.payload.content), /free/i);
+
+  const parkingPermit = await ask("How do I apply for a university parking permit?", "203.0.113.254");
+  assert.equal(parkingPermit.payload.stateLabel, "guided_service");
+  assert.equal((parkingPermit.payload.guide as { id?: string } | undefined)?.id, "al-ain-female-student-campus-parking-permit");
+  assert.match(String(parkingPermit.payload.content), /female students from Al Ain/i);
+  assert.match(JSON.stringify(parkingPermit.payload.citations), /serviceId=117/);
+
   const libraryResearchHelp = await ask("How can UAEU students get library or research help?", "203.0.113.230");
   assert.equal(libraryResearchHelp.payload.stateLabel, "guided_service");
   assert.equal(libraryResearchHelp.payload.resolutionState, "VERIFIED");

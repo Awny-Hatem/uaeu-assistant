@@ -68,6 +68,14 @@ The Playwright suite passed 25/25 after its cross-tab history assertion was made
 
 These checks cover the local code and data paths listed above. They do not certify every possible student question, historical cohort, live UAEU record, or external university action.
 
+### Service-answer and context regressions (2026-11-11)
+
+The independent 100-question run revealed two avoidable misses: a currently enrolled student's transcript question and a general question about a campus parking permit. Added source-backed V3 service guides for the enrolled-student transcript and the narrowly scoped female-student-from-Al-Ain parking permit. The parking guide makes the eligibility limitation explicit and does not generalize the permit to all students, staff, or visitors. The transcript guide preserves the distinction between current students and alumni and labels the listed 10-minute delivery time as a normal target.
+
+A contextual fee follow-up initially lost the phrase "currently enrolled" because the resolver only inherited "current student." The resolver now carries "currently enrolled" and "currently studying" forward as the current-student scope. Generic fee, cost, duration, delivery, and download follow-ups can retain the preceding subject in the V3 execution request; the reviewed guide is then selected from the combined, scope-preserving request. Direct service guides are preferred over broad synthesis after canonical answer matching.
+
+Verification: `tests/service-content-checks.ts` passed 19/19; pipeline regressions passed (32 isolated route calls plus semantic/evidence assertions); all five V3 route suites passed, including the new current-student transcript, contextual fee follow-up, and parking eligibility regressions. A clean detached worktree production build passed with `CHATBOT_DB_PATH=:memory:`. The first build attempt hit `SQLITE_BUSY` while parallel workers shared the local database; using an isolated in-memory database resolved it. These checks do not replace the pending human factual review of the 100-question run. A fresh deployed preview still needs to be built and verified after this change.
+
 ## External dependencies
 
 Phases 3 and 5 cannot be completed from public web evidence or this repository alone. UAEU must provide approved identity, student-record, and transactional interfaces together with authorization, privacy, retention, and audit requirements. Phase 4 also needs authoritative course offering and section availability data before it can promise feasible term plans.
