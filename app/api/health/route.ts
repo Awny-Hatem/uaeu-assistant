@@ -12,6 +12,7 @@ import { createHash } from "node:crypto";
 import { isV3Enabled } from "@/lib/v3/runtime";
 import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
 import { loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
+import { parseCatalogPrerequisiteExpression } from "@/lib/academic/catalog-prerequisite-parser";
 
 export const runtime = "nodejs";
 
@@ -28,6 +29,8 @@ export async function GET() {
   const sourceCoverage = sourceCoverageSnapshot();
   const programCatalog = loadUndergraduateProgramCatalog();
   const courseCatalog = loadOfficialCourseCatalog();
+  const relationCourses = courseCatalog?.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length) ?? [];
+  const structuredRelationCount = relationCourses.filter((course) => parseCatalogPrerequisiteExpression(course)).length;
   const curriculumCoverage = programCatalog.programs.reduce((counts, program) => {
     counts[program.curriculumStatus] += 1;
     return counts;
@@ -74,6 +77,12 @@ export async function GET() {
       prerequisiteEntries: courseCatalog?.courses.filter((course) => Boolean(course.prerequisiteText)).length ?? 0,
       corequisiteEntries: courseCatalog?.courses.filter((course) => Boolean(course.corequisiteText)).length ?? 0,
       preCorequisiteEntries: courseCatalog?.courses.filter((course) => Boolean(course.preCorequisiteText)).length ?? 0,
+      prerequisiteParsing: {
+        relationRecords: relationCourses.length,
+        structuredRecords: structuredRelationCount,
+        unsupportedRecords: relationCourses.length - structuredRelationCount,
+        structuredCoveragePercent: relationCourses.length ? Math.round((structuredRelationCount / relationCourses.length) * 1000) / 10 : 0,
+      },
       degreeApplicability: "course records do not establish program requirements",
     },
     auth: {

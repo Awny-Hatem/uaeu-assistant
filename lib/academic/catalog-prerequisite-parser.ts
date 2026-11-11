@@ -87,9 +87,10 @@ function parseItem(text: string): PrerequisiteExpression | null {
   return expression && position === tokens.length ? expression : null;
 }
 
-function mapPreCorequisiteToPriorOrCurrent(expression: PrerequisiteExpression): PrerequisiteExpression | null {
+/** A listed pre/corequisite may be completed earlier or taken concurrently. */
+function mapPriorOrCurrent(expression: PrerequisiteExpression): PrerequisiteExpression | null {
   if ("op" in expression) {
-    const conditions = expression.conditions.map(mapPreCorequisiteToPriorOrCurrent);
+    const conditions = expression.conditions.map(mapPriorOrCurrent);
     if (conditions.some((condition) => !condition)) return null;
     return { op: expression.op, conditions: conditions as PrerequisiteExpression[] };
   }
@@ -107,13 +108,20 @@ function combineAnd(expressions: PrerequisiteExpression[]): PrerequisiteExpressi
 
 /** Parse only complete, explicit catalog list items; unknown grammar fails closed. */
 export function parseCatalogPrerequisiteExpression(record: OfficialCourseRecord): PrerequisiteExpression | null {
-  if (record.corequisiteItems.length) return null;
   const required = record.prerequisiteItems.map(parseItem);
   if (required.some((expression) => !expression)) return null;
-  const concurrent = record.preCorequisiteItems.map((item) => {
+  const corequisites = record.corequisiteItems.map((item) => {
     const parsed = parseItem(item);
-    return parsed ? mapPreCorequisiteToPriorOrCurrent(parsed) : null;
+    return parsed ? mapPriorOrCurrent(parsed) : null;
   });
-  if (concurrent.some((expression) => !expression)) return null;
-  return combineAnd([...required as PrerequisiteExpression[], ...concurrent as PrerequisiteExpression[]]);
+  const preCorequisites = record.preCorequisiteItems.map((item) => {
+    const parsed = parseItem(item);
+    return parsed ? mapPriorOrCurrent(parsed) : null;
+  });
+  if ([...corequisites, ...preCorequisites].some((expression) => !expression)) return null;
+  return combineAnd([
+    ...required as PrerequisiteExpression[],
+    ...corequisites as PrerequisiteExpression[],
+    ...preCorequisites as PrerequisiteExpression[],
+  ]);
 }

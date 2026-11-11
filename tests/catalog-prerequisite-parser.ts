@@ -56,6 +56,22 @@ assert.deepEqual(parseCatalogPrerequisiteExpression(record({
   ],
 });
 
+assert.deepEqual(parseCatalogPrerequisiteExpression(record({
+  corequisiteItems: ["STAT480 or STAT482"],
+})), {
+  op: "OR",
+  conditions: [
+    { op: "OR", conditions: [
+      { type: "COURSE_COMPLETED", courseCode: "STAT480" },
+      { type: "COURSE_CURRENT", courseCode: "STAT480" },
+    ] },
+    { op: "OR", conditions: [
+      { type: "COURSE_COMPLETED", courseCode: "STAT482" },
+      { type: "COURSE_CURRENT", courseCode: "STAT482" },
+    ] },
+  ],
+});
+
 assert.deepEqual(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: ["STAT511 or STAT202"] })), {
   op: "OR",
   conditions: [
@@ -72,11 +88,12 @@ assert.deepEqual(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: 
   courseCode: "DBA919",
 });
 assert.equal(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: ["CURR232 with a minimum grade 60"] })), null);
-assert.equal(parseCatalogPrerequisiteExpression(record({ corequisiteItems: ["MGMT666"] })), null, "corequisite-only rules need their own verified semantics");
+assert.equal(parseCatalogPrerequisiteExpression(record({ corequisiteItems: ["MGMT666 or"] })), null, "malformed corequisite rules fail closed");
 assert.equal(parseCatalogPrerequisiteExpression(record({ prerequisiteItems: ["Senior standing and CSBP219 with a minimum grade D"] })), null);
 
 const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
+assert(parsed.length > 1298, "parsing explicit corequisite records should expand supported course-rule coverage");
 console.log(`Catalog prerequisite parser checks passed; safely parsed ${parsed.length}/${relationRecords.length} records with relation text; unsupported formats remain unstructured.`);

@@ -131,10 +131,29 @@ async function main() {
   assert.match(String(passGradePrerequisiteAssessment.payload.content), /modeled prerequisite is satisfied/);
 
   const unsupportedPrerequisiteAssessment = await ask("Can I take STAT488?", "203.0.113.244");
-  assert.equal(unsupportedPrerequisiteAssessment.payload.stateLabel, "v3_official_course_catalog_lookup");
+  assert.equal(unsupportedPrerequisiteAssessment.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
   assert.equal(unsupportedPrerequisiteAssessment.payload.resolutionState, "UNSUPPORTED");
-  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /eligibility not verified/);
-  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /Catalog corequisite wording: STAT480 or STAT482/);
+  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /STAT480/);
+  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /STAT482/);
+  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /cannot determine/i);
+
+  const completedCorequisite = await askMessages([
+    { role: "user", content: "I passed STAT480 with B." },
+    { role: "user", content: "Can I take STAT488?" },
+  ], "203.0.113.251");
+  assert.equal(completedCorequisite.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(completedCorequisite.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(completedCorequisite.payload.content), /STAT480/);
+  assert.match(String(completedCorequisite.payload.content), /modeled prerequisite is satisfied/i);
+
+  const concurrentCorequisite = await askMessages([
+    { role: "user", content: "I am currently taking STAT482." },
+    { role: "user", content: "Can I take STAT488?" },
+  ], "203.0.113.252");
+  assert.equal(concurrentCorequisite.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(concurrentCorequisite.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(concurrentCorequisite.payload.content), /STAT482/);
+  assert.match(String(concurrentCorequisite.payload.content), /modeled prerequisite is satisfied/i);
 
   const catalogPrerequisites = await ask("What are the prerequisites for CSBP319?", "203.0.113.241");
   assert.equal(catalogPrerequisites.payload.stateLabel, "v3_official_course_catalog_lookup");
