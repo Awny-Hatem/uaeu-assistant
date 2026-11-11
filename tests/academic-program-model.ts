@@ -33,6 +33,8 @@ assert.equal(psychologyAnswer?.programId, "psychology");
 assert.match(renderProgramRequirementsAssessment(psychologyAnswer!, "en"), /PSYC452/);
 assert.match(renderProgramRequirementsAssessment(psychologyAnswer!, "en"), /maximum of 6 additional course credits/);
 assert.equal(getProgramCurriculum("psychology", 2024), null, "the 2025-2026 Psychology model must not be applied to earlier cohorts");
+assert.equal(getProgramCurriculum("bsc-computer-science", 2027), null,
+  "a source verification date on a current catalog page must not be treated as a confirmed student cohort mapping");
 
 const translationStudies = getProgramCurriculum("translation-studies");
 assert.ok(translationStudies);
@@ -586,18 +588,18 @@ assert.equal(earlyChildhoodCohortAudit?.auditStatus, "COHORT_MODEL_UNAVAILABLE",
 assert.equal(earlyChildhoodCohortAudit?.curriculumVersion, "early-childhood-education-2025-120-plan-only");
 assert.match(JSON.stringify(earlyChildhoodCohortAudit?.limitations), /detailed cohort course requirements are not structured/i);
 const computerScienceGradeAudit = assessDegreeAuditConversation([
-  { role: "user", content: "I entered Computer Science in the 2027 cohort." },
-  { role: "user", content: "I am a Computer Science student." },
-  { role: "user", content: "I received 59 in CSBP119. I got a D in CSBP219. I received W in CSBP319." },
+  { role: "user", content: "I entered Psychology in the 2025 cohort." },
+  { role: "user", content: "I am a Psychology student." },
+  { role: "user", content: "I received 59 in PSYC100. I got a D in PSYC200. I received W in PSYC201." },
   { role: "user", content: "What do I still need to graduate?" },
 ]);
-assert.equal(computerScienceGradeAudit?.courseStatus.CSBP119, "REPEAT_REQUIRED",
+assert.equal(computerScienceGradeAudit?.courseStatus.PSYC100, "REPEAT_REQUIRED",
   "a numeric mark below the published 60-point pass threshold is not counted as a completed course in a program covered by the general undergraduate grading policy");
-assert.equal(computerScienceGradeAudit?.courseStatus.CSBP219, "COMPLETE",
+assert.equal(computerScienceGradeAudit?.courseStatus.PSYC200, "COMPLETE",
   "a recognized passing letter grade remains complete in a program covered by the general undergraduate grading policy");
-assert.equal(computerScienceGradeAudit?.courseStatus.CSBP319, "NEEDS_CONFIRMATION",
+assert.equal(computerScienceGradeAudit?.courseStatus.PSYC201, "NEEDS_CONFIRMATION",
   "withdrawal is not interpreted as a completed course");
-assert.match(renderDegreeAuditAssessment(computerScienceGradeAudit!, "en"), /repeat required: CSBP119/i,
+assert.match(renderDegreeAuditAssessment(computerScienceGradeAudit!, "en"), /repeat required: PSYC100/i,
   "the preliminary audit explains why a below-threshold course remains outstanding");
 const missingDegreeAuditCohort = assessDegreeAuditConversation([
   { role: "user", content: "I am a Computer Science student." },

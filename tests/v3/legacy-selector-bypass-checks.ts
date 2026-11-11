@@ -506,18 +506,18 @@ async function main() {
   assert.match(String(scopedPsychologyAudit.payload.content), /not an official degree audit/i);
 
   const partialDegreeAudit = await askMessages([
-    { role: "user", content: "I passed CSBP119 with C." },
-    { role: "user", content: "I passed MATH105 with B." },
-    { role: "user", content: "I am in Information Technology." },
-    { role: "user", content: "I entered UAEU in the 2027 cohort." },
+    { role: "user", content: "I passed PSYC100 with C." },
+    { role: "user", content: "I passed PSYC200 with B." },
+    { role: "user", content: "I am in Psychology." },
+    { role: "user", content: "I entered UAEU in the 2025 cohort." },
     { role: "user", content: "What do I still need to graduate from my degree?" },
   ], "203.0.113.247");
   assert.equal(partialDegreeAudit.payload.stateLabel, "v3_degree_audit_preview");
   assert.equal(partialDegreeAudit.payload.resolutionState, "CONDITIONAL");
-  assert.match(String(partialDegreeAudit.payload.content), /Entry year 2027/);
+  assert.match(String(partialDegreeAudit.payload.content), /Entry year 2025/);
   assert.match(String(partialDegreeAudit.payload.content), /Preliminary requirement comparison/);
-  assert.match(String(partialDegreeAudit.payload.content), /CSBP119/);
-  assert.match(String(partialDegreeAudit.payload.content), /MATH105/);
+  assert.match(String(partialDegreeAudit.payload.content), /PSYC100/);
+  assert.match(String(partialDegreeAudit.payload.content), /PSYC200/);
   assert.match(String(partialDegreeAudit.payload.content), /not an official degree audit/i);
 
   const degreeAuditMissingProgram = await askMessages([
@@ -528,13 +528,13 @@ async function main() {
   assert.match(String(degreeAuditMissingProgram.payload.content), /what is your major/i);
 
   const inProgressDegreeRequirement = await askMessages([
-    { role: "user", content: "I am currently taking BIOC100." },
-    { role: "user", content: "I am in Information Technology." },
-    { role: "user", content: "I entered UAEU in the 2027 cohort." },
+    { role: "user", content: "I am currently taking PSYC100." },
+    { role: "user", content: "I am in Psychology." },
+    { role: "user", content: "I entered UAEU in the 2025 cohort." },
     { role: "user", content: "What do I still need to graduate from my degree?" },
   ], "203.0.113.250");
-  assert.match(String(inProgressDegreeRequirement.payload.content), /Choose one science course/);
-  assert.match(String(inProgressDegreeRequirement.payload.content), /IN_PROGRESS/);
+  assert.match(String(inProgressDegreeRequirement.payload.content), /in progress: PSYC100/i);
+  assert.doesNotMatch(String(inProgressDegreeRequirement.payload.content), /remaining\/not confirmed: [^\n]*PSYC100/i);
 
   const unmodeledDegreeAudit = await ask("What do I still need to graduate in Psychology?", "203.0.113.248");
   assert.equal(unmodeledDegreeAudit.payload.stateLabel, "v3_degree_audit_preview");
