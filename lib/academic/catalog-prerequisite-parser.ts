@@ -15,6 +15,13 @@ const REVIEWED_CATALOG_ITEM_REPAIRS: Record<string, Record<string, string>> = {
   GEOL300: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D))" },
   GEOL400: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D))" },
   CHME330: { "PHYS135 with a minimum grade D)": "PHYS135 with a minimum grade D" },
+  // The official AERO490 page renders its PHYS200/MATH210 alternatives and
+  // the separately labeled Pre/Co AERO485 link in one list item without a
+  // connective. Keep the alternatives grouped and require the Pre/Co course.
+  AERO490: {
+    "PHYS200 with a minimum grade D or MATH210 with a minimum grade D Pre/Co AERO485 with a minimum grade P":
+      "(PHYS200 with a minimum grade D or MATH210 with a minimum grade D) and Pre/Co AERO485 with a minimum grade P",
+  },
 };
 
 type Token = { kind: "course"; expression: PrerequisiteExpression } | { kind: "and" | "or" | "left" | "right" };

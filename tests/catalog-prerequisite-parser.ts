@@ -138,7 +138,7 @@ const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
-assert.equal(parsed.length, 1474, "the verified catalog snapshot should safely structure 1,474 of its 1,478 relation records");
+assert.equal(parsed.length, 1475, "the verified catalog snapshot should safely structure 1,475 of its 1,478 relation records");
 const minimumD = (courseCode: string) => ({ type: "COURSE_GRADE_AT_LEAST" as const, courseCode, minimumGrade: "D" as const });
 const reviewedRepairs = [
   {
@@ -191,6 +191,19 @@ const incompleteCsbp340 = catalog.courses.find((course) => course.code === "CSBP
 assert.ok(incompleteCsbp340);
 assert.equal(parseCatalogPrerequisiteExpression(incompleteCsbp340), null,
   "the official CSBP340 catalog row ends with a dangling OR and must remain unsupported");
+const aero490 = catalog.courses.find((course) => course.code === "AERO490");
+assert.ok(aero490);
+assert.deepEqual(parseCatalogPrerequisiteExpression(aero490), {
+  op: "AND",
+  conditions: [
+    minimumD("STAT210"), minimumD("GENG315"), minimumD("MECH305"), minimumD("MECH310"),
+    minimumD("MECH315"), minimumD("MECH350"), minimumD("AERO301"), minimumD("AERO300"), minimumD("AERO315"),
+    { op: "AND", conditions: [
+      { op: "OR", conditions: [minimumD("PHYS200"), minimumD("MATH210")] },
+      { op: "OR", conditions: [{ type: "COURSE_COMPLETED", courseCode: "AERO485" }, { type: "COURSE_CURRENT", courseCode: "AERO485" }] },
+    ] },
+  ],
+}, "AERO490 preserves the PHYS200-or-MATH210 route and separately requires AERO485 completed or concurrent");
 const multipleCourseCodes = assessCatalogPrerequisiteConversation([{ role: "user", content:
   "Can I register for FINC210? I passed ACCT111 with grade D, and I'm currently taking ECON105." }]);
 assert.equal(multipleCourseCodes?.evaluation.status, "ELIGIBLE",
