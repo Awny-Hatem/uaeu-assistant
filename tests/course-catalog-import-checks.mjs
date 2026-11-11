@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { extractCourseCodes, parseCoursePage } from "../scripts/import-official-course-catalog.mjs";
+import { extractCourseCodes, groupCoursesByPage, parseCoursePage } from "../scripts/import-official-course-catalog.mjs";
 
 const links = extractCourseCodes(`
   <a href="https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=CSBP319 ">CSBP319</a>
@@ -10,6 +10,14 @@ const links = extractCourseCodes(`
 assert.equal(links.length, 1);
 assert.equal(links[0].code, "CSBP319");
 assert.equal(links[0].url, "https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=CSBP319");
+const groupedPages = groupCoursesByPage([
+  ...links,
+  { code: "CSBP221", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=CSBP221" },
+  { code: "MATH105", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_2.shtml?id=MATH105" },
+]);
+assert.equal(groupedPages.length, 2, "courses sharing a catalog page should be fetched together");
+assert.deepEqual(groupedPages[0].courses.map(({ code }) => code), ["CSBP319", "CSBP221"]);
+assert.equal(groupedPages[0].url, links[0].url, "page fetch retains a representative official URL");
 
 const record = parseCoursePage(`
   <div id="CSBP319 "><h1>Data Structures (CSBP319)</h1>

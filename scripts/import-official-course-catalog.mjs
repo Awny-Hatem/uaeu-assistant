@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 
 const ROOT = "https://www.uaeu.ac.ae/en/catalog/courses/";
 const OUTPUT = path.join(process.cwd(), "data", "academic", "course-catalog.json");
-const CACHE = path.join(tmpdir(), "uaeu-course-catalog-import-cache-v1.json");
+const CACHE = path.join(tmpdir(), "uaeu-course-catalog-import-cache-v3.json");
 const CODE = /^[A-Z]{2,8}\s?\d{3,4}[A-Z]?$/;
 
 export function decodeHtml(value = "") {
@@ -50,6 +50,18 @@ export function extractCourseCodes(indexHtml) {
     if (!courses.has(code)) courses.set(code, { code, url: url.href });
   }
   return [...courses.values()];
+}
+
+export function groupCoursesByPage(courses) {
+  const groups = new Map();
+  for (const course of courses) {
+    const url = new URL(course.url);
+    const key = `${url.origin}${url.pathname}`;
+    const group = groups.get(key) ?? { url: course.url, courses: [] };
+    group.courses.push(course);
+    groups.set(key, group);
+  }
+  return [...groups.values()];
 }
 
 function getSection(html, code) {
@@ -131,8 +143,10 @@ async function main() {
   const index = await fetchOfficial(ROOT);
   const links = extractCourseCodes(index);
   if (links.length < 1000) throw new Error(`Catalog index returned suspiciously few courses (${links.length})`);
+  const pages = groupCoursesByPage(links);
   const signature = createHash("sha256").update(JSON.stringify(links)).digest("hex");
   const records = new Array(links.length);
+  const indexByCode = new Map(links.map((link, index) => [link.code, index]));
   const failures = [];
   try {
     const cache = JSON.parse(await readFile(CACHE, "utf8"));
@@ -156,26 +170,30 @@ async function main() {
   let finished = records.filter(Boolean).length;
   const worker = async () => {
     while (true) {
-      const i = next++;
-      if (i >= links.length) return;
-      if (records[i]) continue;
+      const pageIndex = next++;
+      if (pageIndex >= pages.length) return;
+      const page = pages[pageIndex];
+      const pageIndexes = page.courses.map(({ code }) => indexByCode.get(code));
+      if (pageIndexes.every((index) => index !== undefined && records[index])) continue;
+      for (const index of pageIndexes) if (index !== undefined) records[index] = undefined;
       try {
-        const html = await fetchOfficial(links[i].url);
-        records[i] = parseCoursePage(html, links[i], verifiedAt);
+        const html = await fetchOfficial(page.url);
+        const parsedPageRecords = page.courses.map((course) => parseCoursePage(html, course, verifiedAt));
+        pageIndexes.forEach((index, offset) => {
+          if (index !== undefined) records[index] = parsedPageRecords[offset];
+        });
       } catch (error) {
-        failures.push({ code: links[i].code, error: String(error) });
+        failures.push({ url: page.url, courseCodes: page.courses.map(({ code }) => code), error: String(error) });
       }
-      finished++;
-      if (finished % 50 === 0) {
-        console.log(`Fetched ${finished}/${links.length}`);
-        await checkpoint();
-      }
+      finished = records.filter(Boolean).length;
+      console.log(`Fetched ${finished}/${links.length} course records (${pageIndex + 1}/${pages.length} pages)`);
+      await checkpoint();
     }
   };
-  await Promise.all(Array.from({ length: 6 }, worker));
+  await Promise.all(Array.from({ length: 2 }, worker));
   await checkpoint();
-  if (failures.length || records.length !== links.length) {
-    console.error(JSON.stringify({ listed: links.length, parsed: records.length, failures }, null, 2));
+  if (failures.length || records.some((record) => !record)) {
+    console.error(JSON.stringify({ listed: links.length, parsed: records.filter(Boolean).length, pages: pages.length, failures }, null, 2));
     throw new Error(`Course catalog import incomplete: ${failures.length} failures`);
   }
   const output = { schemaVersion: 1, title: "UAEU official course catalog snapshot", verifiedAt, sourceIndex: ROOT, courseCount: records.length, courses: records };
