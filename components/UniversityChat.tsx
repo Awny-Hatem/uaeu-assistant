@@ -332,7 +332,8 @@ function sourceIcon(source: AssistantSource) {
 }
 
 export function UniversityChat() {
-  const maintenanceMode = process.env.NEXT_PUBLIC_UAEU_MAINTENANCE_MODE === "enabled";
+  // This deployment is intentionally maintenance-only until the assistant is approved for use.
+  const maintenanceMode = true;
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authPrompt, setAuthPrompt] = useState<AuthPrompt>({
