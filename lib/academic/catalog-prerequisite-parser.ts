@@ -5,6 +5,17 @@ const COURSE_CODE_PATTERN = /\b([A-Z]{2,8})\s?(\d{3,4}[A-Z]?)\b/giu;
 const GRADE_PATTERN = /(?:with\s+)?(?:a\s+)?minimum\s+grade\s+([A-F](?:[+-])?|pass|p)\b/giu;
 const VALID_GRADES = new Set<Grade>(["F", "D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"]);
 
+// The official catalog text for these records omits closing parentheses while
+// otherwise spelling out every course, grade, and Boolean operator. Apply a
+// repair only to the exact source fragments reviewed against the UAEU pages;
+// any source wording change continues to fail closed.
+const REVIEWED_PARENTHESIS_REPAIRS: Record<string, Record<string, number>> = {
+  MECH350: { "( MECH210 with a minimum grade D or ( AERO220 with a minimum grade D)": 1 },
+  CHEM355: { "( CHEM251 with a minimum grade D or ( CHME322 with a minimum grade D and GENG220 with a minimum grade D)": 1 },
+  GEOL300: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": 1 },
+  GEOL400: { "( STAT210 with a minimum grade D or ( STAT235 with a minimum grade D)": 1 },
+};
+
 type Token = { kind: "course"; expression: PrerequisiteExpression } | { kind: "and" | "or" | "left" | "right" };
 
 function parseItem(text: string): PrerequisiteExpression | null {
@@ -88,9 +99,11 @@ function parseItem(text: string): PrerequisiteExpression | null {
 }
 
 /** Honor an explicit inline Pre/Co marker without relaxing other catalog grammar. */
-function parsePrerequisiteItem(text: string): PrerequisiteExpression | null {
+function parsePrerequisiteItem(text: string, courseCode: string): PrerequisiteExpression | null {
+  const missingClosures = REVIEWED_PARENTHESIS_REPAIRS[courseCode]?.[text];
+  const sourceText = missingClosures ? `${text}${")".repeat(missingClosures)}` : text;
   const concurrentCodes: string[] = [];
-  const normalized = text.replace(
+  const normalized = sourceText.replace(
     /\bpre\s*[\/&]\s*co(?:requisites?)?\s+([A-Z]{2,8}\s?\d{3,4}[A-Z]?)\b/giu,
     (_marker, code: string) => {
       concurrentCodes.push(code.replace(/\s+/g, "").toUpperCase());
@@ -133,7 +146,7 @@ function combineAnd(expressions: PrerequisiteExpression[]): PrerequisiteExpressi
 
 /** Parse only complete, explicit catalog list items; unknown grammar fails closed. */
 export function parseCatalogPrerequisiteExpression(record: OfficialCourseRecord): PrerequisiteExpression | null {
-  const required = record.prerequisiteItems.map(parsePrerequisiteItem);
+  const required = record.prerequisiteItems.map((item) => parsePrerequisiteItem(item, record.code));
   if (required.some((expression) => !expression)) return null;
   const corequisites = record.corequisiteItems.map((item) => {
     const parsed = parseItem(item);

@@ -138,7 +138,37 @@ const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
-assert(parsed.length > 1298, "parsing explicit corequisite records should expand supported course-rule coverage");
+assert.equal(parsed.length, 1473, "the verified catalog snapshot should safely structure 1,473 of its 1,478 relation records");
+const minimumD = (courseCode: string) => ({ type: "COURSE_GRADE_AT_LEAST" as const, courseCode, minimumGrade: "D" as const });
+const reviewedRepairs = [
+  {
+    code: "MECH350",
+    expected: { op: "AND", conditions: [
+      { op: "AND", conditions: [minimumD("PHYS140"), minimumD("PHYS110"), minimumD("MATH275")] },
+      { op: "OR", conditions: [minimumD("MECH210"), minimumD("AERO220")] },
+    ] },
+  },
+  {
+    code: "CHEM355",
+    expected: { op: "AND", conditions: [
+      minimumD("CHEM115"),
+      { op: "OR", conditions: [minimumD("CHEM251"), { op: "AND", conditions: [minimumD("CHME322"), minimumD("GENG220")] }] },
+    ] },
+  },
+  {
+    code: "GEOL300",
+    expected: { op: "AND", conditions: [minimumD("GEOL215"), minimumD("GEOL220"), { op: "OR", conditions: [minimumD("STAT210"), minimumD("STAT235")] }] },
+  },
+  {
+    code: "GEOL400",
+    expected: { op: "AND", conditions: [minimumD("GEOL340"), { op: "OR", conditions: [minimumD("STAT210"), minimumD("STAT235")] }] },
+  },
+];
+for (const { code, expected } of reviewedRepairs) {
+  const course = catalog.courses.find((candidate) => candidate.code === code);
+  assert.ok(course);
+  assert.deepEqual(parseCatalogPrerequisiteExpression(course), expected, `${code} must retain its official AND/OR meaning after the exact source repair`);
+}
 const chme330 = catalog.courses.find((course) => course.code === "CHME330");
 assert.ok(chme330);
 assert.equal(parseCatalogPrerequisiteExpression(chme330), null,
