@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 48, "forty-eight current or historical program records have structured evidence records");
+assert.equal(programs.length, 50, "fifty current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -122,6 +122,49 @@ const politicalQuestion = assessProgramRequirementsConversation([{ role: "user",
 assert.equal(politicalQuestion?.programId, "political-science");
 assert.match(renderProgramRequirementsAssessment(politicalQuestion!, "en"), /PSG440/);
 assert.match(JSON.stringify(politicalScience.program.sources), /bachelor-of-arts-in-political-science\.shtml/);
+
+const linguistics = getProgramCurriculum("linguistics");
+assert.ok(linguistics);
+assert.equal(linguistics.curriculum.totalCredits, 120);
+assert.deepEqual(linguistics.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 63, 6, 9, 3, 12]);
+assert.equal(linguistics.curriculum.cohortMapping, "unresolved");
+const linguisticsMajor = linguistics.curriculum.requirements.find((item) => item.id === "linguistics-major");
+assert.ok(linguisticsMajor?.type === "REQUIRED_COURSE_SET");
+assert.equal(linguisticsMajor.courseCodes.length, 21);
+assert.equal(linguisticsMajor.courseCodes.includes("LNG456"), false);
+const linguisticsInternship = linguistics.curriculum.requirements.find((item) => item.id === "linguistics-internship");
+assert.ok(linguisticsInternship?.type === "INTERNSHIP");
+assert.equal(linguisticsInternship.courseCode, "LNG456");
+assert.equal(linguisticsInternship.otherCoursesAllowed, false);
+const linguisticsLanguagePath = linguistics.curriculum.requirements.find((item) => item.id === "linguistics-general-education-language");
+assert.ok(linguisticsLanguagePath?.type === "PATHWAY_CHOICE");
+assert.equal(linguisticsLanguagePath.options.length, 5);
+const linguisticsQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Linguistics?" }]);
+assert.equal(linguisticsQuestion?.programId, "linguistics");
+assert.match(renderProgramRequirementsAssessment(linguisticsQuestion!, "en"), /LNG456/);
+assert.match(JSON.stringify(linguistics.program.sources), /bachelor-of-arts-in-linguistics\.shtml/);
+
+const massCommunication = getProgramCurriculum("mass-communication");
+assert.ok(massCommunication);
+assert.equal(massCommunication.curriculum.totalCredits, 120);
+assert.deepEqual(massCommunication.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 27, 6, 27, 18, 15]);
+assert.equal(massCommunication.curriculum.cohortMapping, "unresolved");
+const massConcentrations = massCommunication.curriculum.requirements.find((item) => item.id === "mass-communication-concentrations");
+assert.ok(massConcentrations?.type === "PATHWAY_CHOICE");
+assert.equal(massConcentrations.options.length, 3);
+assert.ok(massConcentrations.options.every(({ credits }) => credits === 27));
+const mediaSupporting = massCommunication.curriculum.requirements.find((item) => item.id === "mass-communication-supporting-pathway");
+assert.ok(mediaSupporting?.type === "PATHWAY_CHOICE");
+assert.equal(mediaSupporting.options.length, 2);
+assert.ok(mediaSupporting.options[1].requirements?.some((item) => item.type === "PATHWAY_CHOICE"));
+const massInternship = massCommunication.curriculum.requirements.find((item) => item.id === "mass-communication-internship");
+assert.ok(massInternship?.type === "INTERNSHIP");
+assert.equal(massInternship.courseCode, "MSC490");
+assert.equal(massInternship.otherCoursesAllowed, false);
+const massQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What are the requirements for Mass Communication?" }]);
+assert.equal(massQuestion?.programId, "mass-communication");
+assert.match(renderProgramRequirementsAssessment(massQuestion!, "en"), /Journalism/);
+assert.match(JSON.stringify(massCommunication.program.sources), /bachelor-of-arts-in-mass-communication\.shtml/);
 
 for (const programId of ["biology", "biochemistry"]) {
   const program = getProgramCurriculum(programId);
