@@ -27,6 +27,7 @@ import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
+import type { ResolutionState } from "@/lib/v3/contracts";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -51,6 +52,7 @@ type AssistantPayload = {
   answerStatus?: import("@/lib/agent-contracts").AgentAnswerStatus;
   source: AssistantSource;
   stateLabel: string;
+  resolutionState?: ResolutionState;
   citations?: Citation[];
   communications?: UniversityCommunication[];
   guide?: ServiceGuide;
@@ -878,7 +880,7 @@ export async function POST(req: Request) {
       const content = locale === "ar"
         ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${blockingMissingContext.join("؛ ")}.`
         : `I need one detail before I can verify the right rule: ${blockingMissingContext.join("; ")}.`;
-      const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "v3_missing_context", disposition: "clarify", clarificationReason: "missing_context", citations: [], communications };
+      const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "v3_missing_context", resolutionState: "MISSING_CONTEXT", disposition: "clarify", clarificationReason: "missing_context", citations: [], communications };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
@@ -918,6 +920,7 @@ export async function POST(req: Request) {
           content: locale === "ar" ? `يمكنك فتح **التقويم الأكاديمي الرسمي لجامعة الإمارات** من هنا: [التقويم الأكاديمي](${calendarSource.url}).` : `You can check the **official UAEU academic calendar** here: [${calendarSource.title}](${calendarSource.url}).`,
           source: "rag",
           stateLabel: "v3_verified_source_location",
+          resolutionState: "VERIFIED",
           disposition: "answer",
           citations: [{ title: calendarSource.title, url: calendarSource.url, lastVerified: calendarSource.lastVerified }],
           evidenceIds: [calendarSource.id],
@@ -1198,6 +1201,7 @@ export async function POST(req: Request) {
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
       stateLabel: escalationReason ? "model_escalation" : usedOfficialWebResearch ? "official_web_research" : "local_db",
+      ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || responseClarification ? "CONDITIONAL" : "VERIFIED" } : {}),
       citations: escalationReason
         ? []
         : uniqueCitations(selectedSources.map(({ citation }) => citation)),
