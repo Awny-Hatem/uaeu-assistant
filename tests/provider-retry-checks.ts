@@ -7,8 +7,8 @@ const keys = ['AI_PROVIDER', 'openai_key', 'OPENAI_KEY', 'OPENAI_API_KEY', 'OPEN
 const previous = Object.fromEntries(keys.map(key => [key, process.env[key]]));
 const args = { system: 'Synthetic retry test', messages: [{ role: 'user' as const, content: 'Synthetic question only' }] };
 const success = () => new Response(JSON.stringify({ status: 'completed', output_text: 'Synthetic answer' }));
-const failure = (status: number, code?: string, retryAfter?: string, type?: string) => new Response(JSON.stringify({ error: {
-  code, type, message: 'SYNTHETIC_PRIVATE_DIAGNOSTIC_MUST_NOT_ESCAPE', status: 'SYNTHETIC_PRIVATE_STATUS_MUST_NOT_ESCAPE',
+const failure = (status: number, code?: string, retryAfter?: string, type?: string, param?: string) => new Response(JSON.stringify({ error: {
+  code, type, param, message: 'SYNTHETIC_PRIVATE_DIAGNOSTIC_MUST_NOT_ESCAPE', status: 'SYNTHETIC_PRIVATE_STATUS_MUST_NOT_ESCAPE',
 } }), { status, headers: retryAfter === undefined ? {} : { 'Retry-After': retryAfter } });
 let now = 1_000;
 let waits: number[] = [];
@@ -140,6 +140,26 @@ async function main() {
           return true;
         });
       }
+    });
+    await check('provider diagnostics retain only safe code and parameter fields', async () => {
+      handler = () => failure(400, 'invalid_json_schema', undefined, 'invalid_request_error', 'text.format.schema.properties.claims.items.maxItems');
+      await assert.rejects(generateAssistantResponse(args), error => {
+        assert.ok(error instanceof AiProviderError);
+        const described = describeAiProviderError(error);
+        assert.equal(described.diagnosticCode, 'invalid_json_schema');
+        assert.equal(described.diagnosticParam, 'text.format.schema.properties.claims.items.maxItems');
+        assert.equal(JSON.stringify(described).includes('SYNTHETIC_PRIVATE'), false);
+        return true;
+      });
+    });
+    await check('untrusted provider diagnostic strings are discarded', async () => {
+      handler = () => failure(400, 'key=leak-secret', undefined, 'invalid_request_error', 'input[0].content=student-name');
+      await assert.rejects(generateAssistantResponse(args), error => {
+        assert.ok(error instanceof AiProviderError);
+        assert.equal(describeAiProviderError(error).diagnosticCode, undefined);
+        assert.equal(describeAiProviderError(error).diagnosticParam, undefined);
+        return true;
+      });
     });
     await check('transient network failure can recover without changing provider or request body', async () => {
       handler = attempt => { if (attempt === 1) throw new TypeError('Synthetic connection reset'); return success(); };

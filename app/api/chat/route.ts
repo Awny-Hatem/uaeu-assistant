@@ -1364,11 +1364,11 @@ export async function POST(req: Request) {
 
     return respond(payload, latest, locale);
   } catch (error) {
+    const providerError = describeAiProviderError(error);
     console.error(
       "AI generation error:",
-      error instanceof Error ? error.message : "Unknown error",
+      JSON.stringify({ status: providerError.status, providerStatus: providerError.providerStatus, code: providerError.diagnosticCode, type: providerError.diagnosticType, param: providerError.diagnosticParam }),
     );
-    const providerError = describeAiProviderError(error);
     const supportRejected = groundingTrace?.status === "rejected" && !groundingTrace.reasonCodes.includes("verification_unavailable");
     const payload: AssistantPayload = {
       role: "assistant",

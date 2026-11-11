@@ -29,6 +29,9 @@ export class AiProviderError extends Error {
   publicMessage: string;
   retryable: boolean;
   retryAfterMs?: number;
+  diagnosticCode?: string;
+  diagnosticParam?: string;
+  diagnosticType?: string;
 
   constructor(args: {
     status: number;
@@ -37,6 +40,9 @@ export class AiProviderError extends Error {
     cause?: unknown;
     retryable?: boolean;
     retryAfterMs?: number;
+    diagnosticCode?: string;
+    diagnosticParam?: string;
+    diagnosticType?: string;
   }) {
     super(args.publicMessage);
     this.name = "AiProviderError";
@@ -45,6 +51,9 @@ export class AiProviderError extends Error {
     this.publicMessage = args.publicMessage;
     this.retryable = args.retryable === true;
     this.retryAfterMs = args.retryAfterMs;
+    this.diagnosticCode = args.diagnosticCode;
+    this.diagnosticParam = args.diagnosticParam;
+    this.diagnosticType = args.diagnosticType;
     if (args.cause) {
       this.cause = args.cause;
     }
@@ -77,7 +86,8 @@ function retryAfterMs(header: string | null): number | undefined {
 
 function openAiHttpError(response: Response, data: Record<string, unknown>): AiProviderError {
   const detail = data.error && typeof data.error === 'object'
-    ? data.error as { code?: unknown; type?: unknown } : {};
+    ? data.error as { code?: unknown; type?: unknown; param?: unknown } : {};
+  const safeDiagnostic = (value: unknown) => typeof value === "string" && /^[A-Za-z0-9_.\[\]-]{1,100}$/.test(value) ? value : undefined;
   const quotaCodes = new Set([
     'insufficient_quota', 'credit_balance_exhausted', 'organization_spend_limit_exceeded',
     'project_spend_limit_exceeded', 'organization_usage_limit_exceeded', 'billing_hard_limit_reached',
@@ -99,6 +109,9 @@ function openAiHttpError(response: Response, data: Record<string, unknown>): AiP
       server ? 'OpenAI is temporarily unavailable. Please try again later.' : 'OpenAI rejected the request configuration.',
     retryable: !quota && !auth && (rate || server),
     retryAfterMs: retryAfterMs(response.headers.get('retry-after')),
+    diagnosticCode: safeDiagnostic(detail.code),
+    diagnosticParam: safeDiagnostic(detail.param),
+    diagnosticType: safeDiagnostic(detail.type),
   });
 }
 
@@ -473,12 +486,18 @@ export function describeAiProviderError(error: unknown): {
   status: number;
   providerStatus: string;
   message: string;
+  diagnosticCode?: string;
+  diagnosticParam?: string;
+  diagnosticType?: string;
 } {
   if (error instanceof AiProviderError) {
     return {
       status: error.status,
       providerStatus: error.providerStatus,
       message: error.publicMessage,
+      ...(error.diagnosticCode ? { diagnosticCode: error.diagnosticCode } : {}),
+      ...(error.diagnosticParam ? { diagnosticParam: error.diagnosticParam } : {}),
+      ...(error.diagnosticType ? { diagnosticType: error.diagnosticType } : {}),
     };
   }
 
