@@ -97,4 +97,15 @@ assert.equal(calendarLocation.status, "FOUND");
 assert.ok(calendarLocation.evidence.every((item) => item.scope?.domain === "calendar"));
 assert.ok(calendarLocation.evidence.some((item) => /Calendar/i.test(item.title)));
 
+const majorChangeEvidence = createEvidenceService({ now: () => now }).search({
+  request: "Can I change my major from business administration to finance after my third year?",
+  requestedFacts: ["major-change policy and third-year eligibility"],
+  scope: { domain: "academics" },
+  freshnessRequirement: "normal",
+});
+assert.equal(majorChangeEvidence.status, "FOUND", "explicit source-domain metadata lets a policy document support major-change guidance");
+assert.ok(majorChangeEvidence.evidence.every((item) => item.scope?.domain === "academics"));
+assert.ok(majorChangeEvidence.evidence.some((item) => /change a major/i.test(item.excerpt)));
+assert.ok(!majorChangeEvidence.evidence.some((item) => /Academic Calendar/i.test(item.title)), "a secondary calendar citation must not be substituted for major-change policy");
+
 console.log("V3 Evidence Service checks passed: hard domain and course identity filters, source-specific citations, event metadata gate, freshness, and policy recall.");

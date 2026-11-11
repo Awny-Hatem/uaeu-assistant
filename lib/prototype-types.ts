@@ -22,6 +22,7 @@ export type Citation = {
   evidenceText?: string;
   sourceSection?: string;
   sourceVersion?: string;
+  evidenceDomain?: string;
 };
 
 export const GROUNDING_REASON_CODES = [

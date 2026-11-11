@@ -111,6 +111,8 @@ async function main() {
     assert.equal(metadata.disposition, undefined);
     assert.equal(sanitizeAnswerMetadata({ resolutionState: "VERIFIED" }).resolutionState, "VERIFIED");
     assert.equal(sanitizeAnswerMetadata({ resolutionState: "APPROVED_BY_AI" }).resolutionState, undefined);
+    assert.equal(sanitizeAnswerMetadata({ citations: [{ title: "policy", evidenceDomain: "academics" }] }).citations?.[0].evidenceDomain, "academics");
+    assert.equal(sanitizeAnswerMetadata({ citations: [{ title: "policy", evidenceDomain: "not a domain!" }] }).citations?.[0].evidenceDomain, undefined);
     const evidence = sanitizeAnswerMetadata({ citations: [
       { title: "source", evidenceText: "Exact source-qualified fact.", sourceVersion: "2026", sourceSection: "Section 1" },
       { title: "oversized evidence", evidenceText: "x".repeat(12001), sourceSection: false },

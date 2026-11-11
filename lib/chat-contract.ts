@@ -87,6 +87,7 @@ function citation(value: unknown): Citation | null {
     // Drop invalid evidence instead of silently truncating a qualification.
     if (typeof text === "string" && text.length <= limit) result[key] = text;
   }
+  if (typeof value.evidenceDomain === "string" && /^[a-z_]{2,40}$/.test(value.evidenceDomain)) result.evidenceDomain = value.evidenceDomain;
   return result;
 }
 

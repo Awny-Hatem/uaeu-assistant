@@ -13,6 +13,7 @@ const DOMAIN_ALIASES: Record<string, string> = {
   scholarship: "financial_aid", scholarships: "financial_aid", "financial-aid": "financial_aid", financial_aid: "financial_aid",
   tuition: "finance", fees: "finance", finance: "finance",
   academic: "academics", academics: "academics", course: "academics", courses: "academics", grading: "academics", "academic-standing": "academics", "data-structures": "academics",
+  programs: "academics",
   graduation: "graduation", housing: "housing", visa: "visa", library: "library", it: "it",
   wellbeing: "wellbeing", careers: "careers", campus: "campus", "student-services": "student_services",
   student_services: "student_services", "student-services-general": "student_services",
@@ -88,7 +89,9 @@ function toEvidenceItems(row: EvidenceRow, now: Date, faqIndex: Map<string, Retu
   return refs.flatMap((citation, index): EvidenceItem[] => {
     const citationEvidence = citation.evidenceText?.trim();
     const citationDomains = understandQuery(`${citation.title}\n${citationEvidence ?? ""}`).subjects.map(canonicalDomain).filter((domain): domain is string => Boolean(domain));
-    const citationDomain = citationDomains.length === 1 ? citationDomains[0] : null;
+    const citationDomain = citation.evidenceDomain
+      ? canonicalDomain(citation.evidenceDomain)
+      : citationDomains.length === 1 ? citationDomains[0] : null;
     // A multi-source answer without source-specific facts cannot be split
     // safely into independently attributable evidence items.
     if (citations.length > 1 && !citationEvidence) return [];
