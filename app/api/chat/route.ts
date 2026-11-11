@@ -23,6 +23,7 @@ import { canonicalCandidateIds, evidenceForSemanticRoute, requestedCourseTargets
 import { preserveEvidenceQualifications } from "@/lib/answer-qualifiers";
 import { sourceEvidence, sourceEvidenceContext, sourceClaimViolations, type SourceEvidence } from "@/lib/source-evidence";
 import { verifySourceClaims } from "@/lib/claim-verifier";
+import { answerScopeViolations } from "@/lib/answer-scope-guard";
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
@@ -1254,8 +1255,11 @@ export async function POST(req: Request) {
       if (!result.grounded) break;
       result.grounded = preserveEvidenceQualifications(result.grounded, evidenceSources, locale);
       let violations = sourceClaimViolations(result.grounded, evidenceSources, answerRequest);
+      if (v3EvidenceMode && executionPlan) violations.push(...answerScopeViolations(executionPlan, result.grounded));
       let reasonCodes: AnswerGrounding["reasonCodes"] = violations.length
-        ? [violations.some((violation) => violation.includes("exclusion from this policy")) ? "unsupported_detail" : "unsupported_critical_token"] : [];
+        ? [violations.some((violation) => violation.includes("does not address the requested"))
+          ? "scope_drift"
+          : violations.some((violation) => violation.includes("exclusion from this policy")) ? "unsupported_detail" : "unsupported_critical_token"] : [];
       if (!violations.length) {
         groundingTrace = { status: "rejected", rewriteCount: attempt, reasonCodes: ["verification_unavailable"] };
         const verdict = await verifySourceClaims(result.grounded, evidenceSources, answerRequest, deadlineAt);
