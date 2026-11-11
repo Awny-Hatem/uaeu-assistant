@@ -162,9 +162,11 @@ async function main() {
     { role: "user", content: "Would that also be the rule for medicine?" },
   ], "203.0.113.226");
   assert.equal(medicineScopeAnswer.status, 200);
-  assert.equal(medicineScopeAnswer.payload.stateLabel, "model_escalation", "the mock provider cannot synthesize the grounded answer and must fail closed");
+  assert.equal(medicineScopeAnswer.payload.stateLabel, "v3_reviewed_policy_applicability", "a fully reviewed applicability record should answer deterministically");
+  assert.match(String(medicineScopeAnswer.payload.content), /excludes the College of Medicine and Health Sciences/i);
+  assert.match(String(medicineScopeAnswer.payload.content), /does not state a numeric minimum graduation CGPA/i);
   assert.doesNotMatch(String(medicineScopeAnswer.payload.content), /2\.00/);
-  assert.deepEqual(medicineScopeAnswer.payload.citations, [], "an ungrounded mock response must not present citations as if it answered");
+  assert.match(JSON.stringify(medicineScopeAnswer.payload.citations), /6_degree_completion_and_graduation-en\.pdf/);
 
   const admissionsDeadline = await ask("When is the admission deadline for Fall 2027?", "203.0.113.224");
   assert.equal(admissionsDeadline.payload.resolutionState, "MISSING_CONTEXT");

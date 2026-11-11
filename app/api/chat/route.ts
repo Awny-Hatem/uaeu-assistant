@@ -890,6 +890,32 @@ export async function POST(req: Request) {
     ? null
     : directFaqHit ?? contextualFaqHit;
   if (v3EvidenceMode) faqHit = null;
+  const crossSubjectApplicability = resolution.usedContext &&
+    /\b(?:would|does|do|is) (?:that|it|this|the same (?:rule|requirement))\b[^.!?]{0,120}\b(?:also )?(?:apply|hold|be the rule)\b|\bsame (?:rule|requirement) for\b/i.test(latest);
+  const priorUserRequest = sanitized.filter((message) => message.role === "user").slice(0, -1).at(-1)?.content ?? "";
+  const applicabilityIntent = understandQuery(priorUserRequest).intents;
+  const reviewedApplicabilityEntry = crossSubjectApplicability && v3EvidenceMode && executionPlan && resolution.subject
+    ? loadFaqEntries().find((entry) => entry.applicability?.type === "policy-scope" &&
+      entry.applicability.policyDomain === executionPlan.entities.domain &&
+      entry.applicability.targetProgramId === executionPlan.entities.program &&
+      entry.applicability.intents.every((intent) => applicabilityIntent.includes(intent)))
+    : undefined;
+  if (reviewedApplicabilityEntry && executionPlan && !executionPlan.missingContext.length) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: faqAnswer(reviewedApplicabilityEntry, locale),
+      source: "rag",
+      stateLabel: "v3_reviewed_policy_applicability",
+      resolutionState: "CONDITIONAL",
+      disposition: "clarify",
+      topic: resolution.subject.key,
+      evidenceIds: [`answer:${reviewedApplicabilityEntry.id}`],
+      citations: uniqueCitations(citationsForFaq(reviewedApplicabilityEntry)),
+      communications,
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
   const acknowledgement = conversationAcknowledgement(latest);
 
   if (acknowledgement) {

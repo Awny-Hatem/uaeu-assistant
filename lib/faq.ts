@@ -14,6 +14,12 @@ export type AnswerDisposition =
 export type FaqEntry = {
   id: string;
   category: string;
+  applicability?: {
+    type: "policy-scope";
+    policyDomain: string;
+    targetProgramId: string;
+    intents: string[];
+  };
   questions: string[];
   matchPhrases?: string[];
   excludePhrases?: string[];

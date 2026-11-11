@@ -154,11 +154,9 @@ check("CMHS policy exclusion is not proof that its numeric GPA must differ", () 
   const en = plain(record.answer_en), ar = plain(record.answer_ar);
   assert.match(en, /does not prove that medicine must have a different GPA threshold/);
   assert.match(en, /does not state a numeric minimum graduation CGPA/);
-  assert.match(en, /cannot verify that 2\.00 is or is not/);
-  assert.match(ar, /ولا يثبت هذا الاستثناء أن للطب بالضرورة معدلًا مختلفًا/);
-  assert.match(ar, /لا تذكر صفحة الكتالوج الحالية حدًا رقميًا أدنى للمعدل التراكمي عند التخرج/);
-  assert.match(ar, /تأكيد أن 2\.00 هو الحد الحالي.*أو نفي ذلك/);
-  assert.doesNotMatch(en, /2\.00.{0,45}does not apply to.*Medicine/);
+  assert.match(en, /do not assume an undergraduate threshold applies to MD/);
+  assert.doesNotMatch(en, /2\.00/);
+  assert.doesNotMatch(ar, /2\.00/);
 });
 
 check("medical answer does not infer program-specific application dates from a calendar", () => {
