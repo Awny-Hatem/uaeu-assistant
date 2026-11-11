@@ -6,7 +6,7 @@ assert.equal(catalog.programs.length, 55, "the official snapshot lists 55 underg
 assert.equal(new Set(catalog.programs.map(({ college }) => college)).size, 9);
 assert.equal(new Set(catalog.programs.map(({ id }) => id)).size, catalog.programs.length);
 assert.ok(catalog.programs.every(({ url }) => new URL(url).hostname.endsWith("uaeu.ac.ae")));
-assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "modelled").length, 24);
+assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "modelled").length, 26);
 assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "legacy_model_review_required").length, 0);
 assert.equal(catalog.curriculumRecordsRequiringIdentityReview.length, 2);
 
