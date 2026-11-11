@@ -134,6 +134,20 @@ async function main() {
 
   const checks: { name: string; run: () => Promise<void> | void }[] = [
     {
+      name: "maintenance mode returns a safe 503 before generating an answer",
+      run: async () => {
+        process.env.NEXT_PUBLIC_UAEU_MAINTENANCE_MODE = "enabled";
+        try {
+          const result = await postJson({ messages: [{ role: "user", content: "How can UAEU students get library or research help?" }] });
+          assert.equal(result.status, 503);
+          assert.equal(result.data.stateLabel, "maintenance");
+          assert.match(result.data.content || "", /under maintenance/i);
+        } finally {
+          delete process.env.NEXT_PUBLIC_UAEU_MAINTENANCE_MODE;
+        }
+      },
+    },
+    {
       name: "guest limit defaults to 10 questions",
       run: () => {
         assert.equal(getQuotaLimit("guest"), 10);

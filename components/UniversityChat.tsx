@@ -332,6 +332,7 @@ function sourceIcon(source: AssistantSource) {
 }
 
 export function UniversityChat() {
+  const maintenanceMode = process.env.NEXT_PUBLIC_UAEU_MAINTENANCE_MODE === "enabled";
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [authPrompt, setAuthPrompt] = useState<AuthPrompt>({
@@ -721,7 +722,7 @@ export function UniversityChat() {
 
   const send = useCallback(async () => {
     const trimmed = input.trim();
-    if (!trimmed || loading || historyLoading || authTransitionRef.current) return;
+    if (maintenanceMode || !trimmed || loading || historyLoading || authTransitionRef.current) return;
 
     const currentUsage = user ? readAccountUsage(user.id) : guestQuestionsUsed;
     if (user) setAccountQuestionsUsed(currentUsage);
@@ -831,6 +832,7 @@ export function UniversityChat() {
       request.finish();
     }
   }, [
+    maintenanceMode,
     input,
     loading,
     historyLoading,
@@ -1092,6 +1094,13 @@ export function UniversityChat() {
           </div>
         </header>
 
+        {maintenanceMode && (
+          <div role="alert" aria-live="assertive" className="border-b border-rose-300 bg-rose-50 px-4 py-4 text-center text-sm font-semibold text-rose-950">
+            <p className="m-0">{uiLocale === "ar" ? "المساعد قيد الصيانة حالياً. لا تستخدمه للحصول على إرشادات جامعية؛ يُرجى الرجوع إلى القنوات الرسمية لجامعة الإمارات." : "The assistant is temporarily under maintenance. Do not rely on it for university guidance; please use official UAEU channels."}</p>
+            <a href="https://www.uaeu.ac.ae/en/contact/index.shtml" target="_blank" rel="noopener noreferrer" className="mt-2 inline-block underline">{uiLocale === "ar" ? "قنوات التواصل الرسمية لجامعة الإمارات" : "Official UAEU contact information"}</a>
+          </div>
+        )}
+
         {banner && (
           <motion.div
             role="status"
@@ -1215,6 +1224,7 @@ export function UniversityChat() {
                       key={label}
                       type="button"
                       onClick={() => applySuggestion(prompt)}
+                      disabled={maintenanceMode}
                       className="flex min-h-[56px] items-center gap-3 rounded-lg border border-zinc-200 bg-white px-4 py-3 text-left text-sm font-bold text-zinc-700 shadow-sm transition hover:border-[#E0182D]/40 hover:bg-rose-50/40 hover:text-[#E0182D]"
                     >
                       <Icon size={17} className="shrink-0 text-[#E0182D]" />
@@ -1276,7 +1286,9 @@ export function UniversityChat() {
                 maxLength={6000}
                 rows={1}
                 placeholder={
-                  quotaBlocked
+                  maintenanceMode
+                    ? uiLocale === "ar" ? "المساعد قيد الصيانة" : "Assistant under maintenance"
+                    : quotaBlocked
                     ? user ? copy.dailyLimit : copy.signInTitle
                     : user
                       ? `${copy.askLabel}, ${user.username}`
@@ -1290,12 +1302,12 @@ export function UniversityChat() {
                     void send();
                   }
                 }}
-                disabled={loading || historyLoading || authTransition || quotaBlocked}
+                disabled={maintenanceMode || loading || historyLoading || authTransition || quotaBlocked}
               />
               <button
                 type="button"
                 onClick={() => void send()}
-                disabled={loading || historyLoading || authTransition || !input.trim() || quotaBlocked}
+                disabled={maintenanceMode || loading || historyLoading || authTransition || !input.trim() || quotaBlocked}
                 className="absolute bottom-3 right-3 flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-950 text-white shadow-md transition hover:bg-zinc-800 disabled:bg-zinc-100 disabled:text-zinc-400 disabled:shadow-none dark:bg-zinc-100 dark:text-zinc-950 dark:hover:bg-white dark:disabled:bg-zinc-800 dark:disabled:text-zinc-600"
                 aria-label={copy.send}
                 data-testid="send-message"

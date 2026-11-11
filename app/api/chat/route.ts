@@ -666,6 +666,16 @@ export async function POST(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
 
+  if (process.env.NEXT_PUBLIC_UAEU_MAINTENANCE_MODE === "enabled") {
+    return jsonNoStore({
+      role: "assistant",
+      content: "The UAEU assistant is temporarily under maintenance. Please use official UAEU channels for guidance.",
+      source: "error",
+      stateLabel: "maintenance",
+      citations: [],
+    }, { status: 503 });
+  }
+
   const limited = rateLimitGuard(req, "chat", { limit: 30, windowMs: 60 * 1000 });
   if (limited) return limited;
 
