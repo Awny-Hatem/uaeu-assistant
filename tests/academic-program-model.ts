@@ -208,6 +208,7 @@ const statsRequirementsText = renderProgramRequirementsAssessment(statsRequireme
 assert.match(statsRequirementsText, /Statistics concentration electives: choose 2 \(6 credits\) from STAT250, STAT370, STAT410, STAT475/);
 assert.match(statsRequirementsText, /Analytics for Business concentration electives: choose 2 \(6 credits\) from BANA410, BANA420, BANA430/);
 assert.match(statsRequirementsText, /course names/);
+assert.doesNotMatch(statsRequirementsText, /\.\./, "nested concentration requirements render clean punctuation");
 const economicsRequirements = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required for Economics?" }]);
 assert.ok(economicsRequirements?.curriculum);
 assert.match(renderProgramRequirementsAssessment(economicsRequirements, "en"), /at least 3 credits from each cluster/i,

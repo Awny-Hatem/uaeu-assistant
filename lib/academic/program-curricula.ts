@@ -530,7 +530,7 @@ export function renderProgramRequirementsAssessment(
             if (child.type === "INTERNSHIP") return `${child.name ?? "Internship"}: ${child.courseCode}, ${child.credits} credits.`;
             return `${child.name}: choose one of ${child.options.map(({ name }) => name).join(" or ")}.`;
           }).join("; ");
-          return `- ${option.name} (${option.credits} credits): ${nested}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
+          return `- ${option.name} (${option.credits} credits): ${nested}${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
         }
         if (option.type === "ELECTIVE_GROUP") return `- ${option.name}: choose ${option.chooseCount} courses (${option.credits} credits) from ${option.courseCodes.join(", ")}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
         return `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
