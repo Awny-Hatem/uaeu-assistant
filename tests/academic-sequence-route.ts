@@ -120,12 +120,17 @@ async function main() {
   assert.ok(courseOptions.requirementSummary.mandatoryCourseCodes.every((code: string) => /^[A-Z0-9]+$/u.test(code)));
   const candidateCurriculum = getProgramCurriculum(candidate.program.id, candidate.cohortYear);
   assert.ok(candidateCurriculum);
+  const completedCourseCode = catalog.courses.find((record) => record.code !== candidate.course.code &&
+    requirementCodes(candidateCurriculum!.curriculum.requirements).includes(record.code) &&
+    (record.creditHours ?? 0) > 0 && !record.prerequisiteText && !record.corequisiteText && !record.preCorequisiteText &&
+    record.prerequisiteItems.length === 0 && record.corequisiteItems.length === 0 && record.preCorequisiteItems.length === 0)?.code;
+  assert.ok(completedCourseCode, "a second curriculum course is needed to verify completed-course grade input");
   const candidatePathwayCodes = new Set(candidateCurriculum!.curriculum.requirements
     .filter((requirement) => requirement.type === "PATHWAY_CHOICE")
     .flatMap((requirement) => requirement.options.flatMap((option) => option.courseCodes.map((code) => code.toUpperCase()))));
   assert.ok(courseOptions.requirementSummary.mandatoryCourseCodes.every((code: string) => !candidatePathwayCodes.has(code)), "pathway alternatives must never be auto-classified as mandatory");
 
-  const validResponse = await POST(request());
+  const validResponse = await POST(request({ completedCourseCodes: [completedCourseCode], completedCourseGrades: { [completedCourseCode]: "B" } }));
   assert.equal(validResponse.status, 200);
   const validBody = await validResponse.json();
   assert.equal(validBody.scope.selectedCoursesOnly, true);
@@ -134,6 +139,11 @@ async function main() {
   assert.ok(validBody.plan.assumptions.some((assumption: string) => /no prerequisite wording in the catalog snapshot/i.test(assumption)));
   assert.equal(validResponse.headers.get("cache-control"), "no-store, max-age=0");
   assert.ok(validBody.courseSources.some((source: { code: string }) => source.code === candidate.course.code));
+
+  const gradeForUncompletedCourse = await POST(request({ completedCourseGrades: { [completedCourseCode]: "B" } }));
+  assert.equal(gradeForUncompletedCourse.status, 400, "a grade cannot be supplied for a course not reported completed");
+  const invalidGrade = await POST(request({ completedCourseCodes: [completedCourseCode], completedCourseGrades: { [completedCourseCode]: "F" } }));
+  assert.equal(invalidGrade.status, 400, "failed grades are rejected from the passed-course input");
 
   const overlapResponse = await POST(request({ completedCourseCodes: [candidate.course.code] }));
   assert.equal(overlapResponse.status, 400, "a course cannot be both completed and remaining");

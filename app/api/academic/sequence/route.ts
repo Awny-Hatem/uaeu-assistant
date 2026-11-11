@@ -12,6 +12,7 @@ const COURSE_CODE = /^[A-Z]{2,8}\d{3,4}[A-Z]?$/u;
 const MAX_COURSES = 80;
 const MAX_TERMS = 8;
 const MAX_EVIDENCE_AGE_DAYS = 180;
+const PASSING_LETTER_GRADES = new Set(["D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"]);
 
 type RequirementGroup = { id: string; name: string; type: string; chooseCount?: number; credits?: number };
 type PlanningChoice = {
@@ -58,6 +59,24 @@ function normalizeCourseCodes(value: unknown): string[] | null {
   if (!value.every((code) => typeof code === "string" && COURSE_CODE.test(code.trim().toUpperCase()))) return null;
   const codes = value.map((code) => (code as string).trim().toUpperCase());
   return new Set(codes).size === codes.length ? codes : null;
+}
+
+function normalizeCourseGrades(value: unknown, completedCourseCodes: string[]): Record<string, string> | null {
+  if (value === undefined) return {};
+  if (!isRecord(value) || Object.keys(value).length > MAX_COURSES) return null;
+  const completed = new Set(completedCourseCodes);
+  const grades: Record<string, string> = {};
+  for (const [rawCode, rawGrade] of Object.entries(value)) {
+    const code = rawCode.trim().replace(/[\s-]+/gu, "").toUpperCase();
+    if (!COURSE_CODE.test(code) || !completed.has(code) || typeof rawGrade !== "string") return null;
+    const grade = rawGrade.trim().toUpperCase();
+    const numericGrade = Number(grade);
+    const validGrade = PASSING_LETTER_GRADES.has(grade) ||
+      (/^\d{1,3}(?:\.\d+)?$/u.test(grade) && Number.isFinite(numericGrade) && numericGrade >= 0 && numericGrade <= 100);
+    if (!validGrade || Object.hasOwn(grades, code)) return null;
+    grades[code] = grade;
+  }
+  return grades;
 }
 
 function collectRequirementCourses(requirements: ProgramRequirement[], result = new Set<string>()): Set<string> {
@@ -312,10 +331,11 @@ export async function POST(request: Request): Promise<Response> {
   const remainingCourseCodes = normalizeCourseCodes(body.remainingCourseCodes);
   const completedCourseCodes = normalizeCourseCodes(body.completedCourseCodes ?? []);
   const currentCourseCodes = normalizeCourseCodes(body.currentCourseCodes ?? []);
+  const completedCourseGrades = completedCourseCodes ? normalizeCourseGrades(body.completedCourseGrades, completedCourseCodes) : null;
   if (typeof programId !== "string" || !/^[a-z0-9-]{2,80}$/u.test(programId) ||
       !Number.isInteger(cohortYear) || Number(cohortYear) < 1990 || Number(cohortYear) > new Date().getUTCFullYear() ||
-      !remainingCourseCodes?.length || !completedCourseCodes || !currentCourseCodes) {
-    return json({ error: "Provide a valid programId, entry cohortYear, non-empty remainingCourseCodes, and valid completedCourseCodes/currentCourseCodes arrays." }, 400);
+      !remainingCourseCodes?.length || !completedCourseCodes || !currentCourseCodes || !completedCourseGrades) {
+    return json({ error: "Provide a valid programId, entry cohortYear, non-empty remainingCourseCodes, valid completedCourseCodes/currentCourseCodes arrays, and valid grades only for courses listed as completed." }, 400);
   }
   if (!Array.isArray(body.terms) || body.terms.length < 1 || body.terms.length > MAX_TERMS) {
     return json({ error: `Provide between 1 and ${MAX_TERMS} planning terms.` }, 400);
@@ -397,6 +417,7 @@ export async function POST(request: Request): Promise<Response> {
   const plan = buildConditionalSemesterPlan({
     courses,
     completedCourseCodes,
+    completedCourseGrades,
     currentCourseCodes,
     terms,
     asOf,
@@ -415,7 +436,7 @@ export async function POST(request: Request): Promise<Response> {
       curriculumLimitations: curriculum.limitations,
       curriculumSources: program.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
       selectedCoursesOnly: true,
-      disclaimer: "This is a conditional sequence for the course codes supplied, not a degree audit or registration approval. Elective/pathway choices, unlisted rules, personal standing, live sections, timetable conflicts, and university records are not verified. Confirm your Degree Works plan and current offerings with your advisor before registering. Course-code inputs are processed for this response and are not stored by this route.",
+      disclaimer: "This is a conditional sequence for the course codes and grades you report, not a degree audit or registration approval. Elective/pathway choices, unlisted rules, personal standing, live sections, timetable conflicts, and university records are not verified. Confirm your Degree Works plan and current offerings with your advisor before registering. Course-code and grade inputs are processed for this response and are not stored by this route.",
     },
   });
 }

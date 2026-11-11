@@ -89,10 +89,12 @@ test('keyboard skip link and reduced-motion accessibility hooks are available', 
 
 test('guided academic planner selects a cohort and displays a sourced conditional sequence', async ({ page }) => {
   await guest(page);
+  let submittedSequencePayload: Record<string, unknown> | undefined;
   await page.route('**/api/academic/sequence**', async route => {
     const request = route.request();
     const url = new URL(request.url());
     if (request.method() === 'POST') {
+      submittedSequencePayload = request.postDataJSON() as Record<string, unknown>;
       return route.fulfill({ json: {
         plan: {
           status: 'CONDITIONAL_PLAN',
@@ -144,6 +146,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
   await electiveCourse.check();
   await dialog.getByLabel('Courses you are currently taking').fill('CSBP219');
+  await dialog.getByLabel('Grades for completed courses (optional)').fill('MATH105: B');
   await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');
   await dialog.getByLabel('Maximum credits per term').fill('18');
   await dialog.getByRole('button', { name: 'Create conditional sequence' }).click();
@@ -151,6 +154,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await expect(dialog.getByText(/CSBP119 — Introduction to Programming/)).toBeVisible();
   await expect(dialog.getByText(/No confirmed section offering/)).toBeVisible();
   await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' }).last()).toHaveAttribute('href', /uaeu\.ac\.ae/);
+  expect(submittedSequencePayload?.completedCourseGrades).toEqual({ MATH105: 'B' });
 });
 
 for (const hungPath of ['/api/auth/session', '/api/history']) {

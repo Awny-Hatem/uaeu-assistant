@@ -62,6 +62,21 @@ function parseCodes(value: string): string[] {
   return [...new Set(value.split(/[\n,;]+/u).map((part) => part.trim().replace(/[\s-]+/gu, "").toUpperCase()).filter(Boolean))];
 }
 
+function parseCourseGrades(value: string): Record<string, string> | null {
+  const entries = value.split(/[\n;]+/u).map((entry) => entry.trim()).filter(Boolean);
+  const grades: Record<string, string> = {};
+  for (const entry of entries) {
+    const match = entry.match(/^([A-Z]{2,8}[\s-]*\d{3,4}[A-Z]?)\s*:\s*(\d{1,3}(?:\.\d+)?|A-?|B[+-]?|C[+-]?|D\+?)$/iu);
+    if (!match) return null;
+    const code = match[1].replace(/[\s-]+/gu, "").toUpperCase();
+    const grade = match[2].toUpperCase();
+    const numericGrade = Number(grade);
+    if (Object.hasOwn(grades, code) || (/^\d/u.test(grade) && (numericGrade < 0 || numericGrade > 100)) || grade === "F") return null;
+    grades[code] = grade;
+  }
+  return grades;
+}
+
 export function AcademicSequencePlanner({
   open,
   language,
@@ -80,6 +95,7 @@ export function AcademicSequencePlanner({
   const [curriculum, setCurriculum] = useState<CurriculumOptions | null>(null);
   const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
   const [completedText, setCompletedText] = useState("");
+  const [completedGradeText, setCompletedGradeText] = useState("");
   const [currentText, setCurrentText] = useState("");
   const [termText, setTermText] = useState("");
   const [creditLimit, setCreditLimit] = useState("");
@@ -125,6 +141,8 @@ export function AcademicSequencePlanner({
     chooseCohort: "Choose your entry year",
     courses: "Remaining courses to sequence",
     completed: "Completed course codes (comma separated)",
+    grades: "Grades for completed courses (optional)",
+    gradesHint: "Only enter passed courses listed above. Use CODE: grade, for example CSBP219: B or MATH105: 78. These are self-reported.",
     current: "Courses you are currently taking",
     terms: "Planning terms (one term per line)",
     termsHint: "For example: Fall 2026, then Spring 2027. Use up to 8 terms.",
@@ -245,6 +263,12 @@ export function AcademicSequencePlanner({
 
   async function createSequence(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    const completedCourseCodes = parseCodes(completedText);
+    const completedCourseGrades = parseCourseGrades(completedGradeText);
+    if (!completedCourseGrades || Object.keys(completedCourseGrades).some((code) => !completedCourseCodes.includes(code))) {
+      setError("Enter grades as COURSECODE: grade, using only passed courses listed in Completed courses (for example CSBP219: B). Remove failed or unlisted courses.");
+      return;
+    }
     if (!curriculum || selectedCodes.length === 0 || terms.length === 0 || terms.length > 8 || !Number(creditLimit)) {
       setError("Choose at least one remaining course, one planning term, and a valid credit limit.");
       return;
@@ -261,7 +285,8 @@ export function AcademicSequencePlanner({
           programId,
           cohortYear: Number(cohortYear),
           remainingCourseCodes: selectedCodes,
-          completedCourseCodes: parseCodes(completedText),
+          completedCourseCodes,
+          completedCourseGrades,
           currentCourseCodes: parseCodes(currentText),
           terms: terms.map((label, index) => ({ id: `term-${index + 1}`, label, maxCredits: Number(creditLimit) })),
         }),
@@ -421,6 +446,12 @@ export function AcademicSequencePlanner({
                 <textarea value={currentText} onChange={(event) => updateReportedCourses("current", event.target.value)} rows={2} placeholder="CSBP219" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
               </label>
             </div>
+
+            <label className="block text-sm font-bold text-zinc-700">
+              {"grades" in labels ? labels.grades : "Completed course grades (optional)"}
+              <textarea value={completedGradeText} onChange={(event) => setCompletedGradeText(event.target.value)} rows={2} placeholder="CSBP219: B; MATH105: 78" aria-describedby="completed-grade-hint" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+              <span id="completed-grade-hint" className="mt-1 block text-xs font-normal text-zinc-500">{"gradesHint" in labels ? labels.gradesHint : "Enter only passed courses listed above. These grades are self-reported."}</span>
+            </label>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block text-sm font-bold text-zinc-700">
