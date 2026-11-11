@@ -178,6 +178,10 @@ test('cross-tab account change pauses on failed reconciliation then loads only t
   await expect(page.getByTestId('chat-input')).toBeEnabled();
   await expect(page.getByText('ACCOUNT A PRIVATE FOLLOW-UP', { exact: true })).toHaveCount(0);
   expect(rejectedRequests).toBe(1);
+  await expect.poll(() => page.evaluate(({ key, userId }) => {
+    const stored = JSON.parse(localStorage.getItem(key) || '{}');
+    return Object.prototype.hasOwnProperty.call(stored, userId);
+  }, { key: accountKey, userId: otherUser.id })).toBe(true);
   const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}'), accountKey);
   expect(JSON.stringify(stored[otherUser.id])).not.toContain('ACCOUNT A');
   expect(JSON.stringify(stored[user.id])).toContain('ACCOUNT A PRIVATE HISTORY');

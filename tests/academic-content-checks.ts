@@ -207,6 +207,7 @@ check("incomplete database prerequisite wording remains unconfirmed", () => {
   assert.match(record.answer_en, /Fall 2025.*places CSBP340 after CSBP319/);
   const catalogCitation = record.citations[0];
   assert(catalogCitation);
+  assert.ok(catalogCitation.evidenceText, "catalog citation must include the source excerpt supporting its claim");
   assert.match(catalogCitation.evidenceText, /dangling.*or[\s\S]*not established/);
 });
 
