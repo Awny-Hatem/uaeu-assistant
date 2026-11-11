@@ -5194,5 +5194,146 @@
         ]
       }
     ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "social-work",
+    "name": "Bachelor of Social Work",
+    "degreeLevel": "undergraduate",
+    "college": "College of Humanities and Social Sciences",
+    "sources": [
+      { "documentId": "74-social-work-curriculum.md", "title": "UAEU Bachelor of Social Work Model Study Plan (2020–2021 cohort onwards)", "url": "https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_social_work_study_plan.pdf", "lastVerified": "2026-11-11" },
+      { "documentId": "74-social-work-curriculum.md", "title": "UAEU Undergraduate Program Catalog 2021–2022: Social Work Major", "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2021_2022.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "social-work-model-plan-2020-2021-120",
+        "version": "2020-2021-model-plan",
+        "status": "approved",
+        "cohortLabel": "Published 2020–2021 cohort model plan",
+        "effectiveFrom": "2020-08-01",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General education in the model plan", "credits": 33 },
+          { "id": "social-work-major", "name": "Social Work major", "credits": 66 },
+          { "id": "minor", "name": "Minor", "credits": 18 },
+          { "id": "free-electives", "name": "Free elective", "credits": 3 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "social-work-required-courses", "name": "Required Social Work courses", "courseCodes": ["SWK200", "SWK210", "SWK220", "SWK230", "SWK240", "SWK250", "SWK251", "SWK320", "SWK350", "SWK351", "SWK355", "SWK360", "SWK361", "SWK365", "SWK375", "SWK376", "SWK380", "SWK385", "SWK465", "SWK466", "SWK470", "SWK485", "SWK499"], "ruleNote": "The published model plan places SWK465 and SWK470 field practicums in two semesters. The 2021–2022 catalog states students may register for at most 6 additional course credits during each practicum semester." },
+          { "type": "CREDIT_BLOCK", "id": "social-work-general-education", "name": "General Education", "credits": 33, "ruleNote": "Credit total and semester grouping follow the published 2020–2021 model plan; individual course choices depend on the General Education requirements that apply to the student's cohort." },
+          { "type": "CREDIT_BLOCK", "id": "social-work-minor", "name": "Minor", "credits": 18, "ruleNote": "The model plan allocates 18 credits to a minor; it does not identify an individual student's selected minor." },
+          { "type": "CREDIT_BLOCK", "id": "social-work-free-elective", "name": "Free elective", "credits": 3, "ruleNote": "The published model plan allocates 3 free-elective credits." }
+        ],
+        "limitations": [
+          "The model plan is labelled 2020–2021 cohort onwards, but individual cohort applicability remains unresolved; verify the assigned plan in Degree Works or with the College Advising Unit.",
+          "The 120-credit model plan is not a personalized degree audit and does not establish course availability, completed credits, or registration eligibility."
+        ]
+      }
+    ]
+  }
+  ,
+  {
+    "schemaVersion": 1,
+    "id": "english-literature",
+    "name": "Bachelor of Arts in English Literature",
+    "degreeLevel": "undergraduate",
+    "college": "College of Humanities and Social Sciences",
+    "sources": [
+      { "documentId": "75-english-literature-curriculum.md", "title": "UAEU BA English Literature degree requirements", "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-arts-in-english-literature.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "75-english-literature-curriculum.md", "title": "UAEU BA English Literature Model Study Plan (2020-2021 cohort onwards)", "url": "https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_english_literature_study_plan1.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "english-literature-current-page-120",
+        "version": "current-degree-page-2026-11",
+        "status": "approved",
+        "cohortLabel": "Current published degree-page requirements; student cohort mapping unresolved",
+        "effectiveFrom": "2026-11-11",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General Education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 6 },
+          { "id": "compulsory-courses", "name": "Compulsory courses", "credits": 57 },
+          { "id": "supporting-language", "name": "Supporting language courses", "credits": 6 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "electives", "name": "Program electives", "credits": 12 },
+          { "id": "free-electives", "name": "Free electives", "credits": 12 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "english-literature-compulsory", "name": "Compulsory English Literature and supporting major courses", "courseCodes": ["ENG151", "ENG220", "ENG240", "ENG315", "ENG320", "ENG335", "ENG330", "ENG355", "ENG365", "ENG370", "ENG385", "ENG410", "ENG420", "ENG250", "ENG310", "ENG450", "ENG489"] },
+          { "type": "PATHWAY_CHOICE", "id": "english-literature-supporting-language", "name": "Choose one language and complete Levels 1 and 2", "options": [
+            { "id": "korean", "name": "Korean", "type": "COMPOSITE", "credits": 6, "courseCodes": ["KOR101", "KOR102"], "requirements": [{ "type": "REQUIRED_COURSE_SET", "id": "english-language-korean", "name": "Korean Level 1 and Level 2", "courseCodes": ["KOR101", "KOR102"] }] },
+            { "id": "german", "name": "German", "type": "COMPOSITE", "credits": 6, "courseCodes": ["GER101", "GER102"], "requirements": [{ "type": "REQUIRED_COURSE_SET", "id": "english-language-german", "name": "German Level 1 and Level 2", "courseCodes": ["GER101", "GER102"] }] },
+            { "id": "spanish", "name": "Spanish", "type": "COMPOSITE", "credits": 6, "courseCodes": ["SPN101", "SPN102"], "requirements": [{ "type": "REQUIRED_COURSE_SET", "id": "english-language-spanish", "name": "Spanish Level 1 and Level 2", "courseCodes": ["SPN101", "SPN102"] }] },
+            { "id": "chinese", "name": "Chinese", "type": "COMPOSITE", "credits": 6, "courseCodes": ["CHIN101", "CHIN102"], "requirements": [{ "type": "REQUIRED_COURSE_SET", "id": "english-language-chinese", "name": "Chinese Level 1 and Level 2", "courseCodes": ["CHIN101", "CHIN102"] }] },
+            { "id": "french", "name": "French", "type": "COMPOSITE", "credits": 6, "courseCodes": ["FCH101", "FCH102"], "requirements": [{ "type": "REQUIRED_COURSE_SET", "id": "english-language-french", "name": "French Level 1 and Level 2", "courseCodes": ["FCH101", "FCH102"] }] }
+          ] },
+          { "type": "ELECTIVE_GROUP", "id": "english-literature-electives", "name": "English Literature electives", "chooseCount": 4, "credits": 12, "courseCodes": ["ENG300", "ENG354", "EWR380", "EWR390", "ENG330", "ENG314", "ENG340", "ENG360", "ENG361", "ENG368"], "selectionNote": "The official page lists ENG330 in both the compulsory-course and elective lists; confirm with the College Advising Unit whether it may count in both categories for your plan." },
+          { "type": "INTERNSHIP", "id": "english-literature-internship", "name": "Final-semester internship", "courseCode": "ENG490", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false },
+          { "type": "CREDIT_BLOCK", "id": "english-literature-general-education", "name": "General Education", "credits": 21, "ruleNote": "The page requires 21 credits under the published General Education themes; selected courses and language-pair rules may depend on the assigned cohort." },
+          { "type": "CREDIT_BLOCK", "id": "english-literature-college-requirements", "name": "College requirements", "credits": 6, "ruleNote": "Complete HSSR101 and HSSR103 as listed on the degree page." },
+          { "type": "CREDIT_BLOCK", "id": "english-literature-free-electives", "name": "Free electives", "credits": 12, "ruleNote": "The published degree page requires 12 free-elective credits." }
+        ],
+        "limitations": [
+          "The degree page gives current requirements, while the linked model plan is labelled 2020-2021 cohort onwards; the current page does not map these requirements to each student's assigned cohort.",
+          "The page lists ENG330 as both compulsory and an elective; do not assume double counting without advisor confirmation.",
+          "Published requirements do not establish completed credits, personal eligibility, offered sections, or an individual degree audit."
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "tourism-studies",
+    "name": "Bachelor of Arts in Tourism Studies",
+    "degreeLevel": "undergraduate",
+    "college": "College of Humanities and Social Sciences",
+    "sources": [
+      { "documentId": "76-tourism-studies-curriculum.md", "title": "UAEU BA Tourism Studies degree requirements", "url": "https://uaeu.ac.ae/en/chss/programs/undergraduate/bachelor-of-arts-in-tourism-studies.shtml", "lastVerified": "2026-11-11" },
+      { "documentId": "76-tourism-studies-curriculum.md", "title": "UAEU BA Tourism Studies Model Study Plan", "url": "https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_tourism_study_plan.pdf", "lastVerified": "2026-11-11" }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "tourism-studies-current-page-120",
+        "version": "current-degree-page-2026-11",
+        "status": "approved",
+        "cohortLabel": "Current published degree-page requirements; student cohort mapping unresolved",
+        "effectiveFrom": "2026-11-11",
+        "cohortMapping": "unresolved",
+        "totalCredits": 120,
+        "creditBuckets": [
+          { "id": "general-education", "name": "General Education", "credits": 21 },
+          { "id": "college-requirements", "name": "College requirements", "credits": 6 },
+          { "id": "tourism-major", "name": "Tourism major", "credits": 45 },
+          { "id": "internship", "name": "Internship", "credits": 6 },
+          { "id": "electives", "name": "Program electives", "credits": 21 },
+          { "id": "supplemental-languages", "name": "Supplemental language courses", "credits": 9 },
+          { "id": "free-electives", "name": "Free electives", "credits": 12 }
+        ],
+        "requirements": [
+          { "type": "REQUIRED_COURSE_SET", "id": "tourism-major", "name": "Tourism Studies major and required history courses", "courseCodes": ["TOR101", "TOR140", "TOR205", "TOR222", "TOR263", "TOR350", "TOR403", "TOR404", "TOR416", "TOR421", "TOR485", "HIS121", "HIS133", "HIS212", "HIS381"] },
+          { "type": "ELECTIVE_GROUP", "id": "tourism-elective-cluster-one", "name": "Tourism elective cluster 1", "chooseCount": 3, "credits": 9, "courseCodes": ["HIS312", "PSG120", "PSG250", "MKTG200", "MGMT201", "TOR202", "GEO432"] },
+          { "type": "ELECTIVE_GROUP", "id": "tourism-elective-cluster-two", "name": "Tourism elective cluster 2", "chooseCount": 4, "credits": 12, "courseCodes": ["HIS122", "HIS215", "HIS217", "HIS310", "HIS318", "HIS372", "HIS440", "HIS471", "TOR322"] },
+          { "type": "PATHWAY_CHOICE", "id": "tourism-language-pathway", "name": "Choose one supplemental-language pathway", "options": [
+            { "id": "chinese", "name": "Chinese", "type": "ELECTIVE_GROUP", "credits": 9, "chooseCount": 3, "courseCodes": ["CHIN101", "CHIN102", "CHIN201"] },
+            { "id": "french", "name": "French", "type": "ELECTIVE_GROUP", "credits": 9, "chooseCount": 3, "courseCodes": ["FCH101", "FCH102", "FCH202"] },
+            { "id": "korean", "name": "Korean", "type": "ELECTIVE_GROUP", "credits": 9, "chooseCount": 3, "courseCodes": ["KOR101", "KOR102", "KOR202"] },
+            { "id": "spanish", "name": "Spanish", "type": "ELECTIVE_GROUP", "credits": 9, "chooseCount": 3, "courseCodes": ["SPN101", "SPN102", "SPN201"] },
+            { "id": "german", "name": "German", "type": "ELECTIVE_GROUP", "credits": 9, "chooseCount": 3, "courseCodes": ["GER101", "GER102", "GER201"] }
+          ] },
+          { "type": "INTERNSHIP", "id": "tourism-internship", "name": "Final-semester Tourism internship", "courseCode": "TOR440", "credits": 6, "finalSemesterOnly": true, "otherCoursesAllowed": false },
+          { "type": "CREDIT_BLOCK", "id": "tourism-general-education", "name": "General Education", "credits": 21, "ruleNote": "The degree page requires 21 credits under the published General Education themes; choices may depend on the assigned cohort." },
+          { "type": "CREDIT_BLOCK", "id": "tourism-college-requirements", "name": "College requirements", "credits": 6, "ruleNote": "Complete HSSR101 and HSSR103 as listed on the degree page." },
+          { "type": "CREDIT_BLOCK", "id": "tourism-free-electives", "name": "Free electives", "credits": 12, "ruleNote": "The published degree page requires 12 free-elective credits." }
+        ],
+        "limitations": [
+          "The degree page publishes a 120-credit curriculum but does not establish its cohort-specific applicability; verify the assigned plan in Degree Works or with the College Advising Unit.",
+          "Published requirements do not establish completed credits, personal eligibility, offered sections, or an individual degree audit."
+        ]
+      }
+    ]
   }
 ]

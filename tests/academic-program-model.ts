@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 43, "forty-three current or historical program records have structured evidence records");
+assert.equal(programs.length, 46, "forty-six current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -22,6 +22,64 @@ assert.equal(unmodeledAudit?.auditStatus, "PROGRAM_NOT_MODELED");
 assert.equal(unmodeledAudit?.programId, "psychology");
 assert.match(JSON.stringify(unmodeledAudit?.sources), /undergraduate\/programs\/index\.shtml/);
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
+
+const socialWork = getProgramCurriculum("social-work");
+assert.ok(socialWork);
+assert.equal(socialWork.curriculum.totalCredits, 120);
+assert.deepEqual(socialWork.curriculum.creditBuckets?.map(({ credits }) => credits), [33, 66, 18, 3]);
+assert.equal(socialWork.curriculum.cohortMapping, "unresolved", "the published model-plan label is not assigned to a student's cohort automatically");
+const socialWorkMajor = socialWork.curriculum.requirements.find((item) => item.id === "social-work-required-courses");
+assert.ok(socialWorkMajor?.type === "REQUIRED_COURSE_SET");
+assert.equal(socialWorkMajor.courseCodes.length, 23);
+assert.ok(socialWorkMajor.courseCodes.includes("SWK465") && socialWorkMajor.courseCodes.includes("SWK470"));
+assert.match(socialWorkMajor.ruleNote ?? "", /at most 6 additional course credits/i);
+const socialWorkAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Social Work?" }]);
+assert.equal(socialWorkAnswer?.programId, "social-work");
+assert.match(renderProgramRequirementsAssessment(socialWorkAnswer!, "en"), /SWK465/);
+assert.match(renderProgramRequirementsAssessment(socialWorkAnswer!, "en"), /SWK470/);
+assert.match(JSON.stringify(socialWork.program.sources), /chss_bsc_social_work_study_plan\.pdf/);
+
+const englishLiterature = getProgramCurriculum("english-literature");
+assert.ok(englishLiterature);
+assert.equal(englishLiterature.curriculum.totalCredits, 120);
+assert.deepEqual(englishLiterature.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 57, 6, 6, 12, 12]);
+assert.equal(englishLiterature.curriculum.cohortMapping, "unresolved");
+const engCore = englishLiterature.curriculum.requirements.find((item) => item.id === "english-literature-compulsory");
+assert.ok(engCore?.type === "REQUIRED_COURSE_SET");
+assert.equal(engCore.courseCodes.length, 17);
+assert.ok(engCore.courseCodes.includes("ENG489"));
+const engInternship = englishLiterature.curriculum.requirements.find((item) => item.id === "english-literature-internship");
+assert.ok(engInternship?.type === "INTERNSHIP");
+assert.equal(engInternship.courseCode, "ENG490");
+assert.equal(engInternship.otherCoursesAllowed, false);
+const englishLanguage = englishLiterature.curriculum.requirements.find((item) => item.id === "english-literature-supporting-language");
+assert.ok(englishLanguage?.type === "PATHWAY_CHOICE");
+assert.equal(englishLanguage.options.length, 5);
+assert.ok(englishLanguage.options.every((option) => option.type === "COMPOSITE" && option.credits === 6));
+const englishAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in English Literature?" }]);
+assert.equal(englishAnswer?.programId, "english-literature");
+assert.match(renderProgramRequirementsAssessment(englishAnswer!, "en"), /ENG490/);
+assert.match(JSON.stringify(englishLiterature.program.sources), /bachelor-of-arts-in-english-literature\.shtml/);
+
+const tourism = getProgramCurriculum("tourism-studies");
+assert.ok(tourism);
+assert.equal(tourism.curriculum.totalCredits, 120);
+assert.deepEqual(tourism.curriculum.creditBuckets?.map(({ credits }) => credits), [21, 6, 45, 6, 21, 9, 12]);
+assert.equal(tourism.curriculum.cohortMapping, "unresolved");
+assert.equal(tourism.curriculum.requirements.find((item) => item.id === "tourism-major")?.type, "REQUIRED_COURSE_SET");
+const tourismClusters = tourism.curriculum.requirements.filter((item) => item.type === "ELECTIVE_GROUP");
+assert.deepEqual(tourismClusters.map(({ chooseCount }) => chooseCount), [3, 4]);
+const tourismLanguages = tourism.curriculum.requirements.find((item) => item.id === "tourism-language-pathway");
+assert.ok(tourismLanguages?.type === "PATHWAY_CHOICE");
+assert.equal(tourismLanguages.options.length, 5);
+const tourismInternship = tourism.curriculum.requirements.find((item) => item.id === "tourism-internship");
+assert.ok(tourismInternship?.type === "INTERNSHIP");
+assert.equal(tourismInternship.courseCode, "TOR440");
+assert.equal(tourismInternship.otherCoursesAllowed, false);
+const tourismAnswer = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Tourism Studies?" }]);
+assert.equal(tourismAnswer?.programId, "tourism-studies");
+assert.match(renderProgramRequirementsAssessment(tourismAnswer!, "en"), /TOR440/);
+assert.match(JSON.stringify(tourism.program.sources), /bachelor-of-arts-in-tourism-studies\.shtml/);
 
 for (const programId of ["biology", "biochemistry"]) {
   const program = getProgramCurriculum(programId);
