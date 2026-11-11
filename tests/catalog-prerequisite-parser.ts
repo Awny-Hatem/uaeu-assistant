@@ -165,9 +165,9 @@ const reviewedRepairs = [
   },
 ];
 for (const { code, expected } of reviewedRepairs) {
-  const course = catalog.courses.find((candidate) => candidate.code === code);
-  assert.ok(course);
-  assert.deepEqual(parseCatalogPrerequisiteExpression(course), expected, `${code} must retain its official AND/OR meaning after the exact source repair`);
+  const courseRecord: OfficialCourseRecord | undefined = catalog.courses.find((candidate) => candidate.code === code);
+  assert.ok(courseRecord);
+  assert.deepEqual(parseCatalogPrerequisiteExpression(courseRecord), expected, `${code} must retain its official AND/OR meaning after the exact source repair`);
 }
 const chme330 = catalog.courses.find((course) => course.code === "CHME330");
 assert.ok(chme330);
