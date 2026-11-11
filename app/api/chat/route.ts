@@ -623,6 +623,24 @@ function groundedClarification(kind: GroundedAnswer["clarification"], query: str
   return questions[kind][locale === "ar" ? 1 : 0];
 }
 
+function clarificationMatchesPlan(kind: GroundedAnswer["clarification"], plan: ReturnType<typeof createExecutionPlan>): boolean {
+  if (!kind) return true;
+  const missing = plan.missingContext.join(" ").toLowerCase();
+  const required: Partial<Record<Exclude<GroundedAnswer["clarification"], "" | "unverified_fact" | "individual_record">, RegExp>> = {
+    applicant_category: /applicant category/,
+    degree_level: /degree|program level/,
+    term_year: /term|year|intake/,
+    course_identity: /course code|degree program/,
+    cohort: /cohort|admission year|degree program/,
+    student_status: /student status/,
+    campus_or_branch: /campus|branch/,
+    request_type: /request type|deadline process|service you mean/,
+  };
+  if (kind === "unverified_fact") return true;
+  if (kind === "individual_record") return plan.needs.studentData;
+  return Boolean(required[kind]?.test(missing));
+}
+
 // This is an application capability boundary, not a claim about university
 // policy. Keep it outside source-grounded claims and persist the same displayed
 // content. It supplements the procedure instead of replacing useful steps.
@@ -1168,6 +1186,9 @@ export async function POST(req: Request) {
     }
     if (result.grounded) {
       if (result.grounded.claims.length && result.grounded.disposition === "abstain") result.grounded.disposition = "clarify";
+      if (v3EvidenceMode && executionPlan && !clarificationMatchesPlan(result.grounded.clarification, executionPlan)) {
+        result.grounded.clarification = "";
+      }
       if (result.grounded.claims.length && result.grounded.clarification === "unverified_fact") {
         result.grounded.clarification = understandQuery(routingQuery).codes.length ? "individual_record" : "";
       }
@@ -1194,18 +1215,19 @@ export async function POST(req: Request) {
         ? "لتطبيق القاعدة على مقررك تحديدًا، أرسل رمز المقرر وبرنامجك الدراسي، واذكر ما إذا كان المقرر إجباريًا أم اختياريًا."
         : "To apply this to your specific course, share its course code and your degree program, and say whether it is required or elective."
       : "";
-    const responseClarification = [remainingClarification, courseIdentityClarification].filter(Boolean).join("\n\n");
+    const responseClarification = courseIdentityClarification;
+    const hasClarification = Boolean(remainingClarification || courseIdentityClarification);
     const payload: AssistantPayload = {
       role: "assistant",
       content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, routingQuery) : [finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), responseClarification].filter(Boolean).join("\n\n"), latest, locale),
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
       stateLabel: escalationReason ? "model_escalation" : usedOfficialWebResearch ? "official_web_research" : "local_db",
-      ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || responseClarification ? "CONDITIONAL" : "VERIFIED" } : {}),
+      ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || hasClarification ? "CONDITIONAL" : "VERIFIED" } : {}),
       citations: escalationReason
         ? []
         : uniqueCitations(selectedSources.map(({ citation }) => citation)),
-      disposition: escalationReason || responseClarification ? "clarify" : "answer",
+      disposition: escalationReason || hasClarification ? "clarify" : "answer",
       communications,
       escalationReason,
       provider: result.provider,
@@ -1217,7 +1239,7 @@ export async function POST(req: Request) {
         return `${source.row.source}#${id}`;
       }) })),
       grounding: groundingTrace,
-      clarificationReason: escalationReason ? "missing_official_evidence" : responseClarification ? "additional_scope_needed" : undefined,
+      clarificationReason: escalationReason ? "missing_official_evidence" : hasClarification ? "additional_scope_needed" : undefined,
     };
 
     if (shouldPersistServerSide && userId) {
