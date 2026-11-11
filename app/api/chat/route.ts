@@ -1212,7 +1212,8 @@ export async function POST(req: Request) {
     const usedOfficialWebResearch = selectedSources.some(({ row }) => row.source.startsWith("official-web:"));
     const remainingClarification = result.grounded && result.grounded.clarification !== "individual_record"
       ? groundedClarification(result.grounded.clarification, answerRequest, locale) : "";
-    const needsCourseIdentity = executionPlan?.mode === "COMPLEX_SCENARIO" &&
+    const needsCourseIdentity = (executionPlan?.mode === "COMPLEX_SCENARIO" ||
+      executionPlan?.requestedFacts.includes("undergraduate failed course repeat policy")) &&
       executionPlan.missingContext.some((item) => item.includes("exact course code or degree program"));
     const courseIdentityClarification = needsCourseIdentity
       ? locale === "ar"
