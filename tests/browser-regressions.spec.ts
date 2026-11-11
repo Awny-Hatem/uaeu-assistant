@@ -108,7 +108,7 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
       } });
     }
     if (!url.searchParams.has('programId')) {
-      return route.fulfill({ json: { programs: [{ id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology', cohorts: [2025] }] } });
+      return route.fulfill({ json: { programs: [{ id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology', curriculumAvailable: true, cohorts: [2025] }] } });
     }
     if (!url.searchParams.has('cohortYear')) return route.fulfill({ json: { programId: 'bsc-computer-science', cohorts: [2025] } });
     return route.fulfill({ json: {

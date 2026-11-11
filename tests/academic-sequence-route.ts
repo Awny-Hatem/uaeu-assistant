@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { loadOfficialCourseCatalog } from "../lib/academic/course-catalog";
+import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-program-catalog";
 import { listAcademicPrograms, getProgramCurriculum, type ProgramRequirement } from "../lib/academic/program-curricula";
 import { GET, POST } from "../app/api/academic/sequence/route";
 
@@ -33,6 +34,8 @@ function internshipCodes(requirements: ProgramRequirement[]): Set<string> {
 
 const catalog = loadOfficialCourseCatalog();
 assert.ok(catalog);
+const undergraduatePrograms = loadUndergraduateProgramCatalog().programs;
+const normalizeProgramName = (name: string) => name.normalize("NFKC").replace(/[^\p{L}\p{N}]/gu, "").toLocaleLowerCase("en");
 const asOf = new Date().toISOString().slice(0, 10);
 const candidate = listAcademicPrograms().flatMap((program) =>
   Array.from({ length: 37 }, (_, index) => 1990 + index)
@@ -54,12 +57,14 @@ const candidate = listAcademicPrograms().flatMap((program) =>
     }),
 )[0];
 assert.ok(candidate, "a fresh, cohort-matched program and catalog course are required for the happy-path route check");
+const catalogCandidate = undergraduatePrograms.find((program) => normalizeProgramName(program.title) === normalizeProgramName(candidate.program.name));
+if (!catalogCandidate) throw new Error("the selected curriculum must be linked to a published undergraduate program");
 
 const request = (overrides: Record<string, unknown> = {}) => new Request("http://localhost/api/academic/sequence", {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({
-    programId: candidate.program.id,
+    programId: catalogCandidate!.id,
     cohortYear: candidate.cohortYear,
     remainingCourseCodes: [candidate.course.code],
     completedCourseCodes: [],
@@ -74,13 +79,27 @@ async function main() {
   assert.equal(programListResponse.status, 200);
   const programList = await programListResponse.json();
   assert.equal(programList.programs.length, 55, "the picker covers the complete undergraduate degree inventory");
+  assert.ok(programList.programs.every((program: { curriculumAvailable: boolean }) => program.curriculumAvailable), "all 55 catalog degrees resolve to one curriculum model");
+  for (const entry of programList.programs as { id: string; curriculumAvailable: boolean; cohorts: number[] }[]) {
+    const response = await GET(new Request(`http://localhost/api/academic/sequence?programId=${entry.id}`));
+    assert.equal(response.status, 200, `${entry.id} resolves through the student-facing catalog ID`);
+    const body = await response.json();
+    assert.deepEqual(body.cohorts, entry.cohorts, `${entry.id} returns its advertised cohorts`);
+    if (entry.cohorts.length) {
+      const cohortResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${entry.id}&cohortYear=${entry.cohorts[0]}`));
+      assert.equal(cohortResponse.status, 200, `${entry.id}/${entry.cohorts[0]} loads its curriculum options`);
+      const cohortBody = await cohortResponse.json();
+      assert.equal(cohortBody.cohort.year, entry.cohorts[0]);
+      assert.ok(cohortBody.courses.length > 0, `${entry.id} exposes courses for a selectable cohort`);
+    }
+  }
 
-  const programCohortResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${candidate.program.id}`));
+  const programCohortResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${catalogCandidate!.id}`));
   assert.equal(programCohortResponse.status, 200);
   const programCohorts = await programCohortResponse.json();
   assert.ok(programCohorts.cohorts.includes(candidate.cohortYear));
 
-  const courseOptionsResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${candidate.program.id}&cohortYear=${candidate.cohortYear}`));
+  const courseOptionsResponse = await GET(new Request(`http://localhost/api/academic/sequence?programId=${catalogCandidate!.id}&cohortYear=${candidate.cohortYear}`));
   assert.equal(courseOptionsResponse.status, 200);
   const courseOptions = await courseOptionsResponse.json();
   assert.ok(courseOptions.courses.some((course: { code: string }) => course.code === candidate.course.code));
@@ -123,7 +142,7 @@ async function main() {
     courses: term.courses.map(({ code }) => code),
   })), [{ id: "spring", courses: ["ITBP496"] }], "the curriculum internship is restricted to the final term");
 
-  console.log(`Academic sequence API passed for ${candidate.program.id}/${candidate.cohortYear}/${candidate.course.code}: 55-program picker, cohort/curriculum lookup, catalog-backed course options, sequence constraints, no-store response, overlap rejection, and out-of-program rejection.`);
+  console.log(`Academic sequence API passed for ${catalogCandidate!.id}/${candidate.cohortYear}/${candidate.course.code}: all 55 catalog IDs resolve to curriculum records, cohort/curriculum lookup, catalog-backed course options, sequence constraints, no-store response, overlap rejection, and out-of-program rejection.`);
 }
 
 void main();

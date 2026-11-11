@@ -5,7 +5,7 @@ import type { FormEvent } from "react";
 import { GraduationCap, LoaderCircle, X } from "lucide-react";
 import type { UiLocale } from "@/lib/ui-copy";
 
-type ProgramOption = { id: string; name: string; college: string; cohorts: number[] };
+type ProgramOption = { id: string; name: string; college: string; curriculumAvailable: boolean; cohorts: number[] };
 type CourseOption = {
   code: string;
   title: string;
@@ -257,7 +257,7 @@ export function AcademicSequencePlanner({
                 required
               >
                 <option value="">{loadingPrograms ? labels.loadingPrograms : labels.chooseProgram}</option>
-                {programs.map((program) => <option key={program.id} value={program.id}>{program.name} — {program.college}</option>)}
+                {programs.map((program) => <option key={program.id} value={program.id} disabled={!program.curriculumAvailable || !program.cohorts.length}>{program.name} — {program.college}</option>)}
               </select>
             </label>
             <label className="block text-sm font-bold text-zinc-700">

@@ -26,6 +26,23 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function normalizedProgramName(value: string): string {
+  return value.normalize("NFKC").replace(/[^\p{L}\p{N}]/gu, "").toLocaleLowerCase("en");
+}
+
+/** Map catalog-facing program IDs to curriculum IDs without guessing on ambiguity. */
+function curriculumForCatalogProgram(
+  catalogProgram: ReturnType<typeof loadUndergraduateProgramCatalog>["programs"][number],
+  curriculumById: Map<string, AcademicProgram>,
+  curricula: AcademicProgram[],
+): AcademicProgram | undefined {
+  const exact = curriculumById.get(catalogProgram.id);
+  if (exact) return exact;
+  const title = normalizedProgramName(catalogProgram.title);
+  const matches = curricula.filter((program) => normalizedProgramName(program.name) === title);
+  return matches.length === 1 ? matches[0] : undefined;
+}
+
 function normalizeCourseCodes(value: unknown): string[] | null {
   if (!Array.isArray(value) || value.length > MAX_COURSES) return null;
   if (!value.every((code) => typeof code === "string" && COURSE_CODE.test(code.trim().toUpperCase()))) return null;
@@ -71,13 +88,14 @@ function isFresh(date: string, asOf: string): boolean {
   return Number.isFinite(ageDays) && ageDays >= 0 && ageDays <= MAX_EVIDENCE_AGE_DAYS;
 }
 
-function availableCohorts(program: AcademicProgram, asOf: string): number[] {
+function availableCohorts(program: AcademicProgram, asOf: string, availableCourseCodes: ReadonlySet<string>): number[] {
   const years: number[] = [];
   const lastYear = Number(asOf.slice(0, 4));
   for (let year = 1990; year <= lastYear; year += 1) {
     const selected = getProgramCurriculum(program.id, year);
     if (selected?.cohortMatched && selected.curriculum.cohortMapping !== "unresolved" &&
-        program.sources.every((source) => isFresh(source.lastVerified, asOf))) years.push(year);
+        program.sources.every((source) => isFresh(source.lastVerified, asOf)) &&
+        [...collectRequirementCourses(selected.curriculum.requirements)].some((code) => availableCourseCodes.has(code))) years.push(year);
   }
   return years;
 }
@@ -125,17 +143,22 @@ export async function GET(request: Request): Promise<Response> {
   const cohortValue = url.searchParams.get("cohortYear");
   const asOf = new Date().toISOString().slice(0, 10);
   const catalogPrograms = loadUndergraduateProgramCatalog().programs;
-  const curriculumById = new Map(listAcademicPrograms().map((program) => [program.id, program]));
+  const curricula = listAcademicPrograms();
+  const curriculumById = new Map(curricula.map((program) => [program.id, program]));
+  const courseCatalog = loadOfficialCourseCatalog();
+  const availableCourseCodes = new Set(courseCatalog?.courses.filter((course) => course.creditHours !== null && course.creditHours > 0)
+    .map((course) => course.code.toUpperCase()) ?? []);
 
   if (!programId) {
     if (cohortValue) return json({ error: "programId is required when cohortYear is supplied." }, 400);
     const programs = catalogPrograms.map((catalogProgram) => {
-      const model = curriculumById.get(catalogProgram.id);
+      const model = curriculumForCatalogProgram(catalogProgram, curriculumById, curricula);
       return {
         id: catalogProgram.id,
         name: model?.name ?? catalogProgram.title,
         college: catalogProgram.college,
-        cohorts: model ? availableCohorts(model, asOf) : [],
+        curriculumAvailable: Boolean(model),
+        cohorts: model ? availableCohorts(model, asOf, availableCourseCodes) : [],
       };
     });
     return json({ programs, asOf });
@@ -143,16 +166,16 @@ export async function GET(request: Request): Promise<Response> {
 
   if (!/^[a-z0-9-]{2,80}$/u.test(programId)) return json({ error: "Invalid programId." }, 400);
   const catalogProgram = catalogPrograms.find((program) => program.id === programId);
-  const program = curriculumById.get(programId);
+  const program = catalogProgram ? curriculumForCatalogProgram(catalogProgram, curriculumById, curricula) : undefined;
   if (!catalogProgram || !program) return json({ error: "That program is not in the undergraduate curriculum catalog." }, 404);
-  const cohorts = availableCohorts(program, asOf);
+  const cohorts = availableCohorts(program, asOf, availableCourseCodes);
   if (!cohortValue) return json({ programId, cohorts });
   if (!/^\d{4}$/u.test(cohortValue)) return json({ error: "cohortYear must be a four-digit entry year." }, 400);
   const cohortYear = Number(cohortValue);
   if (!cohorts.includes(cohortYear)) {
     return json({ error: "No fresh, cohort-matched curriculum is available for this program and entry year.", resolutionState: "NEEDS_COHORT_CONFIRMATION", cohorts }, 409);
   }
-  const selection = getProgramCurriculum(programId, cohortYear);
+  const selection = getProgramCurriculum(program.id, cohortYear);
   if (!selection) return json({ error: "The cohort curriculum could not be resolved." }, 409);
 
   const catalog = loadOfficialCourseCatalog();
@@ -220,7 +243,13 @@ export async function POST(request: Request): Promise<Response> {
     return json({ error: "A course cannot appear in more than one of the completed, current, or remaining lists." }, 400);
   }
 
-  const selectedCurriculum = getProgramCurriculum(programId, Number(cohortYear));
+  const catalogProgram = loadUndergraduateProgramCatalog().programs.find((item) => item.id === programId);
+  const curricula = listAcademicPrograms();
+  const curriculumById = new Map(curricula.map((item) => [item.id, item]));
+  const mappedProgram = catalogProgram
+    ? curriculumForCatalogProgram(catalogProgram, curriculumById, curricula)
+    : curriculumById.get(programId);
+  const selectedCurriculum = mappedProgram ? getProgramCurriculum(mappedProgram.id, Number(cohortYear)) : null;
   if (!selectedCurriculum?.cohortMatched || selectedCurriculum.curriculum.cohortMapping === "unresolved") {
     return json({
       error: "The available curriculum cannot be matched confidently to that entry cohort. I will not create a cohort-specific sequence from a different plan.",
