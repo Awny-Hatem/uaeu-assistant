@@ -190,6 +190,40 @@ async function main() {
   assert.match(String(mechCourses.payload.content), /MECH485/);
   assert.match(String(mechCourses.payload.content), /MECH490/);
 
+  const partialDegreeAudit = await askMessages([
+    { role: "user", content: "I passed CSBP119 with C." },
+    { role: "user", content: "I passed MATH105 with B." },
+    { role: "user", content: "I am in Information Technology." },
+    { role: "user", content: "What do I still need to graduate from my degree?" },
+  ], "203.0.113.247");
+  assert.equal(partialDegreeAudit.payload.stateLabel, "v3_degree_audit_preview");
+  assert.equal(partialDegreeAudit.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(partialDegreeAudit.payload.content), /Preliminary requirement comparison/);
+  assert.match(String(partialDegreeAudit.payload.content), /CSBP119/);
+  assert.match(String(partialDegreeAudit.payload.content), /MATH105/);
+  assert.match(String(partialDegreeAudit.payload.content), /not an official degree audit/i);
+
+  const degreeAuditMissingProgram = await askMessages([
+    { role: "user", content: "I passed CSBP119 with C." },
+    { role: "user", content: "What do I still need to graduate?" },
+  ], "203.0.113.249");
+  assert.equal(degreeAuditMissingProgram.payload.resolutionState, "MISSING_CONTEXT");
+  assert.match(String(degreeAuditMissingProgram.payload.content), /what is your major/i);
+
+  const inProgressDegreeRequirement = await askMessages([
+    { role: "user", content: "I am currently taking BIOC100." },
+    { role: "user", content: "I am in Information Technology." },
+    { role: "user", content: "What do I still need to graduate from my degree?" },
+  ], "203.0.113.250");
+  assert.match(String(inProgressDegreeRequirement.payload.content), /Choose one science course/);
+  assert.match(String(inProgressDegreeRequirement.payload.content), /IN_PROGRESS/);
+
+  const unmodeledDegreeAudit = await ask("What do I still need to graduate in Finance?", "203.0.113.248");
+  assert.equal(unmodeledDegreeAudit.payload.stateLabel, "v3_degree_audit_preview");
+  assert.equal(unmodeledDegreeAudit.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(unmodeledDegreeAudit.payload.content), /structured curriculum model/);
+  assert.doesNotMatch(String(unmodeledDegreeAudit.payload.content), /remaining courses?:\s+[A-Z]{2,8}\d{3,4}/i);
+
   const networkSecuritySubstitution = await ask(
     "In Computer Engineering, take Networking Security instead of Selected Topics in Computer Engineering.",
     "203.0.113.233",

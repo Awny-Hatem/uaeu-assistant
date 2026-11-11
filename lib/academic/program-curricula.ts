@@ -43,7 +43,7 @@ export type AcademicProgram = {
   curriculumVersions: CurriculumVersion[];
 };
 
-const COURSE_CODE = /^[A-Z]{2,5}\d{3,4}$/;
+const COURSE_CODE = /^[A-Z]{2,8}\d{3,4}[A-Z]?$/;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -168,7 +168,7 @@ export type ProgramCourseSubstitutionAssessment = ProgramCreditAssessment & {
   sharedOption?: PathwayOption;
 };
 
-function programIdInText(text: string): string | undefined {
+export function programIdInText(text: string): string | undefined {
   if (/\b(?:information technology|\bIT\s+degree)\b/i.test(text)) return "bsc-information-technology";
   if (/\bmechanical engineering\b/i.test(text)) return "bsc-mechanical-engineering";
   if (/\bcomputer (?:and )?(?:artificial intelligence|AI) engineering\b/i.test(text)) return "bsc-computer-ai-engineering";
@@ -178,7 +178,7 @@ function programIdInText(text: string): string | undefined {
   return undefined;
 }
 
-function cohortYearInText(text: string): number | undefined {
+export function cohortYearInText(text: string): number | undefined {
   const match = text.match(/\b(?:cohort|entry|entered|joined|started|admitted)[^.!?]{0,80}?\b(20\d{2})\b/i) ??
     text.match(/\bcohort\s+(?:is\s+|of\s+)?(20\d{2})\b/i) ??
     text.match(/\b(20\d{2})\s*(?:cohort|entry|entrant|intake)\b/i);

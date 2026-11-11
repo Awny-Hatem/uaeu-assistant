@@ -32,6 +32,7 @@ import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessCatalogPrerequisiteConversation } from "@/lib/academic/catalog-prerequisite-assessment";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
+import { assessDegreeAuditConversation, renderDegreeAuditAssessment } from "@/lib/academic/degree-audit";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
 import { answerOfficialCourseCatalogQuestion } from "@/lib/academic/course-catalog";
 import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
@@ -1088,6 +1089,30 @@ export async function POST(req: Request) {
         citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
         evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
         topic: programId,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const degreeAuditAssessment = assessDegreeAuditConversation(
+      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    );
+    if (degreeAuditAssessment) {
+      const auditResolution = degreeAuditAssessment.auditStatus === "PROGRAM_NOT_MODELED"
+        ? "UNSUPPORTED"
+        : degreeAuditAssessment.auditStatus === "COHORT_MODEL_UNAVAILABLE" || !degreeAuditAssessment.hasCourseData
+          ? "MISSING_CONTEXT"
+          : "CONDITIONAL";
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: renderDegreeAuditAssessment(degreeAuditAssessment, locale),
+        source: "rag",
+        stateLabel: "v3_degree_audit_preview",
+        resolutionState: auditResolution,
+        disposition: auditResolution === "CONDITIONAL" ? "answer" : "clarify",
+        citations: degreeAuditAssessment.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+        evidenceIds: [`degree-audit-preview:${degreeAuditAssessment.programId}:${degreeAuditAssessment.curriculumVersion}`],
+        topic: degreeAuditAssessment.programId,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
