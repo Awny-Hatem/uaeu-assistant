@@ -274,7 +274,16 @@ export function AcademicSequencePlanner({
   }
 
   function toggleCourse(code: string) {
+    if (completedAndCurrent.has(code)) return;
     setSelectedCodes((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
+  }
+
+  function updateReportedCourses(kind: "completed" | "current", value: string) {
+    const otherValue = kind === "completed" ? currentText : completedText;
+    const reported = new Set([...parseCodes(value), ...parseCodes(otherValue)]);
+    if (kind === "completed") setCompletedText(value);
+    else setCurrentText(value);
+    setSelectedCodes((current) => current.filter((code) => !reported.has(code)));
   }
 
   function addOutstandingRequiredCourses() {
@@ -377,12 +386,12 @@ export function AcademicSequencePlanner({
             </section>
 
             <fieldset className="rounded-lg border border-zinc-200 p-4">
-              <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({selectedCodes.length} {labels.selected})</legend>
+              <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({selectedCodes.filter((code) => !completedAndCurrent.has(code)).length} {labels.selected})</legend>
               <p className="mb-3 text-xs leading-5 text-zinc-600">{requirementCopy.requiredPrompt}</p>
               <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
                 {curriculum.courses.map((course) => (
                   <label key={course.code} className="flex cursor-pointer items-start gap-3 rounded-md px-2 py-2 hover:bg-zinc-50">
-                    <input type="checkbox" checked={selectedCodes.includes(course.code)} onChange={() => toggleCourse(course.code)} className="mt-1 h-4 w-4 accent-[#E0182D]" />
+                    <input type="checkbox" checked={selectedCodes.includes(course.code)} disabled={completedAndCurrent.has(course.code)} onChange={() => toggleCourse(course.code)} className="mt-1 h-4 w-4 accent-[#E0182D] disabled:cursor-not-allowed disabled:opacity-50" />
                     <span className="min-w-0 text-sm">
                       <span className="font-bold">{course.code}</span> · {course.title} <span className="text-zinc-500">({course.credits} cr)</span>
                       <span className="block text-xs text-zinc-500">{course.groups.map((group) => group.name).join(" · ")}</span>
@@ -396,11 +405,11 @@ export function AcademicSequencePlanner({
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block text-sm font-bold text-zinc-700">
                 {labels.completed}
-                <textarea value={completedText} onChange={(event) => setCompletedText(event.target.value)} rows={2} placeholder="CSBP119, MATH105" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <textarea value={completedText} onChange={(event) => updateReportedCourses("completed", event.target.value)} rows={2} placeholder="CSBP119, MATH105" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
               </label>
               <label className="block text-sm font-bold text-zinc-700">
                 {labels.current}
-                <textarea value={currentText} onChange={(event) => setCurrentText(event.target.value)} rows={2} placeholder="CSBP219" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <textarea value={currentText} onChange={(event) => updateReportedCourses("current", event.target.value)} rows={2} placeholder="CSBP219" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
               </label>
             </div>
 

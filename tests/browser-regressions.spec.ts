@@ -128,7 +128,11 @@ test('guided academic planner selects a cohort and displays a sourced conditiona
   await expect(dialog.getByText(/CSBP119.*Introduction to Programming/)).toBeVisible();
   await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
   await expect(dialog.getByRole('checkbox')).toBeChecked();
+  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105, CSBP119');
+  await expect(dialog.getByRole('checkbox')).not.toBeChecked();
+  await expect(dialog.getByRole('button', { name: 'Create conditional sequence' })).toBeDisabled();
   await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105');
+  await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
   await dialog.getByLabel('Courses you are currently taking').fill('CSBP219');
   await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');
   await dialog.getByLabel('Maximum credits per term').fill('18');
