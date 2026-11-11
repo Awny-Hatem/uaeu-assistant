@@ -116,6 +116,16 @@ async function main() {
   assert.match(String(computerEngineeringCredits.payload.content), /45 credits/);
   assert.match(JSON.stringify(computerEngineeringCredits.payload.citations), /Bachelor of Science in Computer Engineering/);
 
+  const historicalComputerEngineeringCredits = await askMessages([
+    { role: "user", content: "I entered Computer Engineering in 2022." },
+    { role: "assistant", content: "What do you want to check about your program?" },
+    { role: "user", content: "How many credit hours to graduate in Computer Engineering?" },
+  ], "203.0.113.238");
+  assert.equal(historicalComputerEngineeringCredits.payload.stateLabel, "v3_program_credit_model");
+  assert.match(String(historicalComputerEngineeringCredits.payload.content), /144 credit hours/);
+  assert.doesNotMatch(String(historicalComputerEngineeringCredits.payload.content), /131 credit hours/);
+  assert.match(JSON.stringify(historicalComputerEngineeringCredits.payload.citations), /cohort model study plan/);
+
   const computerEngineeringPathways = await ask("Which courses are required in Computer Engineering?", "203.0.113.235");
   assert.equal(computerEngineeringPathways.payload.stateLabel, "v3_program_requirement_model");
   assert.match(String(computerEngineeringPathways.payload.content), /Major electives/);

@@ -302,6 +302,11 @@ export function renderProgramCourseSubstitutionAssessment(
       ? `لا أستطيع التحقق من استبدال ${replacement.code} بـ${replaced.code} لدفعة ${cohortYear} في ${programName}؛ لا تتوفر لدي خطة معتمدة لهذه الدفعة. تحقق من خطتك في Degree Works.`
       : `I cannot verify replacing ${replaced.code} with ${replacement.code} for the ${cohortYear} entry cohort in ${programName}; I do not have an approved pathway model for that cohort. Check the plan assigned to you in Degree Works.`;
   }
+  if (curriculum.requirements.length === 0) {
+    return locale === "ar"
+      ? `تذكر خطة دفعة ${cohortYear} المنشورة إجمالي 144 ساعة، لكنها لا توفر هنا قائمة منظمة كاملة لمقررات الاختيار. لذلك لا أستطيع تأكيد استبدال ${replaced.code} بـ${replacement.code} لهذه الدفعة. تحقق من خطتك المعتمدة في Degree Works واسأل مرشدك الأكاديمي.`
+      : `The published ${cohortYear} cohort plan states 144 total credits, but its complete elective list is not structured here. I cannot verify replacing ${replaced.code} with ${replacement.code} for this cohort. Check your assigned plan in Degree Works and confirm with your academic advisor.`;
+  }
   const permitted = sharedOption?.type === "ELECTIVE_GROUP";
   const isConcentrationPathway = Boolean(sharedOption && curriculum.requirements.some((requirement) =>
     requirement.type === "PATHWAY_CHOICE" && requirement.options.some(({ id }) => id === sharedOption.id)));
@@ -334,6 +339,12 @@ export function renderProgramRequirementsAssessment(
     return locale === "ar"
       ? `لا تتوفر لدي متطلبات مقررات معتمدة ومنظمة لدفعة ${cohortYear} في ${programName}. تحقق من الخطة المخصصة لك في Degree Works.`
       : `I do not have an approved structured course-requirement model for the ${cohortYear} entry cohort in ${programName}. Check the plan assigned to you in Degree Works.`;
+  }
+
+  if (curriculum.requirements.length === 0) {
+    return locale === "ar"
+      ? `تذكر خطة دفعة ${cohortYear} المنشورة إجمالي 144 ساعة، لكن قائمة المقررات ومتطلباتها غير منظمة في هذا السجل. لا أستطيع عرضها كقائمة كاملة؛ تحقق من خطتك المعتمدة في Degree Works.`
+      : `The published ${cohortYear} model plan states **${curriculum.totalCredits} total credits**, but its course requirements are not structured in this record. I cannot provide a complete course list for this cohort; check your assigned plan in Degree Works.`;
   }
 
   const groups = curriculum.requirements.map((requirement) => {

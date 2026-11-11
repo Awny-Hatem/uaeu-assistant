@@ -158,7 +158,19 @@ assert.equal(computerElectives?.type, "ELECTIVE_GROUP");
 assert.equal(computerElectives?.chooseCount, 4);
 assert.ok(computerElectives?.courseCodes.includes("CENG532"));
 assert.ok(computerElectives?.courseCodes.includes("CENG580"));
-assert.equal(getProgramCurriculum("bsc-computer-engineering", 2022), null, "a current catalog snapshot is not proof of the historic Computer Engineering cohort plan");
+const computerEngineering2022 = getProgramCurriculum("bsc-computer-engineering", 2022);
+assert.ok(computerEngineering2022);
+assert.equal(computerEngineering2022.curriculum.totalCredits, 144);
+assert.equal(computerEngineering2022.curriculum.creditBuckets, undefined, "do not invent historic credit buckets from the model-plan table");
+assert.equal(getProgramCurriculum("bsc-computer-engineering", 2026), null, "the newer 131-credit catalog does not identify its first applicable cohort");
+const computerEngineering2022Requirements = assessProgramRequirementsConversation([
+  { role: "user", content: "I entered Computer Engineering in 2022." },
+  { role: "assistant", content: "Which requirements should I check?" },
+  { role: "user", content: "Which courses are required in my degree?" },
+]);
+assert.ok(computerEngineering2022Requirements);
+assert.equal(computerEngineering2022Requirements.curriculum?.totalCredits, 144);
+assert.match(renderProgramRequirementsAssessment(computerEngineering2022Requirements, "en"), /course requirements are not structured/);
 const computerDegreeSubstitution = assessProgramCourseSubstitutionConversation([{
   role: "user", content: "In Computer Engineering, take Networking Security instead of Selected Topics in Computer Engineering.",
 }]);
@@ -170,5 +182,15 @@ assert.match(computerDegreeSubstitutionAnswer, /choosing 4 courses/);
 assert.doesNotMatch(computerDegreeSubstitutionAnswer, /concentration/);
 const computerDegreeArabic = renderProgramCourseSubstitutionAssessment(computerDegreeSubstitution, "ar");
 assert.ok(computerDegreeArabic.includes("يعرض"));
+
+const oldCohortSubstitution = assessProgramCourseSubstitutionConversation([
+  { role: "user", content: "I entered Computer Engineering in 2022." },
+  { role: "assistant", content: "Which course change are you considering?" },
+  { role: "user", content: "Take Networking Security instead of Selected Topics in Computer Engineering." },
+]);
+assert.ok(oldCohortSubstitution);
+assert.equal(oldCohortSubstitution.curriculum?.totalCredits, 144);
+assert.equal(oldCohortSubstitution.sharedOption, undefined, "do not apply the newer elective list to the historical cohort");
+assert.match(renderProgramCourseSubstitutionAssessment(oldCohortSubstitution, "en"), /cannot verify replacing CENG580 with CENG532/);
 
 console.log("Academic program model passed: 6 sourced programs, credit totals, elective and pathway groups, cohort selection, and safe missing versions.");
