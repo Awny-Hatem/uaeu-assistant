@@ -31,13 +31,36 @@ function relationBlockItems(section, headingName) {
   const regex = new RegExp(`<h3\\b[^>]*>\\s*${headingName}\\s*<\\/h3>([\\s\\S]*?)(?=<h3\\b|$)`, "i");
   const body = section.match(regex)?.[1];
   if (!body) return [];
-  const items = [...body.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)].map((match) => stripHtml(match[1])).filter(Boolean);
+  const items = [...body.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)]
+    .map((match) => stripHtml(addAndBetweenAdjacentCourseLinks(match[1])))
+    .filter(Boolean);
   if (!items.length) return [stripHtml(body)].filter(Boolean);
   // Some UAEU course pages contain visible linked requirements outside the
   // surrounding <li> elements. Keep that residual text so downstream rule
   // parsing fails closed instead of silently dropping a prerequisite.
   const unlistedText = stripHtml(body.replace(/<li\b[^>]*>[\s\S]*?<\/li>/gi, " "));
   return unlistedText ? [...items, unlistedText] : items;
+}
+
+function addAndBetweenAdjacentCourseLinks(itemHtml) {
+  const text = stripHtml(itemHtml);
+  const courses = [...text.matchAll(/\b[A-Z]{2,8}\s?\d{3,4}[A-Z]?\b/giu)];
+  const insertions = [];
+  for (let index = 0; index < courses.length - 1; index++) {
+    const current = courses[index];
+    const next = courses[index + 1];
+    const gap = text.slice((current.index ?? 0) + current[0].length, next.index);
+    if (/\b(?:and|or)\b|\bpre\s*[\/&]\s*co\b/i.test(gap)) continue;
+    // Only bridge a blank or grade-threshold-only gap. Descriptive or
+    // malformed text remains unsupported by the Boolean rule parser.
+    if (!/^(?:\s*(?:(?:with\s+)?(?:a\s+)?minimum\s+grade\s+[A-F](?:[+-])?\s*)?)*$/i.test(gap)) continue;
+    insertions.push(next.index ?? 0);
+  }
+  let normalized = text;
+  for (const position of insertions.reverse()) {
+    normalized = `${normalized.slice(0, position)} and ${normalized.slice(position)}`;
+  }
+  return normalized;
 }
 
 export function extractCourseCodes(indexHtml) {

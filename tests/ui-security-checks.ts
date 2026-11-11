@@ -312,9 +312,9 @@ async function main() {
     assert.equal(v3Health.agent.legacySelectorBypassedForUniversityModes, true);
     assert.equal(v3Health.knowledge.retrieval.activePath, "v3-orchestrator-evidence-research-verified-generation");
     assert.equal(v3Health.courseCatalog.prerequisiteParsing.relationRecords, 1478);
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredRecords, 1451);
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.unsupportedRecords, 27);
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredCoveragePercent, 98.2);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredRecords, 1469);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.unsupportedRecords, 9);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredCoveragePercent, 99.4);
     delete process.env.UAEU_AGENT_V3_ENABLED;
     delete process.env.AI_PROVIDER;
     delete process.env.CHATBOT_BUILD_REVISION;

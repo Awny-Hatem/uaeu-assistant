@@ -37,6 +37,25 @@ assert.equal(record.preCorequisiteText, "CSBP221 with a minimum grade D");
 assert.deepEqual(record.preCorequisiteItems, ["CSBP221 with a minimum grade D"]);
 assert.equal(record.source.verifiedAt, "2026-11-11");
 
+const bundledLinks = parseCoursePage(`
+  <div id="CSBP319"><h1>Data Structures (CSBP319)</h1>
+  <h3>Prerequisites</h3><ul><li>
+  <a href="https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=CSBP219">CSBP219</a> with a minimum grade D
+  <a href="https://www.uaeu.ac.ae/en/catalog/courses/course_2.shtml?id=MATH115">MATH115</a> with a minimum grade C
+  </li><li><a href="https://www.uaeu.ac.ae/en/catalog/courses/course_3.shtml?id=STAT180">STAT180</a> or
+  <a href="https://www.uaeu.ac.ae/en/catalog/courses/course_4.shtml?id=STAT210">STAT210</a></li></ul></div>
+`, links[0], "2026-11-11");
+assert.deepEqual(bundledLinks.prerequisiteItems, [
+  "CSBP219 with a minimum grade D and MATH115 with a minimum grade C",
+  "STAT180 or STAT210",
+], "adjacent official course links imply a combined list requirement only when the source has no explicit Boolean connector");
+const mixedPlainAndLinkedCodes = parseCoursePage(`
+  <div id="CSBP319"><h1>Data Structures (CSBP319)</h1>
+  <h3>Prerequisites</h3><ul><li>PSYC304<a href="https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=PSYC401">PSYC401</a></li></ul></div>
+`, links[0], "2026-11-11");
+assert.deepEqual(mixedPlainAndLinkedCodes.prerequisiteItems, ["PSYC304 and PSYC401"],
+  "adjacent source course codes normalize even when UAEU omits the first hyperlink");
+
 const combined = parseCoursePage(`
   <div id="CSBP319"><h1>Data Structures (CSBP319)</h1><p>Lists.</p>
   <h3>Credit Hours : 3</h3><h3>Prerequisites</h3><ul>

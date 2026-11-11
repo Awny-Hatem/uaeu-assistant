@@ -23,6 +23,15 @@ assert.deepEqual(parseCatalogPrerequisiteExpression(record({
     { type: "COURSE_GRADE_AT_LEAST", courseCode: "MATH115", minimumGrade: "C" },
   ],
 });
+assert.deepEqual(parseCatalogPrerequisiteExpression(record({
+  prerequisiteItems: ["CSBP219 with a minimum grade D and MATH115 with a minimum grade C"],
+})), {
+  op: "AND",
+  conditions: [
+    { type: "COURSE_GRADE_AT_LEAST", courseCode: "CSBP219", minimumGrade: "D" },
+    { type: "COURSE_GRADE_AT_LEAST", courseCode: "MATH115", minimumGrade: "C" },
+  ],
+}, "source-linked requirements normalized from a single list item retain AND semantics");
 
 assert.deepEqual(parseCatalogPrerequisiteExpression(record({
   prerequisiteItems: ["AGRB200 with a minimum grade D or ECON105 with a minimum grade D"],

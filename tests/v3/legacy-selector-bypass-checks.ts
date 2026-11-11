@@ -174,6 +174,18 @@ async function main() {
   assert.match(String(passGradePrerequisiteAssessment.payload.content), /completion of ACCT101/);
   assert.match(String(passGradePrerequisiteAssessment.payload.content), /modeled prerequisite is satisfied/);
 
+  const passedWithoutLetterGrade = await ask("I passed PSYC304 and PSYC401. Can I take PSYC413?", "203.0.113.252");
+  assert.equal(passedWithoutLetterGrade.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(passedWithoutLetterGrade.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(passedWithoutLetterGrade.payload.content), /modeled prerequisite is satisfied/i,
+    "explicit passes without stated grades satisfy completion-only source requirements");
+
+  const inlinePreCorequisite = await ask("I passed LNG100 with grade D and I'm currently taking SLP106. Can I take LNG450?", "203.0.113.253");
+  assert.equal(inlinePreCorequisite.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(inlinePreCorequisite.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(inlinePreCorequisite.payload.content), /modeled prerequisite is satisfied/i,
+    "an explicitly marked inline Pre/Co course can be satisfied by current enrollment");
+
   const unsupportedPrerequisiteAssessment = await ask("Can I take STAT488?", "203.0.113.244");
   assert.equal(unsupportedPrerequisiteAssessment.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
   assert.equal(unsupportedPrerequisiteAssessment.payload.resolutionState, "MISSING_CONTEXT");

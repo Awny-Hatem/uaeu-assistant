@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
+import { academicSnapshotFromMessages, asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, evaluateCatalogPrerequisite, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
 
 const courseCodes = new Set(listModeledPrerequisiteCourses().map(({ code }) => code));
 assert.equal(courseCodes.size, 10);
@@ -79,6 +79,32 @@ assert.equal(staleSnapshot.status, "UNDETERMINED", "a catalog snapshot older tha
 assert.equal(staleSnapshot.resolutionState, "UNSUPPORTED", "stale rule evidence is unsupported rather than a student-context gap");
 const noInventedEffectiveDate = evaluatePrerequisite({ targetCourseCode: "CSBP320", asOf: "2026-11-12", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }] } });
 assert.equal(noInventedEffectiveDate.status, "ELIGIBLE", "the source observation date is tracked without claiming it is the rule's official effective date");
+
+const passedWithoutGrade = academicSnapshotFromMessages([{ role: "user", content: "I passed CSBP219." }]);
+assert.deepEqual(passedWithoutGrade.completedCourses, [{ courseCode: "CSBP219", grade: "PASS" }],
+  "an explicit pass without a stated letter grade retains completion without inventing a grade");
+assert.deepEqual(academicSnapshotFromMessages([{ role: "user", content: "I passed PSYC304 and PSYC401." }]).completedCourses, [
+  { courseCode: "PSYC304", grade: "PASS" },
+  { courseCode: "PSYC401", grade: "PASS" },
+], "coordinated courses inherit the explicit pass verb while retaining no invented letter grades");
+const completionOnlyRule = evaluateCatalogPrerequisite({
+  targetCourse: { code: "TEST200", title: "Completion Only", credits: 3 },
+  expression: { type: "COURSE_COMPLETED", courseCode: "CSBP219" },
+  version: new Date().toISOString().slice(0, 10),
+  source: { documentId: "test", title: "Test rule", url: "https://www.uaeu.ac.ae/en/catalog/courses/" },
+  snapshot: passedWithoutGrade,
+});
+assert.equal(completionOnlyRule.status, "ELIGIBLE", "a stated pass satisfies a completion-only prerequisite");
+const minimumGradeStillUnknown = evaluateCatalogPrerequisite({
+  targetCourse: { code: "TEST201", title: "Minimum Grade", credits: 3 },
+  expression: { type: "COURSE_GRADE_AT_LEAST", courseCode: "CSBP219", minimumGrade: "D" },
+  version: new Date().toISOString().slice(0, 10),
+  source: { documentId: "test", title: "Test rule", url: "https://www.uaeu.ac.ae/en/catalog/courses/" },
+  snapshot: passedWithoutGrade,
+});
+assert.equal(minimumGradeStillUnknown.status, "UNDETERMINED", "a pass without its grade cannot satisfy a minimum-grade prerequisite");
+const ambiguousCompletion = academicSnapshotFromMessages([{ role: "user", content: "I completed CSBP219." }]);
+assert.equal(ambiguousCompletion.completedCourses[0]?.grade, "", "completion wording alone does not imply a passing result");
 
 const repeat = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } });
 assert.deepEqual(repeat, csbp340ByFirstPath, "same rule and snapshot always produce the same trace/result");

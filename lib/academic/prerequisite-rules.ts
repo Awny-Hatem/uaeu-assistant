@@ -282,13 +282,26 @@ export function academicSnapshotFromMessages(messages: { role: "user" | "assista
         if (!/(?:لا|لست|لم|ما)\s*$/u.test(prefix)) current.add(match[1]);
       }
 
-      const completionPattern = new RegExp(`\\b(?:PASSED|COMPLETED|FINISHED|EARNED)\\s+(?:COURSE\\s+)?${code}\\b`, "g");
+      const completionPattern = new RegExp(`\\b(PASSED|COMPLETED|FINISHED|EARNED)\\s+(?:COURSE\\s+)?${code}\\b`, "g");
       for (const match of clause.matchAll(completionPattern)) {
-        const afterCode = clause.slice((match.index ?? 0) + match[0].length, (match.index ?? 0) + match[0].length + 28);
-        const gradeMatch = afterCode.match(new RegExp(`^\\s+(?:WITH\\s+)?(?:A\\s+)?(?:GRADE\\s+)?${grades}\\b`));
-        const values = completed.get(match[1]) ?? new Set<string>();
-        values.add(gradeMatch?.[1] ?? "");
-        completed.set(match[1], values);
+        const recordCompletedCourse = (courseCode: string, verb: string, cursor: number) => {
+          const afterCode = clause.slice(cursor, cursor + 28);
+          const gradeMatch = afterCode.match(new RegExp(`^\\s+(?:WITH\\s+)?(?:A\\s+)?(?:GRADE\\s+)?${grades}\\b`));
+          const values = completed.get(courseCode) ?? new Set<string>();
+          values.add(gradeMatch?.[1] ?? (verb === "PASSED" || verb === "EARNED" ? "PASS" : ""));
+          completed.set(courseCode, values);
+          return cursor + (gradeMatch?.[0].length ?? 0);
+        };
+        let cursor = (match.index ?? 0) + match[0].length;
+        cursor = recordCompletedCourse(match[2], match[1], cursor);
+        const coordinatedCourse = new RegExp(`^\\s*(?:,\\s*(?:AND\\s+)?|AND\\s+)${code}\\b`, "i");
+        while (true) {
+          const next = coordinatedCourse.exec(clause.slice(cursor));
+          if (!next) break;
+          const nextCourseCode = next[1];
+          cursor += next[0].length;
+          cursor = recordCompletedCourse(nextCourseCode, match[1], cursor);
+        }
       }
 
       const arabicCompletionPattern = new RegExp(`(?:اجتزت|نجحت في|أنهيت|انهيت|أكملت|اكملت)\\s+(?:المساق\\s+)?${code}\\b`, "gu");
