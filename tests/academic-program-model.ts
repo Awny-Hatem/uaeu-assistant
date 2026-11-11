@@ -5,7 +5,7 @@ import { loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-p
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, getProgramCurriculum, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "../lib/academic/program-curricula";
 
 const programs = listAcademicPrograms();
-assert.equal(programs.length, 31, "thirty-one current or historical program records have structured evidence records");
+assert.equal(programs.length, 33, "thirty-three current or historical program records have structured evidence records");
 for (const catalogProgram of loadUndergraduateProgramCatalog().programs) {
   if (catalogProgram.curriculumStatus === "not_modelled") {
     assert.equal(programIdInText(catalogProgram.title), catalogProgram.id, `${catalogProgram.title} resolves to its own catalog identity`);
@@ -22,6 +22,22 @@ assert.equal(unmodeledAudit?.auditStatus, "PROGRAM_NOT_MODELED");
 assert.equal(unmodeledAudit?.programId, "psychology");
 assert.match(JSON.stringify(unmodeledAudit?.sources), /undergraduate\/programs\/index\.shtml/);
 assert.ok(programs.every((program) => program.sources.length > 0 && program.curriculumVersions.length > 0));
+
+for (const programId of ["biology", "biochemistry"]) {
+  const program = getProgramCurriculum(programId);
+  assert.equal(program?.curriculum.totalCredits, 120, `${programId} preserves the current page's 120-credit total`);
+  assert.equal(program?.curriculum.cohortMapping, "unresolved", `${programId} current-page rules are not silently assigned to a cohort`);
+  assert.ok((program?.curriculum.requirements.length ?? 0) > 0, `${programId} has structured requirements`);
+}
+const biologyConcentrations = assessProgramRequirementsConversation([{ role: "user", content: "What are the Biology concentration requirements?" }]);
+assert.equal(biologyConcentrations?.programId, "biology");
+assert.match(renderProgramRequirementsAssessment(biologyConcentrations!, "en"), /Ecology and Organismal Biology/);
+assert.match(renderProgramRequirementsAssessment(biologyConcentrations!, "en"), /Cellular and Molecular Biology/);
+assert.match(renderProgramRequirementsAssessment(biologyConcentrations!, "en"), /BIOM335/);
+const biochemistryElectives = assessProgramRequirementsConversation([{ role: "user", content: "What are the Biochemistry elective requirements?" }]);
+assert.equal(biochemistryElectives?.programId, "biochemistry");
+assert.match(renderProgramRequirementsAssessment(biochemistryElectives!, "en"), /BCHM483/);
+assert.match(renderProgramRequirementsAssessment(biochemistryElectives!, "en"), /CHEM419/);
 
 assert.equal(assessAcademicProgramIdentityReview([
   { role: "user", content: "How many credits do I need to graduate from Cybersecurity?" },

@@ -3235,4 +3235,414 @@
     }
   ]
 }
+,
+  {
+    "schemaVersion": 1,
+    "id": "biology",
+    "name": "Bachelor of Science in Biology",
+    "degreeLevel": "undergraduate",
+    "college": "College of Science",
+    "sources": [
+      {
+        "documentId": "62-biology-curriculum.md",
+        "title": "UAEU BSc Biology current degree requirements",
+        "url": "https://www.uaeu.ac.ae/en/cos/programs/undergraduate/bachelor-of-science-in-biology.shtml",
+        "lastVerified": "2026-11-11"
+      },
+      {
+        "documentId": "62-biology-curriculum.md",
+        "title": "UAEU Biology model study plan",
+        "url": "https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_biology_study_plan.pdf",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "biology-current-degree-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; cohort mapping unresolved",
+        "cohortMapping": "unresolved",
+        "effectiveFrom": "2026-11-11",
+        "totalCredits": 120,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General Education",
+            "credits": 21
+          },
+          {
+            "id": "specialization",
+            "name": "Biology specialization requirements",
+            "credits": 27
+          },
+          {
+            "id": "supporting-courses",
+            "name": "Supporting courses",
+            "credits": 30
+          },
+          {
+            "id": "internship",
+            "name": "Internship",
+            "credits": 6
+          },
+          {
+            "id": "concentration",
+            "name": "One concentration",
+            "credits": 27
+          },
+          {
+            "id": "free-electives",
+            "name": "Free electives",
+            "credits": 9
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "biology-general-education",
+            "name": "General Education",
+            "credits": 21,
+            "ruleNote": "Required themes plus 6 CH selected from theme options; Theme 11 requires a paired language sequence."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "biology-specialization",
+            "name": "Biology specialization requirements",
+            "courseCodes": [
+              "BIOC100",
+              "BIOC155",
+              "BIOC160",
+              "BIOC165",
+              "BIOC250",
+              "BIOC270",
+              "BIOC275",
+              "BIOC290",
+              "BIOC490",
+              "BIOC480",
+              "BIOC280"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "biology-supporting-courses",
+            "name": "Supporting courses",
+            "courseCodes": [
+              "CHEM111",
+              "CHEM113",
+              "CHEM115",
+              "CHEM241",
+              "CHEM245",
+              "MATH105",
+              "MATH110",
+              "STAT235",
+              "GEOL100",
+              "PHYS105",
+              "PHYS135",
+              "PHYS110"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "biology-internship",
+            "name": "Internship",
+            "courseCodes": [
+              "BIOC500"
+            ],
+            "ruleNote": "6 CH, half semester (8 weeks) during the last study year. The linked plan lists BIOL500, while the current page lists BIOC500; confirm the assigned cohort plan."
+          },
+          {
+            "type": "PATHWAY_CHOICE",
+            "id": "biology-concentration",
+            "name": "Choose one 27-credit concentration",
+            "options": [
+              {
+                "id": "ecology-and-organismal-biology",
+                "name": "Ecology and Organismal Biology",
+                "type": "COMPOSITE",
+                "credits": 27,
+                "courseCodes": [
+                  "BIOE250",
+                  "BIOE212",
+                  "BIOE214",
+                  "BIOE230",
+                  "BIOE310",
+                  "BIOE320",
+                  "BIOE330",
+                  "BIOE332",
+                  "BIOE340",
+                  "BIOE350",
+                  "BIOE355",
+                  "BIOE360",
+                  "BIOE370",
+                  "BIOE380",
+                  "BIOE391",
+                  "BIOE435",
+                  "BIOE436",
+                  "BIOE450",
+                  "BIOE454",
+                  "BIOE457",
+                  "BIOE459"
+                ],
+                "requirements": [
+                  {
+                    "type": "REQUIRED_COURSE_SET",
+                    "id": "biology-eob-required",
+                    "name": "Required course",
+                    "courseCodes": [
+                      "BIOE250"
+                    ]
+                  },
+                  {
+                    "type": "CREDIT_BLOCK",
+                    "id": "biology-eob-electives",
+                    "name": "EOB and cross-concentration electives",
+                    "credits": 24,
+                    "ruleNote": "At least 12 CH from the EOB list; other 12 CH may be EOB or CMB. Minimums: 3 CH Level 2, 6 CH Level 3, 6 CH Level 4. Level 2: BIOE212, BIOE214, BIOE230. Level 3: BIOE310, BIOE320, BIOE330, BIOE332, BIOE340, BIOE350, BIOE355, BIOE360, BIOE370, BIOE380, BIOE391. Level 4: BIOE435, BIOE436, BIOE450, BIOE454, BIOE457, BIOE459. Every listed EOB option is 3 CH."
+                  }
+                ]
+              },
+              {
+                "id": "cellular-and-molecular-biology",
+                "name": "Cellular and Molecular Biology",
+                "type": "COMPOSITE",
+                "credits": 27,
+                "courseCodes": [
+                  "BIOM335",
+                  "BIOM339",
+                  "BIOM350",
+                  "BIOM310",
+                  "BIOM370",
+                  "BIOM380",
+                  "BIOM390",
+                  "BIOM420",
+                  "BIOM430",
+                  "BIOM433",
+                  "BIOM461",
+                  "BIOM462",
+                  "BIOM470",
+                  "BIOM481",
+                  "BIOM489",
+                  "BIOM490",
+                  "BIOE212",
+                  "BIOE214",
+                  "BIOE230",
+                  "BIOE310",
+                  "BIOE320",
+                  "BIOE330",
+                  "BIOE332",
+                  "BIOE340",
+                  "BIOE350",
+                  "BIOE355",
+                  "BIOE360",
+                  "BIOE370",
+                  "BIOE380",
+                  "BIOE391",
+                  "BIOE435",
+                  "BIOE436",
+                  "BIOE450",
+                  "BIOE454",
+                  "BIOE457",
+                  "BIOE459"
+                ],
+                "requirements": [
+                  {
+                    "type": "REQUIRED_COURSE_SET",
+                    "id": "biology-cmb-required",
+                    "name": "Required course",
+                    "courseCodes": [
+                      "BIOM335"
+                    ]
+                  },
+                  {
+                    "type": "CREDIT_BLOCK",
+                    "id": "biology-cmb-electives",
+                    "name": "CMB and cross-concentration electives",
+                    "credits": 24,
+                    "ruleNote": "At least 12 CH from the CMB list; other 12 CH may be CMB or EOB. CMB options and credits: BIOM339 (2), BIOM350 (3), BIOM310 (3), BIOM370 (3), BIOM380 (3), BIOM390 (2), BIOM420 (3), BIOM430 (3), BIOM433 (3), BIOM461 (3), BIOM462 (3), BIOM470 (3), BIOM481 (3), BIOM489 (1), BIOM490 (3)."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "biology-free-electives",
+            "name": "Free electives",
+            "credits": 9,
+            "ruleNote": "Any eligible courses according to the assigned plan; the degree page does not list eligible codes."
+          }
+        ],
+        "limitations": [
+          "The current page does not identify which entering cohorts its course requirements apply to.",
+          "The current degree page lists internship BIOC500, but the linked model plan lists BIOL500; confirm the student�s assigned plan before advising on the course code.",
+          "Concentration elective rules have level and cross-concentration minimums; the model preserves them as constraints, but portal eligibility and course availability require confirmation.",
+          "The published requirements do not establish completed courses, personal eligibility, or offered sections."
+        ]
+      }
+    ]
+  },
+  {
+    "schemaVersion": 1,
+    "id": "biochemistry",
+    "name": "Bachelor of Science in Biochemistry",
+    "degreeLevel": "undergraduate",
+    "college": "College of Science",
+    "sources": [
+      {
+        "documentId": "63-biochemistry-curriculum.md",
+        "title": "UAEU BSc Biochemistry current degree requirements",
+        "url": "https://www.uaeu.ac.ae/en/cos/programs/undergraduate/bachelor-of-science-in-biochemistry.shtml",
+        "lastVerified": "2026-11-11"
+      }
+    ],
+    "curriculumVersions": [
+      {
+        "id": "biochemistry-current-degree-page",
+        "version": "current-degree-page",
+        "status": "approved",
+        "cohortLabel": "Current published degree page; cohort mapping unresolved",
+        "cohortMapping": "unresolved",
+        "effectiveFrom": "2026-11-11",
+        "totalCredits": 120,
+        "creditBuckets": [
+          {
+            "id": "general-education",
+            "name": "General Education",
+            "credits": 21
+          },
+          {
+            "id": "major-requirements",
+            "name": "Biochemistry major requirements",
+            "credits": 51
+          },
+          {
+            "id": "internship",
+            "name": "Internship",
+            "credits": 6
+          },
+          {
+            "id": "supporting-courses",
+            "name": "Supporting courses",
+            "credits": 21
+          },
+          {
+            "id": "major-electives",
+            "name": "Major electives",
+            "credits": 9
+          },
+          {
+            "id": "supporting-electives",
+            "name": "Supporting electives",
+            "credits": 6
+          },
+          {
+            "id": "free-electives",
+            "name": "Free electives",
+            "credits": 6
+          }
+        ],
+        "requirements": [
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "biochemistry-general-education",
+            "name": "General Education",
+            "credits": 21,
+            "ruleNote": "Includes required themes plus selected theme courses; a selected Theme 11 language requires its complementary course."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "biochemistry-major",
+            "name": "Required Biochemistry major courses",
+            "courseCodes": [
+              "CHEM111",
+              "CHEM113",
+              "CHEM115",
+              "CHEM222",
+              "CHEM241",
+              "CHEM242",
+              "CHEM245",
+              "CHEM251",
+              "CHEM321",
+              "CHEM355",
+              "BIOL114",
+              "BIOE230",
+              "BIOC270",
+              "BIOC275",
+              "BCHM361",
+              "BCHM362",
+              "BCHM462",
+              "BCHM418",
+              "BCHM472",
+              "BIOM489"
+            ]
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "biochemistry-internship",
+            "name": "Internship",
+            "courseCodes": [
+              "CHEM419"
+            ],
+            "ruleNote": "6 CH, half a semester (8 weeks) during the last study year."
+          },
+          {
+            "type": "REQUIRED_COURSE_SET",
+            "id": "biochemistry-supporting",
+            "name": "Supporting courses",
+            "courseCodes": [
+              "BIOC100",
+              "BIOL105",
+              "ENG310",
+              "STAT235",
+              "CSBP119",
+              "PHYS105",
+              "MATH105"
+            ]
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "biochemistry-major-electives",
+            "name": "Major electives",
+            "chooseCount": 3,
+            "credits": 9,
+            "courseCodes": [
+              "CHEM231",
+              "CHEM422",
+              "CHEM423",
+              "CHEM442",
+              "BIOM445",
+              "CHEM480",
+              "BIOC290",
+              "BCHM483"
+            ]
+          },
+          {
+            "type": "ELECTIVE_GROUP",
+            "id": "biochemistry-supporting-electives",
+            "name": "Supporting electives",
+            "chooseCount": 2,
+            "credits": 6,
+            "courseCodes": [
+              "CSBP224",
+              "GEOL100",
+              "MATH110",
+              "PHYS110"
+            ]
+          },
+          {
+            "type": "CREDIT_BLOCK",
+            "id": "biochemistry-free-electives",
+            "name": "Free electives",
+            "credits": 6,
+            "ruleNote": "The degree page does not list eligible course codes."
+          }
+        ],
+        "limitations": [
+          "The current degree page does not identify which entry cohorts its requirements apply to.",
+          "The published requirements do not establish completed courses, personal eligibility, or offered sections."
+        ]
+      }
+    ]
+  }
 ]
