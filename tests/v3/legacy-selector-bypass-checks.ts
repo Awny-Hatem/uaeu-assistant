@@ -43,6 +43,11 @@ async function main() {
   assert.match(String(libraryResearchHelp.payload.content), /one-hour email-response target/i);
   assert.match(JSON.stringify(libraryResearchHelp.payload.citations), /serviceId=98/);
 
+  const staffHandoff = await ask("I want to speak to a human advisor.", "203.0.113.246");
+  assert.equal(staffHandoff.payload.stateLabel, "human_handoff");
+  assert.equal(staffHandoff.payload.escalationReason, "student_requested_person");
+  assert.match(JSON.stringify(staffHandoff.payload.citations), /uaeu\.ac\.ae\/en\/contact/);
+
   const programCatalog = await ask("Which degrees does UAEU offer?", "203.0.113.231");
   assert.equal(programCatalog.payload.stateLabel, "undergraduate_program_catalog");
   assert.equal(programCatalog.payload.resolutionState, "VERIFIED");
@@ -104,6 +109,32 @@ async function main() {
   assert.equal(incompletePrerequisites.payload.stateLabel, "v3_academic_rule_evaluation");
   assert.equal(incompletePrerequisites.payload.resolutionState, "UNSUPPORTED");
   assert.match(String(incompletePrerequisites.payload.content), /STAT210[\s\S]*ITBP301/);
+
+  const catalogPrerequisiteAssessment = await askMessages([
+    { role: "user", content: "I passed FINC110 with B." },
+    { role: "assistant", content: "Which course do you want to check?" },
+    { role: "user", content: "Can I take FINC120?" },
+  ], "203.0.113.243");
+  assert.equal(catalogPrerequisiteAssessment.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(catalogPrerequisiteAssessment.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(catalogPrerequisiteAssessment.payload.content), /completion of FINC110/);
+  assert.match(String(catalogPrerequisiteAssessment.payload.content), /modeled prerequisite is satisfied/);
+
+  const passGradePrerequisiteAssessment = await askMessages([
+    { role: "user", content: "I passed ACCT101 with P." },
+    { role: "assistant", content: "Which course do you want to check?" },
+    { role: "user", content: "Can I take ACCT103?" },
+  ], "203.0.113.245");
+  assert.equal(passGradePrerequisiteAssessment.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
+  assert.equal(passGradePrerequisiteAssessment.payload.resolutionState, "CONDITIONAL");
+  assert.match(String(passGradePrerequisiteAssessment.payload.content), /completion of ACCT101/);
+  assert.match(String(passGradePrerequisiteAssessment.payload.content), /modeled prerequisite is satisfied/);
+
+  const unsupportedPrerequisiteAssessment = await ask("Can I take STAT488?", "203.0.113.244");
+  assert.equal(unsupportedPrerequisiteAssessment.payload.stateLabel, "v3_official_course_catalog_lookup");
+  assert.equal(unsupportedPrerequisiteAssessment.payload.resolutionState, "UNSUPPORTED");
+  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /eligibility not verified/);
+  assert.match(String(unsupportedPrerequisiteAssessment.payload.content), /Catalog corequisite wording: STAT480 or STAT482/);
 
   const catalogPrerequisites = await ask("What are the prerequisites for CSBP319?", "203.0.113.241");
   assert.equal(catalogPrerequisites.payload.stateLabel, "v3_official_course_catalog_lookup");

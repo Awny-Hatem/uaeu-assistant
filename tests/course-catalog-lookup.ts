@@ -13,7 +13,16 @@ assert(prerequisites);
 assert.match(prerequisites.content, /Prerequisites as stated in the catalog: CSBP219 with a minimum grade D/u);
 assert.match(prerequisites.content, /Pre\/Co requirement as labeled by the catalog: CSBP221 with a minimum grade D/u);
 
-assert.equal(answerOfficialCourseCatalogQuestion("Am I eligible to take CSBP319?", "en"), null);
+const eligibility = answerOfficialCourseCatalogQuestion("Am I eligible to take CSBP319?", "en");
+assert(eligibility);
+assert.equal(eligibility.resolutionState, "UNSUPPORTED");
+assert.match(eligibility.content, /eligibility not verified/u);
+assert.match(eligibility.content, /CSBP219 with a minimum grade D/u);
+const arabicEligibility = answerOfficialCourseCatalogQuestion("\u0647\u0644 \u064a\u0645\u0643\u0646\u0646\u064a \u062a\u0633\u062c\u064a\u0644 STAT488\u061f", "ar");
+assert(arabicEligibility);
+assert.equal(arabicEligibility.resolutionState, "UNSUPPORTED");
+assert.match(arabicEligibility.content, /\u0644\u0645 \u064a\u062a\u0645 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646 \u0623\u0647\u0644\u064a\u0629 \u0627\u0644\u062a\u0633\u062c\u064a\u0644/u);
+assert.match(arabicEligibility.content, /STAT480 or STAT482/u);
 assert.equal(answerOfficialCourseCatalogQuestion("Does CSBP319 count toward Computer Science?", "en"), null);
 assert.equal(answerOfficialCourseCatalogQuestion("Compare CSBP319 and CSBP323 credits", "en"), null);
 

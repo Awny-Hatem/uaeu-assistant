@@ -4,6 +4,7 @@ export type Grade = "F" | "D" | "D+" | "C-" | "C" | "C+" | "B-" | "B" | "B+" | "
 
 export type PrerequisiteExpression =
   | { type: "COURSE_GRADE_AT_LEAST"; courseCode: string; minimumGrade: Grade }
+  | { type: "COURSE_COMPLETED"; courseCode: string }
   | { type: "COURSE_CURRENT"; courseCode: string }
   | { op: "AND" | "OR"; conditions: PrerequisiteExpression[] };
 
@@ -53,7 +54,7 @@ const gradeOrder: Record<Grade, number> = {
   "B-": 6, B: 7, "B+": 8, "A-": 9, A: 10,
 };
 const VALID_GRADES = new Set(Object.keys(gradeOrder));
-const COURSE_CODE = /^[A-Z]{2,5}\d{3,4}$/;
+const COURSE_CODE = /^[A-Z]{2,8}\d{3,4}[A-Z]?$/;
 const MAX_RULE_AGE_DAYS = 180;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -63,6 +64,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 function isExpression(value: unknown): value is PrerequisiteExpression {
   if (!isRecord(value)) return false;
   if (value.type === "COURSE_CURRENT") return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode);
+  if (value.type === "COURSE_COMPLETED") return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode);
   if (value.type === "COURSE_GRADE_AT_LEAST") {
     return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode) &&
       typeof value.minimumGrade === "string" && VALID_GRADES.has(value.minimumGrade);
@@ -123,6 +125,15 @@ function evaluateExpression(
     return "unknown";
   }
   const grade = grades[0];
+  if (expression.type === "COURSE_COMPLETED") {
+    if (!grade || (!VALID_GRADES.has(grade) && grade !== "PASS" && grade !== "P")) {
+      results.push({ path, courseCode: code, status: "UNKNOWN", reason: `No recognized completed result was supplied for ${code}.` });
+      return "unknown";
+    }
+    const satisfied = grade !== "F";
+    results.push({ path, courseCode: code, status: satisfied ? "SATISFIED" : "NOT_SATISFIED", reason: satisfied ? `${code} is recorded with a passing grade.` : `${code} is recorded with a failing grade.` });
+    return satisfied ? "true" : "false";
+  }
   if (!grade || !VALID_GRADES.has(grade)) {
     results.push({ path, courseCode: code, status: "UNKNOWN", reason: `No recognized completed grade was supplied for ${code}.` });
     return "unknown";
@@ -130,6 +141,47 @@ function evaluateExpression(
   const satisfied = gradeOrder[grade as Grade] >= gradeOrder[expression.minimumGrade];
   results.push({ path, courseCode: code, status: satisfied ? "SATISFIED" : "NOT_SATISFIED", reason: `${code} grade ${grade} ${satisfied ? "meets" : "does not meet"} the minimum ${expression.minimumGrade}.` });
   return satisfied ? "true" : "false";
+}
+
+export function evaluateCatalogPrerequisite(input: {
+  targetCourse: { code: string; title: string; credits: number };
+  expression: PrerequisiteExpression;
+  version: string;
+  source: PrerequisiteRule["source"];
+  snapshot: AcademicSnapshot;
+  asOf?: string;
+}): PrerequisiteEvaluation {
+  const asOf = input.asOf ?? new Date().toISOString().slice(0, 10);
+  const ageDays = Math.floor((Date.parse(asOf) - Date.parse(input.version)) / 86_400_000);
+  if (!Number.isFinite(Date.parse(asOf)) || !Number.isFinite(Date.parse(input.version)) || ageDays < 0 || ageDays > MAX_RULE_AGE_DAYS) {
+    return {
+      targetCourse: input.targetCourse,
+      status: "UNDETERMINED",
+      resolutionState: "UNSUPPORTED",
+      decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT",
+      conditions: [],
+      source: input.source,
+      explanation: "The catalog evidence is stale or not valid for the requested date and must be re-verified before applying the course rule.",
+    };
+  }
+  const conditions: RuleConditionResult[] = [];
+  const truth = evaluateExpression(input.expression, input.snapshot, "1", conditions);
+  const status = truth === "true" ? "ELIGIBLE" : truth === "false" ? "NOT_ELIGIBLE" : "UNDETERMINED";
+  return {
+    targetCourse: input.targetCourse,
+    status,
+    resolutionState: truth === "unknown" ? "UNSUPPORTED" : "CONDITIONAL",
+    decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT",
+    ruleId: `course-catalog:${input.targetCourse.code}`,
+    ruleVersion: input.version,
+    conditions,
+    source: input.source,
+    explanation: status === "ELIGIBLE"
+      ? "The supplied course information satisfies the parsed catalog requirements. This is not a registration approval."
+      : status === "NOT_ELIGIBLE"
+        ? "The supplied course information does not satisfy the parsed catalog requirements. Confirm equivalencies or exceptions with your college."
+        : "The catalog requirement result cannot be established from the supplied course information.",
+  };
 }
 
 /**
@@ -187,7 +239,7 @@ export function asksPersonalPrerequisiteEligibility(question: string): boolean {
 }
 
 function courseCodeFromQuestion(question: string): string | undefined {
-  const code = "([A-Z]{2,5}\\d{3,4})";
+  const code = "([A-Z]{2,8}\\d{3,4}[A-Z]?)";
   const patterns = [
     new RegExp(`\\b(?:can i|may i|am i (?:eligible|allowed) to)\\s+(?:take|register for|enroll in|enrol in)\\s+(?:the\\s+)?${code}\\b`, "i"),
     new RegExp(`(?:هل\\s+(?:أستطيع|استطيع|يمكنني|اقدر)\\s+(?:أن\\s+)?(?:آخذ|اخذ|أسجل|اسجل|تسجيل|التحاق|ادرس|أدرس)|(?:ما\\s+)?(?:المتطلبات السابقة|المتطلب السابق|متطلبات)\\s+(?:مساق\\s+|لمساق\\s+|مادة\\s+|لمادة\\s+)?)\\s+${code}\\b`, "u"),
@@ -205,11 +257,11 @@ function courseCodeFromQuestion(question: string): string | undefined {
   return undefined;
 }
 
-function userProvidedSnapshot(messages: { role: "user" | "assistant"; content: string }[]): AcademicSnapshot {
+export function academicSnapshotFromMessages(messages: { role: "user" | "assistant"; content: string }[]): AcademicSnapshot {
   const completed = new Map<string, Set<string>>();
   const current = new Set<string>();
-  const grades = "(A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F)";
-  const code = "([A-Z]{2,5}\\d{3,4})";
+  const grades = "(PASS|P|A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F)";
+  const code = "([A-Z]{2,8}\\d{3,4}[A-Z]?)";
 
   for (const message of messages) {
     if (message.role !== "user") continue;
@@ -277,7 +329,7 @@ function userProvidedSnapshot(messages: { role: "user" | "assistant"; content: s
 }
 
 export type PrerequisiteConversationAssessment = {
-  rule: PrerequisiteRule;
+  rule: Pick<PrerequisiteRule, "id" | "course" | "expression" | "source" | "version">;
   evaluation: PrerequisiteEvaluation;
 };
 
@@ -290,7 +342,7 @@ export function assessPrerequisiteConversation(
   if (!targetCode) return null;
   const rule = prerequisiteRules.find((item) => item.course.code === targetCode);
   if (!rule) return null;
-  return { rule, evaluation: evaluatePrerequisite({ targetCourseCode: targetCode, snapshot: userProvidedSnapshot(messages) }) };
+  return { rule, evaluation: evaluatePrerequisite({ targetCourseCode: targetCode, snapshot: academicSnapshotFromMessages(messages) }) };
 }
 
 function describeExpression(expression: PrerequisiteExpression, locale: "en" | "ar" = "en"): string {
@@ -298,6 +350,9 @@ function describeExpression(expression: PrerequisiteExpression, locale: "en" | "
     const parts = expression.conditions.map((condition) => describeExpression(condition, locale));
     if (locale === "ar") return expression.op === "AND" ? parts.join(" و ") : `إما ${parts.join(" أو ")}`;
     return expression.op === "AND" ? parts.join(" and ") : `either ${parts.join(" or ")}`;
+  }
+  if (expression.type === "COURSE_COMPLETED") {
+    return locale === "ar" ? `Ø¥ÙƒÙ…Ø§Ù„ ${expression.courseCode}` : `completion of ${expression.courseCode}`;
   }
   if (locale === "ar") return expression.type === "COURSE_CURRENT"
     ? `التسجيل الحالي في ${expression.courseCode}`

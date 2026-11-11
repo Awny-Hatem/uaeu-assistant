@@ -30,6 +30,7 @@ import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
+import { assessCatalogPrerequisiteConversation } from "@/lib/academic/catalog-prerequisite-assessment";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
 import { answerOfficialCourseCatalogQuestion } from "@/lib/academic/course-catalog";
@@ -1050,16 +1051,17 @@ export async function POST(req: Request) {
       }
     }
     const latestUserQuestion = [...sanitized].reverse().find((message) => message.role === "user")?.content ?? latest;
-    const prerequisiteAssessment = asksPersonalPrerequisiteEligibility(latestUserQuestion) ? assessPrerequisiteConversation(
-      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
-    ) : null;
+    const prerequisiteMessages = sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant");
+    const prerequisiteAssessment = asksPersonalPrerequisiteEligibility(latestUserQuestion)
+      ? assessPrerequisiteConversation(prerequisiteMessages) ?? assessCatalogPrerequisiteConversation(prerequisiteMessages)
+      : null;
     if (prerequisiteAssessment) {
       const { rule, evaluation } = prerequisiteAssessment;
       const payload: AssistantPayload = {
         role: "assistant",
         content: renderPrerequisiteAssessment(prerequisiteAssessment, locale),
         source: "rag",
-        stateLabel: "v3_academic_rule_evaluation",
+        stateLabel: rule.id.startsWith("official-course-catalog-") ? "v3_catalog_prerequisite_evaluation" : "v3_academic_rule_evaluation",
         resolutionState: evaluation.resolutionState,
         disposition: evaluation.status === "UNDETERMINED" ? "clarify" : "answer",
         citations: [{ title: rule.source.title, url: rule.source.url, lastVerified: rule.version }],

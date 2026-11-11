@@ -1,5 +1,6 @@
 import fs from "node:fs";
 import path from "node:path";
+import { asksPersonalPrerequisiteEligibility } from "@/lib/academic/prerequisite-rules";
 
 export type OfficialCourseRecord = {
   code: string;
@@ -8,8 +9,11 @@ export type OfficialCourseRecord = {
   descriptionStatus: "published" | "not-present-in-catalog-section";
   creditHours: number | null;
   prerequisiteText: string | null;
+  prerequisiteItems: string[];
   corequisiteText: string | null;
+  corequisiteItems: string[];
   preCorequisiteText: string | null;
+  preCorequisiteItems: string[];
   source: { title: string; url: string; verifiedAt: string };
 };
 
@@ -49,6 +53,10 @@ export function loadOfficialCourseCatalog(): CatalogSnapshot | null {
     if (!/^[A-Z]{2,8}\d{3,4}[A-Z]?$/u.test(course.code) || codes.has(course.code) || !course.title || !isOfficialUrl(course.source?.url) || !course.source.verifiedAt) {
       throw new Error(`Invalid or duplicate UAEU course catalog record: ${course.code || "unknown"}`);
     }
+    if (![course.prerequisiteItems, course.corequisiteItems, course.preCorequisiteItems].every((items) =>
+      Array.isArray(items) && items.every((item) => typeof item === "string" && item.trim().length > 0))) {
+      throw new Error(`Invalid UAEU course relation items: ${course.code}`);
+    }
     codes.add(course.code);
   }
   cachedCatalog = catalog;
@@ -63,9 +71,11 @@ function targetCode(question: string): string | null {
 
 export function answerOfficialCourseCatalogQuestion(question: string, locale: "en" | "ar") {
   const normalized = question.toLowerCase();
-  const asksPersonalOrProgramDecision = /\b(?:am i eligible|can i register|can i take|will this count|counts? toward|degree requirement|major requirement|graduate|my degree|study plan|cohort|waiver|exception)\b/u.test(normalized);
+  const asksCourseEligibility = asksPersonalPrerequisiteEligibility(question) ||
+    /\b(?:eligible to (?:take|enroll|register)|meet (?:the )?prerequisites?)\b/u.test(normalized);
+  const asksProgramDecision = /\b(?:will this count|counts? toward|degree requirement|major requirement|graduate|my degree|study plan|cohort|waiver|exception)\b/u.test(normalized);
   const asksCatalogFact = /\b(?:course|credits?|credit hours?|prerequisites?|corequisites?|pre\s*[/&-]?\s*co|description|what is|tell me about|catalog)\b/u.test(normalized);
-  if (!asksCatalogFact || asksPersonalOrProgramDecision) return null;
+  if ((!asksCatalogFact && !asksCourseEligibility) || asksProgramDecision) return null;
   const code = targetCode(question);
   if (!code) return null;
   const catalog = loadOfficialCourseCatalog();
@@ -76,6 +86,25 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
       ? `لم أجد الرمز **${code}** في لقطة فهرس المقررات الرسمية المتاحة. أرسل رمز المقرر كما يظهر في بوابة UAEU أو اذكر سنة الفهرس.`
       : `I could not find **${code}** in the available official UAEU course-catalog snapshot. Check the course code in the UAEU portal or provide the catalog year.`;
     return { content, code, source: null, resolutionState: "UNSUPPORTED" as const };
+  }
+  if (asksCourseEligibility) {
+    const listedRequirements = [
+      record.prerequisiteText ? `- ${locale === "ar" ? "نص المتطلب السابق في الفهرس" : "Catalog prerequisite wording"}: ${record.prerequisiteText}.` : locale === "ar" ? "- لا يتضمن سجل الفهرس المتاح نصاً لمتطلب سابق لهذا المقرر." : "- The catalog snapshot does not provide prerequisite wording for this course.",
+      record.corequisiteText ? `- ${locale === "ar" ? "نص المتطلب المصاحب في الفهرس" : "Catalog corequisite wording"}: ${record.corequisiteText}.` : "",
+      record.preCorequisiteText ? `- ${locale === "ar" ? "نص متطلب السابق/المصاحب في الفهرس" : "Catalog Pre/Co wording"}: ${record.preCorequisiteText}.` : "",
+    ].filter(Boolean);
+    return {
+      content: [
+        `**${record.code} ${record.title} — ${locale === "ar" ? "لم يتم التحقق من أهلية التسجيل" : "eligibility not verified"}**`,
+        ...listedRequirements,
+        locale === "ar"
+          ? "لا أستطيع حساب أهلية التسجيل بأمان من هذا النص وحده لأن صيغة القاعدة غير مدعومة حالياً في أداة التقييم. راجع خطة Degree Works وبوابة التسجيل، أو اطلب من وحدة الإرشاد في كليتك تأكيد القاعدة لدفعتك. هذا الرد لا يؤكد السماح بالتسجيل أو توفر شعبة."
+          : "I cannot safely calculate eligibility from this catalog text alone because its rule structure is not supported by the current evaluator. Check your Degree Works plan and registration portal, or ask your college advising unit to confirm the rule for your cohort. This answer does not confirm registration permission or section availability.",
+      ].join("\n"),
+      code,
+      source: { title: record.source.title, url: record.source.url, lastVerified: record.source.verifiedAt },
+      resolutionState: "UNSUPPORTED" as const,
+    };
   }
   const lines = [`**${record.code} ${record.title}**`];
   if (record.creditHours !== null) lines.push(locale === "ar" ? `- الساعات المعتمدة في الفهرس: **${record.creditHours}**.` : `- Catalog credit hours: **${record.creditHours}**.`);

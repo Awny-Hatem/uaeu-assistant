@@ -27,6 +27,14 @@ export function stripHtml(value = "") {
     .trim();
 }
 
+function relationBlockItems(section, headingName) {
+  const regex = new RegExp(`<h3\\b[^>]*>\\s*${headingName}\\s*<\\/h3>([\\s\\S]*?)(?=<h3\\b|$)`, "i");
+  const body = section.match(regex)?.[1];
+  if (!body) return [];
+  const items = [...body.matchAll(/<li\b[^>]*>([\s\S]*?)<\/li>/gi)].map((match) => stripHtml(match[1])).filter(Boolean);
+  return items.length ? items : [stripHtml(body)].filter(Boolean);
+}
+
 export function extractCourseCodes(indexHtml) {
   const courses = new Map();
   for (const match of indexHtml.matchAll(/<a\b[^>]*href=["']([^"']*course_\d+\.shtml\?id=([^"']+))["'][^>]*>([\s\S]*?)<\/a>/gi)) {
@@ -62,29 +70,31 @@ export function parseCoursePage(html, course, verifiedAt = new Date().toISOStrin
   const description = rawDescription ? stripHtml(rawDescription) : null;
   const creditsMatch = section.match(/<h3\b[^>]*>[\s\S]*?Credit\s*Hours?\s*:\s*([\d.]+)\s*<\/h3>/i);
   const creditHours = creditsMatch ? Number(creditsMatch[1]) : null;
-  const relations = { prerequisites: null, corequisites: null, preCorequisites: null };
-  for (const label of Object.keys(relations)) {
-    const headingName = label === "preCorequisites" ? "Pre\\s*[/&]\\s*Co(?:requisites)?" : label;
-    const headingRegex = new RegExp(`<h3\\b[^>]*>\\s*${headingName}\\s*<\\/h3>([\\s\\S]*?)(?=<h3\\b|$)`, "i");
-    const body = section.match(headingRegex)?.[1];
-    if (body) relations[label] = stripHtml(body);
+  const prerequisiteItems = relationBlockItems(section, "Prerequisites");
+  const corequisiteItems = relationBlockItems(section, "Corequisites");
+  const preCorequisiteItems = relationBlockItems(section, "Pre\\s*[/&]\\s*Co(?:requisites)?");
+  const regularPrerequisites = [];
+  const concurrentAlternatives = [...preCorequisiteItems];
+  for (const item of prerequisiteItems) {
+    const preCo = item.match(/^Pre\s*\/\s*Co\s+(.+)$/i);
+    if (preCo) concurrentAlternatives.push(preCo[1].trim());
+    else regularPrerequisites.push(item);
   }
-  if (relations.prerequisites) {
-    const preCo = relations.prerequisites.match(/(?:^|\s)Pre\s*\/\s*Co\s+(.+)$/i);
-    if (preCo) {
-      relations.prerequisites = relations.prerequisites.slice(0, preCo.index).trim() || null;
-      relations.preCorequisites = preCo[1].trim();
-    }
-  }
+  const prerequisiteText = regularPrerequisites.length ? regularPrerequisites.join("; ") : null;
+  const corequisiteText = corequisiteItems.length ? corequisiteItems.join("; ") : null;
+  const preCorequisiteText = concurrentAlternatives.length ? concurrentAlternatives.join("; ") : null;
   return {
     code: course.code,
     title,
     description,
     descriptionStatus: description ? "published" : "not-present-in-catalog-section",
     creditHours,
-    prerequisiteText: relations.prerequisites,
-    corequisiteText: relations.corequisites,
-    preCorequisiteText: relations.preCorequisites,
+    prerequisiteText,
+    prerequisiteItems: regularPrerequisites,
+    corequisiteText,
+    corequisiteItems,
+    preCorequisiteText,
+    preCorequisiteItems: concurrentAlternatives,
     source: { title: `UAEU Course Catalog — ${course.code}`, url: course.url, verifiedAt },
   };
 }

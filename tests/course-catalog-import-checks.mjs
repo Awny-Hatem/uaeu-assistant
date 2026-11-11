@@ -22,8 +22,11 @@ assert.equal(record.title, "Data Structures");
 assert.equal(record.creditHours, 3);
 assert.equal(record.description, "Lists & trees.");
 assert.equal(record.prerequisiteText, "CSBP219 with a minimum grade D");
+assert.deepEqual(record.prerequisiteItems, ["CSBP219 with a minimum grade D"]);
 assert.equal(record.corequisiteText, null);
+assert.deepEqual(record.corequisiteItems, []);
 assert.equal(record.preCorequisiteText, "CSBP221 with a minimum grade D");
+assert.deepEqual(record.preCorequisiteItems, ["CSBP221 with a minimum grade D"]);
 assert.equal(record.source.verifiedAt, "2026-11-11");
 
 const combined = parseCoursePage(`
@@ -33,6 +36,7 @@ const combined = parseCoursePage(`
   </ul></div>
 `, links[0], "2026-11-11");
 assert.equal(combined.prerequisiteText, "CSBP219 with a minimum grade D");
+assert.deepEqual(combined.prerequisiteItems, ["CSBP219 with a minimum grade D"]);
 assert.equal(combined.preCorequisiteText, "CSBP221 with a minimum grade D");
 
 const sparse = parseCoursePage('<div id="ENVE850"><h1>Special Topics (ENVE850)</h1></div>', {
