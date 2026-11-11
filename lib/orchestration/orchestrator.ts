@@ -13,7 +13,7 @@ export type OrchestratorInput = {
 
 const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|course|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar)\b|Ø¬Ø§Ù…Ø¹[Ø©Ù‡]|Ø§Ù„ÙƒÙ„ÙŠ[Ø©Ù‡]|Ø§Ù„ØªØ³Ø¬ÙŠÙ„|Ø§Ù„Ù‚Ø¨ÙˆÙ„|Ø§Ù„ØªØ®Ø±Ø¬/u;
 const CURRENT_TERMS = /\b(?:current|currently|today|latest|upcoming|this (?:term|semester|year)|deadlines?|due dates?|last days?|closing dates?|when does .* open|when does .* close|start dates?|exam dates?)\b/u;
-const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major|cancel my course)\b|Ù‚Ø¯Ù‘Ù… Ø·Ù„Ø¨ÙŠ|Ø§Ù†Ø³Ø­Ø¨ Ù„ÙŠ|Ø³Ø¬Ù„Ù†ÙŠ|Ø§Ø¯ÙØ¹ Ù„ÙŠ/u;
+const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major for me|switch my major for me|cancel my course)\b|Ù‚Ø¯Ù‘Ù… Ø·Ù„Ø¨ÙŠ|Ø§Ù†Ø³Ø­Ø¨ Ù„ÙŠ|Ø³Ø¬Ù„Ù†ÙŠ|Ø§Ø¯ÙØ¹ Ù„ÙŠ/u;
 const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|delay(?:ed)?|graduate|graduation plan|what should i do|options|scenario|because|although|but)\b|Ø±Ø³Ø¨Øª|Ø§Ù„ØªØ®Ø±Ø¬|ØªØ£Ø®Ø±|Ù…Ø±ØªÙŠÙ†|Ù…Ø§Ø°Ø§ Ø£ÙØ¹Ù„/u;
 const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|record|progress|graduation)|i have completed|i failed|i passed|i am a student)\b|Ù‡Ù„ Ø£Ø³ØªØ·ÙŠØ¹|Ù‡Ù„ Ø£Ù†Ø§|Ù…Ù‚Ø±Ø±Ø§ØªÙŠ|Ù…Ø¹Ø¯Ù„ÙŠ/u;
 const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|Ø§Ù„Ù…ÙˆØ¹Ø¯ Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ|Ø¢Ø®Ø± Ù…ÙˆØ¹Ø¯/u;
@@ -41,9 +41,10 @@ function executionMode(latest: string, query: string): ExecutionMode {
   // this allowlist narrow sent ordinary university questions back to the legacy
   // answer selector even though they had already been identified as UAEU topics.
   const academicOrServiceTarget = courseCodes(query).length > 0 || subjects.length > 0;
-  if (PERSONALIZED_TERMS.test(text) && academicOrServiceTarget && !LOCATION_LOOKUP.test(request)) return "PERSONALIZED_ACADEMIC";
+  const processQuestion = /^(?:how (?:do|can) i|where can i|where do i)\b/u.test(text);
+  if (PERSONALIZED_TERMS.test(text) && academicOrServiceTarget && !LOCATION_LOOKUP.test(request) && !processQuestion) return "PERSONALIZED_ACADEMIC";
   if (CURRENT_TERMS.test(request) && UAEU_TERMS.test(request) && !LOCATION_LOOKUP.test(request)) return "CURRENT_UAEU_RESEARCH";
-  if (UAEU_TERMS.test(request) || courseCodes(query).length > 0) return "UAEU_FACTUAL";
+  if (UAEU_TERMS.test(request) || courseCodes(query).length > 0 || subjects.length > 0) return "UAEU_FACTUAL";
   return "GENERAL_EXPLANATION";
 }
 

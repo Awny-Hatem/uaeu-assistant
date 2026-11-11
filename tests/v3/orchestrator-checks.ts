@@ -56,6 +56,12 @@ assert.equal(personal.mode, "PERSONALIZED_ACADEMIC");
 assert.equal(personal.needs.studentData, false, "public prerequisites can be explained without accessing a student's record");
 assert.deepEqual(personal.missingContext, [], "the answer can state the published prerequisite rule and explain what personal details affect it");
 
+const majorChangeEligibility = plan("Can I change my major from business administration to finance after my third year?");
+assert.equal(majorChangeEligibility.mode, "PERSONALIZED_ACADEMIC", "asking whether a policy permits a change is not a request to submit the change");
+assert.equal(majorChangeEligibility.needs.universityAction, false);
+assert.equal(majorChangeEligibility.needs.studentData, false);
+assert.equal(plan("How do I change my major?").mode, "UAEU_FACTUAL", "a process question must use evidence-first guidance");
+
 const privateRecord = plan("Can I register right now with my current holds and completed courses?");
 assert.equal(privateRecord.needs.studentData, true);
 assert.ok(privateRecord.missingContext.some((item) => item.includes("authenticated access")));
