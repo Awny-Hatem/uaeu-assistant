@@ -270,7 +270,7 @@ export function academicSnapshotFromMessages(messages: { role: "user" | "assista
       if (/(?:لم|ما)\s+(?:أجتز|اجتز|نجح|أكمل|اكمل|أنهِ|انهِ)/u.test(clause)) continue;
       if (/\b(?:NOT|NEVER|DIDN'T|DID NOT|HAVEN'T|HAVE NOT|HASN'T|HAS NOT)\s+(?:YET\s+)?(?:PASSED|COMPLETED|FINISHED|EARNED)\b/.test(clause)) continue;
 
-      const currentPattern = new RegExp(`\\b(?:(?:I AM|I'M)\\s+(?:CURRENTLY\\s+)?TAKING|CURRENTLY\\s+TAKING|(?:I AM\\s+)?(?:CURRENTLY\\s+)?ENROLLED IN|(?:I AM\\s+)?(?:CURRENTLY\\s+)?REGISTERED IN)\\s+${code}\\b`, "g");
+      const currentPattern = new RegExp(`\\b(?:(?:I AM|I'M|AM)\\s+(?:CURRENTLY\\s+)?TAKING|CURRENTLY\\s+TAKING|(?:I AM\\s+)?(?:CURRENTLY\\s+)?ENROLLED IN|(?:I AM\\s+)?(?:CURRENTLY\\s+)?REGISTERED IN)\\s+${code}\\b`, "g");
       for (const match of clause.matchAll(currentPattern)) {
         const prefix = clause.slice(0, match.index ?? 0);
         if (!/\b(?:NOT|NEVER|NO LONGER)\s*$/.test(prefix)) current.add(match[1]);

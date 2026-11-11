@@ -179,12 +179,14 @@ async function main() {
   }
 
   const chme330PrerequisiteAssessment = await askMessages([
-    { role: "user", content: "Can I register for CHME330? I passed PHYS105 with grade D, and I'm currently taking CHME300." },
+    { role: "user", content: "Can I register for CHME330? I passed PHYS105 with grade D, and am taking CHME300." },
   ], "203.0.113.254");
   assert.equal(chme330PrerequisiteAssessment.payload.stateLabel, "v3_catalog_prerequisite_evaluation");
   assert.equal(chme330PrerequisiteAssessment.payload.resolutionState, "MISSING_CONTEXT");
   assert.match(String(chme330PrerequisiteAssessment.payload.content), /PHYS135/,
     "the exact reviewed source repair must retain the separately listed PHYS135 prerequisite");
+  assert.match(String(chme330PrerequisiteAssessment.payload.content), /CHME300 is listed as current/,
+    "a coordinated 'and am taking' clause must preserve current enrollment instead of falsely reporting it missing");
 
   const passGradePrerequisiteAssessment = await askMessages([
     { role: "user", content: "I passed ACCT101 with P." },

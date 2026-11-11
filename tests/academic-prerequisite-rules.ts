@@ -108,6 +108,8 @@ assert.equal(ambiguousCompletion.completedCourses[0]?.grade, "", "completion wor
 
 const repeat = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } });
 assert.deepEqual(repeat, csbp340ByFirstPath, "same rule and snapshot always produce the same trace/result");
+const abbreviatedCurrentCourse = academicSnapshotFromMessages([{ role: "user", content: "I passed PHYS105 with grade D, and am taking CHME300." }]);
+assert.deepEqual(abbreviatedCurrentCourse.currentCourses, ["CHME300"], "a natural coordinated phrase can omit the repeated subject before 'am taking'");
 
 const conversationAssessment = assessPrerequisiteConversation([
   { role: "user", content: "I passed STAT210 with D and ITBP301 with C." },
