@@ -15,7 +15,10 @@ export type PrerequisiteRule = {
   ruleType: "PREREQUISITE";
   course: { code: string; title: string; credits: number };
   degreeLevel: "undergraduate" | "postgraduate";
-  effectiveFrom: string;
+  /** Date the current catalog entry was checked; this is not a policy effective date. */
+  verifiedAt: string;
+  /** Only populate when the authoritative source explicitly gives a policy start date. */
+  effectiveFrom?: string;
   effectiveTo?: string;
   source: { documentId: string; title: string; url: string };
   expression: PrerequisiteExpression;
@@ -51,6 +54,7 @@ const gradeOrder: Record<Grade, number> = {
 };
 const VALID_GRADES = new Set(Object.keys(gradeOrder));
 const COURSE_CODE = /^[A-Z]{2,5}\d{3,4}$/;
+const MAX_RULE_AGE_DAYS = 180;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -70,7 +74,10 @@ function isExpression(value: unknown): value is PrerequisiteExpression {
 function validateRule(value: unknown): value is PrerequisiteRule {
   if (!isRecord(value) || value.schemaVersion !== 1 || value.status !== "approved" || value.ruleType !== "PREREQUISITE") return false;
   if (typeof value.id !== "string" || !value.id || typeof value.version !== "string" ||
-      typeof value.effectiveFrom !== "string" || !Number.isFinite(Date.parse(value.effectiveFrom))) return false;
+      typeof value.verifiedAt !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.verifiedAt) ||
+      !Number.isFinite(Date.parse(value.verifiedAt))) return false;
+  if (value.effectiveFrom !== undefined && (typeof value.effectiveFrom !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.effectiveFrom) || !Number.isFinite(Date.parse(value.effectiveFrom)))) return false;
+  if (value.effectiveTo !== undefined && (typeof value.effectiveTo !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.effectiveTo) || !Number.isFinite(Date.parse(value.effectiveTo)))) return false;
   if (!isRecord(value.course) || typeof value.course.code !== "string" || !COURSE_CODE.test(value.course.code) ||
       typeof value.course.title !== "string" || typeof value.course.credits !== "number" || value.course.credits <= 0) return false;
   if (!isRecord(value.source) || typeof value.source.documentId !== "string" || typeof value.source.title !== "string" || typeof value.source.url !== "string") return false;
@@ -142,8 +149,10 @@ export function evaluatePrerequisite(input: {
   }
 
   const asOf = input.asOf ?? new Date().toISOString().slice(0, 10);
-  if (!Number.isFinite(Date.parse(asOf)) || asOf < rule.effectiveFrom || (rule.effectiveTo && asOf > rule.effectiveTo)) {
-    return { targetCourse: rule.course, status: "UNDETERMINED", resolutionState: "UNSUPPORTED", decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT", ruleId: rule.id, ruleVersion: rule.version, conditions: [], source: rule.source, explanation: "The approved rule is not established as effective for the requested date." };
+  const ageDays = Math.floor((Date.parse(asOf) - Date.parse(rule.verifiedAt)) / 86_400_000);
+  if (!Number.isFinite(Date.parse(asOf)) || ageDays < 0 || ageDays > MAX_RULE_AGE_DAYS ||
+      (rule.effectiveFrom !== undefined && asOf < rule.effectiveFrom) || (rule.effectiveTo && asOf > rule.effectiveTo)) {
+    return { targetCourse: rule.course, status: "UNDETERMINED", resolutionState: "UNSUPPORTED", decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT", ruleId: rule.id, ruleVersion: rule.version, conditions: [], source: rule.source, explanation: ageDays > MAX_RULE_AGE_DAYS ? "The catalog evidence is stale and must be re-verified before this rule can be applied." : "The approved rule is not established by the verified catalog snapshot for the requested date." };
   }
 
   const conditions: RuleConditionResult[] = [];

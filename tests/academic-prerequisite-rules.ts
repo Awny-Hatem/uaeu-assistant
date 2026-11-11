@@ -47,8 +47,12 @@ const unknownTarget = evaluatePrerequisite({ targetCourseCode: "CENG999", snapsh
 assert.equal(unknownTarget.status, "UNDETERMINED", "an unmodeled course never receives a guessed rule");
 assert.equal(unknownTarget.source, undefined);
 
-const beforeEffectiveDate = evaluatePrerequisite({ targetCourseCode: "MECH305", asOf: "2026-10-05", snapshot: { completedCourses: [{ courseCode: "CIVL240", grade: "A" }] } });
-assert.equal(beforeEffectiveDate.status, "UNDETERMINED", "future-effective evidence cannot be applied early");
+const beforeVerification = evaluatePrerequisite({ targetCourseCode: "MECH305", asOf: "2026-10-05", snapshot: { completedCourses: [{ courseCode: "CIVL240", grade: "A" }] } });
+assert.equal(beforeVerification.status, "UNDETERMINED", "a current catalog snapshot cannot establish a historic prerequisite rule");
+const staleSnapshot = evaluatePrerequisite({ targetCourseCode: "MECH305", asOf: "2027-04-10", snapshot: { completedCourses: [{ courseCode: "CIVL240", grade: "A" }] } });
+assert.equal(staleSnapshot.status, "UNDETERMINED", "a catalog snapshot older than the 180-day freshness window requires re-verification");
+const noInventedEffectiveDate = evaluatePrerequisite({ targetCourseCode: "CSBP320", asOf: "2026-11-12", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }] } });
+assert.equal(noInventedEffectiveDate.status, "ELIGIBLE", "the source observation date is tracked without claiming it is the rule's official effective date");
 
 const repeat = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } });
 assert.deepEqual(repeat, csbp340ByFirstPath, "same rule and snapshot always produce the same trace/result");
@@ -87,4 +91,4 @@ assert.equal(notTakingCourse.evaluation.status, "UNDETERMINED", "a negated enrol
 
 assert.equal(assessPrerequisiteConversation([{ role: "user", content: "What can I do if I fail Data Structures twice?" }]), null, "failed-course policy questions are not misrouted as registration eligibility");
 
-console.log("Academic prerequisite rules passed: 9 approved records, grade thresholds, AND/OR, concurrency, conversation assessment, provenance, unknowns, and deterministic results.");
+console.log("Academic prerequisite rules passed: 9 approved records, grade thresholds, AND/OR, concurrency, snapshot dating/freshness, conversation assessment, provenance, unknowns, and deterministic results.");
