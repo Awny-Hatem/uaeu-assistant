@@ -11,13 +11,13 @@ export type OrchestratorInput = {
   authenticatedScopes?: string[];
 };
 
-const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|course|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar)\b|Ø¬Ø§Ù…Ø¹[Ø©Ù‡]|Ø§Ù„ÙƒÙ„ÙŠ[Ø©Ù‡]|Ø§Ù„ØªØ³Ø¬ÙŠÙ„|Ø§Ù„Ù‚Ø¨ÙˆÙ„|Ø§Ù„ØªØ®Ø±Ø¬/u;
-const CURRENT_TERMS = /\b(?:current|currently|today|latest|upcoming|this (?:term|semester|year)|deadlines?|due dates?|last days?|closing dates?|when does .* open|when does .* close|start dates?|exam dates?)\b/u;
-const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major for me|switch my major for me|cancel my course)\b|Ù‚Ø¯Ù‘Ù… Ø·Ù„Ø¨ÙŠ|Ø§Ù†Ø³Ø­Ø¨ Ù„ÙŠ|Ø³Ø¬Ù„Ù†ÙŠ|Ø§Ø¯ÙØ¹ Ù„ÙŠ/u;
-const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|delay(?:ed)?|graduate|graduation plan|what should i do|options|scenario|because|although|but)\b|Ø±Ø³Ø¨Øª|Ø§Ù„ØªØ®Ø±Ø¬|ØªØ£Ø®Ø±|Ù…Ø±ØªÙŠÙ†|Ù…Ø§Ø°Ø§ Ø£ÙØ¹Ù„/u;
-const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|record|progress|graduation)|i have completed|i failed|i passed|i am a student)\b|Ù‡Ù„ Ø£Ø³ØªØ·ÙŠØ¹|Ù‡Ù„ Ø£Ù†Ø§|Ù…Ù‚Ø±Ø±Ø§ØªÙŠ|Ù…Ø¹Ø¯Ù„ÙŠ/u;
-const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|Ø§Ù„Ù…ÙˆØ¹Ø¯ Ø§Ù„Ù†Ù‡Ø§Ø¦ÙŠ|Ø¢Ø®Ø± Ù…ÙˆØ¹Ø¯/u;
-const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b/u;
+const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|course|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar)\b|جامعة|الجامعة|كلية|الكلية|القبول|التسجيل|الفصل الدراسي|مساق|مقرر|مادة|منحة|منح|السكن|كشف الدرجات|التخرج|البوابة|الخدمات الطلابية|التقويم الأكاديمي/u;
+const CURRENT_TERMS = /\b(?:current|currently|today|latest|upcoming|this (?:term|semester|year)|deadlines?|due dates?|last days?|closing dates?|when does .* open|when does .* close|start dates?|exam dates?)\b|حالي(?:اً|ا)?|اليوم|احدث|القادم|هذا الفصل|المواعيد النهائية|الموعد النهائي|اخر موعد|مواعيد التقديم|موعد الاغلاق|متى يبدأ|متى ينتهي|تاريخ البدء|مواعيد الاختبارات/u;
+const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major for me|switch my major for me|cancel my course)\b|قدّم(?:ي)? طلب(?:ي)?|انسحب لي|سجلني|سجّلني|ادفع لي|غيّر تخصصي لي|بدّل تخصصي لي|ألغِ مساقي|احذف مساقي/u;
+const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|delay(?:ed)?|graduate|graduation plan|what should i do|options|scenario|because|although|but)\b|رسبت|يرسب|رسوب|مرتين|للمرة الثالثة|متأخر|خطة التخرج|ماذا أفعل|ما الحل|خيارات|سيناريو|بسبب|رغم|لكن/u;
+const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|record|progress|graduation)|i have completed|i failed|i passed|i am a student)\b|هل أستطيع|هل استطيع|هل يمكنني|هل أقدر|هل انا|مقرراتي|مساقاتي|معدلي|سجلي|تقدمي|تخرجي|أكملت|اكملت|رسبت|نجحت|أنا طالب|انا طالب/u;
+const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|الموعد النهائي|آخر موعد|اخر موعد|مواعيد التقديم|موعد الإغلاق|موعد الاغلاق/u;
+const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b|اين (?:اجد|اتحقق من)|وين (?:القى|اتحقق)|اين التقويم الاكاديمي/u;
 const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
 const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science"]);
 

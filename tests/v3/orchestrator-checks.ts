@@ -70,6 +70,25 @@ const scenario = plan("I failed CSBP340 twice and it blocks graduation. What sho
 assert.equal(scenario.mode, "COMPLEX_SCENARIO");
 assert.equal(scenario.needs.planning, true);
 
+const arabicEligibility = plan("هل أستطيع تسجيل CSBP340 في الفصل القادم؟");
+assert.equal(arabicEligibility.mode, "PERSONALIZED_ACADEMIC", "Arabic personal eligibility wording uses the governed academic path");
+assert.deepEqual(arabicEligibility.entities.courses, ["CSBP340"]);
+
+const arabicFailureScenario = plan("رسبت في CSBP340 مرتين، ماذا أفعل؟");
+assert.equal(arabicFailureScenario.mode, "COMPLEX_SCENARIO", "Arabic failed-course scenarios receive scenario handling");
+assert.equal(arabicFailureScenario.needs.planning, true);
+
+const arabicAction = plan("سجلني في CSBP340");
+assert.equal(arabicAction.mode, "UNIVERSITY_TRANSACTION", "Arabic commands that request a portal action require the transaction boundary");
+
+const arabicCurrentDeadline = plan("ما آخر موعد للتقديم في جامعة الإمارات؟");
+assert.equal(arabicCurrentDeadline.mode, "CURRENT_UAEU_RESEARCH", "Arabic current-deadline questions use fresh official research");
+
+const arabicCalendarLocation = plan("أين أجد التقويم الأكاديمي لجامعة الإمارات؟");
+assert.equal(arabicCalendarLocation.mode, "UAEU_FACTUAL");
+assert.equal(arabicCalendarLocation.entities.eventType, undefined, "Arabic calendar location requests do not become date lookups");
+assert.match(evidenceQueryForPlan(arabicCalendarLocation).request, /official UAEU academic calendar webpage/i, "Arabic calendar-location wording maps to the calendar location evidence request");
+
 const unspecifiedFailedCourse = plan("What can I do if I fail Data Structure course?");
 assert.equal(unspecifiedFailedCourse.mode, "COMPLEX_SCENARIO");
 assert.equal(unspecifiedFailedCourse.entities.courses, undefined, "a course title must not silently become an assumed course code");
@@ -85,4 +104,4 @@ assert.equal(plan("Explain recursion.").mode, "GENERAL_EXPLANATION");
 assert.equal(plan("Thanks!").mode, "SIMPLE_CONVERSATION");
 assert.equal(isExecutionPlan(admissions), true);
 
-console.log("V3 orchestrator checks passed: modes, explicit target, context correction, missing slots and authorization boundary.");
+console.log("V3 orchestrator checks passed: English/Arabic modes, explicit target, context correction, missing slots and authorization boundary.");
