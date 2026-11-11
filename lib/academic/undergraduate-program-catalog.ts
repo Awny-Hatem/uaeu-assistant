@@ -62,6 +62,7 @@ const COLLEGE_ALIASES: Record<string, string[]> = {
 
 function catalogRequest(query: string): boolean {
   const text = normalizeQuery(query);
+  if (/\b(?:tuition|fees?|cost|price|payment|scholarship|deadline|admission criteria)\b/u.test(text)) return false;
   if (/\b(?:my|i am|am i|completed|courses?|classes?|coursework|prerequisites?|requirements?|credits?|gpa|eligible|eligibility|switch|change my|study plan|degree audit)\b/u.test(text)) return false;
   const asksForProgramInventory = /\b(?:which|what|list|show|available|offered|offer)\b.{0,70}\b(?:programs?|degrees?|majors?)\b/u.test(text) ||
     /\b(?:programs?|degrees?|majors?)\b.{0,70}\b(?:available|offered|offer|list)\b/u.test(text);

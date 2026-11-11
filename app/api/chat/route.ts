@@ -29,9 +29,10 @@ import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { researchOfficialUaeu } from "@/lib/research/official-research";
-import { assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
+import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
+import { answerOfficialCourseCatalogQuestion } from "@/lib/academic/course-catalog";
 import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { isV3Enabled } from "@/lib/v3/runtime";
@@ -1024,9 +1025,10 @@ export async function POST(req: Request) {
         return respond(payload, latest, locale);
       }
     }
-    const prerequisiteAssessment = assessPrerequisiteConversation(
+    const latestUserQuestion = [...sanitized].reverse().find((message) => message.role === "user")?.content ?? latest;
+    const prerequisiteAssessment = asksPersonalPrerequisiteEligibility(latestUserQuestion) ? assessPrerequisiteConversation(
       sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
-    );
+    ) : null;
     if (prerequisiteAssessment) {
       const { rule, evaluation } = prerequisiteAssessment;
       const payload: AssistantPayload = {
@@ -1100,6 +1102,23 @@ export async function POST(req: Request) {
         citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
         evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
         topic: programId,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const courseCatalogAnswer = answerOfficialCourseCatalogQuestion(latest, locale);
+    if (courseCatalogAnswer) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: courseCatalogAnswer.content,
+        source: "rag",
+        stateLabel: "v3_official_course_catalog_lookup",
+        resolutionState: courseCatalogAnswer.resolutionState,
+        disposition: courseCatalogAnswer.resolutionState === "UNSUPPORTED" ? "clarify" : "answer",
+        citations: courseCatalogAnswer.source ? [courseCatalogAnswer.source] : [],
+        evidenceIds: courseCatalogAnswer.source ? [`official-course-catalog:${courseCatalogAnswer.code}`] : [],
+        topic: courseCatalogAnswer.code,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
@@ -1236,29 +1255,8 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  if (!v3EvidenceMode && faqHit && !contextualProcedure) {
-    const payload: AssistantPayload = {
-      role: "assistant",
-      content: withActionBoundary(faqAnswer(faqHit.entry, locale), latest, locale),
-      source: "faq",
-      responseMode: "canonical",
-      stateLabel: "verified_answer",
-      faqId: faqHit.entry.id,
-      disposition: faqHit.entry.disposition ?? "answer",
-      topic: resolution.subject?.key,
-      evidenceIds: [`answer:${faqHit.entry.id}`],
-      citations: citationsForFaq(faqHit.entry),
-      communications,
-    };
-    if (shouldPersistServerSide && userId) {
-      saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
-    }
-    return respond(payload, latest, locale);
-  }
-
-  // V3 can execute a reviewed service workflow as structured guidance. This is
-  // a typed source-backed procedure, not a semantic selector returning a nearby
-  // canonical answer. Guides needing further verification remain on research.
+  // Prefer a directly matched, reviewed service guide over a broader FAQ answer
+  // when both match a concrete process request.
   const candidateGuide = semantic ? null : findServiceGuide(v3EvidenceMode ? answerRequest : routingQuery);
   const guide = candidateGuide && (!v3EvidenceMode || !candidateGuide.requiresVerification) ? candidateGuide : null;
   if (guide) {
@@ -1273,6 +1271,26 @@ export async function POST(req: Request) {
       evidenceIds: [`guide:${guide.id}`],
       guide: localizeServiceGuide(guide, locale),
       citations: [citationForGuide(guide)],
+      communications,
+    };
+    if (shouldPersistServerSide && userId) {
+      saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    }
+    return respond(payload, latest, locale);
+  }
+
+  if (!v3EvidenceMode && faqHit && !contextualProcedure) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: withActionBoundary(faqAnswer(faqHit.entry, locale), latest, locale),
+      source: "faq",
+      responseMode: "canonical",
+      stateLabel: "verified_answer",
+      faqId: faqHit.entry.id,
+      disposition: faqHit.entry.disposition ?? "answer",
+      topic: resolution.subject?.key,
+      evidenceIds: [`answer:${faqHit.entry.id}`],
+      citations: citationsForFaq(faqHit.entry),
       communications,
     };
     if (shouldPersistServerSide && userId) {

@@ -180,6 +180,12 @@ export function listModeledPrerequisiteCourses(): PrerequisiteRule["course"][] {
   return prerequisiteRules.map(({ course }) => course);
 }
 
+export function asksPersonalPrerequisiteEligibility(question: string): boolean {
+  return /\b(?:can i|may i|am i|do i meet|eligible to|allowed to|register for|registration eligibility|enroll in|enrol in|my grade|my grades|my record|my transcript|based on my)\b/iu.test(question) ||
+    /(?:Ù‡Ù„\s*(?:Ø£Ø³ØªØ·ÙŠØ¹|ÙŠÙ…ÙƒÙ†Ù†ÙŠ)|Ù‡Ù„ Ø£Ø³Ø¬Ù„|Ø£Ù‡Ù„ Ø£Ù†|Ø£Ø³ØªÙˆÙÙŠ)/u.test(question) ||
+    /\u0647\u0644\s*(?:\u0623\u0633\u062a\u0637\u064a\u0639|\u064a\u0645\u0643\u0646\u0646\u064a).*(?:\u062a\u0633\u062c\u064a\u0644|\u0623\u062f\u0631\u0633|\u0622\u062e\u0630)/u.test(question);
+}
+
 function courseCodeFromQuestion(question: string): string | undefined {
   const code = "([A-Z]{2,5}\\d{3,4})";
   const patterns = [

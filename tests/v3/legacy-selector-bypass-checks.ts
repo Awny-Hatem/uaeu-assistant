@@ -105,6 +105,12 @@ async function main() {
   assert.equal(incompletePrerequisites.payload.resolutionState, "UNSUPPORTED");
   assert.match(String(incompletePrerequisites.payload.content), /STAT210[\s\S]*ITBP301/);
 
+  const catalogPrerequisites = await ask("What are the prerequisites for CSBP319?", "203.0.113.241");
+  assert.equal(catalogPrerequisites.payload.stateLabel, "v3_official_course_catalog_lookup");
+  assert.equal(catalogPrerequisites.payload.resolutionState, "VERIFIED");
+  assert.match(String(catalogPrerequisites.payload.content), /CSBP219[\s\S]*Pre\/Co requirement[\s\S]*CSBP221/);
+  assert.doesNotMatch(String(catalogPrerequisites.payload.content), /No recognized completed grade/);
+
   const arabicPrerequisite = await ask("هل أستطيع تسجيل CSBP319؟", "203.0.113.239", "ar");
   assert.equal(arabicPrerequisite.payload.stateLabel, "v3_academic_rule_evaluation");
   assert.equal(arabicPrerequisite.payload.resolutionState, "UNSUPPORTED");

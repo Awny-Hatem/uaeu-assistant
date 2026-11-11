@@ -11,6 +11,7 @@ import { sourceCoverageSnapshot } from "@/lib/source-registry";
 import { createHash } from "node:crypto";
 import { isV3Enabled } from "@/lib/v3/runtime";
 import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
+import { loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
 
 export const runtime = "nodejs";
 
@@ -26,6 +27,7 @@ export async function GET() {
   const v3Enabled = isV3Enabled();
   const sourceCoverage = sourceCoverageSnapshot();
   const programCatalog = loadUndergraduateProgramCatalog();
+  const courseCatalog = loadOfficialCourseCatalog();
   const curriculumCoverage = programCatalog.programs.reduce((counts, program) => {
     counts[program.curriculumStatus] += 1;
     return counts;
@@ -62,6 +64,17 @@ export async function GET() {
       verifiedAt: programCatalog.verifiedAt,
       curriculumCoverage,
       curriculumRecordsRequiringIdentityReview: programCatalog.curriculumRecordsRequiringIdentityReview.length,
+    },
+    courseCatalog: {
+      status: courseCatalog ? "official-course-catalog-snapshot" : "not-loaded",
+      courses: courseCatalog?.courses.length ?? 0,
+      verifiedAt: courseCatalog?.verifiedAt ?? null,
+      entriesWithoutDescription: courseCatalog?.courses.filter((course) => !course.description).length ?? 0,
+      entriesWithoutCreditValue: courseCatalog?.courses.filter((course) => course.creditHours === null).length ?? 0,
+      prerequisiteEntries: courseCatalog?.courses.filter((course) => Boolean(course.prerequisiteText)).length ?? 0,
+      corequisiteEntries: courseCatalog?.courses.filter((course) => Boolean(course.corequisiteText)).length ?? 0,
+      preCorequisiteEntries: courseCatalog?.courses.filter((course) => Boolean(course.preCorequisiteText)).length ?? 0,
+      degreeApplicability: "course records do not establish program requirements",
     },
     auth: {
       encryptedCookies: true,

@@ -1,8 +1,12 @@
 import assert from "node:assert/strict";
-import { assessPrerequisiteConversation, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
+import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
 
 const courseCodes = new Set(listModeledPrerequisiteCourses().map(({ code }) => code));
 assert.equal(courseCodes.size, 10);
+assert.equal(asksPersonalPrerequisiteEligibility("What are the prerequisites for CSBP319?"), false);
+assert.equal(asksPersonalPrerequisiteEligibility("Can I take CSBP319 if I passed CSBP219?"), true);
+assert.equal(asksPersonalPrerequisiteEligibility("Ù‡Ù„ Ø£Ø³ØªØ·ÙŠØ¹ ØªØ³Ø¬ÙŠÙ„ CSBP319ØŸ"), true);
+assert.equal(asksPersonalPrerequisiteEligibility("\u0647\u0644 \u0623\u0633\u062a\u0637\u064a\u0639 \u062a\u0633\u062c\u064a\u0644 CSBP319\u061f"), true);
 
 const csbp319CompletedPrereqs = evaluatePrerequisite({ targetCourseCode: "CSBP319", snapshot: { completedCourses: [
   { courseCode: "CSBP219", grade: "D" }, { courseCode: "CSBP221", grade: "D" },

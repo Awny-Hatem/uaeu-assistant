@@ -26,5 +26,6 @@ assert.doesNotMatch(businessPrograms.content, /College of Engineering/);
 
 assert.equal(answerProgramCatalogQuestion("What courses does the Computer Science program offer?", "en"), null, "course questions must not be mistaken for a degree inventory request");
 assert.equal(answerProgramCatalogQuestion("Can I change my major after third year?", "en"), null, "personal major-change questions must not trigger the inventory response");
+assert.equal(answerProgramCatalogQuestion("What is the tuition cost for the program I want?", "en"), null, "a program tuition question must not trigger the degree inventory response");
 
 console.log("UAEU program catalog checks passed: 55 official degrees across 9 colleges, catalog-only coverage states, college filtering, and scope guards.");

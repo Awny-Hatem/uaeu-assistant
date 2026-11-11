@@ -556,6 +556,15 @@ export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
     const questionTopics = understandQuery([...entry.questions, ...(entry.matchPhrases ?? [])].join(" ")).subjects;
     const specific = meaning.subjects.filter((subject) => ["admissions", "graduation", "scholarship", "visa", "housing", "tuition"].includes(subject));
     if (specific.length && !specific.some((subject) => questionTopics.includes(subject))) return false;
+    // A broad example question can mention a neighbouring topic without making
+    // that record authoritative for its deadlines. Require domain ownership
+    // from the answer's reviewed category or explicit subject scope.
+    const categoryTopic = entry.category === "fees" ? "tuition"
+      : entry.category === "scholarships" ? "scholarship"
+      : entry.category === "international" ? "visa"
+      : entry.category;
+    const ownedTopics = new Set([categoryTopic, ...(entry.scope?.subjects ?? [])]);
+    if (specific.length && !specific.some((subject) => ownedTopics.has(subject))) return false;
   }
   return true;
 }
