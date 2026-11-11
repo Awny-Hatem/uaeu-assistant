@@ -63,12 +63,18 @@ const dieteticsInternship = getProgramCurriculum("dietetics")?.curriculum.requir
 assert.ok(dieteticsInternship?.type === "INTERNSHIP");
 assert.equal(dieteticsInternship.courseCode, "NUTR490");
 assert.equal(dieteticsInternship.otherCoursesAllowed, false);
+const dieteticsInternshipQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What is the internship requirement for Dietetics?" }]);
+assert.equal(dieteticsInternshipQuestion?.programId, "dietetics");
+assert.match(renderProgramRequirementsAssessment(dieteticsInternshipQuestion!, "en"), /NUTR490/);
 const nutritionInternship = getProgramCurriculum("nutritional-science")?.curriculum.requirements.find((item) => item.id === "ns-internship");
 assert.ok(nutritionInternship?.type === "INTERNSHIP");
 assert.equal(nutritionInternship.courseCode, "NUTR491");
 const slpClinical = getProgramCurriculum("speech-language-pathology")?.curriculum.requirements.find((item) => item.id === "slp-clinical");
 assert.ok(slpClinical?.type === "REQUIRED_COURSE_SET");
 assert.match(slpClinical.ruleNote ?? "", /200 clinical hours[\s\S]*no concurrent courses[\s\S]*300 clinical hours/i);
+const slpClinicalQuestion = assessProgramRequirementsConversation([{ role: "user", content: "What are the clinical training requirements for Speech-Language Pathology?" }]);
+assert.equal(slpClinicalQuestion?.programId, "speech-language-pathology");
+assert.match(renderProgramRequirementsAssessment(slpClinicalQuestion!, "en"), /SLP456/);
 const spaceDegree = assessProgramRequirementsConversation([{ role: "user", content: "What courses are required in Space Sciences?" }]);
 assert.equal(spaceDegree?.programId, "space-sciences", "standalone Space Sciences degree is not conflated with Physics concentration");
 assert.match(renderProgramRequirementsAssessment(spaceDegree!, "en"), /CSBP478/);

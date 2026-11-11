@@ -378,7 +378,8 @@ function asksProgramCourseRequirements(text: string): boolean {
     /\b(?:what|which)\b.{0,100}\b(?:courses?|classes?|electives?|concentrations?)\b/i.test(text) ||
     /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
     /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text) ||
-    /\b(?:electives?|concentrations?|credit requirements?|prerequisites?)\b.{0,60}\brequirements?\b/i.test(text);
+    /\b(?:electives?|concentrations?|credit requirements?|prerequisites?|internships?|clinical training|practic(?:um|a))\b.{0,60}\b(?:requirements?|rules?|credits?|courses?|hours?)\b/i.test(text) ||
+    /\b(?:requirements?|rules?)\b.{0,60}\b(?:electives?|concentrations?|internships?|clinical training|practic(?:um|a))\b/i.test(text);
 }
 
 export function assessProgramRequirementsConversation(
