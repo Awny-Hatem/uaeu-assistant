@@ -20,6 +20,7 @@
     "test:academic-rules": "tsx tests/academic-prerequisite-rules.ts",
     "test:academic-model": "tsx tests/academic-program-model.ts",
     "test:academic-planner": "tsx tests/academic-semester-planner.ts",
+    "test:academic-sequence": "tsx tests/academic-semester-planner.ts && tsx tests/academic-sequence-route.ts",
     "test:academic-catalog": "tsx tests/academic-program-catalog-checks.ts",
     "test:catalog-import": "node tests/course-catalog-import-checks.mjs && tsx tests/course-catalog-lookup.ts && tsx tests/catalog-prerequisite-parser.ts",
     "test:answer-scope": "tsx tests/answer-scope-guard-checks.ts",

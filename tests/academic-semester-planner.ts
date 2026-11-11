@@ -127,6 +127,16 @@ const unsupportedRule = buildConditionalSemesterPlan({
 assert.equal(unsupportedRule.status, "NO_PLAN");
 assert.match(unsupportedRule.unscheduled[0]?.reason ?? "", /cannot be interpreted safely/i);
 
+const absentCatalogRule = buildConditionalSemesterPlan({
+  asOf: "2026-11-12",
+  courses: [course("CSBP119", undefined, "NO_LISTED_RULE")],
+  completedCourseCodes: [],
+  terms: [{ id: "term-1", label: "Term 1", maxCredits: 15 }],
+});
+assert.equal(absentCatalogRule.status, "CONDITIONAL_PLAN");
+assert.ok(absentCatalogRule.assumptions.some((assumption) => /no prerequisite wording in the catalog snapshot/i.test(assumption)));
+assert.ok(absentCatalogRule.assumptions.some((assumption) => /not confirmation of registration eligibility/i.test(assumption)));
+
 const capacityBlocked = buildConditionalSemesterPlan({
   asOf: "2026-11-12",
   courses: [course("CSBP119", undefined)],

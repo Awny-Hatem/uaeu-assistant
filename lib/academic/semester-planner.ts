@@ -1,6 +1,6 @@
 import type { MinimumGrade, PrerequisiteExpression } from "@/lib/academic/prerequisite-rules";
 
-export type PlannerPrerequisiteStatus = "VERIFIED_RULE" | "VERIFIED_NONE" | "UNSUPPORTED";
+export type PlannerPrerequisiteStatus = "VERIFIED_RULE" | "VERIFIED_NONE" | "NO_LISTED_RULE" | "UNSUPPORTED";
 export type PlannerAvailabilityStatus = "CONFIRMED_OFFERING" | "NOT_OFFERED";
 
 export type PlannerCourse = {
@@ -227,6 +227,9 @@ export function buildConditionalSemesterPlan(input: {
     if (!isFreshEvidence(course.source.verifiedAt, asOf)) {
       unscheduled.set(course.code, "The official course evidence is stale or not yet applicable for the planning date.");
     }
+    if (course.prerequisiteStatus === "NO_LISTED_RULE") {
+      assumptions.add(`${course.code} has no prerequisite wording in the catalog snapshot; this is not confirmation of registration eligibility or absence of other restrictions.`);
+    }
     if (course.prerequisiteStatus === "UNSUPPORTED") unscheduled.set(course.code, "The published prerequisite rule is missing or cannot be interpreted safely.");
     if (course.prerequisiteStatus === "VERIFIED_RULE" && !prerequisiteOptions(course.prerequisiteExpression!)) {
       unscheduled.set(course.code, "The prerequisite rule has too many or unsupported alternatives for deterministic planning.");
@@ -247,7 +250,7 @@ export function buildConditionalSemesterPlan(input: {
 
         const offering = availability.find((item) => item.courseCode.toUpperCase() === code && item.termId === term.id);
         if (offering?.status === "NOT_OFFERED" && isFreshEvidence(offering.verifiedAt, asOf)) continue;
-        const options = course.prerequisiteStatus === "VERIFIED_NONE"
+        const options = course.prerequisiteStatus === "VERIFIED_NONE" || course.prerequisiteStatus === "NO_LISTED_RULE"
           ? [{ completedBefore: new Set<string>(), currentWith: new Set<string>(), minimumGrades: new Map<string, MinimumGrade>() }]
           : prerequisiteOptions(course.prerequisiteExpression!) ?? [];
         const selected = chooseSatisfiedOption(options, scheduledBefore, new Set([...sameTerm, ...current]), plannedGrade, assumedPasses);
@@ -307,7 +310,9 @@ export function buildConditionalSemesterPlan(input: {
         ? `The planner needs verified completion or transfer status for prerequisite${externalDependencies.length === 1 ? "" : "s"} ${externalDependencies.join(", ")}.`
         : course.prerequisiteStatus === "VERIFIED_RULE"
           ? "Its modeled prerequisites are not satisfied by earlier courses in the supplied plan, or the required courses cannot fit within the supplied terms."
-          : "No verified prerequisite status is available for this course.";
+          : course.prerequisiteStatus === "NO_LISTED_RULE"
+            ? "The catalog snapshot contains no prerequisite wording for this course; verify its restrictions in Degree Works or with your advisor before registration."
+            : "No verified prerequisite status is available for this course.";
     unscheduled.set(code, reason);
   }
 
