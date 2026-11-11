@@ -26,8 +26,16 @@ type CatalogSnapshot = {
   courses: OfficialCourseRecord[];
 };
 
+type CourseCreditDiscrepancy = {
+  courseCode: string;
+  message: { en: string; ar: string };
+  sources: { title: string; url: string; lastVerified: string }[];
+};
+
 const CATALOG_PATH = path.join(process.cwd(), "data", "academic", "course-catalog.json");
+const CREDIT_DISCREPANCIES_PATH = path.join(process.cwd(), "data", "academic", "course-credit-discrepancies.json");
 let cachedCatalog: CatalogSnapshot | null | undefined;
+let cachedCreditDiscrepancies: Map<string, CourseCreditDiscrepancy> | null | undefined;
 
 function isOfficialUrl(value: unknown): value is string {
   if (typeof value !== "string") return false;
@@ -38,7 +46,14 @@ function isOfficialUrl(value: unknown): value is string {
       url.pathname === "/catalog/auto/department_HS_HS_SOCW.asp";
     const biologyDepartmentCatalog = url.hostname === "webapps.uaeu.ac.ae" &&
       url.pathname === "/catalog/auto/department_SC_SC_BIOL.asp";
-    return url.protocol === "https:" && (primaryCourseCatalog || socialWorkDepartmentCatalog || biologyDepartmentCatalog);
+    const approvedProgramEvidence = url.hostname === "www.uaeu.ac.ae" && (
+      url.pathname === "/en/catalog/undergraduate/programs/bachelor-of-science-in-marine-fisheries-and-animal-science.shtml" ||
+      url.pathname === "/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml" ||
+      url.pathname === "/en/catalog/undergraduate/programs/bachelor-of-science-in-communication-engineering.shtml" ||
+      url.pathname === "/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf" ||
+      url.pathname === "/en/eng/pdf/coe_bsc_communication_engineering_study_plan.pdf"
+    );
+    return url.protocol === "https:" && (primaryCourseCatalog || socialWorkDepartmentCatalog || biologyDepartmentCatalog || approvedProgramEvidence);
   } catch {
     return false;
   }
@@ -69,6 +84,23 @@ export function loadOfficialCourseCatalog(): CatalogSnapshot | null {
   return cachedCatalog;
 }
 
+function loadCreditDiscrepancies(): Map<string, CourseCreditDiscrepancy> {
+  if (cachedCreditDiscrepancies) return cachedCreditDiscrepancies;
+  const data = JSON.parse(fs.readFileSync(CREDIT_DISCREPANCIES_PATH, "utf8")) as CourseCreditDiscrepancy[];
+  if (!Array.isArray(data)) throw new Error("Invalid UAEU course-credit discrepancy data.");
+  const records = new Map<string, CourseCreditDiscrepancy>();
+  for (const item of data) {
+    if (!/^[A-Z]{2,8}\d{3,4}[A-Z]?$/u.test(item.courseCode) || records.has(item.courseCode) ||
+      !item.message?.en || !item.message?.ar || !Array.isArray(item.sources) || !item.sources.length ||
+      item.sources.some((source) => !source.title || !isOfficialUrl(source.url) || !source.lastVerified)) {
+      throw new Error(`Invalid UAEU course-credit discrepancy record: ${item.courseCode || "unknown"}`);
+    }
+    records.set(item.courseCode, item);
+  }
+  cachedCreditDiscrepancies = records;
+  return records;
+}
+
 function targetCode(question: string): string | null {
   const codes = [...question.matchAll(/\b([A-Z]{2,8})[\s-]?(\d{3,4}[A-Z]?)\b/giu)]
     .map((match) => `${match[1]}${match[2]}`.toUpperCase());
@@ -83,7 +115,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
   const asksProgramDecision = /\b(?:will this count|counts? toward|degree requirement|major requirement|graduate|my degree|study plan|cohort|waiver|exception)\b/u.test(normalized);
   const asksWhatToCompleteBeforeCourse = Boolean(code) &&
     /\b(?:what|which)\s+(?:must|should|do)\s+i\s+(?:complete|finish|pass|take)\s+before\b/u.test(normalized);
-  const asksCatalogFact = /\b(?:course|classes|credits?|credit hours?|prerequisites?|corequisites?|pre\s*[/&-]?\s*co|description|what is|tell me about|catalog)\b/u.test(normalized) ||
+  const asksCatalogFact = /\b(?:course|classes|credits?|credit hours?|prerequisites?|corequisites?|pre\s*[/&-]?\s*co|description|what is|tell me about|catalog)\b|كم\s+ساعة|الساعات المعتمدة|متطلبات المقرر|المتطلبات السابقة/u.test(normalized) ||
     /\b(?:classes|courses)\b.{0,60}\b(?:pass|complete|take)\b.{0,30}\bbefore\b/u.test(normalized) ||
     asksWhatToCompleteBeforeCourse;
   if ((!asksCatalogFact && !asksCourseEligibility) || asksProgramDecision) return null;
@@ -126,8 +158,11 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     };
   }
   const lines = [`**${record.code} ${record.title}**`];
-  if (record.creditHours !== null) lines.push(locale === "ar" ? `- الساعات المعتمدة في الفهرس: **${record.creditHours}**.` : `- Catalog credit hours: **${record.creditHours}**.`);
+  if (record.creditHours !== null) lines.push(locale === "ar" ? `- الساعات المعتمدة الموضحة في المصدر المستشهد به: **${record.creditHours}**.` : `- Credit hours shown in the cited source: **${record.creditHours}**.`);
   else lines.push(locale === "ar" ? "- لا يعرض هذا السجل عدد الساعات." : "- This catalog entry does not display a credit-hour value.");
+  const asksCredits = /\b(?:credit|credits|credit hours?|hours?)\b|ساعات|ساعة/iu.test(question);
+  const creditDiscrepancy = asksCredits ? loadCreditDiscrepancies().get(code) : undefined;
+  if (creditDiscrepancy) lines.push(creditDiscrepancy.message[locale]);
   if (record.prerequisiteText) {
     if (prerequisiteUnsupported) {
       lines.push(`- ${locale === "ar" ? "نص المتطلب السابق في الفهرس" : "Catalog prerequisite wording"}: ${record.prerequisiteText}.`);
@@ -151,6 +186,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     content: lines.join("\n"),
     code,
     source: { title: record.source.title, url: record.source.url, lastVerified: record.source.verifiedAt },
-    resolutionState: prerequisiteUnsupported && /\b(?:prerequisites?|pre-?reqs?|المتطلبات السابقة)\b/iu.test(normalized) ? "UNSUPPORTED" as const : "VERIFIED" as const,
+    additionalSources: creditDiscrepancy?.sources,
+    resolutionState: creditDiscrepancy ? "CONFLICTED" as const : prerequisiteUnsupported && /\b(?:prerequisites?|pre-?reqs?|المتطلبات السابقة)\b/iu.test(normalized) ? "UNSUPPORTED" as const : "VERIFIED" as const,
   };
 }

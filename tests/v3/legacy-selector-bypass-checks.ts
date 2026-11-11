@@ -604,6 +604,19 @@ async function main() {
   assert.match(JSON.stringify(naturalCoursePrerequisite.payload.citations), /course_2968\.shtml\?id=CSBP219/);
   assert.equal(naturalCoursePrerequisite.payload.provider, undefined, "a direct catalog fact must not invoke the language model");
 
+  const biolCreditConflict = await ask("How many credits is BIOL210?", "203.0.113.240");
+  assert.equal(biolCreditConflict.payload.stateLabel, "v3_official_course_catalog_lookup");
+  assert.equal(biolCreditConflict.payload.resolutionState, "CONFLICTED");
+  assert.match(String(biolCreditConflict.payload.content), /lists BIOL210 as 3 credits[\s\S]*lists it as 0\.00/i);
+  assert.match(JSON.stringify(biolCreditConflict.payload.citations), /department_SC_SC_BIOL\.asp/);
+  assert.match(JSON.stringify(biolCreditConflict.payload.citations), /marine-fisheries-and-animal-science\.shtml/);
+
+  const elecCreditConflict = await ask("How many credits is ELEC490?", "203.0.113.241");
+  assert.equal(elecCreditConflict.payload.resolutionState, "CONFLICTED");
+  assert.match(String(elecCreditConflict.payload.content), /study plans list ELEC490 as 1 credit[\s\S]*list it as 0\.00/i);
+  assert.match(JSON.stringify(elecCreditConflict.payload.citations), /coe_bsc_electrical_engineering_study_plan\.pdf/);
+  assert.match(JSON.stringify(elecCreditConflict.payload.citations), /bachelor-of-science-in-communication-engineering\.shtml/);
+
   console.log("V3 route checks passed: selector bypass, deadline separation, repeat policy, and structured prerequisite and program models.");
 }
 

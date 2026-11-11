@@ -92,23 +92,27 @@ export function mergeCourseCatalogSupplements(records, supplements) {
   if (!Array.isArray(supplements)) throw new Error("Course catalog supplements must be a JSON array.");
   const merged = [...records];
   const mergedCodes = new Set(records.map(({ code }) => code));
+  const supplementCodes = new Set();
   for (const record of supplements) {
     let officialSource = false;
     try {
       const sourceUrl = new URL(record?.source?.url);
       officialSource = sourceUrl.protocol === "https:" && (
         (sourceUrl.hostname === "www.uaeu.ac.ae" && sourceUrl.pathname.startsWith("/en/catalog/courses/")) ||
+        (sourceUrl.hostname === "www.uaeu.ac.ae" && sourceUrl.pathname === "/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf") ||
         (sourceUrl.hostname === "webapps.uaeu.ac.ae" && [
           "/catalog/auto/department_HS_HS_SOCW.asp",
           "/catalog/auto/department_SC_SC_BIOL.asp",
         ].includes(sourceUrl.pathname))
       );
     } catch { /* Invalid source URLs are rejected below. */ }
-    if (!record || !CODE.test(record.code) || mergedCodes.has(record.code) || !record.title || !officialSource || !record.source?.verifiedAt ||
+    if (!record || !CODE.test(record.code) || supplementCodes.has(record.code) || !record.title || !officialSource || !record.source?.verifiedAt ||
       (record.creditHours !== null && (!Number.isFinite(record.creditHours) || record.creditHours < 0)) ||
       !Array.isArray(record.prerequisiteItems) || !Array.isArray(record.corequisiteItems) || !Array.isArray(record.preCorequisiteItems)) {
       throw new Error(`Invalid, duplicate, or unsourced course catalog supplement: ${record?.code ?? "unknown"}`);
     }
+    supplementCodes.add(record.code);
+    if (mergedCodes.has(record.code)) continue;
     merged.push(record);
     mergedCodes.add(record.code);
   }

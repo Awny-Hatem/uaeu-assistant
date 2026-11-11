@@ -24,8 +24,10 @@ const supplement = {
   source: { url: "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp", verifiedAt: "2026-11-12" },
 };
 assert.deepEqual(mergeCourseCatalogSupplements([{ code: "CSBP319" }], [supplement]).map(({ code }) => code), ["CSBP319", "SWK200"]);
-assert.throws(() => mergeCourseCatalogSupplements([{ code: "SWK200" }], [supplement]), /duplicate/u,
-  "supplements cannot shadow central course-catalog records");
+assert.deepEqual(mergeCourseCatalogSupplements([{ code: "SWK200", title: "Central record" }], [supplement]).map(({ title }) => title), ["Central record"],
+  "a future central catalog record takes precedence over its supplement");
+assert.throws(() => mergeCourseCatalogSupplements([], [supplement, supplement]), /duplicate/u,
+  "duplicate supplement entries remain invalid");
 assert.throws(() => mergeCourseCatalogSupplements([], [{ ...supplement, source: undefined }]), /unsourced/u,
   "supplements require provenance");
 assert.throws(() => mergeCourseCatalogSupplements([], [{ ...supplement, source: { ...supplement.source, url: "https://attacker.example/course" } }]), /unsourced/u,

@@ -10,31 +10,42 @@ const credits = answerOfficialCourseCatalogQuestion("How many credit hours is CS
 assert(credits);
 assert.equal(credits.resolutionState, "VERIFIED");
 assert.match(credits.content, /Data Structures/u);
-assert.match(credits.content, /credit hours: \*\*3\*\*/u);
+assert.match(credits.content, /Credit hours shown in the cited source: \*\*3\*\*/u);
 assert.equal(credits.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319");
 
 const geol654Credits = answerOfficialCourseCatalogQuestion("How many credit hours is GEOL654?", "en");
 assert(geol654Credits, "the official GEOL654 course record includes a credit value");
 assert.equal(geol654Credits.resolutionState, "VERIFIED");
-assert.match(geol654Credits.content, /Earth Climate Evolution[\s\S]*credit hours: \*\*3\*\*/u);
+assert.match(geol654Credits.content, /Earth Climate Evolution[\s\S]*Credit hours shown in the cited source: \*\*3\*\*/u);
 assert.equal(geol654Credits.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2929.shtml?id=GEOL654");
 
 const socialWorkIslam = answerOfficialCourseCatalogQuestion("How many credits is SWK380?", "en");
 assert(socialWorkIslam, "SWK380 is present in the official Social Work department course catalog");
 assert.equal(socialWorkIslam.resolutionState, "VERIFIED");
-assert.match(socialWorkIslam.content, /SWK380 Social Work & Islam[\s\S]*credit hours: \*\*3\*\*/u);
+assert.match(socialWorkIslam.content, /SWK380 Social Work & Islam[\s\S]*Credit hours shown in the cited source: \*\*3\*\*/u);
 assert.equal(socialWorkIslam.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp");
 
 const animalBiology = answerOfficialCourseCatalogQuestion("How many credits is BIOL210?", "en");
 assert(animalBiology, "BIOL210 is included from the official Biology department catalog");
-assert.equal(animalBiology.resolutionState, "VERIFIED");
-assert.match(animalBiology.content, /BIOL210 Animal Biology[\s\S]*credit hours: \*\*3\*\*/u);
+assert.equal(animalBiology.resolutionState, "CONFLICTED");
+assert.match(animalBiology.content, /BIOL210 Animal Biology[\s\S]*Credit hours shown in the cited source: \*\*3\*\*[\s\S]*lists it as 0\.00/u);
 assert.equal(animalBiology.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_SC_SC_BIOL.asp");
+assert.deepEqual(animalBiology.additionalSources?.map(({ url }) => url), [
+  "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-marine-fisheries-and-animal-science.shtml",
+]);
+const animalBiologyDescription = answerOfficialCourseCatalogQuestion("Tell me about BIOL210.", "en");
+assert(animalBiologyDescription);
+assert.equal(animalBiologyDescription.resolutionState, "VERIFIED", "a credit-only discrepancy does not mislabel an uncontested course description");
+assert.doesNotMatch(animalBiologyDescription.content, /Credit source conflict/u);
+const arabicAnimalBiologyCredits = answerOfficialCourseCatalogQuestion("كم ساعة معتمدة BIOL210؟", "ar");
+assert(arabicAnimalBiologyCredits, "Arabic course-credit questions resolve the same sourced record");
+assert.equal(arabicAnimalBiologyCredits.resolutionState, "CONFLICTED");
+assert.match(arabicAnimalBiologyCredits.content, /تعارض في مصادر الساعات المعتمدة/u);
 
 const socialWelfare = answerOfficialCourseCatalogQuestion("How many credits is SWK200?", "en");
 assert(socialWelfare, "SWK200 is included from the official Social Work department catalog");
 assert.equal(socialWelfare.resolutionState, "VERIFIED");
-assert.match(socialWelfare.content, /SWK200 Introduction to Social Welfare[\s\S]*credit hours: \*\*3\*\*/u);
+assert.match(socialWelfare.content, /SWK200 Introduction to Social Welfare[\s\S]*Credit hours shown in the cited source: \*\*3\*\*/u);
 assert.equal(socialWelfare.source?.url, "https://webapps.uaeu.ac.ae/catalog/auto/department_HS_HS_SOCW.asp");
 
 const socialWelfareEligibility = answerOfficialCourseCatalogQuestion("Can I register for SWK200?", "en");
@@ -42,6 +53,13 @@ assert(socialWelfareEligibility);
 assert.equal(socialWelfareEligibility.resolutionState, "UNSUPPORTED",
   "non-course language-test prerequisite is preserved but not guessed as an evaluable course rule");
 assert.match(socialWelfareEligibility.content, /BNCHFORMIN\.SCOREOF5\.0/u);
+
+const elec490Credits = answerOfficialCourseCatalogQuestion("How many credit hours is ELEC490?", "en");
+assert(elec490Credits, "ELEC490 is represented from the official electrical engineering model study plan");
+assert.equal(elec490Credits.resolutionState, "CONFLICTED");
+assert.match(elec490Credits.content, /ELEC490 Internship II[\s\S]*Credit hours shown in the cited source: \*\*1\*\*[\s\S]*list it as 0\.00/u);
+assert.equal(elec490Credits.source?.url, "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf");
+assert.equal(elec490Credits.additionalSources?.length, 3, "both degree-page conflicts and the Communication Engineering model plan are cited");
 
 const prerequisites = answerOfficialCourseCatalogQuestion("What are CSBP319 prerequisites?", "en");
 assert(prerequisites);
