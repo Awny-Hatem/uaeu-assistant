@@ -36,6 +36,7 @@ export type AnswerGrounding = {
 };
 
 export type AnswerMetadata = {
+  resolutionState?: import("@/lib/v3/contracts").ResolutionState;
   responseMode?: "canonical" | "grounded_generation";
   citations?: Citation[];
   communications?: UniversityCommunication[];

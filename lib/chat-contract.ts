@@ -1,4 +1,5 @@
 import { GROUNDING_REASON_CODES, type AnswerMetadata, type Citation, type ServiceGuide } from "@/lib/prototype-types";
+import { RESOLUTION_STATES } from "@/lib/v3/contracts";
 
 export const MAX_CHAT_BODY_BYTES = 96 * 1024;
 export const MAX_CHAT_MESSAGES = 30;
@@ -102,6 +103,9 @@ function guide(value: unknown): value is ServiceGuide {
 export function sanitizeAnswerMetadata(value: unknown): AnswerMetadata {
   if (!record(value)) return {};
   const result: AnswerMetadata = {};
+  if (typeof value.resolutionState === "string" && RESOLUTION_STATES.includes(value.resolutionState as typeof RESOLUTION_STATES[number])) {
+    result.resolutionState = value.resolutionState as AnswerMetadata["resolutionState"];
+  }
   if (Array.isArray(value.citations)) result.citations = value.citations.slice(0, 20)
     .map(citation).filter((item): item is Citation => item !== null);
   if (guide(value.guide)) result.guide = value.guide;

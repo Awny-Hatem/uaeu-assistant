@@ -323,6 +323,21 @@ function sourceLabel(source: AssistantSource, disposition: UiMessage["dispositio
   return copy[source];
 }
 
+function resolutionLabel(state: UiMessage["resolutionState"], language: "en" | "ar") {
+  if (!state) return null;
+  const labels: Record<NonNullable<UiMessage["resolutionState"]>, { en: string; ar: string }> = {
+    VERIFIED: { en: "Verified from sources", ar: "تم التحقق من المصادر" },
+    CONDITIONAL: { en: "Conditional guidance", ar: "إرشادات مشروطة" },
+    MISSING_CONTEXT: { en: "More information needed", ar: "مطلوب مزيد من المعلومات" },
+    CONFLICTED: { en: "Sources conflict", ar: "تعارض في المصادر" },
+    STALE: { en: "Source may be outdated", ar: "قد يكون المصدر قديمًا" },
+    AUTHORIZATION_REQUIRED: { en: "Sign-in required", ar: "يلزم تسجيل الدخول" },
+    HUMAN_DECISION_REQUIRED: { en: "University decision required", ar: "يتطلب قرارًا من الجامعة" },
+    UNSUPPORTED: { en: "Could not verify", ar: "تعذر التحقق" },
+  };
+  return labels[state][language];
+}
+
 function sourceIcon(source: AssistantSource) {
   if (source === "web") return <Globe size={10} />;
   if (source === "guide") return <ListChecks size={10} />;
@@ -1171,6 +1186,12 @@ export function UniversityChat() {
                             {message.provider} / {message.model}
                           </span>
                         )}
+                      </div>
+                    )}
+
+                    {message.resolutionState && (
+                      <div className="px-2 text-[11px] font-medium text-zinc-500 dark:text-zinc-400" role="status">
+                        {resolutionLabel(message.resolutionState, textLanguage(message.content))}
                       </div>
                     )}
 
