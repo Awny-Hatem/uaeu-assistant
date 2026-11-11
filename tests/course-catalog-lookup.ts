@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
-import { answerOfficialCourseCatalogQuestion } from "@/lib/academic/course-catalog";
+import { answerOfficialCourseCatalogQuestion, loadOfficialCourseCatalog } from "@/lib/academic/course-catalog";
+
+const officialCatalog = loadOfficialCourseCatalog();
+assert(officialCatalog);
+assert.equal(officialCatalog.courses.filter((course) => course.creditHours === null).length, 0,
+  "every course in the official snapshot must have a verified credit value or an explicit zero-credit value");
 
 const credits = answerOfficialCourseCatalogQuestion("How many credit hours is CSBP319?", "en");
 assert(credits);
@@ -7,6 +12,12 @@ assert.equal(credits.resolutionState, "VERIFIED");
 assert.match(credits.content, /Data Structures/u);
 assert.match(credits.content, /credit hours: \*\*3\*\*/u);
 assert.equal(credits.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319");
+
+const geol654Credits = answerOfficialCourseCatalogQuestion("How many credit hours is GEOL654?", "en");
+assert(geol654Credits, "the official GEOL654 course record includes a credit value");
+assert.equal(geol654Credits.resolutionState, "VERIFIED");
+assert.match(geol654Credits.content, /Earth Climate Evolution[\s\S]*credit hours: \*\*3\*\*/u);
+assert.equal(geol654Credits.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2929.shtml?id=GEOL654");
 
 const prerequisites = answerOfficialCourseCatalogQuestion("What are CSBP319 prerequisites?", "en");
 assert(prerequisites);
