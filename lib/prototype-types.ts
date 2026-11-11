@@ -27,7 +27,7 @@ export type Citation = {
 
 export const GROUNDING_REASON_CODES = [
   "unsupported_critical_token", "unsupported_detail", "scope_drift", "contradiction",
-  "invalid_verification_contract", "verification_unavailable",
+  "invalid_verification_contract", "verification_unavailable", "answer_quality_issue",
 ] as const;
 
 export type AnswerGrounding = {

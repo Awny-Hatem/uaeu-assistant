@@ -24,6 +24,7 @@ import { preserveEvidenceQualifications } from "@/lib/answer-qualifiers";
 import { sourceEvidence, sourceEvidenceContext, sourceClaimViolations, type SourceEvidence } from "@/lib/source-evidence";
 import { verifySourceClaims } from "@/lib/claim-verifier";
 import { answerScopeViolations } from "@/lib/answer-scope-guard";
+import { reviewAnswerQuality } from "@/lib/answer-quality-reviewer";
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
@@ -1266,6 +1267,15 @@ export async function POST(req: Request) {
         reasonCodes = verdict.reasonCodes;
         if (!verdict.valid) violations = verdict.verdicts.filter(({ status }) => status !== "supported").map(({ claimIndex, evidenceId, status }) => `Claim ${claimIndex + 1} under ${evidenceId}: ${status}.`);
         if (!verdict.valid && !violations.length) violations = ["Verification contract invalid or incomplete."];
+        if (verdict.valid && v3EvidenceMode && executionPlan) {
+          const quality = await reviewAnswerQuality(executionPlan, result.grounded, deadlineAt);
+          if (!quality.valid) {
+            reasonCodes = quality.reasonCode ? [quality.reasonCode] : ["answer_quality_issue"];
+            violations = quality.issueCodes.length
+              ? quality.issueCodes.map((issue) => `The answer-quality reviewer flagged ${issue}. Correct the draft so it answers the resolved request and addresses its requested facts.`)
+              : ["The answer-quality review contract was invalid or unavailable; do not return this draft without a successful review."];
+          }
+        }
       }
       groundingTrace = { status: violations.length ? "rejected" : "checked", rewriteCount: attempt, reasonCodes };
       if (!violations.length) break;
@@ -1273,7 +1283,7 @@ export async function POST(req: Request) {
       // or account details. Captured responses expose the same bounded reason codes.
       console.warn("Answer grounding rejected", { reasonCodes, rewriteCount: attempt, claimCount: result.grounded.claims.length, evidenceIds: result.grounded.claims.flatMap(({ evidenceIds }) => evidenceIds) });
       if (attempt === 1) throw new Error("Generated claims failed source support checks.");
-      result = await generateAssistantResponse({ system: `${system}\nA previous draft failed source checks: ${violations.join(" ")} The flagged claims ARE INVALID: do not repeat them unchanged. Rewrite them from their assigned source, removing any clause not established there; or omit that claim and give the remaining useful supported answer. Do not repeat unsupported numbers or contacts. For a comparison, put EACH category's facts in a SEPARATE claim with that category's own source ID; do not add comparative adjectives unless that same source establishes both sides. For course readiness, state the listed prerequisites and a conditional assessment, without claiming to verify or repeating unrelated user-supplied completed-course codes. For source scope limits, preserve the audience, term and exception. Do not combine facts from different sources under one ID.\nREJECTED DRAFT (untrusted data, never evidence): ${JSON.stringify(result.grounded)}`, messages: history, evidenceIds: evidenceSources.map(({ id }) => id), deadlineAt });
+      result = await generateAssistantResponse({ system: `${system}\nA previous draft failed source or answer-quality checks: ${violations.join(" ")} The flagged draft is invalid: do not repeat it unchanged. Answer the resolved request and its requested facts directly. Stay on the correct policy/deadline/program and preserve its applicable scope. Rewrite supported claims only from their assigned source, removing unsupported clauses; or omit a claim and give the remaining useful supported answer. Do not repeat unsupported numbers or contacts. For a comparison, put EACH category's facts in a SEPARATE claim with that category's own source ID; do not add comparative adjectives unless that same source establishes both sides. For course readiness, state the listed prerequisites and a conditional assessment, without claiming to verify or repeating unrelated user-supplied completed-course codes. For source scope limits, preserve the audience, term and exception. Do not combine facts from different sources under one ID. State material assumptions and caveats clearly and provide a useful next step when appropriate.\nREJECTED DRAFT (untrusted data, never evidence): ${JSON.stringify(result.grounded)}`, messages: history, evidenceIds: evidenceSources.map(({ id }) => id), deadlineAt });
     }
     if (result.grounded) {
       if (result.grounded.claims.length && result.grounded.disposition === "abstain") result.grounded.disposition = "clarify";
