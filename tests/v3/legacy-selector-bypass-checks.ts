@@ -65,6 +65,13 @@ async function main() {
   assert.match(String(parkingPermit.payload.content), /female students from Al Ain/i);
   assert.match(JSON.stringify(parkingPermit.payload.citations), /serviceId=117/);
 
+  const dropVersusWithdrawal = await ask("What's the difference between dropping and withdrawing from a course?", "203.0.113.228");
+  assert.equal(dropVersusWithdrawal.payload.stateLabel, "guided_service");
+  assert.equal((dropVersusWithdrawal.payload.guide as { id?: string } | undefined)?.id, "course-drop-vs-withdrawal");
+  assert.match(String(dropVersusWithdrawal.payload.content), /separate eServices request/i);
+  assert.match(JSON.stringify(dropVersusWithdrawal.payload.guide), /Drop-Web/);
+  assert.match(JSON.stringify(dropVersusWithdrawal.payload.citations), /course-registration-service\.pdf/);
+
   const libraryResearchHelp = await ask("How can UAEU students get library or research help?", "203.0.113.230");
   assert.equal(libraryResearchHelp.payload.stateLabel, "guided_service");
   assert.equal(libraryResearchHelp.payload.resolutionState, "VERIFIED");
