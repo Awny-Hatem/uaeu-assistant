@@ -82,7 +82,7 @@ The standalone app can explain university procedures, prepare a checklist or req
 The live site is contacted only by a maintainer-initiated discovery command, never by a student chat request:
 
 ```powershell
-npm run research:official -- "UAEU topic or fact to verify"
+npm run research:official -- calendar "UAEU Fall 2026 registration dates"
 ```
 
 Results are labeled unapproved research leads with retrieval time and unknown freshness. A maintainer must inspect the official page and its scope, update the governed local record by hand, and run the relevant content/catalog checks plus `npm run audit:standalone`. No discovery result is ingested or shown as authoritative automatically. If source discovery fails, the existing local snapshot remains in use; the student-facing assistant reports gaps/staleness rather than calling the website.

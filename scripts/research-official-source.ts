@@ -1,16 +1,18 @@
 import { researchOfficialUaeu } from "@/lib/research/official-research";
 import type { EvidenceQuery } from "@/lib/v3/contracts";
 
-const request = process.argv.slice(2).join(" ").trim();
-if (request.length < 8) {
-  console.error('Usage: npm run research:official -- "topic or fact to verify"');
+const allowedDomains = new Set(["admissions", "calendar", "registration", "academics", "financial_aid", "finance", "graduation"]);
+const [domain, ...requestParts] = process.argv.slice(2);
+const request = requestParts.join(" ").trim();
+if (!domain || !allowedDomains.has(domain) || request.length < 8) {
+  console.error('Usage: npm run research:official -- <admissions|calendar|registration|academics|financial_aid|finance|graduation> "topic or fact to verify"');
   process.exit(2);
 }
 
 const query: EvidenceQuery = {
   request,
   requestedFacts: [request],
-  scope: {},
+  scope: { domain },
   freshnessRequirement: "current",
 };
 
