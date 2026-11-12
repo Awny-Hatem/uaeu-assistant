@@ -77,6 +77,16 @@ The standalone app can explain university procedures, prepare a checklist or req
 - Gate releases on no critical fabricated-policy answer; high factual and citation performance on answerable cases; correct abstention on unsupported/conflicted cases; and no material regression against the prior accepted build.
 - Automated LLM graders can triage but do not replace human review of consequential policy, deadline, and academic-rule cases.
 
+## Offline knowledge maintenance loop
+
+The live site is contacted only by a maintainer-initiated discovery command, never by a student chat request:
+
+```powershell
+npm run research:official -- "UAEU topic or fact to verify"
+```
+
+Results are labeled unapproved research leads with retrieval time and unknown freshness. A maintainer must inspect the official page and its scope, update the governed local record by hand, and run the relevant content/catalog checks plus `npm run audit:standalone`. No discovery result is ingested or shown as authoritative automatically. If source discovery fails, the existing local snapshot remains in use; the student-facing assistant reports gaps/staleness rather than calling the website.
+
 ## Final institutional integration gate (after standalone acceptance)
 
 Only after the standalone product passes its evidence and usability gates should UAEU decide whether to approve integration. Optional adapters may then add managed SSO, read-only personal records, live course offerings, and eventually explicitly authorized transactions. Each adapter has separate scopes, consent, privacy/retention, audit, confirmation, rollback, incident, and kill-switch requirements. The standalone core remains useful if any integration is unavailable.

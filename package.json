@@ -34,6 +34,8 @@
     "eval:independent": "node scripts/evaluate-independent.mjs",
     "eval:sophisticated": "node scripts/evaluate-sophisticated.mjs",
     "eval:report": "node scripts/render-evaluation-report.mjs",
+    "audit:standalone": "tsx scripts/audit-standalone-coverage.ts",
+    "research:official": "tsx scripts/research-official-source.ts",
     "start": "next start",
     "lint": "eslint",
     "ingest": "npx tsx scripts/ingest.ts"
