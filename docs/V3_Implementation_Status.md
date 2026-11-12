@@ -232,6 +232,16 @@ Reviewing the transition architecture found that the UAEU web research adapter l
 
 This is a safety correction to how evidence freshness is represented; it does not establish that every live-researched answer is current, and the Vercel Preview still does not include it. The Vercel TypeScript failure fix is also not yet live-verified. No Vercel deployment was attempted in this continuation, and production remains untouched.
 
+### Student gateway integration contract and production service status (2026-11-12)
+
+Added a Phase 3 server-side contract for reading only the authenticated student's own minimum academic snapshot. The caller cannot supply a student ID; the adapter must validate the bearer token against UAEU identity, map its verified subject to one student, enforce `student:academic:read`, and return a scoped snapshot. The boundary rejects stale authentication (over five minutes), missing scope, malformed records, and unavailable/ambiguous upstream responses. Contract tests cover these fail-closed cases.
+
+This is an integration seam only: no UAEU identity provider or student-record adapter is configured, no student data is queried or persisted, and no personalized answer path consumes this contract. Phase 3 remains incomplete until UAEU provisions and approves the systems, scopes, privacy/retention policy, and institutional integration tests.
+
+Read-only production probes on 2026-11-12 found `/api/health` returning the legacy V2 fingerprint with `build.revision: "unknown"`; the production `/api/chat` calendar question returned HTTP 503 with the explicit maintenance message “The UAEU assistant is temporarily under maintenance. Please use official UAEU channels for guidance.” This confirms the user-facing outage is an application maintenance response. It does not identify an AI-key or credit failure, and no key status can be inferred from that response. Production was not modified.
+
+Verification for this continuation: the complete `npm run test:v3` suite passed, including the selector-bypass chat route regressions and the new gateway boundary cases. TypeScript `--noEmit` passed in the clean isolated dependency worktree; `git diff --check` passed. The full Next.js production build was last run successfully before this addition; no route or UI was changed here. The worktree has four prior local commits ahead of the feature remote plus the current gateway increment; nothing has been deployed.
+
 ### Full offline regression pass (2026-11-12)
 
 `npm run test:offline` passed on branch commit `39fdd50`, including the prototype and pipeline/scope suites, grounding and security checks, academic curriculum/rules/planner/catalog checks, V3 contracts/evidence/orchestrator/official-research/selector-bypass checks, and the common/alignment fixture evaluators. The latter two report 100/100 and 80/80 mock route regressions, respectively; they do not assess model-generated factual quality, and their default environment exercises legacy-mode fixture behavior. The dedicated V3 selector-bypass suite passed separately. These results are local checks only, not build, deployment, live-provider, or independent factual-review evidence.
