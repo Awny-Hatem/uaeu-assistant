@@ -198,7 +198,10 @@ export async function researchOfficialUaeu(query: EvidenceQuery, options: Offici
       retrievedAt: now,
       authority: "UAEU",
       scope,
-      freshnessStatus: "current",
+      // Retrieval proves when we saw the page, not when UAEU last reviewed
+      // its contents. Keep freshness unknown until the source exposes a
+      // trustworthy publication or revision date that we can validate.
+      freshnessStatus: "unknown",
       trustStatus: "discovered",
     } satisfies EvidenceItem;
   }));
