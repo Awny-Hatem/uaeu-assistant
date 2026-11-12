@@ -96,7 +96,10 @@ assert.equal(plan("How do I change my major?").mode, "UAEU_FACTUAL", "a process 
 
 const privateRecord = plan("Can I register right now with my current holds and completed courses?");
 assert.equal(privateRecord.needs.studentData, true);
-assert.ok(privateRecord.missingContext.some((item) => item.includes("authenticated access")));
+assert.ok(privateRecord.missingContext.some((item) => item.includes("self-reported; not verified by UAEU")),
+  "standalone personalization should ask for student-supplied values rather than require UAEU authentication");
+assert.equal(plan("I passed CSBP219 with a B; can I register right now?").missingContext.some((item) => item.includes("self-reported")), false,
+  "a supplied course/grade premise should not trigger an unnecessary request for private records");
 
 const scenario = plan("I failed CSBP340 twice and it blocks graduation. What should I do?");
 assert.equal(scenario.mode, "COMPLEX_SCENARIO");

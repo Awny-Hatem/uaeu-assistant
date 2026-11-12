@@ -28,7 +28,6 @@ import { reviewAnswerQuality } from "@/lib/answer-quality-reviewer";
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
-import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessCatalogPrerequisiteConversation, catalogTargetCodeFromMessages, isCoursePrerequisiteFollowUp } from "@/lib/academic/catalog-prerequisite-assessment";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
@@ -99,6 +98,9 @@ function cleanLimitedString(value: unknown, maxLength: number): string | undefin
 
 function localizeMissingContext(item: string, locale: "ar" | "en"): string {
   if (locale === "en") return item;
+  if (item === "share the relevant values shown in your student record (self-reported; not verified by UAEU)") {
+    return "Ø´Ø§Ø±Ùƒ Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø°Ø§Øª Ø§Ù„ØµÙ„Ø© Ø§Ù„Ø¸Ø§Ù‡Ø±Ø© ÙÙŠ Ø³Ø¬Ù„Ùƒ Ø§Ù„Ø¯Ø±Ø§Ø³ÙŠ (Ø¨ÙŠØ§Ù†Ø§Øª ØªØ°ÙƒØ±Ù‡Ø§ Ø£Ù†Øª ÙˆÙ„ÙŠØ³Øª Ù…Ø¤ÙƒØ¯Ø© Ù…Ù† Ø¬Ø§Ù…Ø¹Ø© Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª)";
+  }
   const labels: Record<string, string> = {
     "which deadline process you mean": "نوع الموعد الذي تقصده، مثل موعد القبول أو التقويم الأكاديمي أو المنحة",
     "the program or service whose deadline you need": "اسم البرنامج أو الخدمة التي تريد معرفة موعدها",
@@ -1066,11 +1068,10 @@ export async function POST(req: Request) {
     }
     const evidenceQuery = evidenceQueryForPlan(executionPlan);
     const evidenceResult = createEvidenceService().search(evidenceQuery);
-    let evidenceItems = evidenceResult.evidence;
-    if (executionPlan.needs.liveResearch || evidenceResult.status === "NOT_FOUND" || evidenceResult.status === "STALE" || evidenceResult.status === "PARTIAL") {
-      const liveEvidence = await researchOfficialUaeu(evidenceQuery);
-      evidenceItems = [...evidenceItems, ...liveEvidence];
-    }
+    // Answer-time retrieval uses the governed local snapshot only. New public
+    // pages must enter through a separate ingestion/review workflow so website
+    // availability and unreviewed changes cannot alter a student response.
+    const evidenceItems = evidenceResult.evidence;
     v3EvidenceRows = evidenceItems.map((item) => ({
       source: item.sourceType === "official_web" ? `official-web:${item.id}` : item.id,
       text: item.excerpt,
@@ -1519,7 +1520,6 @@ export async function POST(req: Request) {
     const escalationReason: EscalationReason | undefined = finalized.escalated || missingSupport || result.grounded?.claims.length === 0
       ? "low_confidence"
       : undefined;
-    const usedOfficialWebResearch = selectedSources.some(({ row }) => row.source.startsWith("official-web:"));
     const evidenceNeedsQualification = needsEvidenceQualification(selectedSources.map(({ row }) => row));
     const remainingClarification = result.grounded && result.grounded.clarification !== "individual_record"
       ? groundedClarification(result.grounded.clarification, answerRequest, locale) : "";
@@ -1543,7 +1543,7 @@ export async function POST(req: Request) {
       content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, answerRequest) : [finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), responseClarification].filter(Boolean).join("\n\n"), latest, locale),
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
-      stateLabel: escalationReason ? "model_escalation" : usedOfficialWebResearch ? "official_web_research" : "local_db",
+      stateLabel: escalationReason ? "model_escalation" : "local_db",
       ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || hasClarification || evidenceNeedsQualification ? "CONDITIONAL" : "VERIFIED" } : {}),
       citations: escalationReason
         ? []

@@ -107,12 +107,18 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   if (meaning.intents.includes("prerequisites") && !explicitCourseCodes.length) missingContext.push("the exact course code or degree program");
   if (ambiguousFailedCourse) missingContext.push("the exact course code or degree program to check course-specific rules");
   if (meaning.intents.includes("courses") && /\b(?:degree plan|study plan|graduation plan|plan my courses)\b/u.test(meaning.normalized) && !resolution.subject) missingContext.push("your degree program");
-  // Personal phrasing does not itself require a portal record. Ask for
-  // authenticated access only when the answer depends on private account data.
+  // Standalone mode cannot access private records. Ask the student to supply
+  // the relevant values instead; downstream logic must label them as claims,
+  // not as university-verified data.
   const requiresPersonalRecord = /\b(?:my (?:gpa|cgpa|record|transcript|degree audit|completed courses|holds?|registration status)|am i eligible based on my record|can i register right now|can i graduate now|what is my academic standing)\b/i.test(normalizedRequest);
   const asksRepeatPolicy = failedCourseMention && (courseMention || /\b[A-Z]{2,5}\d{3,4}\b/i.test(normalizedRequest));
-  if (requiresPersonalRecord && !input.authenticatedScopes?.includes("student-record:read")) {
-    missingContext.push("authenticated access to your student record for a personal eligibility decision");
+  const includesSelfReportedRecordData =
+    (/\b[A-Z]{2,8}[\s-]*\d{3,4}[A-Z]?\b/i.test(normalizedRequest) &&
+      /\b(?:passed|failed|completed|grade|taking|currently enrolled)\b/i.test(normalizedRequest)) ||
+    /\b(?:cgpa|gpa)\b.{0,20}\b[0-4](?:\.\d+)?\b/i.test(normalizedRequest) ||
+    /\b(?:holds?|registration status)\b.{0,24}\b(?:none|no|clear|blocked|hold)\b/i.test(normalizedRequest);
+  if (requiresPersonalRecord && !includesSelfReportedRecordData && !input.authenticatedScopes?.includes("student-record:read")) {
+    missingContext.push("share the relevant values shown in your student record (self-reported; not verified by UAEU)");
   }
   if (mode === "UNIVERSITY_TRANSACTION") missingContext.push("an approved UAEU portal integration and your explicit confirmation before any submission");
 
