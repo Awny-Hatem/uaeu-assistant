@@ -28,11 +28,24 @@ function sourceAge(lastVerified: string | undefined): "current" | "stale" | "unk
 const courseCatalog = loadOfficialCourseCatalog();
 if (!courseCatalog) throw new Error("Official course catalog snapshot is unavailable.");
 const programs = loadUndergraduateProgramCatalog().programs;
-const curriculumVersions = listAcademicPrograms().flatMap((program) => program.curriculumVersions);
-const unresolvedCurriculumVersions = curriculumVersions.filter((version) => version.cohortMapping === "unresolved");
+const academicPrograms = listAcademicPrograms();
+const curriculumVersions = academicPrograms.flatMap((program) => program.curriculumVersions);
+const unresolvedCurriculumVersions = academicPrograms.flatMap((program) => program.curriculumVersions
+  .filter((version) => version.cohortMapping === "unresolved")
+  .map((version) => `${program.id} | ${version.version} | ${version.cohortLabel} | sources: ${program.sources.map((source) => source.documentId).join(", ")}`));
 const listedPrerequisiteCourses = courseCatalog.courses.filter((course) =>
   course.prerequisiteItems.length + course.corequisiteItems.length + course.preCorequisiteItems.length > 0);
 const structuredPrerequisiteCourses = listedPrerequisiteCourses.filter((course) => parseCatalogPrerequisiteExpression(course) !== null);
+const unresolvedPrerequisiteCourses = listedPrerequisiteCourses
+  .filter((course) => parseCatalogPrerequisiteExpression(course) === null)
+  .map((course) => ({
+    code: course.code,
+    title: course.title,
+    prerequisiteText: course.prerequisiteText,
+    corequisiteText: course.corequisiteText,
+    preCorequisiteText: course.preCorequisiteText,
+    source: course.source,
+  }));
 const serviceGuideFiles = readdirSync(join(root, "data/service-guides")).filter((file) => file.endsWith(".json"));
 const verifiedAnswerFiles = jsonFiles("data/verified-answers");
 const verifiedAnswers = verifiedAnswerFiles.flatMap((file) => {
@@ -54,12 +67,14 @@ console.log(JSON.stringify({
     structuredCurriculumVersions: curriculumVersions.length,
     explicitlyUnresolvedCohortVersions: unresolvedCurriculumVersions.length,
     versionsWithNoUnresolvedFlag: curriculumVersions.length - unresolvedCurriculumVersions.length,
+    unresolvedApplicabilityRecords: unresolvedCurriculumVersions,
   },
   courses: {
     snapshotRecords: courseCatalog.courses.length,
     listedPrerequisiteOrCorequisiteRecords: listedPrerequisiteCourses.length,
     structurallyInterpretableRecords: structuredPrerequisiteCourses.length,
     unresolvedListedRuleRecords: listedPrerequisiteCourses.length - structuredPrerequisiteCourses.length,
+    unresolvedRuleRecords: unresolvedPrerequisiteCourses,
     sourceFreshness: freshness,
   },
   knowledge: {
