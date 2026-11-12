@@ -33,6 +33,14 @@ This status follows the six standalone phases in [V3_Standalone_Architecture.md]
 
 **Fully complete phases: 0 of 6.** Standalone completion does not require UAEU SSO, private student records, or transaction APIs. Those are optional integration gates after the standalone product is accepted.
 
+### Phase 1 and 2 independent evidence review (2026-11-12)
+
+The latest full 100-case independent HTTP capture in the repository is tied to revision `af148311790b`; all 100 case verdicts are still `pending`. It has no automated run-integrity issues, but 28 responses escalated, and neither HTTP 200 nor an escalation establishes factual correctness. This is not a review of current branch revision `5008091`; the latest changes need a fresh exact-revision run before acceptance. Every case must be checked against the original cited official page or policy, including topic scope, cohort/term applicability, citation support, and whether abstention was appropriate.
+
+The standalone coverage audit lists all 49 unresolved curriculum applicability records, their published version labels, and linked source documents in [the evidence request and review checklist](V3_Phase1_Phase2_Evidence_Request.md). The 55-program catalog inventory is undergraduate-only; graduate catalog completeness has not been established. The current course catalog snapshot has 2,795 records, with 1,477/1,480 listed prerequisite/corequisite records interpretable by the parser.
+
+Direct checks of the official sources confirm the following remain ambiguous in the published pages: CSBP340's current page concatenates two minimum-grade entries and ends with `or`; BMSC711's current page lists `MMIM601 or MMIM602 or`; and SWK200's Social Work catalog page lists `ENGU1304 or ENGU1305 or BNCHFORMIN.SCOREOF5.0`. These are preserved as unresolved rather than guessed. Resolving them requires clarification from the responsible UAEU department/registrar or a corrected authoritative catalog. Source links and the exact requested cohort fields are in the evidence request document. No production or Preview changes were made.
+
 ## Verification evidence for this snapshot
 
 The root checkout's `node_modules` could not be safely refreshed because Windows returned `EPERM` while removing a locked native module. The exact changed academic data and test files were synchronized to the isolated `UAEU-ChatBot-verify` worktree, where the following passed:
