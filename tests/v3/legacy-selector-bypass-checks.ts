@@ -74,6 +74,19 @@ async function main() {
   assert.match(JSON.stringify(dropVersusWithdrawal.payload.guide), /Drop-Web/);
   assert.match(JSON.stringify(dropVersusWithdrawal.payload.citations), /course-registration-service\.pdf/);
 
+  const registerForClass = await ask("How can I register for a course?", "203.0.113.226");
+  assert.equal(registerForClass.payload.stateLabel, "guided_service");
+  assert.equal(registerForClass.payload.resolutionState, "VERIFIED");
+  assert.equal((registerForClass.payload.guide as { id?: string } | undefined)?.id, "register-for-a-class");
+  assert.match(JSON.stringify(registerForClass.payload.guide), /Active & Locked/i);
+  assert.match(JSON.stringify(registerForClass.payload.guide), /Pending/i);
+  assert.match(JSON.stringify(registerForClass.payload.guide), /Registered/i);
+  assert.match(JSON.stringify(registerForClass.payload.citations), /course-registration-service\.pdf/);
+
+  const registrationDateQuestion = await ask("When does course registration open for next semester?", "203.0.113.225");
+  assert.notEqual((registrationDateQuestion.payload.guide as { id?: string } | undefined)?.id, "register-for-a-class",
+    "a question about registration dates must not be routed to the procedural registration guide");
+
   const finalExamConflict = await ask("Two final exams are scheduled at the same time. What do I do?", "203.0.113.227");
   assert.equal(finalExamConflict.payload.stateLabel, "guided_service");
   assert.equal((finalExamConflict.payload.guide as { id?: string } | undefined)?.id, "final-exam-time-conflict");
