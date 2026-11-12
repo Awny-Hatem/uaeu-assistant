@@ -349,6 +349,12 @@ export async function POST(request: Request): Promise<Response> {
     }
     terms.push({ id: item.id, label: item.label.trim(), maxCredits: item.maxCredits });
   }
+  const comparisonMaxCredits = body.comparisonMaxCredits;
+  if (comparisonMaxCredits !== undefined &&
+      (typeof comparisonMaxCredits !== "number" || !Number.isFinite(comparisonMaxCredits) || comparisonMaxCredits <= 0 || comparisonMaxCredits > 40 ||
+       terms.every((term) => term.maxCredits === comparisonMaxCredits))) {
+    return json({ error: "comparisonMaxCredits must be a distinct positive value no greater than 40." }, 400);
+  }
   const hasOverlap = (left: string[], right: string[]) => left.some((code) => right.includes(code));
   if (hasOverlap(completedCourseCodes, remainingCourseCodes) || hasOverlap(currentCourseCodes, remainingCourseCodes) ||
       hasOverlap(completedCourseCodes, currentCourseCodes)) {
@@ -422,8 +428,19 @@ export async function POST(request: Request): Promise<Response> {
     terms,
     asOf,
   });
+  const comparisonPlan = typeof comparisonMaxCredits === "number"
+    ? buildConditionalSemesterPlan({
+      courses,
+      completedCourseCodes,
+      completedCourseGrades: completedCourseGrades ?? {},
+      currentCourseCodes,
+      terms: terms.map((term) => ({ ...term, maxCredits: comparisonMaxCredits })),
+      asOf,
+    })
+    : undefined;
   return json({
     plan,
+    ...(comparisonPlan ? { comparisonPlan, comparisonMaxCredits } : {}),
     courseSources: courses.map(({ code, title, source }) => ({ code, title, url: source.url, verifiedAt: source.verifiedAt })),
     scope: {
       programId: program.id,

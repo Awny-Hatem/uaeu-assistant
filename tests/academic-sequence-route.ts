@@ -141,6 +141,16 @@ async function main() {
   assert.equal(validResponse.headers.get("cache-control"), "no-store, max-age=0");
   assert.ok(validBody.courseSources.some((source: { code: string }) => source.code === candidate.course.code));
 
+  const comparisonResponse = await POST(request({ comparisonMaxCredits: 1 }));
+  assert.equal(comparisonResponse.status, 200);
+  const comparisonBody = await comparisonResponse.json();
+  assert.equal(comparisonBody.comparisonMaxCredits, 1);
+  assert.ok(comparisonBody.comparisonPlan, "an explicitly requested alternate load limit returns a second schedule");
+  assert.ok(comparisonBody.comparisonPlan.terms.every((term: { creditLimit: number; credits: number }) => term.creditLimit === 1 && term.credits <= 1),
+    "the alternate schedule must obey the student-provided comparison cap");
+  const duplicateComparisonResponse = await POST(request({ comparisonMaxCredits: 18 }));
+  assert.equal(duplicateComparisonResponse.status, 400, "a comparison identical to the primary credit limit is rejected");
+
   const gradeForUncompletedCourse = await POST(request({ completedCourseGrades: { [completedCourseCode]: "B" } }));
   assert.equal(gradeForUncompletedCourse.status, 400, "a grade cannot be supplied for a course not reported completed");
   const invalidGrade = await POST(request({ completedCourseCodes: [completedCourseCode], completedCourseGrades: { [completedCourseCode]: "F" } }));

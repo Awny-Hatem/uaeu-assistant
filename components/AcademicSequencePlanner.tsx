@@ -38,14 +38,17 @@ type CurriculumOptions = {
   sources: { title: string; url: string; lastVerified: string }[];
   limitations: string[];
 };
+type PlannedSchedule = {
+  status: "CONDITIONAL_PLAN" | "PARTIAL_PLAN" | "NO_PLAN";
+  terms: { id: string; label: string; credits: number; creditLimit: number; courses: { code: string; title: string; credits: number; availability: string; prerequisiteAssumptions: string[] }[] }[];
+  unscheduled: { code: string; reason: string }[];
+  assumptions: string[];
+  blockers: string[];
+};
 type SequenceResult = {
-  plan: {
-    status: "CONDITIONAL_PLAN" | "PARTIAL_PLAN" | "NO_PLAN";
-    terms: { id: string; label: string; credits: number; creditLimit: number; courses: { code: string; title: string; credits: number; availability: string; prerequisiteAssumptions: string[] }[] }[];
-    unscheduled: { code: string; reason: string }[];
-    assumptions: string[];
-    blockers: string[];
-  };
+  plan: PlannedSchedule;
+  comparisonPlan?: PlannedSchedule;
+  comparisonMaxCredits?: number;
   courseSources: { code: string; title: string; url: string; verifiedAt: string }[];
   scope: {
     programName: string;
@@ -99,6 +102,7 @@ export function AcademicSequencePlanner({
   const [currentText, setCurrentText] = useState("");
   const [termText, setTermText] = useState("");
   const [creditLimit, setCreditLimit] = useState("");
+  const [comparisonCreditLimit, setComparisonCreditLimit] = useState("");
   const [result, setResult] = useState<SequenceResult | null>(null);
   const [error, setError] = useState("");
   const [loadingPrograms, setLoadingPrograms] = useState(false);
@@ -118,6 +122,9 @@ export function AcademicSequencePlanner({
     terms: "الفصول المخطط لها (فصل واحد في كل سطر)",
     termsHint: "مثال: خريف 2026 ثم ربيع 2027. لا تتجاوز 8 فصول.",
     limit: "الحد الأعلى للساعات في كل فصل",
+    compareLimit: "مقارنة بحد آخر للساعات (اختياري)",
+    comparison: "سيناريو حمل دراسي بديل",
+    comparisonHint: "يستخدم السيناريو الثاني الفصول وسجل المقررات نفسيهما مع هذا الحد للساعات. لا يفترض توفر المقررات.",
     submit: "إنشاء تسلسل مشروط",
     close: "إغلاق مخطط المقررات",
     loading: "جارٍ تحميل بيانات المنهج…",
@@ -147,6 +154,9 @@ export function AcademicSequencePlanner({
     terms: "Planning terms (one term per line)",
     termsHint: "For example: Fall 2026, then Spring 2027. Use up to 8 terms.",
     limit: "Maximum credits per term",
+    compareLimit: "Compare with another maximum (optional)",
+    comparison: "Alternative load scenario",
+    comparisonHint: "The second scenario uses the same terms and course history with this credit cap. It does not assume course availability.",
     submit: "Create conditional sequence",
     close: "Close course planner",
     loading: "Loading curriculum…",
@@ -289,6 +299,7 @@ export function AcademicSequencePlanner({
           completedCourseGrades,
           currentCourseCodes: parseCodes(currentText),
           terms: terms.map((label, index) => ({ id: `term-${index + 1}`, label, maxCredits: Number(creditLimit) })),
+          ...(comparisonCreditLimit.trim() ? { comparisonMaxCredits: Number(comparisonCreditLimit) } : {}),
         }),
       });
       const data = await response.json();
@@ -463,6 +474,11 @@ export function AcademicSequencePlanner({
                 {labels.limit}
                 <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={creditLimit} onChange={(event) => setCreditLimit(event.target.value)} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
               </label>
+              <label className="block text-sm font-bold text-zinc-700 sm:col-span-2">
+                {labels.compareLimit}
+                <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={comparisonCreditLimit} onChange={(event) => setComparisonCreditLimit(event.target.value)} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <span className="mt-1 block text-xs font-normal text-zinc-500">{labels.comparisonHint}</span>
+              </label>
             </div>
 
             <div className="flex flex-wrap justify-end gap-2">
@@ -489,6 +505,15 @@ export function AcademicSequencePlanner({
           {result.plan.unscheduled.length > 0 && <section><h4 className="font-bold">{labels.unscheduled}</h4><ul className="mt-1 list-disc ps-5 text-sm">{result.plan.unscheduled.map((item) => <li key={item.code}><strong>{item.code}</strong>: {item.reason}</li>)}</ul></section>}
           {result.plan.assumptions.length > 0 && <section><h4 className="font-bold">{labels.assumptions}</h4><ul className="mt-1 list-disc ps-5 text-sm">{result.plan.assumptions.map((item) => <li key={item}>{item}</li>)}</ul></section>}
           {result.plan.blockers.length > 0 && <section><h4 className="font-bold">{labels.blockers}</h4><ul className="mt-1 list-disc ps-5 text-sm">{result.plan.blockers.map((item) => <li key={item}>{item}</li>)}</ul></section>}
+          {result.comparisonPlan && <section className="space-y-3 rounded-lg border border-zinc-300 bg-zinc-50 p-4" aria-label={labels.comparison}>
+            <h4 className="font-bold">{labels.comparison} · {result.comparisonMaxCredits} max credits per term · {result.comparisonPlan.status.replaceAll("_", " ")}</h4>
+            {result.comparisonPlan.terms.map((term) => <div key={`comparison-${term.id}`}>
+              <p className="text-sm font-semibold">{term.label} · {term.credits}/{term.creditLimit} credits</p>
+              <p className="text-sm">{term.courses.map((course) => `${course.code} (${course.credits} cr)`).join(", ")}</p>
+            </div>)}
+            {result.comparisonPlan.unscheduled.length > 0 && <ul className="list-disc ps-5 text-sm">{result.comparisonPlan.unscheduled.map((item) => <li key={`comparison-${item.code}`}><strong>{item.code}</strong>: {item.reason}</li>)}</ul>}
+            {result.comparisonPlan.assumptions.length > 0 && <p className="text-xs text-zinc-600">{result.comparisonPlan.assumptions.join(" ")}</p>}
+          </section>}
           <section>
             <h4 className="font-bold">{labels.sources}</h4>
             <ul className="mt-1 list-disc ps-5 text-sm">
