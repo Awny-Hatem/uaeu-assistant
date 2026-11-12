@@ -234,7 +234,7 @@ This is a safety correction to how evidence freshness is represented; it does no
 
 ### Student gateway integration contract and production service status (2026-11-12)
 
-Added a Phase 3 server-side contract for reading only the authenticated student's own minimum academic snapshot. The caller cannot supply a student ID; the adapter must validate the bearer token against UAEU identity, map its verified subject to one student, enforce `student:academic:read`, and return a scoped snapshot. The boundary rejects stale authentication (over five minutes), missing scope, malformed records, and unavailable/ambiguous upstream responses. Contract tests cover these fail-closed cases.
+Added a Phase 3 server-side contract for reading only the authenticated student's own minimum academic snapshot. The caller cannot supply a student ID; the adapter must validate the bearer token against UAEU identity, map its verified subject to one student, enforce `student:academic:read`, and return a scoped snapshot with no internal student identifier exposed to the model. The boundary rejects stale authentication (over five minutes), missing scope, malformed records, and unavailable upstream responses. Contract tests cover these fail-closed cases.
 
 This is an integration seam only: no UAEU identity provider or student-record adapter is configured, no student data is queried or persisted, and no personalized answer path consumes this contract. Phase 3 remains incomplete until UAEU provisions and approves the systems, scopes, privacy/retention policy, and institutional integration tests.
 

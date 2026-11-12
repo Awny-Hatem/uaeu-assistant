@@ -3,7 +3,6 @@ import { getOwnAcademicSnapshot, type StudentAcademicSnapshot, type StudentDataG
 
 const now = Date.parse("2026-11-12T08:00:00.000Z");
 const snapshot: StudentAcademicSnapshot = {
-  studentId: "internal-student-1",
   programId: "computer-engineering",
   cohort: "2024",
   completedCourses: [{ courseCode: "MATH110", credits: 3, grade: "B", term: "2025-FALL" }],
@@ -36,6 +35,7 @@ async function main() {
     await getOwnAcademicSnapshot(gateway(authorized, (token) => { receivedToken = token; }), "opaque-access-token", now),
     { status: "AUTHORIZED", snapshot },
   );
+  assert.equal("studentId" in snapshot, false, "internal identifiers must not cross the gateway boundary");
   assert.equal(receivedToken, "opaque-access-token", "token is passed to the validating adapter; no student ID is accepted from the caller");
 
   const noScope: StudentGatewayResult = {
@@ -60,7 +60,7 @@ async function main() {
   assert.equal((await getOwnAcademicSnapshot(gateway(malformed), "token", now)).status, "INVALID_UPSTREAM_RESPONSE");
 
   assert.deepEqual(await getOwnAcademicSnapshot(gateway({ status: "UNAVAILABLE", retryable: true }), "token", now), { status: "UNAVAILABLE", retryable: true });
-  assert.equal((await getOwnAcademicSnapshot(gateway({ status: "NOT_FOUND" }), "token", now)).status, "INVALID_UPSTREAM_RESPONSE");
+  assert.equal((await getOwnAcademicSnapshot(gateway({ status: "NOT_FOUND" }), "token", now)).status, "RECORD_NOT_AVAILABLE");
 
   console.log("Student gateway contract checks passed: authentication, scope, freshness, data validation, and fail-closed upstream behavior.");
 }

@@ -20,7 +20,7 @@ export type VerifiedStudentIdentity = {
 };
 
 export type StudentAcademicSnapshot = {
-  studentId: string;
+  /** Internal record identifiers are intentionally excluded from this snapshot. */
   programId: string;
   curriculumVersionId?: string;
   cohort?: string;
@@ -51,6 +51,7 @@ export type StudentGatewayResolution =
   | { status: "AUTHENTICATION_REQUIRED" }
   | { status: "SCOPE_REQUIRED"; scope: StudentDataScope }
   | { status: "STALE_AUTHENTICATION" }
+  | { status: "RECORD_NOT_AVAILABLE" }
   | { status: "UNAVAILABLE"; retryable: boolean }
   | { status: "INVALID_UPSTREAM_RESPONSE" };
 
@@ -62,8 +63,7 @@ function validDate(value: string): number | null {
 }
 
 function validSnapshot(value: StudentAcademicSnapshot): boolean {
-  return typeof value.studentId === "string" && value.studentId.length > 0 &&
-    typeof value.programId === "string" && value.programId.length > 0 &&
+  return typeof value.programId === "string" && value.programId.length > 0 &&
     typeof value.snapshotVersion === "string" && value.snapshotVersion.length > 0 &&
     validDate(value.retrievedAt) !== null &&
     Array.isArray(value.currentCourses) && value.currentCourses.every((code) => typeof code === "string") &&
@@ -88,7 +88,7 @@ export async function getOwnAcademicSnapshot(
 
   const result = await gateway.readOwnAcademicSnapshot(accessToken);
   if (result.status === "UNAVAILABLE") return result;
-  if (result.status === "NOT_FOUND") return { status: "INVALID_UPSTREAM_RESPONSE" };
+  if (result.status === "NOT_FOUND") return { status: "RECORD_NOT_AVAILABLE" };
 
   const identity = result.identity;
   if (!identity.subject || !identity.issuer || !Array.isArray(identity.scopes)) {
