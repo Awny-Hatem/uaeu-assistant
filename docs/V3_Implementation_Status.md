@@ -235,3 +235,11 @@ This is a safety correction to how evidence freshness is represented; it does no
 ### Full offline regression pass (2026-11-12)
 
 `npm run test:offline` passed on branch commit `39fdd50`, including the prototype and pipeline/scope suites, grounding and security checks, academic curriculum/rules/planner/catalog checks, V3 contracts/evidence/orchestrator/official-research/selector-bypass checks, and the common/alignment fixture evaluators. The latter two report 100/100 and 80/80 mock route regressions, respectively; they do not assess model-generated factual quality, and their default environment exercises legacy-mode fixture behavior. The dedicated V3 selector-bypass suite passed separately. These results are local checks only, not build, deployment, live-provider, or independent factual-review evidence.
+
+### Latest local build and demo smoke check (2026-11-12)
+
+The exact branch commit `b273fbc` passed `npm run build -- --webpack` in the isolated build worktree using the lockfile dependency set. This caught and fixed two TypeScript issues that the earlier Vercel failure had masked: nullable catalog narrowing in the sequence-route test and an implicit inference error in the prerequisite-parser test. The build then completed compilation, project TypeScript, static generation, and route tracing.
+
+Against that locally built revision, `tests/http-smoke.mjs` passed its Arabic chat, test-account signup/login/logout, encrypted-cookie, session, history-deletion, health, and readiness-boundary checks with an ephemeral test-only auth secret. `npm run test:browser` passed 26/26, including the guided academic planner, light-only UI, keyboard navigation, reduced-motion, and account/history lifecycle. Four local V3 starter prompts returned their expected states and one citation each: student document (`guided_service`/`VERIFIED`), calendar location (`v3_verified_source_location`/`VERIFIED`), library help (`guided_service`/`VERIFIED`), and human advisor (`human_handoff`). These local checks used a mock provider where needed; they do not validate live OpenAI output or independently establish factual accuracy.
+
+The latest branch commits remain local and have not been pushed to Vercel. The last Ready Preview still predates these changes; do not present it as serving `b273fbc`. Production remains untouched.
