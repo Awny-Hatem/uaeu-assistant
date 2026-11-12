@@ -36,7 +36,12 @@ type ChatPayload = {
   answerId?: string;
   faqId?: string;
   disposition?: string;
-  guide?: { id?: string };
+  guide?: {
+    id?: string;
+    title?: string;
+    description?: string;
+    steps?: { title?: string; instruction?: string }[];
+  };
   escalationReason?: string;
   citations?: { title?: string; url?: string; document?: string }[];
   error?: string;
@@ -64,6 +69,14 @@ function normalize(value: string): string {
     .replace(/[^\p{L}\p{N}\s]/gu, " ")
     .replace(/\s+/g, " ")
     .trim();
+}
+
+function displayedAnswerText(payload: ChatPayload): string {
+  const guide = payload.guide;
+  return [payload.content, guide?.title, guide?.description,
+    ...(guide?.steps ?? []).flatMap((step) => [step.title, step.instruction])]
+    .filter((value): value is string => typeof value === "string")
+    .join("\n");
 }
 
 function readCases(): EvalCase[] {
@@ -138,7 +151,7 @@ function validateDisposition(
   payload: ChatPayload,
   errors: string[],
 ): void {
-  const content = payload.content ?? "";
+  const content = displayedAnswerText(payload);
 
   switch (testCase.expectedDisposition) {
     case "guide":
@@ -181,7 +194,7 @@ function validateDisposition(
 
 function validatePayload(testCase: EvalCase, status: number, payload: ChatPayload): string[] {
   const errors: string[] = [];
-  const content = payload.content ?? "";
+  const content = displayedAnswerText(payload);
 
   if (status !== 200) {
     errors.push(`expected HTTP 200, received ${status}${payload.error ? ` (${payload.error})` : ""}`);
