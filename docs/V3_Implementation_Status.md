@@ -4,7 +4,7 @@
 **Working branch:** `feature/uaeu-v3-phase1`  
 **Production:** No changes made from this branch.
 
-This status follows the six phases and the Phase 1 completion checklist in `UAEU_V2_to_V3_Transition_Plan.md`. No phase is marked complete unless its full acceptance conditions have evidence.
+This status follows the six standalone phases in [V3_Standalone_Architecture.md](V3_Standalone_Architecture.md). UAEU approval and portal integration are intentionally deferred until the standalone acceptance gates pass. No phase is marked complete unless its full acceptance conditions have evidence.
 
 ## Current implementation
 
@@ -22,16 +22,16 @@ This status follows the six phases and the Phase 1 completion checklist in `UAEU
 
 ## Phase status
 
-| Phase | Status | Remaining acceptance work |
+| Phase | Status | Remaining standalone acceptance work |
 | --- | --- | --- |
-| 0. Stabilize and establish baseline | Substantially complete | Reconfirm the reproducible production/V2 fingerprint and close the release baseline review. |
-| 1. Trusted UAEU Information Assistant | Substantially implemented; incomplete | Re-run the independent benchmark against the updated preview, complete all 100 factual reviews, verify deployment identity/configuration, and demonstrate improvement across novel and time-sensitive questions. |
-| 2. Academic Intelligence | Partial | Broaden cohort applicability and structured-rule coverage; review the remaining unsupported prerequisite records; expand deterministic tests across programs. A current-page curriculum record for each catalog degree is not complete cohort coverage. Personal course comparisons now require a cohort year before applying a curriculum. |
-| 3. Authorized Student Personalization | Not implemented | Requires UAEU-approved SSO, student-record APIs, permissions, privacy and retention rules, and institutional testing. |
-| 4. Advanced Academic Planning | Partial foundation | Complete a constraint-based semester planner, prerequisite-aware course sequencing, alternative plans, and live offering/availability integration. No personal degree audit is available without authorized student data. |
-| 5. University Actions | Not implemented | Requires approved university transaction APIs, write authorization, preview/confirmation, execution receipts, audit, and kill switches. |
+| 0. Reproducible baseline | Substantially complete | Record a reproducible baseline tied to exact deployment/source identity; close the independent release review. |
+| 1. Trusted standalone information assistant | Substantially implemented; incomplete | Complete human factual reviews, verify exact deployed revision, and demonstrate accuracy on independent novel/time-sensitive cases. Runtime independence and freshness behavior still need release-level validation. |
+| 2. Governed academic knowledge | Partial | Broaden cohort applicability, resolve or publish remaining prerequisite gaps, measure program/course/cohort coverage, and test across all covered degrees. |
+| 3. Self-reported student context and deterministic audit | Partial foundation | Guided sequencing accepts explicit user inputs, but full ephemeral profile/context correction, requirement completion, audit coverage, privacy behavior, and program-wide acceptance remain. The student gateway contract is optional future integration and is not required to finish this standalone phase. |
+| 4. Standalone degree and course planning | Partial foundation | Complete alternative-plan generation, requirement/elective selection, broader student constraints, and availability-aware scenario comparisons. No live section feed is required; unverified offerings must remain assumptions. |
+| 5. Portal navigation and request preparation | Partial | Expand and verify structured procedures, draft/checklist support, deep links, and clear manual handoff. Portal login and submission are explicitly out of standalone scope. |
 
-**Fully complete phases: 0 of 6.**
+**Fully complete phases: 0 of 6.** Standalone completion does not require UAEU SSO, private student records, or transaction APIs. Those are optional integration gates after the standalone product is accepted.
 
 ## Verification evidence for this snapshot
 
@@ -85,7 +85,7 @@ The full 100-case live HTTP rerun on revision `6014a9a` is recorded at `reports/
 
 ## External dependencies
 
-Phases 3 and 5 cannot be completed from public web evidence or this repository alone. UAEU must provide approved identity, student-record, and transactional interfaces together with authorization, privacy, retention, and audit requirements. Phase 4 also needs authoritative course offering and section availability data before it can promise feasible term plans.
+Earlier V2-to-V3 notes treated identity and transactional integrations as phase prerequisites. The standalone target now supersedes that dependency: Phase 3 uses student-entered data and Phase 5 provides portal navigation/request preparation only. UAEU identity, private records, live sections, and write APIs remain optional integration work after standalone acceptance. Without authoritative offering feeds, plans must remain conditional scenarios.
 
 ### Contextual policy-scope regression (2026-11-11)
 
@@ -236,7 +236,7 @@ This is a safety correction to how evidence freshness is represented; it does no
 
 Added a Phase 3 server-side contract for reading only the authenticated student's own minimum academic snapshot. The caller cannot supply a student ID; the adapter must validate the bearer token against UAEU identity, map its verified subject to one student, enforce `student:academic:read`, and return a scoped snapshot with no internal student identifier exposed to the model. The boundary rejects stale authentication (over five minutes), missing scope, malformed records, and unavailable upstream responses. Contract tests cover these fail-closed cases.
 
-This is an integration seam only: no UAEU identity provider or student-record adapter is configured, no student data is queried or persisted, and no personalized answer path consumes this contract. Phase 3 remains incomplete until UAEU provisions and approves the systems, scopes, privacy/retention policy, and institutional integration tests.
+This is an integration seam only: no UAEU identity provider or student-record adapter is configured, no student data is queried or persisted, and no personalized answer path consumes this contract. It is optional to standalone acceptance; Phase 3 will be completed through self-reported, ephemeral student context and deterministic auditing.
 
 Read-only production probes on 2026-11-12 found `/api/health` returning the legacy V2 fingerprint with `build.revision: "unknown"`; the production `/api/chat` calendar question returned HTTP 503 with the explicit maintenance message “The UAEU assistant is temporarily under maintenance. Please use official UAEU channels for guidance.” This confirms the user-facing outage is an application maintenance response. It does not identify an AI-key or credit failure, and no key status can be inferred from that response. Production was not modified.
 
