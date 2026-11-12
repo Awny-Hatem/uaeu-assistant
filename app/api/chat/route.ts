@@ -37,6 +37,7 @@ import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-progr
 import { answerOfficialCourseCatalogQuestion } from "@/lib/academic/course-catalog";
 import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
 import type { ResolutionState } from "@/lib/v3/contracts";
+import { needsEvidenceQualification } from "@/lib/v3/evidence-quality";
 import { isV3Enabled } from "@/lib/v3/runtime";
 
 export const runtime = "nodejs";
@@ -1075,6 +1076,9 @@ export async function POST(req: Request) {
       text: item.excerpt,
       score: 1,
       title: item.title,
+      retrievedAt: item.retrievedAt,
+      freshnessStatus: item.freshnessStatus,
+      trustStatus: item.trustStatus,
       ...(item.scope ? { scope: {
         ...(item.scope.domain ? { subjects: [item.scope.domain] } : {}),
         ...(item.scope.courseCodes?.length ? { courseCodes: item.scope.courseCodes } : {}),
@@ -1516,6 +1520,7 @@ export async function POST(req: Request) {
       ? "low_confidence"
       : undefined;
     const usedOfficialWebResearch = selectedSources.some(({ row }) => row.source.startsWith("official-web:"));
+    const evidenceNeedsQualification = needsEvidenceQualification(selectedSources.map(({ row }) => row));
     const remainingClarification = result.grounded && result.grounded.clarification !== "individual_record"
       ? groundedClarification(result.grounded.clarification, answerRequest, locale) : "";
     const needsCourseIdentity = (executionPlan?.mode === "COMPLEX_SCENARIO" ||
@@ -1526,7 +1531,12 @@ export async function POST(req: Request) {
         ? "لتطبيق القاعدة على مقررك تحديدًا، أرسل رمز المقرر وبرنامجك الدراسي، واذكر ما إذا كان المقرر إجباريًا أم اختياريًا."
         : "To apply this to your specific course, share its course code and your degree program, and say whether it is required or elective."
       : "";
-    const responseClarification = courseIdentityClarification;
+    const evidenceFreshnessNote = evidenceNeedsQualification
+      ? locale === "ar"
+        ? "المصدر الرسمي المستشهد به لا يعرض تاريخ مراجعة يمكن التحقق منه. تحقّق من المكتب المختص قبل الاعتماد على المواعيد الحساسة للوقت أو قرارات الأهلية الشخصية."
+        : "The cited official source does not show a verifiable last-reviewed date. Confirm time-sensitive dates or personal eligibility with the responsible UAEU office before acting."
+      : "";
+    const responseClarification = [courseIdentityClarification, evidenceFreshnessNote].filter(Boolean).join("\n\n");
     const hasClarification = Boolean(remainingClarification || courseIdentityClarification);
     const payload: AssistantPayload = {
       role: "assistant",
@@ -1534,7 +1544,7 @@ export async function POST(req: Request) {
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
       stateLabel: escalationReason ? "model_escalation" : usedOfficialWebResearch ? "official_web_research" : "local_db",
-      ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || hasClarification ? "CONDITIONAL" : "VERIFIED" } : {}),
+      ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || hasClarification || evidenceNeedsQualification ? "CONDITIONAL" : "VERIFIED" } : {}),
       citations: escalationReason
         ? []
         : uniqueCitations(selectedSources.map(({ citation }) => citation)),

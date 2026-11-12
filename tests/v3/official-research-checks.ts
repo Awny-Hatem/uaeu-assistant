@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { researchOfficialUaeu } from "../../lib/research/official-research";
+import { needsEvidenceQualification } from "../../lib/v3/evidence-quality";
 import type { EvidenceQuery } from "../../lib/v3/contracts";
 
 const sitemapUrl = "https://www.uaeu.ac.ae/en/website/index.shtml";
@@ -35,6 +36,9 @@ assert.equal(items[0].sourceType, "official_web");
 assert.equal(items[0].trustStatus, "discovered", "web discovery must not silently approve a new rule");
 assert.equal(items[0].freshnessStatus, "unknown", "fetch time alone must not imply the page's policy is current");
 assert.equal(items[0].retrievedAt, "2026-11-11T08:00:00.000Z", "retain the observed retrieval timestamp");
+assert.equal(needsEvidenceQualification([items[0]]), true);
+assert.equal(needsEvidenceQualification([{ freshnessStatus: "current", trustStatus: "approved" }]), false);
+assert.equal(needsEvidenceQualification([{ freshnessStatus: "unknown", trustStatus: "approved" }]), true);
 assert.equal(items[0].authority, "UAEU");
 assert.equal(items[0].scope?.domain, "calendar");
 assert.equal(items[0].scope?.year, 2026);

@@ -248,6 +248,9 @@ export type EvidenceRow = {
   citations?: Citation[];
   scope?: EvidenceScope;
   title?: string;
+  retrievedAt?: string;
+  freshnessStatus?: "current" | "stale" | "unknown";
+  trustStatus?: "approved" | "verified_official" | "discovered";
 };
 
 const FACT_EVIDENCE: Partial<Record<FactIntent, RegExp>> = {
