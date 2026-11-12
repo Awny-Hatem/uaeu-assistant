@@ -198,7 +198,7 @@ const unresolvedPrerequisiteSources = [
   { code: "SWK200", reason: "the SWK200 source includes an unmodeled benchmark condition rather than a recognized course code" },
 ];
 for (const { code, reason } of unresolvedPrerequisiteSources) {
-  const course = catalog.courses.find((candidate) => candidate.code === code);
+  const course: OfficialCourseRecord | undefined = catalog.courses.find((candidate) => candidate.code === code);
   assert.ok(course, `${code} remains in the official catalog snapshot`);
   assert.equal(parseCatalogPrerequisiteExpression(course), null, `${reason}; it must remain unsupported`);
 }
