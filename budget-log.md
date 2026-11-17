@@ -12,3 +12,5 @@ Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage
 | power-results-v1 (172 new cases) | Codex | 172 cases | – | $0.289 | $0.430 |
 | after-six-v3 (Claude: case 6 fix) | Claude | 6 cases / 15 answers | $0.05 | $0.023 | $0.453 |
 | power-results-v2 (172 cases, current build) | Claude | 172 cases | $0.30 | $0.270 | $0.723 |
+| after-six-v4 | Claude | 6 cases | $0.03 | $0.029 | $0.752 |
+| power-results-v3 (172 cases after fixes) | Claude | 172 cases | $0.30 | $0.274 | $1.026 |

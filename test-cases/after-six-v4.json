@@ -706,8 +706,336 @@
               "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
             }
           }
+        },
+        {
+          "question": "Who created you?",
+          "status": 200,
+          "seconds": 0.005024917000002461,
+          "actualAnswer": "I'm the UAEU AI Assistant, built by UAEU students from the College of Computing and Artificial Intelligence (CCAI) as their Senior Graduation Project. As your UAEU student-services assistant, I help with admissions, courses, plans and services using official UAEU sources.",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "I'm the UAEU AI Assistant, built by UAEU students from the College of Computing and Artificial Intelligence (CCAI) as their Senior Graduation Project. As your UAEU student-services assistant, I help with admissions, courses, plans and services using official UAEU sources.",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 1,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP04",
+      "title": "First-year introduction without a question",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my first year, first semester at UAEU."
+      ],
+      "expected": "Greet Noor, introduce the assistant and suggest relevant help. No unsolicited plan or cannot-verify fallback.",
+      "sources": [],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my first year, first semester at UAEU.",
+          "status": 200,
+          "seconds": 0.006638916999996582,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 3,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP05",
+      "title": "Second-year introduction repeated",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU."
+      ],
+      "expected": "Natural greeting/acknowledgement on each turn; no unsolicited plan, old college name, raw XML citation or cannot-verify fallback.",
+      "sources": [],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 0.0071553749999948195,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 2,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 0.004030624999999418,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 1,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP06",
+      "title": "Next semester using earlier IT year and semester",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+        "What should I take next semester?",
+        "Bachelor of Science in Information Technology",
+        "Year three term one"
+      ],
+      "expected": "Keep IT as the only stated program and infer Year 3 Semester 1. Ask for admit term/catalog if unknown, then use that matching official plan. Do not invent Information Security as an earlier-mentioned program.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 0.0048076250000012805,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 1,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "What should I take next semester?",
+          "status": 200,
+          "seconds": 0.011769667000000482,
+          "actualAnswer": "Your next model-plan position is Year 3, Semester 1. What year were you admitted, and was your entry in Fall or Spring?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Your next model-plan position is Year 3, Semester 1. What year were you admitted, and was your entry in Fall or Spring?",
+            "citations": [],
+            "source": "conversation",
+            "stateLabel": "academic_planning",
+            "disposition": "clarify",
+            "usage": {
+              "elapsedMs": 8,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Bachelor of Science in Information Technology",
+          "status": 200,
+          "seconds": 0.011651875000003201,
+          "actualAnswer": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 8,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Year three term one",
+          "status": 200,
+          "seconds": 0.009199958000004699,
+          "actualAnswer": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 5,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
         }
       ]
     }
-  ]
+  ],
+  "finishedAt": "2026-11-17T15:12:26.934Z"
 }

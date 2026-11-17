@@ -148,10 +148,12 @@ export function academicAnswer(q: string, history: Turn[], profile: AcademicProf
   if (!context.cohort || !context.entry)
     return { content: ar ? `الفصل التالي هو السنة ${position.year}، الفصل ${position.semester}. في أي سنة التحقت بالجامعة، وهل كان دخولك في الخريف أم الربيع؟` : `Your next model-plan position is Year ${position.year}, Semester ${position.semester}. What year were you admitted, and was your entry in Fall or Spring?`, citations: [] };
   const p = selectPlan({ program: context.program, catalogYear: `${context.cohort}/${context.cohort + 1}`, admitTerm: { year: context.cohort, season: context.entry }, track: null });
-  if (p && !p.validation.totalsPass)
+  const degreeTotalOnly = !!p && !p.validation.totalsPass && p.validation.issues.length > 0 && p.validation.issues.every(i => /^Plan sum /u.test(i));
+  if (p && !p.validation.totalsPass && !degreeTotalOnly)
     return { content: (ar ? 'توجد مشكلة حسابية في نموذج دفعتك المنشور؛ لا يمكن اعتماد قائمة كاملة حتى تتم مراجعتها.' : 'Your cohort’s published model has a numeric validation conflict; I cannot present a fully confirmed course list until it is reviewed.') + '\n' + note, citations: [source(p)] };
   if (!p)
     return { content: ar ? 'لم أجد نموذجاً معتمداً يطابق سنة وفصل دخولك. أحتاج الخطة الرسمية المطابقة قبل اقتراح المساقات.' : 'I do not have a validated model matching your admit year and entry semester. I need that official plan before recommending courses.', citations: [] };
   const body = list(p, position.year, position.semester, ar);
-  return body ? { content: body + '\n' + note, citations: [source(p)] } : null;
+  const conflictNote = degreeTotalOnly ? (ar ? 'ملاحظة: مجموع ساعات الخطة المطبوع لا يطابق مجموع فصولها؛ تأكد من مرشدك.' : "Note: this plan's printed degree total doesn't match the sum of its semesters; confirm with your advisor.") : '';
+  return body ? { content: [body, conflictNote, note].filter(Boolean).join('\n'), citations: [source(p)] } : null;
 }
