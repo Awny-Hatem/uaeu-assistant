@@ -69,6 +69,9 @@ export function personalizeQuery(query: string, profile: Profile | null): Person
     return level ? { query: `${query} (${level} student${when})`, used: true, fields: ["level"] } : { query, used: false, fields: [] };
   }
   if (!PROGRAM_DEPENDENT.test(query) || courseCodes(query).length) return { query, used: false, fields: [] }; // a named course needs no program
+  // University-wide procedures (add/drop, withdraw, pay, request a document) are the same for every major.
+  const procedure = /\bhow (?:do|can|to|should) i\b.{0,40}\b(?:add|drop|withdraw|pay|request|apply for|order|replace|register)\b|كيف.{0,20}(?:أحذف|احذف|أضيف|اضيف|أنسحب|انسحب|أدفع|ادفع|أطلب|اطلب|أسجل|اسجل)/iu.test(query);
+  if (procedure && !/\b(?:study plan|degree plan|which courses|what courses|electives?|credits?|prerequisites?)\b|خطتي|خطة|أي مساقات|اي مساقات|ساعات/iu.test(query)) return { query, used: false, fields: [] };
   if (namesAProgram(query)) return { query, used: false, fields: [] }; // an explicit program wins
   const fields: string[] = [];
   const parts: string[] = [];

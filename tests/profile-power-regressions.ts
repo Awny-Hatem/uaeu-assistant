@@ -6,6 +6,8 @@ import { academicAnswer } from '../lib/academic-profile/answer';
 import { selectPlan, studyPlans } from '../lib/academic-profile/planning';
 import { programEvidence, programDirectoryAnswer, currentCEAnswer } from '../lib/academic-profile/program-registry';
 import { testerEnabled, testerRequestAllowed } from '../lib/tester/gate';
+import { dialogueReply } from '../lib/memory/dialogue';
+import { personalizeQuery } from '../lib/profile/personalize';
 const fixtures = JSON.parse(readFileSync('data/academic/tester-accounts.json', 'utf8')).accounts, p = fixtures.find((a: {
   slug: string;
 }) => a.slug === 'elm').profile;
@@ -31,6 +33,25 @@ check('choose-one plan rows keep both course codes and a readable title', () => 
   const rows = studyPlans().flatMap(p => p.terms.flatMap(t => t.courses));
   assert.ok(!rows.some(c => /^\d{3,4}\s/.test(c.title)), 'no title starts with a stray course number');
   assert.ok(rows.some(c => c.options?.includes('CHEM111') && /\(choose one\)$/.test(c.title)));
+});
+check('thanks, goodbye, system-access and "what did you say about" are answered from the conversation', () => {
+  assert.match(dialogueReply('Bye', [], 'en') ?? '', /Goodbye/);
+  assert.match(dialogueReply('Thanks for the help!', [], 'en') ?? '', /welcome/);
+  assert.match(dialogueReply('شكراً', [], 'ar') ?? '', /العفو/);
+  assert.match(dialogueReply('Can you access my Degree Works audit?', [], 'en') ?? '', /can't access Degree Works/);
+  assert.equal(dialogueReply('Thanks, what is the transcript fee?', [], 'en'), null, 'a real question after thanks still goes to retrieval');
+  const h = [{ role: 'user', content: 'Prerequisites for CSBP219?' }, { role: 'assistant', content: 'CSBP219 requires CSBP119 with a minimum grade of D.' }];
+  assert.match(dialogueReply('What did you say about CSBP219?', h, 'en') ?? '', /CSBP119/);
+  assert.match(dialogueReply('What did you say about housing?', h, 'en') ?? '', /haven't said anything about housing/);
+});
+check('a named college or "which ... programs" lists that college from the official directory', () => {
+  const a = programDirectoryAnswer('Which undergraduate programs are in CCAI?', false);
+  assert.match(a?.content ?? '', /Computer Science/); assert.doesNotMatch(a?.content ?? '', /Mechanical Engineering/);
+});
+check('university-wide procedures do not take the saved major', () => {
+  const prof = { major: 'Bachelor of Science in Computer Science', college: null, academicYear: '1', language: null } as Parameters<typeof personalizeQuery>[1];
+  assert.equal(personalizeQuery('How do I add or drop my courses?', prof).used, false);
+  assert.equal(personalizeQuery('How many credits do I need for my major?', prof).used, true);
 });
 check('senior-project questions use the signed-in Mechanical cohort', () => { const a = academicAnswer('When should I take my senior project?', [], p, 'en'); assert.ok(a?.content.includes('2023')); assert.doesNotMatch(a?.content ?? '', /VMED/); });
 check('a bare admit answer preserves an explicitly requested model position', () => { const h = [{ role: 'user', content: 'I am an IT major, second year second semester.' }, { role: 'user', content: 'What should I take next semester?' }, { role: 'assistant', content: 'What year were you admitted?' }, { role: 'user', content: 'Year three term one' }, { role: 'assistant', content: 'What year were you admitted, Fall or Spring?' }]; const a = academicAnswer('Fall 2022', h, null, 'en'); assert.match(a?.content ?? '', /Year 3, Semester 1/); });

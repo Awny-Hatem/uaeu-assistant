@@ -54,7 +54,7 @@ export function programEvidence(q: string): EvidenceRow[] {
 }
 /** Exhaustive directory/list operations, rather than asking top-k search to enumerate. */
 export function programDirectoryAnswer(q: string, ar: boolean) {
-  const list = /\ball\b|\blist\b|which (?:program|major)|what (?:program|major)|جميع|كل البرامج|البرامج المتاحة|التخصصات المتاحة/iu.test(q);
+  const list = /\ball\b|\blist\b|(?:which|what)(?:\s+\w+){0,2}\s+(?:programs?|majors?|degrees?)\b|programs?\s+(?:are|does|do)\b.{0,30}\b(?:offer|in|at|have)\b|جميع|كل البرامج|البرامج المتاحة|التخصصات المتاحة/iu.test(q);
   if (!list || !/program|major|degree|STEM|برامج|تخصصات/iu.test(q))
     return null;
   // Policies, admissions and individual course requirements need their own evidence.
