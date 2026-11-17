@@ -22,8 +22,11 @@ export function studyContext(history: Turn[]) {
     const q = turn.content.replace(/(?:not|ليس|لست)\s+(?:a |an )?(?:mechanical engineering|computer science|information technology|veterinary medicine|information security|طالب هندسة ميكانيكية)/giu, ''), known = programsMentioned(q);
     if (known.length === 1)
       program = known[0].program;
-    if (/\bIT (?:major|student)|(?:studying|in) IT\b/iu.test(q))
+    // Abbreviations are case-sensitive so the pronoun "it" never names a program.
+    if (/\bIT\b(?:\s+(?:major|student|program))?/u.test(q) && /\b(?:IT (?:major|student|program)|(?:study(?:ing)?|major(?:ing)? in|in|an) IT)\b/u.test(q))
       program = 'Bachelor of Science in Information Technology';
+    if (/\b(?:CS (?:major|student|program)|(?:study(?:ing)?|major(?:ing)? in|in|a) CS)\b/u.test(q))
+      program = 'Bachelor of Science in Computer Science';
     if (/mech\s*e\b|mechanical engineering|الهندسة الميكانيكية/iu.test(q))
       program = 'Bachelor of Science in Mechanical Engineering';
     const y = q.match(/(?:year\s*(?:number\s*)?(one|two|three|four|[1-8])|\b(first|second|third|fourth) year\b)/iu);

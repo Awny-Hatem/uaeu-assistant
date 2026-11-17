@@ -54,6 +54,12 @@ check('introductions are greeted by visitor role and graduate admission is not a
   const route = readFileSync('app/api/chat/route.ts', 'utf8');
   assert.match(route, /needsApplicantCategory = !graduateAdmission/);
 });
+check('a bare self-description is acknowledged and its program/position carry into planning', () => {
+  assert.match(dialogueReply('I study IT, Year 2 Semester 2.', [], 'en') ?? '', /keep that in mind/);
+  assert.equal(dialogueReply('I study IT, what should I take next semester?', [], 'en'), null);
+  const h = [{ role: 'user' as const, content: 'I study IT, Year 2 Semester 2.' }, { role: 'assistant' as const, content: "Got it, I'll keep that in mind." }];
+  assert.match(academicAnswer('What should I take next semester?', h, null, 'en')?.content ?? '', /Year 3, Semester 1[\s\S]*admitted/);
+});
 check('a named college or "which ... programs" lists that college from the official directory', () => {
   const a = programDirectoryAnswer('Which undergraduate programs are in CCAI?', false);
   assert.match(a?.content ?? '', /Computer Science/); assert.doesNotMatch(a?.content ?? '', /Mechanical Engineering/);

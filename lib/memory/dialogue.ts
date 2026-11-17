@@ -40,6 +40,13 @@ export function dialogueReply(question: string, history: Turn[], language: 'ar' 
       ? (ar ? `هذا ما قلته عن ${topic}:\n` : `Here is what I said about ${topic}:\n`) + said.content
       : (ar ? `لم أتحدث عن ${topic} في هذه المحادثة بعد. هل تريد أن أبحث عنه الآن؟` : `I haven't said anything about ${topic} in this conversation yet. Want me to look it up now?`);
   }
+  // A bare self-description ("I study IT, Year 2 Semester 2.") is context, not a question.
+  const selfDescription = /^(?:i study|i(?: am|'m) studying|i major in|i(?: am|'m) (?:a|an) [\p{L} ]{1,40}(?:student|major)|i(?: am|'m) in (?:my )?(?:first|second|third|fourth|final|[1-6](?:st|nd|rd|th)?) year|أدرس|ادرس|أنا طالب|انا طالب|تخصصي)\b/iu.test(q)
+    && !/[?؟]|\b(?:what|when|why|how|which|can|could|should|do|does|is|are|tell|give|list|show)\b|متى|كيف|كم|هل |ما |ماذا|اعطني|أعطني/iu.test(q) && q.length < 140;
+  if (selfDescription)
+    return ar
+      ? 'تمام، سأتذكر ذلك. بماذا أساعدك؟ مثلاً: مساقات الفصل القادم، الساعات المتبقية، أو المتطلبات السابقة لمساق معيّن.'
+      : "Got it, I'll keep that in mind. What would you like help with? For example: next semester's courses, credits left, or a course's prerequisites.";
   const introduction = /^(?:hi|hello|hey|مرحبا|مرحباً|السلام عليكم)[,!،\s]+/iu.test(q) && /\bmy name is\b|\bi(?: am|'m) (?:an? |in |studying)|\bwe(?: are|'re) (?:an? |from )|\bi represent\b|\bi(?: am|'m) the (?:parent|father|mother)\b|اسمي|انا طالب|أنا طالب/iu.test(q) && !/[?؟]|\b(?:what|when|why|how|can you|could you|should|do i)\b|متى|كيف|كم|هل /iu.test(q);
   if (introduction) {
     const name = q.match(/\bmy name is\s+([\p{L}]{1,24})|اسمي\s+([\p{L}]{1,24})/iu);
