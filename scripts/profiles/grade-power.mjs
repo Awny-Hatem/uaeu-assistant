@@ -33,13 +33,16 @@ function reference(p) {
     const plan = plans.find((x) => x.program === prof.program && x.cohortStart === Number(String(prof.catalogYear).slice(0, 4)) && x.entrySeason === prof.admitTerm?.season) ?? plans.filter((x) => x.program === prof.program).sort((a, b) => b.cohortStart - a.cohortStart)[0];
     const done = (prof.courses ?? []).filter((c) => c.status === 'completed' && c.grade && !['F', 'W'].includes(c.grade)).map((c) => c.code);
     parts.push(`Student record: program ${prof.program}; catalog ${prof.catalogYear}; current model position Year ${prof.modelPosition?.year} Semester ${prof.modelPosition?.semester}; required credits ${prof.requiredCredits}; minors ${JSON.stringify(prof.minors ?? [])}; completed courses ${done.join(', ')}. ${creditTruth(prof)}`);
-    if (plan) parts.push(`Official model plan (${plan.program}, ${plan.cohortStart} ${plan.entrySeason}, ${plan.sourceUrl ?? ''}):\n` + plan.terms.map((t) => `Year ${t.year} Semester ${t.semester}: ` + t.courses.map((c) => `${c.code ?? (c.options ?? []).join('/') ?? ''} ${c.title} (${c.credits})`).join('; ')).join('\n'));
+    if (plan) parts.push(`Official model plan (${plan.program}, ${plan.cohortStart} ${plan.entrySeason}, ${plan.sourceUrl ?? ''}):\n` + plan.terms.map((t) => `Year ${t.year} Semester ${t.semester}: ` + t.courses.map((c) => `${c.code ?? (c.options ?? []).join('/') ?? ''} ${c.title} (${c.credits}; ${c.type ?? ''})`).join('; ')).join('\n'));
   }
-  for (const code of codesIn(q).slice(0, 3)) {
+  for (const raw of codesIn(q).slice(0, 3)) {
+    // Common student typo: CSPB for CSBP.
+    const code = courseList.some((c) => c.code === raw) ? raw : raw.replace(/^CSPB/, 'CSBP');
+    if (code !== raw) parts.push(`${raw} is not a UAEU course code; the intended course is ${code}.`);
     const r = courseList.find((c) => c.code === code);
     if (r) parts.push(`Official catalog record ${code}: ${String(r.text ?? '').slice(0, 900)}`);
   }
-  const college = registry.find((r) => q.toLowerCase().includes(r.college.replace(/^College of /, '').toLowerCase()));
+  const college = registry.filter((r) => q.toLowerCase().includes(r.college.replace(/^College of /, '').toLowerCase())).sort((x, y) => y.college.length - x.college.length)[0];
   if (/program/i.test(q) && college) {
     const grad = /graduate|postgraduate/i.test(q) && !/undergraduate/i.test(q);
     const list = registry.filter((r) => r.college === college.college && (grad ? r.level === 'Graduate' : r.qualification === 'bachelor')).map((r) => r.title);

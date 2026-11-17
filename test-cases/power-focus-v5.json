@@ -1,0 +1,547 @@
+{
+  "startedAt": "2026-11-17T15:53:03.770Z",
+  "base": "http://127.0.0.1:3012",
+  "fixture": "/private/tmp/claude-501/-Users-aliabdullah-Documents-uaeu-assistant/17b84672-1cf5-407a-865b-94f2eacf5231/scratchpad/focus7.json",
+  "fixtureSha256": "c17660d3fef7154ec262e3ff2060dcd7b3adae62b82d242756aac573d506bbb3",
+  "buildId": "vbmSKrk5OXvAwrAaJq2Wi",
+  "grading": "Actual transcripts. Unreviewed until official-source grading; HTTP 200 is not correctness.",
+  "cases": [
+    {
+      "id": "POWER002",
+      "group": "personalized",
+      "title": "cedar — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar",
+      "conversation": [
+        {
+          "question": "How many credits do I have left?",
+          "status": 200,
+          "seconds": 0.120798292,
+          "payload": {
+            "role": "assistant",
+            "content": "Based on your saved profile (Bachelor of Science in Computer Science):\n\nFrom your self-reported record: 0 completed credits and 12 in progress. Against the recorded 120-credit requirement, 120 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 0 of 21 earned, 3 in progress\n• College requirements: 0 of 38 earned, 6 in progress\n• General Education — Cluster 1: 0 of 3 earned, 3 in progress\n• Major / specialization requirements: 0 of 38 earned\n• Free electives: 0 of 2 earned\n• Major electives: 0 of 12 earned\n• Internship: 0 of 6 earned\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Profile requirement source",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 109,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            },
+            "personalized": true
+          },
+          "actualAnswer": "Based on your saved profile (Bachelor of Science in Computer Science):\n\nFrom your self-reported record: 0 completed credits and 12 in progress. Against the recorded 120-credit requirement, 120 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 0 of 21 earned, 3 in progress\n• College requirements: 0 of 38 earned, 6 in progress\n• General Education — Cluster 1: 0 of 3 earned, 3 in progress\n• Major / specialization requirements: 0 of 38 earned\n• Free electives: 0 of 2 earned\n• Major electives: 0 of 12 earned\n• Internship: 0 of 6 earned\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Profile requirement source",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+            }
+          ],
+          "model": null
+        }
+      ]
+    },
+    {
+      "id": "POWER012",
+      "group": "personalized",
+      "title": "maple — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple",
+      "conversation": [
+        {
+          "question": "How many credits do I have left?",
+          "status": 200,
+          "seconds": 0.03610474999999997,
+          "payload": {
+            "role": "assistant",
+            "content": "Based on your saved profile (Bachelor of Science in Computer Science):\n\nFrom your self-reported record: 28 completed credits and 13 in progress. Against the recorded 120-credit requirement, 92 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 3 of 21 earned\n• College requirements: 18 of 38 earned, 9 in progress\n• General Education — Cluster 1: 3 of 3 earned\n• Major / specialization requirements: 4 of 40 earned, 4 in progress\n• Major electives: 0 of 12 earned\n• Internship: 0 of 6 earned\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Profile requirement source",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 25,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            },
+            "personalized": true
+          },
+          "actualAnswer": "Based on your saved profile (Bachelor of Science in Computer Science):\n\nFrom your self-reported record: 28 completed credits and 13 in progress. Against the recorded 120-credit requirement, 92 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 3 of 21 earned\n• College requirements: 18 of 38 earned, 9 in progress\n• General Education — Cluster 1: 3 of 3 earned\n• Major / specialization requirements: 4 of 40 earned, 4 in progress\n• Major electives: 0 of 12 earned\n• Internship: 0 of 6 earned\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Profile requirement source",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+            }
+          ],
+          "model": null
+        }
+      ]
+    },
+    {
+      "id": "POWER022",
+      "group": "personalized",
+      "title": "willow — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow",
+      "conversation": [
+        {
+          "question": "How many credits do I have left?",
+          "status": 200,
+          "seconds": 0.025899709000000257,
+          "payload": {
+            "role": "assistant",
+            "content": "Based on your saved profile (Bachelor of Science in Information Technology):\n\nFrom your self-reported record: 82 completed credits and 12 in progress. Against the recorded 130-credit requirement, 48 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education — Cluster 1: 12 of 15 earned, 3 in progress\n• General Education — Cluster 3: 6 of 6 earned\n• Major / specialization requirements: 34 of 37 earned, 3 in progress\n• College requirements: 27 of 33 earned, 3 in progress\n• General Education — Cluster 2: 3 of 12 earned, 3 in progress\n• Major electives: 0 of 9 earned\n• Free electives: 0 of 6 earned\n• Internship: 0 of 12 earned\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Profile requirement source",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 13,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            },
+            "personalized": true
+          },
+          "actualAnswer": "Based on your saved profile (Bachelor of Science in Information Technology):\n\nFrom your self-reported record: 82 completed credits and 12 in progress. Against the recorded 130-credit requirement, 48 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education — Cluster 1: 12 of 15 earned, 3 in progress\n• General Education — Cluster 3: 6 of 6 earned\n• Major / specialization requirements: 34 of 37 earned, 3 in progress\n• College requirements: 27 of 33 earned, 3 in progress\n• General Education — Cluster 2: 3 of 12 earned, 3 in progress\n• Major electives: 0 of 9 earned\n• Free electives: 0 of 6 earned\n• Internship: 0 of 12 earned\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Profile requirement source",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+            }
+          ],
+          "model": null
+        }
+      ]
+    },
+    {
+      "id": "POWER032",
+      "group": "personalized",
+      "title": "birch — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch",
+      "conversation": [
+        {
+          "question": "How many credits do I have left?",
+          "status": 200,
+          "seconds": 0.007774084000000584,
+          "payload": {
+            "role": "assistant",
+            "content": "Based on your saved profile (Bachelor of Science in Information Technology):\n\nFrom your self-reported record: 28 completed credits and 16 in progress. Against the recorded 130-credit requirement, 102 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 6 of 21 earned, 3 in progress\n• College requirements: 21 of 41 earned, 6 in progress\n• Major / specialization requirements: 1 of 36 earned, 7 in progress\n• Major electives: 0 of 10 earned\n• Free electives: 0 of 6 earned\n• Internship: 0 of 6 earned\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Profile requirement source",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 4,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            },
+            "personalized": true
+          },
+          "actualAnswer": "Based on your saved profile (Bachelor of Science in Information Technology):\n\nFrom your self-reported record: 28 completed credits and 16 in progress. Against the recorded 130-credit requirement, 102 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 6 of 21 earned, 3 in progress\n• College requirements: 21 of 41 earned, 6 in progress\n• Major / specialization requirements: 1 of 36 earned, 7 in progress\n• Major electives: 0 of 10 earned\n• Free electives: 0 of 6 earned\n• Internship: 0 of 6 earned\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Profile requirement source",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+            }
+          ],
+          "model": null
+        }
+      ]
+    },
+    {
+      "id": "POWER082",
+      "group": "personalized",
+      "title": "palm — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm",
+      "conversation": [
+        {
+          "question": "How many credits do I have left?",
+          "status": 200,
+          "seconds": 0.01563237499999923,
+          "payload": {
+            "role": "assistant",
+            "content": "Based on your saved profile (Bachelor of Science in Information Technology):\n\nFrom your self-reported record: 28 completed credits and 16 in progress. Against the recorded 130-credit requirement, 102 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 6 of 21 earned, 3 in progress\n• College requirements: 21 of 41 earned, 6 in progress\n• Major / specialization requirements: 1 of 36 earned, 7 in progress\n• Major electives: 0 of 10 earned\n• Free electives: 0 of 6 earned\n• Internship: 0 of 6 earned\n• AI minor — allocation and cohort applicability pending: 0 of 18 earned\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Profile requirement source",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+              },
+              {
+                "title": "Profile requirement source",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/minor-in-artificial-intelligence.shtml"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 11,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            },
+            "personalized": true
+          },
+          "actualAnswer": "Based on your saved profile (Bachelor of Science in Information Technology):\n\nFrom your self-reported record: 28 completed credits and 16 in progress. Against the recorded 130-credit requirement, 102 credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\nBy requirement block:\n• General Education requirements: 6 of 21 earned, 3 in progress\n• College requirements: 21 of 41 earned, 6 in progress\n• Major / specialization requirements: 1 of 36 earned, 7 in progress\n• Major electives: 0 of 10 earned\n• Free electives: 0 of 6 earned\n• Internship: 0 of 6 earned\n• AI minor — allocation and cohort applicability pending: 0 of 18 earned\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Profile requirement source",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+            },
+            {
+              "title": "Profile requirement source",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/minor-in-artificial-intelligence.shtml"
+            }
+          ],
+          "model": null
+        }
+      ]
+    },
+    {
+      "id": "POWER156",
+      "group": "guest",
+      "title": "prospective-ug",
+      "turns": [
+        "Where is the academic calendar?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-ug",
+      "conversation": [
+        {
+          "question": "Where is the academic calendar?",
+          "status": 200,
+          "seconds": 5.0497482080000005,
+          "payload": {
+            "role": "assistant",
+            "content": "The official UAEU academic calendar is published online at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, where you can find dates for the start of classes, registration, add/drop periods, withdrawal deadlines, and final exams for each semester.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Academic Calendar",
+                "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+                "lastVerified": "2026-11-04",
+                "evidenceText": "The official UAEU academic calendar is published at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en. For each semester it lists dates such as the start of classes, registration, add and drop, withdrawal and final examinations."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [
+              {
+                "id": "academic-calendar",
+                "title": "Academic Calendar",
+                "description": "Check the official UAEU academic calendar for dates, registration windows, exams, and university deadlines.",
+                "url": "https://webapps.uaeu.ac.ae/calendar/index.aspx",
+                "category": "deadline",
+                "keywords": [
+                  "academic calendar",
+                  "registration date",
+                  "registration window",
+                  "exam schedule",
+                  "final exams",
+                  "add drop",
+                  "semester start",
+                  "university holiday",
+                  "التقويم الأكاديمي",
+                  "مواعيد الامتحانات"
+                ],
+                "lastVerified": "2026-09-16"
+              }
+            ],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "calendar",
+            "evidenceIds": [
+              "answer:academic-calendar-location#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The official UAEU academic calendar is published online at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, where you can find dates for the start of classes, registration, add/drop periods, withdrawal deadlines, and final exams for each semester.",
+                "evidenceIds": [
+                  "answer:academic-calendar-location#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5038,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3273,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 80,
+                  "estimatedUsd": 0.0008612
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1330,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005816
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4603,
+              "outputTokens": 111,
+              "knownUsageUsd": 0.0014428000000000002,
+              "estimatedUsd": 0.0014428000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          },
+          "actualAnswer": "The official UAEU academic calendar is published online at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, where you can find dates for the start of classes, registration, add/drop periods, withdrawal deadlines, and final exams for each semester.",
+          "actualSources": [
+            {
+              "title": "UAEU Academic Calendar",
+              "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+              "lastVerified": "2026-11-04",
+              "evidenceText": "The official UAEU academic calendar is published at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en. For each semester it lists dates such as the start of classes, registration, add and drop, withdrawal and final examinations."
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "POWER168",
+      "group": "guest",
+      "title": "partner",
+      "turns": [
+        "Where are official faculty contact details?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "partner",
+      "conversation": [
+        {
+          "question": "Where are official faculty contact details?",
+          "status": 200,
+          "seconds": 13.243675959,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Retry with the same question, or identify the specific service, course, term, or applicant category so I can use a narrower verified record.",
+            "answerStatus": "unavailable",
+            "source": "escalated",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "disposition": "clarify",
+            "escalationReason": "low_confidence",
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "unsupported_detail"
+              ]
+            },
+            "clarificationReason": "unsupported_detail",
+            "usage": {
+              "elapsedMs": 13237,
+              "attemptedCalls": 7,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 26038,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 89,
+                  "estimatedUsd": 0.0105576
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 7,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 1.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5208,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 122,
+                  "estimatedUsd": 0.0022784000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5731,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 72,
+                  "estimatedUsd": 0.0024075999999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1352,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 64,
+                  "estimatedUsd": 0.0006432
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5667,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 46,
+                  "estimatedUsd": 0.0023404000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1326,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 42,
+                  "estimatedUsd": 0.0005976
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 45329,
+              "outputTokens": 435,
+              "knownUsageUsd": 0.01882494,
+              "estimatedUsd": 0.01882494,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          },
+          "actualAnswer": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Retry with the same question, or identify the specific service, course, term, or applicant category so I can use a narrower verified record.",
+          "actualSources": [],
+          "model": null
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-11-17T15:53:33.885Z",
+  "buildIdAfter": "vbmSKrk5OXvAwrAaJq2Wi"
+}

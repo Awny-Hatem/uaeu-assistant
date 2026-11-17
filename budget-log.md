@@ -20,3 +20,4 @@ Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage
 | comparison-50 judge rerun (fixed reference) | Claude | 50 calls | $0.04 | $0.033 | $1.364 |
 | comparison-50 v2: general model + judge | Claude | 50 + 50 calls | $0.10 | $0.067 | $1.431 |
 | power-results-v4 verdict grading | Claude | 172 calls | $0.12 | $0.077 | $1.508 |
+| power-focus-v5 (7 cases: credits, calendar, faculty) | Claude | 7 cases | $0.02 | $0.01 | $1.52 |
