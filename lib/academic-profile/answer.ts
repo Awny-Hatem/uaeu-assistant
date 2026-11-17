@@ -93,7 +93,12 @@ export function academicAnswer(q: string, history: Turn[], profile: AcademicProf
   const remaining = /remaining|credits?.{0,20}left|how many.{0,20}left|المتبقي|باقي.{0,10}ساع|ساع.{0,20}(?:باقي|متبق)/iu.test(q);
   if (profile && remaining && PERSONAL.test(q) && (!programsMentioned(q).length || programsMentioned(q).some(p => p.program === profile.program))) {
     const r = progress(profile);
-    return { content: ar ? `حسب سجلك الذي أدخلته: ${r.completedCredits} ساعة مكتملة، و${r.inProgressCredits} قيد الدراسة. المتبقي من إجمالي ${profile.requiredCredits} هو ${r.remainingEarnedCredits} ساعة لم تُكتسب بعد؛ ولا يعني اكتمال العدد وحده استيفاء كل المتطلبات.\n${note}` : `From your self-reported record: ${r.completedCredits} completed credits and ${r.inProgressCredits} in progress. Against the recorded ${profile.requiredCredits}-credit requirement, ${r.remainingEarnedCredits} credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.\n${note}`, citations: profile.provenance.sourceUrls.map(url => ({ title: 'Profile requirement source', url })) };
+    // Per-block breakdown, like a Degree Works audit summary.
+    const rows = (r.blocks as { title: string; requiredCredits?: number; completedCredits?: number; inProgressCredits?: number }[]).filter(b => b.requiredCredits);
+    const breakdown = rows.length ? (ar ? '\nحسب المتطلبات:\n' : '\nBy requirement block:\n') + rows.map(b => ar
+      ? `• ${b.title}: ${b.completedCredits ?? 0} من ${b.requiredCredits} مكتملة${b.inProgressCredits ? `، و${b.inProgressCredits} قيد الدراسة` : ''}`
+      : `• ${b.title}: ${b.completedCredits ?? 0} of ${b.requiredCredits} earned${b.inProgressCredits ? `, ${b.inProgressCredits} in progress` : ''}`).join('\n') : '';
+    return { content: ar ? `حسب سجلك الذي أدخلته: ${r.completedCredits} ساعة مكتملة، و${r.inProgressCredits} قيد الدراسة. المتبقي من إجمالي ${profile.requiredCredits} هو ${r.remainingEarnedCredits} ساعة لم تُكتسب بعد؛ ولا يعني اكتمال العدد وحده استيفاء كل المتطلبات.${breakdown}\n${note}` : `From your self-reported record: ${r.completedCredits} completed credits and ${r.inProgressCredits} in progress. Against the recorded ${profile.requiredCredits}-credit requirement, ${r.remainingEarnedCredits} credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.${breakdown}\n${note}`, citations: profile.provenance.sourceUrls.map(url => ({ title: 'Profile requirement source', url })) };
   }
   const target = codes(q)[0];
   if (profile && target && PERSONAL.test(q) && /can i|prerequis|eligible|meet|اقدر|أقدر|متطلب|اخذ|آخذ/iu.test(q)) {
