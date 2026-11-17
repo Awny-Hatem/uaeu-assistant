@@ -9,7 +9,9 @@ DB=sqlite3.connect('file:'+str(ROOT/'data/corpus/search.sqlite')+'?mode=ro',uri=
 registry={}; historical={}
 for data, in DB.execute("select data from chunks where json_extract(data,'$.courseCode') is not null and json_extract(data,'$.courseCode') != ''"):
  c=json.loads(data);code=c['courseCode']
- if '.pdf' in c.get('url','') and 'course' in c['url'].lower() and code not in historical:
+ # Prefer an English catalog PDF and the most recent catalog year when no current course page exists.
+ rank=lambda r:(0 if '/ar/' in r['url'] else 1,max([int(y) for y in r.get('years',[]) if str(y).isdigit()] or [0]))
+ if '.pdf' in c.get('url','') and 'course' in c['url'].lower() and (code not in historical or rank({'url':c['url'],'years':c.get('years',[])})>rank(historical[code])):
   pg=re.search(r'Source PDF page:\s*(\d+)',c['text']);historical[code]={'code':code,'title':c['title'],'url':c['url']+('#page='+pg[1]if pg else ''),'text':c['text'],'sourceVerified':'2026-11-04','historical':True,'years':c.get('years',[])}
  if '/courses/' in c.get('url','') and '.shtml' in c['url'] and code not in registry:
   registry[code]={'code':code,'title':c['title'],'url':c['url'],'text':c['text'],'sourceVerified':'2026-11-04'}
