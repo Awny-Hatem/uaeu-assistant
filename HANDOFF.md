@@ -32,10 +32,29 @@ Brief: `~/Downloads/claude_code_prompt_profiles_and_power.md`. Local only: no pu
 ## API spend
 Real balance reported by Ali: $33.63 (17 Nov), i.e. $1.62 spent then. App estimates since: ~$0.33 (v6) + final suites (~$7 est.). Floor: keep the account above $5.
 
+## Final suites (run on the build before commits 1530dab and 9bd2efd)
+Stopped at 22:03 on 17 Nov: "OpenAI could not be reached" ×5, then the Mac went to sleep at 22:05 (lid/user sleep; caffeinate cannot stop that). No quota or 429 errors.
+| Suite | (answers, verdicts) |
+|---|---|
+| examiner 600 | (600, {'correct': 565, 'partial': 28, 'incorrect': 7}) |
+| phrasing 399 | (399, {'correct': 378, 'partial': 15, 'incorrect': 6}) |
+| regression part 1 | (594, {'correct': 580, 'partial': 8, 'incorrect': 6}) |
+| regression part 2 | (595, {'correct': 581, 'incorrect': 8, 'partial': 6}) |
+| regression part 3 (stopped) | (134, {'correct': 126, 'partial': 1, 'incorrect': 7}) |
+| memory 94 | (94, {'correct': 92, 'partial': 2}) |
+Not run yet: rest of regression part 3, browser examiner, browser memory.
+Regressions found vs v11 and already fixed in code (not yet re-measured live):
+- EX090 ×4 prompt injection hijacked the program directory ("STEM" matched inside "system").
+- EX052 ×6 "Which college offers X" used the old college name from the XML feed → programOfferAnswer from the registry.
+- KE161 Minor in Chemistry borrowed the Master's record; KE156 micro-credential lost corpus evidence → qualification guard + conditional short-circuit in hybridRetrieve.
+- KE306 Fall 2035 exams: reviewed calendar answer now says unpublished terms have no dates.
+Not bot errors: EX013/EX035-V4/V5/EX052 expect the raw XML feed as source (Part 4 removed XML citations); EX035 expects the old name "Information Security" (now Cybersecurity).
+Open: EX079-V2/V3 transcript with ungrammatical wording (match phrases need ≥70% token coverage; passed in v11 via retrieval); POWER112 corequisite definition (no official source).
+
 ## Next step
-1. When the final suites finish: rerun their non-correct cases once (provider/network errors first), compare with the v11 baselines (examiner 600/0/0, phrasing 394/4/1, regression 1765/12/5, memory 94/94, browser 100/100, browser memory 17/17), review regressions by hand.
-2. Google Doc continuation: add a profiles-and-power section (six cases before/after, 172-case summary, comparison summary, final suites), END OF TESTING in bold red at the end.
-3. Final report per the brief.
+1. When the network is back: rebuild, restart 3012/3013, rerun ONLY the non-correct cases of every suite (examiner, phrasing, regression 1–3 incl. the unrun rest of part 3, memory), then browser examiner + browser memory. Script: scratchpad final-suites.sh (adapt to --ids/--variant-ids reruns as in rerun-v11.sh).
+2. Compare with v11 baselines; hand-review what stays non-correct.
+3. Google Doc continuation section + END OF TESTING; final report.
 
 ## How to resume
 1. `cd` into the worktree above. Check `git status` and `git log -5`.
