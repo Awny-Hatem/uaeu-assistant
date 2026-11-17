@@ -58,12 +58,12 @@ for name in ['it','cs','mechanical','chemical','economics','ce']:
       amount=next((float(w['text'])for w in line if abs((w['x0']+w['x1'])/2-(cx+2))<4 and re.fullmatch(r'\d+(?:\.\d+)?',w['text'])),None)
       if anchors and amount is not None:
        a=anchors[0];title=' '.join(w['text']for w in line if w['x0']>a['x1']+.1 and w['x1']<cx-1)
-       kind=' '.join(w['text']for w in line if w['x0']>cx+4)
-       options=re.findall(r'[A-Z]{2,6}\d{3,4}',a['text']);elective=not options
+       kind=' '.join(w['text']for w in line if w['x0']>cx+1 and not(re.fullmatch(r'\d+(?:\.\d+)?',w['text'])and abs((w['x0']+w['x1'])/2-(cx+2))<4))
+       options=re.findall(r'[A-Z]{2,6}\d{3,4}',a['text']);slash=re.fullmatch(r'([A-Z]{2,6})(\d{3,4})/(\d{3,4})',a['text']);options=[slash[1]+slash[2],slash[1]+slash[3]]if slash else options;elective=not options
        code=options[0]if len(options)==1 else None
        if alternative and courses and courses[-1]['credits']==amount:
         previous=courses.pop();options=([previous['code']]if previous['code']else previous['options'])+options;code=None;title=previous['title']+' OR '+title;alternative=False
-       courses.append({'code':code,'options':options if len(options)>1 else [],'title':title,'credits':amount,'type':kind,'elective':elective,'catalogUrl':registry.get(code,{}).get('url'),'catalogVerified':code in registry if code else False,'sourceRowY':y})
+       courses.append({'code':code,'options':options if len(options)>1 else [],'title':title,'credits':amount,'type':kind,'elective':elective,'catalogUrl':registry.get(code,{}).get('url'),'catalogVerified':code in registry if code else bool(options)and all(x in registry for x in options),'optionCatalogs':[{'code':x,'url':registry[x]['url']}for x in options if x in registry],'sourceRowY':y})
       elif amount is not None and courses and amount>=sum(c['credits']for c in courses)-1:
        labels=[w for w in ws if start<w['top']<y+1 and abs(w['x0']-semheads[side]['x0'])<10 and re.fullmatch(r'[1-9]|1[0-2]|\(Fall\)|\(Spring\)|Summer',w['text'])]
        ordinal=next((int(w['text'])for w in labels if w['text'].isdigit()),None)
@@ -81,8 +81,8 @@ for name in ['it','cs','mechanical','chemical','economics','ce']:
     if total!=computed:issues.append(f'Plan sum {computed} != printed degree total {total}')
     if not terms:issues.append('No semesters extracted')
     terms.sort(key=lambda t:t['ordinal'])
-    missing=sorted({c['code']for t in terms for c in t['courses']if c['code']and c['code']not in registry})
-    plans.append({'id':f'{name}-{year}-{entry.lower()}'+('-'+('ai-systems'if track=='AI Systems Engineering'else 'robotics'if track=='Robotics and Autonomous Systems'else 'general')if track else ''),'program':program,'track':track,'rawHeading':heading,'cohortStart':year,'catalogYear':f'{year}/{year+1}','entrySeason':entry,'totalCredits':total,'sourceUrl':source[name+'-plan']['url'],'sourceSha256':source[name+'-plan']['sha256'],'sourceFetchedAt':source[name+'-plan']['fetchedAt'],'page':pn,'extraction':'pdfplumber coordinate rows and independently printed semester totals','validation':{'totalsPass':not issues,'issues':issues,'unlinkedCourseCodes':missing,'allCatalogLinksVerified':not missing},'terms':terms})
+    missing=sorted({code for t in terms for c in t['courses']for code in ([c['code']]if c['code']else c['options'])if code not in registry})
+    plans.append({'id':f'{name}-{year}-{entry.lower()}'+('-'+('ai-systems'if track=='AI Systems Engineering'else 'robotics'if track=='Robotics and Autonomous Systems'else 'general')if track else ''),'program':program,'track':track,'rawHeading':heading,'cohortStart':year,'cohortOnwards':'Cohort onwards' in heading,'catalogYear':f'{year}/{year+1}','entrySeason':entry,'totalCredits':total,'sourceUrl':source[name+'-plan']['url'],'sourceSha256':source[name+'-plan']['sha256'],'sourceFetchedAt':source[name+'-plan']['fetchedAt'],'page':pn,'extraction':'pdfplumber coordinate rows and independently printed semester totals','validation':{'totalsPass':not issues,'issues':issues,'unlinkedCourseCodes':missing,'allCatalogLinksVerified':not missing},'terms':terms})
     prev=end
 out=ROOT/'data/academic';out.mkdir(exist_ok=True)
 (out/'study-plans.json').write_text(json.dumps({'schemaVersion':1,'plans':plans},ensure_ascii=False,indent=2)+'\n')

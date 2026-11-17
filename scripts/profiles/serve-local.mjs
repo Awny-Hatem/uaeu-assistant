@@ -1,0 +1,18 @@
+import { createRequire } from 'node:module';
+import { spawn } from 'node:child_process';
+import { randomBytes } from 'node:crypto';
+import path from 'node:path';
+import fs from 'node:fs';
+const root=process.cwd(), require=createRequire(path.join(root,'package.json'));
+require('@next/env').loadEnvConfig('/Users/aliabdullah/Documents/uaeu-assistant');
+const port=process.argv[2]??'3011';
+if(!/^301[0-9]$/.test(port))throw Error('Use an isolated local QA port 3010–3019');
+fs.mkdirSync(path.join(root,'.profiles-local'),{recursive:true,mode:0o700});
+const secretFile=path.join(root,'.profiles-local/qa-secret');
+if(!fs.existsSync(secretFile))fs.writeFileSync(secretFile,randomBytes(48).toString('hex'),{mode:0o600});
+const secret=fs.readFileSync(secretFile,'utf8').trim();
+const env={...process.env,APP_STORE_URL:`file:${root}/.profiles-local/tester.db`,TURSO_DATABASE_URL:'',TURSO_AUTH_TOKEN:'',CHATBOT_DB_PATH:':memory:',AUTH_JWT_SECRET:secret,AUTH_COOKIE_SECRET:secret,PROFILE_ENCRYPTION_KEY:secret,ANSWER_USAGE_DIAGNOSTICS:'enabled',UAEU_TESTER_ENABLED:'true',NEXT_PUBLIC_GUEST_QUESTION_LIMIT:'1000',CHATBOT_BUILD_REVISION:'student-profiles-and-power-local'};
+const mode=process.argv[3]==='production'?'start':'dev';
+const child=spawn(process.execPath,[path.join(root,'node_modules/next/dist/bin/next'),mode,...(mode==='dev'?['--webpack']:[]),'--hostname','127.0.0.1','--port',port],{env,cwd:root,stdio:'inherit'});
+for(const sig of ['SIGINT','SIGTERM'])process.on(sig,()=>child.kill(sig));
+child.on('exit',code=>process.exit(code??0));

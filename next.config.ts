@@ -38,6 +38,9 @@ const nextConfig: NextConfig = {
   outputFileTracingExcludes: {
     "/*": [
       "./data/chatbot.db*",
+      "./data/app-store.db*",
+      "./.profiles-local/**",
+      "./.profile-source-cache/**",
       "./data/corpus/embedding-cache.sqlite*",
       "./data/corpus/embedding-usage.jsonl",
       "./data/corpus/embedding-attempts.jsonl",

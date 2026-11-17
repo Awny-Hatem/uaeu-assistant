@@ -62,7 +62,7 @@ export function personalizeQuery(query: string, profile: Profile | null): Person
   if (!profile || (!profile.major && !profile.college && !profile.academicYear)) return { query, used: false, fields: [] };
   const selfReferenced = SELF_REFERENCE.test(query) || SELF_REFERENCE_AR.test(query);
   if (!selfReferenced) return { query, used: false, fields: [] };
-  if (LEVEL_DEPENDENT.test(query) && !PROGRAM_DEPENDENT.test(query.replace(LEVEL_DEPENDENT, ""))) {
+  if (LEVEL_DEPENDENT.test(query) && (!PROGRAM_DEPENDENT.test(query.replace(LEVEL_DEPENDENT, "")) || /\bhow (?:do|can) I regist|كيف.{0,15}(?:أسجل|اسجل|التسجيل)/iu.test(query))) {
     const level = studentLevel(profile);
     // "When is my registration?" is answered from the published academic calendar.
     const when = /\bwhen\b|\bdate|متى|موعد/iu.test(query) ? "; registration start date for the next semester in the published academic calendar" : "";

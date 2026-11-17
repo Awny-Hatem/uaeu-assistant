@@ -1,3 +1,7 @@
+import { getAcademicProfile } from '@/lib/academic-profile/store';
+import { academicAnswer } from '@/lib/academic-profile/answer';
+import { dialogueReply } from '@/lib/memory/dialogue';
+import { programDirectoryAnswer, currentCEAnswer } from '@/lib/academic-profile/program-registry';
 import { hybridRetrieve, corpusFollowUp, expandCorpusQuery } from "@/lib/hybrid-rag";
 import { withAnswerUsage, answerUsageSnapshot } from "@/lib/answer-usage";
 import { cookies } from "next/headers";
@@ -29,7 +33,7 @@ import { verifySourceClaims } from "@/lib/claim-verifier";
 import { retrieveAcademicEvidence } from "@/lib/academic-retrieval";
 import { normalizeQuery, isProgramRecommendation } from "@/lib/query-understanding";
 import { academicCoverageViolations } from "@/lib/academic-coverage";
-import { appendExchange, MEMORY_COOKIE, memoryCookieOptions, memoryEnabled, openSession, recentTurns, turnCount, type MemorySession, type MemoryTurn } from "@/lib/memory/store";
+import { allTurns, firstTurn, appendExchange, MEMORY_COOKIE, memoryCookieOptions, memoryEnabled, openSession, recentTurns, turnCount, type MemorySession, type MemoryTurn } from "@/lib/memory/store";
 import { refreshSummary, summaryDue } from "@/lib/memory/summary";
 import { serverConversation } from "@/lib/memory/conversation";
 import { asksOwnStudentId, asksRemainingCourses, compareQuestion, ownStudentIdReply, facetCarryQuestion, levelSwitchQuestion, registrationWhenHint, remainingCoursesReply, translatePrevious, translationTarget, withoutTranslationTurns, recallFromPrevious, refersToPreviousAnswer } from "@/lib/memory/followups";
@@ -495,6 +499,8 @@ function respond(
   locale: string,
   status = 200,
 ) {
+  // Internal discovery feeds are never public citations.
+  if(payload.citations)payload={...payload,citations:payload.citations.filter(c=>!c.url||!/[.]xml(?:[?#]|$)/iu.test(c.url))};
   recordEvent(payload, latest, locale);
   const usage = process.env.ANSWER_USAGE_DIAGNOSTICS === "enabled" ? answerUsageSnapshot() : undefined;
   return jsonNoStore({ ...payload, ...(usage ? { usage } : {}) }, { status });
@@ -760,8 +766,11 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   void sanitizeUserContext(parsedBody.userContext);
   const account = userId ? await getAccount(userId).catch(() => null) : null;
   const profile: Profile | null = userId ? await getProfile(userId).catch(() => null) : null;
-  const userContext: UserContext | undefined = account ? { studentType: account.studentType, affiliation: account.universityAffiliation } : undefined;
+  let userContext: UserContext | undefined = account ? { studentType: account.studentType, affiliation: account.universityAffiliation } : undefined;
 
+  if(!account){
+    try{const role=(await cookies()).get('uaeu_visitor_role')?.value;const types:Record<string,string>={'prospective-ug':'Prospective undergraduate','prospective-pg':'Prospective postgraduate',parent:'Parent','current-without-login':'Current student without login',partner:'Partner organization or university'};if(role&&types[role])userContext={studentType:types[role],affiliation:'general'};}catch{/* no request cookie scope in unit tests */}
+  }
   if (!Array.isArray(messages) || messages.length === 0) {
     return jsonNoStore({ error: "messages[] is required." }, { status: 400 });
   }
@@ -838,6 +847,20 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // A saved language preference decides only when the message itself does not
   // (for example a bare course code); the student's own language always wins.
   const locale = resolveLocale(latest, localePref === "auto" && profile?.language && !/[a-z\u0600-\u06ff]{3,}/iu.test(originalLatest.replace(/\b[A-Z]{2,5}\s?\d{3,4}\b/gi, "")) ? profile.language : localePref);
+  let dialogueHistory=(retainedMessages as ChatMessage[]).slice(0,-1);
+  if(opened&&/first (?:question|message)|summari[sz]e|recap|اول|أول|لخص|لخّص/iu.test(originalLatest)){
+    const stored=await allTurns(opened.session.keyHash),first=await firstTurn(opened.session.keyHash);
+    if(stored.length)dialogueHistory=first&&stored[0]?.content!==first.content?[first,...stored]:stored;
+  }
+  const conversationOnly = dialogueReply(originalLatest, dialogueHistory, locale);
+  if (conversationOnly) return respond({role:'assistant',content:conversationOnly,source:'conversation',stateLabel:'conversation_history_answer',disposition:'answer',citations:[]},originalLatest,locale);
+  const directoryAnswer = programDirectoryAnswer(originalLatest, locale==='ar') ?? currentCEAnswer(originalLatest,(retainedMessages as ChatMessage[]).slice(0,-1),locale==='ar');
+  if(directoryAnswer) return respond({role:'assistant',...directoryAnswer,source:'rag',stateLabel:'current_program_registry',disposition:'answer'},originalLatest,locale);
+
+  const academicProfile = userId ? await getAcademicProfile(userId) : null;
+  const plannedAnswer = academicAnswer(originalLatest, (retainedMessages as ChatMessage[]).slice(0,-1), academicProfile, locale);
+  if (plannedAnswer) return respond({role:'assistant',...plannedAnswer,source:plannedAnswer.citations.length?'rag':'conversation',stateLabel:'academic_planning',disposition:plannedAnswer.citations.length?'answer':'clarify'},originalLatest,locale);
+
   // "Translate that to Arabic": a faithful translation of the previous answer,
   // which was already source-checked; no new facts are introduced.
   const translateTo = translationTarget(latest);

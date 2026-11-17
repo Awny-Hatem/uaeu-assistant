@@ -6,6 +6,7 @@ import { courseTargets, dropLinkWords, foldArabicSpelling, normalizeCourseCodes,
 import type { EvidenceRow } from "@/lib/knowledge-files";
 import { providerRequestSignal } from "@/lib/ai-provider";
 import { recordEmbeddingCacheHit, recordProviderUsage, recordProviderAttempt } from "@/lib/answer-usage";
+import { programEvidence } from '@/lib/academic-profile/program-registry';
 
 export const CORPUS_INDEX_PATH = path.join(process.cwd(), "data/corpus/search.sqlite");
 export const EMBEDDING_MODEL = "text-embedding-3-small";
@@ -126,6 +127,8 @@ async function queryEmbedding(query: string, deadlineAt?: number): Promise<numbe
   queryVectors.set(input, vector); return vector;
 }
 export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: number): Promise<EvidenceRow[]> {
+  const fresh = programEvidence(query);
+  if (fresh.length) return fresh.slice(0,topK);
   const store = index(); if (!store?.chunks.length) return [];
   const queryText = fold(query);
   const expanded = expandCorpusQuery(query), qTerms = terms(expanded.query), originalTerms = terms(query), meaning = understandQuery(query), targets = courseTargets(query);
@@ -177,6 +180,8 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
   // semester-bearing sections before the exact body-level relationship check.
   const semesterCandidates=firstSemester&&!targets.length?new Set((store.db.prepare('SELECT id FROM chunk_fts WHERE chunk_fts MATCH ?').all('{heading text}: ("first semester" OR "semester 1" OR "semester one" OR semester1 OR semesterone OR "الفصل الاول"* OR "اول فصل"*)') as {id:string}[]).map(row=>row.id)):null;
   const allowed = (c: Chunk) => {
+    // Feeds are discovery metadata, never a readable public answer source.
+    if (/\.xml(?:[?#]|$)/iu.test(c.url)) return false;
     if (!historicalRequest && c.temporal === "historical") return false;
     // Apply cheap ownership/date gates before reading or normalizing bodies.
     // A normal degree query must not normalize every paragraph in the corpus.

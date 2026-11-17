@@ -37,7 +37,7 @@ def fetch(item):
     pages=[{'number':i+1,'width':p.width,'height':p.height,'text':p.extract_text(layout=True),'words':p.extract_words(x_tolerance=2,y_tolerance=2)}for i,p in enumerate(pdf.pages)]
    (cache/(name+'.pages.json')).write_text(json.dumps(pages,ensure_ascii=False));row['pages']=len(pages)
   else:
-   doc=html.fromstring(raw);row['links']=[{'title':' '.join(a.text_content().split()),'href':a.get('href')}for a in doc.xpath('//a[@href]') if re.search('plan|computer|engineering|graduate|\.pdf',a.get('href','')+' '+a.text_content(),re.I)]
+   doc=html.fromstring(raw);row['links']=[{'title':' '.join(a.text_content().split()),'href':a.get('href')}for a in doc.xpath('//a[@href]') if re.search(r'plan|computer|engineering|graduate|\.pdf',a.get('href','')+' '+a.text_content(),re.I)]
    for e in doc.xpath('//script|//style|//nav|//header|//footer'):e.drop_tree()
    (cache/(name+'.txt')).write_text(' '.join(doc.text_content().split()))
   return row

@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { correctQueryTypos, dropLinkWords, foldArabicSpelling } from "@/lib/query-understanding";
+import { programRegistry } from '@/lib/academic-profile/program-registry';
 import { BASE_PROGRAMS } from "@/lib/academic-retrieval";
 
 // Profile validation uses the same official program/college aliases that
@@ -24,6 +25,9 @@ function load() {
     colleges.set(norm(r.alias), r.canonical);
     colleges.set(norm(r.canonical), r.canonical);
   }
+  // Current college name, independently checked on the official CCAI home page.
+  const ccai = 'College of Computing and Artificial Intelligence';
+  for (const alias of ['CCAI','CIT','College of Information Technology',ccai,'كلية الحوسبة والذكاء الاصطناعي','كلية تقنية المعلومات']) colleges.set(norm(alias),ccai);
   const collegeOf = (equivalents: string[]) => {
     for (const e of equivalents) {
       const exact = colleges.get(norm(e));
@@ -41,7 +45,7 @@ function load() {
       if (!acronyms.has(key)) acronyms.set(key, new Set());
       acronyms.get(key)!.add(r.program);
     }
-    if (!programs.has(r.program)) programs.set(r.program, { program: r.program, qualification: r.qualification, college: collegeOf(r.equivalents ?? []) });
+    if (!programs.has(r.program)) programs.set(r.program, { program: r.program, qualification: r.qualification, college: collegeOf(r.equivalents ?? []) ?? (/\/cit\//u.test((r as AliasRow & {sourceUrl?:string}).sourceUrl??'') ? ccai : null) });
     else if (!programs.get(r.program)!.college) programs.get(r.program)!.college = collegeOf(r.equivalents ?? []);
     for (const name of [r.alias, r.program, ...(r.equivalents ?? []).filter((e) => !/^(?:college of|كلية|قسم)/iu.test(e) && !e.includes(" - "))]) {
       const key = norm(name);
@@ -49,6 +53,11 @@ function load() {
       if (!programAliases.has(key)) programAliases.set(key, new Set());
       programAliases.get(key)!.add(r.program);
     }
+  }
+  for (const p of programRegistry()) {
+    programs.set(p.title,{program:p.title,qualification:p.qualification,college:p.college});
+    if(/^College of /u.test(p.college))colleges.set(norm(p.college),p.college);
+    for(const alias of [p.title,p.titleAr]){if(!alias)continue;const key=norm(alias);if(!programAliases.has(key))programAliases.set(key,new Set());programAliases.get(key)!.add(p.title);}
   }
   // Hand-curated aliases used by retrieval (incl. Arabic names) for core programs.
   for (const p of BASE_PROGRAMS) {

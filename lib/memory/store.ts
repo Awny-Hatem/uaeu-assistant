@@ -87,6 +87,12 @@ export async function allTurns(keyHash: string): Promise<MemoryTurn[]> {
   return rows.map((r) => ({ role: r.role === "assistant" ? "assistant" : "user", content: String(r.content) }));
 }
 
+/** Exact first retained exchange, anchored before the bounded history is trimmed. */
+export async function firstTurn(keyHash:string):Promise<MemoryTurn|null>{
+  const row=(await(await store()).execute({sql:'SELECT content FROM memory_first_turn WHERE key_hash=?',args:[keyHash]})).rows[0];
+  return row?{role:'user',content:String(row.content)}:null;
+}
+
 export async function recentTurns(keyHash: string, limit = recentTurnLimit()): Promise<MemoryTurn[]> {
   const rows = (await (await store()).execute({ sql: "SELECT role, content FROM memory_turns WHERE key_hash = ? ORDER BY id DESC LIMIT ?", args: [keyHash, limit] })).rows;
   return rows.reverse().map((r) => ({ role: r.role === "assistant" ? "assistant" : "user", content: String(r.content) }));
@@ -104,6 +110,7 @@ export async function appendExchange(session: MemorySession, user: string, assis
   if (!live || Number(live.generation) !== session.generation) return false;
   const now = Date.now();
   await tx([
+    {sql:"INSERT OR IGNORE INTO memory_first_turn(key_hash,content) VALUES (?,COALESCE((SELECT content FROM memory_turns WHERE key_hash=? AND role='user' ORDER BY id LIMIT 1),?))",args:[session.keyHash,session.keyHash,user.slice(0,MAX_TURN_CHARS)]},
     { sql: "INSERT INTO memory_turns(key_hash,role,content,created_at) VALUES (?,?,?,?)", args: [session.keyHash, "user", user.slice(0, MAX_TURN_CHARS), now] },
     { sql: "INSERT INTO memory_turns(key_hash,role,content,created_at) VALUES (?,?,?,?)", args: [session.keyHash, "assistant", assistant.slice(0, MAX_TURN_CHARS), now] },
     { sql: "DELETE FROM memory_turns WHERE key_hash = ? AND id NOT IN (SELECT id FROM memory_turns WHERE key_hash = ? ORDER BY id DESC LIMIT ?)", args: [session.keyHash, session.keyHash, MAX_STORED_TURNS] },

@@ -54,6 +54,11 @@ const SCHEMA: string[] = [
     topic_history_enabled INTEGER NOT NULL DEFAULT 0,
     updated_at INTEGER NOT NULL
   )`,
+  `CREATE TABLE IF NOT EXISTS academic_profiles (
+    user_id TEXT PRIMARY KEY REFERENCES accounts(id) ON DELETE CASCADE,
+    payload_enc TEXT NOT NULL,
+    updated_at INTEGER NOT NULL
+  )`,
   `CREATE TABLE IF NOT EXISTS topic_history (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id TEXT NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
@@ -72,6 +77,10 @@ const SCHEMA: string[] = [
   )`,
   `CREATE INDEX IF NOT EXISTS memory_sessions_user_idx ON memory_sessions(user_id, updated_at)`,
   `CREATE INDEX IF NOT EXISTS memory_sessions_expiry_idx ON memory_sessions(expires_at)`,
+  `CREATE TABLE IF NOT EXISTS memory_first_turn (
+    key_hash TEXT PRIMARY KEY REFERENCES memory_sessions(key_hash) ON DELETE CASCADE,
+    content TEXT NOT NULL
+  )`,
   `CREATE TABLE IF NOT EXISTS memory_turns (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     key_hash TEXT NOT NULL,

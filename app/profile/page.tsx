@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import AcademicEditor from "./academic-editor";
 import { useEffect, useState } from "react";
 
 type Profile = {
@@ -143,6 +144,7 @@ export default function ProfilePage() {
         {status === "saved" && <p className="text-xs text-emerald-700" role="status" data-testid="profile-saved">Saved.{profile?.major ? ` Major: ${profile.major}.` : ""}{profile?.college ? ` College: ${profile.college}.` : ""}</p>}
         {status === "error" && <p className="text-xs text-rose-700" role="alert">Something went wrong. Please try again.</p>}
       </form>
+      {accountId && <AcademicEditor accountId={accountId} program={form.major} college={form.college}/>}
     </main>
   );
 }

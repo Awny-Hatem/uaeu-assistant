@@ -20,7 +20,7 @@
     "test:agent": "tsx tests/agent-contract-checks.ts",
     "db:setup": "tsx scripts/setup-store.ts",
     "test:memory": "tsx tests/memory-store-checks.ts && tsx tests/memory-route-checks.ts && tsx tests/memory-followup-checks.ts && tsx tests/auth-profile-checks.ts",
-    "test:offline": "npm test && npm run test:qa-audit && npm run test:pipeline && npm run test:observed-source-scope && npm run test:semantic && npm run test:canonical && npm run test:content && npm run test:grounding && npm run test:security && npm run test:memory && npm run test:source-response && npm run test:deadline && npm run test:integrity && npm run test:agent && npm run eval:common && npm run eval:alignment",
+    "test:offline": "npm test && npm run test:qa-audit && npm run test:pipeline && npm run test:observed-source-scope && npm run test:semantic && npm run test:canonical && npm run test:content && npm run test:grounding && npm run test:security && npm run test:memory && npm run test:profiles && npm run test:source-response && npm run test:deadline && npm run test:integrity && npm run test:agent && npm run eval:common && npm run eval:alignment",
     "eval:alignment": "tsx scripts/evaluate-answer-alignment.ts",
     "eval:sources": "tsx scripts/check-source-urls.ts",
     "eval:common": "tsx scripts/evaluate-common-questions.ts",
@@ -35,7 +35,8 @@
     "eval:examiner": "node evals/run-examiner.mjs",
     "test:observed-source-scope": "tsx tests/observed-source-scope-checks.ts && tsx tests/source-scope-v40-checks.ts && tsx tests/academic-service-completeness-checks.ts",
     "test:knowledge": "tsx tests/knowledge-expansion-checks.ts && tsx tests/observed-retrieval-checks.ts && tsx tests/source-claim-grouping-checks.ts",
-    "eval:review-sources": "tsx evals/review-primary-sources.mjs"
+    "eval:review-sources": "tsx evals/review-primary-sources.mjs",
+    "test:profiles": "tsx tests/academic-profile-checks.ts && tsx tests/profile-power-regressions.ts"
   },
   "dependencies": {
     "@google/genai": "^1.47.0",
