@@ -10,6 +10,7 @@ const registry = JSON.parse(fs.readFileSync('data/academic/programs.json', 'utf8
 const courses = JSON.parse(fs.readFileSync('data/academic/course-records.json', 'utf8'));
 const courseList = Array.isArray(courses) ? courses : Array.isArray(courses.records) ? courses.records : Object.values(courses.records ?? courses);
 const knownCodes = new Set(JSON.parse(fs.readFileSync('data/course-code-identities.json', 'utf8')).codes);
+const knownPrefixes = new Set([...knownCodes].map((c) => c.match(/^[A-Z]+/)[0]));
 const codeRx = /\b([A-Za-z]{2,5})\s?-?(\d{3,4})\b/g;
 const codesIn = (t) => [...new Set([...(t ?? '').matchAll(codeRx)].map((m) => (m[1] + m[2]).toUpperCase()))].filter((c) => /^[A-Z]{2,5}\d{3,4}$/.test(c) && !/^(?:YEAR|FALL|SPRING|PAGE|ROOM|AED)/.test(c));
 // Credit truth from the record itself: unique completed, applied, passing courses; in-progress counted separately.
@@ -56,7 +57,8 @@ function deterministic(answer, q) {
   const codes = codesIn(answer);
   return {
     officialLink: /https?:\/\/(?:www\.)?(?:[a-z]+\.)?uaeu\.ac\.ae/i.test(answer),
-    unknownCourseCodes: codes.filter((c) => !knownCodes.has(c)),
+    // Only tokens with a real UAEU subject prefix can be course codes (excludes "TOEFL ITP 525", "sum 120").
+    unknownCourseCodes: codes.filter((c) => knownPrefixes.has(c.match(/^[A-Z]+/)[0]) && !knownCodes.has(c)),
     outdatedName: /College of Information Technology(?! \(now)|\bBachelor of Science in Computer Engineering\b/i.test(answer),
     languageMatch: /[\u0600-\u06ff]/.test(q) ? /[\u0600-\u06ff]{4}/.test(answer) : true,
   };

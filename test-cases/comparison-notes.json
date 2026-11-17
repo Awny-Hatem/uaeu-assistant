@@ -1,0 +1,31 @@
+{
+  "reasons": [
+    "**Grounded in official UAEU documents.** Every factual answer comes from official uaeu.ac.ae pages, plans or catalog records, with the link shown. The general model cites an official link far less often and fills gaps with plausible-sounding guesses.",
+    "**No invented courses or programs.** The general model used course codes that do not exist at UAEU and mislabelled real ones (for example it called CSPB 219 \"Cell Biology\" with a made-up prerequisite). Our system maps the typo to CSBP219 and gives the catalog prerequisite, CSBP119 with a minimum grade of D.",
+    "**Cohort-specific study plans.** Our answers use the exact published model plan for the student's catalog year and entry season (224 parsed plans, 45 programs) and say when a plan's printed totals don't reconcile. The general model has no access to these plans and guesses semester contents.",
+    "**Profile and history awareness.** With the saved record, credit counts follow the audit rules (unique passing applied courses, in-progress counted separately) and are broken down by requirement block; next semester is worked out from the student's position.",
+    "**Current names.** Answers use the College of Computing and Artificial Intelligence and Computer and Artificial Intelligence Engineering, from the current official pages.",
+    "**Honest boundaries.** When a fact is not in an official source the system says so instead of inventing it, and it never claims access to Degree Works or the portal."
+  ],
+  "cases": {
+    "POWER021": "Judge error on hand review. Our answer lists the official 2022 IT model plan's Year 4 Semester 2 (ITBP481 Senior Graduation Project II plus the plan's elective slots); the judge read the plan's \"student choice\" slots as invented. In substance a tie or better.",
+    "POWER112": "Fair win for the general model. Our answer states CSBP219's prerequisite (CSBP119, minimum D) correctly but does not define a corequisite or say that CSBP219 lists none; the general answer explains both terms. Open improvement.",
+    "POWER154": "Fair on the text alone: the general answer is a more structured step list. Ours states the official eligibility conditions and, in this build, attaches the official step-by-step undergraduate application guide as a card, which the judge did not see.",
+    "POWER155": "Judge error on hand review. Our answer (enrolled students living more than 50 km from Al Ain, apply through the Rooms Assignment Service with UAE Pass or UAEU credentials, pay fees, choose building and room) matches the cited official service page; the judge's reference had no housing data.",
+    "POWER156": "Judge error on hand review. Ours gives the exact official calendar link; the general answer only suggests navigating to an \"Academic Affairs\" or \"Registrar\" section.",
+    "POWER158": "Judge error on hand review. Ours gives the 30-credit minimum and the real core courses ITCO601 and ITCO602 from the official program page; the general answer is a generic outline of a typical MSc."
+  },
+  "examples": [
+    "POWER105",
+    "POWER012",
+    "POWER051",
+    "POWER133",
+    "POWER159"
+  ],
+  "limits": [
+    "50 questions drawn from our own test set; they favour UAEU-specific and personalized questions, which is where a general model is weakest.",
+    "The judge is itself an LLM (gpt-4.1-mini). Every general-model win was checked by hand; 4 of the 6 were judge errors and are labelled as such above, not removed from the counts.",
+    "The general model is the same base model as ours. A stronger general assistant with web browsing could do better on public pages, though it would still lack the student's record and the parsed cohort plans.",
+    "Personalized questions use fictional accounts, not real student records."
+  ]
+}

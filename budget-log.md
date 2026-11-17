@@ -28,3 +28,4 @@ Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage
 | Date | Real balance (Ali) | Real spend since start | Logged estimate at that point | Note |
 |---|---|---|---|---|
 | 2026-11-17 | $33.63 | $1.62 | $1.85 | The app's per-answer estimates are slightly above the real bill; the v6 chain (est. $0.44) was running and may not be included yet. Use the real balance as the source of truth. |
+| v6 chain: six + 172 + verdict grading + comparison v3 (general + judge) | Claude | 6 + 172 + 172 + 50 + 50 | $0.44 | ~$0.33 (app est.) | ~$2.18 (app est.; real at last report $1.62) |
