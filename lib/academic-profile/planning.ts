@@ -47,11 +47,14 @@ export function proposeNextTerm(p: AcademicProfile) {
   const position = nextPosition(p.modelPosition), plan = selectPlan(p);
   if (!plan)
     return { status: 'missing-plan' as const, position, courses: [], issues: ['No exact catalog and entry-season model is approved.'] };
-  if (!plan.validation.totalsPass || !plan.validation.allCatalogLinksVerified)
+  // A degree-total mismatch alone (every semester subtotal matches its printed
+  // total) still lets us show the semester, with the conflict stated.
+  const degreeTotalOnly = !plan.validation.totalsPass && plan.validation.allCatalogLinksVerified && plan.validation.issues.length > 0 && plan.validation.issues.every(i => /^Plan sum /u.test(i));
+  if ((!plan.validation.totalsPass && !degreeTotalOnly) || !plan.validation.allCatalogLinksVerified)
     return { status: 'source-conflict' as const, position, courses: [], issues: [...plan.validation.issues, ...(plan.validation.unlinkedCourseCodes.length ? ['Unlinked course identifiers: ' + plan.validation.unlinkedCourseCodes.join(', ')] : [])], plan };
   const term = plan.terms.find(t => t.year === position.year && t.semester === position.semester);
   const done = new Set(completedAttempts(p).map(c => c.code)), active = new Set(p.courses.filter(c => c.status === 'in-progress').map(c => c.code));
   const courses = term?.courses.filter(c => !c.code || !done.has(c.code)) ?? [];
   const checks = courses.filter(c => c.code).map(c => ({ code: c.code!, ...prerequisiteCheck(p, c.code!) }));
-  return { status: term ? 'proposed' as const : 'model-ended' as const, position, plan, courses, checks, issues: [...(checks.some(c => c.status !== 'met') ? ['Prerequisites needing confirmation: ' + checks.filter(c => c.status !== 'met').map(c => c.code + ' (' + c.status + ')').join(', ') + '.'] : []), ...(active.size ? ['In-progress courses are not yet passed; recommendations remain conditional.'] : []), ...(p.holds.length ? ['A reported hold may affect registration; check the portal.'] : []), ...(p.academicStanding === 'probation' ? ['Check the applicable probation credit-load limit with your advisor.'] : [])] };
+  return { status: term ? 'proposed' as const : 'model-ended' as const, position, plan, courses, checks, issues: [...(degreeTotalOnly ? [`The plan's printed degree total doesn't match the sum of its semesters (${plan.validation.issues.join('; ')}); the semester list above matches its printed semester total. Confirm the degree total with your advisor.`] : []), ...(checks.some(c => c.status !== 'met') ? ['Prerequisites needing confirmation: ' + checks.filter(c => c.status !== 'met').map(c => c.code + ' (' + c.status + ')').join(', ') + '.'] : []), ...(active.size ? ['In-progress courses are not yet passed; recommendations remain conditional.'] : []), ...(p.holds.length ? ['A reported hold may affect registration; check the portal.'] : []), ...(p.academicStanding === 'probation' ? ['Check the applicable probation credit-load limit with your advisor.'] : [])] };
 }
