@@ -66,6 +66,13 @@ function list(p: StudyPlan, year: number, semester: number, ar: boolean, selecte
     return null;
   return (ar ? `الخطة المنشورة: السنة ${year}، الفصل ${semester} (${p.cohortStart}، دخول ${p.entrySeason}):` : `Published model — Year ${year}, Semester ${semester} (${p.cohortStart} ${p.entrySeason} entry):`) + '\n' + (selected ?? t.courses).map(c => `• ${(c.code ? (c.catalogUrl ? `[${c.code}](${c.catalogUrl})` : c.code) : null) ?? (c.options.length ? c.options.map(code => { const url = c.optionCatalogs?.find(x => x.code === code)?.url; return url ? `[${code}](${url})` : code; }).join(' / ') : ar ? 'مساق اختياري حسب فئته' : 'Approved elective selection')}: ${c.title} (${c.credits})`).join('\n') + '\n' + (ar ? `المجموع المنشور: ${t.printedCredits} ساعة.` : `Published semester total: ${t.printedCredits} credits.`) + (selected ? '\n' + (ar ? `ساعات المساقات المعروضة التي لم تُسجل كمكتملة: ${selected.reduce((n, c) => n + c.credits, 0)}.` : `Credits in the displayed courses not recorded as completed: ${selected.reduce((n, c) => n + c.credits, 0)}.`) : '');
 }
+/** Arabic names for the standard requirement blocks; other titles stay as recorded. */
+function blockTitleAr(title: string): string {
+  const cluster = title.match(/^General Education\s*[—-]\s*Cluster\s*(\d+)/iu);
+  if (cluster) return `التعليم العام — المجموعة ${cluster[1]}`;
+  const map: Record<string, string> = { 'general education requirements': 'متطلبات التعليم العام', 'general education': 'متطلبات التعليم العام', 'general university requirements': 'متطلبات الجامعة العامة', 'college requirements': 'متطلبات الكلية', 'major / specialization requirements': 'متطلبات التخصص', 'major requirements': 'متطلبات التخصص', 'major electives': 'المقررات الاختيارية للتخصص', 'free electives': 'المقررات الاختيارية الحرة', 'internship': 'التدريب العملي', 'minor': 'التخصص الفرعي' };
+  return map[title.trim().toLowerCase()] ?? title;
+}
 /** Calculations are deterministic; public claims come only from the selected official plan. */
 export function academicAnswer(q: string, history: Turn[], profile: AcademicProfile | null, locale: 'ar' | 'en'): Answer | null {
   const ar = locale === 'ar', note = ar ? 'المرجع الرسمي للتدقيق هو Degree Works ومرشدك الأكاديمي.' : 'Degree Works and your advisor provide the official audit.';
@@ -96,7 +103,7 @@ export function academicAnswer(q: string, history: Turn[], profile: AcademicProf
     // Per-block breakdown, like a Degree Works audit summary.
     const rows = (r.blocks as { title: string; requiredCredits?: number; completedCredits?: number; inProgressCredits?: number }[]).filter(b => b.requiredCredits);
     const breakdown = rows.length ? (ar ? '\nحسب المتطلبات:\n' : '\nBy requirement block:\n') + rows.map(b => ar
-      ? `• ${b.title}: ${b.completedCredits ?? 0} من ${b.requiredCredits} مكتملة${b.inProgressCredits ? `، و${b.inProgressCredits} قيد الدراسة` : ''}`
+      ? `• ${blockTitleAr(b.title)}: ${b.completedCredits ?? 0} من ${b.requiredCredits} مكتملة${b.inProgressCredits ? `، و${b.inProgressCredits} قيد الدراسة` : ''}`
       : `• ${b.title}: ${b.completedCredits ?? 0} of ${b.requiredCredits} earned${b.inProgressCredits ? `, ${b.inProgressCredits} in progress` : ''}`).join('\n') : '';
     return { content: ar ? `حسب سجلك الذي أدخلته: ${r.completedCredits} ساعة مكتملة، و${r.inProgressCredits} قيد الدراسة. المتبقي من إجمالي ${profile.requiredCredits} هو ${r.remainingEarnedCredits} ساعة لم تُكتسب بعد؛ ولا يعني اكتمال العدد وحده استيفاء كل المتطلبات.${breakdown}\n${note}` : `From your self-reported record: ${r.completedCredits} completed credits and ${r.inProgressCredits} in progress. Against the recorded ${profile.requiredCredits}-credit requirement, ${r.remainingEarnedCredits} credits are not yet earned. Reaching the credit total alone does not satisfy every requirement.${breakdown}\n${note}`, citations: profile.provenance.sourceUrls.map(url => ({ title: 'Profile requirement source', url })) };
   }

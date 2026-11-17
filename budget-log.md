@@ -1,6 +1,7 @@
 # OpenAI API budget log — feat/student-profiles-and-power
 
-Balance at task start (per Ali): about $35.25, auto-reload off. Cap for this task: $20 total spend; keep at least $15 in the account. Stop all paid calls at $18 or on any credit/quota/429 error.
+Balance at task start (per Ali): $35.25, auto-reload off.
+Rule update from Ali (17 Nov 2026): keep the account above **$5** (was $15). Stop all paid calls on any credit/quota/429 error, or before the balance would fall below $5.
 
 Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage only; transport failures are not counted). Average from earlier runs: about $0.002–0.004 per answer, about $0.005 for a multi-turn case.
 
@@ -22,3 +23,8 @@ Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage
 | power-results-v4 verdict grading | Claude | 172 calls | $0.12 | $0.077 | $1.508 |
 | power-focus-v5 (7 cases: credits, calendar, faculty) | Claude | 7 cases | $0.02 | $0.01 | $1.52 |
 | power-results-v5 (172 cases) + verdict grading | Claude | 172 + 172 calls | $0.33 | $0.325 | $1.85 |
+
+## Reconciliation with the real balance
+| Date | Real balance (Ali) | Real spend since start | Logged estimate at that point | Note |
+|---|---|---|---|---|
+| 2026-11-17 | $33.63 | $1.62 | $1.85 | The app's per-answer estimates are slightly above the real bill; the v6 chain (est. $0.44) was running and may not be included yet. Use the real balance as the source of truth. |
