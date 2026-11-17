@@ -18,34 +18,24 @@ Brief: `~/Downloads/claude_code_prompt_profiles_and_power.md`. Local only: no pu
 | 5. 150+ new test cases | 172 cases in test-cases/power-172.json; v2 run: 0 HTTP errors, 0 robotic/unverified replies; hand review found and fixed 9 defect types. Verdicts in the Field/Details markdown still need filling. |
 | 6. Comparison vs general AI | Not run yet (scripts/profiles/compare-general.mjs exists). |
 
-## Test results so far (build at commit after b801a2d)
-- Six cases (after-six-v5): all six behave as expected.
-- 172 new cases (power-results-v4): 0 HTTP errors, 0 robotic replies, 1 refusal (POWER168 faculty contacts).
-  LLM verdicts (power-results-v4-graded.json, gpt-4.1-mini vs rubric + official reference): 135 correct, 32 partial, 5 incorrect.
-  Hand check so far: the 5 "incorrect" and most "partial" are judge/rubric errors, not bot errors:
-  - POWER147/148 (CMHS lists) and POWER105 (CSPB219 typo) are correct; the grader reference matched "Science" inside "Health Sciences" (same bug as the old directory) and has no typo mapping.
-  - POWER009/029/049/059/069/079 flag "Gen Ed course (Cluster 1…)" labels, but the official plan PDFs print exactly those labels; the reference omits course types.
-  - Several conversation/guest rubrics written by Codex ask for things the brief does not (e.g. a greeting must mention the 2025 IT source conflict).
-  Still to review by hand: POWER003, 025, 038/048/078 (registration answers lack the eServices link), 051, 064, 086, 098, 168.
-- Comparison vs general AI (comparison-50-v2-graded.json, 50 matched cases, same base model gpt-4.1-mini without retrieval):
-  ours 42 wins, general 8, ties 0; correctness 1.90 vs 1.02 (0–2), completeness 1.76 vs 0.94; answers with a hallucination 4 vs 27;
-  invented course codes 2 vs 13; official UAEU link cited 21 vs 7. Of the 8 general wins, 2 are judge errors (POWER105, 158), 1 is a tie in
-  substance (POWER011), 5 were fair: credits-left answers were terse (fixed after this run: per-block breakdown), the calendar answer lacked the
-  URL in text (fixed), and the international-application answer is less step-by-step than the general model's (open).
-- Offline: test:offline passed earlier in this session; test:profiles 21/21 + 16/16.
+## Test results so far (latest: v6 build, commit c94fddd)
+- Six cases (after-six-v6): all six behave as the brief expects.
+- 172 new cases (power-results-v6): 0 errors. Hand-reviewed verdicts: 162 correct, 10 partial, 0 incorrect
+  (test-cases/power-results-v6.md, overrides with reasons in test-cases/verdict-overrides-v6.json).
+  The 10 partials are the Arabic "credits left" answers that kept English requirement-block names; fixed after v6 (blockTitleAr).
+- Comparison vs general AI (comparison-vs-general-ai.md, 50 cases): ours 43, general 6, tie 1; correctness 1.90 vs 1.04;
+  hallucinations 3 vs 27; invented course codes 0 vs 6; official link 22 vs 7. Of the 6 general wins, 4 are judge errors
+  (hand-checked), 2 fair (POWER112 corequisite definition — no official definition source; POWER154 structure — guide card now attached).
+- Final suites (examiner 600, phrasing 399, regression 1,782, memory 94, browser examiner, browser memory): running via
+  scratchpad final-suites.sh; outputs labelled *-profiles in reports/.
 
 ## API spend
-budget-log.md: about $1.51 of the $20 cap (well inside; balance should be about $33.7).
+Real balance reported by Ali: $33.63 (17 Nov), i.e. $1.62 spent then. App estimates since: ~$0.33 (v6) + final suites (~$7 est.). Floor: keep the account above $5.
 
-## Next step (as of commit after 6d6eb8c, usage paused at 89%)
-Latest live run: test-cases/power-results-v5.json; automatic verdicts: test-cases/power-results-v5-graded.json → 131 correct, 41 partial, 0 incorrect.
-Most partials are grader artefacts: the judge reference has no requirement blocks (so the new per-block credits breakdown is marked "unsupported"), Codex's generic rubrics ask greetings/guest answers to "distinguish public guidance from live private access", and department grouping comes from the official registry's department field.
-1. Hand-review the 41 partials; write overrides to test-cases/verdict-overrides.json as {"POWERxxx": {"verdict": "correct|partial|incorrect", "comment": "..."}} — only after checking each against the official source.
-   Real issues seen so far: registration answers (POWER028/038/048/078) lack the explicit eServices steps/link; POWER078 says students "must insert courses into Degree Works" (check against the registration guide); POWER051/071 next-semester prerequisite flags.
-2. node scripts/profiles/merge-verdicts.mjs test-cases/power-results-v5.json test-cases/power-results-v5-graded.json test-cases/verdict-overrides.json test-cases/power-results-v5-final.json
-   node scripts/profiles/render-cases.mjs test-cases/power-results-v5-final.json test-cases/power-results-v5.md
-3. Write comparison-vs-general-ai.md from test-cases/comparison-50-v2.json + comparison-50-v2-graded.json (ours 42 / general 8; scores in the earlier section).
-4. Final suites once (examiner 600, regression 1,782, memory 94) or a representative sample within budget; Google Doc log; final report.
+## Next step
+1. When the final suites finish: rerun their non-correct cases once (provider/network errors first), compare with the v11 baselines (examiner 600/0/0, phrasing 394/4/1, regression 1765/12/5, memory 94/94, browser 100/100, browser memory 17/17), review regressions by hand.
+2. Google Doc continuation: add a profiles-and-power section (six cases before/after, 172-case summary, comparison summary, final suites), END OF TESTING in bold red at the end.
+3. Final report per the brief.
 
 ## How to resume
 1. `cd` into the worktree above. Check `git status` and `git log -5`.
