@@ -37,12 +37,15 @@ Brief: `~/Downloads/claude_code_prompt_profiles_and_power.md`. Local only: no pu
 ## API spend
 budget-log.md: about $1.51 of the $20 cap (well inside; balance should be about $33.7).
 
-## Next step
-1. Rebuild and rerun the credits-left and calendar cases (POWER002/012/022/…/156) to confirm the two fixes live.
-2. Fix the grader reference (longest college name, CSPB→CSBP typo map, include plan course types), regrade, then hand-review the remaining partials listed above.
-3. Merge verdicts + comments into the results and render test-cases/power-results-v4.md with scripts/profiles/render-cases.mjs (it already reads c.verdict / c.comments).
-4. Write comparison-vs-general-ai.md from comparison-50-v2(-graded).json (table, scores, side-by-side examples, honest list of general wins).
-5. Final suites (examiner 600, regression 1,782, memory 94) once, or a representative sample, within budget; then the Google Doc log and the final report.
+## Next step (as of commit after 6d6eb8c, usage paused at 89%)
+Latest live run: test-cases/power-results-v5.json; automatic verdicts: test-cases/power-results-v5-graded.json → 131 correct, 41 partial, 0 incorrect.
+Most partials are grader artefacts: the judge reference has no requirement blocks (so the new per-block credits breakdown is marked "unsupported"), Codex's generic rubrics ask greetings/guest answers to "distinguish public guidance from live private access", and department grouping comes from the official registry's department field.
+1. Hand-review the 41 partials; write overrides to test-cases/verdict-overrides.json as {"POWERxxx": {"verdict": "correct|partial|incorrect", "comment": "..."}} — only after checking each against the official source.
+   Real issues seen so far: registration answers (POWER028/038/048/078) lack the explicit eServices steps/link; POWER078 says students "must insert courses into Degree Works" (check against the registration guide); POWER051/071 next-semester prerequisite flags.
+2. node scripts/profiles/merge-verdicts.mjs test-cases/power-results-v5.json test-cases/power-results-v5-graded.json test-cases/verdict-overrides.json test-cases/power-results-v5-final.json
+   node scripts/profiles/render-cases.mjs test-cases/power-results-v5-final.json test-cases/power-results-v5.md
+3. Write comparison-vs-general-ai.md from test-cases/comparison-50-v2.json + comparison-50-v2-graded.json (ours 42 / general 8; scores in the earlier section).
+4. Final suites once (examiner 600, regression 1,782, memory 94) or a representative sample within budget; Google Doc log; final report.
 
 ## How to resume
 1. `cd` into the worktree above. Check `git status` and `git log -5`.
