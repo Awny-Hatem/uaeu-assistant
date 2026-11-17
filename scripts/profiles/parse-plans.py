@@ -15,8 +15,17 @@ for data, in DB.execute("select data from chunks where json_extract(data,'$.cour
   registry[code]={'code':code,'title':c['title'],'url':c['url'],'text':c['text'],'sourceVerified':'2026-11-04'}
 for code,record in historical.items():
  if code not in registry:registry[code]=record
+# PDF headings carry typos ("Sicience", "in in"); map each to the official registry title.
+_titles=[r['title'] for r in json.loads((ROOT/'data/academic/programs.json').read_text())['records'] if r['qualification']=='bachelor']
+_alias={'Bachelor of Science in Computer Engineering':'Bachelor of Science in Computer Engineering','Bachelor of Science in Information Security':'Bachelor of Science in Information Security','Bachelor of Science in Technology':'Bachelor of Science in Technology'}
+def _tokens(t):return {w.rstrip('s') for w in re.sub(r'sicience','science',re.sub(r'[^a-z ]',' ',t.lower())).split()}-{'bachelor','of','in','the','and','art','science','a'}
+def canonical_program(raw):
+ raw=re.sub(r'\b(\w+) \1\b',r'\1',raw)
+ if raw in _alias:return raw
+ best=max(_titles,key=lambda t:(len(_tokens(t)&_tokens(raw))/max(1,len(_tokens(t)|_tokens(raw))),-abs(len(t)-len(raw))))
+ return best if _tokens(best)&_tokens(raw) and len(_tokens(best)&_tokens(raw))/max(1,len(_tokens(best)|_tokens(raw)))>=0.5 else raw
 plans=[]
-for name in ['it','cs','mechanical','chemical','economics','ce']:
+for name in sorted(p.name[:-len('-plan.pdf')] for p in CACHE.glob('*-plan.pdf')):
  with pdfplumber.open(CACHE/(name+'-plan.pdf'))as pdf:
   for pn,page in enumerate(pdf.pages,1):
    words=[w for w in page.extract_words(x_tolerance=.4,y_tolerance=.2)if w.get('upright',True)]
@@ -34,11 +43,13 @@ for name in ['it','cs','mechanical','chemical','economics','ce']:
     heading=' '.join(' '.join(w['text'] for w in sorted(v,key=lambda w:w['x0']))for y,v in sorted(lines.items()))
     match=re.search(r'((?:Bachelor|Master).+?)\s+Model Study Plan\s*\((\d{4})[-–](\d{4}) Cohort',heading)
     if not match:prev=hy;continue
-    program=match[1].strip();year=int(match[2]);track=None
+    rawProgram=match[1].strip();program=canonical_program(rawProgram);year=int(match[2]);track=None
     if name=='ce'and year>=2026:
      program='Bachelor of Science in Computer and Artificial Intelligence Engineering'
      track='AI Systems Engineering'if 'Concentration 1:'in heading else 'Robotics and Autonomous Systems'if 'Concentration 2:'in heading else 'General Computer and AI Engineering Pathway'
     entry='Spring' if re.search('from the Spring',heading,re.I)else 'Fall'
+    conc=re.search(r'Concentration\s*\d*\s*:\s*(.+?)\s+For Students',heading,re.I)
+    if conc and not track:track=re.sub(r'Anayltics','Analytics',' '.join(conc[1].split()))
     hs=sorted([w for w in words if abs(w['top']-hy)<.4],key=lambda w:w['x0'])
     semheads=[w for w in hs if w['text']=='Semester'];ch=[w for w in hs if w['text']=='CH']
     nextY=headerYs[j+1] if j+1<len(headerYs)else page.height
@@ -86,8 +97,13 @@ for name in ['it','cs','mechanical','chemical','economics','ce']:
     if not terms:issues.append('No semesters extracted')
     terms.sort(key=lambda t:t['ordinal'])
     missing=sorted({code for t in terms for c in t['courses']for code in ([c['code']]if c['code']else c['options'])if code not in registry})
-    plans.append({'id':f'{name}-{year}-{entry.lower()}'+('-'+('ai-systems'if track=='AI Systems Engineering'else 'robotics'if track=='Robotics and Autonomous Systems'else 'general')if track else ''),'program':program,'track':track,'rawHeading':heading,'cohortStart':year,'cohortOnwards':'Cohort onwards' in heading,'catalogYear':f'{year}/{year+1}','entrySeason':entry,'totalCredits':total,'sourceUrl':source[name+'-plan']['url'],'sourceSha256':source[name+'-plan']['sha256'],'sourceFetchedAt':source[name+'-plan']['fetchedAt'],'page':pn,'extraction':'pdfplumber coordinate rows and independently printed semester totals','validation':{'totalsPass':not issues,'issues':issues,'unlinkedCourseCodes':missing,'allCatalogLinksVerified':not missing},'terms':terms})
+    plans.append({'id':f'{name}-{year}-{entry.lower()}'+('-'+('ai-systems'if track=='AI Systems Engineering'else 'robotics'if track=='Robotics and Autonomous Systems'else 'general'if track=='General Computer and AI Engineering Pathway'else re.sub(r'[^a-z0-9]+','-',track.lower()).strip('-'))if track else ''),'program':program,'track':track,'rawHeading':heading,'cohortStart':year,'cohortOnwards':'Cohort onwards' in heading,'catalogYear':f'{year}/{year+1}','entrySeason':entry,'totalCredits':total,'sourceUrl':source[name+'-plan']['url'],'sourceSha256':source[name+'-plan']['sha256'],'sourceFetchedAt':source[name+'-plan']['fetchedAt'],'page':pn,'extraction':'pdfplumber coordinate rows and independently printed semester totals','validation':{'totalsPass':not issues,'issues':issues,'unlinkedCourseCodes':missing,'allCatalogLinksVerified':not missing},'terms':terms})
     prev=end
+# A PDF can repeat a cohort/entry/track table (continuation pages); keep each with a numbered id.
+_seen={}
+for _p in plans:
+ _n=_seen.get(_p['id'],0);_seen[_p['id']]=_n+1
+ if _n:_p['id']+=f'-{_n+1}'
 out=ROOT/'data/academic';out.mkdir(exist_ok=True)
 (out/'study-plans.json').write_text(json.dumps({'schemaVersion':1,'plans':plans},ensure_ascii=False,indent=2)+'\n')
 (out/'course-records.json').write_text(json.dumps({'schemaVersion':1,'records':registry},ensure_ascii=False,indent=2)+'\n')

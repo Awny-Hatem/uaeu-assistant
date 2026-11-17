@@ -22,6 +22,10 @@ sources={
  'ccai-college':'https://www.uaeu.ac.ae/en/cit/',
  'program-directory':'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/',
 }
+# Every bachelor study-plan PDF listed in the official program registry.
+for r in json.loads((ROOT/'data/academic/programs.json').read_text())['records']:
+ if r['qualification']=='bachelor' and r['studyPlanUrl'] and r['studyPlanUrl'] not in sources.values():
+  sources[re.sub(r'_study_plan\.pdf$','',r['studyPlanUrl'].rsplit('/',1)[-1]).replace('_','-')+'-plan']=r['studyPlanUrl']
 def official(url):
  u=urlparse(url);return u.scheme=='https' and (u.hostname=='uaeu.ac.ae' or u.hostname.endswith('.uaeu.ac.ae'))
 def fetch(item):
