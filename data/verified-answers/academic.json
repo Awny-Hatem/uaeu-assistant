@@ -1333,7 +1333,12 @@
       "matchPhrases": [
         "order official transcript current student",
         "current student official transcript",
-        "طلب كشف درجات رسمي لطالب حالي"
+        "طلب كشف درجات رسمي لطالب حالي",
+        "request official transcript",
+        "currently enrolled student request official transcript",
+        "current student request transcript",
+        "طالب مسجل حاليا كشف درجات رسمي",
+        "كيف يطلب طالب كشف درجات رسمي"
       ],
       "excludePhrases": [
         "alumnus",
@@ -1404,7 +1409,11 @@
       ],
       "matchPhrases": [
         "كشف الدرجات بالعربية أو الإنجليزية",
-        "لغة كشف الدرجات"
+        "لغة كشف الدرجات",
+        "official transcript arabic or english",
+        "transcript in arabic or english",
+        "كشف درجات رسمي بالعربية او الانجليزية",
+        "كشف درجات بالعربيه او الانجليزيه"
       ],
       "answer_en": "**Transcript language**\n- Yes. UAEU's current-student document service offers both Academic Transcript Arabic and Academic Transcript English.\n- Sign in to the UAEU portal or UAEU App, open Current Students Documents, choose the required language, and submit. The service is free, normally delivered by email within 10 minutes, and lists no required supporting documents.\n- Alumni should use the separate graduate-documents service.",
       "answer_ar": "**لغة كشف الدرجات**\n- نعم. تتيح خدمة وثائق الطلبة الحاليين في جامعة الإمارات طلب **كشف الدرجات** الأكاديمي باللغة العربية أو باللغة الإنجليزية.\n- سجّل الدخول إلى بوابة الجامعة أو تطبيق الجامعة، ثم افتح خدمة وثائق الطلبة الحاليين، واختر اللغة المطلوبة وأرسل الطلب. الخدمة مجانية، ووقت التسليم المعتاد 10 دقائق عبر البريد الإلكتروني، ولا تتطلب مستندات داعمة.\n- إذا كنت خريجاً فاستخدم خدمة وثائق الخريجين المنفصلة.",
@@ -2625,17 +2634,23 @@
       "questions": [
         "I am a postgraduate student asking about a bachelor's graduation GPA. Detect the degree-level mismatch instead of applying the undergraduate rule to me."
       ],
-      "matchPhrases": ["postgraduate student bachelor's graduation GPA", "degree-level mismatch for graduation GPA", "اختلاف مستوى الدرجة وقاعدة معدل التخرج"],
+      "matchPhrases": [
+        "postgraduate student bachelor's graduation GPA",
+        "degree-level mismatch for graduation GPA",
+        "اختلاف مستوى الدرجة وقاعدة معدل التخرج"
+      ],
       "answer_en": "**Degree-level mismatch**\n- A postgraduate student’s graduation GPA must not be answered by applying an undergraduate or bachelor’s rule. The applicable degree, program, catalog year, and governing postgraduate policy must be identified first.\n- The published undergraduate graduation procedure is scoped to undergraduate programs; it is not proof of a postgraduate threshold. Ask for the exact postgraduate degree and cohort before stating a GPA rule.",
       "answer_ar": "**اختلاف مستوى الدرجة**\n- لا يجوز تطبيق قاعدة تخرج البكالوريوس على طالب دراسات عليا. يجب أولاً تحديد الدرجة والبرنامج وسنة الخطة والسياسة الخاصة بالدراسات العليا.\n- إجراء التخرج المنشور للمرحلة الجامعية الأولى خاص ببرامج البكالوريوس ولا يثبت حداً للدراسات العليا.",
       "disposition": "clarify",
-      "citations": [{
-        "title": "UAEU Undergraduate Degree Completion and Graduation Procedure",
-        "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",
-        "lastVerified": "2026-09-29",
-        "sourceSection": "Scope; procedure 4 Application for Degree",
-        "evidenceText": "The procedure is an undergraduate degree-completion and graduation procedure. Its undergraduate scope does not establish a postgraduate graduation GPA rule."
-      }]
+      "citations": [
+        {
+          "title": "UAEU Undergraduate Degree Completion and Graduation Procedure",
+          "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",
+          "lastVerified": "2026-09-29",
+          "sourceSection": "Scope; procedure 4 Application for Degree",
+          "evidenceText": "The procedure is an undergraduate degree-completion and graduation procedure. Its undergraduate scope does not establish a postgraduate graduation GPA rule."
+        }
+      ]
     },
     {
       "id": "conditional-computer-science-degree-plan-scope",
@@ -2643,7 +2658,11 @@
       "questions": [
         "Build a conditional Computer Science plan from Fall 2026 to graduation. I have completed the courses in my unofficial list, want no more than 15 credits per term, and need every remaining requirement and prerequisite explained. Do not claim an official graduation date."
       ],
-      "matchPhrases": ["conditional Computer Science plan from Fall 2026", "unofficial course list 15 credits per term", "خطة مشروطة لعلوم الحاسوب والمتطلبات المتبقية"],
+      "matchPhrases": [
+        "conditional Computer Science plan from Fall 2026",
+        "unofficial course list 15 credits per term",
+        "خطة مشروطة لعلوم الحاسوب والمتطلبات المتبقية"
+      ],
       "answer_en": "**Conditional Computer Science plan**\n- A useful plan must identify the Computer Science catalog/cohort, compare your unofficial completed-course list against the published requirements, evaluate each prerequisite/corequisite, and keep each term at or below 15 credits.\n- The result can explain remaining requirements and prerequisite order, but it remains a **conditional plan** until the official degree audit, completed-course grades, transfer decisions, and current section availability are confirmed.\n- I cannot claim an official graduation date from an unofficial list or a model plan; show the missing program, catalog year, course list and grades so the plan can be computed with those limits.",
       "answer_ar": "**خطة مشروطة لعلوم الحاسوب**\n- يجب تحديد الخطة الدراسية والسنة، ومقارنة المقررات المكتملة غير الرسمية بالمتطلبات المنشورة، وفحص المتطلبات السابقة والمصاحبة، مع ألا تتجاوز الخطة 15 ساعة في الفصل.\n- يمكن شرح المتطلبات المتبقية وترتيب المتطلبات السابقة، لكن الخطة تبقى **مشروطة** حتى يؤكد التدقيق الأكاديمي الرسمي والدرجات وتوافر الشعب.",
       "disposition": "clarify",
@@ -2668,16 +2687,22 @@
       "questions": [
         "My target is graduation in Spring 2028, but one required course is offered only in Fall according to an old plan. How should the planner model sequencing, source freshness, and an alternative without promising the target term?"
       ],
-      "matchPhrases": ["Spring 2028 course offered only in Fall old plan", "source freshness alternative graduation term", "خطة قديمة ومقرر في الخريف وهدف ربيع 2028"],
+      "matchPhrases": [
+        "Spring 2028 course offered only in Fall old plan",
+        "source freshness alternative graduation term",
+        "خطة قديمة ومقرر في الخريف وهدف ربيع 2028"
+      ],
       "answer_en": "**Modeling a stale course-offering constraint**\n- Preserve **Spring 2028** as the student’s target, but treat the old Fall-only statement as stale or unconfirmed until a current catalog, timetable, or department source verifies the offering.\n- Compute the prerequisite sequence and show the earliest feasible placement; then model an alternative only if an official equivalent or alternate term is published.\n- Label the result as a risk and do not promise Spring 2028. If current offering data is unavailable, say that the target cannot be certified and route the student to the department or advising unit for confirmation.",
       "answer_ar": "**التعامل مع معلومة قديمة عن طرح مقرر**\n- احتفظ بهدف **ربيع 2028**، لكن اعتبر معلومة طرح المقرر في الخريف فقط قديمة أو غير مؤكدة حتى يتحقق مصدر حالي.\n- احسب ترتيب المتطلبات السابقة واعرض البديل فقط إذا كان مدعوماً بمصدر رسمي، ولا تضمن الفصل المستهدف.",
       "disposition": "clarify",
-      "citations": [{
-        "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
-        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
-        "lastVerified": "2026-09-29",
-        "evidenceText": "A cohort model plan is not current timetable evidence for Spring 2028. The plan must be scoped to the applicable cohort and checked against current availability before registration."
-      }]
+      "citations": [
+        {
+          "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+          "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "A cohort model plan is not current timetable evidence for Spring 2028. The plan must be scoped to the applicable cohort and checked against current availability before registration."
+        }
+      ]
     },
     {
       "id": "failed-data-structures-twice-next-steps",
@@ -2686,7 +2711,11 @@
         "I'm a second year, 4th semester, I failed data structure twice, what should I do?",
         "I am a second year, 4th semester, I failed data structure twice, what should I do?"
       ],
-      "matchPhrases": ["failed Data Structures twice what should I do", "failed CSBP319 twice", "رسوب مقرر هياكل البيانات مرتين ماذا أفعل"],
+      "matchPhrases": [
+        "failed Data Structures twice what should I do",
+        "failed CSBP319 twice",
+        "رسوب مقرر هياكل البيانات مرتين ماذا أفعل"
+      ],
       "answer_en": "**Failed Data Structures twice — safe next steps**\n- If you mean UAEU’s undergraduate **CSBP319 Data Structures**, a failed compulsory course must be repeated; a failed elective must be repeated or replaced with an elective in the study plan. The general repeat-course policy excludes Medicine and Health Sciences.\n- After you successfully repeat a course failed more than once, the failing grades are excluded from GPA calculation, but **all attempts and grades remain on the transcript** with the excluded grades marked. The counted passing grade is the earned grade or C, whichever is lower.\n- Before registering again, check the current CSBP319 prerequisite/corequisite record and your live degree audit. I cannot see your completed attempts, CGPA, program exceptions, or registration hold. Ask your college advising unit to confirm whether the course is compulsory in your plan and whether any academic-probation rule affects your next load.\n- Do not assume that second-year/fourth-semester status alone determines the decision; the next step depends on your program, CGPA, course status, catalog year, and current student record.",
       "answer_ar": "**الرسوب في هياكل البيانات مرتين — الخطوات التالية**\n- إذا كنت تقصد مقرر **CSBP319 هياكل البيانات** في مرحلة البكالوريوس، فيجب إعادة المقرر الإجباري الراسب، أما المقرر الاختياري الراسب فيعاد أو يستبدل باختياري ضمن الخطة.\n- بعد النجاح في إعادة مقرر رسبت فيه أكثر من مرة، تُستبعد درجات الرسوب من حساب المعدل، لكن **تبقى جميع المحاولات والدرجات في كشف الدرجات** مع تمييز الدرجات المستبعدة.\n- تحقّق من المتطلبات السابقة أو المصاحبة والتدقيق الأكاديمي المباشر، وتواصل مع وحدة الإرشاد في كليتك لتأكيد وضع المقرر وأثر المعدل أو الإنذار الأكاديمي. لا أستطيع رؤية سجلك أو محاولاتك الفعلية.",
       "disposition": "answer",
@@ -2714,16 +2743,22 @@
       "questions": [
         "Describe how the future UAEU agent should answer a scenario that requires current policy, a student record, a degree-plan computation, and a portal submission. Explain the order of evidence, authentication, computation, preview, confirmation, and receipt verification."
       ],
-      "matchPhrases": ["future agent current policy student record degree plan portal submission", "evidence authentication computation preview receipt", "ترتيب الأدلة والمصادقة والمعاينة والإيصال للوكيل"],
+      "matchPhrases": [
+        "future agent current policy student record degree plan portal submission",
+        "evidence authentication computation preview receipt",
+        "ترتيب الأدلة والمصادقة والمعاينة والإيصال للوكيل"
+      ],
       "answer_en": "**Required order for an autonomous UAEU workflow**\n1. Retrieve the current applicable policy/source evidence and record its scope, effective date, and conflicts.\n2. Authenticate the student through UAEU SSO/portal and read only the authorized student record; never infer personal status from public pages.\n3. Compute the conditional degree plan from the official requirements, student record, prerequisites and remaining credits, and show the assumptions.\n4. Present a reviewable preview with the exact courses, fees, consequences and destination; do not submit during planning.\n5. Obtain explicit confirmation for this exact action immediately before the portal write.\n6. Submit idempotently through the authorized portal tool, verify the official receipt/status, and report the receipt—or state clearly that nothing was submitted.",
       "answer_ar": "**الترتيب المطلوب لسير عمل وكيل جامعة الإمارات**\n1. استرجاع السياسة الحالية والمصادر وتحديد نطاقها وتاريخها.\n2. مصادقة الطالب عبر الدخول الموحد وقراءة السجل المصرح به فقط.\n3. حساب خطة مشروطة من المتطلبات الرسمية والسجل والمتطلبات السابقة والساعات المتبقية.\n4. عرض معاينة قابلة للمراجعة توضح المقررات والرسوم والآثار والوجهة.\n5. طلب تأكيد صريح للإجراء المحدد قبل الإرسال.\n6. تنفيذ الإرسال بطريقة آمنة والتحقق من الإيصال أو توضيح أن شيئاً لم يُرسل.",
       "disposition": "answer",
-      "citations": [{
-        "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
-        "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
-        "lastVerified": "2026-09-29",
-        "evidenceText": "The model plan is conditional on the applicable cohort and completed prerequisites; the workflow order and portal authorization are product safety requirements, not claims that the public plan itself grants portal access."
-      }]
+      "citations": [
+        {
+          "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+          "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+          "lastVerified": "2026-09-29",
+          "evidenceText": "The model plan is conditional on the applicable cohort and completed prerequisites; the workflow order and portal authorization are product safety requirements, not claims that the public plan itself grants portal access."
+        }
+      ]
     }
   ]
 }

@@ -54,8 +54,9 @@ export function programEvidence(q: string): EvidenceRow[] {
 }
 /** Exhaustive directory/list operations, rather than asking top-k search to enumerate. */
 export function programDirectoryAnswer(q: string, ar: boolean) {
-  const list = /\ball\b|\blist\b|(?:which|what)(?:\s+\w+){0,2}\s+(?:programs?|majors?|degrees?)\b|programs?\s+(?:are|does|do)\b.{0,30}\b(?:offer|in|at|have)\b|جميع|كل البرامج|البرامج المتاحة|التخصصات المتاحة/iu.test(q);
-  if (!list || !/program|major|degree|STEM|برامج|تخصصات/iu.test(q))
+  const list = /\b(?:all|list)\b.{0,40}\b(?:programs?|majors?|degrees?|STEM)\b|(?:which|what)(?:\s+\w+){0,2}\s+(?:programs?|majors?|degrees?)\b|programs?\s+(?:are|does|do)\b.{0,30}\b(?:offer|in|at|have)\b|جميع|كل البرامج|البرامج المتاحة|التخصصات المتاحة/iu.test(q);
+  // Word boundaries: 'STEM' must not match inside 'system'.
+  if (!list || !/\b(?:programs?|majors?|degrees?|STEM)\b|برامج|تخصصات/iu.test(q))
     return null;
   // Policies, admissions and individual course requirements need their own evidence.
   if (/fees?|tuition|admission|prerequis|شروط|رسوم|متطلب/iu.test(q))
@@ -71,7 +72,7 @@ export function programDirectoryAnswer(q: string, ar: boolean) {
     selected = selected.filter(p => ['College of Engineering', 'College of Science', 'College of Computing and Artificial Intelligence'].includes(p.college));
   else if (namedCollege)
     selected = selected.filter(p => p.college === namedCollege);
-  else if (!/\ball\b|جميع|كل البرامج/iu.test(q))
+  else if (!/\ball\b.{0,40}\b(?:programs?|majors?|degrees?)\b|جميع|كل البرامج/iu.test(q))
     return null;
   const grouped = new Map<string, ProgramRecord[]>();
   for (const p of selected) {
@@ -103,4 +104,25 @@ export function currentCEAnswer(q: string, history: {
   const optionText = options.map(h => '• ' + h.replace(/^\d+-\s*/u, '')).join('\n');
   const overview = p.text.split('\n\n')[1]?.split(/(?<=[.!?])\s/u)[0] ?? '';
   return { content: (ar ? `نعم. الاسم الحالي في الدليل هو **${p.titleAr || p.title}**.` : `Yes. The current catalog name is **${p.title}**.`) + (minimum ? '\n' + (ar ? `الحد الأدنى المنشور: ${minimum} ساعة معتمدة.` : `Published minimum: ${minimum} credits.`) : '') + (optionText ? '\n' + (ar ? 'الخيارات المنشورة (مسارا تركيز ومسار عام):' : 'Published concentrations and pathways:') + '\n' + optionText : '') + '\n' + (ar ? 'يجمع البرنامج هندسة الحاسوب وتطبيقات الذكاء الاصطناعي.' : overview) + '\n' + (ar ? 'إذا كنت تتبع كتالوجاً أقدم، اذكر سنة وفصل دخولك لمطابقة الخطة.' : 'If you follow an older catalog, tell me your admit year and entry semester to match its plan.'), citations: [{ title: p.title, url: p.url, lastVerified: p.fetchedAt.slice(0, 10) }, ...(p.studyPlanUrl ? [{ title: 'Computer and AI Engineering model study plan', url: p.studyPlanUrl }] : [])] };
+}
+
+/** "Does UAEU offer the BSc in X? Which college offers it?" — answered from the current official program record. */
+export function programOfferAnswer(q: string, ar: boolean) {
+  if (!/\b(?:offer|offers|offered|have|has)\b.{0,80}\b(?:program|degree|bachelor|master|doctor|phd|minor)\b|\bwhich college\b|\bwhat college\b|أي كلية|اي كليه|اي كلية|هل يوجد|هل تطرح|هل تقدم/iu.test(q))
+    return null;
+  if (/fees?|tuition|credits?|admission|prerequis|requirements?|رسوم|ساع|قبول|متطلب|شروط/iu.test(q))
+    return null;
+  const norm = (t: string) => t.toLowerCase().replace(/[^\p{L}\p{N} ]/gu, ' ').replace(/\s+/g, ' ').trim();
+  const nq = ' ' + norm(q) + ' ';
+  const hits = programRegistry().filter(p => nq.includes(' ' + norm(p.title) + ' ') || (p.titleAr && nq.includes(' ' + norm(p.titleAr) + ' ')))
+    .sort((a, b) => b.title.length - a.title.length);
+  if (!hits.length || hits.filter(p => p.title === hits[0].title).length !== hits.length && hits.length > 1 && hits[1].title.length === hits[0].title.length)
+    return null;
+  const p = hits[0];
+  const name = ar && p.titleAr ? p.titleAr : p.title;
+  const collegeAr: Record<string, string> = { 'College of Agriculture and Veterinary Medicine': 'كلية الزراعة والطب البيطري', 'College of Business and Economics': 'كلية الأعمال والاقتصاد', 'College of Computing and Artificial Intelligence': 'كلية الحوسبة والذكاء الاصطناعي', 'College of Education': 'كلية التربية', 'College of Engineering': 'كلية الهندسة', 'College of Humanities and Social Sciences': 'كلية العلوم الإنسانية والاجتماعية', 'College of Law': 'كلية القانون', 'College of Medicine and Health Sciences': 'كلية الطب والعلوم الصحية', 'College of Science': 'كلية العلوم' };
+  const content = ar
+    ? `نعم. تطرح جامعة الإمارات **${name}** في ${collegeAr[p.college] ?? p.college}.\nصفحة البرنامج في الدليل الرسمي: [${name}](${p.url})`
+    : `Yes. UAEU offers the **${p.title}**, in the ${p.college}${p.department ? ` (${p.department})` : ''}.\nOfficial catalog page: [${p.title}](${p.url})`;
+  return { content, citations: [{ title: p.title, url: p.url, lastVerified: String(p.fetchedAt ?? '').slice(0, 10) }] };
 }

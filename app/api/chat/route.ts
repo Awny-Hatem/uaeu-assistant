@@ -1,7 +1,7 @@
 import { getAcademicProfile } from '@/lib/academic-profile/store';
 import { academicAnswer } from '@/lib/academic-profile/answer';
 import { dialogueReply } from '@/lib/memory/dialogue';
-import { programDirectoryAnswer, currentCEAnswer } from '@/lib/academic-profile/program-registry';
+import { programDirectoryAnswer, currentCEAnswer, programOfferAnswer } from '@/lib/academic-profile/program-registry';
 import { hybridRetrieve, corpusFollowUp, expandCorpusQuery } from "@/lib/hybrid-rag";
 import { withAnswerUsage, answerUsageSnapshot } from "@/lib/answer-usage";
 import { cookies } from "next/headers";
@@ -854,7 +854,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   }
   const conversationOnly = dialogueReply(originalLatest, dialogueHistory, locale);
   if (conversationOnly) return respond({role:'assistant',content:conversationOnly,source:'conversation',stateLabel:'conversation_history_answer',disposition:'answer',citations:[]},originalLatest,locale);
-  const directoryAnswer = programDirectoryAnswer(originalLatest, locale==='ar') ?? currentCEAnswer(originalLatest,(retainedMessages as ChatMessage[]).slice(0,-1),locale==='ar');
+  const directoryAnswer = programDirectoryAnswer(originalLatest, locale==='ar') ?? programOfferAnswer(originalLatest, locale==='ar') ?? currentCEAnswer(originalLatest,(retainedMessages as ChatMessage[]).slice(0,-1),locale==='ar');
   if(directoryAnswer) return respond({role:'assistant',...directoryAnswer,source:'rag',stateLabel:'current_program_registry',disposition:'answer'},originalLatest,locale);
 
   const academicProfile = userId ? await getAcademicProfile(userId) : null;
