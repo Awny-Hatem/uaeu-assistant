@@ -7,6 +7,7 @@ import { selectPlan, studyPlans } from '../lib/academic-profile/planning';
 import { programEvidence, programDirectoryAnswer, currentCEAnswer } from '../lib/academic-profile/program-registry';
 import { testerEnabled, testerRequestAllowed } from '../lib/tester/gate';
 import { dialogueReply } from '../lib/memory/dialogue';
+import { endedCalendarTerm } from '../lib/hybrid-rag';
 import { personalizeQuery } from '../lib/profile/personalize';
 const fixtures = JSON.parse(readFileSync('data/academic/tester-accounts.json', 'utf8')).accounts, p = fixtures.find((a: {
   slug: string;
@@ -37,7 +38,8 @@ check('choose-one plan rows keep both course codes and a readable title', () => 
 check('thanks, goodbye, system-access and "what did you say about" are answered from the conversation', () => {
   assert.match(dialogueReply('Bye', [], 'en') ?? '', /Goodbye/);
   assert.match(dialogueReply('Thanks for the help!', [], 'en') ?? '', /welcome/);
-  assert.match(dialogueReply('شكراً', [], 'ar') ?? '', /العفو/);
+  assert.equal(dialogueReply('Thanks', [], 'en'), null, 'plain thanks keeps the reviewed acknowledgement');
+  assert.match(dialogueReply('مع السلامة', [], 'ar') ?? '', /مع السلامة/);
   assert.match(dialogueReply('Can you access my Degree Works audit?', [], 'en') ?? '', /can't access Degree Works/);
   assert.equal(dialogueReply('Thanks, what is the transcript fee?', [], 'en'), null, 'a real question after thanks still goes to retrieval');
   const h = [{ role: 'user', content: 'Prerequisites for CSBP219?' }, { role: 'assistant', content: 'CSBP219 requires CSBP119 with a minimum grade of D.' }];
@@ -55,6 +57,20 @@ check('introductions are greeted by visitor role and graduate admission is not a
 check('a named college or "which ... programs" lists that college from the official directory', () => {
   const a = programDirectoryAnswer('Which undergraduate programs are in CCAI?', false);
   assert.match(a?.content ?? '', /Computer Science/); assert.doesNotMatch(a?.content ?? '', /Mechanical Engineering/);
+});
+check('a college whose name contains another college name is matched by the longer name', () => {
+  const a = programDirectoryAnswer('List all undergraduate programs in the College of Medicine and Health Sciences.', false)?.content ?? '';
+  assert.match(a, /College of Medicine and Health Sciences/); assert.doesNotMatch(a, /College of Science ·/);
+  assert.match(programDirectoryAnswer('Which programs does UAEU offer in Science?', false)?.content ?? '', /College of Science ·/);
+});
+check('calendar sections for ended terms are dropped unless that year is asked for', () => {
+  const now = new Date('2026-11-17');
+  assert.equal(endedCalendarTerm('Fall Semester 2024 > Add and drop begins', [], now), true);
+  assert.equal(endedCalendarTerm('Spring Semester 2026 > Final exams', [], now), true);
+  assert.equal(endedCalendarTerm('Fall Semester 2026 > Add and drop begins', [], now), false);
+  assert.equal(endedCalendarTerm('Spring Semester 2027 > Classes begin', [], now), false);
+  assert.equal(endedCalendarTerm('Fall Semester 2024 > Add and drop begins', [2024], now), false);
+  assert.equal(endedCalendarTerm('Registration > New students', [], now), false);
 });
 check('university-wide procedures do not take the saved major', () => {
   const prof = { major: 'Bachelor of Science in Computer Science', college: null, academicYear: '1', language: null } as Parameters<typeof personalizeQuery>[1];

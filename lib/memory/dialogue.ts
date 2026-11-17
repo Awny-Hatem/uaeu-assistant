@@ -19,9 +19,10 @@ export function dialogueReply(question: string, history: Turn[], language: 'ar' 
     return ar ? 'أنا مساعد جامعة الإمارات للذكاء الاصطناعي، طوّرني فريق من طلبة كلية الحوسبة والذكاء الاصطناعي (CCAI) ضمن مشروع تخرجهم. أساعدك بالاعتماد على مصادر الجامعة الرسمية.' : "I'm the UAEU AI Assistant, built by UAEU students from the College of Computing and Artificial Intelligence (CCAI) as their Senior Graduation Project. As your UAEU student-services assistant, I help with admissions, courses, plans and services using official UAEU sources.";
   if (/^(?:where does your (?:info(?:rmation)?|knowledge) come from|what (?:are your sources|can you do)|how can you help(?: me)?)[?!.\s]*$|ما مصادرك|من وين معلوماتك|كيف تساعدني|شو تقدر تسوي/iu.test(q))
     return ar ? 'أساعدك في البرامج والخطط والمساقات والقبول والخدمات بالاعتماد على صفحات جامعة الإمارات ووثائقها الرسمية، وأرفق الروابط المناسبة. أستخدم ملفك المحفوظ عند الحاجة؛ ولا أستطيع الدخول إلى سجلك الجامعي المباشر.' : 'I can help with UAEU programs, study plans, courses, admissions and services using official university pages and documents, with source links. When relevant I can use your saved profile; I cannot access your live university record.';
-  // Thanks and goodbyes are small talk, not university requests.
-  if (/^(?:(?:ok(?:ay)?|great|perfect|cool)[,!\s]+)?(?:thanks?(?: you)?(?: so much| a lot)?|thx|ty|bye|goodbye|see you|that'?s all)(?:[,!\s]+(?:for (?:the |your )?help|bye|thanks?))?[.!\s]*$|^(?:شكرا|شكراً|مشكور|يعطيك العافية|مع السلامة|باي)[\s!.؟]*$/iu.test(q))
-    return /bye|goodbye|see you|that'?s all|مع السلامة|باي/iu.test(q)
+  // Goodbyes (and "thanks for the help" phrasings) are small talk, not university
+  // requests. A plain "Thanks" keeps the route's reviewed acknowledgement.
+  if (/^(?:(?:ok(?:ay)?|great|perfect|cool|thanks?|thank you)[,!\s]+)?(?:bye|goodbye|good bye|see you(?: later)?|that'?s all(?: for now)?)[.!\s]*$|^(?:thanks?|thank you)(?: so much)? for (?:the|your|all the) help[.!\s]*$|^(?:مع السلامة|باي|إلى اللقاء|الى اللقاء)[\s!.؟]*$/iu.test(q))
+    return /bye|goodbye|see you|that'?s all|مع السلامة|باي|اللقاء/iu.test(q)
       ? (ar ? 'مع السلامة! عد في أي وقت إذا احتجت مساعدة في أي شيء يخص جامعة الإمارات.' : 'Goodbye! Come back any time you need help with anything at UAEU.')
       : (ar ? 'العفو! إذا احتجت أي شيء آخر عن جامعة الإمارات، أنا هنا.' : "You're welcome! If you need anything else about UAEU, I'm here.");
   // The assistant has no access to live student systems; say so plainly.

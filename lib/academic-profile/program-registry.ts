@@ -65,7 +65,8 @@ export function programDirectoryAnswer(q: string, ar: boolean) {
   if (/minor|فرعي/iu.test(q))
     selected = programRegistry().filter(p => p.qualification === 'minor');
   const colleges = [...new Set(programRegistry().map(p => p.college))];
-  const namedCollege = colleges.find(c => q.toLowerCase().includes(c.toLowerCase()) || q.toLowerCase().includes(c.replace(/^College of /u, '').toLowerCase())) || (/\bCCAI\b|\bCIT\b|كلية الحوسبة|كلية تقنية المعلومات/iu.test(q) ? 'College of Computing and Artificial Intelligence' : null);
+  // The longest matching name wins: 'Medicine and Health Sciences' must not match 'Science'.
+  const namedCollege = colleges.filter(c => q.toLowerCase().includes(c.replace(/^College of /u, '').toLowerCase())).sort((a, b) => b.length - a.length)[0] || (/\bCCAI\b|\bCIT\b|كلية الحوسبة|كلية تقنية المعلومات/iu.test(q) ? 'College of Computing and Artificial Intelligence' : null);
   if (stem)
     selected = selected.filter(p => ['College of Engineering', 'College of Science', 'College of Computing and Artificial Intelligence'].includes(p.college));
   else if (namedCollege)

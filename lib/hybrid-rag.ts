@@ -183,6 +183,9 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
     // Feeds are discovery metadata, never a readable public answer source.
     if (/\.xml(?:[?#]|$)/iu.test(c.url)) return false;
     if (!historicalRequest && c.temporal === "historical") return false;
+    // A current calendar page also lists terms that have ended; drop those
+    // sections unless the question names that year.
+    if (!historicalRequest && endedCalendarTerm(c.heading, wantedYears)) return false;
     // Apply cheap ownership/date gates before reading or normalizing bodies.
     // A normal degree query must not normalize every paragraph in the corpus.
     if (targets.length && courseRule && !targets.includes(c.courseCode)) return false;
@@ -385,4 +388,13 @@ export function corpusFollowUp(messages: {role:string;content:string}[], latest:
   if(labels.length>1)return {query:latest,labels,ambiguous:true};
   const scope=understandQuery(previous.content);
   return {query:`${latest}\nProgram context from the previous user request: ${labels[0]}; ${scope.years.join(' ')} ${scope.terms.join(' ')}.`,labels,ambiguous:false};
+}
+
+/** True when a calendar heading names a term that has already ended (about 5 months after it starts). */
+export function endedCalendarTerm(heading: string, wantedYears: readonly (string | number)[], now = new Date()): boolean {
+  const m = heading.match(/\b(Fall|Spring|Summer)\s+(?:Semester\s+|Session\s+|Term\s+)?(20\d{2})\b/iu);
+  if (!m || wantedYears.some(y => String(y).includes(m[2]))) return false;
+  const startMonth = { fall: 7, spring: 0, summer: 5 }[m[1].toLowerCase() as 'fall' | 'spring' | 'summer'];
+  const ended = new Date(Number(m[2]), startMonth + 5, 1);
+  return ended < now;
 }
