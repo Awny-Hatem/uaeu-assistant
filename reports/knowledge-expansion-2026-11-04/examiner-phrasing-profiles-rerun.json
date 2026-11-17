@@ -1,0 +1,1657 @@
+{
+  "startedAt": "2026-11-17T20:02:30.881Z",
+  "base": "http://127.0.0.1:3013",
+  "label": "examiner-phrasing-profiles-rerun",
+  "fixture": "reports/knowledge-expansion-2026-11-04/examiner-phrasing-profiles-fixture.json",
+  "fixtureSha256": "bb83756e96876b123e4d72065f039e4da75ea0508b57f1c5ad80af451cc98687",
+  "methodology": "Build examiner_100_phrasing.json: harder phrasing variants per scenario.\n\nEach scenario keeps its main question, expected facts, checks and sources.\nIts variants are replaced by three deterministic perturbations:\n  1. typo  - common misspellings / swapped letters, lower case, no '?'\n  2. short - casual compressed form (filler words dropped, lower case)\n  3. ar-typo - the Arabic variant with everyday spelling slips\nFacts and rubric are unchanged, so any failure is phrasing sensitivity.",
+  "results": [
+    {
+      "turns": [
+        "ما رؤيه جامعه الامارات"
+      ],
+      "expected": "UAEU’s published vision emphasizes leadership and innovation in higher education, research and community service at national and international levels.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "innovat(?:ion|or|ive)|ابتكار|مبتكر"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "research|بحث"
+          ]
+        }
+      ],
+      "id": "EX006-V3",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما رؤية جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what is uaue’s vision",
+        "uaeu’s vision?",
+        "ما رؤيه جامعه الامارات"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "bb2091ee1383b950521076ca740545e2a89e10887e8a6a986dc548dcecef0d7e"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX006",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما رؤيه جامعه الامارات",
+          "status": 200,
+          "seconds": 9.283,
+          "payload": {
+            "role": "assistant",
+            "content": "رؤية جامعة الإمارات هي الريادة والابتكار في التعليم العالي، البحث العلمي وخدمة المجتمع على الصعيدين المحلي والدولي.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "عن جامعة الإمارات",
+                "url": "https://www.uaeu.ac.ae/ar/about/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "عن جامعة الإمارات > الرؤية والرسالة > الرؤية"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:9df968b295d599bf4b6f:2#E7S1"
+            ],
+            "claims": [
+              {
+                "text": "رؤية جامعة الإمارات هي الريادة والابتكار في التعليم العالي، البحث العلمي وخدمة المجتمع على الصعيدين المحلي والدولي.",
+                "evidenceIds": [
+                  "corpus:9df968b295d599bf4b6f:2#E7S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8879,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 15,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4659,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.0019484
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1351,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00059
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6025,
+              "outputTokens": 84,
+              "knownUsageUsd": 0.0025387,
+              "estimatedUsd": 0.0025387,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "innovat(?:ion|or|ive)|ابتكار|مبتكر"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "research|بحث"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "what working hourse does uaue’s general contact page publish"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V1",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what working hourse does uaue’s general contact page publish",
+        "working hours uaeu’s general contact page publish?",
+        "ما ساعات العمل في صفحه التواصل العامه للجامعه"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "59fa7b99d7c09531f33719f33303d34eeeb493fa93f53ea37849c7fa887ee788"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX010",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "what working hourse does uaue’s general contact page publish",
+          "status": 200,
+          "seconds": 2.967,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU's general contact page publishes contact information for general enquiries, including a UAE toll-free number 800 8238, an international phone number +971 3 701 7111, a general service email servicedesk@uaeu.ac.ae, and a Message Us form for routing enquiries.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU general enquiries — official contacts",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "57-general-contact.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU's general contact page publishes contact information for general enquiries, including a UAE toll-free number 800 8238, an international phone number +971 3 701 7111, a general service email servicedesk@uaeu.ac.ae, and a Message Us form for routing enquiries.",
+                "evidenceIds": [
+                  "57-general-contact.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2957,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3317,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 88,
+                  "estimatedUsd": 0.0014676000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1405,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006116
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4722,
+              "outputTokens": 119,
+              "knownUsageUsd": 0.0020792000000000002,
+              "estimatedUsd": 0.0020792000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "uaeu’s bsc information technology accredited by abet?"
+      ],
+      "expected": "The college’s accreditation page specifically states that the BSc in Information Technology is accredited by the Computing Accreditation Commission of ABET. This is a program-specific statement, not a claim about every university degree.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/about/accreditation.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "ABET"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computing|الحوسبة|الحاسوبي",
+            "حوسب"
+          ]
+        }
+      ],
+      "id": "EX013-V2",
+      "category": "Programs and accreditation",
+      "focus": "Examiner",
+      "arabicQuestion": "هل بكالوريوس تقنية المعلومات في الجامعة معتمد من ABET؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "is uaue’s bsc infomation technology accredited by abet",
+        "uaeu’s bsc information technology accredited by abet?",
+        "هل بكالوريوس تقنيه المعلومات في الجامعه معتمد من ABET"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "4486717118e32ab0292798195445e8eb8d0d551b6e6cd24f75b5036d2b2cd184"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX013",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "uaeu’s bsc information technology accredited by abet?",
+          "status": 200,
+          "seconds": 2.95,
+          "payload": {
+            "role": "assistant",
+            "content": "Yes, the Bachelor of Science in Information Technology program at UAE University is accredited by the Computing Accreditation Commission (CAC) of ABET.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "current-program:22707#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "Yes, the Bachelor of Science in Information Technology program at UAE University is accredited by the Computing Accreditation Commission (CAC) of ABET.",
+                "evidenceIds": [
+                  "current-program:22707#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2941,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4873,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.002034
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2934,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0012232
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7807,
+              "outputTokens": 84,
+              "knownUsageUsd": 0.0032572,
+              "estimatedUsd": 0.0032572,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "ABET"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing|الحوسبة|الحاسوبي",
+              "حوسب"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?"
+      ],
+      "expected": "The official catalog lists Computer Science; Computer and Artificial Intelligence Engineering; Data Science and Artificial Intelligence; Information Security; and Information Technology. Separate full degrees from minors or microcredentials.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|علوم الحاسوب",
+            "علوم الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+            "هندسة الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Data Science|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Information Security|أمن المعلومات|امن المعلومات"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+          ]
+        }
+      ],
+      "id": "EX035",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what undergraduate degrees does uaue’s collage of computing and artificial intelligence, also called cit, offer",
+        "undergraduate degrees uaeu’s college computing and artificial intelligence also called cit offer?",
+        "ما برامج البكالوريوس التي تطرحها كليه الحوسبه والذكاء الاصطناعي، المعروفه ايضاً باسم CIT"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "993eda2e79bcd104ccdbd870dabbddee66bfb39eaa2b982f8db134bdb94d24ba"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX035",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+          "status": 200,
+          "seconds": 0.032,
+          "payload": {
+            "role": "assistant",
+            "content": "Programs in the verified official directory:\n\n**College of Computing and Artificial Intelligence · Computer and Network Engineering**\n• [Bachelor of Science in Computer and Artificial Intelligence Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml)\n\n**College of Computing and Artificial Intelligence · Computer Science and Software Engineering**\n• [Bachelor of Science in Computer Science](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml)\n• [Bachelor of Science in Data Science and Artificial Intelligence](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml)\n\n**College of Computing and Artificial Intelligence · Information Systems and Security**\n• [Bachelor of Science in Cybersecurity](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml)\n• [Bachelor of Science in Information Technology](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml)",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Cybersecurity",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Computer Science",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Data Science and Artificial Intelligence",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "current_program_registry",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 25,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Computer Science|علوم الحاسوب",
+              "علوم الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+              "هندسة الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "Data Science|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": false,
+            "patterns": [
+              "Information Security|أمن المعلومات|امن المعلومات"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 4"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "what undergraduate degrees does uaue’s collage of computing and artificial intelligence, also called cit, offer"
+      ],
+      "expected": "The official catalog lists Computer Science; Computer and Artificial Intelligence Engineering; Data Science and Artificial Intelligence; Information Security; and Information Technology. Separate full degrees from minors or microcredentials.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|علوم الحاسوب",
+            "علوم الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+            "هندسة الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Data Science|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Information Security|أمن المعلومات|امن المعلومات"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+          ]
+        }
+      ],
+      "id": "EX035-V1",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what undergraduate degrees does uaue’s collage of computing and artificial intelligence, also called cit, offer",
+        "undergraduate degrees uaeu’s college computing and artificial intelligence also called cit offer?",
+        "ما برامج البكالوريوس التي تطرحها كليه الحوسبه والذكاء الاصطناعي، المعروفه ايضاً باسم CIT"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "993eda2e79bcd104ccdbd870dabbddee66bfb39eaa2b982f8db134bdb94d24ba"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX035",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "what undergraduate degrees does uaue’s collage of computing and artificial intelligence, also called cit, offer",
+          "status": 200,
+          "seconds": 0.017,
+          "payload": {
+            "role": "assistant",
+            "content": "Programs in the verified official directory:\n\n**College of Computing and Artificial Intelligence · Computer and Network Engineering**\n• [Bachelor of Science in Computer and Artificial Intelligence Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml)\n\n**College of Computing and Artificial Intelligence · Computer Science and Software Engineering**\n• [Bachelor of Science in Computer Science](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml)\n• [Bachelor of Science in Data Science and Artificial Intelligence](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml)\n\n**College of Computing and Artificial Intelligence · Information Systems and Security**\n• [Bachelor of Science in Cybersecurity](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml)\n• [Bachelor of Science in Information Technology](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml)",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Cybersecurity",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Computer Science",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Data Science and Artificial Intelligence",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "current_program_registry",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 5,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Computer Science|علوم الحاسوب",
+              "علوم الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+              "هندسة الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "Data Science|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": false,
+            "patterns": [
+              "Information Security|أمن المعلومات|امن المعلومات"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 4"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "undergraduate degrees uaeu’s college computing and artificial intelligence also called cit offer?"
+      ],
+      "expected": "The official catalog lists Computer Science; Computer and Artificial Intelligence Engineering; Data Science and Artificial Intelligence; Information Security; and Information Technology. Separate full degrees from minors or microcredentials.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|علوم الحاسوب",
+            "علوم الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+            "هندسة الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Data Science|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Information Security|أمن المعلومات|امن المعلومات"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+          ]
+        }
+      ],
+      "id": "EX035-V2",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what undergraduate degrees does uaue’s collage of computing and artificial intelligence, also called cit, offer",
+        "undergraduate degrees uaeu’s college computing and artificial intelligence also called cit offer?",
+        "ما برامج البكالوريوس التي تطرحها كليه الحوسبه والذكاء الاصطناعي، المعروفه ايضاً باسم CIT"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "993eda2e79bcd104ccdbd870dabbddee66bfb39eaa2b982f8db134bdb94d24ba"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX035",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "undergraduate degrees uaeu’s college computing and artificial intelligence also called cit offer?",
+          "status": 0,
+          "seconds": 948.551,
+          "error": "The operation was aborted due to timeout",
+          "transportCause": {
+            "name": null,
+            "code": null
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "Computer Science|علوم الحاسوب",
+              "علوم الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+              "هندسة الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": false,
+            "patterns": [
+              "Data Science|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": false,
+            "patterns": [
+              "Information Security|أمن المعلومات|امن المعلومات"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": false,
+            "patterns": [
+              "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2",
+          "Required fact 3",
+          "Required fact 4",
+          "Required fact 5"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "ما برامج البكالوريوس التي تطرحها كليه الحوسبه والذكاء الاصطناعي، المعروفه ايضاً باسم CIT"
+      ],
+      "expected": "The official catalog lists Computer Science; Computer and Artificial Intelligence Engineering; Data Science and Artificial Intelligence; Information Security; and Information Technology. Separate full degrees from minors or microcredentials.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|علوم الحاسوب",
+            "علوم الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+            "هندسة الحاسب"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Data Science|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Information Security|أمن المعلومات|امن المعلومات"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+          ]
+        }
+      ],
+      "id": "EX035-V3",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what undergraduate degrees does uaue’s collage of computing and artificial intelligence, also called cit, offer",
+        "undergraduate degrees uaeu’s college computing and artificial intelligence also called cit offer?",
+        "ما برامج البكالوريوس التي تطرحها كليه الحوسبه والذكاء الاصطناعي، المعروفه ايضاً باسم CIT"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "993eda2e79bcd104ccdbd870dabbddee66bfb39eaa2b982f8db134bdb94d24ba"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX035",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما برامج البكالوريوس التي تطرحها كليه الحوسبه والذكاء الاصطناعي، المعروفه ايضاً باسم CIT",
+          "status": 0,
+          "seconds": 969.981,
+          "error": "The operation was aborted due to timeout",
+          "transportCause": {
+            "name": null,
+            "code": null
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "Computer Science|علوم الحاسوب",
+              "علوم الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "Computer and Artificial Intelligence Engineering|هندسة الحاسوب",
+              "هندسة الحاسب"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": false,
+            "patterns": [
+              "Data Science|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": false,
+            "patterns": [
+              "Information Security|أمن المعلومات|امن المعلومات"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": false,
+            "patterns": [
+              "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2",
+          "Required fact 3",
+          "Required fact 4",
+          "Required fact 5"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": false
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "csbp319",
+      "turns": [
+        "هل استطيع اخذ CSBP 319 مع CSBP 221 في الفصل نفسه وما المتطلب السابق الذي يبقي مطلوباً"
+      ],
+      "expected": "CSBP221 is pre/corequisite; concurrent may be allowed, but CSBP219 minimum D and other registration conditions still matter.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*219"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "CSBP\\s*221"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "alongside",
+            "concurrent",
+            "pre.?co",
+            "متزامن",
+            "معه",
+            "مع المساق",
+            "corequisite",
+            "same semester",
+            "at the same time",
+            "while taking"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "forbidden": [
+        "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+        "CSBP219[^.!?\\n]*before or concurrently",
+        "CSBP\\s*219\\s+(?:can|may)\\s+be\\s+(?:completed|taken)\\s+before\\s+or\\s+(?:alongside|concurrent)",
+        "(?:take|taking)\\s+CSBP\\s*219\\s+(?:alongside|concurrent)"
+      ],
+      "id": "EX040-V3",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل أستطيع أخذ CSBP 319 مع CSBP 221 في الفصل نفسه؟ وما المتطلب السابق الذي يبقى مطلوباً؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "can i do csbp 319 while taking csbp 221 in the same semster",
+        "csbp 319 while taking csbp 221 same semester?",
+        "هل استطيع اخذ CSBP 319 مع CSBP 221 في الفصل نفسه وما المتطلب السابق الذي يبقي مطلوباً"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "74f6173a384221f3685de444f7abdd9774e0e79d72485f77f7b0a9e8ed1ae587"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX040",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "هل استطيع اخذ CSBP 319 مع CSBP 221 في الفصل نفسه وما المتطلب السابق الذي يبقي مطلوباً",
+          "status": 504,
+          "seconds": 1067.107,
+          "payload": {
+            "role": "assistant",
+            "content": "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ يمكنني الاستمرار في تقديم الإجابات المحفوظة الموثقة.",
+            "source": "error",
+            "stateLabel": "provider_error",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 0,
+              "reasonCodes": [
+                "verification_unavailable"
+              ]
+            },
+            "clarificationReason": "verification_unavailable",
+            "usage": {
+              "elapsedMs": 1067108,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 1,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3723,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 139,
+                  "estimatedUsd": 0.0017116000000000002
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3723,
+              "outputTokens": 139,
+              "knownUsageUsd": 0.0017116000000000002,
+              "estimatedUsd": null,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite",
+              "same semester",
+              "at the same time",
+              "while taking"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "does uaue offer a bachlor of science in data science and artificial intelligence? which college offers it",
+        "uaeu offer bachelor science data science and artificial intelligence college offers?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي اي كليه"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "ee266225512169694806243c746164a14d7818de6d493cf5886a44a03c76bc4b"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX052",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+          "status": 200,
+          "seconds": 0.018,
+          "payload": {
+            "role": "assistant",
+            "content": "Yes. UAEU offers the **Bachelor of Science in Data Science and Artificial Intelligence**, in the College of Computing and Artificial Intelligence (Computer Science and Software Engineering).\nOfficial catalog page: [Bachelor of Science in Data Science and Artificial Intelligence](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml)",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Data Science and Artificial Intelligence",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "current_program_registry",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 6,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "6e5dda85d0fc2886ba7974d0ba0a1b0c994e47799040a9c39d0ca7c73f18a136",
+    "files": 8482,
+    "servingSnapshot": "/Users/aliabdullah/Documents/Codex/2026-10-06/referenced-chatgpt-conversation-this-is-an/student-profiles-and-power"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "student-profiles-and-power-local"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "7ac44ce8ca120d7ae633e732ea9c58ef9476bf96d576dada05642340cf0c53b4",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 179,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-17T20:02:33.718Z",
+        "totalRecords": 257,
+        "domains": {
+          "admissions": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-05"
+          },
+          "academics": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-04"
+          },
+          "registration": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-11-04"
+          },
+          "graduation": {
+            "records": 9,
+            "reviewedRecords": 9,
+            "latestVerification": "2026-11-03"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-11-03"
+          },
+          "financial_aid": {
+            "records": 7,
+            "reviewedRecords": 7,
+            "latestVerification": "2026-11-04"
+          },
+          "student_services": {
+            "records": 11,
+            "reviewedRecords": 11,
+            "latestVerification": "2026-11-04"
+          },
+          "housing": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-11-04"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 110
+      },
+      "sourceEvidence": {
+        "mappedReferences": 245,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 51,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/examiner-phrasing-profiles-rerun-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 1,
+    "partial": 5,
+    "incorrect": 3
+  }
+}

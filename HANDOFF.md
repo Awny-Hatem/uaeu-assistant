@@ -51,8 +51,9 @@ Regressions found vs v11 and already fixed in code (not yet re-measured live):
 Not bot errors: EX013/EX035-V4/V5/EX052 expect the raw XML feed as source (Part 4 removed XML citations); EX035 expects the old name "Information Security" (now Cybersecurity).
 Open: EX079-V2/V3 transcript with ungrammatical wording (match phrases need ≥70% token coverage; passed in v11 via retrieval); POWER112 corequisite definition (no official source).
 
-## Next step
-1. When the network is back: rebuild, restart 3012/3013, rerun ONLY the non-correct cases of every suite (examiner, phrasing, regression 1–3 incl. the unrun rest of part 3, memory), then browser examiner + browser memory. Script: scratchpad final-suites.sh (adapt to --ids/--variant-ids reruns as in rerun-v11.sh).
+## Next step (paused 01:05, 18 Nov — Mac kept sleeping)
+A focused rerun (scratchpad final2.sh) started at 00:02 on a build with all fixes, but the Mac slept at 00:34 and 00:52 (lid closed?), so it was stopped. Partial rerun files exist with the label suffix "-rerun" in reports/knowledge-expansion-2026-11-04/ (few answers each); the fixed cases seen so far pass (e.g. EX052 now via the registry, KE306).
+1. With the Mac awake and plugged in (lid open), rerun scratchpad final2.sh. It rebuilds, starts 3012/3013, reruns only non-correct cases per suite with --resume (continues the partial files), resumes regression part 3, then browser examiner and browser memory, stopping on ≥5 provider/network failures.
 2. Compare with v11 baselines; hand-review what stays non-correct.
 3. Google Doc continuation section + END OF TESTING; final report.
 

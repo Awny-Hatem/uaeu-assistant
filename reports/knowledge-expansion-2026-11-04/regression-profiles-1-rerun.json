@@ -1,0 +1,1012 @@
+{
+  "startedAt": "2026-11-17T20:52:43.087Z",
+  "base": "http://127.0.0.1:3012",
+  "label": "regression-profiles-1-rerun",
+  "fixture": "reports/knowledge-expansion-2026-11-04/regression-profiles-1-fixture.json",
+  "fixtureSha256": "9d44deaba84c751c90b40bd556d7d2afe30f1d68c2dc2271b0691e5f289f4504",
+  "methodology": "One shared 2.3-second request-start limiter, at most3 in flight. Original195 plus329 new scenarios; all alternate phrasings. Automated official-source rubric, then semantic review. Candidate71k snapshot, not full crawl completion.",
+  "results": [
+    {
+      "id": "CQ040",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "csbp319",
+      "turns": [
+        "can i do CSBP 319 while taking CSBP 221 in the same semester?"
+      ],
+      "expected": "CSBP221 is pre/corequisite; concurrent may be allowed, but CSBP219 minimum D and other registration conditions still matter.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*219"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "CSBP\\s*221"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "alongside",
+            "concurrent",
+            "pre.?co",
+            "متزامن",
+            "معه",
+            "مع المساق",
+            "corequisite"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "forbidden": [
+        "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+        "CSBP219[^.!?\\n]*before or concurrently",
+        "CSBP\\s*219\\s+(?:can|may)\\s+be\\s+(?:completed|taken)\\s+before\\s+or\\s+(?:alongside|concurrent)",
+        "(?:take|taking)\\s+CSBP\\s*219\\s+(?:alongside|concurrent)"
+      ],
+      "suite": "legacy",
+      "parentId": "CQ040",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "can i do CSBP 319 while taking CSBP 221 in the same semester?",
+          "status": 200,
+          "seconds": 3.381,
+          "payload": {
+            "role": "assistant",
+            "content": "You can take CSBP319 Data Structures while taking CSBP221 in the same semester, provided you have completed CSBP219 with at least a grade of D, and you achieve a minimum grade of D in CSBP221 either before or during the same semester as CSBP319.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Course Catalog — CSBP319 Data Structures",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "CSBP319",
+            "evidenceIds": [
+              "02-csbp319-data-structures.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can take CSBP319 Data Structures while taking CSBP221 in the same semester, provided you have completed CSBP219 with at least a grade of D, and you achieve a minimum grade of D in CSBP221 either before or during the same semester as CSBP319.",
+                "evidenceIds": [
+                  "02-csbp319-data-structures.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3368,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3659,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 83,
+                  "estimatedUsd": 0.0015964
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1639,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007052
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5298,
+              "outputTokens": 114,
+              "knownUsageUsd": 0.0023016,
+              "estimatedUsd": 0.0023016,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 3"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ088",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "program-existence",
+      "turns": [
+        "هل جامعة الإمارات فيها بكالوريوس علم البيانات والذكاء الاصطناعي؟ في أي كلية؟"
+      ],
+      "expected": "Yes; computing/IT college; official naming varies across site pages.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "suite": "legacy",
+      "parentId": "CQ088",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "هل جامعة الإمارات فيها بكالوريوس علم البيانات والذكاء الاصطناعي؟ في أي كلية؟",
+          "status": 200,
+          "seconds": 3.428,
+          "payload": {
+            "role": "assistant",
+            "content": "نعم، جامعة الإمارات تقدم بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي، وهو متاح في كلية تقنية المعلومات.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "نعم، جامعة الإمارات تقدم بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي، وهو متاح في كلية تقنية المعلومات.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3416,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3359,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.0014332000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1354,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005912000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4713,
+              "outputTokens": 87,
+              "knownUsageUsd": 0.0020244,
+              "estimatedUsd": 0.0020244,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "NQ121",
+      "original": false,
+      "focus": "Missing Knowledge",
+      "group": "new-degree",
+      "turns": [
+        "CIT / College of Information Technology: is Data Science and AI offered?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": null,
+      "suite": "legacy",
+      "parentId": "NQ121",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "CIT / College of Information Technology: is Data Science and AI offered?",
+          "status": 200,
+          "seconds": 2.46,
+          "payload": {
+            "role": "assistant",
+            "content": "The College of Information Technology at UAEU offers the Bachelor of Science in Data Science and Artificial Intelligence program.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The College of Information Technology at UAEU offers the Bachelor of Science in Data Science and Artificial Intelligence program.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2453,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3321,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.0008276000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1345,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005876
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4666,
+              "outputTokens": 78,
+              "knownUsageUsd": 0.0014152000000000001,
+              "estimatedUsd": 0.0014152000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "original": false,
+      "auditResult": null,
+      "focus": "Weakness",
+      "group": "sports",
+      "turns": [
+        "Where can I find the schedule for sports and recreation activities?"
+      ],
+      "expected": "Do not invent a current schedule; give verified facilities/contact or official schedule route with dated-source limits.",
+      "sources": [
+        "https://uaeu.ac.ae/en/docs/uaeu-undergraduate-student-handbook2023-english.pdf",
+        "https://map.uaeu.ac.ae/"
+      ],
+      "checks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "schedule|hours|timetable|current|ساعات|جدول"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "NQ190",
+      "suite": "legacy",
+      "parentId": "NQ190",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Where can I find the schedule for sports and recreation activities?",
+          "status": 200,
+          "seconds": 8.41,
+          "payload": {
+            "role": "assistant",
+            "content": "The UAEU Sports Activities Unit provides various sports programs and recreational facilities aimed at students' health and fitness, including fitness centers, swimming pools, sports courts, and exercise halls.\n\nThe Sports Activities Unit and Student Activities sections describe available facilities and activities but do not include a published schedule for sports and recreation activities.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Sports Activities Unit",
+                "url": "https://www.uaeu.ac.ae/en/campus_life/health_club/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Popular Searches"
+              },
+              {
+                "title": "Student Activities",
+                "url": "https://www.uaeu.ac.ae/en/campus_life/activities/activities.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Student Activities > Student Activities > Sports and Recreational Activities"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:d2e86432ab5978116587:1#E1S1",
+              "corpus:525290e0aab100a1ba2e:6#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The UAEU Sports Activities Unit provides various sports programs and recreational facilities aimed at students' health and fitness, including fitness centers, swimming pools, sports courts, and exercise halls.",
+                "evidenceIds": [
+                  "corpus:525290e0aab100a1ba2e:6#E2S1"
+                ]
+              },
+              {
+                "text": "The Sports Activities Unit and Student Activities sections describe available facilities and activities but do not include a published schedule for sports and recreation activities.",
+                "evidenceIds": [
+                  "corpus:d2e86432ab5978116587:1#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8396,
+              "attemptedCalls": 7,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 12,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 2.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6066,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 130,
+                  "estimatedUsd": 0.0026344000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1858,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007928000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1294,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 37,
+                  "estimatedUsd": 0.0005768
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6534,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 105,
+                  "estimatedUsd": 0.0027816000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1278,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005608000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1849,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007892
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 18891,
+              "outputTokens": 365,
+              "knownUsageUsd": 0.00813584,
+              "estimatedUsd": 0.00813584,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Requested fact or honest scope",
+            "passed": true,
+            "patterns": [
+              "schedule|hours|timetable|current|ساعات|جدول"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE258-V2",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "How long can incoming undergraduate exchange students study at United Arab Emirates University?"
+      ],
+      "expected": "Up to2semesters under exchange agreements and agreement of both institutions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "duration",
+          "any": [
+            "two semesters",
+            "2 semesters",
+            "فصلين\\s+دراسيين",
+            "فصلين"
+          ]
+        },
+        {
+          "name": "agreement",
+          "any": [
+            "agreement",
+            "اتفاقي[ةه]",
+            "المؤسستين"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, how long can incoming undergraduate exchange students study at UAEU?",
+        "How long can incoming undergraduate exchange students study at United Arab Emirates University?",
+        "ما المدة المتاحة لطالب التبادل القادم إلى جامعة الإمارات؟",
+        "How long can incoming undergraduate exchange students study at UAEU? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "nrolled in undergraduate education at universities with exchange agreements with uaeu are eligible to study at uaeu for up to two semesters as specified in the exchange agreement and agreed upon by both institutions. discover more",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE258",
+      "conversation": [
+        {
+          "user": "How long can incoming undergraduate exchange students study at United Arab Emirates University?",
+          "status": 200,
+          "seconds": 4.511,
+          "payload": {
+            "role": "assistant",
+            "content": "Incoming undergraduate exchange students at United Arab Emirates University can study for up to two semesters, as specified in the exchange agreement and agreed upon by both institutions.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Incoming Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/incoming-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Incoming Students"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:8f558e9c0dbebd76cb8c:1#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "Incoming undergraduate exchange students at United Arab Emirates University can study for up to two semesters, as specified in the exchange agreement and agreed upon by both institutions.",
+                "evidenceIds": [
+                  "corpus:8f558e9c0dbebd76cb8c:1#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4499,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 14,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 2.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5398,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.0022488
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1347,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005884000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6759,
+              "outputTokens": 87,
+              "knownUsageUsd": 0.0028374800000000003,
+              "estimatedUsd": 0.0028374800000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "duration",
+            "passed": true,
+            "patterns": [
+              "two semesters",
+              "2 semesters",
+              "فصلين\\s+دراسيين",
+              "فصلين"
+            ]
+          },
+          {
+            "name": "agreement",
+            "passed": true,
+            "patterns": [
+              "agreement",
+              "اتفاقي[ةه]",
+              "المؤسستين"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "6e5dda85d0fc2886ba7974d0ba0a1b0c994e47799040a9c39d0ca7c73f18a136",
+    "files": 8482,
+    "servingSnapshot": "/Users/aliabdullah/Documents/Codex/2026-10-06/referenced-chatgpt-conversation-this-is-an/student-profiles-and-power"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "student-profiles-and-power-local"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "7ac44ce8ca120d7ae633e732ea9c58ef9476bf96d576dada05642340cf0c53b4",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 179,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-17T21:03:12.393Z",
+        "totalRecords": 257,
+        "domains": {
+          "admissions": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-05"
+          },
+          "academics": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-04"
+          },
+          "registration": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-11-04"
+          },
+          "graduation": {
+            "records": 9,
+            "reviewedRecords": 9,
+            "latestVerification": "2026-11-03"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-11-03"
+          },
+          "financial_aid": {
+            "records": 7,
+            "reviewedRecords": 7,
+            "latestVerification": "2026-11-04"
+          },
+          "student_services": {
+            "records": 11,
+            "reviewedRecords": 11,
+            "latestVerification": "2026-11-04"
+          },
+          "housing": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-11-04"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 110
+      },
+      "sourceEvidence": {
+        "mappedReferences": 245,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 51,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/regression-profiles-1-rerun-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 0,
+    "partial": 5,
+    "incorrect": 0
+  }
+}
