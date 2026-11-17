@@ -128,7 +128,15 @@ async function queryEmbedding(query: string, deadlineAt?: number): Promise<numbe
 }
 export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: number): Promise<EvidenceRow[]> {
   const fresh = programEvidence(query);
-  if (fresh.length) return fresh.slice(0,topK);
+  // Use only the registry record when it actually contains what is asked (a credit
+  // total for a credits question); otherwise keep it and search the corpus too.
+  const asksCredits = /credit|ساع/iu.test(query);
+  const freshAnswers = fresh.length && (!asksCredits || fresh.some(r => /Required Credit Hours\s*:\s*\S/iu.test(r.text)));
+  if (freshAnswers) return fresh.slice(0,topK);
+  const corpus = await corpusRetrieve(query, topK, deadlineAt);
+  return [...fresh.slice(0, 1), ...corpus].slice(0, topK);
+}
+async function corpusRetrieve(query: string, topK = 8, deadlineAt?: number): Promise<EvidenceRow[]> {
   const store = index(); if (!store?.chunks.length) return [];
   const queryText = fold(query);
   const expanded = expandCorpusQuery(query), qTerms = terms(expanded.query), originalTerms = terms(query), meaning = understandQuery(query), targets = courseTargets(query);

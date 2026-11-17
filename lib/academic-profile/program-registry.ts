@@ -46,7 +46,11 @@ export function programEvidence(q: string): EvidenceRow[] {
     return [];
   if (!/credit|requirement|elective|courses?|concentration|overview|program|degree|ساع|متطلبات|اختيار|مساق|برنامج|تخصص/iu.test(q))
     return [];
-  return namedPrograms(q).slice(0, 3).flatMap(p => {
+  // A named qualification (minor, micro-credential, master's…) must match: "Minor in
+  // Chemistry" must not borrow the Master of Science in Chemistry record.
+  const wanted = [[/\bminor\b|تخصص فرعي/iu, /minor/iu], [/micro-?credential/iu, /micro-?credential/iu], [/\bmaster'?s?\b|\bmsc\b|ماجستير/iu, /^master/iu], [/\bbachelor'?s?\b|\bbsc\b|بكالوريوس/iu, /^bachelor/iu], [/\bph\.?d\b|doctor of philosophy|دكتوراه/iu, /^doctor of philosophy/iu], [/\bdiploma\b|دبلوم/iu, /diploma/iu]] as const;
+  const named = wanted.filter(([inQ]) => inQ.test(q)).map(([, inTitle]) => inTitle);
+  return namedPrograms(q).filter(p => !named.length || named.some(rx => rx.test(p.title) || rx.test(p.qualification))).slice(0, 3).flatMap(p => {
     const total = p.text.match(/Required Credit Hours\s*:\s*[^\n]+/iu)?.[0] ?? '';
     const paragraphs = p.text.split('\n\n'), head = paragraphs.slice(0, 3).join('\n\n'), relevant = paragraphs.filter(s => /required credit hours|hours\)|credit hours|concentration|pathway/iu.test(s));
     return [{ source: 'current-program:' + p.id, title: p.title, score: 1, text: `# ${p.title}\n## Degree credit requirement\n${total}\nCollege: ${p.college}\n${head}\n${relevant.join('\n\n')}`, citations: [{ title: p.title, url: p.url, lastVerified: p.fetchedAt.slice(0, 10) }] }];
