@@ -1,10 +1,10 @@
 import fs from'node:fs';import{createRequire}from'node:module';import path from'node:path';
 const require=createRequire(path.join(process.cwd(),'package.json'));require('@next/env').loadEnvConfig('/Users/aliabdullah/Documents/uaeu-assistant');
-const [input='test-cases/power-results-v2.json',output='test-cases/comparison-50.json']=process.argv.slice(2),rag=JSON.parse(fs.readFileSync(input)),fixtures=JSON.parse(fs.readFileSync('data/academic/tester-accounts.json')).accounts;
+const [input='test-cases/power-results-v3.json',output='test-cases/comparison-50.json',base='http://127.0.0.1:3012']=process.argv.slice(2),rag=JSON.parse(fs.readFileSync(input)),fixtures=JSON.parse(fs.readFileSync('data/academic/tester-accounts.json')).accounts;
 if(!rag.finishedAt)throw Error('Complete the RAG run before selecting matched cases');
 const selected=[...fixtures.flatMap(a=>rag.cases.filter(c=>c.account===a.slug).slice(0,2)),...rag.cases.filter(c=>c.group==='phrasing'),...rag.cases.filter(c=>c.group==='directory').slice(0,10),...rag.cases.filter(c=>c.group==='guest').slice(0,8)];
 if(selected.length!==50)throw Error('Expected exactly fifty matched cases');
-const health=await(await fetch('http://127.0.0.1:3011/api/health')).json(),model=health.provider?.model;if(!model||health.provider?.name!=='openai')throw Error('Comparison requires the serving OpenAI base model');
+const health=await(await fetch(base+'/api/health')).json(),model=health.provider?.model;if(!model||health.provider?.name!=='openai')throw Error('Comparison requires the serving OpenAI base model');
 const run={startedAt:new Date().toISOString(),ragRun:input,baseModel:model,methodology:'Same base model, identical questions and fictional academic context. No retrieval, browsing tools, external sources or UAEU answer documents supplied to the base model. This compares the complete RAG/profile/calculation assistant with a general model, not a pure retriever ablation.',pairs:[]};
 const save=()=>fs.writeFileSync(output,JSON.stringify(run,null,2)+'\n');
 for(const c of selected){try{const f=fixtures.find(a=>a.slug===c.account)?.profile;const context=f?{degree:f.degree,level:f.level,program:f.program,college:f.college,classification:f.classification,admitTerm:f.admitTerm,catalogYear:f.catalogYear,currentTerm:f.currentTerm,modelPosition:f.modelPosition,academicStanding:f.academicStanding,overallGpa:f.overallGpa,requiredCredits:f.requiredCredits,holds:f.holds,minors:f.minors,track:f.track,blocks:f.blocks,courses:f.courses,planner:f.planner,provenance:f.provenance}:null;
