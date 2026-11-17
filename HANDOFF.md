@@ -11,22 +11,23 @@ Brief: `~/Downloads/claude_code_prompt_profiles_and_power.md`. Local only: no pu
 ## Status by phase
 | Phase | Status |
 |---|---|
-| 1. Six test cases, meta/greeting/history, program-filtered retrieval | Mostly done by Codex: cases 1–5 now pass on the after-six-v2 run. Case 6 loops on "what year were you admitted?" (fix in progress). |
-| 2. Study-plan and catalog parsing | Codex: plan extractor with total validation, `data/academic/study-plans.json`, `course-versions.json`; flagged plans whose printed totals don't reconcile. Needs review. |
-| 3. Profiles, tester page, 10 accounts | Codex: `lib/academic-profile/`, `/tester`, `/api/tester`, `/api/profile/academic`, `tester-accounts.md` (10 fictional accounts). Fixture prerequisite audit not fully clean. |
-| 4. Source cleanup, freshness, guest roles | `sources-freshness.md` exists (Codex). Guest roles: started. |
-| 5. 150+ new test cases | Codex: `test-cases/power-172.json` and one live run (`power-results-v1`), all verdicts still "unreviewed". |
-| 6. Comparison vs general AI | Script exists (`scripts/profiles/compare-general.mjs`); not run. |
+| 1. Six test cases, meta/greeting/history, program-filtered retrieval | Done. All six behave as expected on after-six-v3/v4 (case 6 now asks the admit year once, then answers from the newest plan). Added: goodbye, "can you access Degree Works", "what did you say about X", bare self-descriptions, role-aware greetings, IT/CS abbreviations, graduate admission not asked the UG category. |
+| 2. Study-plan and catalog parsing | Mostly done. All 54 official bachelor plan PDFs fetched; 224 cohort plans for 45 programs parsed (146 pass every printed total; the rest are flagged, never repaired). Names mapped to the registry, concentrations read as tracks. 9 PDFs yield no tables (different layout: e.g. Biology, Law, Veterinary Medicine, Nutrition, Dietetics, Food Science, Horticulture, Marine Fisheries, BBA Marketing/HR/SCM) — listed as gaps. |
+| 3. Profiles, tester page, 10 accounts | Built by Codex; fixture audit passes for all 10 accounts. Degree-total-only conflicts now still show the semester with the conflict stated. |
+| 4. Source cleanup, freshness, guest roles | Ended calendar terms are dropped from retrieval; partnerships record added; CMHS directory fixed. sources-freshness.md (Codex) needs regenerating with the new plan validation. Guest roles: greetings tailored; guest-role selector exists on /tester (Codex). |
+| 5. 150+ new test cases | 172 cases in test-cases/power-172.json; v2 run: 0 HTTP errors, 0 robotic/unverified replies; hand review found and fixed 9 defect types. Verdicts in the Field/Details markdown still need filling. |
+| 6. Comparison vs general AI | Not run yet (scripts/profiles/compare-general.mjs exists). |
 
 ## Test results so far
-- Six cases (after-six-v2): 1–5 behave as expected; 6 fails (repeats the admit-year question).
-- 172 new cases: run once, not yet graded.
+- Six cases: all as expected (after-six-v3).
+- 172 cases (v2, before the latest fixes): 166 clean, 6 clarifications (2 were defects, now fixed).
+- Offline: test:offline passes; test:profiles 21/21 regressions + 16/16 academic checks.
 
 ## API spend
-See `budget-log.md`. Total so far: $0.43 of the $20 cap.
+See budget-log.md. Total so far: about $0.72 of the $20 cap.
 
 ## Next step
-Fix the case-6 loop, rerun the six cases, then grade power-results-v1 and fix failures.
+Grade the latest 172-case run into Field/Details verdicts, regenerate sources-freshness.md, then run the general-AI comparison (≈50 questions) within budget, then the final suites.
 
 ## How to resume
 1. `cd` into the worktree above. Check `git status` and `git log -5`.

@@ -10,21 +10,55 @@ Numeric totals and catalog-code linkage do not prove prerequisite order, categor
 
 | Model | Track | Numeric totals | Course links | Issues |
 |---|---|---|---|---|
-| it-2022-fall | — | True | True | None found by numeric checks |
-| it-2022-spring | — | True | True | None found by numeric checks |
-| it-2025-fall | — | False | True | Plan sum 120.0 != printed degree total 130 |
-| cs-2022-fall | — | False | True | Plan sum 115.0 != printed degree total 130 |
-| cs-2022-spring | — | False | True | Plan sum 124.0 != printed degree total 130 |
-| cs-2025-fall | — | True | True | None found by numeric checks |
-| cs-2026-fall | — | True | True | None found by numeric checks |
-| mechanical-2022-fall | — | True | True | None found by numeric checks |
-| mechanical-2022-spring | — | True | True | None found by numeric checks |
-| mechanical-2023-fall | — | True | True | None found by numeric checks |
-| mechanical-2023-spring | — | True | True | None found by numeric checks |
-| mechanical-2025-fall | — | True | True | None found by numeric checks |
-| mechanical-2025-spring | — | True | True | None found by numeric checks |
-| mechanical-2026-fall | — | True | True | None found by numeric checks |
-| mechanical-2026-spring | — | True | True | None found by numeric checks |
+| cbe-bsc-accounting-2022-fall | — | False | True | Plan sum 108.0 != printed degree total 120 |
+| cbe-bsc-accounting-2023-fall | — | False | True | Semester 7 subtotal 9.0 != printed 15.0; Unresolved semester near PDF y=303.5; Plan sum 102.0 != printed degree total 120 |
+| cbe-bsc-accounting-2025-fall | — | False | True | Unresolved semester near PDF y=421.0; Semester 6 subtotal 12.0 != printed 24.0; Unresolved semester near PDF y=421.0; Plan sum 96.0 != printed degree total 120 |
+| cbe-bsc-business-adminstration-entreprenership-2025-fall | — | False | True | Semester 7 subtotal 15.0 != printed 18.0; Plan sum 117.0 != printed degree total 120 |
+| cbe-bsc-finance-and-banking-2020-fall | — | True | True | None found by numeric checks |
+| cbe-bsc-finance-and-banking-2020-spring | — | True | True | None found by numeric checks |
+| cbe-bsc-finance-and-banking-2025-fall | — | False | True | Plan sum 123.0 != printed degree total 120 |
+| cbe-bsc-statistics-and-data-analytics-2022-fall-analytics-for-business | Analytics for Business | False | True | Semester 1 subtotal 12.0 != printed 15.0; Semester 2 subtotal 10.0 != printed 16.0; Plan sum 112.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2022-spring-analytics-for-business | Analytics for Business | False | True | Unresolved semester near PDF y=289.0; Unresolved semester near PDF y=289.0; Plan sum 97.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2022-fall-statistics | Statistics | False | True | Semester 1 subtotal 12.0 != printed 15.0; Semester 2 subtotal 4.0 != printed 3.0; Unresolved semester near PDF y=425.5; Plan sum 106.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2022-spring-statistics | Statistics | False | True | Unresolved semester near PDF y=569.0; Unresolved semester near PDF y=569.0; Plan sum 97.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2024-spring-analytics-for-business | Analytics for Business | False | True | Semester 1 subtotal 12.0 != printed 15.0; Unresolved semester near PDF y=336.0; Plan sum 105.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2024-fall-statistics | Statistics | False | True | Unresolved semester near PDF y=472.5; Plan sum 109.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2024-spring-statistics | Statistics | False | True | Unresolved semester near PDF y=616.0; Unresolved semester near PDF y=616.0; Plan sum 96.0 != printed degree total 121 |
+| cbe-bsc-statistics-and-data-analytics-2025-spring-analytics-for-business | Analytics for Business | True | True | None found by numeric checks |
+| cbe-bsc-statistics-and-data-analytics-2025-fall-statistics | Statistics | True | True | None found by numeric checks |
+| cbe-bsc-statistics-and-data-analytics-2025-spring-statistics | Statistics | True | True | None found by numeric checks |
+| ce-2022-fall | — | False | True | Semester 1 subtotal 16.0 != printed 17.0; Plan sum 143.0 != printed degree total 144 |
+| ce-2022-spring | — | False | True | Semester 1 subtotal 16.0 != printed 17.0; Semester 4 subtotal 15.0 != printed 18.0; Plan sum 140.0 != printed degree total 144 |
+| ce-2025-fall | — | True | True | None found by numeric checks |
+| ce-2026-fall-ai-systems | AI Systems Engineering | False | True | Plan sum 127.0 != printed degree total 130 |
+| ce-2026-fall-robotics | Robotics and Autonomous Systems | True | True | None found by numeric checks |
+| ce-2026-fall-general | General Computer and AI Engineering Pathway | True | True | None found by numeric checks |
+| cedu-bsc-early-childhood-2020-fall | — | False | True | Plan sum 0 != printed degree total 126; No semesters extracted |
+| cedu-bsc-early-childhood-2022-fall | — | True | True | None found by numeric checks |
+| cedu-bsc-early-childhood-2025-fall | — | True | True | None found by numeric checks |
+| cedu-bsc-health-and-physical-education-2020-fall | — | True | True | None found by numeric checks |
+| cedu-bsc-health-and-physical-education-2022-fall | — | True | True | None found by numeric checks |
+| cedu-bsc-health-and-physical-education-2025-fall | — | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-fall-gifted-and-talented | Gifted and Talented | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-spring-gifted-and-talented | Gifted and Talented | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-fall-mild-mod-disabilities | Mild/Mod Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-spring-mild-mod-disabilities | Mild/Mod Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-fall-sensory-impairments | Sensory Impairments | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-spring-sensory-impairments | Sensory Impairments | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2020-fall-severe-disabilities | Severe Disabilities | False | True | Semester 7 subtotal 12.0 != printed 30.0; Semester 8 subtotal 12.0 != printed 30.0 |
+| cedu-bsc-special-education-2020-spring-severe-disabilities | Severe Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-fall-gifted-and-talented | Gifted and Talented | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-spring-gifted-and-talented | Gifted and Talented | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-fall-mild-mod-disabilities | Mild/Mod Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-spring-mild-mod-disabilities | Mild/Mod Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-fall-sensory-impairments | Sensory Impairments | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-spring-sensory-impairments | Sensory Impairments | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2022-fall-severe-disabilities | Severe Disabilities | False | True | Semester 7 subtotal 12.0 != printed 30.0; Semester 8 subtotal 12.0 != printed 30.0 |
+| cedu-bsc-special-education-2022-spring-severe-disabilities | Severe Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2025-fall-gifted-and-talented | Gifted and Talented | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2025-fall-mild-mod-disabilities | Mild/Mod Disabilities | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2025-fall-sensory-impairments | Sensory Impairments | True | True | None found by numeric checks |
+| cedu-bsc-special-education-2025-fall-severe-disabilities | Severe Disabilities | True | True | None found by numeric checks |
 | chemical-2022-fall | — | True | True | None found by numeric checks |
 | chemical-2022-spring | — | True | True | None found by numeric checks |
 | chemical-2023-fall | — | True | True | None found by numeric checks |
@@ -33,16 +67,173 @@ Numeric totals and catalog-code linkage do not prove prerequisite order, categor
 | chemical-2025-spring | — | False | True | Plan sum 133.0 != printed degree total 132 |
 | chemical-2026-fall | — | True | True | None found by numeric checks |
 | chemical-2026-spring | — | True | True | None found by numeric checks |
+| chss-bsc-applied-sociology-and-social-data-analytics-2023-fall-sociology-of-consumption | Sociology of Consumption | True | True | None found by numeric checks |
+| chss-bsc-applied-sociology-and-social-data-analytics-2023-fall-social-policy-analysis | Social Policy Analysis | True | True | None found by numeric checks |
+| chss-bsc-applied-sociology-and-social-data-analytics-2023-fall-quality-of-life-analysis | Quality of Life Analysis | True | True | None found by numeric checks |
+| chss-bsc-applied-sociology-and-social-data-analytics-2025-fall-sociology-of-consumption | Sociology of Consumption | True | True | None found by numeric checks |
+| chss-bsc-applied-sociology-and-social-data-analytics-2025-fall-social-policy-analysis | Social Policy Analysis | True | True | None found by numeric checks |
+| chss-bsc-applied-sociology-and-social-data-analytics-2025-fall-quality-of-life-analysis | Quality of Life Analysis | True | True | None found by numeric checks |
+| chss-bsc-arabic-language-2020-fall-language | Language | False | True | Semester 7 subtotal 6.0 != printed 15.0; Semester 8 subtotal 6.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-arabic-language-2020-fall-literature | Literature | False | True | Semester 7 subtotal 6.0 != printed 15.0; Semester 8 subtotal 6.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-arabic-language-2022-fall-language | Language | False | True | Semester 7 subtotal 6.0 != printed 15.0; Semester 8 subtotal 6.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-arabic-language-2022-fall-literature | Literature | False | True | Semester 7 subtotal 6.0 != printed 15.0; Semester 8 subtotal 6.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-arabic-language-2024-fall | — | True | True | None found by numeric checks |
+| chss-bsc-arabic-language-2025-fall | — | True | True | None found by numeric checks |
+| chss-bsc-english-literature-2020-fall | — | False | True | Semester 5 subtotal 12.0 != printed 15.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 15.0; Unresolved semester near PDF y=205.5; Plan sum 96.0 != printed degree total 120 |
+| chss-bsc-english-literature-2020-fall-2 | — | False | True | Semester 1 subtotal 9.0 != printed 15.0; Unresolved semester near PDF y=294.0; Semester 5 subtotal 9.0 != printed 15.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 15.0; Unresolved semester near PDF y=335.5; Plan sum 75.0 != printed degree total 120 |
+| chss-bsc-english-literature-2022-fall | — | False | True | Semester 5 subtotal 15.0 != printed 18.0; Semester 7 subtotal 9.0 != printed 18.0; Semester 6 subtotal 12.0 != printed 18.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-english-literature-2022-fall-2 | — | False | True | Semester 1 subtotal 9.0 != printed 15.0; Unresolved semester near PDF y=566.5; Unresolved semester near PDF y=592.0; Semester 6 subtotal 12.0 != printed 18.0; Plan sum 66.0 != printed degree total 120 |
+| chss-bsc-english-literature-2024-fall | — | False | True | Semester 7 subtotal 15.0 != printed 18.0; Unresolved semester near PDF y=686.5; Plan sum 105.0 != printed degree total 120 |
+| chss-bsc-english-literature-2024-fall-2 | — | False | True | Semester 7 subtotal 15.0 != printed 18.0; Unresolved semester near PDF y=146.5; Plan sum 105.0 != printed degree total 120 |
+| chss-bsc-english-literature-2025-fall | — | False | True | Semester 3 subtotal 12.0 != printed 15.0; Unresolved semester near PDF y=292.0; Plan sum 105.0 != printed degree total 120 |
+| chss-bsc-geography-2022-fall-environmental-geography | Environmental Geography | False | True | Semester 3 subtotal 15.0 != printed 18.0; Semester 5 subtotal 9.0 != printed 15.0; Semester 7 subtotal 6.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-geography-2022-fall-geoinformatics | Geoinformatics | False | True | Unresolved semester near PDF y=349.0; Semester 6 subtotal 3.0 != printed 15.0; Plan sum 93.0 != printed degree total 120 |
+| chss-bsc-geography-2022-fall-urban-planning | Urban Planning | False | True | Semester 3 subtotal 18.0 != printed 54.0; Semester 5 subtotal 9.0 != printed 18.0; Semester 6 subtotal 9.0 != printed 15.0; Plan sum 105.0 != printed degree total 120 |
+| chss-bsc-geography-2024-fall-environmental-geography | Environmental Geography | True | True | None found by numeric checks |
+| chss-bsc-geography-2024-fall-geoinformatics | Geoinformatics | False | True | Plan sum 114.0 != printed degree total 120 |
+| chss-bsc-geography-2024-fall-urban-planning | Urban Planning | True | True | None found by numeric checks |
+| chss-bsc-geography-2025-fall-environmental-geography | Environmental Geography | True | True | None found by numeric checks |
+| chss-bsc-geography-2025-fall-geoinformatics | Geoinformatics | True | True | None found by numeric checks |
+| chss-bsc-geography-2025-fall-urban-planning | Urban Planning | True | True | None found by numeric checks |
+| chss-bsc-history-and-archaeology-2026-fall-history | History | True | True | None found by numeric checks |
+| chss-bsc-history-and-archaeology-2026-fall-archaeology | Archaeology | True | True | None found by numeric checks |
+| chss-bsc-linguistics-2020-fall | — | False | True | Plan sum 117.0 != printed degree total 120 |
+| chss-bsc-linguistics-2022-fall | — | True | True | None found by numeric checks |
+| chss-bsc-linguistics-2024-fall | — | True | True | None found by numeric checks |
+| chss-bsc-linguistics-2025-fall | — | True | True | None found by numeric checks |
+| chss-bsc-linguistics-2026-fall | — | True | True | None found by numeric checks |
+| chss-bsc-mass-and-communication-2022-fall-journalism | Journalism | False | True | Semester 5 subtotal 9.0 != printed 15.0; Semester 7 subtotal 12.0 != printed 18.0; Semester 6 subtotal 9.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-mass-and-communication-2022-fall-public-relations-and-advertising | Public Relations and Advertising | False | True | Semester 7 subtotal 12.0 != printed 15.0; Semester 6 subtotal 9.0 != printed 15.0; Unterminated course group side 1; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-mass-and-communication-2022-fall-radio-broadcasting | Radio Broadcasting | False | True | Semester 3 subtotal 15.0 != printed 18.0; Semester 5 subtotal 12.0 != printed 15.0; Semester 7 subtotal 9.0 != printed 18.0; Semester 6 subtotal 9.0 != printed 15.0; Plan sum 99.0 != printed degree total 120 |
+| chss-bsc-mass-and-communication-2022-fall-television-broadcasting | Television Broadcasting | False | True | Semester 5 subtotal 12.0 != printed 15.0; Semester 7 subtotal 12.0 != printed 18.0; Semester 4 subtotal 15.0 != printed 18.0; Semester 6 subtotal 9.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-mass-and-communication-2024-fall-journalism | Journalism | True | True | None found by numeric checks |
+| chss-bsc-mass-and-communication-2024-fall-public-relations-and-advertising | Public Relations and Advertising | False | True | Unterminated course group side 1; Plan sum 114.0 != printed degree total 120 |
+| chss-bsc-mass-and-communication-2024-fall-television-broadcasting | Television Broadcasting | True | True | None found by numeric checks |
+| chss-bsc-mass-and-communication-2025-fall-journalism | Journalism | True | True | None found by numeric checks |
+| chss-bsc-mass-and-communication-2025-fall-public-relations-and-advertising | Public Relations and Advertising | True | True | None found by numeric checks |
+| chss-bsc-mass-and-communication-2025-fall-television-broadcasting | Television Broadcasting | True | True | None found by numeric checks |
+| chss-bsc-political-sciences-2020-fall-government-policy-and-administration | Government, Policy and Administration | False | True | Semester 5 subtotal 12.0 != printed 18.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 18.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-political-sciences-2020-fall-international-politics-and-political-systems | International Politics and Political Systems | False | True | Semester 5 subtotal 12.0 != printed 18.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 18.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-political-sciences-2022-fall-government-policy-and-administration | Government, Policy and Administration | False | True | Semester 5 subtotal 12.0 != printed 18.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 18.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-political-sciences-2022-fall-international-politics-and-political-systems | International Politics and Political Systems | False | True | Semester 5 subtotal 12.0 != printed 18.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 18.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-political-sciences-2024-fall | — | True | True | None found by numeric checks |
+| chss-bsc-political-sciences-2025-fall | — | True | True | None found by numeric checks |
+| chss-bsc-psycology-2020-fall | — | False | True | Semester 3 subtotal 12.0 != printed 15.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 2 subtotal 12.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 15.0; Semester 8 subtotal 12.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-psycology-2022-fall | — | False | True | Semester 3 subtotal 12.0 != printed 15.0; Semester 7 subtotal 9.0 != printed 15.0; Semester 2 subtotal 12.0 != printed 15.0; Semester 6 subtotal 12.0 != printed 15.0; Semester 8 subtotal 12.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-psycology-2024-fall | — | True | True | None found by numeric checks |
+| chss-bsc-psycology-2025-fall | — | True | True | None found by numeric checks |
+| chss-bsc-social-work-2020-fall | — | True | True | None found by numeric checks |
+| chss-bsc-social-work-2022-fall | — | False | True | Plan sum 117.0 != printed degree total 120 |
+| chss-bsc-social-work-2024-fall | — | True | True | None found by numeric checks |
+| chss-bsc-social-work-2025-fall | — | False | True | Plan sum 117.0 != printed degree total 120 |
+| chss-bsc-tourism-2020-fall | — | False | True | Semester 7 subtotal 6.0 != printed 15.0; Plan sum 102.0 != printed degree total 120 |
+| chss-bsc-tourism-2022-fall | — | False | True | Unterminated course group side 0; Unterminated course group side 1; Plan sum 0 != printed degree total 120; No semesters extracted |
+| chss-bsc-tourism-2024-fall | — | False | True | Semester 3 subtotal 12.0 != printed 15.0; Semester 5 subtotal 15.0 != printed 18.0; Semester 6 subtotal 15.0 != printed 18.0; Plan sum 111.0 != printed degree total 120 |
+| chss-bsc-tourism-2025-fall | — | False | True | Semester 3 subtotal 12.0 != printed 15.0; Semester 5 subtotal 15.0 != printed 18.0; Semester 4 subtotal 15.0 != printed 18.0; Semester 6 subtotal 15.0 != printed 18.0; Plan sum 108.0 != printed degree total 120 |
+| chss-bsc-translation-stuides-2020-fall | — | True | True | None found by numeric checks |
+| chss-bsc-translation-stuides-2022-fall | — | True | True | None found by numeric checks |
+| chss-bsc-translation-stuides-2024-fall | — | True | True | None found by numeric checks |
+| chss-bsc-translation-stuides-2025-fall | — | True | True | None found by numeric checks |
+| chss-bsc-translation-stuides-2025-spring | — | True | True | None found by numeric checks |
+| chss-bsc-visual-studies-and-creative-industries-2022-fall | — | True | True | None found by numeric checks |
+| chss-bsc-visual-studies-and-creative-industries-2025-fall | — | True | True | None found by numeric checks |
+| cit-bsc-cybersecurity-2022-fall | — | True | True | None found by numeric checks |
+| cit-bsc-cybersecurity-2022-spring | — | False | True | Unterminated course group side 1; Plan sum 0 != printed degree total 130; No semesters extracted |
+| cit-bsc-cybersecurity-2025-fall | — | True | True | None found by numeric checks |
+| cit-bsc-cybersecurity-2026-fall | — | True | False | None found by numeric checks |
+| cit-bsc-data-science-and-artificial-intelligence-2024-fall | — | True | True | None found by numeric checks |
+| cit-bsc-data-science-and-artificial-intelligence-2025-fall | — | True | True | None found by numeric checks |
+| cit-bsc-data-science-and-artificial-intelligence-2026-fall | — | True | True | None found by numeric checks |
+| cmhs-bsc-speech-language-pathology-2022-fall | — | True | True | None found by numeric checks |
+| cmhs-bsc-speech-language-pathology-2024-fall | — | True | True | None found by numeric checks |
+| cmhs-bsc-speech-language-pathology-2025-fall | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2022-fall | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2022-spring | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2023-fall | — | False | True | Semester 8 subtotal 17.0 != printed 16.0 |
+| coe-bsc-aerospace-engineering-2023-spring | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2025-fall | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2025-spring | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2026-fall | — | True | True | None found by numeric checks |
+| coe-bsc-aerospace-engineering-2026-spring | — | True | True | None found by numeric checks |
+| coe-bsc-architectural-engineering-2022-fall | — | False | True | Unterminated course group side 0; Unterminated course group side 1; Plan sum 31.0 != printed degree total 147 |
+| coe-bsc-architectural-engineering-2022-fall-2 | — | True | True | None found by numeric checks |
+| coe-bsc-architectural-engineering-2023-fall | — | False | True | Plan sum 129.0 != printed degree total 132 |
+| coe-bsc-architectural-engineering-2023-fall-2 | — | False | True | Plan sum 129.0 != printed degree total 132 |
+| coe-bsc-architectural-engineering-2025-fall | — | True | True | None found by numeric checks |
+| coe-bsc-architectural-engineering-2025-fall-2 | — | True | True | None found by numeric checks |
+| coe-bsc-architectural-engineering-2026-fall | — | True | True | None found by numeric checks |
+| coe-bsc-architectural-engineering-2026-fall-2 | — | True | True | None found by numeric checks |
+| coe-bsc-civil-engineering-2022-fall | — | True | True | None found by numeric checks |
+| coe-bsc-civil-engineering-2022-spring | — | True | True | None found by numeric checks |
+| coe-bsc-civil-engineering-2023-fall | — | False | True | Plan sum 131.0 != printed degree total 132 |
+| coe-bsc-civil-engineering-2023-spring | — | True | True | None found by numeric checks |
+| coe-bsc-civil-engineering-2025-fall | — | False | True | Plan sum 131.0 != printed degree total 132 |
+| coe-bsc-civil-engineering-2025-spring | — | True | True | None found by numeric checks |
+| coe-bsc-civil-engineering-2026-fall | — | False | True | Plan sum 131.0 != printed degree total 132 |
+| coe-bsc-civil-engineering-2026-spring | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2022-fall | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2022-spring | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2023-fall | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2023-spring | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2025-fall | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2026-fall | — | True | True | None found by numeric checks |
+| coe-bsc-communication-engineering-2026-spring | — | True | True | None found by numeric checks |
+| coe-bsc-electrical-engineering-2022-fall | — | True | True | None found by numeric checks |
+| coe-bsc-electrical-engineering-2022-spring | — | True | True | None found by numeric checks |
+| coe-bsc-electrical-engineering-2023-fall | — | False | True | Semester 5 subtotal 14.0 != printed 15.0; Plan sum 131.0 != printed degree total 132 |
+| coe-bsc-electrical-engineering-2023-spring | — | False | True | Semester 5 subtotal 14.0 != printed 15.0; Plan sum 131.0 != printed degree total 132 |
+| coe-bsc-electrical-engineering-2025-fall | — | True | True | None found by numeric checks |
+| coe-bsc-electrical-engineering-2026-fall | — | True | True | None found by numeric checks |
+| coe-bsc-electrical-engineering-2026-spring | — | True | True | None found by numeric checks |
+| coe-bsc-petroleum-engineering-2022-fall | — | True | True | None found by numeric checks |
+| coe-bsc-petroleum-engineering-2022-spring | — | True | True | None found by numeric checks |
+| coe-bsc-petroleum-engineering-2023-fall | — | True | True | None found by numeric checks |
+| coe-bsc-petroleum-engineering-2023-spring | — | False | True | Plan sum 131.0 != printed degree total 132 |
+| coe-bsc-petroleum-engineering-2025-fall | — | True | True | None found by numeric checks |
+| coe-bsc-petroleum-engineering-2025-spring | — | False | True | Unterminated course group side 0; Plan sum 97.0 != printed degree total 132 |
+| coe-bsc-petroleum-engineering-2026-fall | — | True | True | None found by numeric checks |
+| coe-bsc-petroleum-engineering-2026-spring | — | False | True | Plan sum 131.0 != printed degree total 132 |
+| cos-bsc-biochemistry-2022-fall | — | False | True | Plan sum 117.0 != printed degree total 120 |
+| cos-bsc-biochemistry-2025-fall | — | True | True | None found by numeric checks |
+| cos-bsc-chemistry-2022-fall | — | False | True | Unterminated course group side 1; Plan sum 88.0 != printed degree total 120 |
+| cos-bsc-chemistry-2025-fall | — | True | True | None found by numeric checks |
+| cos-bsc-geosciences-2022-fall | — | True | True | None found by numeric checks |
+| cos-bsc-geosciences-2025-fall | — | True | True | None found by numeric checks |
+| cos-bsc-math-2022-fall | — | True | True | None found by numeric checks |
+| cos-bsc-math-2023-fall | — | True | True | None found by numeric checks |
+| cos-bsc-math-2025-fall | — | True | True | None found by numeric checks |
+| cos-bsc-mathematics-of-data-science-2024-fall | — | True | True | None found by numeric checks |
+| cos-bsc-mathematics-of-data-science-2025-fall | — | True | True | None found by numeric checks |
+| cos-bsc-physics-2022-fall-general-physics | General Physics | False | True | Plan sum 117.0 != printed degree total 120 |
+| cos-bsc-physics-2022-spring-general-physics | General Physics | False | True | Plan sum 117.0 != printed degree total 120 |
+| cos-bsc-physics-2022-fall-space-science | Space Science | True | True | None found by numeric checks |
+| cos-bsc-physics-2024-fall-general-physics | General Physics | False | True | Plan sum 117.0 != printed degree total 120 |
+| cos-bsc-physics-2024-spring-general-physics | General Physics | False | True | Plan sum 117.0 != printed degree total 120 |
+| cos-bsc-physics-2024-fall-space-science | Space Science | True | True | None found by numeric checks |
+| cos-bsc-physics-2025-fall-general-physics | General Physics | False | True | Plan sum 117.0 != printed degree total 120 |
+| cos-bsc-physics-2025-fall-space-science | Space Science | True | True | None found by numeric checks |
+| cos-bsc-physics-2026-fall-general-physics | General Physics | False | True | Plan sum 122.0 != printed degree total 120 |
+| cos-bsc-physics-2026-fall-space-science | Space Science | False | True | Plan sum 122.0 != printed degree total 120 |
+| cos-bsc-space-sciences-2026-fall | — | True | True | None found by numeric checks |
+| cs-2022-fall | — | False | True | Plan sum 115.0 != printed degree total 130 |
+| cs-2022-spring | — | False | True | Plan sum 124.0 != printed degree total 130 |
+| cs-2025-fall | — | True | True | None found by numeric checks |
+| cs-2026-fall | — | True | True | None found by numeric checks |
 | economics-2022-fall | — | True | True | None found by numeric checks |
 | economics-2022-spring | — | True | True | None found by numeric checks |
 | economics-2023-fall | — | False | True | Unterminated course group side 0; Semester 8 subtotal 12.0 != printed 24.0; Plan sum 87.0 != printed degree total 120 |
 | economics-2025-fall | — | True | True | None found by numeric checks |
-| ce-2022-fall | — | False | True | Semester 1 subtotal 16.0 != printed 17.0; Plan sum 143.0 != printed degree total 144 |
-| ce-2022-spring | — | False | True | Semester 1 subtotal 16.0 != printed 17.0; Semester 4 subtotal 15.0 != printed 18.0; Plan sum 140.0 != printed degree total 144 |
-| ce-2025-fall | — | True | True | None found by numeric checks |
-| ce-2026-fall-ai-systems | AI Systems Engineering | False | True | Plan sum 127.0 != printed degree total 130 |
-| ce-2026-fall-robotics | Robotics and Autonomous Systems | True | True | None found by numeric checks |
-| ce-2026-fall-general | General Computer and AI Engineering Pathway | True | True | None found by numeric checks |
+| it-2022-fall | — | True | True | None found by numeric checks |
+| it-2022-spring | — | True | True | None found by numeric checks |
+| it-2025-fall | — | False | True | Plan sum 120.0 != printed degree total 130 |
+| mechanical-2022-fall | — | True | True | None found by numeric checks |
+| mechanical-2022-spring | — | True | True | None found by numeric checks |
+| mechanical-2023-fall | — | True | True | None found by numeric checks |
+| mechanical-2023-spring | — | True | True | None found by numeric checks |
+| mechanical-2025-fall | — | True | True | None found by numeric checks |
+| mechanical-2025-spring | — | True | True | None found by numeric checks |
+| mechanical-2026-fall | — | True | True | None found by numeric checks |
+| mechanical-2026-spring | — | True | True | None found by numeric checks |
 
 The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the readable program curriculum lists 3. Its extracted degree sum is 127 versus printed 130, so the model remains quarantined. Other mismatches can be extraction defects or publisher inconsistencies and must be visually adjudicated before attribution.
 
@@ -7903,15 +8094,15 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/cbe/pdf/carp_policy_2017.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe-newsletter-2025-2026.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe_brochure_2017.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_accounting_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_entreprenership_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_accounting_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_entreprenership_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_hrmd_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_mktg_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_scml_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_business_adminstration_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
-| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_finance_and_banking_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_statistics_and_data_analytics_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_finance_and_banking_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_statistics_and_data_analytics_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/cbenewslettercompressed.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/dp-worldinafrica.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cbe/pdf/fall2020-2021.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
@@ -8404,9 +8595,9 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/cedu/pdf/caep-standards_overview_english.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cedu/pdf/caep2022initiallevelstandards.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cedu/pdf/cedu_brochure.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_early_childhood_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_health_and_physical_education_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_special_education_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_early_childhood_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_health_and_physical_education_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cedu/pdf/cedu_bsc_special_education_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cedu/pdf/curriculum-2012-2013.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cedu/pdf/curriculum2010-2011.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cedu/pdf/curriculum2014.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
@@ -8637,20 +8828,20 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/chss/departments/undergraduate_programs.shtml | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/chss/faq-chss.shtml | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/chss/googlesearch.shtml | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_applied_sociology_and_social_data_analytics_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_arabic_language_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_english_literature_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_applied_sociology_and_social_data_analytics_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_arabic_language_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_english_literature_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_english_literature_study_plan1.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_geography_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_history_and_archaeology_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_linguistics_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_mass_and_communication_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_political_sciences_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_psycology_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_social_work_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_tourism_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_translation_stuides_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_visual_studies_and_creative_industries_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_geography_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_history_and_archaeology_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_linguistics_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_mass_and_communication_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_political_sciences_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_psycology_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_social_work_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_tourism_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_translation_stuides_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_visual_studies_and_creative_industries_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/chss/pdf/deanlist_fall2021_en_female_v3.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/chss/pdf/deanlist_fall2021_en_male_v2.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/chss/pdf/deans_list_fall_2021.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
@@ -8719,7 +8910,8 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_and_artificial_intelligence_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_engineering_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
-| https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_data_science_and_artificial_intelligence_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
+| https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_cybersecurity_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_data_science_and_artificial_intelligence_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cit/programs/graduate/index.shtml | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
@@ -9032,7 +9224,7 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/cmhs/pdf/cmhs_bsc_dietetics_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cmhs/pdf/cmhs_bsc_dietetics_study_plan_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cmhs/pdf/cmhs_bsc_nutritional_science_study_plan.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/cmhs/pdf/cmhs_bsc_speech_language_pathology_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/cmhs/pdf/cmhs_bsc_speech_language_pathology_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cmhs/pdf/cpd-stu-handbook-fall2025.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cmhs/pdf/cpd-student-handbook-fall2025.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cmhs/pdf/dnh-programs.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
@@ -9171,13 +9363,14 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/cos/pdf/cos-annualreport-2022-2023-2.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cos/pdf/cos-policies-and-guidelines-2022.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cos/pdf/cos_brochure_2017.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_biochemistry_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_biochemistry_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_biology_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_chemistry_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_geosciences_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_math_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_mathematics_of_data_science_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_space_sciences_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_chemistry_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_geosciences_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_math_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_mathematics_of_data_science_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_physics_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/cos/pdf/cos_bsc_space_sciences_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/cos/pdf/cosannualreport2023-2024_compressed.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
 | https://www.uaeu.ac.ae/en/cos/pdf/health-safety-college-doc.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/cos/pdf/scilights2022.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
@@ -9877,14 +10070,14 @@ The current CE PDF’s AI Systems table prints CENG510 as 0 credits while the re
 | https://www.uaeu.ac.ae/en/eng/pdf/civilpub13.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/eng/pdf/civilpub14.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/eng/pdf/coe_brochure_18_12_16.pdf | 2026-11-04 | cohort-only / review pending | Historical source retained for matching catalogs; active cohort applicability requires review. Not re-fetched in this change. |
-| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_aerospace_engineering_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_architectural_engineering_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_aerospace_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_architectural_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
-| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_civil_engineering_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_communication_engineering_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
-| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_civil_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_communication_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
+| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
-| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_petroleum_engineering_study_plan.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
+| https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_petroleum_engineering_study_plan.pdf | 2026-11-17 | current container + cohort-only models | Fresh public PDF; numerical validation is per model. Use exact catalog, entry season and track; quarantined models are listed separately. |
 | https://www.uaeu.ac.ae/en/eng/pdf/computer.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/eng/pdf/design.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
 | https://www.uaeu.ac.ae/en/eng/pdf/elecpub09.pdf | 2026-11-04 | review pending | Existing indexed source; the old verification date is not a claim of a fresh crawl. |
