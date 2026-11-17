@@ -127,6 +127,21 @@ export function academicAnswer(q: string, history: Turn[], profile: AcademicProf
   const earlierPositionIndex = history.findLastIndex(t => t.role === 'user' && /^year\s+(?:one|two|three|four|[1-8])\s+(?:term|semester)\s+(?:one|two|[12])[?.!\s]*$/iu.test(t.content));
   const earlierTarget = cohortOnly && earlierPositionIndex >= 0 && !/are you in now|أنت الآن/iu.test(history[earlierPositionIndex - 1]?.content ?? '');
   const position = positionOnly && !answeringCurrentPosition || earlierTarget ? { year: context.year, semester: context.semester } : nextPosition({ year: context.year, semester: context.semester });
+  // Ask for the admit term once. If the reply still does not give it, answer
+  // from the newest published model for the program and name the other cohorts.
+  if ((!context.cohort || !context.entry) && history.slice(-6).some(t => t.role === 'assistant' && /What year were you admitted|في أي سنة التحقت|didn't give your admit year|لم تذكر سنة دخولك/iu.test(t.content))) {
+    const plans = studyPlans().filter(x => x.program === context.program && (!context.entry || x.entrySeason === context.entry))
+      .sort((a, b) => b.cohortStart - a.cohortStart || (a.entrySeason === 'Fall' ? -1 : 1));
+    const latest = plans.find(x => rows(x, position.year, position.semester));
+    const body = latest ? list(latest, position.year, position.semester, ar) : null;
+    if (latest && body) {
+      const others = [...new Set(plans.filter(x => x !== latest).map(x => `${x.cohortStart} ${x.entrySeason}`))];
+      const lead = ar ? 'لم تذكر سنة دخولك، لذلك هذه أحدث خطة منشورة لبرنامجك:' : "You didn't give your admit year, so this is the newest published plan for your program:";
+      const conflict = latest.validation.totalsPass ? '' : (ar ? 'ملاحظة: مجاميع الساعات المطبوعة في هذه الخطة لا تتطابق؛ تأكد من مرشدك.' : "Note: this plan's printed credit totals don't reconcile; confirm with your advisor.");
+      const switchNote = others.length ? (ar ? `توجد خطط لدفعات أخرى (${others.join('، ')}). أخبرني بدفعتك لأعرض الخطة المطابقة.` : `Other cohorts have their own plans (${others.join(', ')}). Tell me yours and I'll switch.`) : '';
+      return { content: [lead, body, conflict, switchNote, note].filter(Boolean).join('\n'), citations: [source(latest)] };
+    }
+  }
   if (!context.cohort || !context.entry)
     return { content: ar ? `الفصل التالي هو السنة ${position.year}، الفصل ${position.semester}. في أي سنة التحقت بالجامعة، وهل كان دخولك في الخريف أم الربيع؟` : `Your next model-plan position is Year ${position.year}, Semester ${position.semester}. What year were you admitted, and was your entry in Fall or Spring?`, citations: [] };
   const p = selectPlan({ program: context.program, catalogYear: `${context.cohort}/${context.cohort + 1}`, admitTerm: { year: context.cohort, season: context.entry }, track: null });

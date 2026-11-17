@@ -60,6 +60,10 @@ for name in ['it','cs','mechanical','chemical','economics','ce']:
        a=anchors[0];title=' '.join(w['text']for w in line if w['x0']>a['x1']+.1 and w['x1']<cx-1)
        kind=' '.join(w['text']for w in line if w['x0']>cx+1 and not(re.fullmatch(r'\d+(?:\.\d+)?',w['text'])and abs((w['x0']+w['x1'])/2-(cx+2))<4))
        options=re.findall(r'[A-Z]{2,6}\d{3,4}',a['text']);slash=re.fullmatch(r'([A-Z]{2,6})(\d{3,4})/(\d{3,4})',a['text']);options=[slash[1]+slash[2],slash[1]+slash[3]]if slash else options;elective=not options
+       # 'BIOC100/CHEM 111 Basic Biology I /General Chemistry I Choose ONE': the second code's digits start the title.
+       split=re.fullmatch(r'([A-Z]{2,6}\d{3,4})/([A-Z]{2,6})',a['text']);lead=re.match(r'(\d{3,4})\s+',title)
+       if split and lead:options=[split[1],split[2]+lead[1]];title=title[lead.end():];elective=False
+       if re.search(r'choose one',title,re.I):title=re.sub(r'\s*/\s*',' or ',re.sub(r'\s*choose one\s*$','',title,flags=re.I)).strip()+' (choose one)'
        code=options[0]if len(options)==1 else None
        if alternative and courses and courses[-1]['credits']==amount:
         previous=courses.pop();options=([previous['code']]if previous['code']else previous['options'])+options;code=None;title=previous['title']+' OR '+title;alternative=False
