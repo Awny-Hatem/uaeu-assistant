@@ -44,6 +44,14 @@ check('thanks, goodbye, system-access and "what did you say about" are answered 
   assert.match(dialogueReply('What did you say about CSBP219?', h, 'en') ?? '', /CSBP119/);
   assert.match(dialogueReply('What did you say about housing?', h, 'en') ?? '', /haven't said anything about housing/);
 });
+check('introductions are greeted by visitor role and graduate admission is not asked the undergraduate category', () => {
+  assert.match(dialogueReply("Hello, I am a prospective master's applicant.", [], 'en') ?? '', /admission requirements/);
+  assert.match(dialogueReply('Hi, I am a parent of a new student.', [], 'en') ?? '', /housing/);
+  assert.match(dialogueReply('Hello, we are a company looking to collaborate with UAEU.', [], 'en') ?? '', /partnerships office/);
+  assert.match(dialogueReply('Hi, my name is Ali. I am an IT major in my first year.', [], 'en') ?? '', /Hi Ali[\s\S]*study plan/);
+  const route = readFileSync('app/api/chat/route.ts', 'utf8');
+  assert.match(route, /needsApplicantCategory = !graduateAdmission/);
+});
 check('a named college or "which ... programs" lists that college from the official directory', () => {
   const a = programDirectoryAnswer('Which undergraduate programs are in CCAI?', false);
   assert.match(a?.content ?? '', /Computer Science/); assert.doesNotMatch(a?.content ?? '', /Mechanical Engineering/);

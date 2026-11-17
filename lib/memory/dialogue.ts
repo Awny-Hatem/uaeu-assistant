@@ -39,11 +39,16 @@ export function dialogueReply(question: string, history: Turn[], language: 'ar' 
       ? (ar ? `هذا ما قلته عن ${topic}:\n` : `Here is what I said about ${topic}:\n`) + said.content
       : (ar ? `لم أتحدث عن ${topic} في هذه المحادثة بعد. هل تريد أن أبحث عنه الآن؟` : `I haven't said anything about ${topic} in this conversation yet. Want me to look it up now?`);
   }
-  const introduction = /^(?:hi|hello|hey|مرحبا|مرحباً|السلام عليكم)[,!،\s]+/iu.test(q) && /\bmy name is\b|\bi(?: am|'m) (?:an? |in |studying)|اسمي|انا طالب|أنا طالب/iu.test(q) && !/[?؟]|\b(?:what|when|why|how|can you|could you|should|do i)\b|متى|كيف|كم|هل /iu.test(q);
+  const introduction = /^(?:hi|hello|hey|مرحبا|مرحباً|السلام عليكم)[,!،\s]+/iu.test(q) && /\bmy name is\b|\bi(?: am|'m) (?:an? |in |studying)|\bwe(?: are|'re) (?:an? |from )|\bi represent\b|\bi(?: am|'m) the (?:parent|father|mother)\b|اسمي|انا طالب|أنا طالب/iu.test(q) && !/[?؟]|\b(?:what|when|why|how|can you|could you|should|do i)\b|متى|كيف|كم|هل /iu.test(q);
   if (introduction) {
     const name = q.match(/\bmy name is\s+([\p{L}]{1,24})|اسمي\s+([\p{L}]{1,24})/iu);
     const n = name?.[1] ?? name?.[2];
-    return ar ? `مرحباً${n ? ' ' + n : ''}! أنا مساعد جامعة الإمارات للذكاء الاصطناعي. أستطيع مساعدتك في خطتك الدراسية، متطلبات المساقات أو خدمات الجامعة. بماذا تحب أن نبدأ؟` : `Hi${n ? ' ' + n : ''}! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?`;
+    const role = /prospective|applicant|applying|want to (?:apply|study|join)|high school|متقدم|أتقدم|اتقدم|طالب ثانوي/iu.test(q) ? 'prospective'
+      : /\bparent\b|my (?:son|daughter|child)|ولي أمر|ابني|بنتي|ابنتي/iu.test(q) ? 'parent'
+      : /partner|company|organi[sz]ation|our university|collaborat|research partner|شراكة|شركة|جهة|مؤسسة|تعاون/iu.test(q) ? 'partner' : 'student';
+    const helpEn = { student: 'I can help with your study plan, course requirements or university services.', prospective: 'I can help you compare programs, check admission requirements, fees and scholarships, and find out how to apply.', parent: 'I can help with programs, admission, fees, scholarships, housing and student services at UAEU.', partner: 'I can point you to the right college, department, research center or partnerships office and its official contacts.' }[role];
+    const helpAr = { student: 'أستطيع مساعدتك في خطتك الدراسية، متطلبات المساقات أو خدمات الجامعة.', prospective: 'أستطيع مساعدتك في مقارنة البرامج، ومعرفة شروط القبول والرسوم والمنح وطريقة التقديم.', parent: 'أستطيع مساعدتك في البرامج والقبول والرسوم والمنح والسكن وخدمات الطلبة في جامعة الإمارات.', partner: 'أستطيع توجيهك إلى الكلية أو القسم أو مركز البحث أو مكتب الشراكات المناسب وبيانات التواصل الرسمية.' }[role];
+    return ar ? `مرحباً${n ? ' ' + n : ''}! أنا مساعد جامعة الإمارات للذكاء الاصطناعي. ${helpAr} بماذا تحب أن نبدأ؟` : `Hi${n ? ' ' + n : ''}! I'm the UAEU AI Assistant. ${helpEn} What would you like to start with?`;
   }
   return null;
 }

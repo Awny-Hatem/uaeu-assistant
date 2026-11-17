@@ -1,0 +1,978 @@
+{
+  "startedAt": "2026-11-17T14:36:43.869Z",
+  "fixture": "test-cases/supplied-six.json",
+  "base": "http://127.0.0.1:3012",
+  "grading": "Unreviewed actual transcripts; no HTTP status is treated as a factual pass.",
+  "cases": [
+    {
+      "id": "SUP01",
+      "title": "UAEU STEM programs",
+      "turns": [
+        "Can you tell me all STEM programs UAEU offers?"
+      ],
+      "expected": "Group the published undergraduate STEM programs by their official colleges, or provide specific college program directory links. Define the requested degree level and avoid calling minors standalone degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/programs/undergraduate/",
+        "https://www.uaeu.ac.ae/en/cit/",
+        "https://www.uaeu.ac.ae/en/cos/programs/undergraduate/"
+      ],
+      "conversation": [
+        {
+          "question": "Can you tell me all STEM programs UAEU offers?",
+          "status": 200,
+          "seconds": 1.168696958,
+          "actualAnswer": "Undergraduate degrees in Engineering, Science, and Computing and AI. This is the scope used here for STEM; the directory does not supply a university-wide STEM classification.\n\n**College of Computing and Artificial Intelligence · Computer and Network Engineering**\n• [Bachelor of Science in Computer and Artificial Intelligence Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml)\n\n**College of Computing and Artificial Intelligence · Computer Science and Software Engineering**\n• [Bachelor of Science in Computer Science](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml)\n• [Bachelor of Science in Data Science and Artificial Intelligence](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml)\n\n**College of Computing and Artificial Intelligence · Information Systems and Security**\n• [Bachelor of Science in Cybersecurity](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml)\n• [Bachelor of Science in Information Technology](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml)\n\n**College of Engineering · Architectural Engineering**\n• [Bachelor of Science in Architectural Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-architectural-engineering.shtml)\n\n**College of Engineering · Chemical & Petroleum Engineering**\n• [Bachelor of Science in Chemical Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemical-engineering.shtml)\n• [Bachelor of Science in Petroleum Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml)\n\n**College of Engineering · Civil & Environmental Engineering**\n• [Bachelor of Science in Civil Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-civil-engineering.shtml)\n\n**College of Engineering · Electrical and Communication Engineering**\n• [Bachelor of Science in Communication Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-communication-engineering.shtml)\n• [Bachelor of Science in Electrical Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml)\n\n**College of Engineering · Mechanical and Aero Space Engineering**\n• [Bachelor of Science in Aerospace Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-aerospace-engineering.shtml)\n• [Bachelor of Science in Mechanical Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml)\n\n**College of Science · Biology**\n• [Bachelor of Science in Biology](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biology.shtml)\n\n**College of Science · Chemistry**\n• [Bachelor of Science in Biochemistry](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biochemistry.shtml)\n• [Bachelor of Science in Chemistry](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemistry.shtml)\n\n**College of Science · Geosciences**\n• [Bachelor of Science in Geosciences](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-geosciences.shtml)\n\n**College of Science · Mathematical Sciences**\n• [Bachelor of Science in Mathematics](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mathematics.shtml)\n• [Bachelor of Science in the Mathematics of Data Science](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml)\n\n**College of Science · Physics**\n• [Bachelor of Science in Physics](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-physics.shtml)\n• [Bachelor of Science in Space Sciences](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-space-sciences.shtml)",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Information Technology",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Geosciences",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-geosciences.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Biology",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biology.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Chemistry",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemistry.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Biochemistry",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biochemistry.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Cybersecurity",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in the Mathematics of Data Science",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Space Sciences",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-space-sciences.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Computer Science",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Mathematics",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mathematics.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Physics",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-physics.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Data Science and Artificial Intelligence",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Chemical Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemical-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Civil Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-civil-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Petroleum Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Mechanical Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Aerospace Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-aerospace-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Electrical Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Communication Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-communication-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Bachelor of Science in Architectural Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-architectural-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Undergraduate degrees in Engineering, Science, and Computing and AI. This is the scope used here for STEM; the directory does not supply a university-wide STEM classification.\n\n**College of Computing and Artificial Intelligence · Computer and Network Engineering**\n• [Bachelor of Science in Computer and Artificial Intelligence Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml)\n\n**College of Computing and Artificial Intelligence · Computer Science and Software Engineering**\n• [Bachelor of Science in Computer Science](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml)\n• [Bachelor of Science in Data Science and Artificial Intelligence](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml)\n\n**College of Computing and Artificial Intelligence · Information Systems and Security**\n• [Bachelor of Science in Cybersecurity](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml)\n• [Bachelor of Science in Information Technology](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml)\n\n**College of Engineering · Architectural Engineering**\n• [Bachelor of Science in Architectural Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-architectural-engineering.shtml)\n\n**College of Engineering · Chemical & Petroleum Engineering**\n• [Bachelor of Science in Chemical Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemical-engineering.shtml)\n• [Bachelor of Science in Petroleum Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml)\n\n**College of Engineering · Civil & Environmental Engineering**\n• [Bachelor of Science in Civil Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-civil-engineering.shtml)\n\n**College of Engineering · Electrical and Communication Engineering**\n• [Bachelor of Science in Communication Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-communication-engineering.shtml)\n• [Bachelor of Science in Electrical Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml)\n\n**College of Engineering · Mechanical and Aero Space Engineering**\n• [Bachelor of Science in Aerospace Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-aerospace-engineering.shtml)\n• [Bachelor of Science in Mechanical Engineering](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml)\n\n**College of Science · Biology**\n• [Bachelor of Science in Biology](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biology.shtml)\n\n**College of Science · Chemistry**\n• [Bachelor of Science in Biochemistry](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biochemistry.shtml)\n• [Bachelor of Science in Chemistry](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemistry.shtml)\n\n**College of Science · Geosciences**\n• [Bachelor of Science in Geosciences](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-geosciences.shtml)\n\n**College of Science · Mathematical Sciences**\n• [Bachelor of Science in Mathematics](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mathematics.shtml)\n• [Bachelor of Science in the Mathematics of Data Science](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml)\n\n**College of Science · Physics**\n• [Bachelor of Science in Physics](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-physics.shtml)\n• [Bachelor of Science in Space Sciences](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-space-sciences.shtml)",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Geosciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-geosciences.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Biology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biology.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Chemistry",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemistry.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Biochemistry",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-biochemistry.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Cybersecurity",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in the Mathematics of Data Science",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Space Sciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-space-sciences.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Computer Science",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Mathematics",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mathematics.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Physics",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-physics.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Data Science and Artificial Intelligence",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Chemical Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-chemical-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Civil Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-civil-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Petroleum Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Mechanical Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Aerospace Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-aerospace-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Electrical Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-electrical-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Communication Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-communication-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Bachelor of Science in Architectural Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-architectural-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "current_program_registry",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 24,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP02",
+      "title": "Ambiguous CE followed by Computer Engineering",
+      "turns": [
+        "Does UAEU have a CE program?",
+        "Computer Engineering"
+      ],
+      "expected": "Clarify Civil versus Computer Engineering first; then identify the current Computer and Artificial Intelligence Engineering degree, explain its two concentrations or general pathway, and give readable current sources.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml"
+      ],
+      "conversation": [
+        {
+          "question": "Does UAEU have a CE program?",
+          "status": 200,
+          "seconds": 8.209974749999999,
+          "actualAnswer": "Do you mean Civil Engineering / Computer Engineering? That abbreviation does not identify one program.",
+          "actualSources": [
+            {
+              "title": "UAEU official undergraduate programs",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+              "lastVerified": "2026-11-03"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Do you mean Civil Engineering / Computer Engineering? That abbreviation does not identify one program.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official undergraduate programs",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_ambiguous",
+            "communications": [],
+            "usage": {
+              "elapsedMs": 8198,
+              "attemptedCalls": 1,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25678,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 58,
+                  "estimatedUsd": 0.010364
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 25678,
+              "outputTokens": 58,
+              "knownUsageUsd": 0.010364,
+              "estimatedUsd": 0.010364,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Computer Engineering",
+          "status": 200,
+          "seconds": 0.014537207999999737,
+          "actualAnswer": "Yes. The current catalog name is **Bachelor of Science in Computer and Artificial Intelligence Engineering**.\nPublished minimum: 130 credits.\nPublished concentrations and pathways:\n• Concentration 1: AI Systems Engineering (Req. CH: 15)\n• Concentration 2: Robotics and Autonomous Systems (Req. CH:15)\n• General Computer and AI Engineering Pathway (Req. CH:15)\nThe Bachelor of Science in Computer and AI Engineering program prepares students to design, develop, and integrate intelligent computing systems that combine hardware, software, and artificial intelligence.\nIf you follow an older catalog, tell me your admit year and entry semester to match its plan.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+              "lastVerified": "2026-11-17"
+            },
+            {
+              "title": "Computer and AI Engineering model study plan",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_and_artificial_intelligence_engineering_study_plan.pdf"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Yes. The current catalog name is **Bachelor of Science in Computer and Artificial Intelligence Engineering**.\nPublished minimum: 130 credits.\nPublished concentrations and pathways:\n• Concentration 1: AI Systems Engineering (Req. CH: 15)\n• Concentration 2: Robotics and Autonomous Systems (Req. CH:15)\n• General Computer and AI Engineering Pathway (Req. CH:15)\nThe Bachelor of Science in Computer and AI Engineering program prepares students to design, develop, and integrate intelligent computing systems that combine hardware, software, and artificial intelligence.\nIf you follow an older catalog, tell me your admit year and entry semester to match its plan.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Computer and Artificial Intelligence Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+                "lastVerified": "2026-11-17"
+              },
+              {
+                "title": "Computer and AI Engineering model study plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_and_artificial_intelligence_engineering_study_plan.pdf"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "current_program_registry",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 5,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP03",
+      "title": "Calendar then Mechanical Engineering project then chat history and identity",
+      "turns": [
+        "Where can I check UAEU academic calendar deadlines?",
+        "I am a mech E student in my third year first semester, when should I take the senior project?",
+        "No, I am a mechanical engineering student, not whatever that is!",
+        "What was my first question?",
+        "Who created you?"
+      ],
+      "expected": "Calendar source; Mechanical Engineering project sequence from the applicable model (ask entry cohort if needed), never VMED580; preserve the correction; recall the first calendar question from chat; identify the student SGP team from CCAI without retrieving a university policy.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/calendar/index.shtml",
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "conversation": [
+        {
+          "question": "Where can I check UAEU academic calendar deadlines?",
+          "status": 200,
+          "seconds": 8.554810208,
+          "actualAnswer": "You can check the UAEU academic calendar deadlines on the official UAEU Academic Calendar website, for example, the Spring Semester 2027 calendar is available at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en.",
+          "actualSources": [
+            {
+              "title": "UAEU Academic Calendar — Spring2027",
+              "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Spring Semester2027 > Classes Begin; Add and drop begins; Last day to add courses; Last day to withdraw and drop without failure",
+              "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+              "evidenceText": "For Spring Semester2027, the official UAEU academic calendar lists Classes Begin on Monday4January2027. Add and drop begins on4January2027. The Last day to add courses is Friday15January2027. The Last day to withdraw and drop without failure is Friday5February2027. These are published Spring2027 university calendar events, not proof of an individual registration appointment, eligibility or available seat."
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "You can check the UAEU academic calendar deadlines on the official UAEU Academic Calendar website, for example, the Spring Semester 2027 calendar is available at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Academic Calendar — Spring2027",
+                "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Spring Semester2027 > Classes Begin; Add and drop begins; Last day to add courses; Last day to withdraw and drop without failure",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For Spring Semester2027, the official UAEU academic calendar lists Classes Begin on Monday4January2027. Add and drop begins on4January2027. The Last day to add courses is Friday15January2027. The Last day to withdraw and drop without failure is Friday5February2027. These are published Spring2027 university calendar events, not proof of an individual registration appointment, eligibility or available seat."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [
+              {
+                "id": "academic-calendar",
+                "title": "Academic Calendar",
+                "description": "Check the official UAEU academic calendar for dates, registration windows, exams, and university deadlines.",
+                "url": "https://webapps.uaeu.ac.ae/calendar/index.aspx",
+                "category": "deadline",
+                "keywords": [
+                  "academic calendar",
+                  "registration date",
+                  "registration window",
+                  "exam schedule",
+                  "final exams",
+                  "add drop",
+                  "semester start",
+                  "university holiday",
+                  "التقويم الأكاديمي",
+                  "مواعيد الامتحانات"
+                ],
+                "lastVerified": "2026-09-16"
+              }
+            ],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "calendar",
+            "evidenceIds": [
+              "answer:calendar-spring-2027-key-dates#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can check the UAEU academic calendar deadlines on the official UAEU Academic Calendar website, for example, the Spring Semester 2027 calendar is available at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en.",
+                "evidenceIds": [
+                  "answer:calendar-spring-2027-key-dates#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8547,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25687,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.010386800000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3354,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 74,
+                  "estimatedUsd": 0.0014600000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1419,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006172
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 30460,
+              "outputTokens": 175,
+              "knownUsageUsd": 0.012464000000000001,
+              "estimatedUsd": 0.012464000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "I am a mech E student in my third year first semester, when should I take the senior project?",
+          "status": 200,
+          "seconds": 0.02028979099999924,
+          "actualAnswer": "For the published Mechanical Engineering 2026 Fall-entry model:\n• MECH585 Design and Critical Thinking in Mechanical Engineering: Year 4, Semester 1 (Fall).\n• MECH590 Capstone Engineering Design Project: Year 4, Semester 2 (Spring).\nTell me your admit year and entry semester to confirm the model that applies to you.\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Mechanical Engineering — 2026 Fall-entry model study plan",
+              "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf#page=2",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "For the published Mechanical Engineering 2026 Fall-entry model:\n• MECH585 Design and Critical Thinking in Mechanical Engineering: Year 4, Semester 1 (Fall).\n• MECH590 Capstone Engineering Design Project: Year 4, Semester 2 (Spring).\nTell me your admit year and entry semester to confirm the model that applies to you.\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Mechanical Engineering — 2026 Fall-entry model study plan",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf#page=2",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 10,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "No, I am a mechanical engineering student, not whatever that is!",
+          "status": 200,
+          "seconds": 0.01563366699999824,
+          "actualAnswer": "For the published Mechanical Engineering 2026 Fall-entry model:\n• MECH585 Design and Critical Thinking in Mechanical Engineering: Year 4, Semester 1 (Fall).\n• MECH590 Capstone Engineering Design Project: Year 4, Semester 2 (Spring).\nTell me your admit year and entry semester to confirm the model that applies to you.\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Mechanical Engineering — 2026 Fall-entry model study plan",
+              "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf#page=2",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "For the published Mechanical Engineering 2026 Fall-entry model:\n• MECH585 Design and Critical Thinking in Mechanical Engineering: Year 4, Semester 1 (Fall).\n• MECH590 Capstone Engineering Design Project: Year 4, Semester 2 (Spring).\nTell me your admit year and entry semester to confirm the model that applies to you.\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Mechanical Engineering — 2026 Fall-entry model study plan",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf#page=2",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 9,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "What was my first question?",
+          "status": 200,
+          "seconds": 0.007717333000000508,
+          "actualAnswer": "Your first message was: “Where can I check UAEU academic calendar deadlines?”",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Your first message was: “Where can I check UAEU academic calendar deadlines?”",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 2,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Who created you?",
+          "status": 200,
+          "seconds": 0.008293292000002112,
+          "actualAnswer": "I'm the UAEU AI Assistant, built by UAEU students from the College of Computing and Artificial Intelligence (CCAI) as their Senior Graduation Project. As your UAEU student-services assistant, I help with admissions, courses, plans and services using official UAEU sources.",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "I'm the UAEU AI Assistant, built by UAEU students from the College of Computing and Artificial Intelligence (CCAI) as their Senior Graduation Project. As your UAEU student-services assistant, I help with admissions, courses, plans and services using official UAEU sources.",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 2,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP04",
+      "title": "First-year introduction without a question",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my first year, first semester at UAEU."
+      ],
+      "expected": "Greet Noor, introduce the assistant and suggest relevant help. No unsolicited plan or cannot-verify fallback.",
+      "sources": [],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my first year, first semester at UAEU.",
+          "status": 200,
+          "seconds": 0.0092534169999999,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 3,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP05",
+      "title": "Second-year introduction repeated",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU."
+      ],
+      "expected": "Natural greeting/acknowledgement on each turn; no unsolicited plan, old college name, raw XML citation or cannot-verify fallback.",
+      "sources": [],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 0.009283084000002419,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 3,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 0.007325415999999677,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 2,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP06",
+      "title": "Next semester using earlier IT year and semester",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+        "What should I take next semester?",
+        "Bachelor of Science in Information Technology",
+        "Year three term one"
+      ],
+      "expected": "Keep IT as the only stated program and infer Year 3 Semester 1. Ask for admit term/catalog if unknown, then use that matching official plan. Do not invent Information Security as an earlier-mentioned program.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 0.007852667000006476,
+          "actualAnswer": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Hi Noor! I'm the UAEU AI Assistant. I can help with your study plan, course requirements or university services. What would you like to start with?",
+            "source": "conversation",
+            "stateLabel": "conversation_history_answer",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 3,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "What should I take next semester?",
+          "status": 200,
+          "seconds": 0.01594120899999689,
+          "actualAnswer": "Your next model-plan position is Year 3, Semester 1. What year were you admitted, and was your entry in Fall or Spring?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Your next model-plan position is Year 3, Semester 1. What year were you admitted, and was your entry in Fall or Spring?",
+            "citations": [],
+            "source": "conversation",
+            "stateLabel": "academic_planning",
+            "disposition": "clarify",
+            "usage": {
+              "elapsedMs": 7,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Bachelor of Science in Information Technology",
+          "status": 200,
+          "seconds": 0.01791558399999485,
+          "actualAnswer": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 11,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Year three term one",
+          "status": 200,
+          "seconds": 0.01799408300000505,
+          "actualAnswer": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+              "lastVerified": "2026-11-17"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "You didn't give your admit year, so this is the newest published plan for your program:\nPublished model — Year 3, Semester 1 (2025 Fall entry):\n• [ITBP322](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP322): Web and Mobile Systems (3)\n• [BIOC100](https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100) / [CHEM111](https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111): Basic Biology I or General Chemistry I (choose one) (3)\n• [CSBP315](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP315): Operating Systems Fundamentals (3)\n• [CSBP320](https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP320): Data Mining (3)\n• [ITBP321](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP321): Web Application Development Lab (1)\nPublished semester total: 13 credits.\nNote: this plan's printed credit totals don't reconcile; confirm with your advisor.\nOther cohorts have their own plans (2022 Fall). Tell me yours and I'll switch.\nDegree Works and your advisor provide the official audit.",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology — 2025 Fall-entry model study plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf#page=1",
+                "lastVerified": "2026-11-17"
+              }
+            ],
+            "source": "rag",
+            "stateLabel": "academic_planning",
+            "disposition": "answer",
+            "usage": {
+              "elapsedMs": 9,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-11-17T14:37:36.500Z"
+}

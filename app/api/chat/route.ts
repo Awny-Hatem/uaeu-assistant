@@ -1160,7 +1160,9 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     return respond(payload, latest, locale);
   }
   const meaning = understandQuery(routingQuery);
-  const needsApplicantCategory = !isProgramRecommendation(routingQuery) && !faqHit && !meaning.codes.length && meaning.subjects.includes("admissions") && meaning.intents.some((intent) => ["requirements", "eligibility"].includes(intent)) && !meaning.applicantCategories.length && !meaning.degreeLevel?.includes("postgraduate") && !meaning.intents.includes("deadline");
+  const graduateAdmission = /\b(?:graduate|postgraduate|master'?s?|ph\.?d|doctor(?:al|ate))\b|ماجستير|دكتوراه|الدراسات العليا/iu.test(routingQuery) && !/\bundergraduate\b|بكالوريوس/iu.test(routingQuery);
+  // The applicant-category question is about undergraduate admission only.
+  const needsApplicantCategory = !graduateAdmission && !isProgramRecommendation(routingQuery) && !faqHit && !meaning.codes.length && meaning.subjects.includes("admissions") && meaning.intents.some((intent) => ["requirements", "eligibility"].includes(intent)) && !meaning.applicantCategories.length && !meaning.degreeLevel?.includes("postgraduate") && !meaning.intents.includes("deadline");
 
   let canonicalEntries: import("@/lib/faq").FaqEntry[] = [];
   let recoveryEvidence: EvidenceRow[] | undefined;
