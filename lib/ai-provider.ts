@@ -310,7 +310,9 @@ async function generateWithOpenAiAttempt(args: GenerateArgs, key: string): Promi
           })),
         max_output_tokens: maxOutputTokens(),
         store: false,
-        temperature: 0.1,
+        // New reasoning/solution model families reject custom temperature.
+        // Leave it out so the model's supported default is used.
+        ...(/^gpt-(?:5|6|o\d)/i.test(model) ? {} : { temperature: 0.1 }),
         ...(args.responseSchema || args.evidenceIds ? { text: { format: { type: "json_schema", name: args.responseSchema?.name ?? "grounded_answer", strict: true, schema: args.responseSchema?.schema ?? groundedAnswerSchema(args.evidenceIds!) } } } : {}),
       }),
     });

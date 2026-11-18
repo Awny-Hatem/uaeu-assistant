@@ -880,6 +880,23 @@ export function UniversityChat() {
       const data = (await res.json().catch(() => ({}))) as ChatApiResponse;
       if (!request.isCurrent()) return;
 
+      // Shared server quota is authoritative across tabs and Vercel instances.
+      // Sync it into the local display so the remaining count matches enforcement.
+      const serverUsedValue = res.headers.get("X-Chat-Quota-Used");
+      const serverUsed = serverUsedValue === null ? null : Number(serverUsedValue);
+      const hasServerQuota = serverUsed !== null && Number.isSafeInteger(serverUsed) && serverUsed >= 0;
+      if (hasServerQuota) {
+        if (user) {
+          accountUsageRef.current = { userId: user.id, date: todayKey(), used: serverUsed };
+          usageDateRef.current = todayKey();
+          writeAccountUsage(user.id, serverUsed);
+          setAccountQuestionsUsed(serverUsed);
+        } else {
+          setGuestQuestionsUsed(serverUsed);
+          writeGuestState(readGuestState().messages, serverUsed);
+        }
+      }
+
       if (res.status === 409 && data.code === 'account_changed') {
         await reconcileAccount();
         return;
@@ -917,7 +934,7 @@ export function UniversityChat() {
             ...sanitizeAnswerMetadata(data),
           },
         ]);
-        incrementUsage();
+        if (!hasServerQuota) incrementUsage();
       }
     } catch {
       if (!request.isCurrent()) return;

@@ -56,6 +56,7 @@ async function main() {
       handler = () => success();
       const result = await generateAssistantResponse(args);
       assert.equal((requests[0].body as Record<string, unknown>).model, 'gpt-6.1-sol');
+      assert.equal('temperature' in (requests[0].body as Record<string, unknown>), false, 'reasoning model requests omit unsupported temperature');
       assert.equal(result.model, 'gpt-6.1-sol');
     });
     await check('evaluation output budget above the student-answer default reaches the provider up to its hard cap', async () => {
