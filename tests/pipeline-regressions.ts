@@ -10,7 +10,7 @@ process.env.TRUST_PROXY_HEADERS = "enabled";
 
 async function main() {
   const { POST } = await import("../app/api/chat/route");
-  const { matchFaq, courseIdentityConflict } = await import("../lib/faq");
+  const { matchFaq, faqAnswer, courseIdentityConflict, faqScopeAllows, loadFaqEntries } = await import("../lib/faq");
   const { retrieveVerifiedEvidence, hasRequestedFactEvidence, lexicalRetrieve, loadKnowledgeMarkdown } = await import("../lib/knowledge-files");
   const { normalizeCourseCodes, courseCodes, resolveConversation } = await import("../lib/query-understanding");
   const { parseGroundedAnswer } = await import("../lib/provider-response");
@@ -19,14 +19,52 @@ async function main() {
   const { citationsFromRows } = await import("../lib/citations");
   const { sourceClaimViolations, sourceEvidence } = await import("../lib/source-evidence");
   let requests = 0;
+  let observedGuestSetCookie: string | null = null;
   const ask = async (question: string, history: { role: "user" | "assistant"; content: string }[] = []) => {
     const response = await POST(new Request("http://localhost/api/chat", {
       method: "POST", headers: { "content-type": "application/json", "x-forwarded-for": `198.18.0.${++requests}` },
       body: JSON.stringify({ messages: [...history, { role: "user", content: question }], locale: "auto" }),
     }));
     assert.equal(response.status, 200);
+    observedGuestSetCookie = response.headers.get("set-cookie");
     return response.json();
   };
+  const computerSciencePlanQuestion = "What courses can I take for the second semester of Computer Science?";
+  assert.equal(matchFaq(computerSciencePlanQuestion)?.entry.id, "computer-science-second-semester-plan");
+  assert.equal(matchFaq("Which courses should I take in the second semester of Computer Engineering?"), null,
+    "a Computer Science plan cannot satisfy a Computer Engineering request");
+  assert.equal(matchFaq("What courses can I take for the second semester?"), null,
+    "a scoped degree plan cannot answer when the student has not named a program");
+  const priorProgramFlag = process.env.UAEU_AGENT_V3_ENABLED;
+  process.env.UAEU_AGENT_V3_ENABLED = "enabled";
+  try {
+    const computerEngineeringPlan = await ask("Which courses should I take in the second semester of Computer Engineering?");
+    assert.notEqual(computerEngineeringPlan.faqId, "computer-science-second-semester-plan");
+    assert.equal(computerEngineeringPlan.stateLabel, "v3_program_semester_plan");
+    assert.equal(computerEngineeringPlan.topic, "bsc-computer-engineering");
+    assert.match(observedGuestSetCookie ?? "", /chat_guest_id=/u, "chat route issues its quota identity cookie on the response");
+    assert.match(computerEngineeringPlan.content, /Which published cohort\/source label/u);
+    assert.ok(computerEngineeringPlan.citations?.some((citation: { url?: string }) => citation.url?.endsWith("bsc_computer_engineering_study_plan.pdf")));
+    assert.doesNotMatch(JSON.stringify(computerEngineeringPlan.citations), /bscs_study_plan_fall_2025/u);
+    assert.doesNotMatch(computerEngineeringPlan.content, /\b(?:CSBP219|CENG202|MATH110|MATH140)\b/u,
+      "the Computer Science semester answer's distinctive course list must not leak into Computer Engineering");
+  } finally {
+    if (priorProgramFlag === undefined) delete process.env.UAEU_AGENT_V3_ENABLED;
+    else process.env.UAEU_AGENT_V3_ENABLED = priorProgramFlag;
+  }
+  const fullCourseSeatRequest = await ask("The course I want is full. Is there a way to request a seat?");
+  assert.equal(fullCourseSeatRequest.faqId, "course-section-full");
+  assert.match(fullCourseSeatRequest.content, /CLOSED SECTION override/i);
+  assert.match(fullCourseSeatRequest.content, /offering college/i);
+  assert.match(fullCourseSeatRequest.content, /not a guaranteed place/i);
+  const alumniPrintedCertificateQuestion = "I'm a UAEU alumnus. How do I request a printed graduation certificate?";
+  assert.equal(matchFaq(alumniPrintedCertificateQuestion)?.entry.id, "alumni-graduation-certificate-format");
+  const alumniPrintedCertificate = await ask(alumniPrintedCertificateQuestion);
+  assert.equal(alumniPrintedCertificate.faqId, "alumni-graduation-certificate-format");
+  assert.equal(alumniPrintedCertificate.source, "faq");
+  assert.match(alumniPrintedCertificate.content, /processing estimate, not a delivery guarantee/i);
+  assert.match(alumniPrintedCertificate.content, /collect printed documents at Registration/i);
+  assert.ok(alumniPrintedCertificate.citations?.some((citation: { url?: string }) => citation.url?.endsWith("alumni-uaepass-guide.pdf")));
   for (const code of ["CSBP319", "CSBP 319", "csbp-319", "CSBP\u00a0319", "CSBP–319"]) {
     assert.equal(normalizeCourseCodes(code), "CSBP319");
     assert.equal(matchFaq(`What are the prerequisites for ${code}?`)?.entry.id, "course-prerequisites-data-structures");
@@ -35,6 +73,61 @@ async function main() {
     assert.match(answer.content, /CSBP221/);
     assert.equal(answer.disposition, "answer");
   }
+  const arabicCatalogFact = await ask("\u0648\u0634 \u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0645\u0627\u062f\u0629 ISEC-421 \u0648\u0643\u0645 \u0633\u0627\u0639\u062a\u0647\u0627\u061f");
+  assert.equal(arabicCatalogFact.stateLabel, "v3_official_course_catalog_lookup");
+  assert.match(arabicCatalogFact.content, /STAT210[\s\S]*ITBP301/);
+  assert.match(arabicCatalogFact.content, /[\u0600-\u06ff]/u);
+  assert.match(arabicCatalogFact.content, /STAT210 \u0648ITBP301/u, "the model plan lists STAT210 and ITBP301 without an unsupported minimum-grade claim");
+  assert.doesNotMatch(arabicCatalogFact.content, /STAT210 \(\u0628\u062f\u0631\u062c\u0629 \u0644\u0627 \u062a\u0642\u0644 \u0639\u0646 D\)/u, "do not transfer the course-catalog D threshold to the plan's STAT210 requirement");
+  assert.ok(arabicCatalogFact.citations.some((citation: { url?: string }) => citation.url === "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC421"));
+  const unpublishedSpringCalendar = await ask("On what date does Spring 2028 start?");
+  assert.match(unpublishedSpringCalendar.content, /2027\/2028[\s\S]*calendar is not available/u);
+  assert.ok(unpublishedSpringCalendar.citations.some((citation: { url?: string }) => citation.url === "https://webapps.uaeu.ac.ae/calendar/index.aspx"));
+  const parkingThreshold = await ask("How many parking warnings can I get before my account is suspended?");
+  assert.match(parkingThreshold.content, /could not verify a published number of warnings/u);
+  assert.match(parkingThreshold.content, /800-8238/u);
+  assert.ok(parkingThreshold.citations.some((citation: { url?: string }) => citation.url === "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"));
+  assert.doesNotMatch(parkingThreshold.content, /\b\d+\s+warnings?\b/u);
+  const wrappedArabicCredits = await ask("Please distinguish confirmed information from anything I must verify: \u0645\u0627 \u0639\u062f\u062f \u0627\u0644\u0633\u0627\u0639\u0627\u062a \u0627\u0644\u0645\u0646\u0634\u0648\u0631 \u0644\u0644\u0645\u0642\u0631\u0631 ARCH335 \u0648\u0641\u0642 \u062f\u0644\u064a\u0644 \u062c\u0627\u0645\u0639\u0629 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a\u061f");
+  assert.equal(wrappedArabicCredits.stateLabel, "v3_official_course_catalog_lookup");
+  assert.ok(wrappedArabicCredits.citations.some((citation: { url?: string }) => citation.url === "https://www.uaeu.ac.ae/en/catalog/courses/course_2898.shtml?id=ARCH335"));
+  assert.match(wrappedArabicCredits.content, /ARCH335[\s\S]*Intermediate Building Design Studio[\s\S]*3/);
+  assert.match(wrappedArabicCredits.content, /[\u0600-\u06ff]/u);
+  const wrappedArabicPrerequisite = await ask("Please distinguish confirmed information from anything I must verify: \u0647\u0644 \u064a\u0633\u062c\u0644 \u062f\u0644\u064a\u0644 \u062c\u0627\u0645\u0639\u0629 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0645\u062a\u0637\u0644\u0628\u0627\u064b \u0633\u0627\u0628\u0642\u0627\u064b \u0623\u0648 \u0645\u0635\u0627\u062d\u0628\u0627\u064b \u0644\u0644\u0645\u0642\u0631\u0631 BANA692\u061f");
+  assert.equal(wrappedArabicPrerequisite.stateLabel, "v3_official_course_catalog_lookup");
+  assert.ok(wrappedArabicPrerequisite.citations.some((citation: { url?: string }) => citation.url === "https://www.uaeu.ac.ae/en/catalog/courses/course_4976.shtml?id=BANA692"));
+  assert.match(wrappedArabicPrerequisite.content, /BANA691/);
+  const wrappedLibrarianGuide = await ask("Please distinguish confirmed information from anything I must verify: How do I use the official UAEU service for Ask a Librarian — Research Help?");
+  assert.equal(wrappedLibrarianGuide.source, "guide");
+  assert.equal(wrappedLibrarianGuide.guide?.id, "ask-a-librarian-research-help");
+  assert.equal(wrappedLibrarianGuide.disposition, "answer");
+  const wrappedMedicalGuide = await ask("Please distinguish confirmed information from anything I must verify: How do I use the official UAEU service for Get Medical Care as a UAEU Student?");
+  assert.equal(wrappedMedicalGuide.source, "guide");
+  assert.equal(wrappedMedicalGuide.guide?.id, "student-medical-care");
+  assert.ok(wrappedMedicalGuide.content.includes("Steps"));
+  const concurrentLabQuestion = "Can I take CSBP319 and its programming lab in the same semester?";
+  assert.equal(matchFaq(concurrentLabQuestion)?.entry.id, "course-prerequisites-data-structures");
+  const concurrentLabAnswer = await ask(concurrentLabQuestion);
+  assert.equal(concurrentLabAnswer.source, "faq");
+  assert.equal(concurrentLabAnswer.faqId, "course-prerequisites-data-structures");
+  assert.match(concurrentLabAnswer.content, /Yes, the catalog labels CSBP221[\s\S]*may be taken before or concurrently/);
+  assert.match(concurrentLabAnswer.content, /CSBP219.*minimum grade of D/);
+  const repeatCourseQuestion = "Can I repeat a failed course, and what happens to the old grade?";
+  assert.equal(matchFaq(repeatCourseQuestion)?.entry.id, "course-repeat-grades");
+  const repeatCourseAnswer = await ask(repeatCourseQuestion);
+  assert.equal(repeatCourseAnswer.source, "faq");
+  assert.equal(repeatCourseAnswer.faqId, "course-repeat-grades");
+  assert.match(repeatCourseAnswer.content, /failing grade(?:s)? (?:is|are) excluded from GPA/i);
+  assert.match(repeatCourseAnswer.content, /next review listed as due 1 September 2021/);
+  assert.match(repeatCourseAnswer.content, /not verified whether it has been superseded/);
+  const probationLoadQuestion = "Can a student on academic probation register for the usual credit load?";
+  assert.equal(matchFaq(probationLoadQuestion)?.entry.id, "academic-probation");
+  const probationLoadAnswer = await ask(probationLoadQuestion);
+  assert.equal(probationLoadAnswer.source, "faq");
+  assert.equal(probationLoadAnswer.faqId, "academic-probation");
+  assert.match(probationLoadAnswer.content, /normally capped at \*\*13 credits\*\*/);
+  assert.match(probationLoadAnswer.content, /policy is effective 12 August 2018/);
+  assert.match(probationLoadAnswer.content, /later supersession has not been established/);
   for (const prose of ["Do I need at least 120 credits?", "Is the fee for 150 AED?", "There are 130 credits in that model."]) {
     assert.equal(normalizeCourseCodes(prose), prose);
     assert.deepEqual(courseCodes(prose), []);
@@ -84,6 +177,22 @@ async function main() {
   assert.equal(admission.stateLabel, "clarify_applicant_category");
   assert.doesNotMatch(admission.content, /IELTS Academic 5.5|TOEFL ITP 525/);
   assert.equal(matchFaq("What are the admission requirements for international students?")?.entry.id, "admissions-requirements-international");
+  const previousV3Flag = process.env.UAEU_AGENT_V3_ENABLED;
+  process.env.UAEU_AGENT_V3_ENABLED = "enabled";
+  const framedUndergraduateApplication = await ask("Please distinguish confirmed information from anything I must verify: How do I apply to UAEU as a first-year undergraduate?");
+  assert.equal(framedUndergraduateApplication.faqId, "admissions-apply-undergraduate");
+  assert.equal(framedUndergraduateApplication.citations.length, 3);
+  assert.match(framedUndergraduateApplication.content, /UAE nationals and children of Emirati mothers/);
+  assert.match(framedUndergraduateApplication.content, /\*\*International applicants and children of UAEU employees:/);
+  const internationalRequirementsFollowUp = await ask("I am an international applicant, not a UAE national.", [
+    { role: "user", content: "What do I need to apply for an undergraduate degree?" },
+    { role: "assistant", content: "Please tell me your applicant category." },
+  ]);
+  if (previousV3Flag === undefined) delete process.env.UAEU_AGENT_V3_ENABLED;
+  else process.env.UAEU_AGENT_V3_ENABLED = previousV3Flag;
+  assert.equal(internationalRequirementsFollowUp.faqId, "admissions-requirements-international");
+  assert.match(internationalRequirementsFollowUp.content, /IELTS Academic 5\.5/);
+  assert.equal(internationalRequirementsFollowUp.disposition, "clarify");
   assert.equal(loadKnowledgeMarkdown().find((document) => document.filename === "03-undergraduate-admissions.md")?.scope?.applicantCategory, "national");
   for (const query of ["What IELTS score does an international undergraduate applicant need?", "What English test result is needed for university admission?"]) {
     assert.ok(!lexicalRetrieve(query, 20).some((row) => row.source === "03-undergraduate-admissions.md"), query);
@@ -125,8 +234,26 @@ async function main() {
   const gpa = retrieveVerifiedEvidence("What is the minimum GPA required to graduate from UAEU?");
   assert.ok(gpa.some((row) => row.source === "answer:graduation-requirements-program"));
   assert.ok(!gpa.some((row) => row.source.includes("admissions")));
+  const mastersGpaQuestion = "What's the general GPA requirement for applying to a master's program?";
+  assert.equal(matchFaq(mastersGpaQuestion)?.entry.id, "admissions-graduate-application");
+  const mastersGpaAnswer = await ask(mastersGpaQuestion);
+  assert.equal(mastersGpaAnswer.source, "faq");
+  assert.equal(mastersGpaAnswer.faqId, "admissions-graduate-application");
+  assert.match(mastersGpaAnswer.content, /conditional GPA routes exist from 2\.5/i);
   const certificate = retrieveVerifiedEvidence("كيف أقدر أطلع شهادة التخرج من جامعة الإمارات؟");
   assert.ok(certificate.some((row) => row.source === "answer:degree-certificate-collection"));
+  const arabicCertificateQuestion = "\u062a\u062e\u0631\u062c\u062a \u0645\u0646 \u0627\u0644\u062c\u0627\u0645\u0639\u0629 \u0648\u0623\u062d\u062a\u0627\u062c \u0634\u0647\u0627\u062f\u0629 \u0627\u0644\u062a\u062e\u0631\u062c\u060c \u0643\u064a\u0641 \u0623\u0637\u0644\u0639\u0647\u0627\u061f";
+  assert.equal(matchFaq(arabicCertificateQuestion)?.entry.id, "degree-certificate-collection");
+  const arabicCertificateAnswer = await ask(arabicCertificateQuestion);
+  assert.equal(arabicCertificateAnswer.source, "faq");
+  assert.equal(arabicCertificateAnswer.faqId, "degree-certificate-collection");
+  assert.match(arabicCertificateAnswer.content, /5 دقائق[\s\S]*10 دقائق/);
+  assert.match(arabicCertificateAnswer.content, /\u062a\u0642\u062f\u064a\u0631 \u0627\u0644\u062b\u0644\u0627\u062b\u0629 \u0623\u064a\u0627\u0645 \u064a\u062e\u0635 \u0627\u0644\u0645\u0639\u0627\u0644\u062c\u0629 \u0648\u0644\u064a\u0633 \u0636\u0645\u0627\u0646 \u0627\u0644\u062a\u0633\u0644\u064a\u0645/u);
+  const attestation = await ask("How can I have a UAEU graduation certificate attested?");
+  assert.equal(attestation.source, "faq");
+  assert.equal(attestation.faqId, "uaeu-academic-qualification-attestation");
+  assert.match(attestation.content, /Follow the sign-in options displayed by the alumni portal/);
+  assert.doesNotMatch(attestation.content, /UAE Pass or your UAEU account/);
   const price = retrieveVerifiedEvidence("How much does it cost to get an official transcript?");
   assert.ok(price.some((row) => /free/.test(row.text)));
   assert.equal(hasRequestedFactEvidence("What is the transcript fee?", "The transcript service is free."), true);
@@ -136,7 +263,6 @@ async function main() {
 
   for (const query of [
     "What is the maximum number of free parking violations UAEU students can receive before suspension?",
-    "When does Spring 2028 semester start?",
   ]) {
     assert.equal(retrieveVerifiedEvidence(query).length, 0, query);
     const answer = await ask(query);
@@ -146,7 +272,7 @@ async function main() {
   }
   const libraryRumor = retrieveVerifiedEvidence("Is library entry forbidden if my GPA falls below 2.5?");
   assert.ok(libraryRumor.some((row) => row.source === "answer:library-borrowing-limits"));
-  assert.ok(libraryRumor.every((row) => /do \*\*not state a minimum GPA|do not state a minimum GPA/i.test(row.text)));
+  assert.ok(libraryRumor.every((row) => /(?:do|does) \*\*?not state a minimum GPA|(?:do|does) not state a minimum GPA/i.test(row.text)));
   const thanks = await ask("Thank you, that helped.", [{ role: "user", content: "How do I request an enrollment letter?" }]);
   assert.equal(thanks.source, "conversation");
   assert.doesNotMatch(thanks.content, /minutes|enrollment|letter/i);
@@ -157,9 +283,22 @@ async function main() {
   assert.doesNotMatch(letterFollowup.query, /password/);
   const delegatedRequest = await ask("Could you request an official transcript for me through this chat?");
   assert.match(delegatedRequest.content, /cannot submit or complete.*through this chat/i);
+  const transcriptSteps = await ask("I am currently enrolled. How do I download an official transcript?");
+  assert.equal(transcriptSteps.source, "guide");
+  assert.match(transcriptSteps.content, /1\. \*\*Open Current Students Documents\*\*/);
+  assert.match(transcriptSteps.content, /Select Academic Transcript and choose Arabic or English/);
+  const arabicTranscriptSteps = await ask("كيف أطلب كشف درجات رسمي كطالب حالي؟");
+  assert.equal(arabicTranscriptSteps.source, "guide");
+  assert.match(arabicTranscriptSteps.content, /اختر كشف الدرجات الأكاديمي وحدد اللغة العربية أو الإنجليزية/);
   const admissionDeadlineEvidence = retrieveVerifiedEvidence("What is the Fall 2026 undergraduate application deadline?");
-  assert.ok(admissionDeadlineEvidence.every((row) => row.source === "answer:admissions-application-deadline"));
-  assert.ok(admissionDeadlineEvidence.every((row) => /does not state|cannot give|no verified/i.test(row.text)));
+  assert.ok(admissionDeadlineEvidence.every((row) => row.source === "answer:admissions-fall-2026-cycle-status"));
+  assert.ok(admissionDeadlineEvidence.every((row) => /Fall 2026 is already in progress/i.test(row.text)));
+  assert.ok(admissionDeadlineEvidence.every((row) => /Spring 2027[\s\S]*15 December 2026/i.test(row.text)));
+  assert.ok(citationsFromRows(admissionDeadlineEvidence, "What is the Fall 2026 undergraduate application deadline?").some((citation) => /calendar\/index\.shtml/.test(citation.url ?? "")));
+  const genericAdmissionDeadline = loadFaqEntries().find((entry) => entry.id === "admissions-application-deadline");
+  assert.ok(genericAdmissionDeadline);
+  assert.equal(faqScopeAllows("What is the Fall 2026 undergraduate application deadline?", genericAdmissionDeadline), false,
+    "a dated query must not retrieve the cycle-neutral fallback when a dedicated Fall 2026 record exists");
   const deadlineFollowup = resolveConversation([{ role: "user", content: "I want to apply for Fall 2027." },
     { role: "user", content: "What is the application deadline?" }], "What is the application deadline?");
   assert.equal(deadlineFollowup.subject?.key, "admissions");
@@ -170,6 +309,9 @@ async function main() {
   assert.ok(futureAdmissionEvidence.every((row) => row.source === "answer:admissions-application-deadline"));
   assert.ok(futureAdmissionEvidence.every((row) => row.scope?.temporalCoverage === "procedural" && /cannot give a verified deadline/.test(row.text)));
   assert.ok(citationsFromRows(futureAdmissionEvidence, deadlineFollowup.query).some((citation) => /serviceId=89/.test(citation.url ?? "")));
+  const graduateAdmissionEvidence = retrieveVerifiedEvidence("What is the general GPA requirement for applying to a master's program?");
+  assert.ok(graduateAdmissionEvidence.some((row) => row.source === "answer:admissions-graduate-application"));
+  assert.ok(!graduateAdmissionEvidence.some((row) => row.source === "answer:admissions-application-deadline"));
   const deadline = await ask("What is the application deadline?");
   assert.match(deadline.content, /application.*term.*year/i);
   assert.doesNotMatch(deadline.content, /prerequisites/);
@@ -198,6 +340,24 @@ async function main() {
   const contact = await ask("I need to speak with a human.");
   assert.match(contact.content, /8008238/);
   assert.equal(contact.disposition, "handoff");
+  const scholarshipHousingQuestion = "If I receive a scholarship, does it always cover housing too?";
+  assert.equal(matchFaq(scholarshipHousingQuestion)?.entry.id, "scholarship-housing-coverage");
+  const scholarshipHousingAnswer = await ask(scholarshipHousingQuestion);
+  assert.equal(scholarshipHousingAnswer.faqId, "scholarship-housing-coverage");
+  assert.equal(scholarshipHousingAnswer.disposition, "clarify");
+  assert.equal(scholarshipHousingAnswer.content, faqAnswer(matchFaq(scholarshipHousingQuestion)!.entry, "en"));
+  assert.match(scholarshipHousingAnswer.content, /housing is not automatic/i);
+  assert.match(scholarshipHousingAnswer.content, /does not establish the benefits of every scholarship/i);
+  assert.ok(scholarshipHousingAnswer.citations.some((citation: { url?: string }) => citation.url?.includes("undergraduate-scholarships")));
+  assert.ok(scholarshipHousingAnswer.citations.some((citation: { url?: string }) => citation.url?.includes("serviceId=106")));
+  const registrationHoldQuestion = "My registration page says I have a hold. What should I do first?";
+  assert.equal(matchFaq(registrationHoldQuestion)?.entry.id, "registration-hold");
+  const registrationHoldAnswer = await ask(registrationHoldQuestion);
+  assert.equal(registrationHoldAnswer.faqId, "registration-hold");
+  assert.equal(registrationHoldAnswer.disposition, "portal");
+  assert.match(registrationHoldAnswer.content, /contact the responsible office named there/i);
+  assert.match(registrationHoldAnswer.content, /later supersession has not been established/i);
+  assert.match(registrationHoldAnswer.content, /does not mean every hold is an unpaid fee/i);
   const grounded = { claims: [{ text: "The service is free.", evidenceIds: ["E1"] }], clarification: "", disposition: "answer" };
   assert.ok(parseGroundedAnswer(JSON.stringify(grounded), ["E1"]));
   assert.equal(parseGroundedAnswer(JSON.stringify(grounded), ["E2"]), null);

@@ -14,8 +14,10 @@ const DOMAIN_ALIASES: Record<string, string> = {
   tuition: "finance", fees: "finance", finance: "finance",
   academic: "academics", academics: "academics", course: "academics", courses: "academics", grading: "academics", "academic-standing": "academics", "data-structures": "academics",
   programs: "academics",
+  grade: "academics",
   graduation: "graduation", housing: "housing", visa: "visa", library: "library", it: "it",
-  wellbeing: "wellbeing", careers: "careers", campus: "campus", "student-services": "student_services",
+  wellbeing: "wellbeing", health: "wellbeing", medical: "wellbeing", counseling: "wellbeing",
+  careers: "careers", career: "careers", campus: "campus", "student-services": "student_services",
   student_services: "student_services", "student-services-general": "student_services",
 };
 
@@ -54,9 +56,14 @@ function metadataForRow(row: EvidenceRow, faqIndex: Map<string, ReturnType<typeo
   const titleDomains = title.split(/[|/]/).flatMap((part) =>
     understandQuery(part).subjects.map(canonicalDomain).filter((domain): domain is string => Boolean(domain)));
   const inferredDomains = [...new Set(scopedDomains.length ? scopedDomains : titleDomains)];
+  const domains = [...new Set([
+    ...(categoryDomain ? [categoryDomain] : []),
+    ...scopedDomains,
+    ...(!categoryDomain && scopedDomains.length === 0 && inferredDomains.length === 1 ? inferredDomains : []),
+  ])];
   const domain = categoryDomain ?? (inferredDomains.length === 1 ? inferredDomains[0] : null);
   const citations = row.citations?.length ? row.citations : document ? [{ title: document.title, url: document.sourceUrl, lastVerified: document.lastVerified }] : [];
-  return { faq, document, title, domain, citations };
+  return { faq, document, title, domain, domains, citations };
 }
 
 function evidenceId(source: string, excerpt: string, citationIndex: number): string {
@@ -64,11 +71,12 @@ function evidenceId(source: string, excerpt: string, citationIndex: number): str
   return `evidence:${digest}`;
 }
 
-function itemScope(row: EvidenceRow, domain: string | null): EvidenceScopeV3 | undefined {
+function itemScope(row: EvidenceRow, domain: string | null, domains: string[]): EvidenceScopeV3 | undefined {
   const scope = row.scope;
   if (!scope && !domain) return undefined;
   return {
     ...(domain ? { domain } : {}),
+    ...(domains.length > 1 ? { domains } : {}),
     ...(scope?.programId ? { programId: scope.programId } : {}),
     ...(scope?.courseCodes?.length ? { courseCodes: scope.courseCodes } : {}),
     ...(scope?.applicantCategory ? { applicantCategory: scope.applicantCategory } : {}),
@@ -85,7 +93,7 @@ function toEvidenceItems(row: EvidenceRow, now: Date, faqIndex: Map<string, Retu
   const sourceType = row.source.startsWith("answer:") ? "verified_answer" : "approved_document";
   const verifiedDates = citations.map(({ lastVerified }) => lastVerified).filter((date): date is string => Boolean(date));
   const baseFreshness = freshness(verifiedDates.sort().at(-1), now);
-  const evidenceScope = itemScope(row, metadata.domain);
+  const evidenceScope = itemScope(row, metadata.domain, metadata.domains);
   const refs = citations.length ? citations : [{ title: metadata.title }];
   return refs.flatMap((citation, index): EvidenceItem[] => {
     const citationEvidence = citation.evidenceText?.trim();
@@ -98,7 +106,8 @@ function toEvidenceItems(row: EvidenceRow, now: Date, faqIndex: Map<string, Retu
     if (citations.length > 1 && !citationEvidence) return [];
     if (citations.length > 1 && !citationDomain) return [];
     const text = citationEvidence || row.text.trim();
-    const scopedEvidence = itemScope(row, citationDomain ?? metadata.domain);
+    const citationScopes = citationDomain ? [citationDomain] : metadata.domains;
+    const scopedEvidence = itemScope(row, citationDomain ?? metadata.domain, citationScopes);
     const lastVerified = citation.lastVerified ?? verifiedDates[index];
     return [{
       id: evidenceId(row.source, text, index),
@@ -120,20 +129,26 @@ function matchesHardScope(item: EvidenceItem, required: EvidenceScopeV3, request
   const actual = item.scope;
   if (required.domain) {
     const expectedDomain = canonicalDomain(required.domain);
-    const actualDomain = actual?.domain ? canonicalDomain(actual.domain) : null;
-    if (!expectedDomain || actualDomain !== expectedDomain) return false;
+    const declaredDomains = [...new Set([actual?.domain, ...(actual?.domains ?? [])]
+      .filter((domain): domain is string => Boolean(domain)))];
+    const actualDomains = declaredDomains.map(canonicalDomain).filter((domain): domain is string => Boolean(domain));
+    if (!expectedDomain || (declaredDomains.length > 0 && actualDomains.length === 0)) return false;
+    // Unknown domain metadata is not a contradiction: lexical/topic checks in
+    // the approved evidence retriever have already matched the source. Explicit
+    // domains still prevent cross-topic substitution.
+    if (actualDomains.length && !actualDomains.includes(expectedDomain)) return false;
   }
   // Legacy records do not yet carry an eventType; a date-specific query must
   // wait for reviewed metadata rather than borrowing a same-domain but different event.
   if (required.eventType && actual?.eventType !== required.eventType) return false;
-  if (required.programId && actual?.programId !== required.programId) return false;
+  if (required.programId && actual?.programId && actual.programId !== required.programId) return false;
   if (required.cohort && actual?.cohort !== required.cohort) return false;
-  if (required.degreeLevel && actual?.degreeLevel !== required.degreeLevel) return false;
+  if (required.degreeLevel && actual?.degreeLevel && actual.degreeLevel !== required.degreeLevel) return false;
   if (required.catalogYear !== undefined && actual?.catalogYear !== required.catalogYear) return false;
-  if (required.term && actual?.term !== required.term) return false;
-  if (required.year !== undefined && actual?.year !== required.year) return false;
+  if (required.term && actual?.term && actual.term !== required.term) return false;
+  if (required.year !== undefined && actual?.year !== undefined && actual.year !== required.year) return false;
   if (required.audience && actual?.audience !== required.audience) return false;
-  if (required.applicantCategory && actual?.applicantCategory !== required.applicantCategory) return false;
+  if (required.applicantCategory && actual?.applicantCategory && actual.applicantCategory !== required.applicantCategory) return false;
   if (required.courseCodes?.length && !required.courseCodes.every((code) => actual?.courseCodes?.includes(code))) return false;
   const explicitlyNamedCourse = /\b[A-Z]{2,5}\d{3,4}\b/i.test(request);
   // A course title alone is not enough to apply a course-specific record. In

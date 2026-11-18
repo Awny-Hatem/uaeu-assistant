@@ -100,6 +100,7 @@ export function mergeCourseCatalogSupplements(records, supplements) {
       officialSource = sourceUrl.protocol === "https:" && (
         (sourceUrl.hostname === "www.uaeu.ac.ae" && sourceUrl.pathname.startsWith("/en/catalog/courses/")) ||
         (sourceUrl.hostname === "www.uaeu.ac.ae" && sourceUrl.pathname === "/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf") ||
+        (sourceUrl.hostname === "www.uaeu.ac.ae" && sourceUrl.pathname === "/en/cit/undergraduate-students-affairs/bsc_in_is_study_plan_fall_2025_onwards.pdf") ||
         (sourceUrl.hostname === "webapps.uaeu.ac.ae" && [
           "/catalog/auto/department_HS_HS_SOCW.asp",
           "/catalog/auto/department_SC_SC_BIOL.asp",
@@ -143,6 +144,14 @@ export function parseCoursePage(html, course, verifiedAt = new Date().toISOStrin
   const creditsMatch = section.match(/<h3\b[^>]*>[\s\S]*?Credit\s*Hours?\s*:\s*([\d.]+)\s*<\/h3>/i);
   const creditHours = creditsMatch ? Number(creditsMatch[1]) : null;
   const prerequisiteItems = relationBlockItems(section, "Prerequisites");
+  // Some UAEU course pages put non-course conditions (for example, Senior standing)
+  // in the published description instead of the structured prerequisite section.
+  // Preserve that source wording so the answer path cannot imply the condition is absent.
+  // Keep the full clause after the marker. UAEU descriptions include multi-sentence rules
+  // (for example VIS424's additional 6-credit condition) and abbreviations such as Ph.D.
+  // Splitting at a period can silently truncate a prerequisite.
+  const descriptionPrerequisite = description?.match(/\bpre-?requisites?\s*:\s*([\s\S]+)$/i)?.[1]?.trim().replace(/\s*\*+$/u, "");
+  if (!prerequisiteItems.length && descriptionPrerequisite) prerequisiteItems.push(descriptionPrerequisite);
   const corequisiteItems = relationBlockItems(section, "Corequisites");
   const preCorequisiteItems = relationBlockItems(section, "Pre\\s*[/&]\\s*Co(?:requisites)?");
   const regularPrerequisites = [];

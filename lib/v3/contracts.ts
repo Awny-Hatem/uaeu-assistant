@@ -39,6 +39,8 @@ export type EvidenceTrust = "approved" | "verified_official" | "discovered";
 
 export type EvidenceScopeV3 = {
   domain?: string;
+  /** Additional reviewed domains for evidence that genuinely spans services. */
+  domains?: string[];
   eventType?: string;
   programId?: string;
   courseCodes?: string[];
@@ -170,7 +172,8 @@ export function isEvidenceItem(value: unknown): value is EvidenceItem {
   if (!isRecord(value)) return false;
   const scope = value.scope;
   const validScope = scope === undefined || (isRecord(scope) &&
-    isOptionalString(scope.domain) && isOptionalString(scope.eventType) && isOptionalString(scope.programId) &&
+    isOptionalString(scope.domain) && (scope.domains === undefined || isStringArray(scope.domains)) &&
+    isOptionalString(scope.eventType) && isOptionalString(scope.programId) &&
     isOptionalString(scope.cohort) && isOptionalString(scope.term) && isOptionalString(scope.audience) &&
     (scope.degreeLevel === undefined || isOneOf(scope.degreeLevel, ["undergraduate", "postgraduate"] as const)) &&
     (scope.applicantCategory === undefined || isOneOf(scope.applicantCategory, ["national", "international"] as const)) &&

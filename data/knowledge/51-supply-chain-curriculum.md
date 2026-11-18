@@ -21,9 +21,24 @@ The current degree page and the 2025–2026 model plan each list a minimum/total
 - Supporting courses: ACCT111, ACCT120, ECON105, ECON125, FINC210, MATH115, PRVT265, MGMT415, SCML150, SCML201.
 - Choose three business electives from MKTG210, MKTG300, HRMD320, HRMD330, ENTR310, and ENTR325.
 
-## Cohort applicability and limits
+## Fall-entry 2025?2026 model plan
 
-Although the page and 2025–2026 plan identify the same 120-credit total, the plan classifies MGMT415 differently from the current page. This model keeps current-page requirements separate from cohort-specific plans and reports only the verified 2025–2026 total for that cohort. Confirm the assigned plan in Degree Works.
+The official model plan is explicitly for students admitted from the Fall semester and totals **120 credits**. It names the following courses by semester:
+
+| Semester | Published courses | Credits |
+| --- | --- | ---: |
+| Year 1 Fall | STAT102, MATH115, GEAE101, ECON105, MGMT201 | 15 |
+| Year 1 Spring | SCML150, MKTG205, ECON125, ACCT111, GEIT113 | 15 |
+| Year 2 Fall | GEIE222, SCML201, ACCT120, CSBP119, STAT202 | 15 |
+| Year 2 Spring | BANA200, FINC210, GBUS300, one GE-theme choice, one Major Elective | 15 |
+| Year 3 Fall | PRVT265, SCML300, SCML340, BANA250, GEEM110 | 15 |
+| Year 3 Spring | BANA310, SCML310, SCML320, STAT240, one Major Elective | 15 |
+| Year 4 Fall | one GE-theme choice, SCML400, MGMT415, GEBS220, SCML450, one Major Elective | 18 |
+| Year 4 Spring | ENTR415 **or** GBUS460, 12-credit option | 12 |
+
+The plan leaves **9 major-elective credits** and **6 General Education theme-choice credits** unspecified. Its table does not list eligible codes for those choices; do not fill them from the current degree page unless the student's assigned plan confirms that mapping. The final semester lists two alternative 12-credit options, ENTR415 or GBUS460.
+
+The model plan classifies MGMT415 as Learning in Action, whereas the current degree page places it among supporting requirements. Preserve the source difference and do not assign either classification to a student without confirming their Degree Works plan. The model plan is Fall-entry only: a year-only profile or Spring entrant does not establish applicability. Confirm the assigned plan with the College Advising Unit.
 
 This record does not determine completed requirements, section availability, personal registration eligibility, or graduation approval.
 

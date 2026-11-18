@@ -1,15 +1,15 @@
-import { cookies } from "next/headers";
+import { randomUUID } from "node:crypto";
 import { describeAiProviderError, generateAssistantResponse } from "@/lib/ai-provider";
 import { recordAnalyticsEvent, classifyTopic } from "@/lib/analytics";
-import { citationsForFaq, citationForGuide, uniqueCitations, CONTACT_CITATION } from "@/lib/citations";
-import { courseIdentityConflict, faqAnswer, faqScope, loadFaqEntries, matchFaq, type AnswerDisposition } from "@/lib/faq";
+import { citationsForFaq, citationsForGuide, uniqueCitations, CONTACT_CITATION } from "@/lib/citations";
+import { courseIdentityConflict, faqAnswer, faqAnswerForFollowUp, faqScope, faqScopeAllows, loadFaqEntries, matchFaq, type AnswerDisposition } from "@/lib/faq";
 import { getGemini, embeddingModel } from "@/lib/gemini";
 import { evidenceIsRelevant, retrieveVerifiedEvidence, type EvidenceRow } from "@/lib/knowledge-files";
 import { resolveLocale } from "@/lib/language";
 import { SYSTEM_PROMPT } from "@/lib/prompts";
 import { finalizeProviderResponse, type GroundedAnswer } from "@/lib/provider-response";
-import { accountOwnershipGuard, jsonNoStore, rateLimitGuard, readJsonRequest, sameOriginGuard } from "@/lib/request-security";
-import { SESSION_COOKIE_NAME } from "@/lib/session-cookie";
+import { accountOwnershipGuard, jsonNoStore, rateLimitGuard, readJsonRequest, requestClientIdentity, sameOriginGuard } from "@/lib/request-security";
+import { GUEST_SESSION_COOKIE_NAME, guestSessionCookieOptions, SESSION_COOKIE_NAME } from "@/lib/session-cookie";
 import type { AnswerGrounding, AssistantSource, Citation, EscalationReason, ServiceGuide, UniversityCommunication } from "@/lib/prototype-types";
 import { findServiceGuide, guideIntro, localizeServiceGuide } from "@/lib/service-guides";
 import { loadEmbeddingChunks, vectorRetrieve } from "@/lib/vector-rag";
@@ -24,20 +24,25 @@ import { preserveEvidenceQualifications } from "@/lib/answer-qualifiers";
 import { sourceEvidence, sourceEvidenceContext, sourceClaimViolations, type SourceEvidence } from "@/lib/source-evidence";
 import { verifySourceClaims } from "@/lib/claim-verifier";
 import { answerScopeViolations } from "@/lib/answer-scope-guard";
-import { reviewAnswerQuality } from "@/lib/answer-quality-reviewer";
+import { isAnswerQualityRejection, reviewAnswerQuality } from "@/lib/answer-quality-reviewer";
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessCatalogPrerequisiteConversation, catalogTargetCodeFromMessages, isCoursePrerequisiteFollowUp } from "@/lib/academic/catalog-prerequisite-assessment";
-import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment } from "@/lib/academic/program-curricula";
+import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, assessProgramSemesterPlanConversation, hasProgramCreditIntent, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment, renderProgramSemesterPlanAssessment } from "@/lib/academic/program-curricula";
+import { publishedCurriculumSnapshotAnswer } from "@/lib/academic/curriculum-snapshot-answer";
 import { assessDegreeAuditConversation, renderDegreeAuditAssessment } from "@/lib/academic/degree-audit";
 import { answerProgramCatalogQuestion } from "@/lib/academic/undergraduate-program-catalog";
 import { answerOfficialCourseCatalogQuestion } from "@/lib/academic/course-catalog";
+import { admissionScopePrefix } from "@/lib/v3/admission-scope-prefix";
 import { explainPrerequisiteCorequisite } from "@/lib/academic-concepts";
 import type { ResolutionState } from "@/lib/v3/contracts";
 import { needsEvidenceQualification } from "@/lib/v3/evidence-quality";
 import { isV3Enabled } from "@/lib/v3/runtime";
+import { getQuotaPlan } from "@/lib/access";
+import { getEnforcedQuotaLimit } from "@/lib/server-quota";
+import { consumeSharedDailyUsage, readSharedDailyUsage } from "@/lib/shared-usage";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -99,7 +104,7 @@ function cleanLimitedString(value: unknown, maxLength: number): string | undefin
 function localizeMissingContext(item: string, locale: "ar" | "en"): string {
   if (locale === "en") return item;
   if (item === "share the relevant values shown in your student record (self-reported; not verified by UAEU)") {
-    return "Ø´Ø§Ø±Ùƒ Ø§Ù„Ù…Ø¹Ù„ÙˆÙ…Ø§Øª Ø°Ø§Øª Ø§Ù„ØµÙ„Ø© Ø§Ù„Ø¸Ø§Ù‡Ø±Ø© ÙÙŠ Ø³Ø¬Ù„Ùƒ Ø§Ù„Ø¯Ø±Ø§Ø³ÙŠ (Ø¨ÙŠØ§Ù†Ø§Øª ØªØ°ÙƒØ±Ù‡Ø§ Ø£Ù†Øª ÙˆÙ„ÙŠØ³Øª Ù…Ø¤ÙƒØ¯Ø© Ù…Ù† Ø¬Ø§Ù…Ø¹Ø© Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª)";
+    return "شارك المعلومات ذات الصلة الظاهرة في سجلك الدراسي (بيانات تذكرها أنت وليست مؤكدة من جامعة الإمارات)";
   }
   const labels: Record<string, string> = {
     "which deadline process you mean": "نوع الموعد الذي تقصده، مثل موعد القبول أو التقويم الأكاديمي أو المنحة",
@@ -269,7 +274,17 @@ function focusedConversationSubject(message: string): string {
 
 function buildRoutingQuery(messages: ChatMessage[], latest: string): string {
   const resolved = resolveConversation(messages, latest);
-  if (resolved.usedContext) return resolved.query;
+  if (resolved.usedContext) {
+    // Keep the original request facet (for example, library opening hours) when
+    // the latest turn supplies only a value filter (for example, Friday).
+    // The resolver's compact query preserves the subject but may omit the
+    // earlier intent, which otherwise sends a simple follow-up to generation.
+    const origin = resolved.subject?.origin?.trim();
+    const latestHasItsOwnIntent = understandQuery(latest).intents.length > 0;
+    return origin && !latestHasItsOwnIntent && !resolved.query.includes(origin)
+      ? `${origin}\nFollow-up question: ${resolved.query}`
+      : resolved.query;
+  }
   if (resolved.needsClarification && !needsConversationContext(latest)) return resolved.query;
   // Retain the legacy narrow path for existing service forms while the structured
   // resolver handles entity/intent references and explicit course switches.
@@ -307,15 +322,19 @@ function serverChatHistoryEnabled(): boolean {
   return process.env.SERVER_CHAT_HISTORY?.trim().toLowerCase() === "enabled";
 }
 
-async function getUserIdFromCookie(): Promise<string | null> {
-  try {
-    const cookieStore = await cookies();
-    const token = cookieStore.get(SESSION_COOKIE_NAME)?.value;
-    if (!token) return null;
-    return authenticatedSessionUser(token)?.id ?? null;
-  } catch {
-    return null;
-  }
+function requestCookie(req: Request, name: string): string | undefined {
+  const prefix = `${name}=`;
+  const pair = req.headers.get("cookie")?.split(";").map((part) => part.trim()).find((part) => part.startsWith(prefix));
+  if (!pair) return undefined;
+  const value = pair.slice(prefix.length);
+  try { return decodeURIComponent(value); }
+  catch { return undefined; }
+}
+
+function getUserIdFromCookie(req: Request): string | null {
+  const token = requestCookie(req, SESSION_COOKIE_NAME);
+  if (!token) return null;
+  return authenticatedSessionUser(token)?.id ?? null;
 }
 
 function saveMessage(userId: string, role: string, content: string, source?: AssistantSource, metadata?: AssistantPayload, expectedGeneration?: number) {
@@ -527,7 +546,7 @@ function recordEvent(payload: AssistantPayload, latest: string, locale: string) 
   });
 }
 
-function respond(
+function buildResponse(
   payload: AssistantPayload,
   latest: string,
   locale: string,
@@ -716,11 +735,15 @@ async function retrieveContext(latest: string, deadlineAt?: number): Promise<Evi
 
 export async function POST(req: Request) {
   const deadlineAt = Date.now() + 54_000;
-  if (!runtimeContract().allowed) return jsonNoStore({ error: "Deployment contract is not ready for this environment." }, { status: 503 });
+  const deployment = runtimeContract();
+  if (!deployment.allowed) return jsonNoStore({ error: "Deployment contract is not ready for this environment." }, { status: 503 });
+  if (deployment.mode === "production" && !isV3Enabled()) {
+    return jsonNoStore({ error: "The production chat runtime requires the V3 evidence-first architecture." }, { status: 503 });
+  }
   const originError = sameOriginGuard(req);
   if (originError) return originError;
 
-  const limited = rateLimitGuard(req, "chat", { limit: 30, windowMs: 60 * 1000 });
+  const limited = await rateLimitGuard(req, "chat", { limit: 30, windowMs: 60 * 1000 });
   if (limited) return limited;
 
   const body = await readJsonRequest<ChatBody>(req, { maxBytes: MAX_CHAT_BODY_BYTES });
@@ -735,9 +758,17 @@ export async function POST(req: Request) {
     ? parsedBody.locale ?? "auto"
     : "auto";
   const userContext = sanitizeUserContext(parsedBody.userContext);
-  const userId = await getUserIdFromCookie();
+  const userId = getUserIdFromCookie(req);
   const ownershipFailure = accountOwnershipGuard(req, userId);
   if (ownershipFailure) return ownershipFailure;
+  let guestId: string | null = null;
+  let guestCookieToSet: string | null = null;
+  if (!userId) {
+    const savedGuestId = requestCookie(req, GUEST_SESSION_COOKIE_NAME);
+    if (savedGuestId && /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(savedGuestId)) {
+      guestId = savedGuestId;
+    }
+  }
   const shouldPersistServerSide = Boolean(userId && serverChatHistoryEnabled());
   const expectedHistoryGeneration = shouldPersistServerSide && userId ? historyGeneration(userId) : undefined;
 
@@ -774,6 +805,71 @@ export async function POST(req: Request) {
     return jsonNoStore({ error: "A user message is required." }, { status: 400 });
   }
   const locale = resolveLocale(latest, localePref);
+
+  // The UI keeps a fast local display count. This opaque, httpOnly guest id
+  // provides the server with a stable per-browser bucket for the actual cap.
+  if (!userId && !guestId) {
+    guestId = randomUUID();
+    guestCookieToSet = guestId;
+  }
+  const quotaLimit = getEnforcedQuotaLimit(getQuotaPlan(userId ? { email: null } : null));
+  const quotaIdentity = userId ? `account:${userId}` : `guest:${guestId ?? requestClientIdentity(req)}`;
+  const quotaSnapshot = await readSharedDailyUsage("chat-questions", quotaIdentity);
+  if (!quotaSnapshot.ok) return jsonNoStore({ error: quotaSnapshot.error }, { status: 503 });
+  const sharedQuotaEnabled = quotaSnapshot.configured;
+
+  const quotaFailure = (used: number) => {
+    const response = jsonNoStore({
+      error: locale === "ar"
+        ? "Ø§Ø³ØªÙ†ÙØ¯Øª Ø§Ù„Ø­Ø¯ Ø§Ù„ÙŠÙˆÙ…ÙŠ Ù„Ù„Ø£Ø³Ø¦Ù„Ø©. ÙŠØªØ¬Ø¯Ø¯ Ø§Ù„Ø±ØµÙŠØ¯ ÙÙŠ Ù…Ù†ØªØµÙ Ø§Ù„Ù„ÙŠÙ„ Ø¨ØªÙˆÙ‚ÙŠØª Ø§Ù„Ø¥Ù…Ø§Ø±Ø§Øª."
+        : "You have reached today's question limit. Your allowance resets at midnight UAE time.",
+      code: "daily_question_limit",
+    }, { status: 429 });
+    response.headers.set("Retry-After", String(Math.max(1, Math.ceil(quotaSnapshot.ok && quotaSnapshot.configured ? quotaSnapshot.resetAfterMs / 1000 : 60))));
+    response.headers.set("X-Chat-Quota-Limit", String(quotaLimit));
+    response.headers.set("X-Chat-Quota-Used", String(used));
+    return response;
+  };
+
+  if (sharedQuotaEnabled && quotaSnapshot.used >= quotaLimit) {
+    return quotaFailure(quotaSnapshot.used);
+  }
+
+  const respond = async (
+    payload: AssistantPayload,
+    question: string,
+    responseLocale: string,
+    status = 200,
+  ) => {
+    let responsePayload = payload;
+    if (isV3Enabled() && payload.faqId === "admissions-application-deadline") {
+      const admissionPlan = createExecutionPlan({
+        conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+        latest: question,
+        resolvedRequest: buildRoutingQuery(sanitized, question),
+      });
+      const scopePrefix = admissionScopePrefix(admissionPlan.entities, responseLocale === "ar" ? "ar" : "en");
+      if (scopePrefix && !payload.content.startsWith(scopePrefix.trim())) {
+        responsePayload = { ...payload, content: `${scopePrefix}${payload.content}` };
+      }
+    }
+    if (sharedQuotaEnabled && status === 200) {
+      const committed = await consumeSharedDailyUsage("chat-questions", quotaIdentity, quotaLimit);
+      if (!committed.ok) return jsonNoStore({ error: committed.error }, { status: 503 });
+      if (committed.configured && !committed.admitted) return quotaFailure(committed.used);
+      const response = buildResponse(responsePayload, question, responseLocale, status);
+      if (committed.configured) {
+        response.headers.set("X-Chat-Quota-Limit", String(quotaLimit));
+        response.headers.set("X-Chat-Quota-Used", String(committed.used));
+        response.headers.set("X-Chat-Quota-Remaining", String(Math.max(0, quotaLimit - committed.used)));
+      }
+      if (guestCookieToSet) response.cookies.set(GUEST_SESSION_COOKIE_NAME, guestCookieToSet, guestSessionCookieOptions());
+      return response;
+    }
+    const response = buildResponse(responsePayload, question, responseLocale, status);
+    if (guestCookieToSet) response.cookies.set(GUEST_SESSION_COOKIE_NAME, guestCookieToSet, guestSessionCookieOptions());
+    return response;
+  };
 
   const tuitionCostRequest = /\b(?:tuition|tuition fee|tuition cost|tuition rate|program cost|education cost)\b/iu.test(latest) &&
     /\b(?:cost|how much|price|rate|fee)\b/iu.test(latest);
@@ -836,6 +932,27 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
+  const asksSnapshotIdentity = /\b(?:applicability statement|published cohort label|degree (?:name|title)|program identity|name of the degree and college|degree and college|which college)\b|\u0645\u0627\s+(?:\u0639\u0628\u0627\u0631\u0629|\u062a\u0633\u0645\u064a\u0629)\s+\u0627\u0644\u0627\u0646\u0637\u0628\u0627\u0642|\u0627\u0633\u0645\s+\u0627\u0644\u062f\u0631\u062c\u0629\s+\u0648\s*\u0627\u0644\u0643\u0644\u064a\u0629/iu.test(latest);
+  const explicitCreditRequest = hasProgramCreditIntent(latest);
+  const earlySnapshotProgramId = asksSnapshotIdentity && !explicitCreditRequest ? programIdInText(latest) : null;
+  const earlySnapshotAnswer = earlySnapshotProgramId
+    ? publishedCurriculumSnapshotAnswer(listAcademicPrograms(), earlySnapshotProgramId, latest, locale)
+    : null;
+  if (earlySnapshotProgramId && earlySnapshotAnswer) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: earlySnapshotAnswer.content,
+      source: "rag",
+      stateLabel: "published_curriculum_snapshot",
+      resolutionState: earlySnapshotAnswer.disposition === "answer" ? "CONDITIONAL" : "MISSING_CONTEXT",
+      disposition: earlySnapshotAnswer.disposition,
+      citations: earlySnapshotAnswer.citations.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+      evidenceIds: [`academic-program:${earlySnapshotProgramId}${earlySnapshotAnswer.versionId ? `:${earlySnapshotAnswer.versionId}` : ""}`],
+      topic: earlySnapshotProgramId,
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
   const programCatalogAnswer = answerProgramCatalogQuestion(latest, locale);
   if (programCatalogAnswer) {
     const payload: AssistantPayload = {
@@ -852,12 +969,30 @@ export async function POST(req: Request) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  if (isV3Enabled()) {
-    const identityReview = assessAcademicProgramIdentityReview(
-      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
-      locale,
-    );
-    if (identityReview) {
+  const resolution = resolveConversation(sanitized, latest);
+  const routingQuery = buildRoutingQuery(sanitized, latest);
+  const v3Enabled = isV3Enabled();
+  const executionPlan = v3Enabled ? createExecutionPlan({
+    conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
+    latest,
+    resolvedRequest: routingQuery,
+  }) : null;
+  const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH", "PERSONALIZED_ACADEMIC", "COMPLEX_SCENARIO"].includes(executionPlan.mode));
+  // Published degree-credit questions have a deterministic structured source.
+  // Resolve them before evidence retrieval or the legacy selector fallback so
+  // Arabic/mixed-script wording cannot turn a known curriculum fact into a
+  // provider-availability error.
+  const academicMessages = sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } =>
+    message.role === "user" || message.role === "assistant");
+  const programCreditAssessment = assessProgramCreditConversation(academicMessages);
+  const asksForPersonalCreditBalanceOrPlan =
+    /\b(?:credits? (?:remaining|left)|remaining credits?|credits? do i still need|how many credits? (?:have i completed|do i still need)|my (?:degree audit|completed courses|student record)|plan(?: my|ning)? courses|semester plan|course schedule|course load|graduation plan)\b|\b(?:build|create|make)\b.{0,80}\bplan\b|\bplan\b.{0,80}\b(?:through|to graduation|semester|term)\b/iu.test(latest) ||
+    /\u0627\u0644\u0633\u0627\u0639\u0627\u062a\s+\u0627\u0644\u0645\u062a\u0628\u0642\u064a\u0629|\u0643\u0645\s+\u0633\u0627\u0639\u0629\s+\u0628\u0642\u064a|\u062e\u0637\u0629\s+(?:\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u0641\u0635\u0648\u0644)/iu.test(latest);
+  const explicitProgramCreditRequest = Boolean(programIdInText(latest));
+  const contextualCreditFollowUp = /^\s*(?:and\s+)?how many\s+(?:credit hours?|credits?)(?:\s+do i need(?:\s+to graduate)?|\s+are required(?:\s+to graduate)?)?\s*[?!.]*$/iu.test(latest);
+  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan) {
+    const identityReview = assessAcademicProgramIdentityReview(academicMessages, locale);
+    if (identityReview && !programCreditAssessment.explicitlySelectedVersion) {
       const payload: AssistantPayload = {
         role: "assistant",
         content: identityReview.content,
@@ -869,21 +1004,52 @@ export async function POST(req: Request) {
         topic: identityReview.programId,
         citations: uniqueCitations(identityReview.citations),
         evidenceIds: [`program-identity-review:${identityReview.programId}`],
+        communications: matchCommunications(routingQuery),
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const { curriculum, programId, sources } = programCreditAssessment;
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: renderProgramCreditAssessment(programCreditAssessment, locale),
+      source: "rag",
+      stateLabel: v3Enabled ? "v3_program_credit_model" : "published_curriculum_snapshot_answer",
+      resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
+      disposition: curriculum ? "answer" : "clarify",
+      citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+      evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
+      topic: programId,
+      communications: matchCommunications(routingQuery),
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  // Course facts are deterministic catalog lookups. Resolve them before the
+  // general planner so unsupported Arabic intent classification cannot route
+  // a simple course question into broad retrieval and invent a grade rule.
+  if (locale === "ar" && !asksPersonalPrerequisiteEligibility(latest)) {
+    const directCourseCatalogAnswer = answerOfficialCourseCatalogQuestion(latest, locale);
+    if (directCourseCatalogAnswer) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: directCourseCatalogAnswer.content,
+        source: "rag",
+        stateLabel: "v3_official_course_catalog_lookup",
+        resolutionState: directCourseCatalogAnswer.resolutionState,
+        disposition: directCourseCatalogAnswer.resolutionState === "UNSUPPORTED" ? "clarify" : "answer",
+        citations: [...(directCourseCatalogAnswer.source ? [directCourseCatalogAnswer.source] : []), ...(directCourseCatalogAnswer.additionalSources ?? [])],
+        evidenceIds: directCourseCatalogAnswer.source ? [`official-course-catalog:${directCourseCatalogAnswer.code}`] : [],
+        topic: directCourseCatalogAnswer.code,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
   }
-  const resolution = resolveConversation(sanitized, latest);
-  const routingQuery = buildRoutingQuery(sanitized, latest);
-  const v3Enabled = isV3Enabled();
-  const executionPlan = v3Enabled ? createExecutionPlan({
-    conversation: sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
-    latest,
-    resolvedRequest: routingQuery,
-  }) : null;
-  const v3EvidenceMode = Boolean(executionPlan && ["UAEU_FACTUAL", "CURRENT_UAEU_RESEARCH", "PERSONALIZED_ACADEMIC", "COMPLEX_SCENARIO"].includes(executionPlan.mode));
   const answerRequest = v3EvidenceMode && executionPlan ? executionPlan.normalizedRequest : routingQuery;
+  const contextualReviewedHit = v3EvidenceMode && resolution.usedContext ? matchFaq(answerRequest) : null;
+  const hasScopedContextualReviewedHit = Boolean(contextualReviewedHit && contextualReviewedHit.score >= 800 &&
+    faqScopeAllows(answerRequest, contextualReviewedHit.entry));
   const communications = matchCommunications(routingQuery);
   const standaloneFaq = matchFaq(latest);
   const needsPreviousSubject = requiresPreviousSubject(latest) || (resolution.needsClarification && !standaloneFaq);
@@ -1012,11 +1178,63 @@ export async function POST(req: Request) {
     return respond(payload, latest, locale);
   }
 
+  // Exact, locally reviewed service guides are deterministic capabilities.
+  // Return them before model generation so a provider/router outage cannot
+  // prevent a student from reaching a verified portal procedure.
+  // A short category/detail follow-up can contain keywords that resemble a
+  // service guide (for example, "international applicant"). Preserve the
+  // established request and let its scoped reviewed answer resolve first.
+  const directV3Guide = v3Enabled && !resolution.usedContext ? findServiceGuide(latest) : null;
+  if (directV3Guide) {
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: withActionBoundary(guideIntro(directV3Guide, locale), latest, locale),
+      source: "guide",
+      stateLabel: "guided_service",
+      resolutionState: "VERIFIED",
+      disposition: "answer",
+      topic: directV3Guide.id,
+      evidenceIds: [`guide:${directV3Guide.id}`],
+      guide: localizeServiceGuide(directV3Guide, locale),
+      citations: citationsForGuide(directV3Guide),
+      communications,
+    };
+    if (shouldPersistServerSide && userId) {
+      saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    }
+    return respond(payload, latest, locale);
+  }
+
   const conflict = courseIdentityConflict(latest);
   if (conflict) {
     const payload: AssistantPayload = { role: "assistant", source: "escalated", stateLabel: "clarify_course_identity", disposition: "clarify", escalationReason: "low_confidence", clarificationReason: "conflicting_course_identity",
       content: locale === "ar" ? `ذكرت الرمز **${conflict.supplied}** والاسم **${conflict.title}**، لكن السجل المتاح لهذا الاسم هو **${conflict.named}**. أيهما تقصد؟`
         : `You supplied **${conflict.supplied}** and **${conflict.title}**, but the available catalog record for that title is **${conflict.named}**. Which course do you mean?`,
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+    return respond(payload, latest, locale);
+  }
+  // Arabic course-fact questions can be a strong exact match to a reviewed
+  // bilingual record even when the English-only execution planner cannot
+  // classify their intent. Prefer that scoped record; personal eligibility
+  // questions remain on the deterministic prerequisite-assessment path below.
+  if (locale === "ar" && v3EvidenceMode && !asksPersonalPrerequisiteEligibility(latest) &&
+      standaloneFaq?.entry.category === "courses" && standaloneFaq.score >= 1_000 &&
+      faqScopeAllows(latest, standaloneFaq.entry)) {
+    const entry = standaloneFaq.entry;
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: withActionBoundary(faqAnswer(entry, locale), latest, locale),
+      source: "rag",
+      responseMode: "canonical",
+      stateLabel: "v3_reviewed_answer",
+      resolutionState: entry.disposition === "clarify" ? "CONDITIONAL" : "VERIFIED",
+      disposition: entry.disposition ?? "answer",
+      faqId: entry.id,
+      topic: resolution.subject?.key,
+      evidenceIds: [`answer:${entry.id}`],
+      citations: citationsForFaq(entry),
+      communications,
     };
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
@@ -1058,12 +1276,64 @@ export async function POST(req: Request) {
       ? executionPlan.missingContext.filter((item) => item.startsWith("authenticated access"))
       : executionPlan.missingContext.filter((item) =>
         !(repeatPolicyCanBeAnsweredGenerally && item.includes("exact course code or degree program")));
+    const scopedPartialMatch = directFaqHit ?? contextualReviewedHit ?? matchFaq(answerRequest);
+    const admissionDeadlineFallback = executionPlan.entities.domain === "admissions" &&
+      executionPlan.missingContext.some((item) => item.includes("applicant category"))
+      ? loadFaqEntries().find((entry) => entry.id === "admissions-application-deadline")
+      : undefined;
+    const reviewedPartialAnswer = scopedPartialMatch?.entry.allowPartialAnswerWithMissingContext
+      ? scopedPartialMatch.entry
+      : admissionDeadlineFallback?.allowPartialAnswerWithMissingContext
+        ? admissionDeadlineFallback
+        : undefined;
+    if (blockingMissingContext.length && reviewedPartialAnswer) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: faqAnswer(reviewedPartialAnswer, locale),
+        source: "rag",
+        stateLabel: "v3_reviewed_answer",
+        resolutionState: "CONDITIONAL",
+        disposition: "clarify",
+        clarificationReason: "missing_context",
+        faqId: reviewedPartialAnswer.id,
+        topic: reviewedPartialAnswer.category,
+        evidenceIds: [`answer:${reviewedPartialAnswer.id}`],
+        citations: uniqueCitations(citationsForFaq(reviewedPartialAnswer)),
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
     if (blockingMissingContext.length) {
       const content = locale === "ar"
         ? `أحتاج هذه المعلومة قبل أن أتحقق من القاعدة الصحيحة: ${blockingMissingContext.map((item) => localizeMissingContext(item, locale)).join("؛ ")}.`
         : `I need one detail before I can verify the right rule: ${blockingMissingContext.join("; ")}.`;
       const payload: AssistantPayload = { role: "assistant", content, source: "escalated", stateLabel: "v3_missing_context", resolutionState: "MISSING_CONTEXT", disposition: "clarify", clarificationReason: "missing_context", citations: [], communications };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    // A strong, scoped reviewed answer can resolve general questions such as
+    // published scholarship application windows without requiring a model or
+    // broad live retrieval. Missing personal details are still handled above
+    // through the answer's explicit partial-answer policy.
+    const earlyReviewedAnswer = contextualReviewedHit ?? matchFaq(answerRequest);
+    if (earlyReviewedAnswer && (earlyReviewedAnswer.score >= 950 || hasScopedContextualReviewedHit)) {
+      const entry = earlyReviewedAnswer.entry;
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: withActionBoundary(faqAnswerForFollowUp(entry, locale, latest, resolution.usedContext), latest, locale),
+        source: "rag",
+        responseMode: "canonical",
+        stateLabel: "v3_reviewed_answer",
+        resolutionState: entry.disposition === "clarify" ? "CONDITIONAL" : "VERIFIED",
+        disposition: entry.disposition ?? "answer",
+        faqId: entry.id,
+        topic: resolution.subject?.key ?? entry.category,
+        evidenceIds: [`answer:${entry.id}`],
+        citations: citationsForFaq(entry),
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
     const evidenceQuery = evidenceQueryForPlan(executionPlan);
@@ -1090,7 +1360,9 @@ export async function POST(req: Request) {
       } } : {}),
       citations: [{ title: item.title, url: item.url, lastVerified: item.lastVerified, evidenceText: item.excerpt }],
     }));
-    if (executionPlan.mode === "UAEU_FACTUAL" && /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b/i.test(executionPlan.normalizedRequest)) {
+    const asksForCalendarLocation = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b/i.test(executionPlan.normalizedRequest)
+      && !/\b(?:final[- ]exam|exam timetable|registered courses)\b/i.test(executionPlan.normalizedRequest);
+    if (executionPlan.mode === "UAEU_FACTUAL" && asksForCalendarLocation) {
       const calendarSource = evidenceItems.find((item) => {
         if (item.scope?.domain !== "calendar" || !item.url) return false;
         try {
@@ -1123,15 +1395,32 @@ export async function POST(req: Request) {
       : null;
     if (prerequisiteAssessment) {
       const { rule, evaluation } = prerequisiteAssessment;
+      const combinesRepeatPolicy = executionPlan?.requestedFacts.includes("undergraduate failed course repeat policy") ?? false;
+      const userConversationText = prerequisiteMessages.filter((message) => message.role === "user").map((message) => message.content).join("\n");
+      const namesDataStructures = /\bCSBP[\s-]?319\b|\bdata structures?\b/iu.test(userConversationText);
+      const availableRepeatPolicies = combinesRepeatPolicy ? loadFaqEntries() : [];
+      const repeatPolicy = combinesRepeatPolicy
+        ? (namesDataStructures ? availableRepeatPolicies.find((entry) => entry.id === "failed-data-structures-twice-next-steps") : undefined)
+          ?? availableRepeatPolicies.find((entry) => entry.id === "course-repeat-grades")
+        : undefined;
+      const prerequisiteAnswer = renderPrerequisiteAssessment(prerequisiteAssessment, locale);
+      const answerContent = repeatPolicy
+        ? `${faqAnswer(repeatPolicy, locale)}\n\n**${locale === "ar" ? "فحص متطلب المقرر" : `Prerequisite check for ${rule.course.code}`}**\n${prerequisiteAnswer}`
+        : prerequisiteAnswer;
       const payload: AssistantPayload = {
         role: "assistant",
-        content: renderPrerequisiteAssessment(prerequisiteAssessment, locale),
+        content: answerContent,
         source: "rag",
-        stateLabel: rule.id.startsWith("official-course-catalog-") ? "v3_catalog_prerequisite_evaluation" : "v3_academic_rule_evaluation",
+        stateLabel: repeatPolicy
+          ? "v3_combined_academic_scenario"
+          : rule.id.startsWith("official-course-catalog-") ? "v3_catalog_prerequisite_evaluation" : "v3_academic_rule_evaluation",
         resolutionState: evaluation.resolutionState,
         disposition: evaluation.status === "UNDETERMINED" ? "clarify" : "answer",
-        citations: [{ title: rule.source.title, url: rule.source.url, lastVerified: rule.version }],
-        evidenceIds: [`academic-rule:${rule.id}`],
+        citations: uniqueCitations([
+          ...(repeatPolicy ? citationsForFaq(repeatPolicy) : []),
+          { title: rule.source.title, url: rule.source.url, lastVerified: rule.version },
+        ]),
+        evidenceIds: [...(repeatPolicy ? [`answer:${repeatPolicy.id}`] : []), `academic-rule:${rule.id}`],
         topic: rule.course.code,
         communications,
       };
@@ -1182,6 +1471,49 @@ export async function POST(req: Request) {
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
+    const semesterPlanMessages = sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } =>
+      message.role === "user" || message.role === "assistant");
+    const semesterPlanAssessment = assessProgramSemesterPlanConversation(semesterPlanMessages, locale);
+    if (semesterPlanAssessment) {
+      const answerReady = Boolean(semesterPlanAssessment.plan && semesterPlanAssessment.semesterNumber && !semesterPlanAssessment.clarification);
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: renderProgramSemesterPlanAssessment(semesterPlanAssessment, locale),
+        source: "rag",
+        stateLabel: "v3_program_semester_plan",
+        resolutionState: answerReady ? "CONDITIONAL" : "MISSING_CONTEXT",
+        disposition: answerReady ? "answer" : "clarify",
+        citations: semesterPlanAssessment.sources.map(({ title, url, lastVerified }) => ({
+          title, url, lastVerified,
+          ...(semesterPlanAssessment.plan ? { sourceSection: semesterPlanAssessment.plan.sourceTitle } : {}),
+        })),
+        evidenceIds: answerReady && semesterPlanAssessment.plan
+          ? [`academic-semester-plan:${semesterPlanAssessment.programId}:${semesterPlanAssessment.plan.id}:${semesterPlanAssessment.semesterNumber}`]
+          : [],
+        topic: semesterPlanAssessment.programId,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+    const identityReview = assessAcademicProgramIdentityReview(semesterPlanMessages, locale);
+    if (identityReview) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: identityReview.content,
+        source: "escalated",
+        stateLabel: "academic_program_identity_review",
+        resolutionState: "MISSING_CONTEXT",
+        disposition: "clarify",
+        clarificationReason: identityReview.clarificationReason,
+        topic: identityReview.programId,
+        citations: uniqueCitations(identityReview.citations),
+        evidenceIds: [`program-identity-review:${identityReview.programId}`],
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
     const degreeAuditAssessment = assessDegreeAuditConversation(
       sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
     );
@@ -1206,26 +1538,6 @@ export async function POST(req: Request) {
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
       return respond(payload, latest, locale);
     }
-    const programCreditAssessment = assessProgramCreditConversation(
-      sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
-    );
-    if (programCreditAssessment) {
-      const { curriculum, programId, sources } = programCreditAssessment;
-      const payload: AssistantPayload = {
-        role: "assistant",
-        content: renderProgramCreditAssessment(programCreditAssessment, locale),
-        source: "rag",
-        stateLabel: "v3_program_credit_model",
-        resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
-        disposition: curriculum ? "answer" : "clarify",
-        citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
-        evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
-        topic: programId,
-        communications,
-      };
-      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
-      return respond(payload, latest, locale);
-    }
     const programRequirementsAssessment = assessProgramRequirementsConversation(
       sanitized.filter((message): message is ChatMessage & { role: "user" | "assistant" } => message.role === "user" || message.role === "assistant"),
     );
@@ -1236,11 +1548,31 @@ export async function POST(req: Request) {
         content: renderProgramRequirementsAssessment(programRequirementsAssessment, locale),
         source: "rag",
         stateLabel: "v3_program_requirement_model",
-        resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
+        resolutionState: curriculum ? "CONDITIONAL" : programRequirementsAssessment.scopeClarification ? "MISSING_CONTEXT" : "UNSUPPORTED",
         disposition: curriculum ? "answer" : "clarify",
         citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
         evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
         topic: programId,
+        communications,
+      };
+      if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
+      return respond(payload, latest, locale);
+    }
+  }
+  const snapshotProgramId = programIdInText(routingQuery);
+  if (snapshotProgramId) {
+    const snapshotAnswer = publishedCurriculumSnapshotAnswer(listAcademicPrograms(), snapshotProgramId, routingQuery, locale);
+    if (snapshotAnswer) {
+      const payload: AssistantPayload = {
+        role: "assistant",
+        content: snapshotAnswer.content,
+        source: "rag",
+        stateLabel: "published_curriculum_snapshot",
+        resolutionState: snapshotAnswer.disposition === "answer" ? "CONDITIONAL" : "MISSING_CONTEXT",
+        disposition: snapshotAnswer.disposition,
+        citations: snapshotAnswer.citations.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+        evidenceIds: [`academic-program:${snapshotProgramId}${snapshotAnswer.versionId ? `:${snapshotAnswer.versionId}` : ""}`],
+        topic: snapshotProgramId,
         communications,
       };
       if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
@@ -1287,7 +1619,22 @@ export async function POST(req: Request) {
   }
   let semantic: SemanticRoute | null = null;
   let selectionUnavailable = false;
-  const selectionFailure = (reason: "provider_unavailable" | "invalid_contract") => { if (reason === "provider_unavailable") selectionUnavailable = true; };
+  const selectionFailure = (reason: "provider_unavailable" | "invalid_contract") => {
+    if (reason !== "provider_unavailable") return;
+    selectionUnavailable = true;
+    // Minimal failure telemetry: retain route classification only, never the
+    // student's query, conversation, identity, or provider credentials.
+    console.warn("[uaeu-chat] answer-selector-unavailable", {
+      v3Enabled,
+      executionMode: executionPlan?.mode ?? "unavailable",
+      programCreditIntent: hasProgramCreditIntent(latest),
+      programMatched: Boolean(programIdInText(latest)),
+      structuredCreditAssessment: Boolean(programCreditAssessment),
+      arabicTextPresent: /[\u0600-\u06ff]/u.test(latest),
+      arabicCreditPhrasePresent: /\u0639\u062f\u062f\s+\u0627\u0644\u0633\u0627\u0639\u0627\u062a|\u0643\u0645\s+\u0633\u0627\u0639\u0629/u.test(latest),
+      arabicInformationSecurityNamePresent: /\u0623\u0645\u0646\s+\u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a/u.test(latest),
+    });
+  };
   const selectionUnavailableResponse = () => respond({ role: "assistant", source: "error", stateLabel: "provider_error", citations: [], clarificationReason: "selection_unavailable",
     content: locale === "ar" ? "تعذر اختيار إجابة موثوقة بسبب عدم توفر خدمة الإجابة مؤقتًا. هذا ليس دليلًا على غياب سياسة الجامعة؛ حاول مجددًا بعد قليل."
       : "The answer-selection service is temporarily unavailable. This does not mean the university policy is missing; please try again shortly.",
@@ -1380,7 +1727,9 @@ export async function POST(req: Request) {
   // Prefer directly matched, reviewed service guidance over broader synthesis
   // after exact canonical answers have already had a chance to resolve the turn.
   const candidateGuide = findServiceGuide(v3EvidenceMode ? `${answerRequest}\n${routingQuery}` : routingQuery);
-  const guide = candidateGuide && (!v3EvidenceMode || !candidateGuide.requiresVerification) ? candidateGuide : null;
+  const guide = candidateGuide && (!v3EvidenceMode || !candidateGuide.requiresVerification) && !hasScopedContextualReviewedHit
+    ? candidateGuide
+    : null;
   if (guide) {
     const payload: AssistantPayload = {
       role: "assistant",
@@ -1392,12 +1741,39 @@ export async function POST(req: Request) {
       topic: resolution.subject?.key,
       evidenceIds: [`guide:${guide.id}`],
       guide: localizeServiceGuide(guide, locale),
-      citations: [citationForGuide(guide)],
+      citations: citationsForGuide(guide),
       communications,
     };
     if (shouldPersistServerSide && userId) {
       saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     }
+    return respond(payload, latest, locale);
+  }
+
+  // Reuse a reviewed, source-cited answer when the local matcher finds a strong
+  // scoped match. This is one deterministic retrieval path, not a closed list:
+  // unmatched questions continue through the evidence-first research/generation
+  // path below. Keeping reviewed records out of model paraphrasing also avoids
+  // provider variability for facts that already have an approved answer.
+  const reviewedAnswerHit = contextualReviewedHit ?? (v3EvidenceMode ? matchFaq(answerRequest) : null);
+  const contextualReviewedMatch = hasScopedContextualReviewedHit;
+  if (reviewedAnswerHit && (reviewedAnswerHit.score >= 950 || contextualReviewedMatch)) {
+    const entry = reviewedAnswerHit.entry;
+    const payload: AssistantPayload = {
+      role: "assistant",
+      content: withActionBoundary(faqAnswerForFollowUp(entry, locale, latest, resolution.usedContext), latest, locale),
+      source: "rag",
+      responseMode: "canonical",
+      stateLabel: "v3_reviewed_answer",
+      resolutionState: entry.disposition === "clarify" ? "CONDITIONAL" : "VERIFIED",
+      disposition: entry.disposition ?? "answer",
+      faqId: entry.id,
+      topic: resolution.subject?.key,
+      evidenceIds: [`answer:${entry.id}`],
+      citations: citationsForFaq(entry),
+      communications,
+    };
+    if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
 
@@ -1574,21 +1950,23 @@ export async function POST(req: Request) {
       "AI generation error:",
       JSON.stringify({ status: providerError.status, providerStatus: providerError.providerStatus, code: providerError.diagnosticCode, type: providerError.diagnosticType, param: providerError.diagnosticParam, schemaIssue: providerError.diagnosticSchemaIssue }),
     );
-    const supportRejected = groundingTrace?.status === "rejected" && !groundingTrace.reasonCodes.includes("verification_unavailable");
+    const qualityReviewRejected = isAnswerQualityRejection(groundingTrace);
+    const supportRejected = groundingTrace?.status === "rejected" &&
+      !groundingTrace.reasonCodes.includes("verification_unavailable") && !qualityReviewRejected;
     const payload: AssistantPayload = {
       role: "assistant",
-      content: supportRejected ? (locale === "ar" ? "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة؛ أو حدّد الخدمة أو المساق أو الفصل أو فئة المتقدم لاستخدام سجل موثق أضيق نطاقاً." : "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Retry with the same question, or identify the specific service, course, term, or applicant category so I can use a narrower verified record.") : locale === "ar" ? "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ يمكنني الاستمرار في تقديم الإجابات المحفوظة الموثقة."
+      content: qualityReviewRejected ? (locale === "ar" ? "\u0644\u0645 \u064a\u062a\u0645 \u0625\u0646\u062a\u0627\u062c \u0625\u062c\u0627\u0628\u0629 \u0645\u0646\u0627\u0633\u0628\u0629. \u0623\u0639\u062f \u0635\u064a\u0627\u063a\u0629 \u0627\u0644\u0633\u0624\u0627\u0644 \u0623\u0648 \u062d\u062f\u062f \u0627\u0644\u062c\u0632\u0621 \u0627\u0644\u0645\u0637\u0644\u0648\u0628." : "I could not produce a complete, relevant answer that passed review, so I withheld the draft. Try rephrasing your question or specify the part you need answered.") : supportRejected ? (locale === "ar" ? "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة؛ أو حدّد الخدمة أو المساق أو الفصل أو فئة المتقدم لاستخدام سجل موثق أضيق نطاقاً." : "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Retry with the same question, or identify the specific service, course, term, or applicant category so I can use a narrower verified record.") : locale === "ar" ? "تعذر إكمال الإجابة الآن بسبب مشكلة مؤقتة في خدمة الإجابة. حاول مجددًا بعد قليل؛ يمكنني الاستمرار في تقديم الإجابات المحفوظة الموثقة."
         : "I could not complete the answer because the answer service is temporarily unavailable. Please try again shortly; verified stored answers remain available.",
-      answerStatus: supportRejected ? "unavailable" : undefined,
-      source: supportRejected ? "escalated" : "error",
-      stateLabel: supportRejected ? "grounding_rejected" : "provider_error",
+      answerStatus: supportRejected || qualityReviewRejected ? "unavailable" : undefined,
+      source: supportRejected || qualityReviewRejected ? "escalated" : "error",
+      stateLabel: qualityReviewRejected ? "answer_quality_rejected" : supportRejected ? "grounding_rejected" : "provider_error",
       citations: [],
-      disposition: supportRejected ? "clarify" : undefined,
-      escalationReason: supportRejected ? "low_confidence" : undefined,
+      disposition: supportRejected || qualityReviewRejected ? "clarify" : undefined,
+      escalationReason: supportRejected || qualityReviewRejected ? "low_confidence" : undefined,
       grounding: groundingTrace,
       clarificationReason: groundingTrace?.status === "rejected" ? groundingTrace.reasonCodes.join(",") : providerError.providerStatus,
     };
 
-    return respond(payload, latest, locale, supportRejected ? 200 : providerError.status);
+    return respond(payload, latest, locale, supportRejected || qualityReviewRejected ? 200 : providerError.status);
   }
 }

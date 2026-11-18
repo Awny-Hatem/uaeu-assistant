@@ -64,6 +64,14 @@ export type GuideStep = {
   url?: string;
 };
 
+export type LocalizedWorkflowFact = { en: string; ar: string };
+
+export type ServiceRequestDetails = {
+  documents: LocalizedWorkflowFact;
+  deadline: LocalizedWorkflowFact;
+  handoff: LocalizedWorkflowFact;
+};
+
 export type ServiceGuide = {
   id: string;
   title: string;
@@ -78,6 +86,7 @@ export type ServiceGuide = {
   requiresVerification?: boolean;
   verificationNote?: string;
   verificationNoteAr?: string;
+  requestDetails: ServiceRequestDetails;
   steps: GuideStep[];
 };
 

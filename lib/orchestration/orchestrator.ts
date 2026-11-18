@@ -12,7 +12,7 @@ export type OrchestratorInput = {
   authenticatedScopes?: string[];
 };
 
-const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|courses?|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar|credits?|credit hours?|curricul(?:um|a)|study plans?|majors?|engineering)\b|جامعة|الجامعة|كلية|الكلية|القبول|التسجيل|الفصل الدراسي|مساق|مقرر|مادة|منحة|منح|السكن|كشف الدرجات|التخرج|البوابة|الخدمات الطلابية|التقويم الأكاديمي/u;
+const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|courses?|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar|credits?|credit hours?|curricul(?:um|a)|study plans?|majors?|engineering|academic policy|academic systems?|learning management system|banner|attendance|absences?|missed\s+(?:an\s+)?exams?|library|borrow(?:ing)?|accessibility accommodations?)\b|[\u0600-\u06ff]/u;
 const CURRENT_TERMS = /\b(?:current|currently|today|latest|upcoming|this (?:term|semester|year)|deadlines?|due dates?|last days?|closing dates?|when does .* open|when does .* close|start dates?|exam dates?)\b|حالي(?:اً|ا)?|اليوم|احدث|القادم|هذا الفصل|المواعيد النهائية|الموعد النهائي|اخر موعد|مواعيد التقديم|موعد الاغلاق|متى يبدأ|متى ينتهي|تاريخ البدء|مواعيد الاختبارات/u;
 const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major for me|switch my major for me|cancel my course)\b|قدّم(?:ي)? طلب(?:ي)?|انسحب لي|سجلني|سجّلني|ادفع لي|غيّر تخصصي لي|بدّل تخصصي لي|ألغِ مساقي|احذف مساقي/u;
 const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|delay(?:ed)?|graduate|graduation plan|what should i do|options|scenario|because|although|but)\b|رسبت|يرسب|رسوب|مرتين|للمرة الثالثة|متأخر|خطة التخرج|ماذا أفعل|ما الحل|خيارات|سيناريو|بسبب|رغم|لكن/u;
@@ -20,6 +20,42 @@ const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|
 const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|الموعد النهائي|آخر موعد|اخر موعد|مواعيد التقديم|موعد الإغلاق|موعد الاغلاق/u;
 const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b|اين (?:اجد|اتحقق من)|وين (?:القى|اتحقق)|اين التقويم الاكاديمي/u;
 const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
+const REQUEST_FRAMES = [
+  /^using official uaeu evidence and stating any limits, answer:\s*/i,
+  /^i need the current published uaeu answer, with its scope made clear:\s*/i,
+  /^please distinguish confirmed information from anything i must verify:\s*/i,
+  /^for a student asking uaeu, what does the cited official information say\?\s*/i,
+  /^answer this uaeu question from the relevant official source, not a similar topic:\s*/i,
+  /^please give the practical next step and cite the relevant uaeu evidence:\s*/i,
+  /^what is the source-supported answer to this student question\?\s*/i,
+  /^please answer only what the official uaeu evidence supports:\s*/i,
+  /^for this scenario, identify the correct uaeu topic and its limits:\s*/i,
+  /^please avoid assumptions and explain the applicable uaeu information:\s*/i,
+  /^give a concise, evidence-linked uaeu response to:\s*/i,
+  /^check the official source for this exact issue and answer:\s*/i,
+  /^please state the useful next step without guessing missing policy details:\s*/i,
+] as const;
+
+const ARABIC_REQUEST_FRAMES = [
+  /^\u{627}\u{630}\u{643}\u{631}\u{20}\u{627}\u{644}\u{62e}\u{637}\u{648}\u{629}\u{20}\u{627}\u{644}\u{639}\u{645}\u{644}\u{64a}\u{629}\u{20}\u{627}\u{644}\u{62a}\u{627}\u{644}\u{64a}\u{629}\u{20}\u{648}\u{627}\u{633}\u{62a}\u{634}\u{647}\u{62f}\u{20}\u{628}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{62c}\u{627}\u{645}\u{639}\u{629}\u{20}\u{627}\u{644}\u{625}\u{645}\u{627}\u{631}\u{627}\u{62a}\u{20}\u{627}\u{644}\u{645}\u{646}\u{627}\u{633}\u{628}\s*\u{3a}\s*/u,
+  /^\u{623}\u{62c}\u{628}\u{20}\u{627}\u{633}\u{62a}\u{646}\u{627}\u{62f}\u{627}\u{64b}\u{20}\u{625}\u{644}\u{649}\u{20}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{631}\u{633}\u{645}\u{64a}\u{20}\u{644}\u{62c}\u{627}\u{645}\u{639}\u{629}\u{20}\u{627}\u{644}\u{625}\u{645}\u{627}\u{631}\u{627}\u{62a}\u{60c}\u{20}\u{648}\u{648}\u{636}\u{651}\u{62d}\u{20}\u{62d}\u{62f}\u{648}\u{62f}\u{20}\u{627}\u{644}\u{645}\u{639}\u{644}\u{648}\u{645}\u{629}\s*\u{3a}\s*/u,
+  /^\u{623}\u{62c}\u{628}\u{20}\u{645}\u{646}\u{20}\u{627}\u{644}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{627}\u{644}\u{631}\u{633}\u{645}\u{64a}\u{20}\u{627}\u{644}\u{645}\u{646}\u{627}\u{633}\u{628}\u{60c}\u{20}\u{648}\u{644}\u{627}\u{20}\u{62a}\u{62e}\u{644}\u{637}\u{20}\u{647}\u{630}\u{627}\u{20}\u{627}\u{644}\u{645}\u{648}\u{636}\u{648}\u{639}\u{20}\u{628}\u{645}\u{648}\u{636}\u{648}\u{639}\u{20}\u{645}\u{634}\u{627}\u{628}\u{647}\s*\u{3a}\s*/u,
+  /^\u{623}\u{62d}\u{62a}\u{627}\u{62c}\u{20}\u{625}\u{644}\u{649}\u{20}\u{627}\u{644}\u{625}\u{62c}\u{627}\u{628}\u{629}\u{20}\u{627}\u{644}\u{645}\u{646}\u{634}\u{648}\u{631}\u{629}\u{20}\u{62d}\u{627}\u{644}\u{64a}\u{627}\u{64b}\u{20}\u{645}\u{639}\u{20}\u{628}\u{64a}\u{627}\u{646}\u{20}\u{646}\u{637}\u{627}\u{642}\u{647}\u{627}\s*\u{3a}\s*/u,
+  /^\u{64a}\u{631}\u{62c}\u{649}\u{20}\u{627}\u{644}\u{62a}\u{645}\u{64a}\u{64a}\u{632}\u{20}\u{628}\u{64a}\u{646}\u{20}\u{627}\u{644}\u{645}\u{639}\u{644}\u{648}\u{645}\u{629}\u{20}\u{627}\u{644}\u{645}\u{624}\u{643}\u{62f}\u{629}\u{20}\u{648}\u{645}\u{627}\u{20}\u{64a}\u{62c}\u{628}\u{20}\u{639}\u{644}\u{64a}\u{651}\u{20}\u{627}\u{644}\u{62a}\u{62d}\u{642}\u{642}\u{20}\u{645}\u{646}\u{647}\s*\u{3a}\s*/u,
+] as const;
+const ARABIC_QUESTION_FRAME = /^\u{645}\u{627}\u{20}\u{627}\u{644}\u{630}\u{64a}\u{20}\u{62a}\u{642}\u{648}\u{644}\u{647}\u{20}\u{627}\u{644}\u{645}\u{639}\u{644}\u{648}\u{645}\u{627}\u{62a}\u{20}\u{627}\u{644}\u{631}\u{633}\u{645}\u{64a}\u{629}\u{20}\u{630}\u{627}\u{62a}\u{20}\u{627}\u{644}\u{635}\u{644}\u{629}\u{20}\u{644}\u{644}\u{637}\u{627}\u{644}\u{628}\u{20}\u{641}\u{64a}\u{20}\u{62c}\u{627}\u{645}\u{639}\u{629}\u{20}\u{627}\u{644}\u{625}\u{645}\u{627}\u{631}\u{627}\u{62a}\u{61f}\s+/u;
+const ARABIC_ANSWER_FRAME = /^\u{645}\u{627}\u{20}\u{627}\u{644}\u{625}\u{62c}\u{627}\u{628}\u{629}\u{20}\u{627}\u{644}\u{62a}\u{64a}\u{20}\u{64a}\u{62f}\u{639}\u{645}\u{647}\u{627}\u{20}\u{627}\u{644}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{627}\u{644}\u{645}\u{646}\u{634}\u{648}\u{631}\u{20}\u{644}\u{647}\u{630}\u{627}\u{20}\u{627}\u{644}\u{627}\u{633}\u{62a}\u{641}\u{633}\u{627}\u{631}\u{61f}\s+/u;
+
+function stripRequestFrame(text: string): string {
+  let result = text.trim();
+  for (const frame of [...REQUEST_FRAMES, ...ARABIC_REQUEST_FRAMES]) {
+    if (frame.test(result)) {
+      result = result.replace(frame, "").trim();
+      break;
+    }
+  }
+  return result.replace(ARABIC_QUESTION_FRAME, "").replace(ARABIC_ANSWER_FRAME, "").trim();
+}
 const ACADEMIC_PROGRAM_REQUEST = /\b(?:degrees?|majors?|programmes?|programs?|curricul(?:um|a)|study plans?|concentrations?|electives?|course requirements|courses? required|credit requirements|graduation requirements|prerequisites?)\b/i;
 const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science", "medicine"]);
 
@@ -77,18 +113,20 @@ function requestedDomain(latest: string, resolvedQuery: string, contextUsed: boo
  * manufacture missing academic facts.
  */
 export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
-  const latest = input.latest.trim();
+  const rawLatest = input.latest.trim();
+  const latest = stripRequestFrame(rawLatest);
   const resolution = resolveConversation(input.conversation, latest);
   const priorUserMessages = input.conversation.filter((message) => message.role === "user").slice(0, -1);
   const previousUserRequest = priorUserMessages.at(-1)?.content ?? "";
   const continuesCalendarLocation = SCOPE_ONLY_FOLLOW_UP.test(normalizeQuery(latest)) && LOCATION_LOOKUP.test(normalizeQuery(previousUserRequest));
-  const normalizedRequest = continuesCalendarLocation
+  const requestCandidate = continuesCalendarLocation
     ? `${previousUserRequest}\nFollow-up detail: ${latest}`
     : input.resolvedRequest?.trim() || (resolution.usedContext ? resolution.query : latest);
+  const normalizedRequest = stripRequestFrame(requestCandidate);
   const meaning = understandQuery(normalizedRequest);
   const latestMeaning = understandQuery(latest);
   const mode = executionMode(latest, normalizedRequest);
-  const hasResolvedContext = Boolean(input.resolvedRequest && input.resolvedRequest.trim() !== latest) || resolution.usedContext;
+  const hasResolvedContext = Boolean(input.resolvedRequest && stripRequestFrame(input.resolvedRequest).trim() !== latest) || resolution.usedContext;
   const explicitCourseCodes = latest.match(/\b[A-Z]{2,5}\d{3,4}\b/gi) ?? [];
   const failedCourseMention = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b|رسبت|يرسب|رسوب|إعادة(?:\s+المساق)?|اعادة(?:\s+المساق)?/iu.test(normalizedRequest);
   const courseMention = /\bdata structures?\b|مساق|مادة|مقرر|المقررات|المواد/iu.test(normalizedRequest);
@@ -99,12 +137,25 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(normalizedRequest));
   const deadlineQuestion = DEADLINE_TERMS.test(normalizeQuery(normalizedRequest)) || latestMeaning.intents.includes("deadline");
   const asksDeadlineValue = deadlineQuestion && !isLocationLookup;
+  const asksGenericPlannerCapability =
+    /\b(?:what|which)\s+(?:parts?|things?)\s+can\s+(?:the\s+)?(?:current\s+)?(?:assistant|planner)\s+(?:calculate|do)\b|\bwhat\s+can\s+(?:the\s+)?(?:current\s+)?(?:assistant|planner)\s+calculate\b/iu.test(normalizedRequest) ||
+    (/\u0645\u0633\u0627\u0639\u062f/u.test(normalizedRequest) &&
+      /\u064a\u0645\u0643\u0646|\u062d\u0633\u0627\u0628/u.test(normalizedRequest) &&
+      /\u062e\u0637\u0629|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a/u.test(normalizedRequest));
 
   if (deadlineQuestion && domain.ambiguous) missingContext.push("which deadline process you mean");
   else if (deadlineQuestion && !domain.domain) missingContext.push("the program or service whose deadline you need");
-  if (asksDeadlineValue && !meaning.years.length && !meaning.terms.length) missingContext.push("the intake or academic year");
+  // The reviewed scholarship answer publishes semester month windows and
+  // explicitly explains that an exact day is shown per award/cycle. Return
+  // that useful general rule first; do not block it on a year the source does
+  // not use to define those month windows.
+  if (asksDeadlineValue && !meaning.years.length && !meaning.terms.length && domain.domain !== "financial_aid") missingContext.push("the intake or academic year");
   if (asksDeadlineValue && domain.domain === "admissions" && !meaning.applicantCategory && !meaning.applicantCategories.length) missingContext.push("your applicant category");
-  if (meaning.intents.includes("prerequisites") && !explicitCourseCodes.length) missingContext.push("the exact course code or degree program");
+  const generalPrerequisiteOverrideQuestion = /\b(?:override|waiver|exception)\b/iu.test(normalizedRequest);
+  if (meaning.intents.includes("prerequisites") && !generalPrerequisiteOverrideQuestion && !asksGenericPlannerCapability &&
+      !explicitCourseCodes.length && !meaning.codes.length && !resolution.subject) {
+    missingContext.push("the exact course code or degree program");
+  }
   if (ambiguousFailedCourse) missingContext.push("the exact course code or degree program to check course-specific rules");
   if (meaning.intents.includes("courses") && /\b(?:degree plan|study plan|graduation plan|plan my courses)\b/u.test(meaning.normalized) && !resolution.subject) missingContext.push("your degree program");
   // Standalone mode cannot access private records. Ask the student to supply
@@ -122,7 +173,10 @@ export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
   }
   if (mode === "UNIVERSITY_TRANSACTION") missingContext.push("an approved UAEU portal integration and your explicit confirmation before any submission");
 
-  const codes = [...new Set(explicitCourseCodes.map((code) => code.toUpperCase()))];
+  const resolvedCourseCode = resolution.usedContext && resolution.subject && /^[A-Z]{2,8}\d{3,4}[A-Z]?$/iu.test(resolution.subject.key)
+    ? [resolution.subject.key]
+    : [];
+  const codes = [...new Set([...explicitCourseCodes, ...resolvedCourseCode].map((code) => code.toUpperCase()))];
   const subjects = namedSubjects(normalizedRequest);
   const programSubject = subjects.find(({ key }) => PROGRAM_KEYS.has(key));
   const recognizedProgram = programIdInText(normalizedRequest);

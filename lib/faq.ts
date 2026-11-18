@@ -3,6 +3,7 @@ import path from "path";
 import type { Locale } from "@/lib/language";
 import type { Citation } from "@/lib/prototype-types";
 import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope, type FactIntent } from "@/lib/query-understanding";
+import { programIdInText } from "@/lib/academic/program-curricula";
 
 export type AnswerDisposition =
   | "answer"
@@ -26,6 +27,8 @@ export type FaqEntry = {
   answer_en: string;
   answer_ar?: string;
   disposition?: AnswerDisposition;
+  /** Allow a reviewed general answer that explicitly identifies what remains unknown. */
+  allowPartialAnswerWithMissingContext?: boolean;
   citations: Citation[];
   scope?: EvidenceScope;
 };
@@ -300,7 +303,8 @@ function validScope(scope: unknown): boolean {
   if (scope === undefined) return true;
   if (!scope || typeof scope !== "object" || Array.isArray(scope)) return false;
   const value = scope as EvidenceScope;
-  return [value.courseCodes, value.subjects, value.terms].every((items) => items === undefined || (Array.isArray(items) && items.every((item) => typeof item === "string" && item.trim()))) &&
+  return (value.programId === undefined || (typeof value.programId === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(value.programId))) &&
+    [value.courseCodes, value.subjects, value.terms].every((items) => items === undefined || (Array.isArray(items) && items.every((item) => typeof item === "string" && item.trim()))) &&
     (value.years === undefined || (Array.isArray(value.years) && value.years.every((year) => Number.isInteger(year) && year >= 1900 && year <= 2200))) &&
     (value.applicantCategory === undefined || ["national", "international"].includes(value.applicantCategory)) &&
     (value.categoryIndependent === undefined || (typeof value.categoryIndependent === "boolean" && (!value.categoryIndependent || value.applicantCategory === undefined))) &&
@@ -454,8 +458,26 @@ function containsPhrase(query: string, phrase: string): boolean {
 
 function removeHarmlessFaqWrappers(query: string): string {
   return query
+    .replace(/^(?:(?:using|based on) official (?:uaeu )?evidence(?: and stating any limits)?[,;:]?\s*)/u, "")
+    .replace(/^please distinguish confirmed information from (?:anything(?: that)? i must verify|what i must verify)[,:]?\s*/u, "")
+    .replace(/^for a student asking uaeu what does the cited official information say\s*/u, "")
+    .replace(/^please give (?:the )?practical next step and cite the relevant uaeu evidence\??\s*/u, "")
+    .replace(/^answer this uaeu question from the relevant official source not a similar topic\s*/u, "")
+    .replace(/^what is the source supported answer to this student question\s*/u, "")
+    .replace(/^please answer only what the official uaeu evidence supports\s*[:;,]?\s*/u, "")
+    .replace(/^(?:i need|please provide|give me) (?:the )?current published (?:uaeu )?(?:answer|information)(?: with its scope made clear)?\s*/u, "")
+    .replace(/^(?:please )?answer(?: the question)?[,;:]?\s*/u, "")
     .replace(/^(?:please tell me|i was wondering|could you explain)\s+/u, "")
     .replace(/\s+(?:right now|please)$/u, "")
+    .trim();
+}
+
+function removeFaqAudiencePreface(query: string): string {
+  // Audience facts still participate in scope checks, but should not lower
+  // lexical coverage for the student's actual request (for example,
+  // "I'm a UAEU alumnus. How do I request a printed graduation certificate?").
+  return query
+    .replace(/^(?:i m|i am|as) (?:a|an) (?:uaeu )?(?:alumnus|alumna|graduate)(?: of uaeu)?\s+/u, "")
     .trim();
 }
 
@@ -464,7 +486,10 @@ function similarityScore(
   candidate: string,
   queryTokens: Set<string>,
 ): number {
-  const normalizedCandidate = normalizeAnswerText(candidate);
+  // Audience wording is removed from the query before lexical scoring; remove
+  // the same prefatory wording from candidate questions so "alumnus" does
+  // not count as a missing topic token in an otherwise exact request.
+  const normalizedCandidate = removeFaqAudiencePreface(normalizeAnswerText(candidate));
   if (!normalizedCandidate) return 0;
   if (query === normalizedCandidate) return 10_000 + normalizedCandidate.length;
 
@@ -504,8 +529,8 @@ function phraseScore(
   return 2_000 + normalizedPhrase.length;
 }
 
-function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): number {
-  if (!faqScopeAllows(query, entry)) return 0;
+function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry, scopeQuery = query): number {
+  if (!faqScopeAllows(scopeQuery, entry)) return 0;
   if (entry.excludePhrases?.some((phrase) => containsPhrase(query, phrase))) {
     return 0;
   }
@@ -562,8 +587,16 @@ export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
     [...entry.questions, ...(entry.matchPhrases ?? [])].some((phrase) => containsPhrase(normalizedQuery, phrase));
   const explicitPolicyScopeFollowUp = entry.applicability?.type === "policy-scope" &&
     entry.applicability.intents.some((intent) => meaning.intents.includes(intent)) &&
-    /\b(?:apply|applies|applicable|scope|excluded?)\b/iu.test(normalizedQuery) &&
+    /\b(?:apply|applies|applicable|scope|excluded?|establish(?:es)?|govern|cover(?:s|ed)?)\b/iu.test(normalizedQuery) &&
     understandQuery(entry.applicability.targetProgramId.replaceAll("-", " ")).subjects.some((subject) => meaning.subjects.includes(subject));
+  if (scope.programId && programIdInText(query) !== scope.programId &&
+    !explicitPolicyScopeQuestion && !explicitPolicyScopeFollowUp) return false;
+  // Postgraduate records must not leak into a generic/undergraduate admissions
+  // follow-up just because both records discuss deadlines or applications.
+  // Explicit master's/PhD wording in the resolved conversational query keeps
+  // the postgraduate record eligible.
+  if (scope.degreeLevel === "postgraduate" && meaning.degreeLevel !== "postgraduate") return false;
+  if (entry.excludePhrases?.some((phrase) => containsPhrase(normalizedQuery, phrase))) return false;
   // A course-specific rule needs an identified target. Shared terms such as
   // "prerequisite" or "corequisite" must not make one course's rule answer a
   // general terminology question. Explicit course names are converted to
@@ -571,9 +604,15 @@ export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
   if (entry.category === "courses" && scope.courseCodes?.length &&
     (!meaning.codes.length || !meaning.codes.every((code) => scope.courseCodes!.includes(code)))) return false;
   const scopeText = `${entry.answer_en}\n${entry.answer_ar ?? ""}`;
+  // A policy-scope record exists to explain whether the policy covers the
+  // named population. Requiring the target program to already match the
+  // policy's own program scope rejects questions that explicitly ask about an
+  // excluded program (for example, Medicine and AE-06). Only these reviewed
+  // policy-scope questions may relax the population match; ordinary program
+  // facts remain strictly scoped.
   const scopeMatches = scopeAllows(query, scopeText, scope) || (explicitPolicyScopeQuestion &&
-    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined })) || (explicitPolicyScopeFollowUp &&
-    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined }));
+    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined, programId: undefined })) || (explicitPolicyScopeFollowUp &&
+    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined, programId: undefined }));
   if (!scopeMatches) return false;
   // University-wide calendar facts are not admission/payment/scholarship schedules.
   if (meaning.intents.includes("deadline")) {
@@ -619,15 +658,17 @@ export function courseIdentityConflict(query: string): { supplied: string; named
 export function matchFaq(
   userMessage: string,
 ): { entry: FaqEntry; score: number } | null {
-  const query = normalizeAnswerText(removeHarmlessFaqWrappers(normalizeAnswerText(userMessage)));
+  const originalQuery = normalizeAnswerText(userMessage);
+  const query = normalizeAnswerText(removeHarmlessFaqWrappers(originalQuery));
   if (!query) return null;
+  const similarityQuery = removeFaqAudiencePreface(query);
   const entries = loadFaqEntries();
-  const queryTokens = correctedQueryTokens(query, entries);
+  const queryTokens = correctedQueryTokens(similarityQuery, entries);
   if (!queryTokens.size) return null;
 
   let best: { entry: FaqEntry; score: number } | null = null;
   for (const entry of entries) {
-    const score = scoreEntry(query, queryTokens, entry);
+    const score = scoreEntry(similarityQuery, queryTokens, entry, originalQuery);
     if (score > 0 && (!best || score > best.score)) {
       best = { entry, score };
     }
@@ -639,4 +680,24 @@ export function matchFaq(
 export function faqAnswer(entry: FaqEntry, locale: Locale): string {
   if (locale === "ar" && entry.answer_ar?.trim()) return entry.answer_ar;
   return entry.answer_en;
+}
+
+/** Keep cited follow-up replies focused while reusing only the reviewed answer's facts. */
+export function faqAnswerForFollowUp(entry: FaqEntry, locale: Locale, query: string, isFollowUp: boolean): string {
+  if (!isFollowUp || entry.id !== "library-opening-hours") return faqAnswer(entry, locale);
+
+  const normalized = normalizeAnswerText(query);
+  if (/\bfriday\b|الجمعة/u.test(normalized)) {
+    return locale === "ar"
+      ? "**الجمعة:** تنشر صفحة المكتبة الرئيسية ساعات **7:30 صباحاً إلى 12:00 ظهراً**، وتوضح أن ساعات المكتبة تختلف حسب الموسم. وللتأكد من ساعات يوم جمعة محدد، اتصل بالمكتبة على **+971 3 713 4671**."
+      : "**Friday:** The Main Library lists **7:30 a.m.–12:00 noon**. UAEU notes that library hours vary by season. For a specific Friday, confirm with the library at **+971 3 713 4671**.";
+  }
+
+  if (/\b(?:saturday|sunday|weekend)\b|السبت|الأحد|الاحد/u.test(normalized)) {
+    return locale === "ar"
+      ? "لا تنشر صفحة المكتبة الرئيسية ساعات نهاية الأسبوع. وتذكر صفحة **Library Hours** الأقدم أن المكتبة مغلقة السبت والأحد، لكنها لا تحدد الموسم الذي ينطبق عليه الجدول. للتأكد من ساعات اليوم المطلوب، اتصل بالمكتبة على **+971 3 713 4671**."
+      : "The current Main Library page does not publish weekend hours. A separate older **Library Hours** page lists Saturday and Sunday as closed, but does not identify the season for that schedule. Confirm the hours for your date with the library at **+971 3 713 4671**.";
+  }
+
+  return faqAnswer(entry, locale);
 }

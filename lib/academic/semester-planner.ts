@@ -85,6 +85,7 @@ function mergeOptions(left: PrerequisiteOption, right: PrerequisiteOption): Prer
 
 function prerequisiteOptions(expression: PrerequisiteExpression): PrerequisiteOption[] | null {
   if (!("op" in expression)) {
+    if (expression.type === "ACADEMIC_STANDING_AT_LEAST") return null;
     if (expression.type === "COURSE_CURRENT") {
       return [{ completedBefore: new Set(), currentWith: new Set([expression.courseCode]), minimumGrades: new Map() }];
     }
@@ -227,7 +228,7 @@ export function buildConditionalSemesterPlan(input: {
   const assumedPasses = new Set<string>();
   const plannedGrade = new Map(grades);
   const termsOut: SemesterPlan["terms"] = [];
-  let remaining = new Set(courses.map(({ code }) => code));
+  const remaining = new Set(courses.map(({ code }) => code));
 
   for (const course of courses) {
     if (!isFreshEvidence(course.source.verifiedAt, asOf)) {

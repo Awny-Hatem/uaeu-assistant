@@ -2,6 +2,7 @@ import crypto from "crypto";
 import type { UniversityAffiliation } from "@/lib/access";
 
 export const SESSION_COOKIE_NAME = "chat_session";
+export const GUEST_SESSION_COOKIE_NAME = "chat_guest_id";
 export const LOCAL_ACCOUNTS_COOKIE_NAME = "chat_local_accounts";
 export const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
 export const SESSION_MAX_AGE_MS = SESSION_MAX_AGE_SECONDS * 1000;
@@ -43,6 +44,16 @@ export function sessionCookieOptions(maxAge = SESSION_MAX_AGE_SECONDS) {
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict" as const,
     maxAge,
+    path: "/",
+  };
+}
+
+export function guestSessionCookieOptions() {
+  return {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict" as const,
+    maxAge: 60 * 60 * 24 * 30,
     path: "/",
   };
 }

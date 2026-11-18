@@ -37,7 +37,7 @@ export async function POST(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
   if (!runtimeContract().allowed) return jsonNoStore({ error: 'Account access is unavailable in this deployment configuration.' }, { status: 503 });
-  const addressLimit = rateLimitGuard(req, 'auth:login:address', { limit: 30, windowMs: 60 * 1000 });
+  const addressLimit = await rateLimitGuard(req, 'auth:login:address', { limit: 30, windowMs: 60 * 1000 });
   if (addressLimit) return addressLimit;
 
   const parsed = await readJsonRequest<LoginBody>(req, { maxBytes: 8 * 1024 });
@@ -49,7 +49,7 @@ export async function POST(req: Request) {
     const identifier = typeof username === 'string' ? username.trim().slice(0, 254) : '';
     const normalizedEmail = normalizeEmail(identifier);
 
-    const limited = rateLimitGuard(req, 'auth:login', {
+    const limited = await rateLimitGuard(req, 'auth:login', {
       limit: 12,
       windowMs: 60 * 1000,
       identity: normalizedEmail ?? identifier,

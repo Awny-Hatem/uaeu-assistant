@@ -1,5 +1,6 @@
 import curriculaData from "@/data/academic/program-curricula.json";
 import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
+import { isCorrectionQuery } from "@/lib/query-understanding";
 
 export type CreditBucket = { id: string; name: string; credits: number };
 export type PathwayOption = {
@@ -20,6 +21,24 @@ export type ProgramRequirement =
   | { type: "PATHWAY_CHOICE"; id: string; name: string; options: PathwayOption[] }
   | { type: "INTERNSHIP"; id: string; name?: string; courseCode: string; credits: number; finalSemesterOnly: boolean; otherCoursesAllowed?: boolean };
 
+export type SemesterPlanCourse = {
+  courseCode?: string;
+  courseCodes?: string[];
+  selectionRule?: "choose-one";
+  sourceLabel: string;
+  credits?: number;
+  category: string;
+};
+
+export type SemesterPlan = {
+  id: string;
+  sourceTitle: string;
+  sourceUrl: string;
+  publishedCohortText: string;
+  entrySemester: "fall" | "spring";
+  semesters: { semesterNumber: number; season: "fall" | "spring"; publishedCredits: number; courses: SemesterPlanCourse[] }[];
+};
+
 export type CurriculumVersion = {
   id: string;
   version: string;
@@ -32,6 +51,7 @@ export type CurriculumVersion = {
   totalCredits: number;
   creditBuckets?: CreditBucket[];
   requirements: ProgramRequirement[];
+  semesterPlans?: SemesterPlan[];
   limitations: string[];
 };
 
@@ -51,7 +71,6 @@ const COURSE_CODE = /^[A-Z]{2,8}\d{3,4}[A-Z]?$/;
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
-
 function isDate(value: unknown): value is string {
   return typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value));
 }
@@ -94,11 +113,48 @@ function isRequirement(value: unknown): value is ProgramRequirement {
   return false;
 }
 
+function isSemesterPlan(value: unknown, totalCredits: number): value is SemesterPlan {
+  if (!isRecord(value) || typeof value.id !== "string" || !value.id || typeof value.sourceTitle !== "string" ||
+      typeof value.publishedCohortText !== "string" || !["fall", "spring"].includes(String(value.entrySemester)) ||
+      !Array.isArray(value.semesters) || value.semesters.length === 0) return false;
+  try {
+    const source = new URL(String(value.sourceUrl));
+    if (source.protocol !== "https:" || !(source.hostname === "uaeu.ac.ae" || source.hostname.endsWith(".uaeu.ac.ae"))) return false;
+  } catch { return false; }
+  let total = 0;
+  let allCourseCreditsPublished = true;
+  for (let index = 0; index < value.semesters.length; index++) {
+    const semester = value.semesters[index];
+    if (!isRecord(semester) || semester.semesterNumber !== index + 1 ||
+        !["fall", "spring"].includes(String(semester.season)) || typeof semester.publishedCredits !== "number" ||
+        semester.publishedCredits <= 0 || !Array.isArray(semester.courses) || semester.courses.length === 0) return false;
+    if (semester.season !== (value.entrySemester === "fall" ? (index % 2 === 0 ? "fall" : "spring") : (index % 2 === 0 ? "spring" : "fall"))) return false;
+    let semesterCredits = 0;
+    for (const course of semester.courses) {
+      if (!isRecord(course) || typeof course.sourceLabel !== "string" || !course.sourceLabel ||
+          typeof course.category !== "string" || !course.category ||
+          (course.credits !== undefined && (typeof course.credits !== "number" || course.credits <= 0))) return false;
+      if (course.courseCode !== undefined && (typeof course.courseCode !== "string" || !COURSE_CODE.test(course.courseCode))) return false;
+      if (course.courseCodes !== undefined && (!isCourseCodes(course.courseCodes) || course.selectionRule !== "choose-one")) return false;
+      if (course.courseCode !== undefined && course.courseCodes !== undefined) return false;
+      if (course.selectionRule !== undefined && course.selectionRule !== "choose-one") return false;
+      if (typeof course.credits === "number") semesterCredits += course.credits;
+      else allCourseCreditsPublished = false;
+    }
+    if (semester.courses.every((course) => typeof (course as Record<string, unknown>).credits === "number") && semesterCredits !== semester.publishedCredits) return false;
+    total += semesterCredits;
+  }
+  return (!allCourseCreditsPublished || total === totalCredits) && new Set(value.semesters.map((semester) => (semester as Record<string, unknown>).semesterNumber)).size === value.semesters.length;
+}
+
 function isCurriculumVersion(value: unknown): value is CurriculumVersion {
   if (!isRecord(value) || typeof value.id !== "string" || !value.id || typeof value.version !== "string" || !value.version ||
       value.status !== "approved" || typeof value.cohortLabel !== "string" || !isDate(value.effectiveFrom) ||
       typeof value.totalCredits !== "number" || value.totalCredits <= 0 || !Array.isArray(value.requirements) ||
-      !value.requirements.every(isRequirement) || !Array.isArray(value.limitations) || !value.limitations.every((item) => typeof item === "string")) return false;
+      !value.requirements.every(isRequirement) || !Array.isArray(value.limitations) || !value.limitations.every((item) => typeof item === "string") ||
+      (value.semesterPlans !== undefined && (!Array.isArray(value.semesterPlans) ||
+        !value.semesterPlans.every((plan) => isSemesterPlan(plan, Number(value.totalCredits))) ||
+        new Set(value.semesterPlans.map((plan) => (plan as Record<string, unknown>).id)).size !== value.semesterPlans.length))) return false;
   if (value.effectiveTo !== undefined && (!isDate(value.effectiveTo) || value.effectiveTo < value.effectiveFrom)) return false;
   if (value.cohortMapping !== undefined && value.cohortMapping !== "unresolved") return false;
   if (value.creditBuckets !== undefined) {
@@ -161,6 +217,16 @@ export function getProgramCurriculum(programId: string, cohortYear?: number): {
   return applicable ? { program, curriculum: applicable, cohortMatched: true } : null;
 }
 
+/** Return one exact, explicitly selected published version without claiming cohort applicability. */
+export function getPublishedCurriculumVersion(programId: string, versionId: string): {
+  program: AcademicProgram;
+  curriculum: CurriculumVersion;
+} | null {
+  const program = academicPrograms.find((item) => item.id === programId);
+  const curriculum = program?.curriculumVersions.find((item) => item.id === versionId);
+  return program && curriculum ? { program, curriculum } : null;
+}
+
 export type ProgramCreditAssessment = {
   programId: string;
   programName: string;
@@ -168,9 +234,62 @@ export type ProgramCreditAssessment = {
   sources: AcademicProgram["sources"];
   cohortYear?: number;
   cohortMatched: boolean;
+  explicitlySelectedVersion?: boolean;
 };
 
-export type ProgramRequirementsAssessment = ProgramCreditAssessment;
+export type ProgramRequirementsAssessment = ProgramCreditAssessment & {
+  scopeClarification?: string;
+  entrySemester?: "fall" | "spring";
+};
+
+export function cohortEntrySemesterFromMessages(messages: { role: "user" | "assistant"; content: string }[]): "fall" | "spring" | undefined {
+  let semester: "fall" | "spring" | undefined;
+  const latestAssistant = [...messages].reverse().find((message) => message.role === "assistant")?.content ?? "";
+  for (const message of messages) {
+    if (message.role !== "user") continue;
+    const text = message.content;
+    const admissionContext = /\b(?:admit(?:ted)?|entry|entered|start(?:ed)?|cohort|join(?:ed)?)\b|Ø§Ù„ØªØ­Ù‚|Ø¨Ø¯Ø£|Ø§Ù„Ù‚Ø¨ÙˆÙ„/iu.test(text);
+    const directFall = /\b(?:fall|autumn)\b|Ø§Ù„ÙØµÙ„\s+(?:Ø§Ù„)?Ø®Ø±ÙŠÙ/iu.test(text);
+    const directSpring = /\bspring\b|Ø§Ù„ÙØµÙ„\s+(?:Ø§Ù„)?Ø±Ø¨ÙŠØ¹/iu.test(text);
+    const answerToTermClarification = /\b(?:start|started|admitted|entry)\b.{0,40}\b(?:fall|spring)\b|\b(?:fall|spring)\b.{0,40}\b(?:entry|cohort|admission)\b/i.test(latestAssistant);
+    if (directFall && (admissionContext || answerToTermClarification)) semester = "fall";
+    else if (directSpring && (admissionContext || answerToTermClarification)) semester = "spring";
+    else if (answerToTermClarification && /^\s*(?:fall|autumn)\s*[.!?]*\s*$/iu.test(text)) semester = "fall";
+    else if (answerToTermClarification && /^\s*spring\s*[.!?]*\s*$/iu.test(text)) semester = "spring";
+  }
+  return semester;
+}
+
+function fallEntryVersionForYear(program: AcademicProgram | undefined, cohortYear: number): CurriculumVersion | undefined {
+  if (!program) return undefined;
+  const start = `${cohortYear.toString().padStart(4, "0")}-08-01`;
+  return [...program.curriculumVersions]
+    .filter((version) => version.cohortMapping === "unresolved" &&
+      version.effectiveFrom <= start && new RegExp(`\\bfall(?:[- ]entry|\\s+${cohortYear})`, "i").test(version.cohortLabel))
+    .sort((a, b) => b.effectiveFrom.localeCompare(a.effectiveFrom))[0];
+}
+
+/** Return a source-published total only when the latest unresolved version has one unambiguous total.
+ * This never makes the version applicable for course-by-course planning. */
+function unresolvedCreditTotalVersionForYear(program: AcademicProgram | undefined, cohortYear: number): CurriculumVersion | undefined {
+  if (!program) return undefined;
+  const asOf = `${cohortYear.toString().padStart(4, "0")}-08-01`;
+  const candidates = program.curriculumVersions.filter((version) => version.cohortMapping === "unresolved" &&
+    version.effectiveFrom <= asOf && (!version.effectiveTo || version.effectiveTo >= asOf));
+  if (!candidates.length) return undefined;
+  const latestEffectiveDate = candidates.reduce((latest, version) => version.effectiveFrom > latest ? version.effectiveFrom : latest, "0000-00-00");
+  const latest = candidates.filter((version) => version.effectiveFrom === latestEffectiveDate);
+  return new Set(latest.map((version) => version.totalCredits)).size === 1 ? latest[0] : undefined;
+}
+
+export function fallEntryCurriculumForYear(programId: string, cohortYear: number): {
+  program: AcademicProgram;
+  curriculum: CurriculumVersion;
+} | null {
+  const program = academicPrograms.find((item) => item.id === programId);
+  const curriculum = fallEntryVersionForYear(program, cohortYear);
+  return program && curriculum ? { program, curriculum } : null;
+}
 
 function pathwayCourseCodes(option: PathwayOption): string[] {
   if (option.type !== "COMPOSITE" || !option.requirements) return option.courseCodes;
@@ -198,7 +317,10 @@ export function programIdInText(text: string): string | undefined {
   if (/\belectrical engineering\b/i.test(text)) return "electrical-engineering";
   if (/\bcivil engineering\b/i.test(text)) return "civil-engineering";
   if (/\bchemical engineering\b/i.test(text)) return "chemical-engineering";
+  if (/\barchitectural engineering\b/i.test(text) || /\u0627?\u0644?\u0647\u0646\u062f\u0633\u0629\s+\u0627\u0644?\u0645\u0639\u0645\u0627\u0631\u064a\u0629/u.test(text)) return "architectural-engineering";
+  if (/\bcommunication engineering\b/i.test(text) || /\u0627?\u0644?\u0647\u0646\u062f\u0633\u0629\s+\u0627\u0644?\u0627\u062a\u0635\u0627\u0644\u0627\u062a/u.test(text)) return "communication-engineering";
   if (/\bcomputer (?:and )?(?:artificial intelligence|AI) engineering\b/i.test(text)) return "bsc-computer-ai-engineering";
+  if (/\bCS\b/i.test(text)) return "bsc-computer-science";
   if (/\bcomputer engineering\b/i.test(text)) return "bsc-computer-engineering";
   if (/\bdata science and artificial intelligence\b|\bDSAI\b/i.test(text)) return "data-science-and-artificial-intelligence";
   if (/\bcyber\s?security\b/i.test(text) || /الأمن السيبراني/u.test(text)) return "cybersecurity";
@@ -233,7 +355,13 @@ function catalogProgramSource(programId: string): AcademicProgram["sources"] {
 export function cohortYearInText(text: string): number | undefined {
   const match = text.match(/\b(?:cohort|entry|entered|joined|started|admitted)[^.!?]{0,80}?\b(20\d{2})\b/i) ??
     text.match(/\bcohort\s+(?:is\s+|of\s+)?(20\d{2})\b/i) ??
-    text.match(/\b(20\d{2})\s*(?:cohort|entry|entrant|intake)\b/i);
+    text.match(/\b(20\d{2})\s*(?:cohort|entry|entrant|intake)\b/i) ??
+    // Students often cite the published plan by academic-year label rather
+    // than saying "my cohort". Use the first year only when the range is
+    // explicitly attached to a curriculum or study-plan reference.
+    ( /\b(?:model\s+)?(?:study\s+)?plans?|curricul(?:um|a)|cohort\b/i.test(text)
+      ? text.match(/\b(20\d{2})\s*[-–/]\s*(?:20)?\d{2}\b/i)
+      : null );
   return match ? Number(match[1]) : undefined;
 }
 
@@ -291,7 +419,10 @@ export function assessAcademicProgramIdentityReview(
 ): AcademicProgramIdentityReview | null {
   const userMessages = messages.filter((message) => message.role === "user");
   const latest = userMessages.at(-1)?.content ?? "";
-  const asksAcademicPlanQuestion = /\b(?:credit hours?|credits?|graduate|graduation|degree requirements?|curricul(?:um|a)|study plan|prerequisites?|course requirements?|required courses?|which courses?|what courses?|instead of|rather than|replace(?:d|ment)?|substitut(?:e|ion)|cohort|entry year)\b|\u0643\u0645\s+\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u0627\u062a|\u062a\u062e\u0631\u062c|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u062f\u0631\u0627\u0633\u064a\u0629|\u0627\u0644\u0645\u0642\u0631\u0631/iu.test(latest);
+  const identityQuestion = isCorrectionQuery(latest) && userMessages.length > 1
+    ? `${userMessages.slice(0, -1).map(({ content }) => content).join("\n")}\n${latest}`
+    : latest;
+  const asksAcademicPlanQuestion = /\b(?:credit hours?|credits?|graduate|graduation|degree requirements?|curricul(?:um|a)|study plan|prerequisites?|course requirements?|required courses?|which courses?|what courses?|instead of|rather than|replace(?:d|ment)?|substitut(?:e|ion)|cohort|entry year)\b|\u0643\u0645\s+\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u0627\u062a|\u062a\u062e\u0631\u062c|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u062f\u0631\u0627\u0633\u064a\u0629|\u0627\u0644\u0645\u0642\u0631\u0631/iu.test(identityQuestion);
   if (!asksAcademicPlanQuestion) return null;
 
   const catalog = loadUndergraduateProgramCatalog();
@@ -341,41 +472,84 @@ export function assessProgramCreditConversation(
   const userMessages = messages.filter((message) => message.role === "user");
   const latest = userMessages.at(-1)?.content;
   const latestAssistantText = [...messages].reverse().find((message) => message.role === "assistant")?.content ?? "";
+  // A combined total-plus-pathway question needs the requirements renderer,
+  // which can report the named options as well as the plan's total credits.
+  const explicitPathwayQuestion = latest && /\b(?:which|what|list|choose|select|offered|available)\b[^.!?]{0,80}\b(?:concentrations?|pathways?|specializations?|elective options?)\b|\b(?:concentrations?|pathways?|specializations?|elective options?)\b[^.!?]{0,80}\b(?:options|choose|select|offered|available)\b/iu.test(latest);
+  if (explicitPathwayQuestion) return null;
   const shortCreditFollowUp = Boolean(latest && (
     /^\s*(?:and\s+)?how many\s+(?:credit hours?|credits?)\s*[?!.]*$/i.test(latest) ||
     (/^\s*(?:and\s+)?how many\s*[?!.]*$/i.test(latest) && /\b(?:credits?|credit hours?)\b/i.test(latestAssistantText))
   ));
   if (latest && /\b(?:degree|program|major)\s+requirements?\b/i.test(latest) && !/\b(?:credit hours?|credits?)\b/i.test(latest)) return null;
-  if (!latest || (!shortCreditFollowUp && !/\b(?:credit hours?|credits?|graduate|graduation|degree|bachelor|bsc|curriculum)\b|كم\s+ساعة|ساعات\s+التخرج/u.test(latest))) return null;
+  const creditIntent = Boolean(latest && hasProgramCreditIntent(latest));
+  if (!latest || (!shortCreditFollowUp && !creditIntent)) return null;
 
   const directProgram = programIdInText(latest);
-  const contextIntent = shortCreditFollowUp || /\b(?:graduate|graduation|degree|bachelor|bsc|curriculum)\b|كم\s+ساعة|ساعات\s+التخرج/u.test(latest);
+  const contextIntent = shortCreditFollowUp || creditIntent;
   const programId = directProgram ?? (contextIntent
     ? [...userMessages.slice(0, -1)].reverse().map(({ content }) => programIdInText(content)).find(Boolean)
     : undefined);
   if (!programId) return null;
 
-  const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
+  const program = academicPrograms.find((item) => item.id === programId);
+  const normalizedDescriptor = (value: string) => value.normalize("NFKC").toLocaleLowerCase("en").replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const quotedDescriptors = [...latest.matchAll(/[\u0027\u0022\u201c\u00ab]([^\u0027\u0022\u201d\u00bb]{12,})[\u0027\u0022\u201d\u00bb]/gu)]
+    .map((match) => normalizedDescriptor(match[1]));
+  const labelCandidates = quotedDescriptors.length
+    ? program?.curriculumVersions.filter((version) => {
+      const label = normalizedDescriptor(version.cohortLabel);
+      return quotedDescriptors.some((quoted) => label === quoted || label.includes(quoted) || quoted.includes(label));
+    }) ?? []
+    : [];
+  const labelVersion = labelCandidates.length === 1 ? labelCandidates[0] : undefined;
+  const explicitCreditLabel = latest.match(/\b(\d{2,3})\s*[- ]?credit(?:\s+hour)?s?\s+(?:source\s+variant|model\s+plan|curriculum|plan)\b/i)?.[1];
+  const explicitVersionCandidates = explicitCreditLabel && /\b(?:source\s+variant|model\s+plan|published\s+curriculum|cohort\s+described)\b/i.test(latest)
+    ? program?.curriculumVersions.filter((version) => version.totalCredits === Number(explicitCreditLabel)) ?? []
+    : [];
+  const creditVersion = explicitVersionCandidates.length === 1 ? explicitVersionCandidates[0] : undefined;
+  const explicitVersion = labelVersion ?? creditVersion;
+  const cohortYear = explicitVersion ? undefined : userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
   const selected = getProgramCurriculum(programId, cohortYear);
-  const program = selected?.program ?? academicPrograms.find((item) => item.id === programId);
+  const unresolvedTotalOnlyVersion = cohortYear !== undefined
+    ? unresolvedCreditTotalVersionForYear(program, cohortYear)
+    : undefined;
   const catalogRecord = loadUndergraduateProgramCatalog().programs.find((item) => item.id === programId);
   const programName = program?.name ?? catalogRecord?.title;
   const sources = program?.sources ?? catalogProgramSource(programId);
   if (!programName) return null;
+  const explicitPlanSources = explicitVersion?.semesterPlans?.length
+    ? [...new Set(explicitVersion.semesterPlans.map(({ sourceUrl }) => sourceUrl))]
+        .map((url) => sources.find((source) => source.url === url))
+        .filter((source): source is AcademicProgram["sources"][number] => Boolean(source))
+    : [];
+  const evidenceSources = explicitVersion
+    ? [...explicitPlanSources, ...sources.filter(({ url }) => /fall_2025_onwards/i.test(url))]
+    : sources;
   return {
     programId,
     programName,
-    curriculum: selected?.curriculum ?? null,
-    sources,
+    curriculum: explicitVersion ?? selected?.curriculum ?? unresolvedTotalOnlyVersion ?? null,
+    sources: evidenceSources.length ? evidenceSources : sources,
     ...(cohortYear !== undefined ? { cohortYear } : {}),
     cohortMatched: selected?.cohortMatched ?? false,
+    ...(explicitVersion ? { explicitlySelectedVersion: true } : {}),
   };
+}
+
+export function hasProgramCreditIntent(text: string): boolean {
+  const unquoted = text.replace(/'(?:[^']*)'|"(?:[^"]*)"|\u201c[^\u201d]*\u201d/gu, " ");
+  if (/\u0915\u094d\u0930\u0947\u0921\u093f\u091f[\s-]*\u0935\u093f\u092d\u093e\u091c\u0928|\u0915\u094d\u0930\u0947\u0921\u093f\u091f\s+\u0935\u093f\u0924\u0930\u0923/u.test(unquoted)) return true;
+  return /\b(?:credit hours?|credits?|credit total|credit distribution|credit breakdown|credit allocations?|crédit(?:s)?|créditos?|cuántos créditos|combien de crédits|répartition des crédits)\b|\u0643\u0645\s+\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u0627\u062a\s+\u0627\u0644\u062a\u062e\u0631\u062c|\u062a\u0648\u0632\u064a\u0639\u0627\u062a\s+\u0627\u0644\u0633\u0627\u0639\u0627\u062a|\u0627\u0644\u0633\u0627\u0639\u0627\u062a\s+\u0627\u0644\u0645\u0639\u062a\u0645\u062f\u0629|\u0639\u062f\u062f\s+\u0627\u0644\u0633\u0627\u0639\u0627\u062a|\u0625\u062c\u0645\u0627\u0644\u064a\s+\u0627\u0644\u0633\u0627\u0639\u0627\u062a|\u0915\u0941\u0932\s+(?:\u0915\u093f\u0924\u0928\u0947\s+)?\u0915\u094d\u0930\u0947\u0921\u093f\u091f|\u0915\u093f\u0924\u0928\u0947\s+\u0915\u094d\u0930\u0947\u0921\u093f\u091f|\u06a9\u0644\s+(?:\u06a9\u062a\u0646\u06d2\s+)?\u06a9\u0631\u06cc\u0688\u0679\u0633?|\u06a9\u062a\u0646\u06d2\s+\u06a9\u0631\u06cc\u0688\u0679\u0633?|\u06a9\u0631\u06cc\u0688\u0679\s+(?:\u06a9\u06cc\s+)?\u062a\u0642\u0633\u06cc\u0645/iu.test(unquoted);
 }
 
 function asksProgramCourseRequirements(text: string): boolean {
   if (/\b[A-Z]{2,5}\d{3,4}\b/i.test(text)) return false;
+  // A request for one semester's model-plan schedule must not be answered with
+  // the program-wide requirement groups; let the scoped semester evidence answer it.
+  if (/\b(?:semester|term)\s+(?:one|two|three|four|five|six|\d+)(?:st|nd|rd|th)?\b|\b(?:first|second|third|fourth|fifth|sixth)\s+semester\b|\byear\s+(?:one|two|three|four|five|six|\d+)\b|(?:الفصل|الترم)\s+(?:الدراسي\s+)?(?:الأول|الأولى|الثاني|الثانية|الثالث|الثالثة|الرابع|الرابعة|\d+)|السنة\s+(?:الأولى|الأول|الثانية|الثاني|الثالثة|الثالث|الرابعة|الرابع|\d+)/iu.test(text)) return false;
   if (/\b(?:admission|admissions|entry|applicant)\b.{0,50}\b(?:requirements?|criteria)\b|\b(?:requirements?|criteria)\b.{0,50}\b(?:admission|admissions|entry)\b/i.test(text)) return false;
   return /\b(?:degree|course|program|major)\s+requirements?\b/i.test(text) ||
+    /\b(?:concentration|pathway|specialization)\s+options?\b/i.test(text) ||
     /\b(?:what|which)\b.{0,100}\b(?:courses?|classes?|electives?|concentrations?)\b/i.test(text) ||
     /\b(?:which|what)\s+(?:courses?|classes?)\b.{0,100}\b(?:degree|program|major|curriculum|required|need|take)\b/i.test(text) ||
     /\b(?:required courses?|course requirements?|curriculum courses?)\b/i.test(text) ||
@@ -394,20 +568,231 @@ export function assessProgramRequirementsConversation(
     [...userMessages.slice(0, -1)].reverse().map(({ content }) => programIdInText(content)).find(Boolean);
   if (!programId) return null;
   const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
+  const entrySemester = cohortEntrySemesterFromMessages(messages);
   const selected = getProgramCurriculum(programId, cohortYear);
   const program = selected?.program ?? academicPrograms.find((item) => item.id === programId);
+  const fallEntryVersion = cohortYear !== undefined ? fallEntryVersionForYear(program, cohortYear) : undefined;
+  const explicitlySelectedFallPlan = entrySemester === "fall" ? fallEntryVersion : undefined;
+  // An unresolved source variant may support reporting its published total,
+  // but it must never be promoted to a curriculum for course requirements.
+  const curriculum = selected?.curriculum ?? explicitlySelectedFallPlan ?? null;
   const catalogRecord = loadUndergraduateProgramCatalog().programs.find((item) => item.id === programId);
   const programName = program?.name ?? catalogRecord?.title;
   const sources = program?.sources ?? catalogProgramSource(programId);
   if (!programName) return null;
+  const termClarification = !curriculum && fallEntryVersion
+    ? entrySemester === "spring"
+      ? `The published ${cohortYear} model plan I found is for Fall-entry students. It does not establish the Spring-entry course requirements. Check your assigned plan in Degree Works or with your College Advising Unit.`
+      : `The published ${cohortYear} model plan I found is specifically for Fall-entry students. Did you start in Fall or Spring? I will not apply a Fall-only plan based on the year alone. Your assigned plan in Degree Works controls.`
+    : undefined;
   return {
     programId,
     programName,
-    curriculum: selected?.curriculum ?? null,
+    curriculum,
     sources,
     ...(cohortYear !== undefined ? { cohortYear } : {}),
     cohortMatched: selected?.cohortMatched ?? false,
+    ...(entrySemester ? { entrySemester } : {}),
+    ...(termClarification ? { scopeClarification: termClarification } : {}),
   };
+}
+
+export type ProgramSemesterPlanAssessment = {
+  programId: string;
+  programName: string;
+  plan?: SemesterPlan;
+  semesterNumber?: number;
+  entrySemester?: "fall" | "spring";
+  clarification?: string;
+  sources: AcademicProgram["sources"];
+};
+
+function normalizeSemesterDigits(text: string): string {
+  return text.replace(/[\u0660-\u0669]/g, (digit) => String(digit.charCodeAt(0) - 0x0660));
+}
+
+function requestedSemesterNumber(text: string): number | undefined {
+  const normalized = normalizeSemesterDigits(text);
+  const words: Record<string, number> = {
+    first: 1, second: 2, third: 3, fourth: 4, fifth: 5, sixth: 6, seventh: 7, eighth: 8, ninth: 9,
+    "\u0627\u0644\u0623\u0648\u0644": 1, "\u0627\u0644\u0627\u0648\u0644": 1,
+    "\u0627\u0644\u062b\u0627\u0646\u064a": 2, "\u0627\u0644\u062b\u0627\u0646\u064a\u0629": 2,
+    "\u0627\u0644\u062b\u0627\u0644\u062b": 3, "\u0627\u0644\u062b\u0627\u0644\u062b\u0629": 3,
+    "\u0627\u0644\u0631\u0627\u0628\u0639": 4, "\u0627\u0644\u0631\u0627\u0628\u0639\u0629": 4,
+    "\u0627\u0644\u062e\u0627\u0645\u0633": 5, "\u0627\u0644\u062e\u0627\u0645\u0633\u0629": 5,
+    "\u0627\u0644\u0633\u0627\u062f\u0633": 6, "\u0627\u0644\u0633\u0627\u062f\u0633\u0629": 6,
+    "\u0627\u0644\u0633\u0627\u0628\u0639": 7, "\u0627\u0644\u0633\u0627\u0628\u0639\u0629": 7,
+    "\u0627\u0644\u062b\u0627\u0645\u0646": 8, "\u0627\u0644\u062b\u0627\u0645\u0646\u0629": 8,
+    "\u0627\u0644\u062a\u0627\u0633\u0639": 9, "\u0627\u0644\u062a\u0627\u0633\u0639\u0629": 9,
+  };
+  const arabicMatches = [...normalized.matchAll(/(?:\u0627\u0644\u0641\u0635\u0644|\u0627\u0644\u062a\u0631\u0645)(?:\s+\u0627\u0644\u062f\u0631\u0627\u0633\u064a)?\s*(?:\u0631\u0642\u0645\s*)?(\d{1,2}|\u0627\u0644[\u0621-\u064a]+)/gu)];
+  for (const match of arabicMatches.reverse()) {
+    const number = /^\d+$/.test(match[1]) ? Number(match[1]) : words[match[1]];
+    if (number !== undefined) return number;
+  }
+  const numeric = normalized.match(/\b(?:semester|term)\s*(?:number\s*)?(\d{1,2})(?:st|nd|rd|th)?\b|\b(\d{1,2})(?:st|nd|rd|th)\s+(?:academic\s+)?semester\b/i);
+  if (numeric) return Number(numeric[1] ?? numeric[2]);
+  const english = normalized.match(/\b(first|second|third|fourth|fifth|sixth|seventh|eighth|ninth)\s+(?:academic\s+)?(?:semester|term)\b/i);
+  return english ? words[english[1].toLowerCase()] : undefined;
+}
+
+function semesterScheduleIntent(text: string): boolean {
+  const normalized = normalizeSemesterDigits(text);
+  const mentionsSemester = /\b(?:semester|term)\b|\u0627\u0644\u0641\u0635\u0644|\u0627\u0644\u062a\u0631\u0645/u.test(normalized);
+  if (!mentionsSemester) return false;
+  if (/\bwhich\s+semester\b/i.test(normalized) && /\b[A-Z]{2,6}\s*\d{3}\b/i.test(normalized) &&
+      !/\b(?:courses?|classes?)\b.{0,50}\bsemester\b/i.test(normalized)) return false;
+  return /\b(?:courses?|classes?|take|study|schedule|plan|show|what|which)\b/i.test(normalized) ||
+    /\u0645\u0642\u0631\u0631\u0627\u062a|\u0645\u0633\u0627\u0642\u0627\u062a|\u0645\u0648\u0627\u062f|\u0623\u062f\u0631\u0633|\u0627\u062e\u0630|\u0627\u062e\u0630|\u0627\u0644\u062e\u0637\u0629|\u0627\u0644\u062c\u062f\u0648\u0644|\u0645\u0627\u0630\u0627|\u0645\u0627\b/u.test(normalized);
+}
+
+function explicitPlanCohortMatch(text: string, plan: SemesterPlan, version: CurriculumVersion): boolean {
+  const normalized = text.toLocaleLowerCase("en");
+  const publishedPlanLabel = (plan.publishedCohortText + " " + plan.sourceTitle).toLocaleLowerCase("en");
+  const published = (publishedPlanLabel + " " + version.cohortLabel + " " + version.version).toLocaleLowerCase("en");
+  const userYears = [...new Set(normalized.match(/\b20\d{2}\b/g) ?? [])];
+  if (!userYears.length) return false;
+  const sourceYears = [...new Set(published.match(/\b20\d{2}\b/g) ?? [])];
+  if (!userYears.some((year) => sourceYears.includes(year))) return false;
+  if (/\bprior\b/.test(normalized) && !/\bprior\b/.test(publishedPlanLabel)) return false;
+  if (/\b(?:onward|onwards|and later)\b/.test(normalized) && (!/\b(?:onward|onwards)\b/.test(publishedPlanLabel) || /\bprior\b/.test(publishedPlanLabel))) return false;
+  return true;
+}
+
+function entrySemesterForPlan(messages: { role: "user" | "assistant"; content: string }[]): "fall" | "spring" | undefined {
+  const users = messages.filter((message) => message.role === "user");
+  const lastAssistant = [...messages].reverse().find((message) => message.role === "assistant")?.content ?? "";
+  const assistantAsksEntry = /entry\s+(?:semester|term)|fall-entry or spring-entry|which (?:semester|term) did you (?:enter|start)|\u0641\u0635\u0644\s+\u0627\u0644\u062f\u062e\u0648\u0644|\u0641\u0635\u0644\s+\u0627\u0644\u0627\u0644\u062a\u062d\u0627\u0642/u.test(lastAssistant);
+  let result: "fall" | "spring" | undefined;
+  for (const message of users) {
+    const text = normalizeSemesterDigits(message.content);
+    const fallEntry = /\b(?:fall|autumn)[- ]entry\b|\b(?:entered|admitted|started|began|entry)\b.{0,35}\b(?:in\s+)?(?:the\s+)?(?:fall|autumn)\b|\b(?:fall|autumn)\s+entry\s+(?:semester|term)\b|\u0642\u0628\u0644(?:\u062a|\u0648\u0646\u064a)?.{0,30}\u0627\u0644\u062e\u0631\u064a\u0641|\u062f\u062e\u0644\u062a.{0,25}\u0627\u0644\u0641\u0635\u0644\s+\u0627\u0644\u062e\u0631\u064a\u0641\u064a|\u0641\u0635\u0644\s+\u0627\u0644\u0642\u0628\u0648\u0644\s+\u0627\u0644\u062e\u0631\u064a\u0641\u064a/iu.test(text);
+    const springEntry = /\bspring[- ]entry\b|\b(?:entered|admitted|started|began|entry)\b.{0,35}\b(?:in\s+)?(?:the\s+)?spring\b|\bspring\s+entry\s+(?:semester|term)\b|\u0642\u0628\u0644(?:\u062a|\u0648\u0646\u064a)?.{0,30}\u0627\u0644\u0631\u0628\u064a\u0639|\u062f\u062e\u0644\u062a.{0,25}\u0627\u0644\u0641\u0635\u0644\s+\u0627\u0644\u0631\u0628\u064a\u0639\u064a|\u0641\u0635\u0644\s+\u0627\u0644\u0642\u0628\u0648\u0644\s+\u0627\u0644\u0631\u0628\u064a\u0639\u064a/iu.test(text);
+    if (fallEntry) result = "fall";
+    else if (springEntry) result = "spring";
+    else if (assistantAsksEntry && message === users.at(-1)) {
+      if (/^\s*(?:fall|autumn|\u0627\u0644\u062e\u0631\u064a\u0641)\s*[.!?\u061f]*\s*$/iu.test(text)) result = "fall";
+      else if (/^\s*(?:spring|\u0627\u0644\u0631\u0628\u064a\u0639)\s*[.!?\u061f]*\s*$/iu.test(text)) result = "spring";
+    }
+  }
+  return result;
+}
+
+function semesterPlanClarification(
+  locale: "en" | "ar",
+  reason: "semester" | "source" | "entry" | "no-spring-plan" | "range",
+  semesterNumber?: number,
+  programName = "this program",
+  sourceLabels: string[] = [],
+): string {
+  if (locale === "en") {
+    if (reason === "semester") return "Which semester number (1-9) do you mean?";
+    if (reason === "source") return "Which published cohort/source label applies to your " + programName + " plan? Available labels: " + sourceLabels.join("; ") + ". I won't choose between versions without that detail.";
+    if (reason === "entry") return "This published " + programName + " curriculum has separate Fall-entry and Spring-entry sequences. Was your entry term Fall or Spring?";
+    if (reason === "no-spring-plan") return "The selected " + programName + " source does not publish a sequence for that entry term. Which published cohort/source label should I check instead?";
+    return "That source lists semesters 1-9; which numbered semester in that range do you mean (you asked for " + semesterNumber + ")?";
+  }
+  if (reason === "semester") return "\u0645\u0627 \u0631\u0642\u0645 \u0627\u0644\u0641\u0635\u0644 \u0627\u0644\u062f\u0631\u0627\u0633\u064a \u0627\u0644\u0630\u064a \u062a\u0642\u0635\u062f\u0647 (1-9)\u061f";
+  if (reason === "source") return "\u0623\u064a \u0645\u0635\u062f\u0631 \u0645\u0646\u0634\u0648\u0631 \u064a\u0646\u0637\u0628\u0642 \u0639\u0644\u0649 \u062e\u0637\u062a\u0643 \u0641\u064a " + programName + "\u061f \u0627\u0644\u062e\u064a\u0627\u0631\u0627\u062a: " + sourceLabels.join("; ") + ".";
+  if (reason === "entry") return "\u062a\u062a\u0636\u0645\u0646 \u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u0645\u0646\u0634\u0648\u0631\u0629 \u062a\u0631\u062a\u064a\u0628\u064a\u0646 \u062d\u0633\u0628 \u0641\u0635\u0644 \u0627\u0644\u062f\u062e\u0648\u0644 \u0641\u064a " + programName + ". \u0647\u0644 \u0628\u062f\u0623\u062a \u0641\u064a \u0627\u0644\u062e\u0631\u064a\u0641 \u0623\u0645 \u0627\u0644\u0631\u0628\u064a\u0639\u061f";
+  if (reason === "no-spring-plan") return "\u0644\u0627 \u064a\u0646\u0634\u0631 \u0627\u0644\u0645\u0635\u062f\u0631 \u0627\u0644\u0645\u062d\u062f\u062f \u062a\u0631\u062a\u064a\u0628\u0627\u064b \u0644\u0641\u0635\u0644 \u0627\u0644\u062f\u062e\u0648\u0644 \u0627\u0644\u0630\u064a \u0630\u0643\u0631\u062a\u0647. \u0623\u064a \u0645\u0635\u062f\u0631 \u0645\u0646\u0634\u0648\u0631 \u0622\u062e\u0631 \u062a\u0642\u0635\u062f\u061f";
+  return "\u064a\u0633\u0631\u062f \u0627\u0644\u0645\u0635\u062f\u0631 \u0627\u0644\u0641\u0635\u0648\u0644 \u0645\u0646 1 \u0625\u0644\u0649 9. \u0623\u064a \u0641\u0635\u0644 \u062a\u0642\u0635\u062f\u061f (" + semesterNumber + ")";
+}
+
+export function assessProgramSemesterPlanConversation(
+  messages: { role: "user" | "assistant"; content: string }[],
+  locale: "en" | "ar" = "en",
+): ProgramSemesterPlanAssessment | null {
+  const userMessages = messages.filter((message) => message.role === "user");
+  const latest = userMessages.at(-1)?.content;
+  if (!latest) return null;
+  const priorScheduleQuestion = userMessages.slice(0, -1).some(({ content }) => semesterScheduleIntent(content));
+  const lastAssistant = [...messages].reverse().find((message) => message.role === "assistant")?.content ?? "";
+  const clarificationFollowUp = priorScheduleQuestion && /entry\s+(?:semester|term)|which (?:published )?(?:cohort\/)?source label|which numbered semester|published cohort\/source label|\u0627\u0644\u0645\u0635\u062f\u0631|\u0641\u0635\u0644 \u0627\u0644\u062f\u062e\u0648\u0644/iu.test(lastAssistant);
+  const isFollowUpAnswer = clarificationFollowUp && latest.length <= 120;
+  if (!semesterScheduleIntent(latest) && !isFollowUpAnswer) return null;
+  const contextText = userMessages.map(({ content }) => content).join("\n");
+  const programId = [...userMessages].reverse().map(({ content }) => programIdInText(content) ??
+    (/\u0647\u0646\u062f\u0633\u0629\s+\u0627\u0644\u062d\u0627\u0633\u0648\u0628/u.test(content) ? "bsc-computer-engineering" : undefined)).find(Boolean);
+  if (!programId) return {
+    programId: "unspecified-program",
+    programName: locale === "ar" ? "\u0627\u0644\u062a\u062e\u0635\u0635" : "your degree program",
+    ...(requestedSemesterNumber(contextText) !== undefined ? { semesterNumber: requestedSemesterNumber(contextText) } : {}),
+    clarification: locale === "ar"
+      ? "\u0645\u0627 \u0627\u0644\u062a\u062e\u0635\u0635 \u0627\u0644\u062f\u0631\u0627\u0633\u064a \u0627\u0644\u0630\u064a \u062a\u0642\u0635\u062f\u0647\u061f \u062d\u062f\u062f \u0627\u0644\u0628\u0631\u0646\u0627\u0645\u062c \u0644\u0623\u062a\u062d\u0642\u0642 \u0645\u0646 \u062e\u0637\u062a\u0647 \u0627\u0644\u0645\u0646\u0634\u0648\u0631\u0629."
+      : "Which degree program do you mean? I need the program name to check its published semester plan.",
+    sources: [],
+  };
+  const program = academicPrograms.find((item) => item.id === programId);
+  const versions = program?.curriculumVersions.filter((version) => version.status === "approved" && version.semesterPlans?.length) ?? [];
+  const plans = versions.flatMap((version) => (version.semesterPlans ?? []).map((plan) => ({ plan, version })));
+  if (!program || plans.length === 0) return null;
+  const semesterNumber = [...userMessages].reverse().map(({ content }) => requestedSemesterNumber(content)).find((number) => number !== undefined);
+  const entrySemester = entrySemesterForPlan(messages);
+  const cohortMatches = plans.filter(({ plan, version }) => explicitPlanCohortMatch(contextText, plan, version));
+  const entryMatches = entrySemester ? cohortMatches.filter(({ plan }) => plan.entrySemester === entrySemester) : [];
+  const selectedPlan = entryMatches.length === 1 ? entryMatches[0].plan : undefined;
+  const sourceUrls = [...new Set(plans.map(({ plan }) => plan.sourceUrl))];
+  const sourceLabels = [...new Set(plans.map(({ plan, version }) => plan.publishedCohortText || version.cohortLabel))];
+  let clarification: string | undefined;
+  if (semesterNumber === undefined) clarification = semesterPlanClarification(locale, "semester", undefined, program.name, sourceLabels);
+  else if (semesterNumber < 1 || semesterNumber > 9) clarification = semesterPlanClarification(locale, "range", semesterNumber, program.name, sourceLabels);
+  else if (cohortMatches.length === 0) clarification = semesterPlanClarification(locale, "source", undefined, program.name, sourceLabels);
+  else if (!entrySemester) clarification = semesterPlanClarification(locale, "entry", undefined, program.name, sourceLabels);
+  else if (entryMatches.length === 0) clarification = semesterPlanClarification(locale, "no-spring-plan", undefined, program.name, sourceLabels);
+  else if (entryMatches.length > 1) clarification = semesterPlanClarification(locale, "source", undefined, program.name, sourceLabels);
+  const citedUrls = selectedPlan ? [selectedPlan.sourceUrl] : [...new Set((cohortMatches.length ? cohortMatches.map(({ plan }) => plan.sourceUrl) : sourceUrls))];
+  const sources = program.sources.filter(({ url }) => citedUrls.includes(url));
+  return {
+    programId,
+    programName: program.name,
+    ...(selectedPlan && !clarification ? { plan: selectedPlan } : {}),
+    ...(semesterNumber !== undefined ? { semesterNumber } : {}),
+    ...(entrySemester ? { entrySemester } : {}),
+    ...(clarification ? { clarification } : {}),
+    sources,
+  };
+}
+
+function semesterPlanCategory(category: string, locale: "en" | "ar"): string {
+  if (locale === "en") return category;
+  const translations: Record<string, string> = {
+    "General education": "\u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0627\u0644\u062a\u0639\u0644\u064a\u0645 \u0627\u0644\u0639\u0627\u0645",
+    "College requirement": "\u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0627\u0644\u0643\u0644\u064a\u0629",
+    "Specialization": "\u0627\u0644\u062a\u062e\u0635\u0635",
+    "Major elective": "\u0645\u0642\u0631\u0631 \u0627\u062e\u062a\u064a\u0627\u0631\u064a \u0644\u0644\u062a\u062e\u0635\u0635",
+    "Major elective lab": "\u0645\u062e\u062a\u0628\u0631 \u0627\u062e\u062a\u064a\u0627\u0631\u064a \u0644\u0644\u062a\u062e\u0635\u0635",
+    "Free elective": "\u0645\u0642\u0631\u0631 \u0627\u062e\u062a\u064a\u0627\u0631\u064a \u062d\u0631",
+    "Internship": "\u062a\u062f\u0631\u064a\u0628 \u0639\u0645\u0644\u064a",
+  };
+  return translations[category] ?? category;
+}
+
+export function renderProgramSemesterPlanAssessment(
+  assessment: ProgramSemesterPlanAssessment,
+  locale: "en" | "ar",
+): string {
+  const { plan, programName, semesterNumber, clarification } = assessment;
+  if (clarification || !plan || semesterNumber === undefined) return clarification ?? semesterPlanClarification(locale, "semester");
+  const semester = plan.semesters.find(({ semesterNumber: number }) => number === semesterNumber);
+  if (!semester) return semesterPlanClarification(locale, "range", semesterNumber);
+  const season = semester.season === "fall"
+    ? (locale === "ar" ? "\u0627\u0644\u062e\u0631\u064a\u0641" : "Fall")
+    : (locale === "ar" ? "\u0627\u0644\u0631\u0628\u064a\u0639" : "Spring");
+  const entry = plan.entrySemester === "fall"
+    ? (locale === "ar" ? "\u0627\u0644\u0642\u0628\u0648\u0644 \u0641\u064a \u0627\u0644\u062e\u0631\u064a\u0641" : "Fall-entry")
+    : (locale === "ar" ? "\u0627\u0644\u0642\u0628\u0648\u0644 \u0641\u064a \u0627\u0644\u0631\u0628\u064a\u0639" : "Spring-entry");
+  const rows = semester.courses.map((course) => {
+    const code = course.courseCode ?? course.courseCodes?.join(locale === "ar" ? " \u0623\u0648 " : " or ");
+    const label = `${code ? `**${code}** — ` : ""}${course.sourceLabel}`;
+    const credits = course.credits === undefined ? "" : `; ${locale === "ar" ? `${course.credits} \u0633\u0627\u0639\u0627\u062a` : `${course.credits} credits`}`;
+    return `- ${label} (${semesterPlanCategory(course.category, locale)}${credits})`;
+  });
+  const hasUnspecifiedCourseCredits = semester.courses.some((course) => course.credits === undefined);
+  const title = locale === "ar"
+    ? `**\u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u062f\u0631\u0627\u0633\u064a\u0629 \u0627\u0644\u0645\u0646\u0634\u0648\u0631\u0629: ${programName} — ${plan.publishedCohortText}**\n\n\u0627\u0644\u0641\u0635\u0644 ${semesterNumber} (${season}) — ${entry}\n\n${rows.join("\n")}\n\n**\u0627\u0644\u0645\u062c\u0645\u0648\u0639 \u0627\u0644\u0645\u0646\u0634\u0648\u0631: ${semester.publishedCredits} \u0633\u0627\u0639\u0629.**${hasUnspecifiedCourseCredits ? " \u0627\u0644\u0645\u0635\u062f\u0631 \u0644\u0627 \u064a\u062d\u062f\u062f \u0633\u0627\u0639\u0627\u062a \u0643\u0644 \u0645\u0642\u0631\u0631 \u0639\u0644\u0649 \u062d\u062f\u0629." : ""}\n\n\u0647\u0630\u0627 \u062a\u0633\u0644\u0633\u0644 \u0645\u0646\u0634\u0648\u0631 \u0648\u0644\u064a\u0633 \u062a\u0623\u0643\u064a\u062f\u0627\u064b \u0623\u0646\u0647 \u0627\u0644\u062e\u0637\u0629 \u0627\u0644\u0645\u062e\u0635\u0635\u0629 \u0644\u0643. \u062e\u0637\u0629 Degree Works \u0647\u064a \u0627\u0644\u0645\u0631\u062c\u0639 \u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a\u0643 \u0627\u0644\u0641\u0631\u062f\u064a\u0629. \u0644\u0627 \u064a\u0624\u0643\u062f \u0627\u0644\u062c\u062f\u0648\u0644 \u062a\u0648\u0641\u0631 \u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a \u0623\u0648 \u0645\u062a\u0637\u0644\u0628\u0627\u062a\u0647\u0627 \u0627\u0644\u0633\u0627\u0628\u0642\u0629 \u0623\u0648 \u0623\u0647\u0644\u064a\u0629 \u0627\u0644\u062a\u0633\u062c\u064a\u0644.`
+    : `**Published ${programName} model plan — ${plan.publishedCohortText}**\n\nSemester ${semesterNumber} (${season}) — ${entry}\n\n${rows.join("\n")}\n\n**Published semester subtotal: ${semester.publishedCredits} credits.**${hasUnspecifiedCourseCredits ? " Individual course credits are not specified in this source record." : ""}\n\nThis is a published model sequence, not confirmation that this source plan is assigned to you. Your Degree Works plan controls your individual requirements. Choices and elective placeholders remain as published; this schedule does not confirm current availability, prerequisites, or registration eligibility.`;
+  return title;
 }
 
 function normalizeCoursePhrase(value: string): string {
@@ -498,8 +883,13 @@ export function renderProgramRequirementsAssessment(
   assessment: ProgramRequirementsAssessment,
   locale: "en" | "ar",
 ): string {
-  const { curriculum, programName, cohortYear } = assessment;
+  const { curriculum, programName, cohortYear, scopeClarification } = assessment;
   if (!curriculum) {
+    if (scopeClarification) {
+      return locale === "ar"
+        ? `لم أجد إلا خطة منشورة للطلاب المقبولين في الفصل الخريفي لدفعة ${cohortYear} في ${programName}. هل بدأت في الفصل الخريفي أم الربيعي؟ لن أطبق خطة الخريف على دفعة الربيع. خطتك المخصصة في Degree Works هي المرجع لمتطلباتك الفردية.`
+        : scopeClarification;
+    }
     if (cohortYear === undefined) {
       return locale === "ar"
         ? `لا أملك حالياً نموذجاً منظماً ومعتمداً لمتطلبات المقررات في ${programName}. راجع صفحة البرنامج الرسمية وخطتك المخصصة في Degree Works.`
@@ -530,7 +920,13 @@ export function renderProgramRequirementsAssessment(
       return `**${requirement.name}:** ${requirement.credits} credits. ${requirement.ruleNote}`;
     }
     if (requirement.type === "PATHWAY_CHOICE") {
-      const options = requirement.options.map((option) => {
+      const entryTermOptions = assessment.entrySemester
+        ? requirement.options.filter((option) => option.id === `${assessment.entrySemester}-entry` || option.id.startsWith(`${assessment.entrySemester}-`))
+        : [];
+      const selectedOptions = entryTermOptions.length > 0 && entryTermOptions.length < requirement.options.length
+        ? entryTermOptions
+        : requirement.options;
+      const options = selectedOptions.map((option) => {
         if (option.type === "COMPOSITE" && option.requirements) {
           const nested = option.requirements.map((child) => {
             if (child.type === "REQUIRED_COURSE_SET") return `${child.name}: ${child.courseCodes.join(", ")}${child.ruleNote ? `. ${child.ruleNote}` : ""}`;
@@ -545,7 +941,10 @@ export function renderProgramRequirementsAssessment(
         if (option.type === "ELECTIVE_GROUP") return `- ${option.name}: choose ${option.chooseCount} courses (${option.credits} credits) from ${option.courseCodes.join(", ")}.${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
         return `- ${option.name}: complete all ${option.credits} credits (${option.courseCodes.join(", ")}).${option.selectionNote ? ` ${option.selectionNote}` : ""}`;
       }).join("\n");
-      return `**${requirement.name}:** choose one option:\n${options}`;
+      const optionIntro = selectedOptions.length < requirement.options.length
+        ? `showing the ${assessment.entrySemester} entry option(s):`
+        : "choose one option:";
+      return `**${requirement.name}:** ${optionIntro}\n${options}`;
     }
     return `**${requirement.name ?? "Internship requirement"}:** ${requirement.courseCode}, ${requirement.credits} ${requirement.credits === 1 ? "credit" : "credits"}${requirement.finalSemesterOnly ? ", in the final semester" : ""}${requirement.otherCoursesAllowed === false ? "; no other courses during the internship" : ""}.`;
   });
@@ -565,7 +964,7 @@ export function renderProgramRequirementsAssessment(
 }
 
 export function renderProgramCreditAssessment(assessment: ProgramCreditAssessment, locale: "en" | "ar"): string {
-  const { programName, curriculum, cohortYear } = assessment;
+  const { programName, curriculum, cohortYear, explicitlySelectedVersion } = assessment;
   if (!curriculum) {
     if (cohortYear === undefined) {
       return locale === "ar"
@@ -578,10 +977,44 @@ export function renderProgramCreditAssessment(assessment: ProgramCreditAssessmen
   }
 
   const total = curriculum.totalCredits;
+  if (explicitlySelectedVersion) {
+    if (locale === "ar") {
+      const computerEngineeringNote = assessment.programId === "bsc-computer-engineering" && curriculum.id === "computer-engineering-cohort-model-144"
+        ? "هذه النسخة لا تمثل خطة هندسة الحاسوب المنفصلة لدفعة خريف 2025–2026 وما بعدها، والتي تنص على 131 ساعة. لا تحدد المصادر العامة أي نسخة تاريخية مُعيّنة لطالب بعينه."
+        : "تسمية المصدر تحدد نسخة منشورة، ولا تثبت أنها الخطة المُعيّنة لك. تحقق من خطتك في Degree Works.";
+      const allocationNote = curriculum.creditBuckets?.length
+        ? `توزيع الساعات المنشور:\n${curriculum.creditBuckets.map(({ name, credits }) => `- ${name}: **${credits}**`).join("\n")}`
+        : "لا تعرض هذه النسخة توزيعاً كاملاً لفئات الساعات؛ لذلك لن أستنتج التقسيم من تسلسل الفصول.";
+      const limitationNotes = curriculum.limitations.slice(0, 3).map((note) => `- ${note}`).join("\n");
+      return [
+        `**إجمالي الساعات في النسخة المنشورة — ${programName}**`,
+        `تذكر النسخة المحددة (${curriculum.cohortLabel}) إجمالي **${total} ساعة معتمدة**.`,
+        computerEngineeringNote,
+        allocationNote,
+        limitationNotes ? `تفاصيل قيد المصدر (بالصياغة المنشورة):\n${limitationNotes}` : "",
+        "هذا إجمالي خطة منشورة، وليس عدد الساعات المتبقية في سجلك. Degree Works ووحدة الإرشاد في كليتك هما المرجع لتأكيد الخطة المعيّنة لك.",
+      ].filter(Boolean).join("\n\n");
+    }
+    const sourceVariant = `The identified source variant (${curriculum.cohortLabel}) lists **${total} total credit hours**.`;
+    const currentPlanNote = assessment.programId === "bsc-computer-engineering" && curriculum.id === "computer-engineering-cohort-model-144"
+      ? "This is not the separate Fall-entry 2025\u20132026-onward Computer Engineering model plan, which lists 131 credits. The public sources do not establish which historic revision is assigned to an individual student."
+      : "The source label identifies a published version, not the plan assigned to an individual student. Confirm the assigned plan in Degree Works.";
+    const allocationNote = curriculum.creditBuckets?.length
+      ? `Breakdown:\n${curriculum.creditBuckets.map(({ name, credits }) => `- ${name}: **${credits} credits**`).join("\n")}`
+      : "This source variant does not provide a complete structured credit-bucket breakdown, so I will not infer one from the semester sequence.";
+    const limitationNotes = curriculum.limitations.slice(0, 3).map((note) => `- ${note}`).join("\n");
+    return [`**Published source-variant total — ${programName}**`, sourceVariant, currentPlanNote, allocationNote, limitationNotes ? `Scope notes:\n${limitationNotes}` : "", "This is a published plan total, not the credits remaining on a student's record. Confirm the assigned plan in Degree Works or with the college advising unit."]
+      .filter(Boolean).join("\n\n");
+  }
+  const sourceOnlyCohortTotal = cohortYear !== undefined && !assessment.cohortMatched && curriculum.cohortMapping === "unresolved";
   const buckets = curriculum.creditBuckets?.map(({ name, credits }) => `- ${name}: **${credits} credits**`).join("\n") ?? "";
   const internships = curriculum.requirements.filter((item) => item.type === "INTERNSHIP")
     .map((item) => `- ${item.courseCode}: ${item.credits} ${item.credits === 1 ? "credit" : "credits"}${item.finalSemesterOnly ? "; scheduled in the final semester" : ""}${item.otherCoursesAllowed === false ? "; no other courses during the internship" : item.otherCoursesAllowed === true ? "; other courses are allowed during the internship" : "; the source does not specify other-course enrollment during the internship"}.`).join("\n");
   const notes = curriculum.limitations.map((note) => `- ${note}`).join("\n");
+
+  if (locale === "ar" && sourceOnlyCohortTotal) {
+    return `**إجمالي الساعات المنشور — ${programName}**\n\nتعرض الخطط المنشورة المرتبطة بسنة الدخول ${cohortYear} إجمالي **${total} ساعة معتمدة**. لكن المصادر تعرض خططاً مختلفة، لذلك لا أستطيع تأكيد أن هذه هي الخطة المخصصة لك.\n\nتحقق من خطتك في Degree Works أو مع وحدة الإرشاد في الكلية. هذا الرقم يصف ما تنشره الخطط، ولا يحسب الساعات المتبقية في سجلك.`;
+  }
 
   if (locale === "ar") {
     const yearLabel = cohortYear !== undefined ? ` لدفعة الدخول ${cohortYear}` : " المنشورة حاليًا";
@@ -589,7 +1022,9 @@ export function renderProgramCreditAssessment(assessment: ProgramCreditAssessmen
       .filter(Boolean).join("\n\n");
   }
 
-  const creditSentence = cohortYear !== undefined
+  const creditSentence = sourceOnlyCohortTotal
+    ? `The published plan material associated with the ${cohortYear} entry year lists **${total} credit hours**. This source-reported total does not confirm which conflicting plan is assigned to you.`
+    : cohortYear !== undefined
     ? `For the ${cohortYear} entry cohort, the curriculum requires **${total} credit hours**.`
     : `The currently published curriculum requires **${total} credit hours**.`;
   return [`**Published credit requirements — ${programName}**`, creditSentence, buckets ? `Breakdown:\n${buckets}` : "The approved source available here does not establish a complete credit-bucket breakdown for this older plan.", internships ? `Internship requirement:\n${internships}` : "", notes ? `Scope notes:\n${notes}` : "", "This describes a published curriculum, not the credits remaining on your student record. Your assigned study plan and Degree Works control your personal graduation requirements."]

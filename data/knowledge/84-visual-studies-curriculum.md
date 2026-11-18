@@ -1,13 +1,25 @@
-# UAEU Bachelor of Arts in Visual Studies and Creative Industries — 2025–2026 cohort model
+# UAEU Bachelor of Arts in Visual Studies and Creative Industries — published cohort models
 
-Verified: 2026-11-11.
+Verified: 2026-11-18.
 
 ## Official evidence
 
 - Degree requirements: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-arts-in-visual-studies-and-creative-industries.shtml
 - Model study plan: https://www.uaeu.ac.ae/en/chss/pdf/chss_bsc_visual_studies_and_creative_industries_study_plan.pdf
 
-The study plan labels a 2025–2026 cohort-onwards model and a 120-credit degree. Confirm the student's assigned plan before applying these details to a personal degree audit.
+The official study-plan PDF contains separate 2022–2023 and 2025–2026 cohort-onwards models. Each is 120 credits, but their requirements differ. Confirm the student's assigned plan before applying these details to a personal degree audit.
+
+## 2022–2023 model plan
+
+The PDF labels this plan for students admitted in Fall or Spring from the 2022–2023 cohort onwards. Its semester subtotals are 15, 15, 18, 18, 18, 18, 15, and 3 credits (120 total).
+
+- General Education: 33 credits; the table includes theme/category choices.
+- Specialization courses: 57 credits. The printed code pairs ART201/VIS201, ART301/VIS301, ART302/VIS302, ART303/VIS303, and ART382/VIS382 are retained as alternatives exactly as printed.
+- Major electives: 21 credits across seven student-choice slots; this plan table does not provide a bounded elective list.
+- Free electives: 6 credits.
+- Internship: VIS450, 3 credits, in the final semester shown.
+
+This is distinct from the 2025–2026 model below, which lists a different specialization structure and a 6-credit VIS451 internship. Do not merge the plans or treat either model as a student's official Degree Works audit. The current course catalog does not list all historical ART-prefixed alternatives; verify their applicability and availability with the College Advising Unit.
 
 ## Credit structure
 

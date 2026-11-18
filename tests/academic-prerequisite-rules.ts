@@ -3,10 +3,10 @@ import { assessCatalogPrerequisiteConversation } from "../lib/academic/catalog-p
 import { academicSnapshotFromMessages, asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, evaluateCatalogPrerequisite, evaluatePrerequisite, listModeledPrerequisiteCourses, renderPrerequisiteAssessment } from "../lib/academic/prerequisite-rules";
 
 const courseCodes = new Set(listModeledPrerequisiteCourses().map(({ code }) => code));
-assert.equal(courseCodes.size, 9);
+assert.equal(courseCodes.size, 10);
 assert.equal(asksPersonalPrerequisiteEligibility("What are the prerequisites for CSBP319?"), false);
 assert.equal(asksPersonalPrerequisiteEligibility("Can I take CSBP319 if I passed CSBP219?"), true);
-assert.equal(asksPersonalPrerequisiteEligibility("Ù‡Ù„ Ø£Ø³ØªØ·ÙŠØ¹ ØªØ³Ø¬ÙŠÙ„ CSBP319ØŸ"), true);
+assert.equal(asksPersonalPrerequisiteEligibility("\u0647\u0644 \u064a\u0645\u0643\u0646\u0646\u064a \u0623\u062e\u0630 CSBP319\u061f"), true);
 assert.equal(asksPersonalPrerequisiteEligibility("\u0647\u0644 \u0623\u0633\u062a\u0637\u064a\u0639 \u062a\u0633\u062c\u064a\u0644 CSBP319\u061f"), true);
 
 const csbp319CompletedPrereqs = evaluatePrerequisite({ targetCourseCode: "CSBP319", snapshot: { completedCourses: [
@@ -41,15 +41,20 @@ assert.equal(isec313Satisfied.status, "ELIGIBLE");
 assert.equal(isec313Satisfied.conditions.length, 2);
 assert.equal(isec313Satisfied.source?.documentId, "38-isec313-ai-for-cybersecurity-prerequisite.md");
 
-for (const snapshot of [
-  { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] },
-  { completedCourses: [{ courseCode: "CSBP323", grade: "D+" }] },
-  { completedCourses: [{ courseCode: "CSBP319", grade: "F" }, { courseCode: "CSBP323", grade: "F" }] },
+for (const completed of [
+  [{ courseCode: "CSBP319", grade: "D" }],
+  [{ courseCode: "CSBP323", grade: "D+" }],
 ]) {
-  const csbp340 = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot });
-  assert.equal(csbp340.status, "UNDETERMINED", "CSBP340's catalog field ends in a dangling OR; supplied student grades cannot resolve the incomplete rule");
-  assert.equal(csbp340.resolutionState, "UNSUPPORTED");
+  const csbp340 = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: completed } });
+  assert.equal(csbp340.status, "ELIGIBLE", "either current catalog alternative at minimum grade D satisfies the modeled prerequisite");
+  assert.equal(csbp340.source?.documentId, "course-prerequisites-database-systems");
 }
+const csbp340BothFailed = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [
+  { courseCode: "CSBP319", grade: "F" }, { courseCode: "CSBP323", grade: "F" },
+] } });
+assert.equal(csbp340BothFailed.status, "NOT_ELIGIBLE", "failing both alternatives does not satisfy CSBP340");
+assert.equal(evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [] } }).status, "UNDETERMINED",
+  "no course history leaves CSBP340 eligibility unknown");
 
 const isec421OneOnly = evaluatePrerequisite({ targetCourseCode: "ISEC421", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "A" }] } });
 assert.equal(isec421OneOnly.status, "UNDETERMINED", "missing data in an AND expression is not assumed satisfied");
@@ -58,7 +63,7 @@ const isec421LowGrade = evaluatePrerequisite({ targetCourseCode: "ISEC421", snap
 assert.equal(isec421LowGrade.status, "UNDETERMINED", "unknown grade notation cannot be misread as a UAEU passing grade");
 
 const isec421Satisfied = evaluatePrerequisite({ targetCourseCode: "ISEC421", snapshot: { completedCourses: [{ courseCode: "STAT210", grade: "D" }, { courseCode: "ITBP301", grade: "C" }] } });
-assert.equal(isec421Satisfied.status, "ELIGIBLE", "both required courses at grade D satisfy the modeled rule");
+assert.equal(isec421Satisfied.status, "UNDETERMINED", "official catalog and program-plan prerequisite requirements conflict, so no personal eligibility verdict is safe");
 
 const curr232AtThreshold = assessCatalogPrerequisiteConversation([
   { role: "user", content: "I passed CURR103 with grade 60. Can I take CURR232?" },
@@ -124,7 +129,8 @@ const ambiguousCompletion = academicSnapshotFromMessages([{ role: "user", conten
 assert.equal(ambiguousCompletion.completedCourses[0]?.grade, "", "completion wording alone does not imply a passing result");
 
 const repeat = evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } });
-assert.deepEqual(repeat, evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } }), "same unsupported source and snapshot always produce the same result");
+assert.deepEqual(repeat, evaluatePrerequisite({ targetCourseCode: "CSBP340", snapshot: { completedCourses: [{ courseCode: "CSBP319", grade: "D" }] } }), "same verified source and snapshot always produce the same result");
+assert.equal(repeat.status, "ELIGIBLE");
 const abbreviatedCurrentCourse = academicSnapshotFromMessages([{ role: "user", content: "I passed PHYS105 with grade D, and am taking CHME300." }]);
 assert.deepEqual(abbreviatedCurrentCourse.currentCourses, ["CHME300"], "a natural coordinated phrase can omit the repeated subject before 'am taking'");
 
@@ -134,9 +140,9 @@ const conversationAssessment = assessPrerequisiteConversation([
   { role: "user", content: "Can I take ISEC421?" },
 ]);
 assert.ok(conversationAssessment, "known explicit target course routes to the structured rule");
-assert.equal(conversationAssessment.evaluation.status, "ELIGIBLE", "prior user-provided grades are computed against both AND requirements");
-assert.match(renderPrerequisiteAssessment(conversationAssessment, "en"), /both|STAT210.*ITBP301/i);
-assert.match(renderPrerequisiteAssessment(conversationAssessment, "en"), /does not confirm registration eligibility/i);
+assert.equal(conversationAssessment.evaluation.status, "UNDETERMINED", "official prerequisite requirements conflict, so user history cannot produce a personal eligibility verdict");
+assert.match(renderPrerequisiteAssessment(conversationAssessment, "en"), /sources conflict.*STAT210.*ITBP301/i);
+assert.match(renderPrerequisiteAssessment(conversationAssessment, "en"), /cannot give a personal eligibility verdict/i);
 
 const incompleteConversation = assessPrerequisiteConversation([
   { role: "user", content: "What is the prerequisite for ISEC421? I passed STAT210 with D." },
@@ -167,7 +173,8 @@ assert.equal(arabicUnknownPrerequisite.evaluation.status, "UNDETERMINED", "a tar
 const explicitlyNotCompleted = assessPrerequisiteConversation([
   { role: "user", content: "I have not completed CSBP319 with D, and I have not completed CSBP323 with D. Can I take CSBP340?" },
 ]);
-assert.equal(explicitlyNotCompleted, null, "CSBP340's incomplete catalog rule cannot produce a personal eligibility assessment");
+assert.ok(explicitlyNotCompleted, "the two explicitly unmet alternatives can be evaluated against the published OR rule");
+assert.equal(explicitlyNotCompleted.evaluation.status, "NOT_ELIGIBLE");
 
 const explicitlyNotCurrent = evaluatePrerequisite({ targetCourseCode: "MECH348", snapshot: { completedCourses: [{ courseCode: "MECH210", grade: "D" }], currentCourses: [] } });
 assert.equal(explicitlyNotCurrent.status, "UNDETERMINED", "missing concurrent-course information is not assumed");
@@ -179,4 +186,4 @@ assert.equal(notTakingCourse.evaluation.status, "UNDETERMINED", "a negated enrol
 
 assert.equal(assessPrerequisiteConversation([{ role: "user", content: "What can I do if I fail Data Structures twice?" }]), null, "failed-course policy questions are not misrouted as registration eligibility");
 
-console.log("Academic prerequisite rules passed: 9 approved records, grade thresholds, AND/OR, concurrency, snapshot dating/freshness, conversation assessment, provenance, unknowns, and deterministic results.");
+console.log("Academic prerequisite rules passed: 10 approved records, grade thresholds, AND/OR, concurrency, snapshot dating/freshness, conversation assessment, provenance, unknowns, and deterministic results.");

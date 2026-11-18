@@ -62,11 +62,25 @@ const COLLEGE_ALIASES: Record<string, string[]> = {
 
 function catalogRequest(query: string): boolean {
   const text = normalizeQuery(query);
-  if (/\b(?:tuition|fees?|cost|price|payment|scholarship|deadline|admission criteria)\b/u.test(text)) return false;
+  // Keep transactional admissions requests out of the program inventory path.
+  // The broad "what ... degree" window below otherwise mistakes questions
+  // like "what do I need to apply for an undergraduate degree?" for a catalog.
+  if (/\b(?:tuition|fees?|cost|price|payment|scholarship|deadline|admission|admissions|applicant|application|apply|applying)\b/u.test(text)) return false;
   if (/\b(?:my|i am|am i|completed|courses?|classes?|coursework|prerequisites?|requirements?|credits?|gpa|eligible|eligibility|switch|change my|study plan|degree audit)\b/u.test(text)) return false;
-  const asksForProgramInventory = /\b(?:which|what|list|show|available|offered|offer)\b.{0,70}\b(?:programs?|degrees?|majors?)\b/u.test(text) ||
+  // Inventory requests need explicit availability/offer/list intent. A broad
+  // "which ... degree" match hijacks questions about one named degree's title,
+  // college, published plan, or requirements and returns an unrelated college
+  // list instead.
+  const asksForProgramInventory = /\b(?:which|what)\s+(?:(?:undergraduate|bachelor(?:'s)?)\s+)?(?:programs?|degrees?|majors?)\b.{0,70}\b(?:available|offered|offer|list|provide)\b/u.test(text) ||
+    /\b(?:list|show)\s+(?:all\s+)?(?:(?:undergraduate|bachelor(?:'s)?)\s+)?(?:programs?|degrees?|majors?)\b/u.test(text) ||
     /\b(?:programs?|degrees?|majors?)\b.{0,70}\b(?:available|offered|offer|list)\b/u.test(text);
   return asksForProgramInventory && /\b(?:uaeu|university|college|undergraduate|bachelor|major|program|degree|degrees)\b/u.test(text);
+}
+
+function asksNamedProgramIdentity(query: string): boolean {
+  const text = normalizeQuery(query);
+  return /\b(?:degree\s+)?(?:title|name|college|school)\b.{0,70}\b(?:recorded|listed|published|catalog)\b|\b(?:recorded|listed|published)\b.{0,70}\b(?:degree\s+)?(?:title|name|college|school)\b/u.test(text) ||
+    /(?:اسم|عنوان).{0,50}(?:الدرجة|البرنامج|التخصص)|(?:أي|ما).{0,50}كلية.{0,50}(?:البرنامج|التخصص)/u.test(text);
 }
 
 function requestedCollege(query: string): string | undefined {
@@ -81,8 +95,28 @@ export type ProgramCatalogAnswer = { content: string; citation: Citation; colleg
 
 /** Return the official catalog inventory only for explicit program-list questions. */
 export function answerProgramCatalogQuestion(query: string, locale: "ar" | "en"): ProgramCatalogAnswer | null {
-  if (!catalogRequest(query)) return null;
   const catalog = loadUndergraduateProgramCatalog();
+  // Specific identity queries take precedence over inventory requests. This is
+  // essential when a degree title itself contains a college alias (e.g.
+  // "Bachelor of Science") that would otherwise filter to the wrong college.
+  if (asksNamedProgramIdentity(query)) {
+    const normalizedQuery = normalizeQuery(query);
+    const matchingProgram = catalog.programs.find((program) => {
+      const normalizedTitle = normalizeQuery(program.title);
+      return normalizedTitle.length >= 12 && ` ${normalizedQuery} `.includes(` ${normalizedTitle} `);
+    });
+    if (!matchingProgram) return null;
+    const content = locale === "ar"
+      ? `**${matchingProgram.title}**\n- الكلية المسجلة في دليل البرامج الجامعية الحالي: **${matchingProgram.college}**.\nهذه معلومة تعريفية من الدليل؛ ولا تحدد الخطة الدراسية المطبقة على دفعة بعينها أو أهلية الطالب.`
+      : `**${matchingProgram.title}**\n- College listed in UAEU's current undergraduate catalog: **${matchingProgram.college}**.\nThis identifies the catalog entry; it does not establish which curriculum applies to a particular cohort or student.`;
+    return {
+      content,
+      citation: { title: matchingProgram.title, url: matchingProgram.url, lastVerified: catalog.verifiedAt },
+      college: matchingProgram.college,
+      count: 1,
+    };
+  }
+  if (!catalogRequest(query)) return null;
   const college = requestedCollege(query);
   const programs = catalog.programs.filter((program) => !college || program.college === college);
   const grouped = new Map<string, UndergraduateProgram[]>();

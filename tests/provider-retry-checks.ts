@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { AiProviderError, describeAiProviderError, generateAssistantResponse } from '../lib/ai-provider';
 
 const originals = { fetch: globalThis.fetch, now: Date.now, timeout: AbortSignal.timeout, random: Math.random, setTimeout: globalThis.setTimeout };
-const keys = ['AI_PROVIDER', 'openai_key', 'OPENAI_KEY', 'OPENAI_API_KEY', 'OPENAI', 'GEMINI_API_KEY', 'AI_PROVIDER_FALLBACK', 'AI_PROVIDER_TIMEOUT_MS'] as const;
+const keys = ['AI_PROVIDER', 'OPENAI_CHAT_MODEL', 'OPENAI_MAX_OUTPUT_TOKENS', 'openai_key', 'OPENAI_KEY', 'OPENAI_API_KEY', 'OPENAI', 'GEMINI_API_KEY', 'AI_PROVIDER_FALLBACK', 'AI_PROVIDER_TIMEOUT_MS'] as const;
 const previous = Object.fromEntries(keys.map(key => [key, process.env[key]]));
 const args = { system: 'Synthetic retry test', messages: [{ role: 'user' as const, content: 'Synthetic question only' }] };
 const success = () => new Response(JSON.stringify({ status: 'completed', output_text: 'Synthetic answer' }));
@@ -21,6 +21,8 @@ let checks = 0;
 async function check(name: string, run: () => void | Promise<void>) {
   now = 1_000; waits = []; signals = []; requests = []; timerOvershoot = 0;
   process.env.AI_PROVIDER = 'openai';
+  delete process.env.OPENAI_CHAT_MODEL;
+  delete process.env.OPENAI_MAX_OUTPUT_TOKENS;
   process.env.openai_key = 'synthetic-primary-key';
   process.env.OPENAI_KEY = 'synthetic-primary-key';
   process.env.OPENAI_API_KEY = 'synthetic-primary-key';
@@ -49,6 +51,19 @@ async function main() {
     return handler(requests.length, init);
   };
   try {
+    await check('configured OpenAI model is sent to the provider and reported in the result', async () => {
+      process.env.OPENAI_CHAT_MODEL = 'gpt-6.1-sol';
+      handler = () => success();
+      const result = await generateAssistantResponse(args);
+      assert.equal((requests[0].body as Record<string, unknown>).model, 'gpt-6.1-sol');
+      assert.equal(result.model, 'gpt-6.1-sol');
+    });
+    await check('evaluation output budget above the student-answer default reaches the provider up to its hard cap', async () => {
+      process.env.OPENAI_MAX_OUTPUT_TOKENS = '10000';
+      handler = () => success();
+      await generateAssistantResponse(args);
+      assert.equal((requests[0].body as Record<string, unknown>).max_output_tokens, 10000);
+    });
     await check('a successful response has no retry or extra provider request', async () => {
       handler = () => success();
       assert.equal((await generateAssistantResponse(args)).text, 'Synthetic answer');
@@ -113,6 +128,22 @@ async function main() {
         'Bearer synthetic-second-key',
         'Bearer synthetic-third-key',
       ]);
+    });
+    await check('an invalid primary credential falls over to the next configured OpenAI key', async () => {
+      process.env.OPENAI_API_KEY = 'synthetic-valid-backup-key';
+      handler = attempt => attempt === 1 ? failure(401, 'invalid_api_key') : success();
+      assert.equal((await generateAssistantResponse(args)).text, 'Synthetic answer');
+      assert.deepEqual(requests.map(request => request.authorization), [
+        'Bearer synthetic-primary-key',
+        'Bearer synthetic-valid-backup-key',
+      ]);
+      assert.deepEqual(waits, []);
+    });
+    await check('incomplete primary model output is returned directly instead of being masked by backup credential failures', async () => {
+      process.env.OPENAI_API_KEY = 'synthetic-invalid-backup-key';
+      handler = () => new Response(JSON.stringify({ status: 'incomplete' }));
+      await assert.rejects(generateAssistantResponse(args), error => error instanceof AiProviderError && error.providerStatus === 'OPENAI_INCOMPLETE');
+      assert.equal(requests.length, 1, 'model-output failure is not replayed with unrelated API keys');
     });
     await check('quota type suppresses retries even under HTTP503 or an unfamiliar error code', async () => {
       process.env.OPENAI_API_KEY = process.env.openai_key;

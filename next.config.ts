@@ -31,6 +31,8 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Allow side-by-side local candidate builds without replacing a running preview.
+  distDir: process.env.NEXT_BUILD_OUTPUT_DIR?.trim() || ".next",
   poweredByHeader: false,
   serverExternalPackages: ["better-sqlite3"],
   async headers() {

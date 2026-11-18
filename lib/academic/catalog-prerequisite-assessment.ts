@@ -68,6 +68,15 @@ export function catalogTargetCodeFromMessages(
     const previousMessages = userMessages.slice(0, -1).reverse();
     candidate = previousMessages.map(({ content }) => explicitTargetCode(content)).find(Boolean)
       ?? previousMessages.flatMap(({ content }) => codesIn(content))[0];
+    if (!candidate) {
+      const normalizedHistory = previousMessages.map(({ content }) => content.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim());
+      const titleMatches = catalog.courses.filter((course) => {
+        const title = course.title.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+        return title.length >= 7 && normalizedHistory.some((message) => ` ${message} `.includes(` ${title} `));
+      });
+      const uniqueCodes = [...new Set(titleMatches.map(({ code }) => code))];
+      if (uniqueCodes.length === 1) candidate = uniqueCodes[0];
+    }
   }
   if (!candidate) {
     const currentCodes = codesIn(latestQuestion);
@@ -83,6 +92,8 @@ export function isCoursePrerequisiteFollowUp(
   const userMessages = messages.filter((message) => message.role === "user");
   const latest = userMessages.at(-1)?.content;
   if (!latest || userMessages.length < 2) return false;
+  const latestAsksPrerequisiteFacts = /\b(?:prerequisites?|pre-?reqs?|corequisites?)\b/iu.test(latest);
+  if (latestAsksPrerequisiteFacts && catalogTargetCodeFromMessages(messages)) return true;
   const earlierAskedForPrerequisites = userMessages.slice(0, -1).some(({ content }) =>
     /\b(?:prerequisites?|pre-?reqs?|corequisites?)\b|\b(?:classes|courses)\b.{0,60}\b(?:pass|complete|take)\b.{0,30}\bbefore\b|\bwhat\s+(?:must|do)\s+i\s+complete\s+before\b/iu.test(content));
   if (!earlierAskedForPrerequisites) return false;

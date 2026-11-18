@@ -28,6 +28,21 @@ assert.equal(answerProgramCatalogQuestion("What courses does the Computer Scienc
 assert.equal(answerProgramCatalogQuestion("Can I change my major after third year?", "en"), null, "personal major-change questions must not trigger the inventory response");
 assert.equal(answerProgramCatalogQuestion("What is the tuition cost for the program I want?", "en"), null, "a program tuition question must not trigger the degree inventory response");
 
+const namedProgramIdentity = answerProgramCatalogQuestion(
+  "For the published curriculum label 'Current published degree page', which degree title and college are recorded for Bachelor of Science in Statistics and Data Analytics? Cite the version-specific source.",
+  "en",
+);
+assert.ok(namedProgramIdentity, "a question about one named degree's catalog identity must resolve directly");
+assert.equal(namedProgramIdentity.count, 1);
+assert.equal(namedProgramIdentity.college, "College of Business and Economics");
+assert.match(namedProgramIdentity.content, /Bachelor of Science in Statistics and Data Analytics[\s\S]*College of Business and Economics/u);
+assert.equal(namedProgramIdentity.citation.url, catalog.programs.find(({ id }) => id === "statistics-and-data-analytics")?.url);
+
+assert.equal(answerProgramCatalogQuestion(
+  "For the published curriculum label 'Fall-entry cohort', which degree title and college are recorded for Bachelor of Science in Statistics and Data Analytics?",
+  "en",
+)?.count, 1, "a named-program field lookup must not return all degrees from its college");
+
 console.log("UAEU program catalog checks passed: all 55 official degrees across 9 colleges have structured curriculum evidence, catalog-only coverage states, college filtering, and scope guards.");
 
 void import("../app/api/health/route").then(async ({ GET }) => {

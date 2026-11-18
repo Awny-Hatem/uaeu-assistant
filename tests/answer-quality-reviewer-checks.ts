@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { parseAnswerQualityReview, reviewAnswerQuality } from "../lib/answer-quality-reviewer";
+import { isAnswerQualityRejection, parseAnswerQualityReview, reviewAnswerQuality } from "../lib/answer-quality-reviewer";
 import type { ExecutionPlan } from "../lib/v3/contracts";
 import type { GroundedAnswer } from "../lib/provider-response";
 
@@ -26,6 +26,10 @@ assert.deepEqual(parseAnswerQualityReview('{"decision":"REPAIR","issueCodes":["w
 assert.equal(parseAnswerQualityReview('{"decision":"PASS","issueCodes":["wrong_topic"]}').valid, false, "inconsistent review output fails closed");
 assert.equal(parseAnswerQualityReview('{"decision":"PASS","issueCodes":["looks_good"]}').valid, false, "unknown issue codes fail closed");
 assert.equal(parseAnswerQualityReview('{"decision":"REPAIR","issueCodes":["wrong_topic","wrong_topic"]}').valid, false, "duplicate issue codes are rejected by the local contract parser");
+assert.equal(isAnswerQualityRejection({ status: "rejected", reasonCodes: ["answer_quality_issue"] }), true);
+assert.equal(isAnswerQualityRejection({ status: "rejected", reasonCodes: ["unsupported_detail"] }), false,
+  "a quality-review rejection must not be reported as a source-support failure");
+assert.equal(isAnswerQualityRejection({ status: "checked", reasonCodes: ["answer_quality_issue"] }), false);
 
 let capturedSchema = "";
 let capturedJsonSchema: Record<string, unknown> | undefined;

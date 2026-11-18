@@ -282,10 +282,108 @@ async function main() {
     assert.ok(reads < 6);
   });
 
-  await check("untrusted forwarded headers cannot rotate rate-limit identities", () => {
+  await check("untrusted forwarded headers cannot rotate rate-limit identities", async () => {
     delete process.env.TRUST_PROXY_HEADERS;
-    assert.equal(rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "a" } }), "untrusted-test", { limit: 1, windowMs: 60000 }), null);
-    assert.equal(rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "b" } }), "untrusted-test", { limit: 1, windowMs: 60000 })?.status, 429);
+    assert.equal(await rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "a" } }), "untrusted-test", { limit: 1, windowMs: 60000 }), null);
+    assert.equal((await rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "b" } }), "untrusted-test", { limit: 1, windowMs: 60000 }))?.status, 429);
+  });
+
+  await check("production rate limiting fails closed without the shared store", async () => {
+    process.env.CHATBOT_DEPLOYMENT_MODE = "production";
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    const response = await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000 });
+    assert.equal(response?.status, 503);
+    assert.equal(runtimeContract().rateLimits, "instance-local");
+    delete process.env.CHATBOT_DEPLOYMENT_MODE;
+  });
+
+  await check("runtime health reports shared quotas when the shared store is configured", () => {
+    const previous = {
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      kvUrl: process.env.KV_REST_API_URL,
+      kvToken: process.env.KV_REST_API_TOKEN,
+      mode: process.env.CHATBOT_DEPLOYMENT_MODE,
+    };
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    process.env.KV_REST_API_URL = "https://redis.example.test";
+    process.env.KV_REST_API_TOKEN = "test-token";
+    process.env.CHATBOT_DEPLOYMENT_MODE = "production";
+    try {
+      const contract = runtimeContract();
+      assert.equal(contract.quotas, "shared-upstash");
+      assert.equal(contract.rateLimits, "shared-upstash");
+      assert.equal(contract.productionReady, true, "standalone service readiness should require shared limits, not UAEU SSO");
+      assert.equal(contract.allowed, true);
+      assert.equal(contract.durableStore, false, "server-side history storage is optional in standalone mode");
+      assert.equal(contract.institutionalIdentity, "not-integrated");
+      assert.equal(contract.personalStudentData, "unavailable");
+    } finally {
+      if (previous.url === undefined) delete process.env.UPSTASH_REDIS_REST_URL;
+      else process.env.UPSTASH_REDIS_REST_URL = previous.url;
+      if (previous.token === undefined) delete process.env.UPSTASH_REDIS_REST_TOKEN;
+      else process.env.UPSTASH_REDIS_REST_TOKEN = previous.token;
+      if (previous.kvUrl === undefined) delete process.env.KV_REST_API_URL;
+      else process.env.KV_REST_API_URL = previous.kvUrl;
+      if (previous.kvToken === undefined) delete process.env.KV_REST_API_TOKEN;
+      else process.env.KV_REST_API_TOKEN = previous.kvToken;
+      if (previous.mode === undefined) delete process.env.CHATBOT_DEPLOYMENT_MODE;
+      else process.env.CHATBOT_DEPLOYMENT_MODE = previous.mode;
+    }
+  });
+
+  await check("shared limiter applies atomic store result and fails closed on backend errors", async () => {
+    const previous = {
+      redisUrl: process.env.UPSTASH_REDIS_REST_URL,
+      redisToken: process.env.UPSTASH_REDIS_REST_TOKEN,
+      kvUrl: process.env.KV_REST_API_URL,
+      kvToken: process.env.KV_REST_API_TOKEN,
+    };
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    process.env.KV_REST_API_URL = "https://redis.example.test";
+    process.env.KV_REST_API_TOKEN = "test-token";
+    const originalFetch = globalThis.fetch;
+    let capturedRequest: { url: string; init?: RequestInit } | undefined;
+    try {
+      globalThis.fetch = (async (input, init) => {
+        capturedRequest = { url: String(input), init };
+        return Response.json({ result: [2, 30000] });
+      }) as typeof fetch;
+      const limited = await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000, identity: "known-test" });
+      assert.equal(limited?.status, 429);
+      assert.equal(limited?.headers.get("retry-after"), "30");
+      assert.equal(capturedRequest?.url, "https://redis.example.test/");
+      assert.equal((capturedRequest?.init?.headers as Record<string, string>).Authorization, "Bearer test-token");
+      const command = JSON.parse(String(capturedRequest?.init?.body)) as string[];
+      assert.equal(command[0], "EVAL");
+      assert.match(command[1], /redis\.call\('INCR'/);
+      assert.match(command[1], /redis\.call\('PEXPIRE'/);
+      assert.equal(command[2], "1");
+      assert.match(command[3], /^uaeu:rl:[a-f0-9]{64}$/);
+      assert.doesNotMatch(command[3], /known-test/);
+      assert.equal(command[4], "60000");
+
+      process.env.KV_REST_API_URL = "http://redis.example.test";
+      assert.equal((await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000 }))?.status, 503,
+        "Redis credentials must not be sent to a plaintext endpoint");
+      process.env.KV_REST_API_URL = "https://redis.example.test";
+      globalThis.fetch = (async () => { throw new Error("backend down"); }) as typeof fetch;
+      assert.equal((await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000 }))?.status, 503);
+    } finally {
+      globalThis.fetch = originalFetch;
+      for (const [key, value] of [
+        ["UPSTASH_REDIS_REST_URL", previous.redisUrl],
+        ["UPSTASH_REDIS_REST_TOKEN", previous.redisToken],
+        ["KV_REST_API_URL", previous.kvUrl],
+        ["KV_REST_API_TOKEN", previous.kvToken],
+      ] as const) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      }
+    }
   });
 
   await check("Arabic and English topics are aligned without substring false positives", () => {
@@ -310,6 +408,8 @@ async function main() {
     assert.equal(health.knowledge.retrieval.activePath, "curriculum-extract-then-lexical");
     assert.equal(health.knowledge.retrieval.embedding, "disabled");
     assert.equal(health.deployment.productionReady, false);
+    assert.ok(health.deployment.productionBlockers.includes("Deployment mode is prototype"),
+      "health should explain that a healthy Preview is intentionally not production-ready");
     assert.equal(health.agent.v3Enabled, false);
     process.env.UAEU_AGENT_V3_ENABLED = "enabled";
     const v3Response = await GET();
@@ -317,10 +417,10 @@ async function main() {
     assert.equal(v3Health.agent.architecture, "v3-evidence-first");
     assert.equal(v3Health.agent.legacySelectorBypassedForUniversityModes, true);
     assert.equal(v3Health.knowledge.retrieval.activePath, "v3-orchestrator-evidence-research-verified-generation");
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.relationRecords, 1480);
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredRecords, 1477);
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.unsupportedRecords, 3);
-    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredCoveragePercent, 99.8);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.relationRecords, 1491);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredRecords, 1481);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.unsupportedRecords, 10);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredCoveragePercent, 99.3);
     delete process.env.UAEU_AGENT_V3_ENABLED;
     delete process.env.AI_PROVIDER;
     delete process.env.CHATBOT_BUILD_REVISION;

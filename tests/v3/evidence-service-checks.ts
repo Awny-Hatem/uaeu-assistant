@@ -1,9 +1,11 @@
 import assert from "node:assert/strict";
 import { createEvidenceService } from "../../lib/evidence/evidence-service";
+import { loadFaqEntries } from "../../lib/faq";
 import type { EvidenceRow } from "../../lib/knowledge-files";
+import { createExecutionPlan, evidenceQueryForPlan } from "../../lib/orchestration/orchestrator";
 import type { EvidenceQuery } from "../../lib/v3/contracts";
 
-const now = new Date("2026-11-11T08:00:00.000Z");
+const now = new Date("2026-11-16T12:00:00.000Z");
 const rows: EvidenceRow[] = [
   {
     source: "scholarships-deadlines.md",
@@ -126,7 +128,38 @@ const libraryHelpEvidence = createEvidenceService({ now: () => now }).search({
   freshnessRequirement: "normal",
 });
 assert.equal(libraryHelpEvidence.status, "FOUND");
-assert.ok(libraryHelpEvidence.evidence.some((item) => /Ask[- ]a[- ]Librarian/i.test(item.excerpt)));
+assert.ok(libraryHelpEvidence.evidence.some((item) => /Ask[- ]a[- ]Librarian/i.test(`${item.title} ${item.excerpt}`)));
 assert.ok(libraryHelpEvidence.evidence.some((item) => /serviceId=98/.test(item.url ?? "")));
+
+// Real student phrasing carries more scope than many legacy answer records
+// explicitly encode. Verify complete plan→query→evidence behavior, not only
+// the lower-level lexical retriever. Explicit scope conflicts remain rejected.
+const reportedRetrievalCases = [
+  { answerId: "information-security-final-semester", question: "What should an Information Security student take in the final semester?" },
+  { answerId: "academic-probation", question: "Can a student on academic probation register for the usual credit load?" },
+  { answerId: "tuition-program-cost", question: "How are undergraduate tuition fees calculated for international students?" },
+  { answerId: "scholarships-available", question: "Are there merit scholarships for international undergraduate students?" },
+  { answerId: "campus-wifi-connection", question: "My UAEU Wi-Fi connection isn't working. How can I get help?" },
+  { answerId: "counseling-appointment", question: "How can I make an appointment for confidential student counseling?" },
+  { answerId: "career-cv-interview-support", question: "How do I book career counseling or get help improving my CV?" },
+  { answerId: "internships-student-jobs", question: "Where do students look for internship opportunities?" },
+  { answerId: "student-visa-application", question: "I'm an international student. Who helps with my residence visa?" },
+  { answerId: "student-housing-cost", question: "How much is university accommodation for an international undergraduate in summer?" },
+];
+const reviewedEntries = loadFaqEntries();
+const localService = createEvidenceService({ now: () => now });
+for (const testCase of reportedRetrievalCases) {
+  const plan = createExecutionPlan({
+    conversation: [{ role: "user", content: testCase.question }],
+    latest: testCase.question,
+    resolvedRequest: testCase.question,
+  });
+  const result = localService.search(evidenceQueryForPlan(plan));
+  const expectedUrls = reviewedEntries.find((entry) => entry.id === testCase.answerId)?.citations
+    .map((citation) => citation.url).filter((url): url is string => Boolean(url)) ?? [];
+  assert.ok(expectedUrls.length > 0, `Expected reviewed citation metadata for ${testCase.answerId}`);
+  assert.ok(result.evidence.some((item) => expectedUrls.includes(item.url ?? "")),
+    `Expected the full execution plan to retain ${testCase.answerId} for: ${testCase.question}; got ${result.status}`);
+}
 
 console.log("V3 Evidence Service checks passed: hard domain and course identity filters, source-specific citations, event metadata gate, freshness, and policy recall.");

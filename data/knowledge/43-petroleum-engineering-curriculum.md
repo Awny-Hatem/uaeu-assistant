@@ -2,7 +2,7 @@
 status: approved
 title: UAEU Petroleum Engineering degree requirements and cohort plans
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml
-lastVerified: 2026-11-11
+lastVerified: 2026-11-16
 degreeLevel: undergraduate
 curriculum: true
 subjects: academics, petroleum-engineering, engineering, curriculum
@@ -10,26 +10,17 @@ subjects: academics, petroleum-engineering, engineering, curriculum
 
 # UAEU Petroleum Engineering degree requirements and cohort plans
 
-The current official Bachelor of Science in Petroleum Engineering page, last updated 22 September 2026, lists a minimum of **132 credit hours**. The linked cohort study plan makes an important distinction: the 2022–2023 plan states **147 credits**, while the 2023–2024 plan states **132 credits**. These plans must not be blended.
+The current official program page lists a minimum of **132 credit hours**, including **21 General Education credits**. The linked model-plan PDF publishes separate versions by entry cohort. Equal totals do not mean the course sequences are interchangeable.
 
-## 2023–2024 cohort onward: published 132-credit structure
+## Published cohort versions
 
-- General Education: 21 credits.
-- College of Engineering: 35 credits.
-- Petroleum Engineering requirements: 65 credits.
-- Internship: 2 credits (PETE485 and PETE490, 1 credit each).
-- Electives: 9 credits; choose three courses from the published list.
+- **2022-2023 entrants:** 147 total credits. The model now preserves separate Fall-entry and Spring-entry semester sequences; both have eight academic semesters and 15-credit PETE495 Industrial Training in the final semester, and each published semester-subtotal sequence sums to 147 credits. Legacy/current code pairs remain exactly as printed (including MATH1110/130 and ISLM100/ISLM101). The historical PDF does not list eligible major electives, and one Spring-entry student-choice row has no course-type label, so the model does not invent either detail.
+- **2023-2024 cohort onward, before the next named version:** 132 credits.
+- **2025-2026 cohort onward:** 132 credits. This plan lists MATH130 and MATH135.
+- **2026-2027 cohort onward:** 132 credits. This plan lists MATH105, MATH110, and MATH210.
 
-### Required Petroleum Engineering courses
+The 2025-2026 and 2026-2027 PDF sections separately cover students admitted from Fall and Spring. The 2025-2026 version is now represented by its 21 General Education credits, the union of 37 named required courses, two one-credit internships, and a 12-credit major-elective block. The plan's Fall and Spring tables differ in semester placement and some course-type labels, so this model does not claim an ordered semester schedule or category-level credit breakdown. The eligible major-elective list is not complete in the PDF; PETE409 appears in a major-elective slot but is absent from the imported course catalog. Do not apply the 2026-2027 MATH105/MATH110/MATH210 sequence to 2025-2026 students. Ask the student to use the plan assigned in Degree Works or confirm it with College of Engineering advising before recommending courses.
 
-GEOL100, CHEM282, CHME330, CHME390, PETE290, PETE305, PETE308, PETE315, PETE320, PETE362, PETE403, PETE413, PETE419, PETE422, PETE507, PETE512, PETE519, PETE520, PETE542, PETE585, PETE590, PETE407, GENG220, and GENG230.
+The 2023-2024 plan is separately modeled at 132 credits for Fall and Spring entrants. It includes the named course set, one 3-credit General Education student-choice course, three 3-credit major-elective slots, and PETE485/PETE490 internships at one credit each. Fall and Spring semester placement is not represented in that version's model.
 
-### Electives
-
-Choose three (9 credits) from CHME542, PETE410, PETE424, PETE443, PETE526, PETE547, PETE557, and PETE570.
-
-## 2022–2023 cohort
-
-The official model plan states 147 total credits for this cohort. Its course list is not represented as a complete structured requirement model here, so the assistant can report the published total but will not claim an audited list of required courses. Confirm the assigned Degree Works plan.
-
-The 132-credit current model is scoped to the 2023–2024 cohort onward. The page allows PETE485 and PETE490 in separate summers or together during a regular Fall or Spring semester. General-education options, personal completion, course availability, prerequisites beyond the official course catalog, and registration eligibility are not determined here.
+The current program page publishes current degree requirements and General Education themes; it does not prove which catalog or plan version is assigned to an individual student. Course availability, completed requirements, registration eligibility, and remaining time to graduation require the student's current record and advising review.

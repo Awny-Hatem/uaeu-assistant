@@ -7,6 +7,7 @@ export type PrerequisiteExpression =
   | { type: "COURSE_GRADE_AT_LEAST"; courseCode: string; minimumGrade: MinimumGrade }
   | { type: "COURSE_COMPLETED"; courseCode: string }
   | { type: "COURSE_CURRENT"; courseCode: string }
+  | { type: "ACADEMIC_STANDING_AT_LEAST"; standing: "senior" }
   | { op: "AND" | "OR"; conditions: PrerequisiteExpression[] };
 
 export type PrerequisiteRule = {
@@ -29,6 +30,7 @@ export type PrerequisiteRule = {
 export type RuleConditionResult = {
   path: string;
   courseCode?: string;
+  label?: string;
   status: "SATISFIED" | "NOT_SATISFIED" | "UNKNOWN";
   reason: string;
 };
@@ -48,6 +50,9 @@ export type PrerequisiteEvaluation = {
 export type AcademicSnapshot = {
   completedCourses: { courseCode: string; grade: string }[];
   currentCourses?: string[];
+  explicitlyNotCompletedCourses?: string[];
+  /** Self-reported standing only; never a verified student-record value. */
+  seniorStanding?: boolean;
 };
 
 const gradeOrder: Record<Grade, number> = {
@@ -64,6 +69,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function isExpression(value: unknown): value is PrerequisiteExpression {
   if (!isRecord(value)) return false;
+  if (value.type === "ACADEMIC_STANDING_AT_LEAST") return value.standing === "senior";
   if (value.type === "COURSE_CURRENT") return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode);
   if (value.type === "COURSE_COMPLETED") return typeof value.courseCode === "string" && COURSE_CODE.test(value.courseCode);
   if (value.type === "COURSE_GRADE_AT_LEAST") {
@@ -113,6 +119,21 @@ function evaluateExpression(
     return children.includes("true") ? "true" : children.includes("unknown") ? "unknown" : "false";
   }
 
+  if (expression.type === "ACADEMIC_STANDING_AT_LEAST") {
+    const satisfied = snapshot.seniorStanding;
+    results.push({
+      path,
+      label: "senior standing",
+      status: satisfied === undefined ? "UNKNOWN" : satisfied ? "SATISFIED" : "NOT_SATISFIED",
+      reason: satisfied === undefined
+        ? "Your academic standing is not known from this conversation."
+        : satisfied
+          ? "You reported that you have senior standing."
+          : "You reported that you do not have senior standing.",
+    });
+    return satisfied === undefined ? "unknown" : satisfied ? "true" : "false";
+  }
+
   const code = expression.courseCode;
   if (expression.type === "COURSE_CURRENT") {
     const current = new Set((snapshot.currentCourses ?? []).map((item) => item.trim().toUpperCase()));
@@ -122,6 +143,11 @@ function evaluateExpression(
   }
 
   const matching = snapshot.completedCourses.filter((item) => item.courseCode.trim().toUpperCase() === code);
+  const explicitlyNotCompleted = new Set((snapshot.explicitlyNotCompletedCourses ?? []).map((item) => item.trim().toUpperCase())).has(code);
+  if (explicitlyNotCompleted && !matching.length) {
+    results.push({ path, courseCode: code, status: "NOT_SATISFIED", reason: `${code} was explicitly stated as not completed.` });
+    return "false";
+  }
   const grades = [...new Set(matching.map((item) => item.grade.trim().toUpperCase()))];
   if (grades.length > 1) {
     results.push({ path, courseCode: code, status: "UNKNOWN", reason: `Conflicting grades were supplied for ${code}.` });
@@ -213,6 +239,22 @@ export function evaluatePrerequisite(input: {
     return { targetCourse: empty, status: "UNDETERMINED", resolutionState: "UNSUPPORTED", decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT", conditions: [], explanation: "No approved prerequisite rule is modeled for this course." };
   }
 
+  // ISEC421 has unreconciled official catalog vs. program-plan requirements.
+  // This API has no cohort input, so a personal eligibility verdict would be unsafe.
+  if (targetCode === "ISEC421") {
+    return {
+      targetCourse: rule.course,
+      status: "UNDETERMINED",
+      resolutionState: "UNSUPPORTED",
+      decisionKind: "NON_OFFICIAL_RULE_ASSESSMENT",
+      ruleId: rule.id,
+      ruleVersion: rule.version,
+      conditions: [],
+      source: rule.source,
+      explanation: "Official sources conflict on ISEC421 prerequisites. The current course-detail catalog lists CSBP320 and ITBP301; the Fall 2025-onward Information Security plan lists STAT210 and ITBP301. Confirm the requirement in your assigned Degree Works plan with CIT advising.",
+    };
+  }
+
   const asOf = input.asOf ?? new Date().toISOString().slice(0, 10);
   const ageDays = Math.floor((Date.parse(asOf) - Date.parse(rule.verifiedAt)) / 86_400_000);
   if (!Number.isFinite(Date.parse(asOf)) || ageDays < 0 || ageDays > MAX_RULE_AGE_DAYS ||
@@ -245,9 +287,20 @@ export function listModeledPrerequisiteCourses(): PrerequisiteRule["course"][] {
   return prerequisiteRules.map(({ course }) => course);
 }
 
+export function getCurrentPrerequisiteRule(courseCode: string, asOf = new Date().toISOString().slice(0, 10)): PrerequisiteRule | null {
+  const code = courseCode.trim().toUpperCase();
+  const rule = prerequisiteRules.find((item) => item.course.code === code);
+  if (!rule) return null;
+  const ageDays = Math.floor((Date.parse(asOf) - Date.parse(rule.verifiedAt)) / 86_400_000);
+  if (!Number.isFinite(Date.parse(asOf)) || ageDays < 0 || ageDays > MAX_RULE_AGE_DAYS ||
+      (rule.effectiveFrom !== undefined && asOf < rule.effectiveFrom) || (rule.effectiveTo && asOf > rule.effectiveTo)) return null;
+  return rule;
+}
+
 export function asksPersonalPrerequisiteEligibility(question: string): boolean {
+  if (/\b(?:same semester|same term|concurrently|at the same time|together)\b/iu.test(question)) return false;
   return /\b(?:can i|may i|am i|do i meet|eligible to|allowed to|register for|registration eligibility|enroll in|enrol in|my grade|my grades|my record|my transcript|based on my)\b/iu.test(question) ||
-    /(?:Ù‡Ù„\s*(?:Ø£Ø³ØªØ·ÙŠØ¹|ÙŠÙ…ÙƒÙ†Ù†ÙŠ)|Ù‡Ù„ Ø£Ø³Ø¬Ù„|Ø£Ù‡Ù„ Ø£Ù†|Ø£Ø³ØªÙˆÙÙŠ)/u.test(question) ||
+    /(?:هل\s*(?:أستطيع|يمكنني)|هل أسجل|أهل أن|أستوفي)/u.test(question) ||
     /\u0647\u0644\s*(?:\u0623\u0633\u062a\u0637\u064a\u0639|\u064a\u0645\u0643\u0646\u0646\u064a).*(?:\u062a\u0633\u062c\u064a\u0644|\u0623\u062f\u0631\u0633|\u0622\u062e\u0630)/u.test(question);
 }
 
@@ -267,19 +320,40 @@ function courseCodeFromQuestion(question: string): string | undefined {
     const target = match?.[1]?.toUpperCase();
     if (target && prerequisiteRules.some((rule) => rule.course.code === target)) return target;
   }
+  // Resolve an explicitly named catalog title when the question also mentions
+  // prerequisite course codes (for example: "passed CSBP119 ... Data Structures").
+  const normalizedQuestion = question.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+  const namedTargets = prerequisiteRules.filter(({ course }) => {
+    const title = course.title.toLocaleLowerCase().replace(/[^\p{L}\p{N}]+/gu, " ").trim();
+    return title.length > 0 && ` ${normalizedQuestion} `.includes(` ${title} `);
+  });
+  const mentionedCodes = [...question.matchAll(/\b([A-Z]{2,8})[\s-]?(\d{3,4}[A-Z]?)\b/giu)];
+  if (mentionedCodes.length > 1 && namedTargets.length === 1) return namedTargets[0].course.code;
   return undefined;
 }
 
 export function academicSnapshotFromMessages(messages: { role: "user" | "assistant"; content: string }[]): AcademicSnapshot {
   const completed = new Map<string, Set<string>>();
   const current = new Set<string>();
+  const explicitlyNotCompleted = new Set<string>();
+  let seniorStanding: boolean | undefined;
   const grades = "(PASS|FA|NP|AW|CC|CX|I|W|P|S|A-|A|B\\+|B-|B|C\\+|C-|C|D\\+|D|F|100(?:\\.\\d+)?|[0-9]{1,2}(?:\\.\\d+)?)";
   const code = "([A-Z]{2,8}\\d{3,4}[A-Z]?)";
 
   for (const message of messages) {
     if (message.role !== "user") continue;
+    const priorAssistant = messages.slice(0, messages.indexOf(message)).reverse().find((item) => item.role === "assistant")?.content ?? "";
+    const text = message.content.trim();
+    if (/\b(?:i do not have|i don't have|i am not|i'm not)\s+(?:a\s+)?senior\s+standing\b|\bmy\s+(?:academic\s+)?standing\s+is\s+not\s+senior\b/i.test(text)) {
+      seniorStanding = false;
+    } else if (/\b(?:i have|i hold)\s+senior\s+standing\b|\bmy\s+(?:academic\s+)?standing\s+is\s+senior\b/i.test(text) ||
+        (/\b(?:academic\s+)?standing\b/i.test(priorAssistant) && /^senior\b[.!?]*$/i.test(text))) {
+      seniorStanding = true;
+    }
     const clauses = message.content.toUpperCase().split(/[.!?;]|\bBUT\b/);
     for (const clause of clauses) {
+      const explicitNegation = new RegExp(`\\b(?:NOT|NEVER|DIDN'T|DID NOT|HAVEN'T|HAVE NOT|HASN'T|HAS NOT)\\s+(?:(?:YET|PASSED|COMPLETED|FINISHED|EARNED)\\s+)*${code}\\b`, "g");
+      for (const match of clause.matchAll(explicitNegation)) explicitlyNotCompleted.add(match[1]);
       if (/(?:لم|ما)\s+(?:أجتز|اجتز|نجح|أكمل|اكمل|أنهِ|انهِ)/u.test(clause)) continue;
       if (/\b(?:NOT|NEVER|DIDN'T|DID NOT|HAVEN'T|HAVE NOT|HASN'T|HAS NOT)\s+(?:YET\s+)?(?:PASSED|COMPLETED|FINISHED|EARNED)\b/.test(clause)) continue;
 
@@ -351,6 +425,8 @@ export function academicSnapshotFromMessages(messages: { role: "user" | "assista
   return {
     completedCourses: [...completed].flatMap(([courseCode, values]) => [...values].map((grade) => ({ courseCode, grade }))),
     currentCourses: [...current],
+    explicitlyNotCompletedCourses: [...explicitlyNotCompleted],
+    seniorStanding,
   };
 }
 
@@ -374,8 +450,8 @@ export function assessPrerequisiteConversation(
 function completedOrCurrentPair(expression: PrerequisiteExpression): string | null {
   if (!("op" in expression) || expression.op !== "OR" || expression.conditions.length !== 2) return null;
   const current = expression.conditions.find((condition) => !("op" in condition) && condition.type === "COURSE_CURRENT");
-  const completed = expression.conditions.find((condition) => !("op" in condition) && condition.type !== "COURSE_CURRENT");
-  if (!current || !completed || "op" in current || "op" in completed || current.courseCode !== completed.courseCode) return null;
+  const completed = expression.conditions.find((condition) => "courseCode" in condition && condition.type !== "COURSE_CURRENT");
+  if (!current || !completed || "op" in current || "op" in completed || !("courseCode" in current) || !("courseCode" in completed) || current.courseCode !== completed.courseCode) return null;
   return current.courseCode;
 }
 
@@ -397,8 +473,11 @@ function describeExpression(expression: PrerequisiteExpression, locale: "en" | "
     if (locale === "ar") return expression.op === "AND" ? parts.join(" و ") : `إما ${parts.join(" أو ")}`;
     return expression.op === "AND" ? parts.join(" and ") : `either ${parts.join(" or ")}`;
   }
+  if ("standing" in expression) {
+    return locale === "ar" ? "المستوى الدراسي senior" : "senior standing";
+  }
   if (expression.type === "COURSE_COMPLETED") {
-    return locale === "ar" ? `Ø¥ÙƒÙ…Ø§Ù„ ${expression.courseCode}` : `completion of ${expression.courseCode}`;
+    return locale === "ar" ? `إكمال ${expression.courseCode}` : `completion of ${expression.courseCode}`;
   }
   if (locale === "ar") return expression.type === "COURSE_CURRENT"
     ? `التسجيل الحالي في ${expression.courseCode}`
@@ -452,6 +531,11 @@ export function renderPrerequisiteAssessment(
   locale: "en" | "ar",
 ): string {
   const { rule, evaluation } = assessment;
+  if (rule.course.code === "ISEC421" && evaluation.resolutionState === "UNSUPPORTED") {
+    return locale === "ar"
+      ? "**يوجد تعارض بين المصادر الرسمية لمتطلبات ISEC421.** يذكر فهرس تفاصيل المقرر CSBP320 وITBP301، بينما تذكر خطة بكالوريوس أمن المعلومات ابتداءً من خريف 2025 STAT210 وITBP301. لا يمكن إصدار حكم شخصي بالأهلية دون معرفة الخطة المخصصة لك. تحقق من Degree Works وأكد المتطلب مع الإرشاد الأكاديمي في كلية الحوسبة والذكاء الاصطناعي."
+      : "**Official sources conflict on ISEC421 prerequisites.** The current course-detail catalog lists CSBP320 and ITBP301, while the Fall 2025-onward Information Security plan lists STAT210 and ITBP301. I cannot give a personal eligibility verdict without knowing your assigned plan. Check Degree Works and confirm with CIT advising.";
+  }
   const relevantConditions = evaluation.status === "ELIGIBLE"
     ? evaluation.conditions.filter((condition) => condition.status === "SATISFIED")
     : relevantConditionResults(rule.expression, "1", new Map(evaluation.conditions.map((condition) => [condition.path, condition])));
@@ -462,7 +546,7 @@ export function renderPrerequisiteAssessment(
       : evaluation.status === "NOT_ELIGIBLE"
         ? "استنادًا إلى المعلومات التي ذكرتها، لا تتحقق متطلبات المساق المحددة في القاعدة. تحقق من معادلة المقررات أو الاستثناءات مع مرشد كليتك."
         : "لا يمكن حسم متطلباتك من المعلومات المتاحة. أرسل درجات المقررات المطلوبة كما تظهر في سجلك الدراسي.";
-    const conditions = relevantConditions.map((condition) => `- ${condition.status === "SATISFIED" ? "المعلومات المدخلة تستوفي الشرط" : condition.status === "NOT_SATISFIED" ? "المعلومات المدخلة لا تستوفي الشرط" : "لا تتوفر معلومات كافية للتحقق من الشرط"} الخاص بـ ${condition.courseCode}.`).join("\n");
+    const conditions = relevantConditions.map((condition) => `- ${condition.status === "SATISFIED" ? "المعلومات المدخلة تستوفي الشرط" : condition.status === "NOT_SATISFIED" ? "المعلومات المدخلة لا تستوفي الشرط" : "لا تتوفر معلومات كافية للتحقق من الشرط"}${condition.courseCode ? ` الخاص بـ ${condition.courseCode}` : ` (${condition.label ?? "شرط المستوى الدراسي"})`}.`).join("\n");
     return [requirement, conditions, result, "هذه مقارنة إرشادية مع القاعدة المنشورة باستخدام المعلومات التي أدخلتها؛ لا أستطيع الوصول إلى سجلك، ولا تؤكد النتيجة السماح بالتسجيل أو توفر شعبة. تحقق من Degree Works أو بوابة التسجيل، واسأل مرشدك عن اختلافات الخطة أو المعادلات."]
       .filter(Boolean).join("\n\n");
   }

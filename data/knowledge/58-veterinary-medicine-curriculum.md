@@ -2,7 +2,7 @@
 status: approved
 title: UAEU Bachelor of Veterinary Medicine published degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/cavm/programs/undergraduate/bachelor-of-veterinary-medicine.shtml
-lastVerified: 2026-11-11
+lastVerified: 2026-11-16
 degreeLevel: undergraduate
 curriculum: true
 subjects: academics, veterinary medicine, agriculture, curriculum
@@ -19,7 +19,9 @@ The current degree page lists **175 credits**: 21 General Education, 124 major, 
 
 ## Cohort limits
 
-The current page lists 175 credits. Linked model plans list 152 credits for 2022-2023 and 175 credits from 2024-2025 onwards, with different course sets. The model stores those plan totals separately and does not assign current page course details to cohorts. The degree structure is not an admission eligibility decision or an individual Degree Works audit.
+The linked model-plan PDF lists a Fall-entry 2022-2023 sequence across ten semesters, then separate 175-credit plans for Fall-entry 2024-2025, 2025-2026, and 2026-2027 cohorts. The 2022-2023 semester course groups and named choices are now represented, but their subtotals add to 149, three credits below the 152-credit program-plan record. The PDF does not explain the difference, so no course or credit block is inferred to fill it. The older plan is selected only for an explicitly stated Fall entry; Spring-entry requirements for this cohort are not established.
+
+The three 175-credit plans are modeled separately because course codes change: for example, VMED109 becomes VMED108, and GEIT112/GEIT113 is replaced by VMED143 across later versions. Each model includes the named course set and the plan's 3-credit major-elective slot; it does not assign course completion, current offerings, or an individual Degree Works plan. The degree structure is not an admission eligibility decision or an individual Degree Works audit.
 
 ## Official sources
 

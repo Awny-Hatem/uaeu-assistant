@@ -1,6 +1,7 @@
 import { generateAssistantResponse } from "@/lib/ai-provider";
 import type { ExecutionPlan } from "@/lib/v3/contracts";
 import type { GroundedAnswer } from "@/lib/provider-response";
+import type { AnswerGrounding } from "@/lib/prototype-types";
 
 export const ANSWER_QUALITY_ISSUES = [
   "wrong_topic",
@@ -17,6 +18,10 @@ export type AnswerQualityReview = {
   issueCodes: AnswerQualityIssue[];
   reasonCode?: "answer_quality_issue" | "invalid_verification_contract";
 };
+
+export function isAnswerQualityRejection(grounding?: Pick<AnswerGrounding, "status" | "reasonCodes">): boolean {
+  return grounding?.status === "rejected" && grounding.reasonCodes.includes("answer_quality_issue");
+}
 
 const FAILED_REVIEW: AnswerQualityReview = {
   valid: false,

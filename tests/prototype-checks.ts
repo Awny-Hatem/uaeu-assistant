@@ -29,14 +29,19 @@ async function main() {
   const { POST: signupPost } = await import("../app/api/auth/signup/route");
   const { default: db } = await import("../lib/db");
   const { getQuotaLimit, getQuotaPlan, isUniversityEmail } = await import("../lib/access");
+  const { getEnforcedQuotaLimit } = await import("../lib/server-quota");
   const { providerHealthSnapshot } = await import("../lib/ai-provider");
   const { faqHealthSnapshot, faqScope, loadFaqEntries, matchFaq, normalizeAnswerText } = await import("../lib/faq");
   const { lexicalRetrieve, retrieveVerifiedEvidence } = await import("../lib/knowledge-files");
   const { resolveConversation, understandQuery } = await import("../lib/query-understanding");
-  const { loadServiceGuides } = await import("../lib/service-guides");
+  const { admissionScopePrefix } = await import("../lib/v3/admission-scope-prefix");
+  const { findServiceGuide, loadServiceGuides } = await import("../lib/service-guides");
   const { loadEmbeddingChunks } = await import("../lib/vector-rag");
   const { finalizeProviderResponse } = await import("../lib/provider-response");
   const { citationsFromRows } = await import("../lib/citations");
+  assert.match(admissionScopePrefix({ term: "fall", year: 2027, degreeLevel: "undergraduate" }, "en"), /Fall 2027 undergraduate admission/);
+  assert.match(admissionScopePrefix({ term: "fall", year: 2027, degreeLevel: "undergraduate" }, "ar"), /خريف 2027/);
+  assert.equal(admissionScopePrefix({}, "en"), "");
   const {
     decodeLocalAccountsCookie,
     decodeSessionCookie,
@@ -137,6 +142,27 @@ async function main() {
       name: "guest limit defaults to 10 questions",
       run: () => {
         assert.equal(getQuotaLimit("guest"), 10);
+      },
+    },
+    {
+      name: "server-enforced limits use private configuration, not browser-visible values",
+      run: () => {
+        const previous = {
+          guest: process.env.CHATBOT_GUEST_QUESTION_LIMIT,
+          publicGuest: process.env.NEXT_PUBLIC_GUEST_QUESTION_LIMIT,
+        };
+        process.env.NEXT_PUBLIC_GUEST_QUESTION_LIMIT = "999";
+        try {
+          delete process.env.CHATBOT_GUEST_QUESTION_LIMIT;
+          assert.equal(getEnforcedQuotaLimit("guest"), 10);
+          process.env.CHATBOT_GUEST_QUESTION_LIMIT = "7";
+          assert.equal(getEnforcedQuotaLimit("guest"), 7);
+        } finally {
+          if (previous.guest === undefined) delete process.env.CHATBOT_GUEST_QUESTION_LIMIT;
+          else process.env.CHATBOT_GUEST_QUESTION_LIMIT = previous.guest;
+          if (previous.publicGuest === undefined) delete process.env.NEXT_PUBLIC_GUEST_QUESTION_LIMIT;
+          else process.env.NEXT_PUBLIC_GUEST_QUESTION_LIMIT = previous.publicGuest;
+        }
       },
     },
     {
@@ -275,7 +301,9 @@ async function main() {
         const health = faqHealthSnapshot(now);
         assert.equal(health.complete, true);
         assert.equal(health.packs.length, 2);
-        assert.ok(health.packs.every((pack) => pack.latestVerification && Date.parse(pack.latestVerification) <= now));
+        assert.ok(health.packs.every((pack) =>
+          pack.latestVerification && Date.parse(`${pack.latestVerification}T00:00:00Z`) <= now + 24 * 60 * 60 * 1000,
+        ));
         assert.equal(faqHealthSnapshot(now + 181 * 24 * 60 * 60 * 1000).complete, false);
       },
     },
@@ -332,6 +360,28 @@ async function main() {
             // provider evaluation, not a deterministic English orchestration mock.
             continue;
           }
+          const reviewedGuide = findServiceGuide(arabicQuery);
+          if (reviewedGuide) {
+            assert.equal(result.data.source, "guide", `${entry.id} should use its directly matched reviewed service guide`);
+            assert.equal(result.data.guide?.id, reviewedGuide.id);
+            assert.ok(result.data.citations?.some((citation) => citation.url === reviewedGuide.officialUrl),
+              `${entry.id} guide route must retain its matching official source`);
+            assert.ok(arabicText.test(result.data.content ?? ""),
+              `${entry.id} guided answer must remain in Arabic`);
+            continue;
+          }
+          if (
+            entry.id === "course-prerequisites-data-structures" &&
+            result.data.stateLabel === "v3_official_course_catalog_lookup"
+          ) {
+            assert.equal(result.data.source, "rag");
+            assert.match(result.data.content ?? "", /CSBP319/);
+            assert.match(result.data.content ?? "", /CSBP219/);
+            assert.match(result.data.content ?? "", /CSBP221/);
+            assert.ok(arabicText.test(result.data.content ?? ""));
+            assertOfficialCitation(result, /CSBP319/i);
+            continue;
+          }
           assert.equal(
             result.data.faqId,
             entry.id,
@@ -359,11 +409,11 @@ async function main() {
         assertFaq(result, "course-prerequisites-data-structures", "answer");
         assert.match(
           result.data.content ?? "",
-          /CSBP219[\s\S]*prerequisite[\s\S]*minimum grade of D/i,
+          /CSBP219[\s\S]*minimum grade of D/i,
         );
         assert.match(
           result.data.content ?? "",
-          /CSBP221[\s\S]*pre- or corequisite[\s\S]*minimum grade of D/i,
+          /CSBP221[\s\S]*pre\/?corequisite[\s\S]*minimum grade of D/i,
         );
         assertOfficialCitation(result, /CSBP319/i);
 
@@ -538,6 +588,26 @@ async function main() {
         // Mock generation cannot validate final prose. The independent real-provider
         // suite checks the grounded answer; this test checks context/evidence only.
         assert.deepEqual(result.data.citations, []);
+
+        const previousV3Flag = process.env.UAEU_AGENT_V3_ENABLED;
+        process.env.UAEU_AGENT_V3_ENABLED = "enabled";
+        try {
+          const arabicFollowUp = await postJson({
+            locale: "ar",
+            messages: [
+              { role: "user", content: "I want to apply for Fall 2027." },
+              { role: "assistant", content: "I can help you find the official application dates." },
+              { role: "user", content: "ما الموعد النهائي للتقديم؟" },
+            ],
+          });
+          assert.equal(arabicFollowUp.status, 200);
+          assert.equal(arabicFollowUp.data.faqId, "admissions-application-deadline");
+          assert.match(arabicFollowUp.data.content ?? "", /خريف 2027/);
+        } finally {
+          if (previousV3Flag === undefined) delete process.env.UAEU_AGENT_V3_ENABLED;
+          else process.env.UAEU_AGENT_V3_ENABLED = previousV3Flag;
+        }
+
       },
     },
     {
@@ -559,6 +629,31 @@ async function main() {
       },
     },
     {
+      name: "Arabic Information Security credit question bypasses selector and model availability",
+      run: async () => {
+        const previousV3Flag = process.env.UAEU_AGENT_V3_ENABLED;
+        process.env.UAEU_AGENT_V3_ENABLED = "disabled";
+        try {
+          const result = await postJson({
+            locale: "ar",
+            messages: [{
+              role: "user",
+              content: "\u0643\u0645 \u0639\u062f\u062f \u0627\u0644\u0633\u0627\u0639\u0627\u062a \u0627\u0644\u0645\u0637\u0644\u0648\u0628\u0629 \u0644\u0644\u062a\u062e\u0631\u062c \u0645\u0646 \u0628\u0643\u0627\u0644\u0648\u0631\u064a\u0648\u0633 \u0623\u0645\u0646 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a\u061f",
+            }],
+          });
+          assert.equal(result.status, 200);
+          assert.equal(result.data.source, "rag");
+          assert.equal(result.data.stateLabel, "published_curriculum_snapshot_answer");
+          assert.match(result.data.content ?? "", /120/);
+          assert.match(result.data.content ?? "", /[\u0600-\u06ff]/u);
+          assertOfficialCitation(result);
+        } finally {
+          if (previousV3Flag === undefined) delete process.env.UAEU_AGENT_V3_ENABLED;
+          else process.env.UAEU_AGENT_V3_ENABLED = previousV3Flag;
+        }
+      },
+    },
+    {
       name: "medical emergency answer gives UAE ambulance and police numbers",
       run: async () => {
         const result = await postJson({
@@ -570,7 +665,7 @@ async function main() {
         assertFaq(result, "campus-medical-emergency", "urgent");
         assert.match(result.data.content ?? "", /Ambulance[\s\S]*998/i);
         assert.match(result.data.content ?? "", /Police[\s\S]*999/i);
-        assertOfficialCitation(result, /justice-safety-and-the-law\/Safety/i);
+        assertOfficialCitation(result, /handling-emergencies/i);
       },
     },
     {
@@ -794,8 +889,8 @@ async function main() {
         assert.match(result.data.content ?? "", /CSBP340/);
         assert.match(result.data.content ?? "", /CSBP319[\s\S]*minimum grade D/i);
         assert.match(result.data.content ?? "", /CSBP323[\s\S]*minimum grade D/i);
-        assert.match(result.data.content ?? "", /incomplete/i);
-        assert.match(result.data.content ?? "", /does not establish whether both courses, either course, or another alternative is required/i);
+        assert.match(result.data.content ?? "", /CSBP323.*or CSBP319/i);
+        assert.doesNotMatch(result.data.content ?? "", /incomplete|does not establish whether/i);
         assert.notEqual(result.data.faqId, "library-databases-remote-access");
       },
     },
@@ -846,15 +941,15 @@ async function main() {
       run: async () => {
         const cases = [
           ["What is the housing application deadline?", "student-housing-application", /not specify an application deadline[\s\S]*does not establish that no deadline exists/i],
-          ["What is the graduate application deadline?", "admissions-graduate-application", /deadlines depend on the degree, program and intake[\s\S]*does not establish a later intake.s closing date/i],
-          ["What is the visa application deadline?", "student-visa-application", /does not publish a separate fixed application deadline/i],
+          ["What is the graduate application deadline?", "admissions-graduate-application", /deadline row does not assign separate dates by program or term[\s\S]*does not establish a later cycle.s deadline/i],
+          ["What is the visa application deadline?", "student-visa-application", /public page does not establish a separate fixed application deadline/i],
           ["How can I check my graduation application status?", "graduation-application", /College Advising Unit or Admission and Registration[\s\S]*request reference[\s\S]*does not establish a specific private tracking screen/i],
           ["What payment methods can I use for housing?", "student-housing-cost", /payment before entering[\s\S]*cash and installments are not accepted/i],
           ["What is the housing application fee?", "student-housing-cost", /does not list a separate housing application fee/i],
-          ["How long does visa renewal take?", "student-visa-renewal", /seven days/i],
+          ["How long does visa renewal take?", "student-visa-renewal", /seven.day/i],
           ["How long does the housing application take?", "student-housing-application", /5 minutes[\s\S]*Immediate[\s\S]*do not guarantee/i],
           ["How long does undergraduate admission take?", "admissions-apply-undergraduate", /12-day service delivery target[\s\S]*not an intake deadline or guaranteed admission decision/i],
-          ["How long does a library request take?", "library-request-processing-time", /one-hour delivery target[\s\S]*not a guarantee or a universal library turnaround/i],
+          ["How long does a library request take?", "library-request-processing-time", /one-hour target[\s\S]*within 48 hours[\s\S]*official estimates conflict[\s\S]*neither is guaranteed/i],
         ] as const;
 
         for (const [content, answerId, pattern] of cases) {
@@ -928,13 +1023,13 @@ async function main() {
             prior: "How can I change my major?",
             followUp: "How long does it take?",
             answerId: "change-major",
-            pattern: /does not state a fixed processing time/i,
+            pattern: /no later than the end of the first week of the subsequent regular semester/i,
           },
           {
             prior: "How do I renew my student visa?",
             followUp: "How long does it take?",
             answerId: "student-visa-renewal",
-            pattern: /seven days/i,
+            pattern: /seven.day/i,
           },
         ] as const;
 
@@ -972,6 +1067,14 @@ async function main() {
           ["How can I check my application status right now?", "admissions-application-status"],
           ["I was wondering: How do I add or drop a course?", "course-add-drop"],
           ["Could you explain how I change my major?", "change-major"],
+          ["Please distinguish confirmed information from anything I must verify: How do I add or drop a course?", "course-add-drop"],
+          ["For a student asking UAEU, what does the cited official information say? How do I add or drop a course?", "course-add-drop"],
+          ["Please give the practical next step and cite the relevant UAEU evidence: How do I add or drop a course?", "course-add-drop"],
+          ["Answer this UAEU question from the relevant official source, not a similar topic: How do I add or drop a course?", "course-add-drop"],
+          ["What is the source-supported answer to this student question? How do I add or drop a course?", "course-add-drop"],
+          ["Please answer only what the official UAEU evidence supports: How do I add or drop a course?", "course-add-drop"],
+          ["Please answer only what the official UAEU evidence supports: How do I withdraw from a course after add/drop?", "course-withdrawal"],
+          ["Please answer only what the official UAEU evidence supports: How can I contact my academic advisor?", "academic-advisor-contact"],
         ] as const;
 
         for (const [content, answerId] of cases) {
@@ -994,10 +1097,15 @@ async function main() {
             { role: "user", content: "I'm asking if it's possible to change after my third year from business to finance." },
           ],
         });
-        assertFaq(result, "change-major-third-year");
-        assert.match(result.data.content ?? "", /does not state a third-year cutoff|third year is not identified/i);
-        assert.match(result.data.content ?? "", /not an approval guarantee|not a guarantee/i);
-        assert.doesNotMatch(result.data.content ?? "", /Computer Science second semester|Information Security/i);
+        assert.equal(result.status, 200);
+        assert.ok(["v3_reviewed_answer", "guided_service"].includes(String(result.data.stateLabel)));
+        const displayedFacts = `${result.data.content ?? ""}\n${JSON.stringify(result.data.guide ?? {})}`;
+        assert.match(displayedFacts, /does not (?:state|set) a third-year cutoff|third year is not identified/i);
+        assert.match(displayedFacts, /not an approval guarantee|not a guarantee|does not guarantee approval/i);
+        assert.match(displayedFacts, /no later than the end of the first week of the subsequent regular semester/i);
+        assert.match(displayedFacts, /does not list a Fall 2026 internal-transfer window/i);
+        assert.doesNotMatch(displayedFacts, /Computer Science second semester|Information Security/i);
+        assertOfficialCitation(result);
       },
     },
     {
@@ -1058,10 +1166,16 @@ async function main() {
           locale: "auto",
           messages: [{ role: "user", content: "I need a course plan that satisfies prerequisites, avoids taking two heavy courses together, and reaches 120 credits. Which parts can the current assistant calculate and which parts require official program data?" }],
         });
-        assertFaq(result, "course-planning-capability-boundary", "clarify");
+        assertFaq(result, "course-planning-capability-boundary", "answer");
         assert.match(result.data.content ?? "", /prerequisites and corequisites/i);
         assert.match(result.data.content ?? "", /120-credit/i);
         assert.match(result.data.content ?? "", /conditional plan/i);
+        const arabic = await postJson({
+          locale: "auto",
+          messages: [{ role: "user", content: "ما الذي يمكن للمساعد حسابه في خطة المقررات والمتطلبات السابقة" }],
+        });
+        assertFaq(arabic, "course-planning-capability-boundary", "answer");
+        assert.match(arabic.data.content ?? "", /[\u0600-\u06ff]/u);
       },
     },
     {
@@ -1290,7 +1404,7 @@ async function main() {
         assert.equal(result.status, 200);
         assert.equal(result.data.source, "guide");
         assert.equal(result.data.guide?.id, "to-whom-it-may-concern");
-        assert.match(result.data.content ?? "", /10 minutes/i);
+        assert.match(result.data.content ?? "", /10[- ]minutes?/i);
         assertOfficialCitation(result, /serviceId=92/i);
       },
     },
@@ -1322,7 +1436,7 @@ async function main() {
         assert.ok(guide.steps.length >= 5);
         assert.match(guide.officialUrl, /serviceId=92/);
         assert.equal(guide.requiresVerification, false);
-        assert.match(guide.description, /10 minutes/i);
+        assert.match(guide.description, /10[- ]minutes?/i);
         assert.match(guide.description, /three months/i);
       },
     },

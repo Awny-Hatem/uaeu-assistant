@@ -27,12 +27,14 @@ The standalone app can explain university procedures, prepare a checklist or req
 
 ## Six standalone phases and exit criteria
 
+These phases track implementation completion. Close each phase against its specific capability and data conditions; use focused regression checks during implementation. Do not repeat the full question benchmark after every phase. Run the comprehensive acceptance benchmark once, after Phases 0–5 are implemented, against the final pinned candidate. Keep the initial supported curriculum scope to UAEU's published undergraduate programs; do not imply graduate degree-audit coverage until it has its own complete inventory. “Any question” is not a factual guarantee: the product must answer supported questions with evidence and give a useful, honest boundary for unsupported ones.
+
 ### Phase 0 — Reproducible baseline
 
-- Identify the actual source revision and deployment identity where available.
-- Keep a fixed V2 comparison set and an independently labeled V3 evaluation set.
+- Pin the candidate branch revision, source/config identity, and fixed 100-case student-question fixture.
 - Separate code correctness, route success, factual correctness, and safe abstention in reports.
 - Preserve production as read-only throughout branch work.
+- **Close when:** the candidate and fixed test set are reproducible, the report distinguishes code/HTTP success from factual correctness and safe abstention, and no production change was made. If the deployed production identity cannot be verified, report that gap; it does not block a standalone V3 baseline.
 
 ### Phase 1 — Trusted standalone information assistant
 
@@ -40,13 +42,15 @@ The standalone app can explain university procedures, prepare a checklist or req
 - Time-sensitive facts carry a validity date or an explicit unknown/stale state.
 - Exact-topic evidence filters, citation checks, conflict detection, and fail-safe responses pass English/Arabic regressions.
 - Natural-language answers are tested against reviewed facts; mock route success is never reported as factual accuracy.
+- **Implementation close when:** evidence-first routing, scope checks, citations, conflict states, and useful unresolved responses work without answer-time website access. The final comprehensive run must later label every captured case; route tests and HTTP success alone are not accuracy evidence.
 
 ### Phase 2 — Governed academic knowledge
 
-- Inventory all undergraduate and graduate programs in the declared scope; structure every available official curriculum version and its applicability evidence.
+- Inventory the 55 published undergraduate programs in the declared catalog snapshot; structure every available official curriculum version and its stated applicability evidence.
 - Inventory the official catalog course records, source text, credits, prerequisites, corequisites, alternatives, and rule parser outcomes.
 - Track coverage gaps by program/cohort/course. Do not silently use the newest plan for an older student.
 - Resolve ambiguous source rules only with authoritative evidence; explicitly list unresolved cases.
+- **Close when:** all 55 current undergraduate catalog degrees map to source-backed curriculum records; every available version has its published cohort label; source-conflicted versions and unknown applicability are explicitly listed; and every imported catalog course/prerequisite row is either parsed or listed as unresolved. A closed inventory does not claim every historical assigned plan is known.
 
 ### Phase 3 — Self-reported student context and deterministic audit
 
@@ -54,13 +58,16 @@ The standalone app can explain university procedures, prepare a checklist or req
 - Distinguish each user assertion from official evidence; show the input values used in calculations and allow corrections.
 - Calculate only against a cohort-matched curriculum and supported requirements. Return conditional/unavailable status for missing cohort mappings, grades, transfer credit, exceptions, or unsupported rules.
 - Keep profile data in memory/session state only unless the user explicitly opts into a locally controlled saved plan; provide clear delete/reset behavior.
+- **Close when:** students can enter and edit program/version, cohort, course history, grades, repeats, transfers, and planning constraints; calculations show those reported inputs; unknown cohort or unsupported requirement returns conditional/unavailable; reset clears all entries; and none are persisted by default.
 
 ### Phase 4 — Standalone degree and course planning
 
-- Select requirement groups/electives from cohort-matched plans, build prerequisite-aware schedules, and offer alternatives for different loads/preferences.
+- Select requirement groups/electives from cohort-matched plans where cohort applicability is sourced. Where a published version has structured requirements but no source-backed cohort mapping, let the student explicitly select that version and label the result as conditional; never infer the student's assigned plan. Keep non-current continuing-student programs separate from the current program-finder catalog.
+- Build prerequisite-aware schedules and offer alternatives for different loads/preferences.
 - Support all covered programs, explicit completed/current courses, repeats where sourced, term loads, internship constraints, and student constraints.
 - Mark confirmed offerings separately from assumed future offerings. Without a governed live section feed, label schedules as planning scenarios and check timetable/capacity externally.
 - Compare alternatives with clear tradeoffs and list blockers and assumptions.
+- **Close when:** every fresh structured curriculum version is selectable by cohort or explicit version; the planner respects modeled course rules, load limits, repeats, and internship constraints; unknown offerings and personal applicability are labeled as assumptions; and unstructured/stale/conflicted records are withheld or conditional. The result is a planning scenario and preliminary requirements comparison, not a Degree Works audit or graduation approval.
 
 ### Phase 5 — Portal navigation and request preparation
 
@@ -68,14 +75,16 @@ The standalone app can explain university procedures, prepare a checklist or req
 - Generate a user-reviewed request draft/checklist and link directly to the official portal page.
 - Do not automate login or submission, store portal credentials, or claim transaction completion. A manual handoff to the university portal is the standalone completion boundary.
 - Validate each supported workflow with happy path, missing-input, changed-policy, and incorrect-intent tests.
+- **Close when:** each of the 16 in-scope workflows has an official destination, sourced steps, required inputs/documents/deadlines or an explicit “not published” state, a handoff, and bilingual normal/missing-detail/stale/wrong-intent handling. Authentication and submission remain in UAEU services.
 
 ## Evidence and quality gates
 
-- Build a 5,000–10,000-case **evaluation set**, not a memorized question-answer router. Cases vary wording, context, language, cohort, scenario, and adversarially similar topics. Generate paraphrases from governed facts and hold out complete facts/policies for generalization checks.
+- After the six implementation phases, build the requested 5,000–10,000-case **scale evaluation set**, not a memorized question-answer router. Cases should vary wording, context, language, cohort, scenario, and deceptively similar topics. This is an expanded acceptance exercise, not a prerequisite for implementing the six phases.
 - Each case has an independently reviewed expected conclusion, allowed conditions, required evidence, forbidden claims, and correct abstention/handoff behavior.
 - Report factual correctness, evidence support, scope correctness, context resolution, safe-abstention precision/recall, citation validity, latency, and service availability separately.
 - Gate releases on no critical fabricated-policy answer; high factual and citation performance on answerable cases; correct abstention on unsupported/conflicted cases; and no material regression against the prior accepted build.
 - Automated LLM graders can triage but do not replace human review of consequential policy, deadline, and academic-rule cases.
+- The existing `npm run eval:scale` is only a deterministic mock-route and fixture-coverage check. Its 10,000 rows are not real generated answers and its pass count is not accuracy. Preserve it as a structural diagnostic; do not substitute it for the one final pinned-candidate answer capture and six-criteria review described above.
 
 ## Offline knowledge maintenance loop
 

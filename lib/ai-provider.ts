@@ -158,14 +158,18 @@ function openAiKeys(): OpenAiKey[] {
 }
 
 function shouldFailOverOpenAiKey(error: unknown): boolean {
-  // A backup key can recover quota, authentication, rate-limit, transient
-  // server, network, timeout and malformed-provider responses. Invalid request
-  // shapes and exhausted answer deadlines are deterministic for every key and
-  // must fail without multiplying provider calls.
-  return error instanceof AiProviderError && ![
-    "ANSWER_DEADLINE_EXCEEDED",
-    "OPENAI_BAD_REQUEST",
-    "OPENAI_HTTP_ERROR",
+  // Rotate credentials only for errors a different credential may recover.
+  // Incomplete/empty/invalid model output is not a key failure: trying every
+  // backup masks the useful root cause and wastes calls (notably on long review
+  // schemas). Those errors should reach the caller unchanged.
+  return error instanceof AiProviderError && [
+    "OPENAI_QUOTA_EXHAUSTED",
+    "OPENAI_AUTH_ERROR",
+    "OPENAI_RATE_LIMITED",
+    "OPENAI_429_UNCLASSIFIED",
+    "OPENAI_UNAVAILABLE",
+    "OPENAI_NETWORK_ERROR",
+    "OPENAI_TIMEOUT",
   ].includes(error.providerStatus);
 }
 
@@ -187,7 +191,9 @@ export function providerRequestSignal(deadlineAt?: number): AbortSignal {
 
 function maxOutputTokens(provider: "openai" | "gemini" = "openai"): number {
   const configured = Number.parseInt(process.env[provider === "openai" ? "OPENAI_MAX_OUTPUT_TOKENS" : "GEMINI_MAX_OUTPUT_TOKENS"] ?? "", 10);
-  return Number.isFinite(configured) ? Math.max(256, Math.min(1500, configured)) : 1100;
+  // Keep the default conservative for student answers, while allowing offline
+  // evaluation/review jobs to request enough structured output for a full rubric.
+  return Number.isFinite(configured) ? Math.max(256, Math.min(10000, configured)) : 1100;
 }
 
 function providerResult(raw: string, provider: ProviderName, model: string, evidenceIds?: string[]): ProviderResult {

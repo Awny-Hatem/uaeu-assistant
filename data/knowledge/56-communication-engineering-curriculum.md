@@ -2,7 +2,7 @@
 status: approved
 title: UAEU BSc Communication Engineering published degree requirements
 sourceUrl: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-communication-engineering.shtml
-lastVerified: 2026-11-11
+lastVerified: 2026-11-16
 degreeLevel: undergraduate
 curriculum: true
 subjects: academics, communication engineering, engineering, curriculum
@@ -20,7 +20,9 @@ The current degree page lists a minimum of **132 credits**: 21 General Education
 
 ## Cohort limits
 
-The current page lists 132 credits. The linked model plans list 132 credits for 2023-2024 entrants and 147 for 2022-2023 entrants. Course groupings differ, so this model does not assign current-page requirements to older cohorts. Confirm your assigned Degree Works plan.
+The 2023-2024 model-plan PDF labels distinct Fall-entry and Spring-entry pathways at 132 credits each. Both sequences are now represented by their nine semester groups, including the two one-credit ELEC485/ELEC490 internship courses in the listed Summer term. ISLM101 Biography of the Prophet (Sira) is listed as **3 credits** in both sequences. The separate 2025-2026 plan is a 132-credit Fall-entry sequence; the 2026-2027 plan is 132 credits with distinct Fall and Spring sequences. These newer cohorts have different math and other course groupings and are stored as separate models. Use the plan assigned in Degree Works to confirm cohort applicability and personal completion.
+
+The 2022-2023 model-plan PDF publishes 147 credits for both Fall and Spring entry. The Spring-entry table's named course rows and listed student choices have been calculated at 138 credits, nine below its header; the source does not explain the gap. Both tables include slash-separated legacy/current code labels such as MATH1110/130, MATH1120/135, MATH2210/270, and MATH2220/145. That 2022 model remains total-only until its source discrepancy and code mappings are resolved. Confirm the assigned Degree Works plan.
 
 ## Official sources
 

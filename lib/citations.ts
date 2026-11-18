@@ -39,12 +39,14 @@ export function citationsForFaq(entry: Pick<FaqEntry, "citations">): Citation[] 
   return uniqueCitations(approved);
 }
 
-export function citationForGuide(guide: ServiceGuide): Citation {
-  return {
-    title: guide.title,
-    url: guide.officialUrl,
-    lastVerified: guide.lastVerified,
-  };
+export function citationsForGuide(guide: ServiceGuide): Citation[] {
+  const titlesByUrl = new Map<string, string>([[guide.officialUrl, guide.title]]);
+  for (const step of guide.steps) {
+    if (step.url && isApprovedOfficialUrl(step.url) && !titlesByUrl.has(step.url)) {
+      titlesByUrl.set(step.url, step.title);
+    }
+  }
+  return [...titlesByUrl].map(([url, title]) => ({ title, url, lastVerified: guide.lastVerified }));
 }
 
 export function citationsFromRows(

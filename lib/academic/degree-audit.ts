@@ -1,5 +1,5 @@
 import { academicSnapshotFromMessages, type AcademicSnapshot } from "@/lib/academic/prerequisite-rules";
-import { cohortYearInText, getProgramCurriculum, listAcademicPrograms, programIdInText, type ProgramRequirement } from "@/lib/academic/program-curricula";
+import { cohortEntrySemesterFromMessages, cohortYearInText, fallEntryCurriculumForYear, getProgramCurriculum, getPublishedCurriculumVersion, listAcademicPrograms, programIdInText, type ProgramRequirement } from "@/lib/academic/program-curricula";
 import { loadUndergraduateProgramCatalog } from "@/lib/academic/undergraduate-program-catalog";
 
 type CourseStatus = "COMPLETE" | "IN_PROGRESS" | "REPEAT_REQUIRED" | "NEEDS_CONFIRMATION" | "NOT_REPORTED";
@@ -23,7 +23,7 @@ export type DegreeAuditAssessment = {
   programId: string;
   programName: string;
   curriculumVersion: string | null;
-  auditStatus: "PRELIMINARY" | "PROGRAM_NOT_SPECIFIED" | "PROGRAM_NOT_MODELED" | "COHORT_YEAR_REQUIRED" | "COHORT_MODEL_UNAVAILABLE";
+  auditStatus: "PRELIMINARY" | "PROGRAM_NOT_SPECIFIED" | "PROGRAM_NOT_MODELED" | "COHORT_YEAR_REQUIRED" | "COHORT_ENTRY_TERM_REQUIRED" | "COHORT_MODEL_UNAVAILABLE";
   cohortYear?: number;
   cohortMatched: boolean;
   hasCourseData: boolean;
@@ -246,7 +246,12 @@ export function assessDegreeAuditConversation(
   }
   const cohortYear = userMessages.map(({ content }) => cohortYearInText(content)).filter((year): year is number => year !== undefined).at(-1);
   const selected = getProgramCurriculum(programId, cohortYear);
-  const curriculum = selected?.curriculum;
+  const entrySemester = cohortEntrySemesterFromMessages(messages);
+  const fallEntryModel = cohortYear !== undefined ? fallEntryCurriculumForYear(programId, cohortYear) : null;
+  const explicitFallPlan = entrySemester === "fall" && fallEntryModel
+    ? getPublishedCurriculumVersion(programId, fallEntryModel.curriculum.id)
+    : null;
+  const curriculum = selected?.curriculum ?? explicitFallPlan?.curriculum;
   if (cohortYear === undefined && curriculum) {
     return {
       programId,
@@ -263,6 +268,26 @@ export function assessDegreeAuditConversation(
     };
   }
   if (!curriculum) {
+    if (fallEntryModel) {
+      const needsTerm = entrySemester === undefined;
+      const springEntry = entrySemester === "spring";
+      return {
+        programId,
+        programName: program.name,
+        curriculumVersion: fallEntryModel.curriculum.id,
+        auditStatus: needsTerm ? "COHORT_ENTRY_TERM_REQUIRED" : "COHORT_MODEL_UNAVAILABLE",
+        cohortYear,
+        cohortMatched: false,
+        hasCourseData: false,
+        courseGroups: [],
+        courseStatus: {},
+        creditBlocksNotAssessed: [],
+        sources: program.sources,
+        limitations: [springEntry
+          ? `The published ${cohortYear} model plan is Fall-entry only and does not establish Spring-entry requirements.`
+          : `The published ${cohortYear} model plan is Fall-entry only; entry semester is needed before selecting it.`],
+      };
+    }
     return {
       programId,
       programName: program.name,
@@ -334,9 +359,20 @@ export function renderDegreeAuditAssessment(assessment: DegreeAuditAssessment, l
       : `I do not have a structured curriculum model for **${assessment.programName}** yet. The UAEU catalog confirms the program listing, but it cannot establish your remaining courses or graduation requirements. Check your assigned plan in Degree Works or ask your college advising unit.`;
   }
   if (assessment.auditStatus === "COHORT_MODEL_UNAVAILABLE") {
+    const fallOnlyLimitation = assessment.limitations.find((limitation) => /Fall-entry only and does not establish Spring-entry requirements/i.test(limitation));
+    if (fallOnlyLimitation) {
+      return locale === "ar"
+        ? `الخطة المنشورة لعام ${assessment.cohortYear} خاصة بدخول فصل الخريف، ولا تحدد متطلبات دخول فصل الربيع. لن أطبقها على سجلك؛ راجع Degree Works أو وحدة الإرشاد في كليتك.`
+        : `The published ${assessment.cohortYear} model is for Fall-entry students and does not establish Spring-entry requirements. I will not apply it to your record; check the assigned plan in Degree Works or with your college advising unit.`;
+    }
     return locale === "ar"
       ? `\u0644\u0627 \u064a\u062a\u0648\u0641\u0631 \u0644\u062f\u064a \u0646\u0645\u0648\u0630\u062c \u0645\u0646\u0647\u062c\u064a \u0645\u0624\u0643\u062f \u0644\u062f\u0641\u0639\u0629 ${assessment.cohortYear} \u0641\u064a ${assessment.programName}. \u0644\u0646 \u0623\u0637\u0628\u0642 \u062e\u0637\u0629 \u062f\u0641\u0639\u0629 \u0623\u062e\u0631\u0649 \u0639\u0644\u0649 \u0633\u062c\u0644\u0643. \u0631\u0627\u062c\u0639 \u062e\u0637\u062a\u0643 \u0641\u064a Degree Works \u0623\u0648 \u0623\u0631\u0633\u0644 \u0633\u0646\u0629 \u0627\u0644\u0645\u0646\u0647\u062c \u0627\u0644\u0638\u0627\u0647\u0631\u0629 \u0641\u064a\u0647\u0627.`
       : `I do not have a verified structured curriculum model for the ${assessment.cohortYear} entry cohort in ${assessment.programName}. I will not apply another cohort's plan to your record. Check your assigned Degree Works plan or provide the catalog year shown there.`;
+  }
+  if (assessment.auditStatus === "COHORT_ENTRY_TERM_REQUIRED") {
+    return locale === "ar"
+      ? `الخطة المنشورة لعام ${assessment.cohortYear} خاصة بدخول فصل الخريف. هل بدأت في الخريف أم الربيع؟ لن أطبق خطة الخريف بناءً على السنة فقط.`
+      : `The published ${assessment.cohortYear} plan is specifically for Fall-entry students. Did you start in Fall or Spring? I will not use the Fall plan based on year alone.`;
   }
   if (assessment.auditStatus === "COHORT_YEAR_REQUIRED") {
     return locale === "ar"

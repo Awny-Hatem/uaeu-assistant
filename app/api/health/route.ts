@@ -49,14 +49,24 @@ export async function GET() {
     markdown: knowledgeFingerprint(), answers: verifiedAnswers, guides: serviceGuides,
   })).digest("hex");
   const revision = (process.env.VERCEL_GIT_COMMIT_SHA || process.env.CHATBOT_BUILD_REVISION || "unknown").trim().slice(0, 80);
-  const ready = coreKnowledgeReady && authConfigured && generationReady && contract.allowed;
+  const productionArchitectureReady = contract.mode !== "production" || v3Enabled;
+  const readinessBlockers = [
+    ...(contract.mode !== "production" ? ["Deployment mode is prototype"] : []),
+    ...contract.productionBlockers,
+    ...(!coreKnowledgeReady ? ["Reviewed knowledge pack is incomplete or stale"] : []),
+    ...(!authConfigured ? ["Authentication cookie secret is not configured"] : []),
+    ...(!generationReady ? ["AI answer provider is not configured"] : []),
+    ...(!productionArchitectureReady ? ["Production chat requires V3 evidence-first architecture"] : []),
+  ];
+  const productionReady = contract.productionReady && coreKnowledgeReady && authConfigured && generationReady && productionArchitectureReady;
+  const ready = contract.mode === "production" ? productionReady : coreKnowledgeReady && authConfigured && generationReady && contract.allowed;
   return jsonNoStore({
     ok: ready,
     live: true,
     build: { revision },
     agent: { architecture: v3Enabled ? "v3-evidence-first" : "legacy", v3Enabled, legacySelectorBypassedForUniversityModes: v3Enabled },
     readiness: { knowledge: coreKnowledgeReady, accounts: authConfigured, generation: generationReady, configuration: contract.allowed },
-    deployment: contract,
+    deployment: { ...contract, productionReady, productionBlockers: readinessBlockers },
     provider: {
       name: provider.provider,
       configured: provider.provider !== "none",
@@ -128,10 +138,7 @@ export async function GET() {
       },
     },
     privacy: {
-      serverChatHistory:
-        process.env.SERVER_CHAT_HISTORY?.trim().toLowerCase() === "enabled"
-          ? "enabled"
-          : "disabled",
+      serverChatHistory: contract.serverChatHistory,
       rawQueryLogs: "disabled",
       serverHistoryRetentionDays: 30,
       serverHistoryMaxMessages: 80,

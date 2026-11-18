@@ -23,6 +23,47 @@ assert.equal(admissions.entities.eventType, "admissions_deadline");
 assert.deepEqual(admissions.missingContext, ["the intake or academic year", "your applicant category"]);
 assert.equal(evidenceQueryForPlan(admissions).freshnessRequirement, "current");
 
+const admissionQuestion = "How do I apply to UAEU as a first-year undergraduate?";
+const requestFrames = [
+  "Using official UAEU evidence and stating any limits, answer: ",
+  "I need the current published UAEU answer, with its scope made clear: ",
+  "Please distinguish confirmed information from anything I must verify: ",
+  "For a student asking UAEU, what does the cited official information say? ",
+  "Answer this UAEU question from the relevant official source, not a similar topic: ",
+  "Please give the practical next step and cite the relevant UAEU evidence: ",
+  "What is the source-supported answer to this student question? ",
+  "Please answer only what the official UAEU evidence supports: ",
+  "For this scenario, identify the correct UAEU topic and its limits: ",
+  "Please avoid assumptions and explain the applicable UAEU information: ",
+  "Give a concise, evidence-linked UAEU response to: ",
+  "Check the official source for this exact issue and answer: ",
+  "Please state the useful next step without guessing missing policy details: ",
+];
+for (const frame of requestFrames) {
+  const framed = plan(`${frame}${admissionQuestion}`);
+  assert.equal(framed.normalizedRequest, admissionQuestion, `strips harmless request framing: ${frame}`);
+  assert.equal(framed.mode, "UAEU_FACTUAL", `keeps the question factual: ${frame}`);
+  assert.equal(framed.entities.domain, "admissions", `preserves the admissions domain: ${frame}`);
+}
+
+const arabicAdmissionQuestion = "\u0645\u0627 \u0627\u0644\u0645\u0633\u062a\u0646\u062f\u0627\u062a \u0627\u0644\u0645\u0637\u0644\u0648\u0628\u0629 \u0644\u0637\u0644\u0628 \u0627\u0644\u0628\u0643\u0627\u0644\u0648\u0631\u064a\u0648\u0633\u061f";
+const arabicRequestFrames = [
+  "\u0627\u0630\u0643\u0631 \u0627\u0644\u062e\u0637\u0648\u0629 \u0627\u0644\u0639\u0645\u0644\u064a\u0629 \u0627\u0644\u062a\u0627\u0644\u064a\u0629 \u0648\u0627\u0633\u062a\u0634\u0647\u062f \u0628\u0645\u0635\u062f\u0631 \u062c\u0627\u0645\u0639\u0629 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a \u0627\u0644\u0645\u0646\u0627\u0633\u0628: ",
+  "\u0623\u062c\u0628 \u0627\u0633\u062a\u0646\u0627\u062f\u0627\u064b \u0625\u0644\u0649 \u0645\u0635\u062f\u0631 \u0631\u0633\u0645\u064a \u0644\u062c\u0627\u0645\u0639\u0629 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a\u060c \u0648\u0648\u0636\u0651\u062d \u062d\u062f\u0648\u062f \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0629: ",
+  "\u0623\u062c\u0628 \u0645\u0646 \u0627\u0644\u0645\u0635\u062f\u0631 \u0627\u0644\u0631\u0633\u0645\u064a \u0627\u0644\u0645\u0646\u0627\u0633\u0628\u060c \u0648\u0644\u0627 \u062a\u062e\u0644\u0637 \u0647\u0630\u0627 \u0627\u0644\u0645\u0648\u0636\u0648\u0639 \u0628\u0645\u0648\u0636\u0648\u0639 \u0645\u0634\u0627\u0628\u0647: ",
+  "\u0623\u062d\u062a\u0627\u062c \u0625\u0644\u0649 \u0627\u0644\u0625\u062c\u0627\u0628\u0629 \u0627\u0644\u0645\u0646\u0634\u0648\u0631\u0629 \u062d\u0627\u0644\u064a\u0627\u064b \u0645\u0639 \u0628\u064a\u0627\u0646 \u0646\u0637\u0627\u0642\u0647\u0627: ",
+  "\u064a\u0631\u062c\u0649 \u0627\u0644\u062a\u0645\u064a\u064a\u0632 \u0628\u064a\u0646 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0629 \u0627\u0644\u0645\u0624\u0643\u062f\u0629 \u0648\u0645\u0627 \u064a\u062c\u0628 \u0639\u0644\u064a\u0651 \u0627\u0644\u062a\u062d\u0642\u0642 \u0645\u0646\u0647: ",
+];
+for (const frame of arabicRequestFrames) {
+  const framed = plan(`${frame}${arabicAdmissionQuestion}`);
+  assert.equal(framed.normalizedRequest, arabicAdmissionQuestion, "strips Arabic request framing before classifying the student's actual question");
+  assert.equal(framed.mode, "UAEU_FACTUAL");
+  assert.equal(framed.entities.domain, "admissions");
+}
+const arabicQuestionFrame = plan(`\u0645\u0627 \u0627\u0644\u0630\u064a \u062a\u0642\u0648\u0644\u0647 \u0627\u0644\u0645\u0639\u0644\u0648\u0645\u0627\u062a \u0627\u0644\u0631\u0633\u0645\u064a\u0629 \u0630\u0627\u062a \u0627\u0644\u0635\u0644\u0629 \u0644\u0644\u0637\u0627\u0644\u0628 \u0641\u064a \u062c\u0627\u0645\u0639\u0629 \u0627\u0644\u0625\u0645\u0627\u0631\u0627\u062a\u061f ${arabicAdmissionQuestion}`);
+assert.equal(arabicQuestionFrame.normalizedRequest, arabicAdmissionQuestion, "strips Arabic question-style request framing");
+assert.equal(arabicQuestionFrame.entities.domain, "admissions");
+
 const scholarship = plan("When is the scholarship deadline for Fall 2027?");
 assert.equal(scholarship.entities.domain, "financial_aid");
 assert.equal(scholarship.entities.term, "fall");
@@ -74,6 +115,12 @@ const personal = plan("Can I take CSBP340 next semester?");
 assert.equal(personal.mode, "PERSONALIZED_ACADEMIC");
 assert.equal(personal.needs.studentData, false, "public prerequisites can be explained without accessing a student's record");
 assert.deepEqual(personal.missingContext, [], "the answer can state the published prerequisite rule and explain what personal details affect it");
+
+const prerequisiteContext = plan("What are the prerequisites for this course?", [
+  "How can I take Data Structures in my Computer Science major?",
+]);
+assert.deepEqual(prerequisiteContext.entities.courses, ["CSBP319"]);
+assert.deepEqual(prerequisiteContext.missingContext, [], "a resolved course from the prior user turn satisfies the course-identity slot");
 
 const electricalRequirements = plan("What courses are required in Electrical Engineering?");
 assert.equal(electricalRequirements.mode, "UAEU_FACTUAL", "named-degree course requirements must bypass the legacy selector even without a UAEU keyword");

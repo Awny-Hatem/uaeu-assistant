@@ -28,6 +28,9 @@ type Token = { kind: "course"; expression: PrerequisiteExpression } | { kind: "a
 
 function parseItem(text: string): PrerequisiteExpression | null {
   const source = text.trim();
+  if (/^senior\s+standing$/iu.test(source)) {
+    return { type: "ACADEMIC_STANDING_AT_LEAST", standing: "senior" };
+  }
   const courseMatches = [...source.matchAll(COURSE_CODE_PATTERN)];
   if (!courseMatches.length) return null;
   const courses: PrerequisiteExpression[] = [];
@@ -127,6 +130,7 @@ function parsePrerequisiteItem(text: string, courseCode: string): PrerequisiteEx
     if ("op" in expression) {
       return { op: expression.op, conditions: expression.conditions.map(makeConcurrent) };
     }
+    if (!("courseCode" in expression)) return expression;
     if (!concurrentCodes.includes(expression.courseCode)) return expression;
     return {
       op: "OR",
@@ -144,6 +148,7 @@ function mapPriorOrCurrent(expression: PrerequisiteExpression): PrerequisiteExpr
     return { op: expression.op, conditions: conditions as PrerequisiteExpression[] };
   }
   if (expression.type === "COURSE_CURRENT") return null;
+  if (!("courseCode" in expression)) return null;
   return {
     op: "OR",
     conditions: [expression, { type: "COURSE_CURRENT", courseCode: expression.courseCode }],

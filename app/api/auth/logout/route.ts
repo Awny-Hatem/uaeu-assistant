@@ -7,7 +7,7 @@ export async function POST(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
 
-  const limited = rateLimitGuard(req, 'auth:logout', {
+  const limited = await rateLimitGuard(req, 'auth:logout', {
     limit: 20,
     windowMs: 60 * 1000,
   });

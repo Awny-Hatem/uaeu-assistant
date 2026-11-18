@@ -140,7 +140,17 @@ const catalog = loadOfficialCourseCatalog();
 assert(catalog);
 const relationRecords = catalog.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length);
 const parsed = relationRecords.filter((course) => parseCatalogPrerequisiteExpression(course));
-assert.equal(parsed.length, 1477, "the verified catalog snapshot should safely structure 1,477 of its 1,480 relation records");
+assert.equal(parsed.length, 1481, "the refreshed catalog snapshot should safely structure 1,481 of its 1,484 relation records");
+const Arag404 = catalog.courses.find((course) => course.code === "ARAG404");
+assert.ok(Arag404);
+assert.deepEqual(parseCatalogPrerequisiteExpression(Arag404), {
+  type: "COURSE_COMPLETED", courseCode: "ARAG307",
+}, "ARAG404's explicit description prerequisite is available to catalog lookup and prerequisite assessment");
+const Arag485 = catalog.courses.find((course) => course.code === "ARAG485");
+assert.ok(Arag485);
+assert.equal(Arag485.prerequisiteText, "Completing 90 Credit hours");
+assert.equal(parseCatalogPrerequisiteExpression(Arag485), null,
+  "ARAG485's credit-hour threshold stays visible as source text and is not misrepresented as a course-code rule");
 const minimumD = (courseCode: string) => ({ type: "COURSE_GRADE_AT_LEAST" as const, courseCode, minimumGrade: "D" as const });
 const reviewedRepairs = [
   {
@@ -189,10 +199,12 @@ for (const code of ["LNG450", "LNG460"]) {
   assert.ok(course);
   assert.ok(parseCatalogPrerequisiteExpression(course), `${code}'s inline Pre/Co alternative should parse explicitly`);
 }
-const incompleteCsbp340 = catalog.courses.find((course) => course.code === "CSBP340");
-assert.ok(incompleteCsbp340);
-assert.equal(parseCatalogPrerequisiteExpression(incompleteCsbp340), null,
-  "the official CSBP340 catalog row ends with a dangling OR and must remain unsupported");
+const csbp340 = catalog.courses.find((course) => course.code === "CSBP340");
+assert.ok(csbp340);
+assert.deepEqual(parseCatalogPrerequisiteExpression(csbp340), {
+  op: "OR",
+  conditions: [minimumD("CSBP323"), minimumD("CSBP319")],
+}, "the current official CSBP340 catalog lists either CSBP323 or CSBP319, each with minimum grade D");
 const unresolvedPrerequisiteSources = [
   { code: "BMSC711", reason: "the official BMSC711 prerequisite list ends with a dangling OR" },
   { code: "SWK200", reason: "the SWK200 source includes an unmodeled benchmark condition rather than a recognized course code" },
@@ -202,6 +214,27 @@ for (const { code, reason } of unresolvedPrerequisiteSources) {
   assert.ok(course, `${code} remains in the official catalog snapshot`);
   assert.equal(parseCatalogPrerequisiteExpression(course), null, `${reason}; it must remain unsupported`);
 }
+const ceng580 = catalog.courses.find((course) => course.code === "CENG580");
+assert.ok(ceng580);
+assert.deepEqual(parseCatalogPrerequisiteExpression(ceng580), {
+  type: "ACADEMIC_STANDING_AT_LEAST",
+  standing: "senior",
+}, "CENG580's published senior-standing requirement is modeled as a standing condition, not misclassified as a course code");
+const ceng580UnknownStanding = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "What are the prerequisites for CENG580?" },
+]);
+assert.equal(ceng580UnknownStanding?.evaluation.status, "UNDETERMINED",
+  "the system must request standing context instead of claiming the student qualifies");
+const ceng580SeniorStanding = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "I have senior standing. Can I register for CENG580?" },
+]);
+assert.equal(ceng580SeniorStanding?.evaluation.status, "ELIGIBLE",
+  "an explicit self-reported senior-standing claim can satisfy the catalog condition in a conditional assessment");
+const ceng580NotSenior = assessCatalogPrerequisiteConversation([
+  { role: "user", content: "I do not have senior standing. Can I register for CENG580?" },
+]);
+assert.equal(ceng580NotSenior?.evaluation.status, "NOT_ELIGIBLE",
+  "an explicit self-report that senior standing is absent does not satisfy the published condition");
 const aero490 = catalog.courses.find((course) => course.code === "AERO490");
 assert.ok(aero490);
 assert.deepEqual(parseCatalogPrerequisiteExpression(aero490), {

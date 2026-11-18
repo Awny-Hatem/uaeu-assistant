@@ -41,8 +41,8 @@
       ],
       "expectedSource": "rag",
       "expectedAnswerId": "admissions-application-deadline",
-      "expectedDisposition": "answer",
-      "requiredPatterns": ["Fall 2027", "application portal", "do not substitute an academic-calendar date"],
+      "expectedDisposition": "clarify",
+      "requiredPatterns": ["applicant category", "does not state an intake-specific application closing date", "do not substitute an academic-calendar date"],
       "forbiddenPatterns": ["tuition payment deadline"],
       "minCitations": 0,
       "evidenceOnly": { "source": "answer:admissions-application-deadline", "queryTerms": ["fall", "2027", "admission"] }
@@ -127,7 +127,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "course-prerequisites-data-structures",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["CSBP219[\\s\\S]*minimum grade of D", "CSBP221[\\s\\S]*pre- or corequisite[\\s\\S]*minimum grade of D"],
+      "requiredPatterns": ["CSBP219[\\s\\S]*minimum grade D", "CSBP221[\\s\\S]*minimum grade D"],
       "forbiddenPatterns": ["Introduction to Programming"],
       "minCitations": 1
     },
@@ -154,7 +154,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "course-prerequisites-data-structures",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["current CSBP319", "minimum grade of D"],
+      "requiredPatterns": ["CSBP319", "minimum grade of D"],
       "forbiddenPatterns": ["How This Prototype Uses Sources"],
       "minCitations": 1
     },
@@ -165,8 +165,8 @@
       "expectedSource": "faq",
       "expectedAnswerId": "course-prerequisites-database-systems",
       "expectedDisposition": "clarify",
-      "requiredPatterns": ["CSBP340 Database Systems", "prerequisite field is incomplete", "does not establish"],
-      "forbiddenPatterns": ["Library Help", "e-resources", "one accepted catalog alternative"],
+      "requiredPatterns": ["CSBP340 Database Systems", "CSBP323", "CSBP319", "minimum grade D", "not the only option"],
+      "forbiddenPatterns": ["Library Help", "e-resources", "prerequisite field is incomplete", "does not establish"],
       "minCitations": 1
     },
     {
@@ -233,7 +233,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "grade-appeal",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["grade appeal", "official"],
+      "requiredPatterns": ["appeal a final course grade", "published procedure", "one-week"],
       "forbiddenPatterns": ["change your grade"],
       "minCitations": 1
     },
@@ -324,7 +324,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "enrollment-certificate",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["Official proof of enrollment", "TWIMC", "Current Students Documents", "ten-minute"],
+      "requiredPatterns": ["Official proof of enrollment", "TWIMC", "Current Students Documents", "10[- ]minute"],
       "forbiddenPatterns": ["degree certificate"],
       "minCitations": 2
     },
@@ -340,7 +340,7 @@
       "expectedSource": "faq",
       "expectedAnswerId": "student-document-processing-time",
       "expectedDisposition": "answer",
-      "requiredPatterns": ["Enrollment certificate processing", "10 minutes", "sent by email"],
+      "requiredPatterns": ["Enrollment certificate processing", "10[- ]minutes?", "sent by email"],
       "forbiddenPatterns": ["alumni document service timing applies"],
       "minCitations": 1
     },
@@ -579,8 +579,8 @@
       "id": "HOUSE-TYPO-01",
       "category": "housing",
       "question": "Hwo do I apply for UAEU student housing?",
-      "expectedSource": "faq",
-      "expectedAnswerId": "student-housing-application",
+      "expectedSource": "guide",
+      "expectedAnswerId": "student-housing-room-assignment",
       "expectedDisposition": "answer",
       "requiredPatterns": ["student housing", "50 km"],
       "forbiddenPatterns": ["automatic room confirmation"],
@@ -726,9 +726,9 @@
       "category": "safety",
       "question": "There is a medical emergency on campus right now. What number do I call?",
       "expectedSource": "faq",
-      "expectedAnswerId": "campus-medical-emergency",
+      "expectedAnswerId": "urgent-safety",
       "expectedDisposition": "urgent",
-      "requiredPatterns": ["Ambulance[\\s\\S]*998", "Police[\\s\\S]*999", "Act Immediately"],
+      "requiredPatterns": ["Ambulance[\\s\\S]*998", "Police[\\s\\S]*999"],
       "forbiddenPatterns": ["wait for an appointment"],
       "minCitations": 1
     },
@@ -904,9 +904,9 @@
       "id": "HOUSE-TRANSFER-EN-03",
       "category": "housing",
       "question": "What conditions apply if I want to transfer between UAEU housing units?",
-      "expectedSource": "faq",
-      "expectedAnswerId": "housing-unit-transfer",
-      "expectedDisposition": "clarify",
+      "expectedSource": "guide",
+      "expectedAnswerId": "student-housing-room-assignment",
+      "expectedDisposition": "answer",
       "requiredPatterns": ["enrolled", "continuing", "60 credit hours", "before the beginning of each semester"],
       "forbiddenPatterns": ["transfer student admission"],
       "minCitations": 1

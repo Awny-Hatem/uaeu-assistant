@@ -51,6 +51,38 @@ assert.equal(record.preCorequisiteText, "CSBP221 with a minimum grade D");
 assert.deepEqual(record.preCorequisiteItems, ["CSBP221 with a minimum grade D"]);
 assert.equal(record.source.verifiedAt, "2026-11-11");
 
+const inlineDescriptionPrerequisite = parseCoursePage(`
+  <div id="ARAG404"><h1>Vegetable Production (ARAG404)</h1>
+  <p>Course overview. Prerequisite: ARAG 307</p><h3>Credit Hours : 3</h3></div>
+`, { code: "ARAG404", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=ARAG404" }, "2026-11-11");
+assert.equal(inlineDescriptionPrerequisite.prerequisiteText, "ARAG 307");
+assert.deepEqual(inlineDescriptionPrerequisite.prerequisiteItems, ["ARAG 307"],
+  "an explicit prerequisite in the official description is retained in the searchable fields");
+
+const inlineCreditThreshold = parseCoursePage(`
+  <div id="ARAG485"><h1>Capstone (ARAG485)</h1>
+  <p>Course overview. Prerequisite: Completing 90 Credit hours</p><h3>Credit Hours : 3</h3></div>
+`, { code: "ARAG485", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=ARAG485" }, "2026-11-11");
+assert.equal(inlineCreditThreshold.prerequisiteText, "Completing 90 Credit hours");
+assert.deepEqual(inlineCreditThreshold.prerequisiteItems, ["Completing 90 Credit hours"],
+  "a non-course threshold is preserved as text without pretending it is a parsed course rule");
+
+const multiSentenceDescriptionPrerequisite = parseCoursePage(`
+  <div id="VIS424"><h1>Writing for Art (VIS424)</h1>
+  <p>Course overview. *Prerequisite: 21 hours of major credit hours must be completed prior to taking this course. At least 6 of these CH need to be from Professional Studio Track</p>
+  <h3>Credit Hours : 3</h3></div>
+`, { code: "VIS424", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_4968.shtml?id=VIS424" }, "2026-11-11");
+assert.equal(multiSentenceDescriptionPrerequisite.prerequisiteText,
+  "21 hours of major credit hours must be completed prior to taking this course. At least 6 of these CH need to be from Professional Studio Track",
+  "the importer preserves all published prerequisite conditions after a marker");
+
+const phdAbbreviationPrerequisite = parseCoursePage(`
+  <div id="BIOE710"><h1>Topics in Ecology (BIOE710)</h1>
+  <p>*Prerequisite: Ecology course or consent of Ph.D. committee.</p><h3>Credit Hours : 3</h3></div>
+`, { code: "BIOE710", url: "https://www.uaeu.ac.ae/en/catalog/courses/course_1.shtml?id=BIOE710" }, "2026-11-11");
+assert.equal(phdAbbreviationPrerequisite.prerequisiteText, "Ecology course or consent of Ph.D. committee.",
+  "abbreviations inside prerequisite wording are not treated as clause terminators");
+
 const bundledLinks = parseCoursePage(`
   <div id="CSBP319"><h1>Data Structures (CSBP319)</h1>
   <h3>Prerequisites</h3><ul><li>

@@ -169,6 +169,11 @@ export function GuidedServicePanel({
   language?: UiLocale;
 }) {
   const [index, setIndex] = useState(0);
+  const [requestSummary, setRequestSummary] = useState(guide.title);
+  const [requestNotes, setRequestNotes] = useState("");
+  const [checkedSteps, setCheckedSteps] = useState<boolean[]>(() => guide.steps.map(() => false));
+  const [showDraftPreview, setShowDraftPreview] = useState(false);
+  const [draftError, setDraftError] = useState(false);
   const current = guide.steps[index];
   const officialUrl = safeExternalUrl(guide.officialUrl);
   const ar = language === "ar";
@@ -267,6 +272,67 @@ export function GuidedServicePanel({
             ) : null
           )}
         </div>
+
+        <section aria-labelledby="request-draft-heading" data-testid="service-request-draft" className="mt-6 border-t border-zinc-200 pt-5">
+          <h3 id="request-draft-heading" className="text-base font-bold text-zinc-950">{ar ? "جهّز طلبك" : "Prepare your request"}</h3>
+          <p className="mt-1 text-xs leading-5 text-zinc-600">{ar ? "تبقى قائمة التحقق والمسودة في هذه الصفحة فقط. لا يتم حفظهما أو إرسالهما. لا تُدخل كلمات المرور أو رموز التحقق أو بيانات الدخول." : "This checklist and draft stay in this page session. They are not saved or submitted. Never enter passwords, verification codes, or account credentials."}</p>
+
+          <fieldset className="mt-4 space-y-2">
+            <legend className="text-sm font-semibold text-zinc-800">{ar ? "قائمة التحقق للإرشاد" : "Guide checklist"}</legend>
+            {guide.steps.map((step, stepIndex) => (
+              <label key={`${step.title}-${stepIndex}`} className="flex items-start gap-2 text-xs leading-5 text-zinc-700">
+                <input
+                  type="checkbox"
+                  checked={checkedSteps[stepIndex] ?? false}
+                  onChange={(event) => setCheckedSteps((items) => items.map((checked, itemIndex) => itemIndex === stepIndex ? event.target.checked : checked))}
+                  className="mt-1 accent-[#E0182D]"
+                />
+                <span>{ar ? step.titleAr ?? step.title : step.title}</span>
+              </label>
+            ))}
+          </fieldset>
+
+          <div className="mt-4 rounded-lg bg-white p-3 text-xs leading-5 text-zinc-700">
+            <p><strong>{ar ? "المستندات" : "Documents"}:</strong> {ar ? guide.requestDetails.documents.ar : guide.requestDetails.documents.en}</p>
+            <p className="mt-2"><strong>{ar ? "الموعد" : "Deadline"}:</strong> {ar ? guide.requestDetails.deadline.ar : guide.requestDetails.deadline.en}</p>
+          </div>
+
+          <label htmlFor="request-summary" className="mt-4 block text-sm font-semibold text-zinc-800">{ar ? "ملخص الطلب" : "Request summary"} <span className="font-normal text-zinc-500">{ar ? "(مطلوب)" : "(required)"}</span></label>
+          <input
+            id="request-summary"
+            value={requestSummary}
+            onChange={(event) => { setRequestSummary(event.target.value); setShowDraftPreview(false); setDraftError(false); }}
+            maxLength={160}
+            className="mt-1 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20"
+          />
+          <label htmlFor="request-notes" className="mt-3 block text-sm font-semibold text-zinc-800">{ar ? "تفاصيل لإضافتها" : "Details to include"} <span className="font-normal text-zinc-500">{ar ? "(اختياري)" : "(optional)"}</span></label>
+          <textarea
+            id="request-notes"
+            value={requestNotes}
+            onChange={(event) => { setRequestNotes(event.target.value); setShowDraftPreview(false); }}
+            maxLength={1200}
+            rows={3}
+            placeholder={ar ? "أضف تفاصيل غير حساسة تريد تذكّرها بشأن طلبك." : "Add non-sensitive details you want to remember for your request."}
+            className="mt-1 w-full resize-y rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 outline-none focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20"
+          />
+          {draftError && <p role="alert" className="mt-2 text-xs font-semibold text-red-700">{ar ? "أدخل ملخص الطلب لمعاينة المسودة." : "Add a request summary to preview your draft."}</p>}
+
+          <div className="mt-3 flex flex-wrap gap-2">
+            <button type="button" onClick={() => { if (!requestSummary.trim()) { setDraftError(true); setShowDraftPreview(false); return; } setDraftError(false); setShowDraftPreview(true); }} className="rounded-lg bg-zinc-950 px-3 py-2 text-xs font-bold text-white">{ar ? "معاينة المسودة" : "Preview draft"}</button>
+            <button type="button" onClick={() => { setRequestSummary(guide.title); setRequestNotes(""); setCheckedSteps(guide.steps.map(() => false)); setShowDraftPreview(false); setDraftError(false); }} className="rounded-lg border border-zinc-300 bg-white px-3 py-2 text-xs font-bold text-zinc-700">{ar ? "مسح المسودة" : "Clear draft"}</button>
+          </div>
+
+          {showDraftPreview && (
+            <div aria-live="polite" data-testid="request-draft-preview" className="mt-4 rounded-lg border border-amber-300 bg-amber-50 p-3 text-xs leading-5 text-zinc-800">
+              <p className="font-bold text-amber-900">{ar ? "مسودة فقط — لم يتم الإرسال" : "Draft only — NOT SUBMITTED"}</p>
+              <p className="mt-2"><strong>{ar ? "الطلب:" : "Request:"}</strong> {requestSummary.trim()}</p>
+              {requestNotes.trim() && <p className="mt-1 whitespace-pre-wrap"><strong>{ar ? "التفاصيل:" : "Details:"}</strong> {requestNotes.trim()}</p>}
+              <p className="mt-2"><strong>{ar ? "التحضير:" : "Preparation:"}</strong> {ar ? `${checkedSteps.filter(Boolean).length} من ${guide.steps.length} من عناصر القائمة تمت مراجعتها.` : `${checkedSteps.filter(Boolean).length} of ${guide.steps.length} checklist items reviewed.`}</p>
+              <p className="mt-2">{ar ? guide.requestDetails.handoff.ar : guide.requestDetails.handoff.en}</p>
+              {officialUrl && <a href={officialUrl} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 font-bold text-[#E0182D] underline">{ar ? "المتابعة عبر صفحة UAEU الرسمية" : "Continue on UAEU official page"} <ExternalLink size={12} /></a>}
+            </div>
+          )}
+        </section>
       </div>
     </aside>
   );

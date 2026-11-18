@@ -5,7 +5,8 @@ import type { FormEvent } from "react";
 import { GraduationCap, LoaderCircle, X } from "lucide-react";
 import type { UiLocale } from "@/lib/ui-copy";
 
-type ProgramOption = { id: string; name: string; college: string; curriculumAvailable: boolean; cohorts: number[] };
+type PublishedVersionOption = { id: string; version: string; cohortLabel: string; totalCredits: number };
+type ProgramOption = { id: string; name: string; college: string; curriculumAvailable: boolean; cohorts: number[]; publishedVersions: PublishedVersionOption[]; continuingOnly?: boolean };
 type CourseOption = {
   code: string;
   title: string;
@@ -25,7 +26,7 @@ type PlanningChoice = {
 };
 type CurriculumOptions = {
   program: { id: string; name: string; college: string };
-  cohort: { year: number; label: string; version: string; totalCredits: number };
+  cohort: { year: number | null; label: string; version: string; versionId?: string; totalCredits: number; selectionMode: "cohort-matched" | "published-version-selected" };
   courses: CourseOption[];
   requirementSummary: {
     mandatoryCourseCodes: string[];
@@ -52,11 +53,23 @@ type SequenceResult = {
   courseSources: { code: string; title: string; url: string; verifiedAt: string }[];
   scope: {
     programName: string;
-    cohortYear: number;
+    cohortYear: number | null;
+    curriculumSelectionMode: "cohort-matched" | "published-version-selected";
     cohortLabel: string;
     curriculumVersion: string;
     curriculumCredits: number;
     curriculumSources: { title: string; url: string; lastVerified: string }[];
+    reportedInputs: {
+      completedCourseCodes: string[];
+      currentCourseCodes: string[];
+      remainingCourseCodes: string[];
+      repeatCourseCodes: string[];
+      transferCourseCodes: string[];
+      completedCourseGrades: Record<string, string>;
+      terms: { label: string; maxCredits: number }[];
+      comparisonMaxCredits?: number;
+    };
+    transferReview: string;
     disclaimer: string;
   };
 };
@@ -95,11 +108,14 @@ export function AcademicSequencePlanner({
   const [programs, setPrograms] = useState<ProgramOption[]>([]);
   const [programId, setProgramId] = useState("");
   const [cohortYear, setCohortYear] = useState("");
+  const [publishedVersionId, setPublishedVersionId] = useState("");
   const [curriculum, setCurriculum] = useState<CurriculumOptions | null>(null);
   const [selectedCodes, setSelectedCodes] = useState<string[]>([]);
   const [completedText, setCompletedText] = useState("");
   const [completedGradeText, setCompletedGradeText] = useState("");
   const [currentText, setCurrentText] = useState("");
+  const [repeatText, setRepeatText] = useState("");
+  const [transferText, setTransferText] = useState("");
   const [termText, setTermText] = useState("");
   const [creditLimit, setCreditLimit] = useState("");
   const [comparisonCreditLimit, setComparisonCreditLimit] = useState("");
@@ -110,12 +126,19 @@ export function AcademicSequencePlanner({
   const [submitting, setSubmitting] = useState(false);
 
   const labels = language === "ar" ? {
+    repeats: "\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a \u0627\u0644\u0645\u0637\u0644\u0648\u0628 \u0625\u0639\u0627\u062f\u0629 \u062f\u0631\u0627\u0633\u062a\u0647\u0627 (\u0631\u0645\u0648\u0632 \u0645\u0641\u0635\u0648\u0644\u0629 \u0628\u0641\u0648\u0627\u0635\u0644)",
+    repeatsHint: "\u0633\u062a\u064f\u062f\u0631\u062c \u0647\u0630\u0647 \u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a \u0643\u0645\u062d\u0627\u0648\u0644\u0627\u062a \u0625\u0639\u0627\u062f\u0629 \u0628\u0646\u0627\u0621\u064b \u0639\u0644\u0649 \u0645\u0627 \u0623\u062f\u062e\u0644\u062a\u0647\u061b \u0648\u0644\u064a\u0633\u062a \u062a\u0623\u0643\u064a\u062f\u064b\u0627 \u0645\u0646 \u0627\u0644\u0633\u062c\u0644 \u0627\u0644\u0631\u0633\u0645\u064a.",
+    transfers: "\u0645\u0642\u0631\u0631\u0627\u062a \u062a\u062a\u0648\u0642\u0639 \u0627\u062d\u062a\u0633\u0627\u0628\u0647\u0627 \u0643\u0633\u0627\u0639\u0627\u062a \u0645\u062d\u0648\u0644\u0629 (\u0631\u0645\u0648\u0632 \u0645\u0641\u0635\u0648\u0644\u0629 \u0628\u0641\u0648\u0627\u0635\u0644)",
+    transfersHint: "\u0644\u0627 \u062a\u062f\u062e\u0644 \u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a \u0627\u0644\u0645\u062d\u0648\u0644\u0629 \u0641\u064a \u0627\u0644\u062d\u0633\u0627\u0628\u0627\u062a \u0625\u0644\u0649 \u0623\u0646 \u062a\u0624\u0643\u062f \u0648\u062d\u062f\u0629 \u0627\u0644\u0625\u0631\u0634\u0627\u062f \u0627\u0644\u0643\u0644\u064a\u0629 \u0645\u0639\u0627\u062f\u0644\u062a\u0647\u0627.",
     title: "تخطيط تسلسل المقررات",
     intro: "هذه أداة تخطيط مشروط للمقررات التي تختارها. لا تؤكد استيفاء متطلبات التخرج أو الأهلية للتسجيل أو توفر الشعب.",
     program: "البرنامج الدراسي",
     chooseProgram: "اختر البرنامج",
     cohort: "سنة الالتحاق",
     chooseCohort: "اختر سنة الالتحاق",
+    publishedPlan: "خطة منشورة (تحقق من Degree Works)",
+    choosePublishedPlan: "اختر نسخة خطة منشورة",
+    publishedPlanHint: "اختر هذه الخطة فقط إذا كانت تطابق خطتك المعيّنة. لا تستطيع الأداة التحقق من ذلك.",
     courses: "المقررات المتبقية التي تريد ترتيبها",
     completed: "المقررات المجتازة (رموز المقررات مفصولة بفواصل)",
     current: "المقررات المسجل فيها حالياً",
@@ -138,6 +161,7 @@ export function AcademicSequencePlanner({
     sources: "المصادر الرسمية",
     noPlan: "تعذر إنشاء تسلسل كامل بهذه البيانات.",
     selected: "المحدد",
+    clear: "\u0645\u0633\u062d \u0645\u062f\u062e\u0644\u0627\u062a \u0627\u0644\u062e\u0637\u0629",
     cancel: "إلغاء",
   } : {
     title: "Plan a course sequence",
@@ -146,10 +170,17 @@ export function AcademicSequencePlanner({
     chooseProgram: "Choose a program",
     cohort: "Entry cohort year",
     chooseCohort: "Choose your entry year",
+    publishedPlan: "Published plan version (confirm in Degree Works)",
+    choosePublishedPlan: "Choose a published plan version",
+    publishedPlanHint: "Choose a version only if it matches the plan assigned to you. This tool cannot verify that assignment.",
     courses: "Remaining courses to sequence",
     completed: "Completed course codes (comma separated)",
     grades: "Grades for completed courses (optional)",
     gradesHint: "Only enter passed courses listed above. Use CODE: grade, for example CSBP219: B or MATH105: 78. These are self-reported.",
+    repeats: "Courses to repeat (course codes, comma separated)",
+    repeatsHint: "These are scheduled as repeat attempts based on your report; this is not a verified transcript result.",
+    transfers: "UAEU courses you expect transfer credit to cover (comma separated)",
+    transfersHint: "Transfer claims are excluded from calculations until your college confirms equivalency.",
     current: "Courses you are currently taking",
     terms: "Planning terms (one term per line)",
     termsHint: "For example: Fall 2026, then Spring 2027. Use up to 8 terms.",
@@ -170,6 +201,7 @@ export function AcademicSequencePlanner({
     sources: "Official sources",
     noPlan: "A complete sequence could not be created from these inputs.",
     selected: "selected",
+    clear: "Clear plan inputs",
     cancel: "Cancel",
   };
 
@@ -189,7 +221,12 @@ export function AcademicSequencePlanner({
       .then(async (response) => {
         const data = await response.json();
         if (!response.ok) throw new Error(data.error ?? "Could not load program list.");
-        setPrograms(data.programs);
+        setPrograms([...data.programs, ...(data.continuingPrograms ?? []).map((program: Omit<ProgramOption, "curriculumAvailable" | "cohorts">) => ({
+          ...program,
+          curriculumAvailable: true,
+          cohorts: [],
+          continuingOnly: true,
+        }))]);
       })
       .catch((reason: unknown) => {
         if (!controller.signal.aborted) setError(reason instanceof Error ? reason.message : "Could not load program list.");
@@ -199,7 +236,7 @@ export function AcademicSequencePlanner({
   }, [open]);
 
   useEffect(() => {
-    if (!open || !programId || !cohortYear) {
+    if (!open || !programId || (!cohortYear && !publishedVersionId)) {
       setCurriculum(null);
       setSelectedCodes([]);
       return;
@@ -208,7 +245,8 @@ export function AcademicSequencePlanner({
     setLoadingCurriculum(true);
     setError("");
     setResult(null);
-    fetch(`/api/academic/sequence?programId=${encodeURIComponent(programId)}&cohortYear=${encodeURIComponent(cohortYear)}`, {
+    const selection = cohortYear ? `cohortYear=${encodeURIComponent(cohortYear)}` : `curriculumVersionId=${encodeURIComponent(publishedVersionId)}`;
+    fetch(`/api/academic/sequence?programId=${encodeURIComponent(programId)}&${selection}`, {
       cache: "no-store",
       signal: controller.signal,
     })
@@ -222,7 +260,7 @@ export function AcademicSequencePlanner({
       })
       .finally(() => { if (!controller.signal.aborted) setLoadingCurriculum(false); });
     return () => controller.abort();
-  }, [open, programId, cohortYear]);
+  }, [open, programId, cohortYear, publishedVersionId]);
 
   const selectedProgram = useMemo(() => programs.find((program) => program.id === programId), [programId, programs]);
   const terms = useMemo(() => termText.split("\n").map((term) => term.trim()).filter(Boolean), [termText]);
@@ -274,12 +312,18 @@ export function AcademicSequencePlanner({
   async function createSequence(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const completedCourseCodes = parseCodes(completedText);
+    const repeatCourseCodes = parseCodes(repeatText);
+    const transferCourseCodes = parseCodes(transferText);
     const completedCourseGrades = parseCourseGrades(completedGradeText);
     if (!completedCourseGrades || Object.keys(completedCourseGrades).some((code) => !completedCourseCodes.includes(code))) {
       setError("Enter grades as COURSECODE: grade, using only passed courses listed in Completed courses (for example CSBP219: B). Remove failed or unlisted courses.");
       return;
     }
-    if (!curriculum || selectedCodes.length === 0 || terms.length === 0 || terms.length > 8 || !Number(creditLimit)) {
+    if (!cohortYear && !publishedVersionId) {
+      setError("Choose an entry year or an explicit published plan version.");
+      return;
+    }
+    if (!curriculum || (selectedCodes.length === 0 && !repeatCourseCodes.length) || terms.length === 0 || terms.length > 8 || !Number(creditLimit)) {
       setError("Choose at least one remaining course, one planning term, and a valid credit limit.");
       return;
     }
@@ -293,11 +337,13 @@ export function AcademicSequencePlanner({
         cache: "no-store",
         body: JSON.stringify({
           programId,
-          cohortYear: Number(cohortYear),
-          remainingCourseCodes: selectedCodes,
+          ...(cohortYear ? { cohortYear: Number(cohortYear) } : { curriculumVersionId: publishedVersionId }),
+          remainingCourseCodes: [...new Set([...selectedCodes, ...repeatCourseCodes])],
           completedCourseCodes,
           completedCourseGrades,
           currentCourseCodes: parseCodes(currentText),
+          repeatCourseCodes,
+          transferCourseCodes,
           terms: terms.map((label, index) => ({ id: `term-${index + 1}`, label, maxCredits: Number(creditLimit) })),
           ...(comparisonCreditLimit.trim() ? { comparisonMaxCredits: Number(comparisonCreditLimit) } : {}),
         }),
@@ -313,12 +359,19 @@ export function AcademicSequencePlanner({
     }
   }
 
+  function invalidateResult() {
+    setResult(null);
+    setError("");
+  }
+
   function toggleCourse(code: string) {
+    invalidateResult();
     if (completedAndCurrent.has(code)) return;
     setSelectedCodes((current) => current.includes(code) ? current.filter((item) => item !== code) : [...current, code]);
   }
 
   function updateReportedCourses(kind: "completed" | "current", value: string) {
+    invalidateResult();
     const otherValue = kind === "completed" ? currentText : completedText;
     const reported = new Set([...parseCodes(value), ...parseCodes(otherValue)]);
     if (kind === "completed") setCompletedText(value);
@@ -327,7 +380,26 @@ export function AcademicSequencePlanner({
   }
 
   function addOutstandingRequiredCourses() {
+    invalidateResult();
     setSelectedCodes((current) => [...new Set([...current, ...mandatoryRemaining])]);
+  }
+
+  function clearPlanInputs() {
+    setProgramId("");
+    setCohortYear("");
+    setPublishedVersionId("");
+    setCurriculum(null);
+    setSelectedCodes([]);
+    setCompletedText("");
+    setCompletedGradeText("");
+    setCurrentText("");
+    setRepeatText("");
+    setTransferText("");
+    setTermText("");
+    setCreditLimit("");
+    setComparisonCreditLimit("");
+    setResult(null);
+    setError("");
   }
 
   return (
@@ -362,35 +434,49 @@ export function AcademicSequencePlanner({
               <select
                 autoFocus
                 value={programId}
-                onChange={(event) => { setProgramId(event.target.value); setCohortYear(""); setCurriculum(null); setResult(null); }}
+                onChange={(event) => { setProgramId(event.target.value); setCohortYear(""); setPublishedVersionId(""); setCurriculum(null); invalidateResult(); }}
                 className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20"
                 required
               >
                 <option value="">{loadingPrograms ? labels.loadingPrograms : labels.chooseProgram}</option>
-                {programs.map((program) => <option key={program.id} value={program.id} disabled={!program.curriculumAvailable || !program.cohorts.length}>{program.name} — {program.college}</option>)}
+                {programs.map((program) => <option key={program.id} value={program.id} disabled={!program.curriculumAvailable || (!program.cohorts.length && !program.publishedVersions.length)}>{program.name}{program.continuingOnly ? " — continuing students" : ""} — {program.college}</option>)}
               </select>
             </label>
             <label className="block text-sm font-bold text-zinc-700">
               {labels.cohort}
               <select
                 value={cohortYear}
-                onChange={(event) => { setCohortYear(event.target.value); setResult(null); }}
-                disabled={!selectedProgram?.cohorts.length || loadingPrograms}
+                onChange={(event) => { setCohortYear(event.target.value); if (event.target.value) setPublishedVersionId(""); invalidateResult(); }}
+                disabled={!selectedProgram?.cohorts.length || loadingPrograms || Boolean(publishedVersionId)}
                 className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20 disabled:bg-zinc-100 disabled:text-zinc-500"
-                required
+                required={!selectedProgram?.publishedVersions.length}
               >
                 <option value="">{labels.chooseCohort}</option>
                 {selectedProgram?.cohorts.map((year) => <option key={year} value={year}>{year}</option>)}
               </select>
-              {selectedProgram && !selectedProgram.cohorts.length && <span className="mt-1 block text-xs font-medium text-amber-800">{labels.noCohorts}</span>}
+              {selectedProgram && !selectedProgram.cohorts.length && !selectedProgram.publishedVersions.length && <span className="mt-1 block text-xs font-medium text-amber-800">{labels.noCohorts}</span>}
             </label>
+            {Boolean(selectedProgram?.publishedVersions.length) && <label className="block text-sm font-bold text-zinc-700">
+              {labels.publishedPlan}
+              <select
+                value={publishedVersionId}
+                onChange={(event) => { setPublishedVersionId(event.target.value); if (event.target.value) setCohortYear(""); invalidateResult(); }}
+                disabled={loadingPrograms || Boolean(cohortYear)}
+                required={!selectedProgram?.cohorts.length}
+                className="mt-2 w-full rounded-lg border border-zinc-300 bg-white px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20 disabled:bg-zinc-100 disabled:text-zinc-500"
+              >
+                <option value="">{labels.choosePublishedPlan}</option>
+                {selectedProgram?.publishedVersions.map((version) => <option key={version.id} value={version.id}>{version.version} — {version.totalCredits} credits — {version.cohortLabel}</option>)}
+              </select>
+              <span className="mt-1 block text-xs font-medium text-amber-800">{labels.publishedPlanHint}</span>
+            </label>}
           </div>
 
           {loadingCurriculum && <p role="status" className="flex items-center gap-2 text-sm text-zinc-600"><LoaderCircle size={16} className="animate-spin" aria-hidden="true" />{labels.loading}</p>}
 
           {curriculum && <>
             <div className="rounded-lg border border-sky-200 bg-sky-50 p-3 text-sm leading-6 text-sky-950">
-              <p className="font-bold">{curriculum.program.name} · {curriculum.cohort.year} · {curriculum.cohort.totalCredits} credits</p>
+              <p className="font-bold">{curriculum.program.name} · {curriculum.cohort.year ?? curriculum.cohort.version} · {curriculum.cohort.totalCredits} credits</p>
               <p>{curriculum.cohort.label}</p>
               {curriculum.limitations.map((limitation) => <p key={limitation} className="mt-1">{limitation}</p>)}
             </div>
@@ -431,7 +517,7 @@ export function AcademicSequencePlanner({
             </section>
 
             <fieldset className="rounded-lg border border-zinc-200 p-4">
-              <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({selectedCodes.filter((code) => !completedAndCurrent.has(code)).length} {labels.selected})</legend>
+              <legend className="px-1 text-sm font-bold text-zinc-800">{labels.courses} ({new Set([...selectedCodes, ...parseCodes(repeatText)]).size} {labels.selected})</legend>
               <p className="mb-3 text-xs leading-5 text-zinc-600">{requirementCopy.requiredPrompt}</p>
               <div className="max-h-64 space-y-1 overflow-y-auto pr-1">
                 {curriculum.courses.map((course) => (
@@ -458,32 +544,46 @@ export function AcademicSequencePlanner({
               </label>
             </div>
 
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block text-sm font-bold text-zinc-700">
+                {"repeats" in labels ? labels.repeats : "Courses to repeat (course codes, comma separated)"}
+                <textarea value={repeatText} onChange={(event) => { setRepeatText(event.target.value); invalidateResult(); }} rows={2} placeholder="CSBP219" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <span className="mt-1 block text-xs font-normal text-zinc-500">{"repeatsHint" in labels ? labels.repeatsHint : "These are scheduled as repeat attempts based on your report; this is not a verified transcript result."}</span>
+              </label>
+              <label className="block text-sm font-bold text-zinc-700">
+                {"transfers" in labels ? labels.transfers : "UAEU courses you expect transfer credit to cover (comma separated)"}
+                <textarea value={transferText} onChange={(event) => { setTransferText(event.target.value); invalidateResult(); }} rows={2} placeholder="CSBP119" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <span className="mt-1 block text-xs font-normal text-zinc-500">{"transfersHint" in labels ? labels.transfersHint : "Transfer claims are excluded from calculations until your college confirms equivalency."}</span>
+              </label>
+            </div>
+
             <label className="block text-sm font-bold text-zinc-700">
               {"grades" in labels ? labels.grades : "Completed course grades (optional)"}
-              <textarea value={completedGradeText} onChange={(event) => setCompletedGradeText(event.target.value)} rows={2} placeholder="CSBP219: B; MATH105: 78" aria-describedby="completed-grade-hint" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+              <textarea value={completedGradeText} onChange={(event) => { setCompletedGradeText(event.target.value); invalidateResult(); }} rows={2} placeholder="CSBP219: B; MATH105: 78" aria-describedby="completed-grade-hint" className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
               <span id="completed-grade-hint" className="mt-1 block text-xs font-normal text-zinc-500">{"gradesHint" in labels ? labels.gradesHint : "Enter only passed courses listed above. These grades are self-reported."}</span>
             </label>
 
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block text-sm font-bold text-zinc-700">
                 {labels.terms}
-                <textarea value={termText} onChange={(event) => setTermText(event.target.value)} rows={3} placeholder={language === "ar" ? "خريف 2026\nربيع 2027" : "Fall 2026\nSpring 2027"} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <textarea value={termText} onChange={(event) => { setTermText(event.target.value); invalidateResult(); }} rows={3} placeholder={language === "ar" ? "خريف 2026\nربيع 2027" : "Fall 2026\nSpring 2027"} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-normal focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
                 <span className="mt-1 block text-xs font-normal text-zinc-500">{labels.termsHint}</span>
               </label>
               <label className="block text-sm font-bold text-zinc-700">
                 {labels.limit}
-                <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={creditLimit} onChange={(event) => setCreditLimit(event.target.value)} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={creditLimit} onChange={(event) => { setCreditLimit(event.target.value); invalidateResult(); }} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
               </label>
               <label className="block text-sm font-bold text-zinc-700 sm:col-span-2">
                 {labels.compareLimit}
-                <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={comparisonCreditLimit} onChange={(event) => setComparisonCreditLimit(event.target.value)} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
+                <input type="number" min="1" max="40" step="0.5" inputMode="decimal" value={comparisonCreditLimit} onChange={(event) => { setComparisonCreditLimit(event.target.value); invalidateResult(); }} className="mt-2 w-full rounded-lg border border-zinc-300 px-3 py-2.5 font-medium focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20" />
                 <span className="mt-1 block text-xs font-normal text-zinc-500">{labels.comparisonHint}</span>
               </label>
             </div>
 
             <div className="flex flex-wrap justify-end gap-2">
+              <button type="button" onClick={clearPlanInputs} disabled={submitting} className="rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-bold text-zinc-700 hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-50">{labels.clear}</button>
               <button type="button" onClick={onClose} className="rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-bold text-zinc-700 hover:bg-zinc-50">{labels.cancel}</button>
-              <button type="submit" disabled={submitting || !selectedCodes.length || !terms.length || terms.length > 8 || !creditLimit} className="inline-flex items-center gap-2 rounded-lg bg-[#E0182D] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-zinc-300">
+              <button type="submit" disabled={submitting || (!selectedCodes.length && !parseCodes(repeatText).length) || !terms.length || terms.length > 8 || !creditLimit} className="inline-flex items-center gap-2 rounded-lg bg-[#E0182D] px-4 py-2.5 text-sm font-bold text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:bg-zinc-300">
                 {submitting && <LoaderCircle size={16} className="animate-spin" aria-hidden="true" />}{labels.submit}
               </button>
             </div>
@@ -520,6 +620,15 @@ export function AcademicSequencePlanner({
               {result.scope.curriculumSources.map((source) => <li key={source.url}><a className="text-[#B10E23] underline" href={source.url} target="_blank" rel="noreferrer">{source.title}</a> · {source.lastVerified}</li>)}
               {result.courseSources.map((source) => <li key={source.code}><a className="text-[#B10E23] underline" href={source.url} target="_blank" rel="noreferrer">{source.code} course record</a> · {source.verifiedAt}</li>)}
             </ul>
+          </section>
+          <section className="rounded-lg border border-zinc-200 p-3 text-sm" aria-label="Inputs used for this plan">
+            <h4 className="font-bold">Inputs used</h4>
+            <p>Completed: {result.scope.reportedInputs.completedCourseCodes.join(", ") || "none"}; current: {result.scope.reportedInputs.currentCourseCodes.join(", ") || "none"}; repeats: {result.scope.reportedInputs.repeatCourseCodes.join(", ") || "none"}.</p>
+            <p>Planned course codes: {result.scope.reportedInputs.remainingCourseCodes.join(", ")}.</p>
+            <p>Grades: {Object.entries(result.scope.reportedInputs.completedCourseGrades).map(([code, grade]) => `${code}: ${grade}`).join(", ") || "none supplied"}.</p>
+            <p>Terms: {result.scope.reportedInputs.terms.map(({ label, maxCredits }) => `${label} (max ${maxCredits} credits)`).join("; ")}.</p>
+            {result.scope.reportedInputs.comparisonMaxCredits !== undefined && <p>Alternative load cap: {result.scope.reportedInputs.comparisonMaxCredits} credits per term.</p>}
+            {result.scope.reportedInputs.transferCourseCodes.length > 0 && <p className="mt-1 text-amber-900">{result.scope.transferReview} Reported transfer courses: {result.scope.reportedInputs.transferCourseCodes.join(", ")}.</p>}
           </section>
           <p className="rounded-lg bg-amber-50 p-3 text-sm leading-6 text-amber-950">{result.scope.disclaimer}</p>
         </section>}

@@ -20,7 +20,11 @@ The current degree page lists **120 credits**: 21 General Education; 12 College;
 
 ## Cohort limits
 
-The linked 2020-2021 study plan also lists 120 credits but differs from the current degree page in course codes and category placement. The model keeps the current page separate from the cohort plan total. Some General Education credits can overlap with major requirements; do not add these categories as distinct credits. Check the assigned Degree Works plan for your cohort.
+The linked official **2020-2021 cohort onwards** model plan provides separate schedules for Fall-admitted and Spring-admitted students. The Fall schedule's semester loads total 120 credits. The Spring schedule's printed semester loads total **117**, although its heading says 120; it also lists GESU121 in both semesters 1 and 7. The source does not explain either discrepancy, so do not infer a missing course or count the repeated course as a confirmed additional requirement.
+
+The model plan's course codes and General Education/elective placements differ from the current degree page, which UAEU updated on 9 November 2026. For a student-specific decision, use the entry-term plan assigned in Degree Works and ask the College Advising Unit to reconcile any mismatch. Do not combine the model-plan course list with current-page requirement totals. The structured curriculum record preserves both Fall and Spring paths, the Spring discrepancies, and the conflict with the current page.
+
+Some General Education credits can overlap with major requirements; do not add category totals as distinct completed credits. Neither public source is a personal Degree Works audit or proof that a course section will be offered.
 
 ## Official sources
 

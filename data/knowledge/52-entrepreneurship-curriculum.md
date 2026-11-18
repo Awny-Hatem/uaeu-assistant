@@ -21,9 +21,24 @@ The current degree page lists a minimum of **120 credits**: 21 General Education
 - Supporting courses: MATH115, ACCT111, ECON105, ACCT120, ECON125, SCML150, SCML201, FINC210, PRVT265, MGMT415.
 - Choose three business electives from MKTG210, SCML300, SCML340, ECON215, HRMD330, and HRMD340.
 
-## Cohort applicability and limits
+## Fall-entry 2025?2026 model plan
 
-The linked 2025–2026 model plan lists 120 credits but labels ENTR415 as an internship, while the current degree page defines it as an entrepreneurial venture and states its registration gate. The model uses the current page for course requirements and does not assign those details to a cohort; it uses the linked plan only for the published 2025–2026 total. Confirm the student's assigned Degree Works plan and verify their personal ENTR415 eligibility separately.
+The official model plan is explicitly for students admitted from the Fall semester and totals **120 credits**. It names the following courses by semester:
+
+| Semester | Published courses | Credits |
+| --- | --- | ---: |
+| Year 1 Fall | ACCT111, MATH115, GEAE101, ECON105, MGMT201 | 15 |
+| Year 1 Spring | SCML150, MKTG205, ECON125, STAT102, GEIT113 | 15 |
+| Year 2 Fall | ENTR310, ENTR325, ACCT120, STAT202, GEIE222 | 15 |
+| Year 2 Spring | BANA200, ENTR355, PRVT265, FINC210, MKTG300 | 15 |
+| Year 3 Fall | MKTG310, BANA310, SCML201, GBUS300, one Major Elective | 15 |
+| Year 3 Spring | GEEM110, HRMD320, SCML320, ENTR405, one Major Elective | 15 |
+| Year 4 Fall | ENTR480, MGMT415, GEBS220, two 3-credit choices from GE Themes 6?10, one Major Elective | 18 |
+| Year 4 Spring | ENTR415, listed as a 12-credit Internship | 12 |
+
+The plan names 32 course codes (including the 12-credit ENTR415) and leaves **9 major-elective credits** and **6 General Education theme-choice credits** unspecified. Its table does not give eligible codes for those choices; do not fill them from the current degree page unless the student's assigned plan confirms that mapping.
+
+The model-plan PDF labels ENTR415 as an Internship, while the current degree page describes it as Developing an Entrepreneurial Venture under Learning in Action and states a registration gate (GPA above 2.0, at least 76 completed credits, and GEIE222 with minimum grade D). Preserve this source discrepancy; do not merge the labels or determine the student's eligibility without a verified record. The model plan is Fall-entry only: a year-only profile or Spring entrant does not establish applicability. Confirm the student's assigned Degree Works plan with the College Advising Unit.
 
 This record does not establish a student's GPA, completed credits, section availability, personal registration eligibility, or graduation approval.
 

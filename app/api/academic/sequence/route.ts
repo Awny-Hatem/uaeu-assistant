@@ -14,6 +14,10 @@ const MAX_TERMS = 8;
 const MAX_EVIDENCE_AGE_DAYS = 180;
 const PASSING_LETTER_GRADES = new Set(["D", "D+", "C-", "C", "C+", "B-", "B", "B+", "A-", "A"]);
 
+function uaeDate(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Dubai", year: "numeric", month: "2-digit", day: "2-digit" }).format(new Date());
+}
+
 type RequirementGroup = { id: string; name: string; type: string; chooseCount?: number; credits?: number };
 type PlanningChoice = {
   id: string;
@@ -250,7 +254,8 @@ export async function GET(request: Request): Promise<Response> {
   const url = new URL(request.url);
   const programId = url.searchParams.get("programId");
   const cohortValue = url.searchParams.get("cohortYear");
-  const asOf = new Date().toISOString().slice(0, 10);
+  const selectedVersionId = url.searchParams.get("curriculumVersionId");
+  const asOf = uaeDate();
   const catalogPrograms = loadUndergraduateProgramCatalog().programs;
   const curricula = listAcademicPrograms();
   const curriculumById = new Map(curricula.map((program) => [program.id, program]));
@@ -259,26 +264,92 @@ export async function GET(request: Request): Promise<Response> {
     .map((course) => course.code.toUpperCase()) ?? []);
 
   if (!programId) {
-    if (cohortValue) return json({ error: "programId is required when cohortYear is supplied." }, 400);
+    if (cohortValue || selectedVersionId) return json({ error: "programId is required when a cohort or curriculum version is supplied." }, 400);
     const programs = catalogPrograms.map((catalogProgram) => {
       const model = curriculumForCatalogProgram(catalogProgram, curriculumById, curricula);
+      const publishedVersions = model && model.sources.every((source) => isFresh(source.lastVerified, asOf))
+        ? model.curriculumVersions.filter((version) => version.cohortMapping === "unresolved" && version.requirements.length > 0 &&
+            [...collectRequirementCourses(version.requirements)].some((code) => availableCourseCodes.has(code)))
+          .map(({ id, version, cohortLabel, totalCredits }) => ({ id, version, cohortLabel, totalCredits }))
+        : [];
       return {
         id: catalogProgram.id,
         name: model?.name ?? catalogProgram.title,
         college: catalogProgram.college,
         curriculumAvailable: Boolean(model),
         cohorts: model ? availableCohorts(model, asOf, availableCourseCodes) : [],
+        publishedVersions,
       };
     });
-    return json({ programs, asOf });
+    const continuingProgram = curriculumById.get("bsc-computer-engineering");
+    const continuingVersions = continuingProgram?.sources.every((source) => isFresh(source.lastVerified, asOf))
+      ? continuingProgram.curriculumVersions.filter((version) => version.id === "computer-engineering-catalog-2026-08" && version.requirements.length > 0 &&
+          [...collectRequirementCourses(version.requirements)].some((code) => availableCourseCodes.has(code)))
+        .map(({ id, version, cohortLabel, totalCredits }) => ({ id, version, cohortLabel, totalCredits }))
+      : [];
+    return json({ programs, continuingPrograms: continuingVersions.length ? [{
+      id: "bsc-computer-engineering",
+      name: continuingProgram!.name,
+      college: continuingProgram!.college,
+      publishedVersions: continuingVersions,
+      limitation: "Continuing-student plan: published for Fall-entry cohorts from 2025–2026 onward. Spring-entry applicability is not established; confirm your assigned plan in Degree Works.",
+    }] : [], asOf });
   }
 
   if (!/^[a-z0-9-]{2,80}$/u.test(programId)) return json({ error: "Invalid programId." }, 400);
   const catalogProgram = catalogPrograms.find((program) => program.id === programId);
   const program = catalogProgram ? curriculumForCatalogProgram(catalogProgram, curriculumById, curricula) : undefined;
-  if (!catalogProgram || !program) return json({ error: "That program is not in the undergraduate curriculum catalog." }, 404);
-  const cohorts = availableCohorts(program, asOf, availableCourseCodes);
-  if (!cohortValue) return json({ programId, cohorts });
+  const continuingProgram = programId === "bsc-computer-engineering" ? curriculumById.get(programId) : undefined;
+  const selectedProgram = program ?? continuingProgram;
+  if (!selectedProgram || (!catalogProgram && !continuingProgram)) return json({ error: "That program is not in the undergraduate curriculum catalog." }, 404);
+  if (continuingProgram && (!selectedVersionId || selectedVersionId !== "computer-engineering-catalog-2026-08" || cohortValue)) {
+    return json({ error: "Computer Engineering is available here only as an explicitly selected Fall-entry 2025 plan; cohort matching and Spring-entry applicability are not established." }, 409);
+  }
+  const cohorts = catalogProgram ? availableCohorts(selectedProgram, asOf, availableCourseCodes) : [];
+  const publishedVersions = selectedProgram.sources.every((source) => isFresh(source.lastVerified, asOf))
+    ? selectedProgram.curriculumVersions.filter((version) => (version.cohortMapping === "unresolved" || version.id === "computer-engineering-catalog-2026-08") && version.requirements.length > 0 &&
+        [...collectRequirementCourses(version.requirements)].some((code) => availableCourseCodes.has(code)))
+      .map(({ id, version, cohortLabel, totalCredits }) => ({ id, version, cohortLabel, totalCredits }))
+    : [];
+  if (cohortValue && selectedVersionId) return json({ error: "Choose a cohort-matched plan or one published plan version, not both." }, 400);
+  if (selectedVersionId) {
+    if (!/^[a-z0-9][a-z0-9-]{1,119}$/u.test(selectedVersionId)) return json({ error: "Invalid curriculumVersionId." }, 400);
+    const curriculum = selectedProgram.curriculumVersions.find((version) => version.id === selectedVersionId);
+    if (!curriculum || (curriculum.cohortMapping !== "unresolved" && curriculum.id !== "computer-engineering-catalog-2026-08") || !curriculum.requirements.length ||
+        ![...collectRequirementCourses(curriculum.requirements)].some((code) => availableCourseCodes.has(code))) {
+      return json({ error: "That published plan is not eligible for conditional planning from the available structured evidence." }, 409);
+    }
+    const stale = selectedProgram.sources.filter((source) => !isFresh(source.lastVerified, asOf));
+    if (stale.length) return json({ error: "The published curriculum evidence is older than the planner's 180-day freshness limit.", sources: stale.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })) }, 409);
+    const catalog = loadOfficialCourseCatalog();
+    if (!catalog) return json({ error: "The official course catalog snapshot is unavailable." }, 503);
+    const catalogByCode = new Map(catalog.courses.map((course) => [course.code.toUpperCase(), course]));
+    const courseGroups = collectCourseGroups(curriculum.requirements);
+    const requirementSummary = summarizePlanningRequirements(curriculum.requirements);
+    const courseOptions = [...courseGroups.entries()].map(([code, groups]) => {
+      const record = catalogByCode.get(code);
+      return record && record.creditHours !== null && record.creditHours > 0
+        ? { code, title: record.title, credits: record.creditHours, groups, source: record.source }
+        : null;
+    }).filter((course): course is NonNullable<typeof course> => course !== null).sort((a, b) => a.code.localeCompare(b.code));
+    const unavailableCourses = [...courseGroups.keys()].filter((code) => !courseOptions.some((course) => course.code === code));
+    return json({
+      program: { id: selectedProgram.id, name: selectedProgram.name, college: selectedProgram.college },
+      cohort: { year: null, label: curriculum.cohortLabel, version: curriculum.version, versionId: curriculum.id, totalCredits: curriculum.totalCredits, selectionMode: "published-version-selected" },
+      courses: courseOptions,
+      requirementSummary,
+      unavailableCourses,
+      sources: selectedProgram.sources,
+      limitations: [
+        ...curriculum.limitations,
+        ...(curriculum.id === "computer-engineering-catalog-2026-08" ? ["The published 131-credit Computer Engineering plan is labeled for Fall-entry cohorts from 2025–2026 onward; Spring-entry applicability is not established."] : []),
+        "This plan version was selected explicitly by you because the published sources do not establish its applicability to your entry cohort. Compare it with your assigned Degree Works plan; the assistant cannot verify your personal assignment.",
+      ],
+      asOf,
+    });
+  }
+  if (!program) return json({ error: "A cohort-matched curriculum is not available for this continuing-student record." }, 409);
+  if (!cohortValue) return json({ programId, cohorts, publishedVersions });
   if (!/^\d{4}$/u.test(cohortValue)) return json({ error: "cohortYear must be a four-digit entry year." }, 400);
   const cohortYear = Number(cohortValue);
   if (!cohorts.includes(cohortYear)) {
@@ -301,7 +372,7 @@ export async function GET(request: Request): Promise<Response> {
   const unavailableCourses = [...courseGroups.keys()].filter((code) => !courseOptions.some((course) => course.code === code));
   return json({
     program: { id: program.id, name: program.name, college: program.college },
-    cohort: { year: cohortYear, label: selection.curriculum.cohortLabel, version: selection.curriculum.version, totalCredits: selection.curriculum.totalCredits },
+    cohort: { year: cohortYear, label: selection.curriculum.cohortLabel, version: selection.curriculum.version, totalCredits: selection.curriculum.totalCredits, selectionMode: "cohort-matched" },
     courses: courseOptions,
     requirementSummary,
     unavailableCourses,
@@ -328,14 +399,21 @@ export async function POST(request: Request): Promise<Response> {
   if (!isRecord(body)) return json({ error: "The request body must be an object." }, 400);
 
   const { programId, cohortYear } = body;
+  const curriculumVersionId = body.curriculumVersionId;
+  const hasCohortField = cohortYear !== undefined;
+  const hasVersionField = curriculumVersionId !== undefined;
+  const hasCohortYear = hasCohortField && Number.isInteger(cohortYear) && Number(cohortYear) >= 1990 && Number(cohortYear) <= new Date().getUTCFullYear();
+  const hasPublishedVersion = hasVersionField && typeof curriculumVersionId === "string" && /^[a-z0-9][a-z0-9-]{1,119}$/u.test(curriculumVersionId);
   const remainingCourseCodes = normalizeCourseCodes(body.remainingCourseCodes);
   const completedCourseCodes = normalizeCourseCodes(body.completedCourseCodes ?? []);
   const currentCourseCodes = normalizeCourseCodes(body.currentCourseCodes ?? []);
+  const repeatCourseCodes = normalizeCourseCodes(body.repeatCourseCodes ?? []);
+  const transferCourseCodes = normalizeCourseCodes(body.transferCourseCodes ?? []);
   const completedCourseGrades = completedCourseCodes ? normalizeCourseGrades(body.completedCourseGrades, completedCourseCodes) : null;
   if (typeof programId !== "string" || !/^[a-z0-9-]{2,80}$/u.test(programId) ||
-      !Number.isInteger(cohortYear) || Number(cohortYear) < 1990 || Number(cohortYear) > new Date().getUTCFullYear() ||
-      !remainingCourseCodes?.length || !completedCourseCodes || !currentCourseCodes || !completedCourseGrades) {
-    return json({ error: "Provide a valid programId, entry cohortYear, non-empty remainingCourseCodes, valid completedCourseCodes/currentCourseCodes arrays, and valid grades only for courses listed as completed." }, 400);
+      (hasCohortField === hasVersionField) || (hasCohortField && !hasCohortYear) || (hasVersionField && !hasPublishedVersion) ||
+      !remainingCourseCodes?.length || !completedCourseCodes || !currentCourseCodes || !repeatCourseCodes || !transferCourseCodes || !completedCourseGrades) {
+    return json({ error: "Provide a valid programId and exactly one cohortYear or curriculumVersionId, plus non-empty remainingCourseCodes and valid course-history fields." }, 400);
   }
   if (!Array.isArray(body.terms) || body.terms.length < 1 || body.terms.length > MAX_TERMS) {
     return json({ error: `Provide between 1 and ${MAX_TERMS} planning terms.` }, 400);
@@ -357,8 +435,11 @@ export async function POST(request: Request): Promise<Response> {
   }
   const hasOverlap = (left: string[], right: string[]) => left.some((code) => right.includes(code));
   if (hasOverlap(completedCourseCodes, remainingCourseCodes) || hasOverlap(currentCourseCodes, remainingCourseCodes) ||
-      hasOverlap(completedCourseCodes, currentCourseCodes)) {
-    return json({ error: "A course cannot appear in more than one of the completed, current, or remaining lists." }, 400);
+      hasOverlap(completedCourseCodes, currentCourseCodes) || hasOverlap(repeatCourseCodes, completedCourseCodes) ||
+      hasOverlap(repeatCourseCodes, currentCourseCodes) || hasOverlap(repeatCourseCodes, transferCourseCodes) ||
+      hasOverlap(transferCourseCodes, completedCourseCodes) || hasOverlap(transferCourseCodes, currentCourseCodes) ||
+      repeatCourseCodes.some((code) => !remainingCourseCodes.includes(code))) {
+    return json({ error: "Completed, current, repeat, and transfer-credit claims must be consistent. Repeat courses must also appear in the remaining course list." }, 400);
   }
 
   const catalogProgram = loadUndergraduateProgramCatalog().programs.find((item) => item.id === programId);
@@ -367,12 +448,28 @@ export async function POST(request: Request): Promise<Response> {
   const mappedProgram = catalogProgram
     ? curriculumForCatalogProgram(catalogProgram, curriculumById, curricula)
     : curriculumById.get(programId);
-  const selectedCurriculum = mappedProgram ? getProgramCurriculum(mappedProgram.id, Number(cohortYear)) : null;
-  if (!selectedCurriculum?.cohortMatched || selectedCurriculum.curriculum.cohortMapping === "unresolved") {
-    return json({
-      error: "The available curriculum cannot be matched confidently to that entry cohort. I will not create a cohort-specific sequence from a different plan.",
-      resolutionState: "NEEDS_COHORT_CONFIRMATION",
-    }, 409);
+  let selectedCurriculum: { program: AcademicProgram; curriculum: NonNullable<ReturnType<typeof getProgramCurriculum>>["curriculum"] } | null = null;
+  let selectionMode: "cohort-matched" | "published-version-selected";
+  if (mappedProgram && hasPublishedVersion) {
+    const curriculum = mappedProgram.curriculumVersions.find((version) => version.id === curriculumVersionId);
+    const courseCatalog = loadOfficialCourseCatalog();
+    const availableCodes = new Set(courseCatalog?.courses.filter((course) => course.creditHours !== null && course.creditHours > 0).map((course) => course.code.toUpperCase()) ?? []);
+    if (!curriculum || (curriculum.cohortMapping !== "unresolved" && curriculum.id !== "computer-engineering-catalog-2026-08") || !curriculum.requirements.length ||
+        ![...collectRequirementCourses(curriculum.requirements)].some((code) => availableCodes.has(code))) {
+      return json({ error: "That published plan version is not available for conditional planning." }, 409);
+    }
+    selectedCurriculum = { program: mappedProgram, curriculum };
+    selectionMode = "published-version-selected";
+  } else {
+    const mappedSelection = mappedProgram && hasCohortYear ? getProgramCurriculum(mappedProgram.id, Number(cohortYear)) : null;
+    if (!mappedSelection?.cohortMatched || mappedSelection.curriculum.cohortMapping === "unresolved") {
+      return json({
+        error: "The available curriculum cannot be matched confidently to that entry cohort. Select a published plan version only if it matches the plan assigned to you.",
+        resolutionState: "NEEDS_COHORT_CONFIRMATION",
+      }, 409);
+    }
+    selectedCurriculum = mappedSelection;
+    selectionMode = "cohort-matched";
   }
   const { program, curriculum } = selectedCurriculum;
   const allowedCourses = collectRequirementCourses(curriculum.requirements);
@@ -385,11 +482,11 @@ export async function POST(request: Request): Promise<Response> {
   const catalog = loadOfficialCourseCatalog();
   if (!catalog) return json({ error: "The official course catalog snapshot is unavailable." }, 503);
   const catalogByCode = new Map(catalog.courses.map((course) => [course.code.toUpperCase(), course]));
-  const unknownCodes = [...completedCourseCodes, ...currentCourseCodes, ...remainingCourseCodes]
+  const unknownCodes = [...completedCourseCodes, ...currentCourseCodes, ...remainingCourseCodes, ...transferCourseCodes]
     .filter((code) => !catalogByCode.has(code));
   if (unknownCodes.length) return json({ error: "Some supplied course codes are absent from the current official catalog snapshot.", courses: [...new Set(unknownCodes)] }, 422);
 
-  const asOf = new Date().toISOString().slice(0, 10);
+  const asOf = uaeDate();
   const staleCurriculumSources = program.sources.filter((source) => !isFresh(source.lastVerified, asOf));
   if (staleCurriculumSources.length) {
     return json({
@@ -438,6 +535,14 @@ export async function POST(request: Request): Promise<Response> {
       asOf,
     })
     : undefined;
+  if (repeatCourseCodes.length) {
+    plan.assumptions.push(`Repeat courses are included in the planned course list because the student reported prior unsuccessful attempts: ${repeatCourseCodes.join(", ")}. Verify attempt history and repeat eligibility in the official student record.`);
+    if (comparisonPlan) comparisonPlan.assumptions.push(`Repeat courses are included in the planned course list because the student reported prior unsuccessful attempts: ${repeatCourseCodes.join(", ")}. Verify attempt history and repeat eligibility in the official student record.`);
+  }
+  if (selectionMode === "published-version-selected") {
+    plan.assumptions.push("The published curriculum version was selected by the student; UAEU has not confirmed that it is the student's assigned cohort plan. Verify the version in Degree Works before relying on this scenario.");
+    if (comparisonPlan) comparisonPlan.assumptions.push("The published curriculum version was selected by the student; UAEU has not confirmed that it is the student's assigned cohort plan. Verify the version in Degree Works before relying on this scenario.");
+  }
   return json({
     plan,
     ...(comparisonPlan ? { comparisonPlan, comparisonMaxCredits } : {}),
@@ -446,13 +551,28 @@ export async function POST(request: Request): Promise<Response> {
       programId: program.id,
       programName: program.name,
       college: program.college,
-      cohortYear: Number(cohortYear),
+      cohortYear: selectionMode === "cohort-matched" ? Number(cohortYear) : null,
+      curriculumSelectionMode: selectionMode,
       cohortLabel: curriculum.cohortLabel,
       curriculumVersion: curriculum.version,
       curriculumCredits: curriculum.totalCredits,
-      curriculumLimitations: curriculum.limitations,
+      curriculumLimitations: [
+        ...curriculum.limitations,
+        ...(curriculum.id === "computer-engineering-catalog-2026-08" ? ["The published 131-credit Computer Engineering plan is labeled for Fall-entry cohorts from 2025–2026 onward; Spring-entry applicability is not established."] : []),
+      ],
       curriculumSources: program.sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
       selectedCoursesOnly: true,
+      reportedInputs: {
+        completedCourseCodes,
+        currentCourseCodes,
+        remainingCourseCodes,
+        repeatCourseCodes,
+        transferCourseCodes,
+        completedCourseGrades,
+        terms: terms.map(({ label, maxCredits }) => ({ label, maxCredits })),
+        ...(typeof comparisonMaxCredits === "number" ? { comparisonMaxCredits } : {}),
+      },
+      transferReview: "Transfer-credit claims are not counted as completed courses or prerequisite evidence in this plan; confirm equivalency with the college advising unit.",
       disclaimer: "This is a conditional sequence for the course codes and grades you report, not a degree audit or registration approval. Elective/pathway choices, unlisted rules, personal standing, live sections, timetable conflicts, and university records are not verified. Confirm your Degree Works plan and current offerings with your advisor before registering. Course-code and grade inputs are processed for this response and are not stored by this route.",
     },
   });

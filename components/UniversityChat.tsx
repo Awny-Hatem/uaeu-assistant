@@ -86,7 +86,7 @@ function isAuthUser(value: unknown): value is AuthUser {
 const GUEST_STATE_KEY = "uaeu-chatbot-guest-v4";
 const ACCOUNT_USAGE_KEY = "uaeu-chatbot-account-usage-v1";
 const ACCOUNT_MESSAGES_KEY = "uaeu-chatbot-account-messages-v1";
-const LANGUAGE_KEY = "uaeu-chatbot-language-v1";
+const ACCESSIBILITY_TEXT_SCALE_KEY = "uaeu-chatbot-text-scale-v1";
 
 const SUGGESTIONS = [
   {
@@ -334,6 +334,37 @@ function sourceIcon(source: AssistantSource) {
   return <Search size={10} />;
 }
 
+function AccessibilityControls({
+  language,
+  fontScale,
+  onDecrease,
+  onIncrease,
+}: {
+  language: "en" | "ar";
+  fontScale: number;
+  onDecrease: () => void;
+  onIncrease: () => void;
+}) {
+  const labels = language === "ar"
+    ? { group: "إمكانية الوصول", smaller: "تصغير النص", larger: "تكبير النص", size: "حجم النص" }
+    : { group: "Accessibility", smaller: "Decrease text size", larger: "Increase text size", size: "Text size" };
+  return (
+    <div role="group" aria-label={labels.group} className="flex items-center gap-2">
+      <button type="button" aria-label={labels.smaller} onClick={onDecrease} disabled={fontScale <= 100}
+        className="min-h-11 min-w-11 rounded-lg border border-zinc-300 bg-white text-base font-bold text-zinc-800 hover:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E0182D] disabled:opacity-50">
+        A−
+      </button>
+      <span aria-live="polite" aria-label={`${labels.size}: ${fontScale}%`} className="min-w-12 text-center text-xs font-semibold text-zinc-700">
+        {fontScale}%
+      </span>
+      <button type="button" aria-label={labels.larger} onClick={onIncrease} disabled={fontScale >= 125}
+        className="min-h-11 min-w-11 rounded-lg border border-zinc-300 bg-white text-base font-bold text-zinc-800 hover:bg-zinc-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#E0182D] disabled:opacity-50">
+        A+
+      </button>
+    </div>
+  );
+}
+
 export function UniversityChat() {
   const [user, setUser] = useState<AuthUser | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -346,10 +377,8 @@ export function UniversityChat() {
       "Create an account with any email, or use a UAEU email for extended local access.",
   });
 
-  const [locale, setLocale] = useState<LocalePref>(() => {
-    try { const value = localStorage.getItem(LANGUAGE_KEY); return value === "en" || value === "ar" ? value : "auto"; }
-    catch { return "auto"; }
-  });
+  const locale: LocalePref = "auto";
+  const [fontScale, setFontScale] = useState(100);
   const reduceMotion = useReducedMotion();
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<UiMessage[]>([]);
@@ -371,12 +400,21 @@ export function UniversityChat() {
   const usageDateRef = useRef(todayKey());
   const accountUsageRef = useRef({ userId: "", date: todayKey(), used: 0 });
   const latestUserText = [...messages].reverse().find((message) => message.role === "user")?.content;
-  const uiLocale = locale === "auto" ? (latestUserText ? textLanguage(latestUserText) : "en") : locale;
+  const uiLocale = latestUserText ? textLanguage(latestUserText) : "en";
   const copy = uiCopy[uiLocale];
 
   useEffect(() => {
-    try { localStorage.setItem(LANGUAGE_KEY, locale); } catch { /* Optional preference storage. */ }
-  }, [locale]);
+    try {
+      const saved = Number(localStorage.getItem(ACCESSIBILITY_TEXT_SCALE_KEY));
+      if ([100, 112.5, 125].includes(saved)) setFontScale(saved);
+    } catch { /* Optional accessibility preference storage. */ }
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.fontSize = `${fontScale}%`;
+    try { localStorage.setItem(ACCESSIBILITY_TEXT_SCALE_KEY, String(fontScale)); }
+    catch { /* Larger text remains available for this session. */ }
+  }, [fontScale]);
 
   const bottomRef = useRef<HTMLDivElement>(null);
   const profileRef = useRef<HTMLDivElement>(null);
@@ -779,7 +817,7 @@ export function UniversityChat() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json", 'x-chat-account-id': user?.id ?? 'guest' },
-        credentials: user ? 'same-origin' : 'omit',
+        credentials: 'same-origin',
         body: JSON.stringify(payload),
         signal: request.signal,
       });
@@ -935,21 +973,13 @@ export function UniversityChat() {
             </div>
           </div>
 
-          <div className="mt-5 space-y-3">
-            <label htmlFor="desktop-language" className="block text-[11px] font-bold uppercase tracking-wider text-zinc-400">
-              {copy.language}
-            </label>
-            <select
-              id="desktop-language"
-              data-testid="desktop-language"
-              value={locale}
-              onChange={(event) => setLocale(event.target.value as LocalePref)}
-              className="w-full appearance-none rounded-lg border border-zinc-200 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 outline-none transition focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20"
-            >
-              <option value="auto">{copy.auto}</option>
-              <option value="en">{copy.english}</option>
-              <option value="ar">{copy.arabic}</option>
-            </select>
+          <div className="mt-5 space-y-2">
+            <AccessibilityControls
+              language={uiLocale}
+              fontScale={fontScale}
+              onDecrease={() => setFontScale((scale) => Math.max(100, scale - 12.5))}
+              onIncrease={() => setFontScale((scale) => Math.min(125, scale + 12.5))}
+            />
           </div>
         </div>
 
@@ -1010,17 +1040,14 @@ export function UniversityChat() {
             className="h-9 w-auto object-contain"
             priority
           />
-          <select
-            data-testid="mobile-language"
-            aria-label={copy.language}
-            value={locale}
-            onChange={(event) => setLocale(event.target.value as LocalePref)}
-            className="mx-2 max-w-28 rounded-lg border border-zinc-200 bg-white px-2 py-2 text-xs"
-          >
-            <option value="auto">{copy.auto}</option>
-            <option value="en">{copy.english}</option>
-            <option value="ar">{copy.arabic}</option>
-          </select>
+          <div className="mx-2 scale-90 origin-center">
+            <AccessibilityControls
+              language={uiLocale}
+              fontScale={fontScale}
+              onDecrease={() => setFontScale((scale) => Math.max(100, scale - 12.5))}
+              onIncrease={() => setFontScale((scale) => Math.min(125, scale + 12.5))}
+            />
+          </div>
           <div className="relative" ref={profileRef}>
             <button
               type="button"
