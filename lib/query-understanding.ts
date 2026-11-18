@@ -320,7 +320,7 @@ function computeUnderstanding(text: string): QueryMeaning {
     intents.some(intent=>intent==="start"||intent==="exams")) subjects.push("calendar");
   const degreeLevels: QueryMeaning["degreeLevels"] = [];
   const positiveDegreeText = normalized.replace(/\bnot (?:a |an )?(?:undergraduate|postgraduate|bachelor(?:s)?|master(?:s)?|phd|doctoral)(?: student| applicant| degree)?\b/gu, "");
-  if (/\b(?:postgraduates?|master|masters|msc|mba|mpa|dba|doctorate|phd|doctoral)\b|\bgraduate\s+(?:application|admission|program|programme|school|degree|studies)\b|ماجستير|دكتوراه|دراسات عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
+  if (/\b(?:postgraduates?|master|masters|msc|mba|mpa|dba|doctorate|phd|doctoral)\b|\bgraduate\s+(?:application|admission|program|programme|school|degree|studies)\b|ماجستير|دكتوراه|(?:ال)?دراسات (?:ال)?عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
   if (/\b(?:undergraduates?|bachelor|bachelors|bsc|bs)\b|بكالوريوس/u.test(positiveDegreeText)) degreeLevels.push("undergraduate");
   const applicantCategories: QueryMeaning["applicantCategories"] = [];
   const positiveCategoryText = normalized.replace(/\bnot (?:a |an )?(?:uae national|emirati|citizen|international(?: applicant| student)?)\b|لست (?:مواطن[اة]?|اماراتي[اة]?|طالبا? دوليا?)/gu, "");

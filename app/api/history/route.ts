@@ -39,7 +39,8 @@ export async function DELETE(req: Request) {
     const ownershipError = accountOwnershipGuard(req, user?.id ?? null);
     if (ownershipError) return ownershipError;
     const serverStore = serverHistoryEnabled() && user;
-    if (serverStore) clearChatHistory(user.id);
+    // V3's opt-in server history owns signed-in conversations when enabled.
+    if (serverStore) { clearChatHistory(user.id); return jsonNoStore({ cleared: true, storage: 'server' }); }
     if (!memoryEnabled()) return jsonNoStore({ cleared: true, storage: serverStore ? 'server' : 'browser' });
     await clearConversation(jar.get(MEMORY_COOKIE)?.value ?? null, user?.id ?? null);
     // Rotate the key so nothing can be written back under the old one.

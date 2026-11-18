@@ -805,6 +805,8 @@ async function rememberExchange(memory: MemoryRequest, response: Response) {
 
 async function openRequestMemory(userId: string | null): Promise<{ session: MemorySession; turns: MemoryTurn[] } | null> {
   if (!memoryEnabled()) return null;
+  // V3's opt-in server history owns signed-in conversations when it is enabled.
+  if (userId && process.env.SERVER_CHAT_HISTORY?.trim().toLowerCase() === "enabled") return null;
   try {
     const jar = await cookies();
     const opened = (await openSession(jar.get(MEMORY_COOKIE)?.value ?? null, userId))!;
@@ -1068,7 +1070,10 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   const untranslated = withoutTranslationTurns(sanitized);
   if (untranslated.length !== sanitized.length) sanitized.splice(0, sanitized.length, ...untranslated);
   let resolution = resolveConversation(sanitized, latest);
-  const corpusContext = !resolution.ambiguous ? corpusFollowUp(sanitized, latest) : null;
+  // V3's conversation resolution goes first; the corpus follow-up only fills in
+  // when it found no subject in the earlier turns.
+  // A message that already matches a reviewed record on its own is not a follow-up.
+  const corpusContext = !resolution.ambiguous && !resolution.usedContext && (matchFaq(latest)?.score ?? 0) < 1000 ? corpusFollowUp(sanitized, latest) : null;
   if (corpusContext) resolution = { ...resolution, usedContext: !corpusContext.ambiguous, ambiguous: corpusContext.ambiguous, needsClarification: corpusContext.ambiguous, candidates: corpusContext.labels.map(label => ({ key: label, label, origin: "previous user request" })) };
   const routingQuery = corpusContext?.query ?? buildRoutingQuery(sanitized, latest);
 
@@ -1888,7 +1893,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  let preferredEvidence: EvidenceRow[] = academic?.rows.length ? academic.rows : expansionEvidence;
+  const preferredEvidence: EvidenceRow[] = academic?.rows.length ? academic.rows : expansionEvidence;
   let semantic: SemanticRoute | null = null;
   let selectionUnavailable = false;
   const selectionFailure = (reason: "provider_unavailable" | "invalid_contract") => {

@@ -378,7 +378,7 @@ async function main() {
     assert.equal(health.readiness.generation, false);
     assert.equal(health.build.revision, "test-build-revision");
     assert.match(health.knowledge.contentFingerprint, /^[a-f0-9]{64}$/);
-    assert.equal(health.knowledge.retrieval.activePath, "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation");
+    assert.equal(health.knowledge.retrieval.activePath, "curriculum-extract-then-reviewed-answers-then-scoped-academic-and-hybrid-corpus-grounded-generation");
     assert.equal(health.knowledge.retrieval.embedding,health.knowledge.hybridCorpus.vectors>0?"ready-openai-hybrid":"disabled");
     assert.equal(health.deployment.productionReady, false);
     assert.ok(health.deployment.productionBlockers.includes("Deployment mode is prototype"),
