@@ -31,3 +31,4 @@ Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage
 | v6 chain: six + 172 + verdict grading + comparison v3 (general + judge) | Claude | 6 + 172 + 172 + 50 + 50 | $0.44 | ~$0.33 (app est.) | ~$2.18 (app est.; real at last report $1.62) |
 | final suites (stopped at 22:03 by network loss; Mac slept) | Claude | examiner 600, phrasing 399, regression 594+595+134, memory 94 | ~$6 | ~$5 (app est.; check real balance) | ~$7.2 (app est.) |
 | V3 merge + offline suites (2026-11-18) | Claude | mock provider only | $0 | $0 | unchanged |
+| final suites partial (stopped for Dr. Fady fixes) + Fady runs + phrasing 399 ×2 (fix2, fix3 running) | Claude | ~207 + 70 + ~800 answers | ~$2.5 (app est.) | check real balance | ~$9.7 (app est.) |

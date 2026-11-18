@@ -126,3 +126,21 @@ Awny's main had no new commits; Ali chose to merge feature/v3-course-answer-scop
 - Then: full `npm run test:offline`, commit, re-apply to KE checkout (copy changed files from this worktree: route
   [minus profile-only lines, see scratch ke draft], history route, query-understanding, course-catalog, program-registry is
   profile-only, student-services.json, tests), run KE suites, commit. Then rerun final suites (paid) under budget rules.
+
+## 18 Nov 2026 — Dr. Fady fixes, regression fix, current state (stopped at 90% usage)
+- Commits (local, not pushed): profiles e3f339d (V3 merge done), d7dd18f + 68f709e (Dr. Fady 10 cases, 35/35),
+  eff302a (scoped-first order, stale-source filter, Ali's corrections). KE: c5cadab, 38cb0d0, 746e527, 32fcbca, cc278fb.
+- Ali's corrections applied: full section → college academic advisor with student ID + CRN first, or MyUAEU
+  Registration Override (https://my.uaeu.ac.ae/service-catalog/service/registration-override; e-services list
+  https://www.uaeu.ac.ae/en/eservices/index.shtml?categoryId=2); offerings → Student Registration > Browse Classes
+  (https://eservices.uaeu.ac.ae/StudentRegistrationSsb/ssb/registration); next-semester choice → catalog study plan,
+  Degree Works worksheet/plans (sign-in), assigned advisor, student-responsibility note; no 2014–17 registration PDFs;
+  English answers with Arabic terms render LTR; message links open in a new tab.
+- Phrasing 399: before merge 378 correct; after merge (selector-first) 271; after first fix 324. Causes: loose V3
+  selector picking unrelated records, V3 credit model answering one-term questions, citation to college page instead
+  of catalog. Fixes in eff302a; recheck RUNNING: scratchpad fix3-run.sh → reports/.../examiner-phrasing-fix3.json and
+  test-cases/fady-after-graded.json (check FIX3_DONE in scratchpad fix3-phrasing.log).
+- NEXT: read fix3 results; if phrasing ≥ ~375 run the remaining final suites (final3.sh: examiner, regression 1–3,
+  memory, browser examiner/memory) under budget rules; regenerate test-cases/fady-google-doc-entries.txt and update
+  cases 2, 3, 4, 6 in the shared log (answers changed) — keep one END OF TESTING at the end.
+- Port 3000 (Ali's manual testing) serves the KE checkout build at cc278fb.
