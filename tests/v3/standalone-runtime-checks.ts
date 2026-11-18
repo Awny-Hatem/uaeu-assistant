@@ -40,7 +40,8 @@ async function main() {
   const arabicScholarship = await ask("\u0645\u0627 \u0647\u064a \u0634\u0631\u0648\u0637 \u0627\u0644\u0645\u0646\u062d", "ar");
   assert.equal(arabicScholarship.stateLabel, "v3_reviewed_answer", "Arabic scholarship criteria should retrieve the reviewed scholarship record");
   assert.equal(arabicScholarship.faqId, "scholarship-eligibility");
-  assert.match(arabicScholarship.content ?? "", /\u0627\u0644\u0646\u062e\u0628\u0629|\u0634\u0631\u0648\u0637/);
+  assert.match(arabicScholarship.content ?? "", /\u0627\u0644\u0646\u062e\u0628\u0629/);
+  assert.doesNotMatch(arabicScholarship.content ?? "", /[ØÙ][\u0080-\u00ff]|\uFFFD/u, "Arabic scholarship text must not contain UTF-8 mojibake or replacement characters");
 
   const summerHousing = await ask("How much is summer housing for an international undergraduate?");
   assert.equal(summerHousing.stateLabel, "v3_reviewed_answer");
