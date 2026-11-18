@@ -146,8 +146,17 @@ CATALOG:\n${JSON.stringify(catalog)}`,
     const correctedSubject = isCorrectionQuery(latest) && latestSubjects.length > 0 && active.subjects.length > 0 && !sameSubject;
     const newSubject = latestSubjects.length > 0 && active.subjects.length > 0 && !sameSubject && !correctedSubject;
     const inheritsScope = correctedSubject || (!newSubject && (isReference || sameSubject));
+    const explicitPolicyScopeFollowUp = /\b(?:apply|applies|applicable|scope|excluded?)\b/iu.test(latest) &&
+      route.primaryRecordIds.some((id) => {
+        const entry = entries.find((candidate) => candidate.id === id);
+        if (entry?.applicability?.type !== "policy-scope" ||
+          !entry.applicability.intents.some((intent) => resolved.intents.includes(intent))) return false;
+        const targetSubjects = understandQuery(entry.applicability.targetProgramId.replaceAll("-", " ")).subjects;
+        return targetSubjects.some((subject) => supplied.subjects.includes(subject) && resolved.subjects.includes(subject));
+      });
+    const priorDegrees = userTurns.slice(0, -1).flatMap((turn) => understandQuery(turn.content).degreeLevels);
     const establishedCategories = [...supplied.applicantCategories, ...(inheritsScope && !supplied.applicantCategories.length ? active.applicantCategories : [])];
-    const establishedDegrees = [...supplied.degreeLevels, ...(inheritsScope && !supplied.degreeLevels.length ? active.degreeLevels : [])];
+    const establishedDegrees = [...supplied.degreeLevels, ...(inheritsScope && !supplied.degreeLevels.length ? active.degreeLevels : []), ...(explicitPolicyScopeFollowUp ? priorDegrees : [])];
     const establishedYears = supplied.years.length ? supplied.years : inheritsScope ? active.years : [];
     const establishedTerms = supplied.terms.length ? supplied.terms : inheritsScope ? active.terms : [];
     if (resolved.applicantCategories.some((category) => !establishedCategories.includes(category)) ||

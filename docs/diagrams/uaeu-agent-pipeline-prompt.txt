@@ -1,0 +1,86 @@
+Use case: infographic-diagram
+Asset type: a finished, high-resolution architecture infographic for a UAEU student project report.
+Primary request: Create one polished image explaining exactly how the implemented UAEU student-services agent works, with clear directional flow and the supplied platform logo prominently inside the image.
+Supporting image: the supplied PNG is the UAEU CHATBOT platform logo. Insert it intact in the top-right header on white, preserving the complete red UAEU wordmark, gray CHATBOT text, red speech bubble, and complete Arabic line. Do not redraw, reword, crop or distort the logo. Preserve its original proportions.
+Canvas: landscape 3:2, preferably 3000 x 2000 or comparably high resolution. White background, crisp contemporary university technical infographic, restrained red #E0182D and charcoal gray, pale gray card fills, subtle pale-red highlights. Use large highly legible clean sans-serif type, generous padding, flat line icons, sharp orthogonal connectors with clear arrowheads. No photo, no 3D ornament, no pseudo-code texture.
+
+Header left:
+"UAEU Agent Pipeline"
+"How a student question becomes a source-backed response"
+
+Use three horizontal swimlanes, a shared response panel on the far right, and a slim foundation strip at the bottom. All text must be legible, with orderly hierarchy. Keep the routing connections unambiguous.
+
+TOP LANE, label "1  RECEIVE & UNDERSTAND"
+Three sequential cards, left to right, joined by arrows:
+"Student question"
+"English or Arabic"
+"Question + recent conversation"
+small caption "Guest or signed-in user"
+then
+"Validate request"
+"POST /api/chat"
+"Origin, rate and message checks"
+"Clean optional profile fields"
+then
+"Resolve context"
+"Choose response language"
+"Carry forward a follow-up subject"
+Arrow from Resolve context down to middle lane's router.
+
+MIDDLE LANE, label "2  ROUTE BEFORE USING AI"
+A wide central card titled "Priority routing".
+Inside it a clearly ordered short vertical list:
+"1. Acknowledge or clarify"
+"2. Urgent safety guidance"
+"3. Requested human support"
+"4. Verified FAQ answer"
+"5. Step-by-step service guide"
+At the top-right of this card, a small pill "First applicable route wins".
+Arrow labeled "Matched: direct response" from this card straight to the shared response panel at far right, bypassing the AI lane completely.
+Arrow labeled "No route matched" from this card down to the leftmost card of the bottom lane.
+
+BOTTOM LANE, label "3  RETRIEVE & GENERATE"
+Left-to-right three cards linked by arrows:
+"Retrieve approved knowledge"
+"Up to 5 relevant excerpts"
+"Default: keyword retrieval"
+"Optional: Gemini vector search"
+small caption "Invalid, empty or failed vector search falls back to keywords"
+then
+"Evidence gate"
+"Relevant excerpts available?"
+"Sensitive claim directly supported?"
+Downward branch labeled "No" leads to a small pale-red box "Clarify or refer to UAEU support"; this small box connects to the shared response panel.
+Main arrow labeled "Yes" leads to
+"Generate grounded answer"
+"Configured OpenAI or Gemini"
+"Instructions + excerpts + profile"
+"Last 12 conversation messages"
+"Prompt: use supplied evidence only"
+Arrow from this card to shared response panel.
+Small caption under the generator card: "Model uncertainty → escalation; provider failure → error response"
+
+SHARED RESPONSE PANEL at far right, spanning middle and lower lanes:
+"4  RETURN TO THE STUDENT"
+"Finalize response"
+"Handle escalation marker"
+"Attach approved source links"
+"Return one JSON response"
+separator
+"Show in chat"
+"Answer or next step"
+"Citations + relevant official links"
+"Service guide when matched"
+Make the matched-direct-response connector visually enter at Attach approved source links / Return level; the AI connector enters at Finalize response level. It is acceptable to simplify this with separate arrow labels so direct routes do not appear to require an LLM.
+
+FOUNDATION STRIP below the lanes, two clearly separated blocks:
+"KNOWLEDGE FOUNDATION"
+"Curated FAQs + service guides + approved UAEU excerpts"
+"Excerpts require: approved status • official source URL • verification date"
+"Optional index: chunk → embed → validate source fingerprint"
+"STORAGE & OBSERVABILITY"
+"Browser chat history by default"
+"Aggregate analytics • optional server history"
+Footer in small but readable gray: "Current prototype architecture • Support referrals provide official contact options"
+
+Important fidelity requirements: depict conditional routing, not every question going through AI. AI providers are alternatives, not sequential model stages. Optional vector indexing is a preparation step, not done on every question. The evidence gate is not a guaranteed factual verifier. Grounded answer is a prompt instruction. Do not add live web browsing, portal access, a ticket creation service, streaming, or an agent tool-call loop. Use only the supplied logo. Keep exact English labels and the logo Arabic intact. Omit all prompt instructions and use-case metadata from the image.

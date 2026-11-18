@@ -62,10 +62,16 @@ function withinOneEdit(a: string, b: string): boolean {
 /** Correct unambiguous one-edit misspellings of domain words in a student's
  * question (cradit, requred, computr, sceince, wetaher, uaue). Applied to user
  * turns only, never to source documents; uncertain words are left unchanged. */
+// English-only spelling repair: a French or Spanish message ("cours", "curso")
+// must not be rewritten into English catalog wording.
+const NON_ENGLISH_LATIN = /[àâçéèêëîïôûùüÿœñ¿¡]|\b(?:je|tu|nous|vous|est|une|des|du|au|aux|puis|quel|quelle|el|los|las|una|del|puedo|qué|cuál)\b/iu;
 export function correctQueryTypos(text: string): string {
+  if (NON_ENGLISH_LATIN.test(text)) return text;
   return text.replace(/\buaue\b/giu, (m) => (m === m.toUpperCase() ? "UAEU" : "uaeu")).replace(/[A-Za-z]{5,}/gu, (word) => {
     const lower = word.toLowerCase();
     if (DOMAIN_WORDS.has(lower) || NEVER_CORRECT.has(lower) || /s$/u.test(lower) && DOMAIN_WORDS.has(lower.slice(0, -1))) return word;
+    // Inflected forms of known words ("scheduled", "registering") are not typos.
+    if (/(?:ed|ing|er|es|d)$/u.test(lower) && [...DOMAIN_WORDS].some((known) => lower.startsWith(known) && lower.length - known.length <= 3)) return word;
     const options = [...DOMAIN_WORDS].filter((candidate) => candidate.length >= 5 && withinOneEdit(lower, candidate));
     if (options.length !== 1) return word;
     const fixed = options[0];
@@ -88,7 +94,18 @@ export function courseCodes(text: string): string[] {
   return [...new Set(normalizeCourseCodes(text).match(/\b[A-Z]{3,6}\d{3,4}\b/g) ?? [])];
 }
 
+// Pure function of the text over bundled identities; matching runs it for every
+// verified entry on every request, so remember recent results.
+const COURSE_NAME_CACHE = new Map<string, string[]>();
 function courseNames(text: string): string[] {
+  const cached = COURSE_NAME_CACHE.get(text);
+  if (cached) return [...cached];
+  const result = computeCourseNames(text);
+  if (COURSE_NAME_CACHE.size >= 4000) COURSE_NAME_CACHE.delete(COURSE_NAME_CACHE.keys().next().value as string);
+  COURSE_NAME_CACHE.set(text, result);
+  return [...result];
+}
+function computeCourseNames(text: string): string[] {
   const normalized = normalizeQuery(text);
   const builtIn = ([
     ["CSBP319", /\bdata structures?\b|هياكل البيانات/u],
@@ -141,7 +158,8 @@ const SUBJECTS = [
   ["vice-chancellor", "UAEU Vice Chancellor", /\bvice chancellor\b|مدير\s+(?:جامع[ةه](?:\s+الامارات)?|الجامع[ةه]|uaeu)/u],
   ["chancellor", "UAEU Chancellor", /(?<!vice )\bchancellor\b|الرييس الاعلى|الرييس الاعلي|الرئيس الاعلى|الرئيس الاعلي/u],
   ["events", "university events", /\b(?:university events?|uaeu events?|workshops?)\b|فعاليات|الفعاليات|ورش العمل/u],
-  ["computer-engineering", "Computer Engineering study plan", /\bcomputer engineering\b/u],
+  ["computer-ai-engineering", "Computer and Artificial Intelligence Engineering study plan", /\bcomputer (?:and )?(?:artificial intelligence|ai) engineering\b/u],
+  ["computer-engineering", "Computer Engineering study plan", /\bcomputer engineering\b|\u0647\u0646\u062f\u0633\u0629\s+(?:\u0627\u0644\u062d\u0627\u0633\u0648\u0628|\u0627\u0644\u0643\u0645\u0628\u064a\u0648\u062a\u0631)/u],
   ["transcript", "official transcript", /\btranscripts?\b|كشف\s+(?:الدرجات|درجات)/u],
   ["certificate", "graduation certificate", /\b(?:graduation|degree) (?:certificate|diploma)|\bdiploma\b|شهاد[ةه]\s+(?:التخرج|الدرج[ةه])/u],
   ["enrollment-document", "enrollment certificate", /\benrollment (?:certificate|letter)|\bproof of enroll|\b(?:letter|certificate|document)\b.{0,35}\b(?:proving|confirming|showing|certifying|to prove|to confirm)\b.{0,35}\b(?:enrolled|enrolment|enrollment|student status)\b|شهاد[ةه]\s+قيد|اثبات\s+القيد|(?:رسال[ةه]|خطاب|شهاد[ةه]|وثيق[ةه]).{0,30}(?:تثبت|يثبت|اثبات|تاكيد).{0,25}(?:قيد|مقيد|طالب)/u],
@@ -149,7 +167,8 @@ const SUBJECTS = [
   ["twimc", "to whom it may concern letter", /to whom it may concern|\btwimc\b|لمن يهمه الامر/u],
   ["reference-letter", "recommendation letter", /\b(?:recommendation|reference) letter\b|رسالة توصية|خطاب توصية/u],
   ["graduation", "graduation", /\bgraduation\b|\bgraduate from\b|\bto graduate\b|التخرج|للتخرج|اتخرج/u],
-  ["admissions", "admission", /\badmissions?\b|\bapply (?:to|as) (?:a |an |the )?(?:uaeu|university|college|undergraduate|bachelor|postgraduate|master|phd|doctoral|international|emirati|national)\b|\bapply for (?:fall|spring|summer|autumn|winter)\b|\bundergraduate application|القبول|للقبول|قبول/u],
+  ["medicine", "Doctor of Medicine program", /\b(?:medicine|doctor of medicine|medical degree|college of medicine and health sciences)\b/u],
+  ["admissions", "admission", /\badmissions?\b|\bgraduate (?:application|admission)\b|\bapply (?:to|as) (?:a |an |the )?(?:uaeu|university|college|undergraduate|bachelor|postgraduate|master|phd|doctoral|international|emirati|national)\b|\bapply for (?:fall|spring|summer|autumn|winter)\b|\bundergraduate application|القبول|للقبول|قبول|التقديم|تقديم|البكالوريوس/u],
   ["transfer", "external academic credit transfer", /\b(?:transfer(?:red)? credits?|credit transfer|credit recognition|credit evaluation|course equivalenc(?:y|ies)|advanced standing)\b/u],
   ["housing", "student housing", /\b(?:housing|dorms?|dormitory|accommodation|room assignment)\b|السكن|سكن|وحدات السكن/u],
   ["scholarship", "scholarship", /\bscholarships?\b|المنح|منح[ةه]|ابتعاث/u],
@@ -220,16 +239,29 @@ export type QueryMeaning = {
 export function isCorrectionQuery(text: string): boolean {
   const normalized = normalizeQuery(text);
   return /^(?:no|sorry|actually|i mean|i meant|i am asking about|im asking about|to clarify|correction)\b/u.test(normalized) ||
-    /\b(?:not|rather than)\b.{0,80}\b(?:i mean|i am asking about|im asking about)\b/u.test(normalized);
+    /\b(?:not|rather than)\b.{0,80}\b(?:i mean|i am asking about|im asking about)\b/u.test(normalized) ||
+    /^(?:لا|عفوا|عذرا|آسف|أقصد|قصدي|كنت أقصد|أنا أقصد|للتوضيح)(?=\s|$)/u.test(normalized);
 }
 
 function escapeRegExp(value: string): string {
   return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
+// Pure function of the text; FAQ scoring calls it for every entry per request.
+const MEANING_CACHE = new Map<string, QueryMeaning>();
 export function understandQuery(text: string): QueryMeaning {
+  const cached = MEANING_CACHE.get(text);
+  if (cached) return structuredClone(cached);
+  const meaning = computeUnderstanding(text);
+  if (MEANING_CACHE.size >= 4000) MEANING_CACHE.delete(MEANING_CACHE.keys().next().value as string);
+  MEANING_CACHE.set(text, structuredClone(meaning));
+  return meaning;
+}
+function computeUnderstanding(text: string): QueryMeaning {
   const normalized = normalizeQuery(text);
   const subjects = SUBJECTS.filter(([, , pattern]) => pattern.test(normalized)).map(([key]) => key);
+  if (/\b(?:ielts|toefl|english proficiency)\b/u.test(normalized) && !subjects.includes("admissions")) subjects.push("admissions");
+  if (/\b(?:maximum number of credits|maximum credits|normal maximum|overload)\b/u.test(normalized) && !subjects.includes("registration")) subjects.push("registration");
   if (!subjects.includes("transfer") && isExternalAcademicCreditRequest(text)) subjects.push("transfer");
   if (!subjects.includes("admissions") && /(?:يتقدم|اتقدم|التقدم|الالتحاق|التحاق).{0,45}(?:بكالوريوس|ماجستير|دكتوراه|جامع[ةه]|دولي)/u.test(normalized)) subjects.push("admissions");
   // Degree applications establish an admissions topic even when the preposition
@@ -256,6 +288,20 @@ export function understandQuery(text: string): QueryMeaning {
   const courseWithdrawal=/انسحاب|(?:حذف|احذف|تحذف).{0,16}(?:مساق|مقرر)|\b(?:drop|withdraw)\b/u.test(normalized);
   if(gradeRemoval&&!courseWithdrawal&&intents.includes('withdrawal'))intents.splice(intents.indexOf('withdrawal'),1);
 
+  // Arabic deadline phrases can normalize hamza/letter forms differently from
+  // the English-oriented intent regexes. Read the original wording as well so
+  // deadline scope filtering is active before evidence is retrieved.
+  if (/(?:الموعد\s+النهائي|موعد\s+نهائي|آخر\s+موعد|اخر\s+موعد|آخر\s+يوم|اخر\s+يوم|متى\s+ينتهي|متى\s+آخر|تاريخ\s+(?:الإغلاق|اغلاق)|ينتهي\s+التقديم)/u.test(text) && !intents.includes("deadline")) {
+    intents.push("deadline");
+  }
+  // "What do I need to apply for ...?" asks for eligibility/materials, while
+  // "How do I apply ...?" asks for the application procedure. Keep these
+  // distinct so applicant-category follow-ups retrieve the right evidence.
+  if (/\bwhat (?:do|would|will) i need (?:to )?(?:apply|submit|provide)\b/u.test(normalized)) {
+    const applyIndex = intents.indexOf("apply");
+    if (applyIndex >= 0) intents.splice(applyIndex, 1);
+    if (!intents.includes("requirements")) intents.push("requirements");
+  }
   // Counting transfer-recognized or degree credits is not semester study load.
   if (intents.includes("credit-load") && /\b(?:transfer\w*|recogniz\w*|degree|graduat\w*)\b/u.test(normalized) &&
     !/\b(?:course load|study load|credit load|semester load|per semester|normal semester)\b/u.test(normalized)) intents.splice(intents.indexOf("credit-load"), 1);
@@ -274,7 +320,7 @@ export function understandQuery(text: string): QueryMeaning {
     intents.some(intent=>intent==="start"||intent==="exams")) subjects.push("calendar");
   const degreeLevels: QueryMeaning["degreeLevels"] = [];
   const positiveDegreeText = normalized.replace(/\bnot (?:a |an )?(?:undergraduate|postgraduate|bachelor(?:s)?|master(?:s)?|phd|doctoral)(?: student| applicant| degree)?\b/gu, "");
-  if (/\b(?:postgraduates?|master|masters|msc|mba|mpa|dba|doctorate|phd|doctoral)\b|ماجستير|دكتوراه|دراسات عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
+  if (/\b(?:postgraduates?|master|masters|msc|mba|mpa|dba|doctorate|phd|doctoral)\b|\bgraduate\s+(?:application|admission|program|programme|school|degree|studies)\b|ماجستير|دكتوراه|دراسات عليا/u.test(positiveDegreeText)) degreeLevels.push("postgraduate");
   if (/\b(?:undergraduates?|bachelor|bachelors|bsc|bs)\b|بكالوريوس/u.test(positiveDegreeText)) degreeLevels.push("undergraduate");
   const applicantCategories: QueryMeaning["applicantCategories"] = [];
   const positiveCategoryText = normalized.replace(/\bnot (?:a |an )?(?:uae national|emirati|citizen|international(?: applicant| student)?)\b|لست (?:مواطن[اة]?|اماراتي[اة]?|طالبا? دوليا?)/gu, "");
@@ -311,8 +357,10 @@ export function namedSubjects(text: string): QuerySubject[] {
 
 const CANCEL = /^(?:never mind|nevermind|forget it|cancel that|ignore that|stop that|خلاص|انس[ىي] الموضوع)$/u;
 const REFERENCE = /\b(?:it|its|that|this|them|those|these|same|first|previous(?! (?:university|college|institution)\b)|earlier|last one|what about|how long|how much|am i eligible|the (?:application )?deadline|the source)\b|هذا|هذه|ذلك|لها|له|الاول|السابق|كم يستغرق|كم تكلف|هل انا موهل/u;
-const SLOT_FRAGMENT = /\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|printed|digital|paper copy|hard copy)\b|الاثنين|الثلاثاء|الاربعاء|الخميس|الجمع[ةه]|السبت|الاحد|مطبوع|رقمي/u;
+const SLOT_FRAGMENT = /\b(?:monday|tuesday|wednesday|thursday|friday|saturday|sunday|printed|digital|paper copy|hard copy|(?:year\s*)?20\d{2}|(?:fall|spring|summer|winter)(?:\s+20\d{2})?)\b|الاثنين|الثلاثاء|الاربعاء|الخميس|الجمع[ةه]|السبت|الاحد|مطبوع|رقمي/u;
 const GENERIC_FOLLOW_UP = /^(?:(?:what|which) (?:are|is) (?:the )?(?:requirements|documents|criteria)|what documents|what do i need|which documents)|^(?:ما|اي) (?:المستندات|الوثائق|المتطلبات|الشروط)/u;
+
+const ARABIC_ADMISSIONS_DEADLINE_REFERENCE = /(?:\u0627\u0644\u0645\u0648\u0639\u062f\s+\u0627\u0644\u0646\u0647\u0627\u0626\u064a|\u0622\u062e\u0631\s+\u0645\u0648\u0639\u062f\s+\u0627\u0644\u062a\u0642\u062f\u064a\u0645|\u0627\u062e\u0631\s+\u0645\u0648\u0639\u062f\s+\u0627\u0644\u062a\u0642\u062f\u064a\u0645)/u;
 
 export type ConversationResolution = {
   query: string;
@@ -379,18 +427,22 @@ export function resolveConversation(
     else if (active.length === 1) subject = active[0];
     else ambiguous = active.length > 1;
   }
-  const inheritsIntent = meaning.codes.length > 0 && !directFacts.length && /\bwhat about\b|ماذا عن|وماذا|وبالنسب[ةه]/u.test(meaning.normalized);
+  const crossSubjectApplicabilityFollowUp = named.length === 1 &&
+    /\b(?:would (?:that|it) (?:also )?(?:be|apply)|does (?:that|it) (?:also )?apply|same (?:rule|requirement) (?:for|in)|also (?:apply|hold) for)\b/u.test(meaning.normalized);
+  const inheritsIntent = (meaning.codes.length > 0 && !directFacts.length && /\bwhat about\b|ماذا عن|وماذا|وبالنسب[ةه]/u.test(meaning.normalized)) || crossSubjectApplicabilityFollowUp;
   const verification = meaning.intents.includes("verify") && !directFacts.length && active.length > 0;
   const intents = (!directFacts.length && (refers || inheritsIntent || verification || correctionOnly)) ? lastIntent : meaning.intents;
   const sameSubjectReference = named.length === 1 && active.length === 1 &&
-    named[0].key === active[0].key && REFERENCE.test(meaning.normalized);
-  const usedContext = Boolean(subject && ((!named.length && refers) || sameSubjectReference || inheritsIntent || verification || correctionOnly));
+    named[0].key === active[0].key &&
+    (REFERENCE.test(meaning.normalized) || (named[0].key === "admissions" && ARABIC_ADMISSIONS_DEADLINE_REFERENCE.test(latest)));
+  const verificationFollowUp = verification && named.length === 0 && prior.length > 0;
+  const usedContext = Boolean(subject && ((!named.length && refers) || sameSubjectReference || inheritsIntent || verificationFollowUp || correctionOnly));
   const intentText: Partial<Record<FactIntent, string>> = { fees: "cost fees", duration: "processing time how long", prerequisites: "prerequisites", deadline: "application deadline", eligibility: "eligibility", status: "status", requirements: "requirements", gpa: "GPA", topics: "course topics" };
   const origin = subject ? (active.some((item) => item.key === subject.key) ? activeScope ?? understandQuery(subject.origin) : understandQuery(subject.origin)) : undefined;
   const inheritedCategory = meaning.applicantCategory ?? origin?.applicantCategory;
   const inheritedScope = origin ? [inheritedCategory === "national" ? "UAE national" : inheritedCategory, meaning.degreeLevel ?? origin.degreeLevel, ...(meaning.years.length ? meaning.years : origin.years), ...(meaning.terms.length ? meaning.terms : origin.terms),
     /\b(?:alumni|alumnus|former student)\b|الخريجين|خريج/u.test(origin.normalized) ? "alumni" : undefined,
-    /\bcurrent student\b|طالب حالي/u.test(origin.normalized) ? "current student" : undefined,
+    /\b(?:current student|currently enrolled|currently studying)\b|طالب حالي/u.test(origin.normalized) ? "current student" : undefined,
   ].filter(Boolean).join(" ") : "";
   // Preserve the identity and applicability, not an old request verb. Otherwise
   // "apply to CSBP319" keeps outscoring a later request for its prerequisites.
@@ -405,13 +457,17 @@ export function resolveConversation(
   const correctedPriorRequest = correctionOnly && previous
     ? `Corrected subject: ${subject?.label ?? ""}\nPrevious user request, interpreted under the corrected subject: ${correctedPriorRequestText}`
     : `Follow-up question: ${normalizeCourseCodes(latest)}`;
+  const comparisonTopic = crossSubjectApplicabilityFollowUp && previous
+    ? `Prior comparison topic (user context only): ${normalizeCourseCodes(previous)}`
+    : "";
   const query = usedContext && subject
-    ? `${subject.label} ${inheritedScope}\nRequested fact: ${intents.map((intent) => intentText[intent] ?? intent).join(" ")}\n${correctedPriorRequest}`
+    ? `${subject.label} ${inheritedScope}\nRequested fact: ${intents.map((intent) => intentText[intent] ?? intent).join(" ")}\n${comparisonTopic}\n${correctedPriorRequest}`
     : normalizeCourseCodes(latest);
   return { query, subject, intents, usedContext, corrected, ambiguous, candidates: ambiguous ? active : [], needsClarification: !subject && refers && !named.length };
 }
 
 export type EvidenceScope = {
+  programId?: string;
   courseCodes?: string[];
   subjects?: string[];
   applicantCategory?: "national" | "international";
@@ -436,7 +492,11 @@ export function scopeAllows(query: string, text: string, scope: EvidenceScope = 
   if (scope.applicantCategory && !wanted.applicantCategories.includes(scope.applicantCategory)) return false;
   if (scope.degreeLevel && wanted.degreeLevel && wanted.degreeLevel !== scope.degreeLevel) return false;
   const temporal = wanted.intents.some((intent) => ["deadline", "start", "exams"].includes(intent));
-  if (temporal && wanted.years.length && scope.temporalCoverage !== "procedural") {
+  // Procedural guidance may be reusable across years only when the evidence
+  // itself is not explicitly scoped to a particular year. A dated record
+  // marked procedural (for example, a cycle-status notice) must still match
+  // the year named by the student.
+  if (temporal && wanted.years.length && (scope.years?.length || scope.temporalCoverage !== "procedural")) {
     const years = scope.years ?? evidence.years;
     if (!wanted.years.every((year) => years.includes(year))) return false;
     // Exact published dates require an applicable year; procedural guidance may have none.

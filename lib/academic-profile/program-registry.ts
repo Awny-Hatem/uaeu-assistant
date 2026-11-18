@@ -65,6 +65,10 @@ export function programDirectoryAnswer(q: string, ar: boolean) {
   // Policies, admissions and individual course requirements need their own evidence.
   if (/fees?|tuition|admission|prerequis|شروط|رسوم|متطلب/iu.test(q))
     return null;
+  // A question about one named program ("Bachelor of Science in Statistics...")
+  // is not a directory request, even though its title contains a college word.
+  if (programRegistry().some(p => p.title.length > 12 && q.toLowerCase().includes(p.title.toLowerCase())))
+    return null;
   const stem = /\bstem\b/iu.test(q), pg = /graduate|\bPG\b|master|phd|دراسات عليا|ماجستير|دكتوراه/iu.test(q) && !/undergraduate/iu.test(q);
   let selected = programRegistry().filter(p => pg ? p.level === 'Graduate' && !['minor', 'microcredential', 'accelerated'].includes(p.qualification) : p.qualification === 'bachelor');
   if (/minor|فرعي/iu.test(q))

@@ -62,3 +62,67 @@ A focused rerun (scratchpad final2.sh) started at 00:02 on a build with all fixe
 2. Read this file and `budget-log.md`.
 3. Offline checks: `npm run test:offline` and `npm run test:profiles` (free, mock provider).
 4. Live server: `node scripts/profiles/serve-local.mjs <port> production` after `npx next build`.
+
+## IN PROGRESS (18 Nov): merging Awny's V3 branch (upstream/feature/v3-course-answer-scope)
+Awny's main had no new commits; Ali chose to merge feature/v3-course-answer-scope (161 commits) and to **adopt V3's sign-in/session/history design** (Ali's answer: "Adopt V3's design").
+- Pre-merge state is saved as branch `backup/profiles-before-v3`. Merge is in progress (`git merge --no-commit`), not committed.
+- Already resolved: auth login/logout/signup (took V3: `await rateLimitGuard`), health route (took V3), lib/language.ts (combined: V3 preamble + first-letter rule and our Arabic-frame rules).
+- Plan for the rest:
+  1. Auth: V3's session cookie (`lib/session-cookie.ts` restored from V3, accounts in lib/db). Our `currentAccountId()` (lib/auth/current.ts) reads the V3 session cookie user id, so profile/tester/academic/topics routes keep working.
+  2. Our libSQL tables (profiles, topic_history, academic_profiles) reference `accounts(id)`: upsert a libSQL `accounts` row with the V3 user id on first use (ensureStoreAccount) so FKs hold.
+  3. Tester switch route: issue the V3 session cookie (as V3 login does: encodeSessionCookie + registerSession) instead of our JWT.
+  4. Memory (FR3): keep our memory cookie/store, keyed by the V3 user id; keep V3's opt-in `saveMessage` history too.
+  5. Route: take V3's quota/guest-id/respond wrapper/orchestrator (behind isV3Enabled) and re-insert our handlers (dialogue, directory/offer/CE, academicAnswer, translation/recall, own-ID/remaining courses, memory open/remember).
+  6. Then typecheck, lint, offline suites; commit the merge; merge the same into feat/uaeu-knowledge-expansion; rerun the final suites.
+- Progress (18 Nov, later): restored V3 lib/session-cookie.ts, lib/auth-session.ts, lib/chat-history.ts; took V3 auth login/signup/logout/session and /api/history routes; lib/auth/current.ts now reads the V3 session cookie and mirrors the user into libSQL accounts (ensureStoreAccount in lib/auth/accounts.ts); tester switch issues the V3 session cookie; profile routes await the now-async rateLimitGuard; health uses authCookieSecretConfigured.
+- route.ts decision: take V3's route.ts as the base (`git checkout upstream/feature/v3-course-answer-scope -- app/api/chat/route.ts`) and re-insert our features, rather than resolving 18 interleaved hunks. Our features to port (see `git diff $(git merge-base backup/profiles-before-v3 upstream/feature/v3-course-answer-scope) backup/profiles-before-v3 -- app/api/chat/route.ts`):
+  a. POST wrapper `withAnswerUsage` → handleChat with MemoryRequest (memory open/serverConversation merge, rememberExchange, withProfileNote, recordTopic).
+  b. Profile: getProfile/getAccount for userId, personalizeQuery + profileNote, level-switch/compare/facet/registration hints (lib/memory/followups), profile-aware locale.
+  c. Early handlers in order: dialogueReply (history/meta/greetings/bye/Degree Works), programDirectoryAnswer ?? programOfferAnswer ?? currentCEAnswer, academicAnswer (planner), translation (translatePrevious), recall (refersToPreviousAnswer), own student ID, remaining courses, withoutTranslationTurns, corpusFollowUp.
+  d. Retrieval/evidence: preparedRecord + exact-record fallback, graduateAdmission guard on the UG applicant-category question, own-program clarification, academicCoverageViolations, coalesceSourceClaims/MAX_GROUNDING_REWRITES usage.
+  Drop our `saveMessage` removal: V3's opt-in saveMessage stays.
+- Route port status: app/api/chat/route.ts is currently V3's file (taken with git checkout). Our full route changes are saved in `.merge-our-route.patch` (diff from merge base to our pre-merge route; 35 hunks). Everything else in the merge is resolved and staged (data files: V3 blocks + union of password-reset questions; faq.ts: V3; query-understanding: combined; source-evidence: V3 web label + our corpus label; package.json: union incl. test:memory, test:profiles, db:setup, V3 test:v3 etc.; scripts and tests: V3).
+- Porting checklist onto V3 route (anchors in V3 file: `export async function POST` ~737, `parsedBody` ~753, `sanitized` ~799, `latest` ~804, `const locale = resolveLocale(latest, localePref)` ~808, `const resolution = resolveConversation` ~973):
+  1. Rename V3 POST to `async function handleChat(req, memory: MemoryRequest)`; add our POST wrapper (withAnswerUsage → handleChat → withProfileNote → rememberExchange) and helpers MemoryRequest, openRequestMemory, rememberExchange, withProfileNote (from the patch hunks around old lines 661–760).
+  2. After V3's userId: `memory.userId = userId`; load account/profile (getAccount/getProfile); visitor-role cookie context (patch hunk @@ -681).
+  3. Before `sanitized`: openRequestMemory + serverConversation merge; `originalLatest`; typo-corrected sanitized; personalization (personalizeQuery, profileNote) and level/compare/facet/registration rewrites (hunk @@ -711).
+  4. Replace V3 `const locale = resolveLocale(latest, localePref)` with our profile-aware locale; set memory.latestOriginal.
+  5. Early handlers, before V3's academic/orchestrator handlers: dialogueReply (with stored dialogueHistory), programDirectoryAnswer ?? programOfferAnswer ?? currentCEAnswer, academicAnswer, translation, recall, own student ID, remaining courses, withoutTranslationTurns, corpusFollowUp-based resolution/routingQuery (make V3's `const resolution`/`routingQuery` use ours).
+  6. Keep V3 explainPrerequisiteCorequisite (fixes POWER112) and its other handlers; keep V3 saveMessage calls.
+  7. Later: generalRequest/weather, secretRequest/liveSeatRead/privateGraduationDecision blocks, own-program clarification (preparedForLatest/asksAboutOwnProgram), preparedRecord/exact-record evidence, graduateAdmission guard (hunks @@ -804 … -1112) — port where V3 has no equivalent.
+  8. Imports for all of the above (hunks @@ -1 and -8).
+
+## V3 merge — status 2026-11-18 (uncommitted, both checkouts mid-merge)
+- Profiles worktree: all conflicts resolved and staged except later edits; tsc + lint clean.
+  Ported onto V3 route: guards (weather/general, live seats, graduation confirmation), own-program clarification,
+  prepared record evidence, graduate-admission guard, profile prompt block + memory notes, role-override framing,
+  coalesceSourceClaims / MAX_GROUNDING_REWRITES / academic coverage, XML citation filter, hybrid corpus in retrieveContext,
+  scoped academic evidence (legacy path only), history route = V3 opt-in history OR FR3 memory.
+- Fixes: memoized understandQuery/courseNames (merged matchFaq was 16x slower); V3 bug: Arabic "ما متطلبات مقرر X"
+  dropped prerequisites (fixed in lib/academic/course-catalog.ts); registrationWhenHint skipped when a reviewed record matches;
+  3 service answers regained eval terms (reset / dining / الوظائف); auth-profile test moved to V3 sessions.
+- Took V3 tests: curriculum-retrieval, canonical-rendering, service-content.
+- OPEN DESIGN QUESTION (asked Ali): V3 renders matched reviewed answers verbatim (canonical); KE routed them through the
+  writer as evidence. Remaining failures depend on it: test:canonical (course comparison), test:qa-audit (medicine
+  exclusion), test:v3 (Urdu eligibility question), test:security (health activePath string), test (graduate-application-help Arabic),
+  test:content (56 vs 55 service records: ours adds housing-graduate-availability).
+- KE checkout (/Users/aliabdullah/Documents/uaeu-assistant): merge in progress; conflicts resolved by copying the profiles
+  resolutions + KE-specific route draft; must re-copy the later fixes (route, history, course-catalog, query-understanding,
+  student-services.json, tests) once the profiles merge is final.
+
+### Update at 90% usage (2026-11-18, ~10:05 +04)
+- Ali chose "V3 verbatim first": V3 selector + verbatim reviewed answers first; our scoped academic evidence, corpus
+  search (hybridRetrieve inside retrieveContext) and the writer cover the rest. Implemented.
+- More fixes: typo corrector skips French/Spanish and inflected forms ("scheduled"); program directory no longer lists a
+  college when one program is named; CE rename note defers to V3's program credit model; V3 password-reset answer text taken;
+  tests adjusted (selector call counts, embeddings excluded from fetch counts, Medicine-as-exclusion, calendar path).
+- Offline suites now passing: pipeline, semantic, canonical, phase1, grounding, qa-audit, observed-source-scope, memory,
+  profiles, source-response, deadline, integrity, agent, academic-*, catalog-import, answer-scope/quality, v3, eval-reviews,
+  eval:common, eval:alignment (verify with a full run).
+- STILL FAILING (next steps):
+  1. `npm test` (prototype-checks): graduate-application-help Arabic query routes to rag, not its reviewed record.
+  2. `test:content`: expects 55 service records; ours has 56 (housing-graduate-availability) -> update count to 56.
+  3. `test:security`: health activePath string; set the non-V3 path label to describe the merged order and update test.
+- Then: full `npm run test:offline`, commit, re-apply to KE checkout (copy changed files from this worktree: route
+  [minus profile-only lines, see scratch ke draft], history route, query-understanding, course-catalog, program-registry is
+  profile-only, student-services.json, tests), run KE suites, commit. Then rerun final suites (paid) under budget rules.

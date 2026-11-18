@@ -1,7 +1,9 @@
 import { cookies } from 'next/headers';
 import { testerRequestAllowed } from '@/lib/tester/gate';
 import { ensureTesterAccount } from '@/lib/tester/accounts';
-import { endSession, startSession } from '@/lib/auth/session';
+import { authenticatedSessionUser, registerSession, revokeSession } from '@/lib/auth-session';
+import { encodeSessionCookie, sessionCookieOptions, SESSION_COOKIE_NAME } from '@/lib/session-cookie';
+import { ensureStoreAccount } from '@/lib/auth/accounts';
 import { userView } from '@/lib/auth/current';
 import { MEMORY_COOKIE, memoryCookieOptions } from '@/lib/memory/store';
 import { jsonNoStore, readJsonRequest, sameOriginGuard, rateLimitGuard } from '@/lib/request-security';
@@ -12,7 +14,7 @@ export async function POST(req: Request) {
   const origin = sameOriginGuard(req);
   if (origin)
     return origin;
-  const limited = rateLimitGuard(req, 'tester:switch', { limit: 30, windowMs: 60000 });
+  const limited = await rateLimitGuard(req, 'tester:switch', { limit: 30, windowMs: 60000 });
   if (limited)
     return limited;
   const parsed = await readJsonRequest<{
@@ -29,10 +31,21 @@ export async function POST(req: Request) {
   if (!selected && !role)
     return jsonNoStore({ error: 'Unknown tester selection.' }, { status: 422 });
   const jar = await cookies();
-  await endSession(jar);
+  // V3 owns sessions: revoke the previous tester session cookie, then issue one for the selection.
+  const previous = jar.get(SESSION_COOKIE_NAME)?.value;
+  if (previous && authenticatedSessionUser(previous)) revokeSession(previous);
+  jar.set(SESSION_COOKIE_NAME, '', sessionCookieOptions(0));
   jar.set(MEMORY_COOKIE, '', memoryCookieOptions(0));
   jar.set('uaeu_visitor_role', role ?? '', { httpOnly: true, secure: process.env.NODE_ENV === 'production', sameSite: 'strict', path: '/', maxAge: role ? 86400 : 0 });
-  if (selected)
-    await startSession(jar, selected.account.id);
+  if (selected) {
+    const a = selected.account;
+    const user = { id: a.id, username: a.username, email: null, studentType: a.studentType, major: selected.fixture.profile.program ?? null, universityAffiliation: a.universityAffiliation };
+    const token = encodeSessionCookie(user);
+    if (!token)
+      return jsonNoStore({ error: 'Auth cookie encryption is not configured.' }, { status: 500 });
+    try { registerSession(user, token); } catch { /* local prototype store: the sealed cookie alone identifies the tester */ }
+    await ensureStoreAccount(user);
+    jar.set(SESSION_COOKIE_NAME, token, sessionCookieOptions());
+  }
   return jsonNoStore({ user: selected ? await userView(selected.account.id) : null, role });
 }

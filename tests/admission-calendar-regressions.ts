@@ -60,6 +60,7 @@ try {
   for (const question of [
     "How do I apply for a master's degree?",
     'I am applying for a PhD program. What are the requirements?',
+    'What is the graduate application deadline?',
   ]) {
     check(`postgraduate application does not inherit undergraduate label: ${question}`, () => {
       const result = resolve(question, 'I am international.');
@@ -119,6 +120,31 @@ try {
     assert.deepEqual(meaning.years, [2030]);
     assert.deepEqual(meaning.terms, ['spring']);
     assert.deepEqual(canonicalEntriesForSemanticRoute(route(query, ['semester-start-date'])), []);
+  });
+  check('Arabic admission-deadline follow-up carries the previously named Fall 2027 cycle into retrieval', () => {
+    const result = resolve('I want to apply for Fall 2027.', 'ما الموعد النهائي للتقديم؟');
+    const meaning = understandQuery(result.query);
+    assert.equal(result.subject?.key, 'admissions');
+    assert.equal(result.usedContext, true);
+    assert.ok(meaning.intents.includes('deadline'));
+    assert.deepEqual(meaning.years, [2027]);
+    assert.deepEqual(meaning.terms, ['fall']);
+    const evidence = retrieveVerifiedEvidence(result.query);
+    assert.ok(evidence.some(row => row.source === 'answer:admissions-application-deadline'));
+    assert.equal(evidence.some(row => row.source === 'answer:scholarship-deadline'), false);
+    assert.equal(evidence.some(row => row.source === 'answer:admissions-fall-2026-cycle-status'), false);
+  });
+  check('Arabic admissions deadline activates the deadline intent and excludes scholarship or wrong-year evidence', () => {
+    const query = 'ما الموعد النهائي للتقديم لخريف 2027؟';
+    const meaning = understandQuery(query);
+    assert.ok(meaning.subjects.includes('admissions'));
+    assert.ok(meaning.intents.includes('deadline'));
+    assert.deepEqual(meaning.years, [2027]);
+    assert.deepEqual(meaning.terms, ['fall']);
+    const evidence = retrieveVerifiedEvidence(query);
+    assert.ok(evidence.some(row => row.source === 'answer:admissions-application-deadline'));
+    assert.equal(evidence.some(row => row.source === 'answer:scholarship-deadline'), false);
+    assert.equal(evidence.some(row => row.source === 'answer:admissions-fall-2026-cycle-status'), false);
   });
   check('housing applications closing are not hijacked by admissions or semester dates', () => {
     const query = 'When do housing applications for Spring 2030 close?';

@@ -122,6 +122,8 @@ async function main() {
     let plannerCalls = 0;
     let writerCalls = 0;
     globalThis.fetch = async (input, init) => {
+      // Corpus query embeddings fall back to lexical ranking; not a model call.
+      if (String(input).endsWith("/v1/embeddings")) throw new Error("Embeddings are unavailable in this test");
       intercepted++;
       assert.equal(String(input), "https://api.openai.com/v1/responses", "Unexpected network request blocked");
       const request = JSON.parse(String(init?.body));
@@ -150,9 +152,11 @@ async function main() {
       body: JSON.stringify({messages:[{role:"user",content:"I have completed CSBP119, but CSBP219 is pending. Can I take Data Structures?"}]}),
     }));
     const body = await response.json();
-    assert.equal(plannerCalls, 0, "Deterministic academic retrieval should avoid an unnecessary selector");
+    // V3 order (Ali, 18 Nov 2026): the reviewed-record selector runs first; it found no
+    // primary record here, so the writer still bounds the unsupported claim.
+    assert.equal(plannerCalls, 1, "The reviewed-record selector runs once before scoped evidence");
     assert.equal(writerCalls, 3);
-    assert.equal(intercepted, 3, "At most three bounded writer attempts are allowed; unsupported tokens fail before verification");
+    assert.equal(intercepted, 5, "One selector call, one recovery selection and at most three bounded writer attempts; unsupported tokens fail before verification");
     assert.equal(response.status, 200);
     assert.equal(body.source, "escalated");
     assert.equal(body.answerStatus, "unavailable");

@@ -22,11 +22,12 @@ export type Citation = {
   evidenceText?: string;
   sourceSection?: string;
   sourceVersion?: string;
+  evidenceDomain?: string;
 };
 
 export const GROUNDING_REASON_CODES = [
   "unsupported_critical_token", "unsupported_detail", "scope_drift", "contradiction",
-  "invalid_verification_contract", "verification_unavailable",
+  "invalid_verification_contract", "verification_unavailable", "answer_quality_issue",
 ] as const;
 
 export type AnswerGrounding = {
@@ -36,6 +37,7 @@ export type AnswerGrounding = {
 };
 
 export type AnswerMetadata = {
+  resolutionState?: import("@/lib/v3/contracts").ResolutionState;
   responseMode?: "canonical" | "grounded_generation";
   citations?: Citation[];
   communications?: UniversityCommunication[];
@@ -62,6 +64,14 @@ export type GuideStep = {
   url?: string;
 };
 
+export type LocalizedWorkflowFact = { en: string; ar: string };
+
+export type ServiceRequestDetails = {
+  documents: LocalizedWorkflowFact;
+  deadline: LocalizedWorkflowFact;
+  handoff: LocalizedWorkflowFact;
+};
+
 export type ServiceGuide = {
   id: string;
   title: string;
@@ -76,6 +86,7 @@ export type ServiceGuide = {
   requiresVerification?: boolean;
   verificationNote?: string;
   verificationNoteAr?: string;
+  requestDetails: ServiceRequestDetails;
   steps: GuideStep[];
   scopeNote?: string;
   sources?: Citation[];

@@ -20,7 +20,7 @@ export async function PUT(req: Request) {
     return guard;
   if (!id)
     return jsonNoStore({ error: 'Sign in to edit your academic profile.' }, { status: 401 });
-  const limited = rateLimitGuard(req, 'academic-profile:update', { limit: 20, windowMs: 60000 });
+  const limited = await rateLimitGuard(req, 'academic-profile:update', { limit: 20, windowMs: 60000 });
   if (limited)
     return limited;
   const parsed = await readJsonRequest<unknown>(req, { maxBytes: 256 * 1024 });

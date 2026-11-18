@@ -46,6 +46,8 @@ let intercepted = 0;
 const realFetch = globalThis.fetch;
 let respond: (request: Record<string, unknown>) => unknown | Promise<unknown> = () => { throw new Error("Unexpected provider call"); };
 globalThis.fetch = async (input, init) => {
+  // Corpus query embeddings fall back to lexical ranking; not a model call.
+  if (String(input).endsWith("/v1/embeddings")) throw new Error("Embeddings are unavailable in this test");
   intercepted++;
   assert.equal(String(input), "https://api.openai.com/v1/responses", "External request blocked");
   const output = await respond(JSON.parse(String(init?.body)));
@@ -282,7 +284,8 @@ async function main() {
       };
       const response = await ask();
       const payload = await response.json();
-      assert.equal(planner, 0, "Validated course identity retrieves evidence without a semantic selector");
+      // V3 order (Ali, 18 Nov 2026): the reviewed-record selector runs once first.
+      assert.equal(planner, 1, "The reviewed-record selector runs once before scoped course evidence");
       assert.equal(writer, rewrittenSupported ? 2 : 3);
       assert.equal(verifier, rewrittenSupported ? 2 : 3);
       assert.ok(!JSON.stringify(payload).includes("All listed prerequisites are optional"), "Rejected draft leaked into response");
@@ -309,7 +312,8 @@ async function main() {
       }
     });
   }
-  assert.equal(intercepted, 40, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
+  // 40 + (selector + recovery selection) in each of the two route checks.
+  assert.equal(intercepted, 44, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
   console.log(`${passed}/${passed + failed} synthetic claim-verifier checks passed; ${intercepted} intercepted fetches, zero network requests. No semantic truth proof is claimed.`);
   if (failed) process.exitCode = 1;
 }
