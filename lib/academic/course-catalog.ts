@@ -284,7 +284,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     (/\b(?:what|which)\s+(?:must|should|do)\s+i\s+(?:complete|finish|pass|take)\s+before\b/u.test(normalized) ||
       /\b(?:what|which)\s+(?:classes|courses)\s+do\s+i\s+need\s+to\s+(?:pass|complete|finish|take)\s+before\b/u.test(normalized));
   const arabicNormalized = question.normalize("NFC").replace(/[\u064B-\u065F\u0670]/gu, "").replace(/[أإآ]/gu, "ا");
-  const asksArabicPrerequisiteFacts = /متطلب.{0,30}(?:سابق|مصاحب|منشور|مذكور)|حالة\s+المتطلب/u.test(arabicNormalized);
+  const asksArabicPrerequisiteFacts = /متطلب.{0,30}(?:سابق|مصاحب|منشور|مذكور)|حالة\s+المتطلب|متطلبات\s+(?:مادة|مقرر)/u.test(arabicNormalized);
   const asksArabicCourseFact = /(?:متطلبات\s+(?:مادة|مقرر)|عدد\s+ال?ساعات?|كم\s+(?:(?:عدد\s+)?ال?)?(?:ساعات?|ساعة)|ساعاتها|متطلبا?\s+(?:سابقا?|مصاحبا?)|المتطلبات?\s+(?:السابقة|المصاحبة)|كيف\s+يسم[يى]|(?:اسم|عنوان)\s+(?:ال?مقرر|ال?مادة)|(?:الاسم|العنوان)\s+المنشور\s+ل(?:لمقرر|لمادة)|المتطلب\s+(?:السابق|المصاحب))/u.test(arabicNormalized);
   const additionalIntent = additionalCatalogIntent(question, targetCourseCode);
   const asksArabicCreditHours = /\u0643\u0645\s+(?:\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u062a\u0647\u0627)|\u0627\u0644\u0633\u0627\u0639\u0627\u062a\s+\u0627\u0644\u0645\u0639\u062a\u0645\u062f\u0629/u.test(question);

@@ -37,6 +37,11 @@ async function main() {
   assert.match(arabicPhd.content ?? "", /\u062e\u0637\u0627\u0628\u064a \u062a\u0648\u0635\u064a\u0629/);
   assert.doesNotMatch(arabicPhd.content ?? "", /[Ã˜Ã™]/);
 
+  const arabicScholarship = await ask("\u0645\u0627 \u0647\u064a \u0634\u0631\u0648\u0637 \u0627\u0644\u0645\u0646\u062d", "ar");
+  assert.equal(arabicScholarship.stateLabel, "v3_reviewed_answer", "Arabic scholarship criteria should retrieve the reviewed scholarship record");
+  assert.equal(arabicScholarship.faqId, "scholarship-eligibility");
+  assert.match(arabicScholarship.content ?? "", /\u0627\u0644\u0646\u062e\u0628\u0629|\u0634\u0631\u0648\u0637/);
+
   const summerHousing = await ask("How much is summer housing for an international undergraduate?");
   assert.equal(summerHousing.stateLabel, "v3_reviewed_answer");
   assert.equal(summerHousing.faqId, "international-undergrad-summer-housing-fee");
@@ -116,29 +121,76 @@ async function main() {
     else process.env.VERCEL = previousHealthEnv.vercel;
   }
 
-  let networkCalls = 0;
+  const officialResearchCalls: string[] = [];
   const originalFetch = globalThis.fetch;
-  globalThis.fetch = async () => {
-    networkCalls += 1;
-    throw new Error("Standalone chat must not make answer-time website requests.");
+  const sitemapUrl = "https://www.uaeu.ac.ae/en/website/index.shtml";
+  const calendarUrl = "https://www.uaeu.ac.ae/en/academic-calendar.shtml";
+  const wellbeingUrl = "https://www.uaeu.ac.ae/en/student-services/counseling-hours.shtml";
+  globalThis.fetch = async (input) => {
+    const url = String(input);
+    officialResearchCalls.push(url);
+    if (url === sitemapUrl) return new Response(`<html><body><main><a href="${calendarUrl}">Academic Calendar Registration Deadlines</a><a href="${wellbeingUrl}">Student Counseling and Wellbeing Drop-in Hours</a></main></body></html>`, { status: 200, headers: { "content-type": "text/html" } });
+    if (url === calendarUrl) return new Response("<html><head><title>Academic Calendar</title></head><body><main><h1>Academic Calendar Fall 2099</h1><p>Fall 2099 course registration deadlines and add drop dates are listed here. This is official UAEU calendar information.</p></main></body></html>", { status: 200, headers: { "content-type": "text/html" } });
+    if (url === wellbeingUrl) return new Response("<html><head><title>Student Counseling Drop-in Hours</title></head><body><main><h1>Student Counseling and Wellbeing Drop-in Hours</h1><p>Current UAEU student counseling drop-in hours and contact information are listed here for students seeking wellbeing support. Please check the published hours before visiting.</p></main></body></html>", { status: 200, headers: { "content-type": "text/html" } });
+    return new Response("", { status: 404 });
   };
 
   try {
+    const ordinary = await POST(new Request("http://localhost/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.198" },
+      body: JSON.stringify({ locale: "en", messages: [{ role: "user", content: "How do I request an official transcript?" }] }),
+    }));
+    assert.ok(ordinary.status >= 200 && ordinary.status < 500);
+    assert.equal(officialResearchCalls.length, 0, "ordinary questions should keep using reviewed local knowledge without a web request");
+
+    const unresolvedFact = await POST(new Request("http://localhost/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.197" },
+      body: JSON.stringify({ locale: "en", messages: [{ role: "user", content: "What are the current UAEU student counseling center hours?" }] }),
+    }));
+    const unresolvedFactPayload = await unresolvedFact.json() as { stateLabel?: string; content?: string };
+    assert.ok(unresolvedFact.status >= 200 && unresolvedFact.status < 500, JSON.stringify(unresolvedFactPayload));
+    assert.ok(officialResearchCalls.includes(wellbeingUrl), `unresolved UAEU factual questions should search relevant official pages; state=${unresolvedFactPayload.stateLabel} body=${unresolvedFactPayload.content} observed ${JSON.stringify(officialResearchCalls)}`);
+
+    const calendarButton = await POST(new Request("http://localhost/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.196" },
+      body: JSON.stringify({ locale: "en", messages: [{ role: "user", content: "Where can I check UAEU academic calendar deadlines?" }] }),
+    }));
+    const calendarPayload = await calendarButton.json() as { stateLabel?: string; citations?: Array<{ url?: string }>; content?: string };
+    assert.equal(calendarPayload.stateLabel, "v3_verified_source_location");
+    assert.equal(calendarPayload.citations?.[0]?.url, "https://webapps.uaeu.ac.ae/calendar/index.aspx");
+    assert.match(calendarPayload.content ?? "", /webapps\.uaeu\.ac\.ae\/calendar\/index\.aspx/);
+
     const response = await POST(new Request("http://localhost/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json", "x-forwarded-for": "203.0.113.199" },
       body: JSON.stringify({
         locale: "en",
-        messages: [{ role: "user", content: "What is the Fall 2099 registration deadline for a visiting student?" }],
+        messages: [{ role: "user", content: "When is the course registration deadline for Fall 2099?" }],
       }),
     }));
-    assert.ok(response.status >= 200 && response.status < 500, "missing local evidence should produce a safe response, not a network failure");
-    assert.equal(networkCalls, 0, "the standalone chat path must rely on its local snapshot, even for an unknown current date");
+    assert.ok(response.status >= 200 && response.status < 500, "current questions should fail safely if official research has no usable result");
+    const currentAnswer = await response.json() as { stateLabel?: string; citations?: Array<{ url?: string }>; content?: string };
+    assert.ok(officialResearchCalls.includes(sitemapUrl), "current scoped research should consult the UAEU site map");
+    assert.ok(officialResearchCalls.includes(calendarUrl), `current scoped research should fetch a relevant official UAEU page; observed ${JSON.stringify(officialResearchCalls)}`);
+    assert.ok(["v3_live_official_research", "no_verified_context"].includes(currentAnswer.stateLabel ?? ""),
+      "with the mock provider, current research either returns a qualified grounded answer or a safe evidence-gap response");
+    if (currentAnswer.stateLabel === "no_verified_context") {
+      assert.deepEqual(currentAnswer.citations ?? [], [], "a safe evidence-gap response must not present an unsupported citation");
+      assert.doesNotMatch(currentAnswer.content ?? "", /September 18, 2099|Fall 2099 deadline/i,
+        "a mock or unavailable answer provider must not invent a deadline from the test query");
+    }
+    assert.ok(officialResearchCalls.every((url) => {
+      const host = new URL(url).hostname;
+      return host === "uaeu.ac.ae" || host.endsWith(".uaeu.ac.ae");
+    }), "live research must remain on UAEU-owned HTTPS pages");
   } finally {
     globalThis.fetch = originalFetch;
   }
 
-  console.log("Standalone runtime check passed: chat answers without any answer-time network access.");
+  console.log("Standalone runtime check passed: reviewed answers stay fast; unresolved factual and current questions use allowlisted UAEU pages.");
 }
 
 void main().catch((error) => {

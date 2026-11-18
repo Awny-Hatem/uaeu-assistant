@@ -28,6 +28,8 @@ import { isAnswerQualityRejection, reviewAnswerQuality } from "@/lib/answer-qual
 import { retrieveCurriculumAnswer } from "@/lib/curriculum-retrieval";
 import { createEvidenceService } from "@/lib/evidence/evidence-service";
 import { createExecutionPlan, evidenceQueryForPlan } from "@/lib/orchestration/orchestrator";
+import { officialResearchQueryForPlan } from "@/lib/research/official-query";
+import { researchOfficialUaeu } from "@/lib/research/official-research";
 import { asksPersonalPrerequisiteEligibility, assessPrerequisiteConversation, renderPrerequisiteAssessment } from "@/lib/academic/prerequisite-rules";
 import { assessCatalogPrerequisiteConversation, catalogTargetCodeFromMessages, isCoursePrerequisiteFollowUp } from "@/lib/academic/catalog-prerequisite-assessment";
 import { assessAcademicProgramIdentityReview, assessProgramCourseSubstitutionConversation, assessProgramCreditConversation, assessProgramRequirementsConversation, assessProgramSemesterPlanConversation, hasProgramCreditIntent, listAcademicPrograms, programIdInText, renderProgramCourseSubstitutionAssessment, renderProgramCreditAssessment, renderProgramRequirementsAssessment, renderProgramSemesterPlanAssessment } from "@/lib/academic/program-curricula";
@@ -1318,7 +1320,7 @@ export async function POST(req: Request) {
     // broad live retrieval. Missing personal details are still handled above
     // through the answer's explicit partial-answer policy.
     const earlyReviewedAnswer = contextualReviewedHit ?? matchFaq(answerRequest);
-    if (earlyReviewedAnswer && (earlyReviewedAnswer.score >= 950 || hasScopedContextualReviewedHit)) {
+    if (executionPlan.mode !== "CURRENT_UAEU_RESEARCH" && earlyReviewedAnswer && (earlyReviewedAnswer.score >= 950 || hasScopedContextualReviewedHit)) {
       const entry = earlyReviewedAnswer.entry;
       const payload: AssistantPayload = {
         role: "assistant",
@@ -1339,10 +1341,23 @@ export async function POST(req: Request) {
     }
     const evidenceQuery = evidenceQueryForPlan(executionPlan);
     const evidenceResult = createEvidenceService().search(evidenceQuery);
-    // Answer-time retrieval uses the governed local snapshot only. New public
-    // pages must enter through a separate ingestion/review workflow so website
-    // availability and unreviewed changes cannot alter a student response.
-    const evidenceItems = evidenceResult.evidence;
+    // Local approved records are primary. When no confident reviewed answer
+    // resolved a UAEU factual question, search the allowlisted official site as
+    // a fallback too; discovered material stays visibly distinct from reviewed facts.
+    let evidenceItems = evidenceResult.evidence;
+    if (executionPlan.mode === "CURRENT_UAEU_RESEARCH" || executionPlan.mode === "UAEU_FACTUAL") {
+      const publicQuery = officialResearchQueryForPlan(executionPlan);
+      if (publicQuery) {
+        try {
+          const seedUrls = evidenceResult.evidence.flatMap((item) => item.url ? [item.url] : []).slice(0, 2);
+          const liveEvidence = await researchOfficialUaeu(publicQuery, { seedUrls });
+          if (liveEvidence.length) evidenceItems = [...evidenceResult.evidence, ...liveEvidence];
+        } catch {
+          // A live lookup outage falls back to scoped local evidence or a safe gap response.
+          console.warn("[uaeu-chat] official-live-research-unavailable", { domain: executionPlan.entities.domain });
+        }
+      }
+    }
     v3EvidenceRows = evidenceItems.map((item) => ({
       source: item.sourceType === "official_web" ? `official-web:${item.id}` : item.id,
       text: item.excerpt,
@@ -1372,14 +1387,18 @@ export async function POST(req: Request) {
         } catch { return false; }
       });
       if (calendarSource?.url) {
+        // Link students to the direct UAEU calendar application. The older
+        // CoreServices view also works, but this is the public calendar URL
+        // with the year selector and the term events.
+        const publicCalendarUrl = "https://webapps.uaeu.ac.ae/calendar/index.aspx";
         const payload: AssistantPayload = {
           role: "assistant",
-          content: locale === "ar" ? `يمكنك فتح **التقويم الأكاديمي الرسمي لجامعة الإمارات** من هنا: [التقويم الأكاديمي](${calendarSource.url}).` : `You can check the **official UAEU academic calendar** here: [${calendarSource.title}](${calendarSource.url}).`,
+          content: locale === "ar" ? `يمكنك فتح **التقويم الأكاديمي الرسمي لجامعة الإمارات** من هنا: [التقويم الأكاديمي](${publicCalendarUrl}).` : `You can check the **official UAEU academic calendar** here: [UAEU Academic Calendar](${publicCalendarUrl}).`,
           source: "rag",
           stateLabel: "v3_verified_source_location",
           resolutionState: "VERIFIED",
           disposition: "answer",
-          citations: [{ title: calendarSource.title, url: calendarSource.url, lastVerified: calendarSource.lastVerified }],
+          citations: [{ title: "UAEU Academic Calendar", url: publicCalendarUrl, lastVerified: calendarSource.lastVerified }],
           evidenceIds: [calendarSource.id],
           topic: "academic-calendar",
           communications,
@@ -1908,19 +1927,25 @@ export async function POST(req: Request) {
         ? "لتطبيق القاعدة على مقررك تحديدًا، أرسل رمز المقرر وبرنامجك الدراسي، واذكر ما إذا كان المقرر إجباريًا أم اختياريًا."
         : "To apply this to your specific course, share its course code and your degree program, and say whether it is required or elective."
       : "";
+    const usedLiveOfficialResearch = selectedSources.some(({ row }) => row.source.startsWith("official-web:"));
     const evidenceFreshnessNote = evidenceNeedsQualification
       ? locale === "ar"
         ? "المصدر الرسمي المستشهد به لا يعرض تاريخ مراجعة يمكن التحقق منه. تحقّق من المكتب المختص قبل الاعتماد على المواعيد الحساسة للوقت أو قرارات الأهلية الشخصية."
         : "The cited official source does not show a verifiable last-reviewed date. Confirm time-sensitive dates or personal eligibility with the responsible UAEU office before acting."
       : "";
-    const responseClarification = [courseIdentityClarification, evidenceFreshnessNote].filter(Boolean).join("\n\n");
+    const liveResearchNote = usedLiveOfficialResearch
+      ? locale === "ar"
+        ? "تم جلب الصفحة مباشرةً من موقع رسمي لجامعة الإمارات لهذا السؤال، لكن لم يتسنَّ التحقق من تاريخ آخر مراجعة منشور. أكّد المواعيد الحساسة للوقت مع الجهة المختصة قبل اتخاذ إجراء."
+        : "I retrieved this page live from an official UAEU site for this question, but could not verify its last-reviewed date. Confirm time-sensitive dates with the responsible UAEU office before acting."
+      : "";
+    const responseClarification = [courseIdentityClarification, usedLiveOfficialResearch ? liveResearchNote : evidenceFreshnessNote].filter(Boolean).join("\n\n");
     const hasClarification = Boolean(remainingClarification || courseIdentityClarification);
     const payload: AssistantPayload = {
       role: "assistant",
       content: withActionBoundary(missingSupport ? handoffContent("low_confidence", locale, answerRequest) : [finalized.content.replace(/\[EVIDENCE:[^\]]*\]/gi, "").trim(), responseClarification].filter(Boolean).join("\n\n"), latest, locale),
       source: escalationReason ? "escalated" : "rag",
       responseMode: "grounded_generation",
-      stateLabel: escalationReason ? "model_escalation" : "local_db",
+      stateLabel: escalationReason ? "model_escalation" : usedLiveOfficialResearch ? "v3_live_official_research" : "local_db",
       ...(v3EvidenceMode ? { resolutionState: escalationReason ? "UNSUPPORTED" : executionPlan?.missingContext.length || hasClarification || evidenceNeedsQualification ? "CONDITIONAL" : "VERIFIED" } : {}),
       citations: escalationReason
         ? []

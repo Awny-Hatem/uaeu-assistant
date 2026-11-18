@@ -8,6 +8,23 @@ const MAX_PAGE_BYTES = 1_000_000;
 const MAX_CANDIDATES = 5;
 const MAX_EXCERPT_CHARS = 8_000;
 const REQUEST_TIMEOUT_MS = 8_000;
+// Use source hosts already present in the approved UAEU corpus rather than a
+// wildcard subdomain rule; this keeps sitemap discovery away from arbitrary
+// or potentially misconfigured subdomains.
+const UAEU_OFFICIAL_HOSTS = new Set([
+  "uaeu.ac.ae",
+  "www.uaeu.ac.ae",
+  "alumniweb.uaeu.ac.ae",
+  "coreservices.uaeu.ac.ae",
+  "internship.uaeu.ac.ae",
+  "jobnavigator.uaeu.ac.ae",
+  "map.uaeu.ac.ae",
+  "my.uaeu.ac.ae",
+  "selfservice.uaeu.ac.ae",
+  "ssb.uaeu.ac.ae",
+  "store.uaeu.ac.ae",
+  "webapps.uaeu.ac.ae",
+]);
 const DOMAIN_TERMS: Record<string, string[]> = {
   admissions: ["admission", "application", "applicant"],
   calendar: ["calendar", "semester", "registration", "examination", "exam"],
@@ -16,6 +33,14 @@ const DOMAIN_TERMS: Record<string, string[]> = {
   financial_aid: ["scholarship", "financial aid", "award"],
   finance: ["tuition", "payment", "fee", "refund"],
   graduation: ["graduation", "degree completion", "graduate"],
+  housing: ["housing", "residence", "accommodation", "dormitory"],
+  visa: ["visa", "international", "residence permit"],
+  library: ["library", "research", "librarian"],
+  it: ["information technology", "account", "password", "helpdesk"],
+  campus: ["campus", "parking", "transport", "map"],
+  wellbeing: ["wellbeing", "health", "counseling", "clinic"],
+  student_services: ["student services", "document", "certificate", "transcript"],
+  careers: ["career", "internship", "employment", "job"],
 };
 const STOP_WORDS = new Set(["where", "when", "what", "how", "can", "could", "check", "find", "see", "the", "for", "from", "uaeu", "university", "official", "please", "tell", "me", "about", "is", "are", "do", "does", "i", "my", "in", "on", "to", "of", "a", "an", "and", "or", "it"]);
 
@@ -29,7 +54,7 @@ function allowedOfficialUrl(value: string): URL | null {
   try {
     const url = new URL(value);
     const host = url.hostname.toLowerCase();
-    if (url.protocol !== "https:" || url.username || url.password || !(host === "uaeu.ac.ae" || host.endsWith(".uaeu.ac.ae"))) return null;
+    if (url.protocol !== "https:" || url.username || url.password || !UAEU_OFFICIAL_HOSTS.has(host)) return null;
     return url;
   } catch {
     return null;
@@ -52,8 +77,10 @@ function decodeHtml(value: string): string {
 function plainText(html: string): string {
   const main = html.match(/<(?:main|article)\b[^>]*>([\s\S]*?)<\/(?:main|article)>/i)?.[1] ?? html;
   return decodeHtml(main.replace(/<(script|style|noscript|svg|nav|footer|header)\b[^>]*>[\s\S]*?<\/\1>/gi, " ")
+    .replace(/<[^>]*class=["'][^"']*\baccordion-title\b[^"']*["'][^>]*>/gi, "\n__UAEU_SECTION__ ")
+    .replace(/<h[12]\b[^>]*>/gi, "\n__UAEU_SECTION__ ")
     .replace(/<\/(?:p|div|li|tr|h[1-6]|section|br)\s*>/gi, "\n")
-    .replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim());
+    .replace(/<[^>]+>/g, " ").replace(/[\t\f\v ]+/g, " ").replace(/ *\n */g, "\n").replace(/\n{2,}/g, "\n").trim());
 }
 
 async function readLimited(response: Response, limit: number): Promise<string | null> {
@@ -86,7 +113,7 @@ async function readLimited(response: Response, limit: number): Promise<string | 
   return new TextDecoder().decode(joined);
 }
 
-async function fetchOfficialPage(urlValue: string, fetcher: typeof fetch): Promise<{ url: string; title: string; text: string; html: string } | null> {
+async function fetchOfficialPage(urlValue: string, fetcher: typeof fetch, minimumTextLength = 120): Promise<{ url: string; title: string; text: string; html: string } | null> {
   let url = allowedOfficialUrl(urlValue);
   if (!url) return null;
   for (let redirects = 0; redirects <= 3; redirects += 1) {
@@ -111,7 +138,7 @@ async function fetchOfficialPage(urlValue: string, fetcher: typeof fetch): Promi
     if (!html) return null;
     const title = decodeHtml(html.match(/<title\b[^>]*>([\s\S]*?)<\/title>/i)?.[1]?.replace(/<[^>]+>/g, " ") ?? url.hostname).replace(/\s+/g, " ").trim();
     const text = plainText(html);
-    return text.length >= 120 ? { url: url.toString(), title: title.slice(0, 240), text: text.slice(0, MAX_EXCERPT_CHARS), html } : null;
+    return text.length >= minimumTextLength ? { url: url.toString(), title: title.slice(0, 240), text, html } : null;
   }
   return null;
 }
@@ -133,26 +160,58 @@ function linkCandidates(html: string, base: string, query: EvidenceQuery): { url
   return [...new Map(candidates.sort((a, b) => b.score - a.score).map(({ url, label }) => [url, { url, label }])).values()].slice(0, MAX_CANDIDATES);
 }
 
-function excerptFor(text: string, query: EvidenceQuery): string | null {
-  const normalized = normalizeQuery(text).toLowerCase();
-  const queryWords = words(`${query.request} ${query.requestedFacts.join(" ")}`);
-  const domainTerms = query.scope.domain ? DOMAIN_TERMS[query.scope.domain] ?? [query.scope.domain.replace(/_/g, " ")] : [];
-  const domainMatch = domainTerms.some((term) => normalized.includes(term));
-  const matched = queryWords.filter((word) => normalized.includes(word));
-  if (!domainMatch || matched.length < Math.min(2, queryWords.length)) return null;
-  if (query.scope.year !== undefined && !new RegExp(`\\b${query.scope.year}\\b`).test(text)) return null;
-  if (query.scope.term && !new RegExp(`\\b${query.scope.term}\\b`, "i").test(normalized)) return null;
-  const excerpt = text.slice(0, MAX_EXCERPT_CHARS).trim();
-  return excerpt.length >= 80 ? excerpt : null;
-}
-
 function supportsEventType(text: string, eventType: string): boolean {
   const normalized = normalizeQuery(text).toLowerCase();
-  if (eventType === "calendar_deadline") return /\b(?:deadline|last day|registration|add.drop|withdraw|examination|exam)\b/.test(normalized);
-  if (eventType.includes("admission")) return /\b(?:admission|application)\b/.test(normalized) && /\b(?:deadline|closing|close|apply|application period)\b/.test(normalized);
-  if (eventType.includes("scholarship")) return /\bscholarship\b/.test(normalized) && /\b(?:deadline|closing|close|apply|application period)\b/.test(normalized);
-  const domain = eventType.replace(/_deadline$/, "").replace(/_/g, " ");
-  return normalized.includes(domain) && /\b(?:deadline|last day|closing|due)\b/.test(normalized);
+  const deadline = /\b(?:deadline|last day|last date|closing date|closing|closes?|due date|due on|payment due)\b/.test(normalized);
+  if (!deadline) return false;
+  if (eventType.includes("admission")) {
+    const admissionContext = /\b(?:admission|admissions|application for admission|admissions application|apply for admission)\b/.test(normalized);
+    const scholarshipContext = /\bscholarship\b/.test(normalized);
+    const admissionDeadlineExplicit = /\b(?:admission|admissions) (?:application )?deadline\b|\bapplication for admission\b/.test(normalized);
+    const explicitlyNotAdmission = /\b(?:not|isn't|is not)\b[^.!?]{0,60}\b(?:admission|admissions)\b|\b(?:admission|admissions)\b[^.!?]{0,60}\b(?:not|isn't|is not)\b/.test(normalized);
+    return admissionContext && !explicitlyNotAdmission && (!scholarshipContext || admissionDeadlineExplicit);
+  }
+  if (eventType.includes("scholarship")) return /\bscholarship\b/.test(normalized);
+  const domain = eventType.replace(/_deadline$/, "");
+  const domainTerms = DOMAIN_TERMS[domain] ?? [domain.replace(/_/g, " ")];
+  return domainTerms.some((term) => normalized.includes(term));
+}
+
+function excerptFor(text: string, query: EvidenceQuery): string | null {
+  const queryWords = words(`${query.request} ${query.requestedFacts.join(" ")}`);
+  const domainTerms = query.scope.domain ? DOMAIN_TERMS[query.scope.domain] ?? [query.scope.domain.replace(/_/g, " ")] : [];
+  const paragraphs = text.split(/\n+/).map((paragraph) => paragraph.trim()).filter(Boolean);
+  const candidates: Array<{ excerpt: string; score: number }> = [];
+  let sectionContext = "";
+  let awaitingSectionHeading = false;
+  for (let index = 0; index < paragraphs.length; index += 1) {
+    if (paragraphs[index].startsWith("__UAEU_SECTION__")) {
+      const inlineHeading = paragraphs[index].replace(/^__UAEU_SECTION__\s*/u, "").trim();
+      if (inlineHeading) sectionContext = inlineHeading;
+      else awaitingSectionHeading = true;
+      continue;
+    }
+    if (awaitingSectionHeading) {
+      sectionContext = paragraphs[index];
+      awaitingSectionHeading = false;
+      continue;
+    }
+    const following = paragraphs.slice(index, index + 2).filter((paragraph) => !paragraph.startsWith("__UAEU_SECTION__"));
+    const excerpt = [sectionContext, ...following].filter(Boolean).join(" ").slice(0, MAX_EXCERPT_CHARS).trim();
+    const normalized = normalizeQuery(excerpt).toLowerCase();
+    const matched = queryWords.filter((word) => normalized.includes(word));
+    if (!domainTerms.some((term) => normalized.includes(term)) || matched.length < Math.min(2, queryWords.length)) continue;
+    if (query.scope.year !== undefined && !new RegExp(`\\b${query.scope.year}\\b`).test(excerpt)) continue;
+    if (query.scope.term && !new RegExp(`\\b${query.scope.term}\\b`, "i").test(normalized)) continue;
+    if (query.scope.eventType && !supportsEventType(excerpt, query.scope.eventType)) continue;
+    // Prefer the tightest passage that carries the requested evidence; do not
+    // retain unrelated neighboring page text merely because it shares a window.
+    candidates.push({ excerpt, score: matched.length * 1_000 - excerpt.length });
+  }
+  const minimumExcerptLength = query.scope.eventType ? 50 : 80;
+  return candidates
+    .filter(({ excerpt }) => excerpt.length >= minimumExcerptLength)
+    .sort((a, b) => b.score - a.score)[0]?.excerpt ?? null;
 }
 
 function uniqueId(url: string, excerpt: string): string {
@@ -171,7 +230,9 @@ export async function researchOfficialUaeu(query: EvidenceQuery, options: Offici
     const url = allowedOfficialUrl(seed);
     return url ? [{ url: url.toString(), label: url.pathname }] : [];
   });
-  const sitemap = await fetchOfficialPage(UAEU_SITEMAP, fetcher);
+  // Sitemap/index pages are useful for discovering official links even when
+  // they contain little prose; only fetched evidence pages need substantial text.
+  const sitemap = await fetchOfficialPage(UAEU_SITEMAP, fetcher, 0);
   const discovered = sitemap ? linkCandidates(sitemap.html, UAEU_SITEMAP, query) : [];
   const candidates = [...new Map([...seedCandidates, ...discovered].map((item) => [item.url, item])).values()].slice(0, MAX_CANDIDATES);
   const now = (options.now ?? (() => new Date()))().toISOString();
@@ -180,7 +241,6 @@ export async function researchOfficialUaeu(query: EvidenceQuery, options: Offici
     if (!page) return null;
     const excerpt = excerptFor(page.text, query);
     if (!excerpt) return null;
-    if (query.scope.eventType && !supportsEventType(page.text, query.scope.eventType)) return null;
     const scope = {
       ...(query.scope.domain ? { domain: query.scope.domain } : {}),
       ...(query.scope.programId ? { programId: query.scope.programId } : {}),

@@ -1,12 +1,12 @@
 # UAEU Assistant V3 — Standalone Completion Target
 
-**Status:** Working architecture for `feature/uaeu-v3-phase1`  
-**Purpose:** Complete and validate a useful student assistant before requesting institutional approval or portal integration.  
-**Production:** Out of scope; this branch does not change production.
+**Status:** Standalone architecture; implementation branch `feature/v3-course-answer-scope`
+**Purpose:** Complete and validate a useful student assistant before institutional approval or portal integration.
+**Production:** A V3 build is deployed; operational readiness is separate from factual acceptance.
 
 ## Product boundary
 
-The V3 core must run without UAEU SSO, private student APIs, portal sessions, or an online website lookup during a conversation. It uses a locally stored, versioned knowledge base built from public and otherwise approved source snapshots. Public-source ingestion can run separately from the student-facing service. Every stored item keeps its source URL, captured/reviewed time, applicable term/cohort, and trust/freshness state.
+The V3 core must run without UAEU SSO, private student APIs, or portal sessions. It uses a locally stored, versioned knowledge base built from public and otherwise approved source snapshots. For requests that need current information, it may also make a bounded, read-only lookup of UAEU-owned HTTPS pages. Those live discoveries are isolated as unapproved evidence with unknown freshness; they are not automatically added to the knowledge base. Every stored item keeps its source URL, captured/reviewed time, applicable term/cohort, and trust/freshness state.
 
 Students can provide their major, catalog year, completed/current courses, grades when needed, and planning preferences directly in the session. These are user-provided inputs, never represented as verified university records. The app can compute a conditional audit or plan from them and show exactly which assumptions affect the result. Do not require an account or persist those details by default.
 
@@ -18,7 +18,7 @@ The standalone app can explain university procedures, prepare a checklist or req
 
 1. **Conversation understanding:** Resolve the current request and relevant prior turns, preserve named degree/course/term/category, and let explicit corrections replace earlier assumptions. Emit a structured execution plan rather than a canned answer.
 2. **Capability router:** Select conversation, general explanation, UAEU factual lookup, academic rule evaluation, scenario comparison, local planning, procedure navigation, or human handoff. Private-record access and writes are unavailable capabilities in standalone mode.
-3. **Local knowledge/evidence service:** Retrieve only scope-compatible, versioned source records from the local snapshot. Reject cross-topic matches (for example, scholarship deadlines for academic-calendar questions). Optional web discovery may propose records for ingestion; it is not required to answer.
+3. **Knowledge and evidence service:** Retrieve only scope-compatible, versioned records from the local snapshot. Reject cross-topic matches (for example, scholarship deadlines for academic-calendar questions). For current-information requests only, build a minimized query from the detected topic and date scope, search/fetch only UAEU-owned HTTPS pages, and keep results separate from reviewed records. Never send conversation history or personal profile data to discovery, and never auto-ingest results.
 4. **Deterministic academic services:** Use structured programs, cohort curricula, requirement groups, course identities/credits, prerequisite expressions, and policy applicability. Unknown or malformed rules stay unresolved.
 5. **Planning service:** Produce one or more conditional schedules from explicit student-provided inputs, sourced course constraints, credit limits, and availability evidence. Unknown future offerings and unsupplied constraints remain visible assumptions.
 6. **Verification and answer composition:** Check the requested facts, rule result, scope, source support, effective dates, conflicts, and claim/citation mapping before rendering. Return a clear resolution state and next step.
@@ -42,7 +42,7 @@ These phases track implementation completion. Close each phase against its speci
 - Time-sensitive facts carry a validity date or an explicit unknown/stale state.
 - Exact-topic evidence filters, citation checks, conflict detection, and fail-safe responses pass English/Arabic regressions.
 - Natural-language answers are tested against reviewed facts; mock route success is never reported as factual accuracy.
-- **Implementation close when:** evidence-first routing, scope checks, citations, conflict states, and useful unresolved responses work without answer-time website access. The final comprehensive run must later label every captured case; route tests and HTTP success alone are not accuracy evidence.
+- **Implementation close when:** evidence-first routing, scope checks, citations, conflict states, useful unresolved responses, and bounded official-site lookup for current requests work. Live findings stay explicitly unapproved, are source-checked, and receive a freshness qualification; ordinary factual requests continue to use the local corpus. The final comprehensive run must later label every captured case; route tests and HTTP success alone are not accuracy evidence.
 
 ### Phase 2 — Governed academic knowledge
 
@@ -86,15 +86,15 @@ These phases track implementation completion. Close each phase against its speci
 - Automated LLM graders can triage but do not replace human review of consequential policy, deadline, and academic-rule cases.
 - The existing `npm run eval:scale` is only a deterministic mock-route and fixture-coverage check. Its 10,000 rows are not real generated answers and its pass count is not accuracy. Preserve it as a structural diagnostic; do not substitute it for the one final pinned-candidate answer capture and six-criteria review described above.
 
-## Offline knowledge maintenance loop
+## Knowledge maintenance and live research boundary
 
-The live site is contacted only by a maintainer-initiated discovery command, never by a student chat request:
+Maintainers can use a discovery command to prepare records for human review:
 
 ```powershell
 npm run research:official -- calendar "UAEU Fall 2026 registration dates"
 ```
 
-Results are labeled unapproved research leads with retrieval time and unknown freshness. A maintainer must inspect the official page and its scope, update the governed local record by hand, and run the relevant content/catalog checks plus `npm run audit:standalone`. No discovery result is ingested or shown as authoritative automatically. If source discovery fails, the existing local snapshot remains in use; the student-facing assistant reports gaps/staleness rather than calling the website.
+Student chats can trigger the separate bounded lookup only when the request needs current information. The runtime query contains topic/date scope, not the student's raw message or profile. Discovered excerpts remain unapproved, carry retrieval time and unknown publication freshness, require grounding and citation checks, and are not stored as governed facts. If live lookup fails or finds no scope-compatible result, the assistant uses qualifying local evidence or reports the evidence gap. Maintainer-ingested records still require human source review and the relevant content/catalog checks plus `npm run audit:standalone`.
 
 ## Final institutional integration gate (after standalone acceptance)
 

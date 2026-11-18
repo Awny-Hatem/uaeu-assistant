@@ -4,6 +4,7 @@ import { createEvidenceService } from "../../lib/evidence/evidence-service";
 import { loadUndergraduateProgramCatalog } from "../../lib/academic/undergraduate-program-catalog";
 import { programIdInText } from "../../lib/academic/program-curricula";
 import { isExecutionPlan } from "../../lib/v3/contracts";
+import { officialResearchQueryForPlan } from "../../lib/research/official-query";
 
 const plan = (latest: string, prior: string[] = []) => createExecutionPlan({
   conversation: [...prior.map((content) => ({ role: "user" as const, content })), { role: "user", content: latest }],
@@ -22,6 +23,21 @@ assert.equal(admissions.entities.domain, "admissions");
 assert.equal(admissions.entities.eventType, "admissions_deadline");
 assert.deepEqual(admissions.missingContext, ["the intake or academic year", "your applicant category"]);
 assert.equal(evidenceQueryForPlan(admissions).freshnessRequirement, "current");
+const publicAdmissionsQuery = officialResearchQueryForPlan(admissions);
+assert.equal(publicAdmissionsQuery?.request, "UAEU official admissions applications deadlines and dates",
+  "live research query should contain only a minimized topic, not the student's raw message");
+assert.deepEqual(publicAdmissionsQuery?.scope, { domain: "admissions", eventType: "admissions_deadline" });
+const locationResearchQuery = officialResearchQueryForPlan(location);
+assert.equal(locationResearchQuery?.request, "UAEU official academic calendar deadlines and dates",
+  "unresolved factual questions should be eligible for a minimized official-site lookup");
+
+const arabicScholarshipCriteria = plan("ما هي شروط المنح");
+assert.equal(arabicScholarshipCriteria.mode, "UAEU_FACTUAL");
+assert.equal(arabicScholarshipCriteria.entities.domain, "financial_aid");
+assert.ok(arabicScholarshipCriteria.requestedFacts.includes("requirements"));
+assert.equal(officialResearchQueryForPlan(arabicScholarshipCriteria)?.request,
+  "UAEU official scholarships and financial aid requirements and conditions",
+  "Arabic scholarship questions should map to an official research query with the requested fact preserved");
 
 const admissionQuestion = "How do I apply to UAEU as a first-year undergraduate?";
 const requestFrames = [

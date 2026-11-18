@@ -13,6 +13,8 @@ process.env.UAEU_AGENT_V3_ENABLED = "enabled";
 process.env.CHATBOT_DB_PATH = ":memory:";
 process.env.TRUST_PROXY_HEADERS = "enabled";
 process.env.AUTH_COOKIE_SECRET = "test-only-auth-cookie-secret-with-at-least-32-characters";
+const originalFetch = globalThis.fetch;
+globalThis.fetch = async () => new Response("", { status: 404 });
 
 async function main() {
   const mixedArabicCurriculumQuestion = "ما توزيعات الساعات التي ينشرها منهج Bachelor of Science in Speech-Language Pathology للفئة الموصوفة بأنها cohort plan؟";
@@ -82,7 +84,7 @@ async function main() {
   assert.equal(calendar.payload.stateLabel, "v3_verified_source_location");
   assert.equal(calendar.payload.resolutionState, "VERIFIED");
   assert.match(String(calendar.payload.content), /official UAEU academic calendar/i);
-  assert.match(JSON.stringify(calendar.payload.citations), /coreservices\.uaeu\.ac\.ae/);
+  assert.match(JSON.stringify(calendar.payload.citations), /webapps\.uaeu\.ac\.ae\/calendar\/index\.aspx/);
 
   const englishPasswordReset = await ask(
     "I've forgotten the password for my university account. What should I do?",
@@ -1215,7 +1217,8 @@ async function main() {
   assert.match(JSON.stringify(elecCreditConflict.payload.citations), /coe_bsc_electrical_engineering_study_plan\.pdf/);
   assert.match(JSON.stringify(elecCreditConflict.payload.citations), /bachelor-of-science-in-communication-engineering\.shtml/);
 
-  console.log("V3 route checks passed: selector bypass, deadline separation, repeat policy, and structured prerequisite and program models.");
+  globalThis.fetch = originalFetch;
+  console.log("V3 route checks passed: selector bypass, scoped official-research fallback, deadline separation, repeat policy, and academic models.");
 }
 
 main().catch((error) => {
