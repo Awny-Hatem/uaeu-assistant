@@ -1,0 +1,242 @@
+[Dr. Fady set] Case 1 — How should I plan my bachelor? (vague planning)
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How should I plan my bachelor?
+Expected answer: Asks program + admit term; gives short planning steps (study plan by semester, prerequisites, degree audit, advisor, graduation rules 120 credits / 2.00 GPA / no I grades).
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/catalog/undergraduate-programs.shtml, https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/6_degree_completion_and_graduation-en.pdf
+Complete conversation:
+Student: How should I plan my bachelor?
+Assistant: **Planning your bachelor's degree**
+Which program are you in, and when were you admitted (e.g. Fall 2024)? Every program and intake has its own study plan, so I can then point you to yours.
+
+The planning steps:
+1. **Follow your program's official study plan** semester by semester. Each program page under [UAEU Undergraduate Programs](https://www.uaeu.ac.ae/en/catalog/undergraduate-programs.shtml) links its plan.
+2. **Check prerequisites** before each term; the registration system blocks a course whose prerequisite is missing.
+3. **Track your progress in Degree Works** (your degree audit). Before each registration, your academic advisor sets next term's plan to *Active & Locked*.
+4. **Meet your academic advisor** every term before registering.
+5. **Keep the graduation rules in mind:** at least **120 credits** (some programs need more), a **cumulative GPA of 2.00** or higher, and **no Incomplete (I)** grades.
+
+The graduation rules are from policy AE-06, which the Registration Department still lists as current; the College of Medicine and Health Sciences has its own rules.
+Deployed bot verdict (before): Partially correct
+Verdict (after): Correct
+Phrasing variants passed: 3/3 (how do i plan my degree; كيف أخطط لدراستي في البكالوريوس؟; how shud i plan my bachelors)
+
+[Dr. Fady set] Case 2 — How to raise ceiling? (student slang)
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How to raise ceiling?
+Expected answer: Recognises raise ceiling / رفع سقف = request a seat in a full section (CLOSED SECTION override); gives the procedure with source.
+Official UAEU source supporting the expected answer: https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/registration_program_spring_2015_en.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/3_undergraduate_registration_and_enrollment-en.pdf
+Complete conversation:
+Student: How to raise ceiling?
+Assistant: **Getting a seat in a full section ("raising the ceiling" / رفع سقف)**
+"Raising the ceiling" means asking for a seat in a section that is already full (e.g. 40/40). In UAEU's registration system this is a **CLOSED SECTION override**.
+1. **Confirm it's full:** in *Student Registration → Register for Classes*, a **Closed Section** error means no seats are left.
+2. **Ask your College Advising Unit** for the override. UAEU's registration guidance sends closed-section and section-capacity questions there, and the college that offers the course sets its section ceiling. Give the course code, the section/CRN you need, and why (for example, your study plan or graduation).
+3. **Do it during registration or add/drop.** Spring 2027: add/drop starts **4 January 2027**; the last day to add is **15 January 2027** ([academic calendar](https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en)).
+4. **If approved,** add the section yourself (*Add → Submit*) and check it shows **Registered**. If not, choose another section or course with seats.
+
+An override is a request, not a guaranteed seat.
+Deployed bot verdict (before): Incorrect
+Verdict (after): Correct
+Phrasing variants passed: 4/4 (كيف أرفع سقف الشعبة؟; how do i get a seat in a full section; section is full 40/40 how to get in; how to rais celing for a course)
+
+[Dr. Fady set] Case 3 — View summer course offerings
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How can I view the list of courses offered for the upcoming summer term? → Bachelor of Science in Computer Science → How can I view the list of courses offered for the upcoming summer term?
+Expected answer: No program question; steps to the class schedule search / Look Up Classes in the registration portal, filtered by the summer term; official link.
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/registration_and_exam_schedule.shtml
+Complete conversation:
+Student: How can I view the list of courses offered for the upcoming summer term?
+Assistant: **Seeing which courses are offered in a term (e.g. summer)**
+Offerings are the same for every student, so you don't need to name your program.
+1. Sign in: UAEU website → **Sign In → MyUAEU → eServices → Student → Student Registration**.
+2. Choose **Register for Classes**, select the term (e.g. Summer), and press **Continue**.
+3. Under **Plans**, pick a course and choose **View Sections** to see its sections in that term. Full sections are marked closed (FULL).
+4. For registration dates for each term, see the Registration Department's [Registration, Class & Exam Schedule](https://www.uaeu.ac.ae/en/dvcsae/registration/registration_and_exam_schedule.shtml) page.
+
+The official guide lists sections through the courses in your Degree Works plan. For a course outside your plan, or one you can't find, ask your College Advising Unit whether it is offered that term.
+Student: Bachelor of Science in Computer Science
+Assistant: **Seeing which courses are offered in a term (e.g. summer)**
+Offerings are the same for every student, so you don't need to name your program.
+1. Sign in: UAEU website → **Sign In → MyUAEU → eServices → Student → Student Registration**.
+2. Choose **Register for Classes**, select the term (e.g. Summer), and press **Continue**.
+3. Under **Plans**, pick a course and choose **View Sections** to see its sections in that term. Full sections are marked closed (FULL).
+4. For registration dates for each term, see the Registration Department's [Registration, Class & Exam Schedule](https://www.uaeu.ac.ae/en/dvcsae/registration/registration_and_exam_schedule.shtml) page.
+
+The official guide lists sections through the courses in your Degree Works plan. For a course outside your plan, or one you can't find, ask your College Advising Unit whether it is offered that term.
+Student: How can I view the list of courses offered for the upcoming summer term?
+Assistant: **Seeing which courses are offered in a term (e.g. summer)**
+Offerings are the same for every student, so you don't need to name your program.
+1. Sign in: UAEU website → **Sign In → MyUAEU → eServices → Student → Student Registration**.
+2. Choose **Register for Classes**, select the term (e.g. Summer), and press **Continue**.
+3. Under **Plans**, pick a course and choose **View Sections** to see its sections in that term. Full sections are marked closed (FULL).
+4. For registration dates for each term, see the Registration Department's [Registration, Class & Exam Schedule](https://www.uaeu.ac.ae/en/dvcsae/registration/registration_and_exam_schedule.shtml) page.
+
+The official guide lists sections through the courses in your Degree Works plan. For a course outside your plan, or one you can't find, ask your College Advising Unit whether it is offered that term.
+Deployed bot verdict (before): Partially correct
+Verdict (after): Correct
+Phrasing variants passed: 3/3 (where can i see which courses are offered in summer; كيف أشوف المواد المطروحة في الفصل الصيفي؟; summer course list uaeu)
+
+[Dr. Fady set] Case 4 — Which courses to register next semester
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How do I know which courses I should register for next semester? → Bachelor of Science in Computer Science → Bachelor of Science in Computer Science
+Expected answer: Asks program once, then admit term + current semester (or answers generally): follow cohort study plan, degree audit, prerequisites, advisor; never loops or shows internal messages.
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf#page=1
+Complete conversation:
+Student: How do I know which courses I should register for next semester?
+Assistant: Which UAEU program are you in? Each program has its own study plan.
+Student: Bachelor of Science in Computer Science
+Assistant: Which year and semester of your study plan are you in now (e.g. Year 2, Semester 1), and when were you admitted (e.g. Fall 2024)? Then I can list the exact courses.
+
+How to decide next semester's courses:
+1. Open your program's study plan for your admission year (newest published: [Bachelor of Science in Computer Science — 2026 Fall plan](https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf)); the courses listed for your next semester are the default.
+2. Check Degree Works (your degree audit) for what you have completed and what is left.
+3. Make sure you have passed each course's prerequisites.
+4. Your academic advisor sets next term's Degree Works plan to Active & Locked before registration, so confirm with them.
+Student: Bachelor of Science in Computer Science
+Assistant: How to decide next semester's courses:
+1. Open your program's study plan for your admission year (newest published: [Bachelor of Science in Computer Science — 2026 Fall plan](https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf)); the courses listed for your next semester are the default.
+2. Check Degree Works (your degree audit) for what you have completed and what is left.
+3. Make sure you have passed each course's prerequisites.
+4. Your academic advisor sets next term's Degree Works plan to Active & Locked before registration, so confirm with them.
+Deployed bot verdict (before): Incorrect
+Verdict (after): Correct
+Phrasing variants passed: 2/2 (what courses should i take next sem; كيف أعرف المواد اللي لازم أسجلها الفصل الجاي؟)
+
+[Dr. Fady set] Case 5 — How to add a course
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How to add a course?
+Expected answer: Step-by-step registration guide (MyUAEU path, Add, Submit, Registered), closed-section note, add/drop deadline link.
+Official UAEU source supporting the expected answer: https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf, https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml
+Complete conversation:
+Student: How to add a course?
+Assistant: **Add or drop a course**
+- To add: in **Student Registration → Register for Classes**, choose the term, then **Plans → View Sections → Add → Submit**. Verify **Registered**; Add alone leaves the choice pending. The Degree Works plan must be Active & Locked and registration restrictions must be cleared.
+- To drop an existing section, use its **Action → Drop-Web → Submit**, then verify the change in your schedule. Do not stop attending while still registered.
+- **Fall 2026:** add/drop started 17 August; last add **28 August**; last withdraw/drop without failure **18 September**. **Spring 2027:** corresponding dates **4 January**, **15 January**, **5 February**. Dates apply only to the named term; adding and dropping have different deadlines.
+- A withdrawal request and any refund are separately subject to the applicable withdrawal rules and submission date.
+Deployed bot verdict (before): Correct
+Verdict (after): Correct
+Phrasing variants passed: 2/2 (how do i add a class; كيف أضيف مادة؟)
+
+[Dr. Fady set] Case 6 — Closed section override request
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How to request a closed section override?
+Expected answer: Concrete steps: where/how to request, what to include, who decides, deadline (add/drop period), how to check result; official source.
+Official UAEU source supporting the expected answer: https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/registration_program_spring_2015_en.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/3_undergraduate_registration_and_enrollment-en.pdf
+Complete conversation:
+Student: How to request a closed section override?
+Assistant: **Getting a seat in a full section ("raising the ceiling" / رفع سقف)**
+"Raising the ceiling" means asking for a seat in a section that is already full (e.g. 40/40). In UAEU's registration system this is a **CLOSED SECTION override**.
+1. **Confirm it's full:** in *Student Registration → Register for Classes*, a **Closed Section** error means no seats are left.
+2. **Ask your College Advising Unit** for the override. UAEU's registration guidance sends closed-section and section-capacity questions there, and the college that offers the course sets its section ceiling. Give the course code, the section/CRN you need, and why (for example, your study plan or graduation).
+3. **Do it during registration or add/drop.** Spring 2027: add/drop starts **4 January 2027**; the last day to add is **15 January 2027** ([academic calendar](https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en)).
+4. **If approved,** add the section yourself (*Add → Submit*) and check it shows **Registered**. If not, choose another section or course with seats.
+
+An override is a request, not a guaranteed seat.
+Deployed bot verdict (before): Partially correct
+Verdict (after): Correct
+Phrasing variants passed: 2/2 (closed section override how; الشعبة مغلقة كيف أطلب استثناء؟)
+
+[Dr. Fady set] Case 7 — How to calculate GPA
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How do I calculate my GPA?
+Expected answer: Grade table, formula, worked example, term vs cumulative, portal for official GPA.
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf
+Complete conversation:
+Student: How do I calculate my GPA?
+Assistant: **GPA and grading scale: how to calculate your GPA**
+| Grade | Marks | Points |
+|---|---|---|
+| A | 90–100 | 4.0 |
+| A- | 87–89 | 3.7 |
+| B+ | 84–86 | 3.3 |
+| B | 80–83 | 3.0 |
+| B- | 77–79 | 2.7 |
+| C+ | 74–76 | 2.3 |
+| C | 70–73 | 2.0 |
+| C- | 67–69 | 1.7 |
+| D+ | 64–66 | 1.3 |
+| D | 60–63 | 1.0 |
+| F | 0–59 | 0.0 |
+
+**Formula:** GPA = Σ (credit hours × grade points, also called quality points) ÷ total credit hours counted in the GPA, reported to two decimal places. UAEU calculates both a term GPA and a cumulative GPA.
+
+**Example:** a 3-credit A (3 × 4.0 = 12.0), a 4-credit B+ (4 × 3.3 = 13.2) and a 3-credit C (3 × 2.0 = 6.0) give 31.2 ÷ 10 = **3.12**.
+
+Transfer and non-degree credits are not counted; special grades and repeated courses follow separate rules. Your official GPA is in the student portal. This scale excludes the College of Medicine and Health Sciences.
+Deployed bot verdict (before): Correct
+Verdict (after): Correct
+Phrasing variants passed: 2/2 (how is gpa calculated; كيف أحسب معدلي التراكمي؟)
+
+[Dr. Fady set] Case 8 — University working hours
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: What are the university's working hours?
+Expected answer: Official working hours (days/times) or the official page; note offices may differ; optionally ask which office.
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/contact/index.shtml
+Complete conversation:
+Student: What are the university's working hours?
+Assistant: UAEU's general Contact page (the university's general contact point) publishes these working hours: Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. Individual colleges, clinics or libraries may publish their own separate hours.
+Deployed bot verdict (before): Incorrect
+Verdict (after): Correct
+Phrasing variants passed: 3/3 (uaeu working hours; متى دوام الجامعة؟; what time does the university open)
+
+[Dr. Fady set] Case 9 — Withdraw from the university
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How to drop out of the uni?
+Expected answer: Withdrawal from the university: steps, form/office, deadlines, refund/fees note, consequences, official source.
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/3_undergraduate_registration_and_enrollment-en.pdf, https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml
+Complete conversation:
+Student: How to drop out of the uni?
+Assistant: **Withdrawing from the university**
+Talk to your academic advisor first; a leave of absence may also be possible.
+1. **Submit the request through eServices** (withdrawal from the University, or registration suspension) within the allowed period. Stopping attendance is not a withdrawal.
+2. **Timing (policy AE-03):**
+   - by the **end of week 4**: that semester's courses are not recorded on your transcript;
+   - **weeks 5–6**: you receive **W** in all classes, and it counts toward your withdrawal/leave chances;
+   - **after week 6**: not allowed, except for a medical emergency or other compelling circumstances, by applying to your **college Dean** (if approved, **AW** in all courses).
+3. **Fees and refunds:** the refund depends on the date you submit. For Fall 2026 full-semester courses, requests from 24 August to **18 September 2026** got a 100% refund; after that the full tuition is due. Check the current term's dates on [Withdrawal Deadlines and Financial Obligations](https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml).
+4. **Complete clearance:** any refund is processed only after the required clearance procedures.
+
+AE-03 applies to undergraduates outside the College of Medicine and Health Sciences.
+Deployed bot verdict (before): Partially correct
+Verdict (after): Correct
+Phrasing variants passed: 2/2 (how do i withdraw from uaeu completely; كيف أنسحب من الجامعة؟)
+
+[Dr. Fady set] Case 10 — How to apply for graduation
+Tester name: Claude (fixes after Dr. Fady's review)
+Date: 18 November 2026
+Version tested: Local — feat/student-profiles-and-power (commit d7dd18f), production build
+Question or scenario: How to apply for graduation?
+Expected answer: Steps (where/portal or College Advising Unit), deadline for current term with calendar link, eligibility, what happens next; current policy.
+Official UAEU source supporting the expected answer: https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en, https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf, https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/6_degree_completion_and_graduation-en.pdf
+Complete conversation:
+Student: How to apply for graduation?
+Assistant: **How to apply for graduation (undergraduate)**
+1. **When:** in the semester you expect to finish, no later than that term's last day to drop without failure: **18 September 2026** for Fall 2026 and **5 February 2027** for Spring 2027 ([academic calendar](https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en)). Combining this procedure with those calendar dates gives the deadline; the calendar does not separately label them as graduation-application dates.
+2. **Where:** submit the graduation (degree) application to your **College Advising Unit** and the **Admission and Registration Deanship**. The published procedure doesn't name a portal screen, so ask your College Advising Unit for the application and how to submit it.
+3. **Check you're eligible:** all degree requirements, at least **120 credits** (some programs need more), **cumulative GPA 2.00** or higher, and **no Incomplete (I)** grades.
+4. **What happens next:** your college confirms you've completed the requirements, then Admission and Registration certifies the degree. Degrees are awarded at the end of each semester; the official date is the semester's last day.
+
+Keep a copy of your application. To check a submitted application's status, ask the College Advising Unit or Admission and Registration with your request reference; the published procedure does not establish a specific private tracking screen. This is policy AE-06, which the Registration Department still lists as current; it doesn't cover the College of Medicine and Health Sciences or graduate degrees.
+Deployed bot verdict (before): Partially correct
+Verdict (after): Correct
+Phrasing variants passed: 2/2 (how do i apply to graduate; كيف أقدم على التخرج؟)
+
