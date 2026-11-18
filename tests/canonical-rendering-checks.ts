@@ -223,7 +223,8 @@ async function main() {
     assert.doesNotMatch(payload.content, /could not verify|missing official evidence/i);
     assert.deepEqual(payload.citations, []);
   });
-  assert.equal(calls, 31);
+  // Two academic probes now search the official corpus before the selector.
+  assert.equal(calls, 29);
   console.log(`${passed} canonical selection/rendering checks passed; ${calls} intercepted selector calls, no network and no factual writer calls.`);
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; }).finally(() => { globalThis.fetch = originalFetch; });

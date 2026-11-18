@@ -386,7 +386,7 @@ export function corpusFollowUp(messages: {role:string;content:string}[], latest:
   return {query:`${latest}\nProgram context from the previous user request: ${labels[0]}; ${scope.years.join(' ')} ${scope.terms.join(' ')}.`,labels,ambiguous:false};
 }
 
-const OPERATIONAL_DOC = /registration[_\s-]?program|final[_\s-]?exams?|exams?[_\s-]?(?:schedule|key|timetable)|class[_\s-]?schedule|timetable|calendar|fees?|rates|tuition|refund|orientation|faq|summer|admission|guide/iu;
+const OPERATIONAL_DOC = /registration[_\s-]?program|final[_\s-]?exams?|exams?[_\s-]?(?:schedule|key|timetable)|class[_\s-]?schedule|timetable|academic[_\s-]?calendar|fees?|rates|tuition|refund/iu;
 /** An operational document whose newest year is before the 2025–26 academic year. */
 export function staleOperationalSource(text: string, currentAcademicYearStart = 2025): boolean {
   if (!OPERATIONAL_DOC.test(text)) return false;
