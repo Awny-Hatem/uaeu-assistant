@@ -1,7 +1,13 @@
 export type UiLocale = "en" | "ar";
 
+// The dominant script decides the direction: an English answer that quotes an
+// Arabic term (e.g. "رفع سقف") stays left-to-right, and an Arabic answer that
+// names an English menu item or "CRN" stays right-to-left. Link targets are ignored.
 export function textLanguage(text: string): UiLocale {
-  return /[\u0600-\u06ff]/u.test(text) ? "ar" : "en";
+  const plain = text.replace(/\]\([^)]*\)|https?:\/\/\S+/gu, " ");
+  const arabic = (plain.match(/[\u0600-\u06ff]/gu) ?? []).length;
+  const latin = (plain.match(/[A-Za-z]/gu) ?? []).length;
+  return arabic > 0 && arabic >= latin ? "ar" : "en";
 }
 
 export const uiCopy = {
