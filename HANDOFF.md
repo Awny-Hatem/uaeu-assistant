@@ -146,3 +146,11 @@ Awny's main had no new commits; Ali chose to merge feature/v3-course-answer-scop
 - Port 3000 (Ali's manual testing) serves the KE checkout build at cc278fb.
 
 - fix3 result: phrasing 329/35/35 (target ~378; still below — investigate remaining canonical/snapshot/grounding cases before final suites); Fady graded 25/25 (check why 25 not 35 entries).
+
+## 18 Nov evening — final suites on the fixed build (v3final) and recheck
+- Dr. Fady's 10: Ali/Dr. Fady retested manually — 10/10 correct; automated 35/35.
+- Phrasing 399 (full run, build 11952f7): 366 / 26 / 7 (pre-merge 378 / 15 / 6).
+- Examiner 600: 542 / 47 / 11 (pre-merge 565 / 28 / 7). Memory 94: 88 / 2 / 4. Browser examiner 96/100 (4 partial). Browser memory: before 8/1, after 15/2.
+- Regression 1 and 2 timed out and ~80 answers were OpenAI network errors (OPENAI_NETWORK_ERROR); regression 3: 522 / 47 / 24.
+- Fixes since that build: pre-merge rewrite method, scoped first selector, short follow-up context carry (commits 993dbf1, 613791c; KE 47d3241, 8dd568e).
+- Recheck RUNNING: scratchpad final6.sh fills regression 1–2, reruns non-correct examiner/phrasing/regressions, full memory (labels *-v3final, memory-v3final2).
