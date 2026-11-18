@@ -50,12 +50,14 @@ void import("../app/api/health/route").then(async ({ GET }) => {
   const payload = await response.json();
   const versions = (await import("../lib/academic/program-curricula")).listAcademicPrograms().flatMap((program) => program.curriculumVersions);
   const unresolved = versions.filter((version) => version.cohortMapping === "unresolved").length;
+  const verified = versions.filter((version) => version.cohortMapping === "verified").length;
   assert.deepEqual(payload.academicCatalog.cohortApplicability, {
     curriculumVersions: versions.length,
     explicitlyUnresolvedMappings: unresolved,
-    versionsWithoutUnresolvedFlag: versions.length - unresolved,
-  }, "health reports cohort scope gaps instead of implying every current curriculum is student-applicable");
-  console.log("Health cohort applicability checks passed: explicitly unresolved curriculum versions are counted.");
+    explicitlyVerifiedMappings: verified,
+    versionsWithoutApplicabilityReview: 0,
+  }, "health reports reviewed and unresolved scope mappings without silently treating missing metadata as verified");
+  console.log("Health cohort applicability checks passed: every curriculum version has an explicit scope status.");
 }).catch((error) => {
   console.error(error);
   process.exitCode = 1;

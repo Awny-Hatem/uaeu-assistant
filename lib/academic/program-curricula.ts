@@ -46,8 +46,8 @@ export type CurriculumVersion = {
   cohortLabel: string;
   effectiveFrom: string;
   effectiveTo?: string;
-  /** Current page summaries can be useful for general questions without proving cohort applicability. */
-  cohortMapping?: "unresolved";
+  /** Source-reviewed cohort-year applicability only; never proves a student's assigned Degree Works plan. */
+  cohortMapping: "verified" | "unresolved";
   totalCredits: number;
   creditBuckets?: CreditBucket[];
   requirements: ProgramRequirement[];
@@ -156,7 +156,7 @@ function isCurriculumVersion(value: unknown): value is CurriculumVersion {
         !value.semesterPlans.every((plan) => isSemesterPlan(plan, Number(value.totalCredits))) ||
         new Set(value.semesterPlans.map((plan) => (plan as Record<string, unknown>).id)).size !== value.semesterPlans.length))) return false;
   if (value.effectiveTo !== undefined && (!isDate(value.effectiveTo) || value.effectiveTo < value.effectiveFrom)) return false;
-  if (value.cohortMapping !== undefined && value.cohortMapping !== "unresolved") return false;
+  if (value.cohortMapping !== "verified" && value.cohortMapping !== "unresolved") return false;
   if (value.creditBuckets !== undefined) {
     if (!Array.isArray(value.creditBuckets) || !value.creditBuckets.every((bucket) => isRecord(bucket) &&
       typeof bucket.id === "string" && typeof bucket.name === "string" && typeof bucket.credits === "number" && bucket.credits > 0)) return false;

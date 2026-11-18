@@ -1025,22 +1025,27 @@ for (const [year, id] of [
   [2025, "veterinary-medicine-2025-plan-175"],
   [2026, "veterinary-medicine-2026-plan-175"],
 ] as const) {
-  const veterinaryPlan = getProgramCurriculum("veterinary-medicine", year)?.curriculum;
-  assert.equal(veterinaryPlan?.id, id, `Veterinary Medicine Fall ${year} selects its separately published cohort plan`);
+  assert.equal(getProgramCurriculum("veterinary-medicine", year), null,
+    `Veterinary Medicine's Fall-only ${year} plan is not selected from year alone`);
+  const veterinaryRequirements = assessProgramRequirementsConversation([
+    { role: "user", content: `What courses are in Veterinary Medicine for Fall ${year} entry?` },
+  ]);
+  const veterinaryPlan = veterinaryRequirements?.curriculum;
+  assert.equal(veterinaryPlan?.id, id, `explicit Fall ${year} entry selects its separately published Veterinary Medicine plan`);
   assert.equal(veterinaryPlan?.totalCredits, 175);
   assert.equal(modeledCreditTotal(veterinaryPlan!.requirements), 175,
     `Veterinary Medicine ${year} named courses and major elective reconcile to 175 credits`);
   assert.equal(veterinaryPlan?.requirements.length, 2);
 }
-const veterinary2024Courses = getProgramCurriculum("veterinary-medicine", 2024)?.curriculum.requirements[0];
+const veterinary2024Courses = getPublishedCurriculumVersion("veterinary-medicine", "veterinary-medicine-2024-plan-175")?.curriculum.requirements[0];
 assert.ok(veterinary2024Courses?.type === "REQUIRED_COURSE_SET");
 assert.ok(veterinary2024Courses.courseCodes.includes("VMED109"));
 assert.ok(!veterinary2024Courses.courseCodes.includes("VMED108"), "the 2024 plan does not borrow the later physiology code");
-const veterinary2025Courses = getProgramCurriculum("veterinary-medicine", 2025)?.curriculum.requirements[0];
+const veterinary2025Courses = getPublishedCurriculumVersion("veterinary-medicine", "veterinary-medicine-2025-plan-175")?.curriculum.requirements[0];
 assert.ok(veterinary2025Courses?.type === "REQUIRED_COURSE_SET");
 assert.ok(veterinary2025Courses.courseCodes.includes("GEIT113"));
 assert.ok(!veterinary2025Courses.courseCodes.includes("VMED143"), "the 2025 plan does not borrow the 2026 AI course");
-const veterinary2026Courses = getProgramCurriculum("veterinary-medicine", 2026)?.curriculum.requirements[0];
+const veterinary2026Courses = getPublishedCurriculumVersion("veterinary-medicine", "veterinary-medicine-2026-plan-175")?.curriculum.requirements[0];
 assert.ok(veterinary2026Courses?.type === "REQUIRED_COURSE_SET");
 assert.ok(veterinary2026Courses.courseCodes.includes("VMED143"));
 assert.ok(!veterinary2026Courses.courseCodes.includes("GEIT113"), "the 2026 plan keeps its separately published AI course code");
@@ -1261,10 +1266,12 @@ const geographyAudit = assessDegreeAuditConversation([
 assert.ok(geographyAudit?.courseGroups.some(({ requirementType, status }) => requirementType === "PATHWAY_CHOICE" && status === "NOT_ASSESSED"),
   "nested composite pathways remain unassessed rather than being assumed complete");
 const cybersecurityAuditCurriculum = getProgramCurriculum("cybersecurity", 2026);
-assert.ok(cybersecurityAuditCurriculum?.cohortMatched);
+assert.equal(cybersecurityAuditCurriculum, null, "Fall-only Cybersecurity plan requires entry-term evidence");
+const cybersecurityFallCurriculum = fallEntryCurriculumForYear("cybersecurity", 2026);
+assert.ok(cybersecurityFallCurriculum?.curriculum);
 const cybersecurityAudit = assessDegreeAuditConversation([
-  { role: "user", content: "I am a Cybersecurity student and entered in the 2026 cohort." },
-  ...[...collectAuditFixtureCourses(cybersecurityAuditCurriculum.curriculum.requirements)].map((code) => ({ role: "user" as const, content: `I passed ${code} with a B.` })),
+  { role: "user", content: "I am a Cybersecurity student and entered in Fall 2026." },
+  ...[...collectAuditFixtureCourses(cybersecurityFallCurriculum.curriculum.requirements)].map((code) => ({ role: "user" as const, content: `I passed ${code} with a B.` })),
   { role: "user", content: "What do I still need to graduate?" },
 ]);
 assert.ok(cybersecurityAudit?.courseGroups.some(({ requirementType }) => requirementType === "ONE_OF_GROUP"),
@@ -1362,8 +1369,9 @@ for (const programId of ["cybersecurity", "data-science-and-artificial-intellige
     }
   }
 }
-assert.equal(getProgramCurriculum("petroleum-engineering", 2022)?.curriculum.totalCredits, 147, "the 2022 Petroleum Engineering cohort retains its separately published 147-credit plan");
-const petroleum2022 = getProgramCurriculum("petroleum-engineering", 2022)?.curriculum;
+assert.equal(getProgramCurriculum("petroleum-engineering", 2022), null,
+  "overlapping Petroleum Engineering 'cohort onwards' source labels do not auto-assign an individual cohort");
+const petroleum2022 = getPublishedCurriculumVersion("petroleum-engineering", "petroleum-engineering-2022-plan-147")?.curriculum;
 assert.ok(petroleum2022);
 assert.equal(petroleum2022.requirements.length, 1, "the older Petroleum plan preserves the two separately published entry sequences");
 assert.equal(modeledCreditTotal(petroleum2022.requirements), 147,
@@ -1394,26 +1402,21 @@ for (const [index, option] of petroleum2022Pathways.options.entries()) {
 }
 assert.match(petroleum2022.limitations.join(" "), /MATH1110\/130.*ISLM100\/ISLM101/);
 assert.match(petroleum2022.limitations.join(" "), /Spring-entry semester 7.*no course-type label/);
-for (const entrySemester of ["Fall", "Spring"] as const) {
-  const petroleum2022EntryAnswer = assessProgramRequirementsConversation([
-    { role: "user", content: `What courses are listed in Petroleum Engineering for ${entrySemester} 2022 entry?` },
-  ]);
-  assert.equal(petroleum2022EntryAnswer?.entrySemester, entrySemester.toLowerCase());
-  const rendered = renderProgramRequirementsAssessment(petroleum2022EntryAnswer!, "en");
-  assert.match(rendered, new RegExp(`showing the ${entrySemester.toLowerCase()} entry option`));
-  assert.match(rendered, new RegExp(`Semester 1 \\(${entrySemester}\\)`));
-  assert.doesNotMatch(rendered, new RegExp(`- ${entrySemester === "Fall" ? "Spring" : "Fall"} entry \\(147 credits\\)`),
-    `an explicitly stated ${entrySemester} 2022 entry must not include the opposite semester sequence`);
-  assert.match(rendered, /PETE495, 15 credits/);
+assert.equal(getProgramCurriculum("petroleum-engineering", 2022), null,
+  "conflicting 'cohort onwards' labels do not silently assign the 2022 plan by year");
+for (const entrySemester of ["fall", "spring"] as const) {
+  const sourceRequirements = getPublishedCurriculumVersion("petroleum-engineering", "petroleum-engineering-2022-plan-147")?.curriculum.requirements[0];
+  assert.ok(sourceRequirements?.type === "PATHWAY_CHOICE");
+  const sourceEntryOption = sourceRequirements.options.find((option) => option.id === `${entrySemester}-entry`);
+  assert.ok(sourceEntryOption, `the published 2022 ${entrySemester}-entry schedule remains available as source evidence`);
+  assert.match(sourceEntryOption.requirements?.map((item) => item.name).join(" ") ?? "", /Semester 1/);
 }
 const petroleum2022UnspecifiedEntry = assessProgramRequirementsConversation([
   { role: "user", content: "What courses are listed in the Petroleum Engineering 2022 cohort model plan?" },
 ]);
-const petroleum2022UnspecifiedRendered = renderProgramRequirementsAssessment(petroleum2022UnspecifiedEntry!, "en");
-assert.match(petroleum2022UnspecifiedRendered, /Fall entry.*Spring entry/s,
-  "without an entry term, show both separate pathways rather than silently selecting one");
-assert.equal(getProgramCurriculum("petroleum-engineering", 2023)?.curriculum.totalCredits, 132, "the 2023–2024 Petroleum model plan totals 132 credits");
-const petroleum2023 = getProgramCurriculum("petroleum-engineering", 2023)?.curriculum;
+assert.equal(petroleum2022UnspecifiedEntry?.curriculum, null,
+  "a year mention does not resolve the overlapping Petroleum source scopes");
+const petroleum2023 = getPublishedCurriculumVersion("petroleum-engineering", "petroleum-engineering-2023-plan-132")?.curriculum;
 assert.ok(petroleum2023);
 assert.equal(petroleum2023.requirements.length, 5,
   "the 2023–2024 plan models named required courses, elective credit blocks, and both internships");
@@ -1426,16 +1429,13 @@ assert.deepEqual(petroleum2023Required?.type === "REQUIRED_COURSE_SET"
 const petroleum2023Answer = assessProgramRequirementsConversation([
   { role: "user", content: "I entered Petroleum Engineering in Fall 2023. What courses are required for my degree?" },
 ]);
-assert.equal(petroleum2023Answer?.curriculum?.id, "petroleum-engineering-2023-plan-132");
-assert.match(renderProgramRequirementsAssessment(petroleum2023Answer!, "en"), /PETE305/);
-assert.match(renderProgramRequirementsAssessment(petroleum2023Answer!, "en"), /three 3-credit major-elective slots/);
+assert.equal(petroleum2023Answer?.curriculum, null,
+  "entry term cannot resolve the overlapping official 'onwards' cohort labels by itself");
 assert.match(petroleum2023.limitations.join(" "), /semester order/,
   "the combined Fall/Spring model discloses that semester placement is not represented");
-assert.equal(getProgramCurriculum("petroleum-engineering", 2023)?.curriculum.creditBuckets, undefined,
+assert.equal(petroleum2023.creditBuckets, undefined,
   "do not apply unverified later credit-category splits to the 2023–2024 plan");
-assert.equal(getProgramCurriculum("petroleum-engineering", 2025)?.curriculum.id, "petroleum-engineering-2025-plan-132",
-  "the separately published 2025–2026 Petroleum plan is selected for its cohort");
-const petroleum2025 = getProgramCurriculum("petroleum-engineering", 2025)?.curriculum;
+const petroleum2025 = getPublishedCurriculumVersion("petroleum-engineering", "petroleum-engineering-2025-plan-132")?.curriculum;
 assert.ok(petroleum2025);
 assert.equal(petroleum2025.requirements.length, 5,
   "the 2025–2026 plan has its own source-backed course set, General Education block, major-elective block and internships");
@@ -1445,14 +1445,10 @@ const petroleum2025Required = petroleum2025.requirements.find(({ id }) => id ===
 assert.deepEqual(petroleum2025Required?.type === "REQUIRED_COURSE_SET" ? petroleum2025Required.courseCodes.filter((code) => ["MATH130", "MATH135", "MATH105", "MATH110", "MATH210"].includes(code)) : [],
   ["MATH130", "MATH135"], "the 2025–2026 math sequence remains separate from both the old 2023–2024 and new 2026–2027 versions");
 const petroleum2025Answer = assessProgramRequirementsConversation([{ role: "user", content: "I entered Petroleum Engineering in Fall 2025. What courses are required for my degree?" }]);
-assert.equal(petroleum2025Answer?.curriculum?.id, "petroleum-engineering-2025-plan-132");
-const petroleum2025AnswerText = renderProgramRequirementsAssessment(petroleum2025Answer!, "en");
-assert.match(petroleum2025AnswerText, /MATH130/);
-assert.match(petroleum2025AnswerText, /do not substitute the separate MATH105\/MATH110\/MATH210 sequence/,
-  "a student-facing 2025 answer warns that the separately published 2026 math sequence does not apply");
-const petroleum2026 = getProgramCurriculum("petroleum-engineering", 2026)?.curriculum;
-assert.equal(petroleum2026?.id, "petroleum-engineering-2026-plan-132",
-  "the separately published 2026–2027 Petroleum plan is selected for its cohort");
+assert.equal(petroleum2025Answer?.curriculum, null,
+  "the explicitly named Fall term still cannot resolve the overlapping cohort-onwards labels");
+const petroleum2026 = getPublishedCurriculumVersion("petroleum-engineering", "petroleum-engineering-2026-plan-132")?.curriculum;
+assert.equal(petroleum2026?.id, "petroleum-engineering-2026-plan-132");
 assert.equal(petroleum2026?.totalCredits, 132);
 const petroleum2026College = petroleum2026?.requirements.find(({ id }) => id === "petroleum-college");
 assert.deepEqual(petroleum2026College?.type === "REQUIRED_COURSE_SET"
@@ -1848,16 +1844,18 @@ assert.ok(computerElectives?.courseCodes.includes("CENG532"));
 assert.ok(computerElectives?.courseCodes.includes("CENG580"));
 assert.equal(getProgramCurriculum("bsc-computer-engineering", 2022), null,
   "overlapping official 144-credit plans with different course sequences must not be assigned to a cohort by year alone");
-const computerEngineering2026 = getProgramCurriculum("bsc-computer-engineering", 2026);
-assert.ok(computerEngineering2026, "the official Fall-entry 2025–2026 plan establishes applicability when 2026 is interpreted as a fall-entry cohort year");
+assert.equal(getProgramCurriculum("bsc-computer-engineering", 2026), null,
+  "year alone does not assign the Fall-entry 2025-2026 Computer Engineering plan");
+const computerEngineering2026 = fallEntryCurriculumForYear("bsc-computer-engineering", 2026);
+assert.ok(computerEngineering2026, "an explicit Fall-entry lookup finds the published 2025-2026 model");
 assert.equal(computerEngineering2026.curriculum.totalCredits, 131);
 assert.equal(computerEngineering2026.curriculum.effectiveFrom, "2025-08-01");
 assert.match(computerEngineering2026.curriculum.cohortLabel, /Fall-entry cohorts from 2025–2026 onward/u);
 assert.ok(computerEngineering2026.curriculum.limitations.some((item) => /does not establish Spring-entry applicability/u.test(item)));
 assert.ok(computerEngineering2026.curriculum.limitations.some((item) => /current Computer Engineering catalog identifies.*ITBP496.*model-plan PDF labels.*ITBP495/u.test(item)),
   "Computer Engineering internship code discrepancy must remain explicit in the modeled curriculum");
-const cybersecurity2026 = getProgramCurriculum("cybersecurity", 2026);
-assert.ok(cybersecurity2026, "the official 2026-2027 cohort plan establishes the Fall 2026 Cybersecurity curriculum");
+const cybersecurity2026 = fallEntryCurriculumForYear("cybersecurity", 2026);
+assert.ok(cybersecurity2026, "an explicit Fall-entry lookup finds the published 2026-2027 Cybersecurity model");
 assert.equal(cybersecurity2026.curriculum.totalCredits, 120);
 assert.equal(cybersecurity2026.curriculum.effectiveFrom, "2026-08-01");
 const computerEngineering2022Requirements = assessProgramRequirementsConversation([

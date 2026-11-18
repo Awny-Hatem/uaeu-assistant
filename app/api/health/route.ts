@@ -31,6 +31,8 @@ export async function GET() {
   const programCatalog = loadUndergraduateProgramCatalog();
   const curriculumVersions = listAcademicPrograms().flatMap((program) => program.curriculumVersions);
   const explicitlyUnresolvedCohortMappings = curriculumVersions.filter((version) => version.cohortMapping === "unresolved").length;
+  const explicitlyVerifiedCohortMappings = curriculumVersions.filter((version) => version.cohortMapping === "verified").length;
+  const versionsWithoutApplicabilityReview = curriculumVersions.filter((version) => !version.cohortMapping).length;
   const courseCatalog = loadOfficialCourseCatalog();
   const relationCourses = courseCatalog?.courses.filter((course) => course.prerequisiteItems.length || course.corequisiteItems.length || course.preCorequisiteItems.length) ?? [];
   const structuredRelationCount = relationCourses.filter((course) => parseCatalogPrerequisiteExpression(course)).length;
@@ -83,7 +85,8 @@ export async function GET() {
       cohortApplicability: {
         curriculumVersions: curriculumVersions.length,
         explicitlyUnresolvedMappings: explicitlyUnresolvedCohortMappings,
-        versionsWithoutUnresolvedFlag: curriculumVersions.length - explicitlyUnresolvedCohortMappings,
+        explicitlyVerifiedMappings: explicitlyVerifiedCohortMappings,
+        versionsWithoutApplicabilityReview,
       },
     },
     courseCatalog: {
