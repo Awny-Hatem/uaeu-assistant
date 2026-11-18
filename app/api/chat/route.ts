@@ -602,6 +602,18 @@ function programOnlyFollowUp(current: string, prior: ChatMessage[]): string | nu
   return `${previousQuestion} (my program: ${text})`;
 }
 
+/** "وما هو الحد الأدنى للتقدير؟" / "And the minimum grade?" right after a course or
+ * program question: carry that question's course codes or program as context. */
+function shortFollowUpQuery(messages: ChatMessage[], latest: string): string | null {
+  const words = latest.trim().split(/\s+/u).length;
+  if (words > 8 || courseCodes(latest).length || namesAProgram(latest)) return null;
+  if (!/^(?:and\b|what about|how about|و|طيب|طب|وش|وما|وكم|وهل)/iu.test(latest.trim())) return null;
+  const previous = [...messages.slice(0, -1)].reverse().find((message) => message.role === "user")?.content ?? "";
+  const codes = courseCodes(previous);
+  if (codes.length) return `${latest} (${codes.join(", ")})`;
+  return namesAProgram(previous) ? `${latest} (${previous})` : null;
+}
+
 function handoffContent(
   reason: EscalationReason,
   locale: "ar" | "en",
@@ -1080,7 +1092,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // A message that already matches a reviewed record on its own is not a follow-up.
   const corpusContext = !resolution.ambiguous && !resolution.usedContext && (matchFaq(latest)?.score ?? 0) < 1000 ? corpusFollowUp(sanitized, latest) : null;
   if (corpusContext) resolution = { ...resolution, usedContext: !corpusContext.ambiguous, ambiguous: corpusContext.ambiguous, needsClarification: corpusContext.ambiguous, candidates: corpusContext.labels.map(label => ({ key: label, label, origin: "previous user request" })) };
-  const routingQuery = corpusContext?.query ?? buildRoutingQuery(sanitized, latest);
+  const routingQuery = corpusContext?.query ?? (resolution.usedContext ? null : shortFollowUpQuery(sanitized, latest)) ?? buildRoutingQuery(sanitized, latest);
 
   const tuitionCostRequest = /\b(?:tuition|tuition fee|tuition cost|tuition rate|program cost|education cost)\b/iu.test(latest) &&
     /\b(?:cost|how much|price|rate|fee)\b/iu.test(latest);
