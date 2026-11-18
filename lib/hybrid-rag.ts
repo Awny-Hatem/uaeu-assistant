@@ -178,6 +178,10 @@ export async function hybridRetrieve(query: string, topK = 8, deadlineAt?: numbe
   const semesterCandidates=firstSemester&&!targets.length?new Set((store.db.prepare('SELECT id FROM chunk_fts WHERE chunk_fts MATCH ?').all('{heading text}: ("first semester" OR "semester 1" OR "semester one" OR semester1 OR semesterone OR "الفصل الاول"* OR "اول فصل"*)') as {id:string}[]).map(row=>row.id)):null;
   const allowed = (c: Chunk) => {
     if (!historicalRequest && c.temporal === "historical") return false;
+    // Time-bound operational documents (registration programmes, exam keys and
+    // schedules, calendars, fee sheets) from past academic years are not current
+    // guidance; use them only when the student asks about that year.
+    if (!historicalRequest && staleOperationalSource(`${c.url} ${c.title ?? ""}`)) return false;
     // Apply cheap ownership/date gates before reading or normalizing bodies.
     // A normal degree query must not normalize every paragraph in the corpus.
     if (targets.length && courseRule && !targets.includes(c.courseCode)) return false;
@@ -380,4 +384,12 @@ export function corpusFollowUp(messages: {role:string;content:string}[], latest:
   if(labels.length>1)return {query:latest,labels,ambiguous:true};
   const scope=understandQuery(previous.content);
   return {query:`${latest}\nProgram context from the previous user request: ${labels[0]}; ${scope.years.join(' ')} ${scope.terms.join(' ')}.`,labels,ambiguous:false};
+}
+
+const OPERATIONAL_DOC = /registration[_\s-]?program|final[_\s-]?exams?|exams?[_\s-]?(?:schedule|key|timetable)|class[_\s-]?schedule|timetable|calendar|fees?|rates|tuition|refund|orientation|faq|summer|admission|guide/iu;
+/** An operational document whose newest year is before the 2025–26 academic year. */
+export function staleOperationalSource(text: string, currentAcademicYearStart = 2025): boolean {
+  if (!OPERATIONAL_DOC.test(text)) return false;
+  const years = [...text.matchAll(/(?<!\d)(20[0-4]\d)/gu)].map((m) => Number(m[1]));
+  return years.length > 0 && Math.max(...years) < currentAcademicYearStart;
 }

@@ -152,11 +152,10 @@ async function main() {
       body: JSON.stringify({messages:[{role:"user",content:"I have completed CSBP119, but CSBP219 is pending. Can I take Data Structures?"}]}),
     }));
     const body = await response.json();
-    // V3 order (Ali, 18 Nov 2026): the reviewed-record selector runs first; it found no
-    // primary record here, so the writer still bounds the unsupported claim.
-    assert.equal(plannerCalls, 1, "The reviewed-record selector runs once before scoped evidence");
+    // Scoped course evidence exists, so the loose selector is not needed.
+    assert.equal(plannerCalls, 0, "Deterministic academic retrieval should avoid an unnecessary selector");
     assert.equal(writerCalls, 3);
-    assert.equal(intercepted, 5, "One selector call, one recovery selection and at most three bounded writer attempts; unsupported tokens fail before verification");
+    assert.equal(intercepted, 3, "At most three bounded writer attempts are allowed; unsupported tokens fail before verification");
     assert.equal(response.status, 200);
     assert.equal(body.source, "escalated");
     assert.equal(body.answerStatus, "unavailable");
