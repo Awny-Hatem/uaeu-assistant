@@ -144,3 +144,5 @@ Awny's main had no new commits; Ali chose to merge feature/v3-course-answer-scop
   memory, browser examiner/memory) under budget rules; regenerate test-cases/fady-google-doc-entries.txt and update
   cases 2, 3, 4, 6 in the shared log (answers changed) — keep one END OF TESTING at the end.
 - Port 3000 (Ali's manual testing) serves the KE checkout build at cc278fb.
+
+- fix3 result: phrasing 329/35/35 (target ~378; still below — investigate remaining canonical/snapshot/grounding cases before final suites); Fady graded 25/25 (check why 25 not 35 entries).
