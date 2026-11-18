@@ -10,7 +10,13 @@ async function converse(id, turns) {
   const messages = []; let cookie = ''; const outTurns = [];
   for (const q of turns) {
     messages.push({ role: 'user', content: q });
-    const r = await fetch(`${base}/api/chat`, { method: 'POST', headers: { 'content-type': 'application/json', origin: base, 'x-forwarded-for': `10.77.${Math.floor(ip / 250)}.${ip++ % 250}`, ...(cookie ? { cookie } : {}) }, body: JSON.stringify({ messages, locale: 'auto' }), signal: AbortSignal.timeout(90000) });
+    let r;
+    for (let attempt = 0; ; attempt++) {
+    r = await fetch(`${base}/api/chat`, { method: 'POST', headers: { 'content-type': 'application/json', origin: base, 'x-forwarded-for': `10.77.${Math.floor(ip / 250)}.${ip++ % 250}`, ...(cookie ? { cookie } : {}) }, body: JSON.stringify({ messages, locale: 'auto' }), signal: AbortSignal.timeout(90000) });
+    // The app's own per-client limiter (30/min) answers 429 without a provider error: wait and retry.
+    if (r.status === 429 && attempt < 3) { const body = await r.clone().text(); if (!/quota|credit|insufficient/i.test(body)) { await new Promise((ok) => setTimeout(ok, 65000)); continue; } }
+    break;
+    }
     const set = r.headers.getSetCookie?.() ?? []; if (set.length) cookie = set.map((c) => c.split(';')[0]).join('; ');
     const d = await r.json().catch(() => ({}));
     if (r.status === 429 || /quota|credit|insufficient/i.test(JSON.stringify(d.error ?? ''))) throw Error(`STOP provider/budget: ${r.status}`);
