@@ -1,0 +1,80 @@
+{
+  "input": "test-cases/fady-before.json",
+  "pass": 3,
+  "total": 10,
+  "graded": [
+    {
+      "id": "FADY01",
+      "verdict": "fail",
+      "issues": [
+        "missing /admitted|التحقت/i",
+        "missing /study plan|الخطة الدراسية/i",
+        "missing /Degree Works/i",
+        "missing /2\\.00/"
+      ]
+    },
+    {
+      "id": "FADY02",
+      "verdict": "fail",
+      "issues": [
+        "missing /CLOSED SECTION override/i",
+        "missing /College Advising Unit|وحدة الإرشاد/i",
+        "missing /add\\/drop|الحذف والإضافة|Register for Classes/i"
+      ]
+    },
+    {
+      "id": "FADY03",
+      "verdict": "fail",
+      "issues": [
+        "missing /Register for Classes/i",
+        "missing /View Sections/i"
+      ]
+    },
+    {
+      "id": "FADY04",
+      "verdict": "fail",
+      "issues": [
+        "turn 3: missing /Degree Works/i",
+        "turn 3: missing /advisor|مرشد/i",
+        "repeated the same clarifying question (loop)"
+      ]
+    },
+    {
+      "id": "FADY05",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "FADY06",
+      "verdict": "fail",
+      "issues": [
+        "missing /College Advising Unit|وحدة الإرشاد/i"
+      ]
+    },
+    {
+      "id": "FADY07",
+      "verdict": "fail",
+      "issues": [
+        "missing /\\|\\s*A\\s*\\|/",
+        "missing /3\\.12/"
+      ]
+    },
+    {
+      "id": "FADY08",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "FADY09",
+      "verdict": "pass",
+      "issues": []
+    },
+    {
+      "id": "FADY10",
+      "verdict": "fail",
+      "issues": [
+        "missing /120/"
+      ]
+    }
+  ]
+}

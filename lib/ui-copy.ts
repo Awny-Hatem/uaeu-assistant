@@ -22,7 +22,7 @@ export const uiCopy = {
     historyNotice: "Conversation is session-only by default. Turn on saving in your profile to keep it on this device; account history may also be saved when enabled. Avoid sharing passwords or sensitive personal records.",
     contact: "Contact UAEU staff", remaining: "questions remaining", used: "questions used", left: "left", of: "of",
     studentDocuments: "Student documents", academicDates: "Academic dates", library: "Library help", staff: "Talk to staff",
-    conversation: "Conversation", faq: "Official-source answer", rag: "Source-based answer", web: "External grounding", guide: "Guided service", clarify: "More detail needed", handoff: "Staff assistance", urgent: "Urgent assistance", error: "System notice",
+    conversation: "Conversation", faq: "Official-source answer", rag: "Source-based answer", web: "External grounding", guide: "Guided service", clarify: "Quick question", handoff: "Staff assistance", urgent: "Urgent assistance", error: "System notice",
     skipToConversation: "Skip to conversation", assistantSettings: "Assistant settings and account", yourMessage: "Your message", assistantMessage: "Assistant message",
   },
   ar: {
@@ -43,6 +43,6 @@ export const uiCopy = {
     historyNotice: "تظل المحادثة مؤقتة حتى إغلاق الصفحة افتراضياً. فعّل الحفظ من ملفك الشخصي للاحتفاظ بها على هذا الجهاز؛ وقد يُحفظ سجل الحساب أيضاً إذا كان مفعّلاً. تجنب مشاركة كلمات المرور أو السجلات الشخصية الحساسة.",
     contact: "التواصل مع موظفي الجامعة", remaining: "أسئلة متبقية", used: "أسئلة مستخدمة", left: "متبقية", of: "من",
     studentDocuments: "وثائق الطلاب", academicDates: "المواعيد الأكاديمية", library: "مساعدة المكتبة", staff: "التحدث مع موظف",
-    conversation: "محادثة", faq: "إجابة بمصدر رسمي", rag: "إجابة من المصادر", web: "مصادر خارجية", guide: "خطوات الخدمة", clarify: "نحتاج تفاصيل إضافية", handoff: "مساعدة الموظفين", urgent: "مساعدة عاجلة", error: "إشعار النظام",
+    conversation: "محادثة", faq: "إجابة بمصدر رسمي", rag: "إجابة من المصادر", web: "مصادر خارجية", guide: "خطوات الخدمة", clarify: "سؤال سريع", handoff: "مساعدة الموظفين", urgent: "مساعدة عاجلة", error: "إشعار النظام",
   },
 };

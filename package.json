@@ -57,7 +57,8 @@
     "test:observed-source-scope": "tsx tests/observed-source-scope-checks.ts && tsx tests/source-scope-v40-checks.ts && tsx tests/academic-service-completeness-checks.ts",
     "test:knowledge": "tsx tests/knowledge-expansion-checks.ts && tsx tests/observed-retrieval-checks.ts && tsx tests/source-claim-grouping-checks.ts",
     "eval:review-sources": "tsx evals/review-primary-sources.mjs",
-    "test:profiles": "tsx tests/academic-profile-checks.ts && tsx tests/profile-power-regressions.ts"
+    "test:profiles": "tsx tests/academic-profile-checks.ts && tsx tests/profile-power-regressions.ts",
+    "eval:fady": "node scripts/profiles/run-fady.mjs ${FADY_BASE:-http://127.0.0.1:3012} test-cases/fady-latest.json --variants && node scripts/profiles/grade-fady.mjs test-cases/fady-latest.json"
   },
   "dependencies": {
     "@google/genai": "^1.47.0",

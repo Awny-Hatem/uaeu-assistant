@@ -14,7 +14,7 @@ type Answer = {
 };
 const source = (p: StudyPlan): Citation => ({ title: `${p.program} — ${p.cohortStart} ${p.entrySeason}-entry model study plan`, url: p.sourceUrl + '#page=' + p.page, lastVerified: p.sourceFetchedAt.slice(0, 10) });
 const codes = (s: string) => [...s.matchAll(/\b([A-Z]{2,6})[ -]?(\d{3,4})\b/giu)].map(m => (m[1] + m[2]).toUpperCase());
-const NEXT = /\bnext (?:semester|term)\b|الفصل (?:القادم|الجاي)|الترم الجاي/iu;
+const NEXT = /\bnext (?:semester|term|sem)\b|الفصل (?:القادم|الجاي)|الترم الجاي|الفصل الياي/iu;
 const PERSONAL = /\b(?:my|i|me|can i|should i)\b|لي|خطتي|تخصصي|اقدر|أقدر|آخذ|اخذ|ساعاتي|تخرجي/iu;
 export function studyContext(history: Turn[]) {
   let program: string | null = null, year: number | null = null, semester: 1 | 2 | null = null, cohort: number | null = null, entry: 'Fall' | 'Spring' | null = null;
@@ -118,7 +118,7 @@ export function academicAnswer(q: string, history: Turn[], profile: AcademicProf
     if (personal)
       return personal;
   }
-  const next = NEXT.test(q) && !codes(q).length && /\b(?:should|take|study|plan)\b|خطة|اخذ|آخذ|ادرس|أدرس|موادي/iu.test(q), positionOnly = /^year\s+(?:one|two|three|four|[1-8])\s+(?:term|semester)\s+(?:one|two|[12])[?.!\s]*$/iu.test(q), pending = history.slice(-6).some(t => t.role === 'user' && NEXT.test(t.content));
+  const next = NEXT.test(q) && !codes(q).length && /\b(?:should|take|study|plan|register)\b|خطة|اخذ|آخذ|ادرس|أدرس|موادي|اسجل|أسجل|المواد اللي/iu.test(q), positionOnly = /^year\s+(?:one|two|three|four|[1-8])\s+(?:term|semester)\s+(?:one|two|[12])[?.!\s]*$/iu.test(q), pending = history.slice(-6).some(t => t.role === 'user' && NEXT.test(t.content));
   const cohortOnly = /^(?:Fall|Spring|خريف|ربيع)\s+20\d{2}[.!؟?]*$/iu.test(q);
   if (!next && !(pending && (positionOnly || cohortOnly || programsMentioned(q).length === 1)))
     return null;
@@ -134,9 +134,22 @@ export function academicAnswer(q: string, history: Turn[], profile: AcademicProf
     }
   }
   if (!context.program)
-    return { content: ar ? 'ما تخصصك في جامعة الإمارات؟' : 'What is your UAEU program?', citations: [] };
-  if (!context.year || !context.semester)
-    return { content: ar ? 'في أي سنة وفصل دراسي أنت الآن في خطتك؟' : 'Which year and semester of your study plan are you in now?', citations: [] };
+    return { content: ar ? 'ما برنامجك (تخصصك) في جامعة الإمارات؟ لكل برنامج خطة دراسية خاصة به.' : 'Which UAEU program are you in? Each program has its own study plan.', citations: [] };
+  if (!context.year || !context.semester) {
+    // Ask once, with useful general guidance and the program's newest plan; if the
+    // student does not give the position, answer generally instead of asking again.
+    const plans = studyPlans().filter(x => x.program === context.program).sort((x, y) => y.cohortStart - x.cohortStart || (x.entrySeason === 'Fall' ? -1 : 1));
+    const latest = plans[0];
+    const planLink = latest ? (ar ? `[خطة ${latest.program} لدفعة ${latest.cohortStart} ${latest.entrySeason === 'Fall' ? 'خريف' : 'ربيع'}](${latest.sourceUrl})` : `[${latest.program} — ${latest.cohortStart} ${latest.entrySeason} plan](${latest.sourceUrl})`) : '';
+    const steps = ar
+      ? `كيف تحدد مواد الفصل القادم:\n1. افتح الخطة الدراسية لبرنامجك حسب سنة التحاقك${planLink ? ` (أحدث خطة منشورة: ${planLink})` : ''}؛ مواد الفصل التالي فيها هي الأساس.\n2. راجع Degree Works (التدقيق الأكاديمي) لمعرفة ما أنجزته وما تبقى.\n3. تأكد من اجتياز المتطلبات السابقة لكل مادة.\n4. يضبط مرشدك الأكاديمي خطة الفصل القادم في Degree Works على Active & Locked قبل التسجيل، فراجعه.`
+      : `How to decide next semester's courses:\n1. Open your program's study plan for your admission year${planLink ? ` (newest published: ${planLink})` : ''}; the courses listed for your next semester are the default.\n2. Check Degree Works (your degree audit) for what you have completed and what is left.\n3. Make sure you have passed each course's prerequisites.\n4. Your academic advisor sets next term's Degree Works plan to Active & Locked before registration, so confirm with them.`;
+    const askedBefore = history.slice(-4).some(t => t.role === 'assistant' && /are you in now|أنت الآن|current year and semester|سنتك وفصلك الحالي/iu.test(t.content));
+    const citations = latest ? [source(latest)] : [];
+    if (askedBefore) return { content: steps, citations };
+    const ask = ar ? 'في أي سنة وفصل أنت الآن في خطتك (مثل السنة 2، الفصل 1)، ومتى التحقت بالجامعة (مثل خريف 2024)؟ سأذكر لك المواد بالضبط.' : 'Which year and semester of your study plan are you in now (e.g. Year 2, Semester 1), and when were you admitted (e.g. Fall 2024)? Then I can list the exact courses.';
+    return { content: `${ask}\n\n${steps}`, citations };
+  }
   const previousAssistant = [...history].reverse().find(t => t.role === 'assistant')?.content ?? '';
   const answeringCurrentPosition = positionOnly && /are you in now|أنت الآن/iu.test(previousAssistant);
   const earlierPositionIndex = history.findLastIndex(t => t.role === 'user' && /^year\s+(?:one|two|three|four|[1-8])\s+(?:term|semester)\s+(?:one|two|[12])[?.!\s]*$/iu.test(t.content));
