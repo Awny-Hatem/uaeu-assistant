@@ -154,3 +154,16 @@ Awny's main had no new commits; Ali chose to merge feature/v3-course-answer-scop
 - Regression 1 and 2 timed out and ~80 answers were OpenAI network errors (OPENAI_NETWORK_ERROR); regression 3: 522 / 47 / 24.
 - Fixes since that build: pre-merge rewrite method, scoped first selector, short follow-up context carry (commits 993dbf1, 613791c; KE 47d3241, 8dd568e).
 - Recheck RUNNING: scratchpad final6.sh fills regression 1–2, reruns non-correct examiner/phrasing/regressions, full memory (labels *-v3final, memory-v3final2).
+- Recheck done (newest build 613791c; reruns of non-correct cases):
+  | Suite | Correct | Partial (citation-only) | Incorrect | Pre-merge |
+  |---|---|---|---|---|
+  | Examiner 600 | 547 | 45 (20) | 8 | 565 / 28 / 7 |
+  | Phrasing 399 | 370 | 24 (14) | 5 | 378 / 15 / 6 |
+  | Regression 1 (594) | 535 | 37 (9) | 22 | 580 / 8 / 6 |
+  | Regression 2 (595) | 537 | 42 (12) | 16 | 581 / 6 / 8 |
+  | Regression 3 (593) | 522 | 47 (5) | 24 | (only 134 run before) |
+  | Memory 94 | 90 | 2 | 2 | 92 / 2 / 0 |
+  | Browser examiner 100 | 96 | 4 | 0 | — |
+  Regression 3 rerun reused saved answers (0.1 s median); treat it as not re-measured.
+- NEXT: the regressions still trail pre-merge by ~40–45 per 600 (V3 handlers answering academic questions); analyse
+  regression 1–3 non-correct cases by stateLabel as done for phrasing, fix, rerun non-correct only.
