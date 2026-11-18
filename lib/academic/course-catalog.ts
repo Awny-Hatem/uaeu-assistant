@@ -281,7 +281,8 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     /\b(?:eligible to (?:take|enroll|register)|meet (?:the )?prerequisites?)\b/u.test(normalized);
   const asksProgramDecision = /\b(?:will this count|counts? toward|degree requirement|major requirement|graduate|my degree|study plan|cohort|waiver|exception)\b/u.test(normalized);
   const asksWhatToCompleteBeforeCourse = Boolean(code) &&
-    /\b(?:what|which)\s+(?:must|should|do)\s+i\s+(?:complete|finish|pass|take)\s+before\b/u.test(normalized);
+    (/\b(?:what|which)\s+(?:must|should|do)\s+i\s+(?:complete|finish|pass|take)\s+before\b/u.test(normalized) ||
+      /\b(?:what|which)\s+(?:classes|courses)\s+do\s+i\s+need\s+to\s+(?:pass|complete|finish|take)\s+before\b/u.test(normalized));
   const arabicNormalized = question.normalize("NFC").replace(/[\u064B-\u065F\u0670]/gu, "").replace(/[أإآ]/gu, "ا");
   const asksArabicPrerequisiteFacts = /متطلب.{0,30}(?:سابق|مصاحب|منشور|مذكور)|حالة\s+المتطلب/u.test(arabicNormalized);
   const asksArabicCourseFact = /(?:متطلبات\s+(?:مادة|مقرر)|عدد\s+ال?ساعات?|كم\s+(?:(?:عدد\s+)?ال?)?(?:ساعات?|ساعة)|ساعاتها|متطلبا?\s+(?:سابقا?|مصاحبا?)|المتطلبات?\s+(?:السابقة|المصاحبة)|كيف\s+يسم[يى]|(?:اسم|عنوان)\s+(?:ال?مقرر|ال?مادة)|(?:الاسم|العنوان)\s+المنشور\s+ل(?:لمقرر|لمادة)|المتطلب\s+(?:السابق|المصاحب))/u.test(arabicNormalized);

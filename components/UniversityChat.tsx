@@ -87,6 +87,12 @@ const GUEST_STATE_KEY = "uaeu-chatbot-guest-v4";
 const ACCOUNT_USAGE_KEY = "uaeu-chatbot-account-usage-v1";
 const ACCOUNT_MESSAGES_KEY = "uaeu-chatbot-account-messages-v1";
 const ACCESSIBILITY_TEXT_SCALE_KEY = "uaeu-chatbot-text-scale-v1";
+const HISTORY_PREFERENCE_KEY = "uaeu-chatbot-save-history-v1";
+
+function historyPersistenceEnabled(): boolean {
+  try { return localStorage.getItem(HISTORY_PREFERENCE_KEY) === "enabled"; }
+  catch { return false; }
+}
 
 const SUGGESTIONS = [
   {
@@ -198,7 +204,11 @@ function readGuestState(): { messages: UiMessage[]; questionsUsed: number } {
       ? Math.max(0, Number(parsed.questionsUsed))
       : 0;
 
-    return { messages: sanitizeStoredMessages(parsed.messages), questionsUsed };
+    const messages = historyPersistenceEnabled() ? sanitizeStoredMessages(parsed.messages) : [];
+    if (!historyPersistenceEnabled() && Array.isArray(parsed.messages)) {
+      writeGuestState([], questionsUsed);
+    }
+    return { messages, questionsUsed };
   } catch {
     return { messages: [], questionsUsed: 0 };
   }
@@ -211,7 +221,7 @@ function writeGuestState(messages: UiMessage[], questionsUsed: number) {
     localStorage.setItem(
       GUEST_STATE_KEY,
       JSON.stringify({
-        messages: messages.slice(-80),
+        messages: historyPersistenceEnabled() ? messages.slice(-80) : [],
         questionsUsed,
         updatedAt: Date.now(),
       }),
@@ -225,6 +235,15 @@ function readAccountMessages(userId: string): UiMessage[] {
   if (typeof window === "undefined") return [];
 
   try {
+    if (!historyPersistenceEnabled()) {
+      const raw = localStorage.getItem(ACCOUNT_MESSAGES_KEY);
+      if (raw) {
+        const parsed = JSON.parse(raw) as Record<string, unknown>;
+        delete parsed[userId];
+        localStorage.setItem(ACCOUNT_MESSAGES_KEY, JSON.stringify(parsed));
+      }
+      return [];
+    }
     const parsed = JSON.parse(localStorage.getItem(ACCOUNT_MESSAGES_KEY) || "{}") as Record<
       string,
       { messages?: unknown; cleared?: boolean }
@@ -250,7 +269,8 @@ function writeAccountMessages(userId: string, messages: UiMessage[]) {
       string,
       { messages?: UiMessage[]; updatedAt?: number; cleared?: boolean }
     >;
-    parsed[userId] = { messages: messages.slice(-80), updatedAt: Date.now(), cleared: messages.length === 0 && parsed[userId]?.cleared === true };
+    if (!historyPersistenceEnabled()) delete parsed[userId];
+    else parsed[userId] = { messages: messages.slice(-80), updatedAt: Date.now(), cleared: messages.length === 0 && parsed[userId]?.cleared === true };
     localStorage.setItem(ACCOUNT_MESSAGES_KEY, JSON.stringify(parsed));
   } catch {
     // Local account history is best effort.
@@ -385,6 +405,7 @@ export function UniversityChat() {
   const [loading, setLoading] = useState(false);
   const [banner, setBanner] = useState<string | null>(null);
   const [profileOpen, setProfileOpen] = useState(false);
+  const [saveHistory, setSaveHistory] = useState(false);
   const [guestQuestionsUsed, setGuestQuestionsUsed] = useState(0);
   const [accountQuestionsUsed, setAccountQuestionsUsed] = useState(0);
   const [activeGuide, setActiveGuide] = useState<ServiceGuide | null>(null);
@@ -402,6 +423,18 @@ export function UniversityChat() {
   const latestUserText = [...messages].reverse().find((message) => message.role === "user")?.content;
   const uiLocale = latestUserText ? textLanguage(latestUserText) : "en";
   const copy = uiCopy[uiLocale];
+
+  useEffect(() => {
+    const enabled = historyPersistenceEnabled();
+    setSaveHistory(enabled);
+    if (!enabled) {
+      try {
+        localStorage.removeItem(ACCOUNT_MESSAGES_KEY);
+        const guest = readGuestState();
+        writeGuestState([], guest.questionsUsed);
+      } catch { /* Keep session-only behavior if browser storage is unavailable. */ }
+    }
+  }, []);
 
   useEffect(() => {
     try {
@@ -461,6 +494,10 @@ export function UniversityChat() {
     setHistoryLoading(true);
     setMessages([]);
     try {
+      if (!historyPersistenceEnabled()) {
+        historyOwnerRef.current = loggedUser.id;
+        return true;
+      }
       const localMessages = readAccountMessages(loggedUser.id);
       if (localMessages.length || hasClearedAccountHistory(loggedUser.id)) {
         if (request.isCurrent()) {
@@ -596,10 +633,10 @@ export function UniversityChat() {
   }, [authLoading, guestQuestionsUsed, messages, user]);
 
   useEffect(() => {
-    if (!authLoading && !historyLoading && user && historyOwnerRef.current === user.id) {
+    if (saveHistory && !authLoading && !historyLoading && user && historyOwnerRef.current === user.id) {
       writeAccountMessages(user.id, messages);
     }
-  }, [authLoading, historyLoading, messages, user]);
+  }, [authLoading, historyLoading, messages, saveHistory, user]);
 
   useEffect(() => {
     if (user) {
@@ -731,6 +768,23 @@ export function UniversityChat() {
     request.finish();
   }
 
+  async function handleHistoryPreferenceChange(enabled: boolean) {
+    try {
+      if (enabled) localStorage.setItem(HISTORY_PREFERENCE_KEY, "enabled");
+      else {
+        localStorage.removeItem(HISTORY_PREFERENCE_KEY);
+        const guest = readGuestState();
+        writeGuestState([], guest.questionsUsed);
+        localStorage.removeItem(ACCOUNT_MESSAGES_KEY);
+        if (user) {
+          const response = await fetch("/api/history", { method: "DELETE", headers: { "x-chat-account-id": user.id } });
+          if (!response.ok) setBanner(copy.clearFailed);
+        }
+      }
+    } catch { /* Preference remains off if browser storage is unavailable. */ }
+    setSaveHistory(enabled && historyPersistenceEnabled());
+  }
+
   const incrementUsage = useCallback(() => {
     if (user) {
       const date = todayKey();
@@ -800,9 +854,11 @@ export function UniversityChat() {
         affiliation?: string;
       };
       messages: { role: Role; content: string }[];
+      persistHistory: boolean;
     } = {
       locale,
       messages: boundOutgoingMessages(nextThread.map(({ role, content }) => ({ role, content }))),
+      persistHistory: saveHistory && historyPersistenceEnabled(),
     };
 
     if (user) {
@@ -878,6 +934,7 @@ export function UniversityChat() {
   }, [
     input,
     loading,
+    saveHistory,
     historyLoading,
     locale,
     messages,
@@ -984,6 +1041,10 @@ export function UniversityChat() {
         </div>
 
         <div className="border-t border-zinc-200 p-4">
+          <label className="mb-3 flex cursor-pointer items-start gap-2 rounded-lg border border-zinc-200 p-3 text-xs text-zinc-700">
+            <input type="checkbox" checked={saveHistory} onChange={(event) => void handleHistoryPreferenceChange(event.target.checked)} className="mt-0.5 accent-[#E0182D]" />
+            <span>{copy.saveHistory}</span>
+          </label>
           {(hasUserMessages || deletionPending) && (
             <button
               type="button"
@@ -1081,6 +1142,10 @@ export function UniversityChat() {
                       {quotaRemaining} {copy.of} {quotaLimit} {copy.remaining}
                     </p>
                   </div>
+                  <label className="flex cursor-pointer items-start gap-2 border-b border-zinc-100 px-4 py-3 text-xs text-zinc-700">
+                    <input type="checkbox" checked={saveHistory} onChange={(event) => void handleHistoryPreferenceChange(event.target.checked)} className="mt-0.5 accent-[#E0182D]" />
+                    <span>{copy.saveHistory}</span>
+                  </label>
                   {(hasUserMessages || deletionPending) && (
                     <button
                       type="button"

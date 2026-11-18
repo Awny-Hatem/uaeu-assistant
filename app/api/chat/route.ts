@@ -59,6 +59,7 @@ type ChatBody = {
   messages?: ChatMessage[];
   locale?: "auto" | "ar" | "en";
   userContext?: UserContext;
+  persistHistory?: boolean;
 };
 
 type AssistantPayload = {
@@ -769,7 +770,7 @@ export async function POST(req: Request) {
       guestId = savedGuestId;
     }
   }
-  const shouldPersistServerSide = Boolean(userId && serverChatHistoryEnabled());
+  const shouldPersistServerSide = Boolean(parsedBody.persistHistory === true && userId && serverChatHistoryEnabled());
   const expectedHistoryGeneration = shouldPersistServerSide && userId ? historyGeneration(userId) : undefined;
 
   if (!Array.isArray(messages) || messages.length === 0) {

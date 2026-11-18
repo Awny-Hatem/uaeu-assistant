@@ -6,7 +6,12 @@ const guestKey = 'uaeu-chatbot-guest-v4';
 const user = { id: 'qa-account-a', username: 'QA account A', email: 'qa@example.invalid', studentType: 'Current Student', major: 'Computer Science', universityAffiliation: 'general' };
 const otherUser = { ...user, id: 'qa-account-b', username: 'QA account B' };
 const accountKey = 'uaeu-chatbot-account-messages-v1';
+const historyPreferenceKey = 'uaeu-chatbot-save-history-v1';
 const answer = { content: 'The current-student document service is free.', source: 'faq', disposition: 'answer', citations: [] };
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(key => localStorage.setItem(key, 'enabled'), historyPreferenceKey);
+});
 
 type DeferredChatWindow = typeof window & { __deferredChat: { started: boolean; bodyRead: boolean; abortObserved: boolean; release: () => void } };
 
@@ -605,6 +610,36 @@ test('canonical mode and complete generated-source audit survive local history r
     if ('claims' in payload) expect(stored.claims).toEqual(payload.claims);
     if ('evidenceIds' in payload) expect(stored.evidenceIds).toEqual(payload.evidenceIds);
   }
+});
+
+test('conversation history is session-only by default and saving requires opt-in', async ({ page }) => {
+  await page.addInitScript(key => localStorage.removeItem(key), historyPreferenceKey);
+  await guest(page);
+  let requestBody: { persistHistory?: boolean } | undefined;
+  await page.route('**/api/chat', async route => {
+    requestBody = route.request().postDataJSON();
+    await route.fulfill({ json: answer });
+  });
+  await page.goto('/');
+  await expect(page.getByRole('checkbox', { name: /save conversation on this device/i })).not.toBeChecked();
+  await submit(page, 'Do not persist this test conversation');
+  await expect(page.getByText(answer.content, { exact: true })).toBeVisible();
+  expect(requestBody?.persistHistory).toBe(false);
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}').messages?.length ?? 0, guestKey)).toBe(0);
+  await page.reload();
+  await expect(page.getByText('Do not persist this test conversation', { exact: true })).toHaveCount(0);
+  await page.getByRole('checkbox', { name: /save conversation on this device/i }).check();
+  await page.route('**/api/chat', async route => {
+    requestBody = route.request().postDataJSON();
+    await route.fulfill({ json: answer });
+  });
+  await submit(page, 'Keep this opted-in test conversation');
+  await expect(page.getByText(answer.content, { exact: true })).toBeVisible();
+  expect(requestBody?.persistHistory).toBe(true);
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}').messages?.some((message: { content: string }) => message.content === 'Keep this opted-in test conversation'), guestKey)).toBe(true);
+  await page.getByRole('checkbox', { name: /save conversation on this device/i }).uncheck();
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}').messages?.length ?? 0, guestKey)).toBe(0);
+  await expect(page.getByText('Keep this opted-in test conversation', { exact: true })).toBeVisible();
 });
 
 test('restored long Arabic history is bounded before transport', async ({ page }) => {
