@@ -1,0 +1,840 @@
+{
+  "schemaVersion": 1,
+  "label": "v3-transcript-parking-regression-6014a9a-20261111",
+  "baseUrl": "https://uaeu-assistant-88dzkwp8c-awnyhatem40-gmailcoms-projects.vercel.app",
+  "startedAt": "2026-11-11T18:11:41.428Z",
+  "fixtureSha256": "9da1503eab261e4202e01f5a95eb20d38aba462080f5278294a42ecec47c78ea",
+  "seed": 29092026,
+  "methodology": "Questions authored independently before repair results. Topic-stratified coverage with seeded random group execution order; conversational groups retain turn order. Not a statistical sample of all possible user questions and not copied from FAQ aliases. Expectations are reviewer rubrics, not asserted proof of source truth.",
+  "commit": "6014a9afeba0203e8420bd117e12f461208db459",
+  "workingTree": "M docs/V3_Implementation_Status.md\n?? docs/diagrams/\n?? maintenance-check.png\n?? reports/independent/v3-branch-phase1-20261111-2c06265.json\n?? reports/independent/v3-branch-phase1-20261111-e34abd4.json\n?? reports/independent/v3-branch-phase1-20261111.json\n?? reports/independent/v3-context-bound-followup-e34abd4.json\n?? reports/sophisticated/release-gate-20261104.json\n?? reports/sophisticated/release-gate-20261104.md",
+  "localSourceSha256": "c10f8fd3cab00f686a74de563578ce0c61791a816f67643fcd7a71b5357d4422",
+  "revisionNote": "Local checkout metadata is not proof of the revision served by a remote deployment. Compare the endpoint health build metadata separately.",
+  "captureNote": "JSON answer text is retained unchanged. Non-JSON failure bodies retain at most 1000 characters; original length and SHA256 are recorded explicitly.",
+  "health": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "6014a9afeba0203e8420bd117e12f461208db459"
+    },
+    "agent": {
+      "architecture": "v3-evidence-first",
+      "v3Enabled": true,
+      "legacySelectorBypassedForUniversityModes": true
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "academicCatalog": {
+      "status": "verified-undergraduate-degree-inventory",
+      "programs": 55,
+      "colleges": 9,
+      "verifiedAt": "2026-11-11",
+      "curriculumCoverage": {
+        "modelled": 55,
+        "legacy_model_review_required": 0,
+        "not_modelled": 0
+      },
+      "curriculumRecordsRequiringIdentityReview": 2
+    },
+    "courseCatalog": {
+      "status": "official-course-catalog-snapshot",
+      "courses": 2791,
+      "verifiedAt": "2026-11-11",
+      "entriesWithoutDescription": 1,
+      "entriesWithoutCreditValue": 1,
+      "prerequisiteEntries": 1393,
+      "corequisiteEntries": 150,
+      "preCorequisiteEntries": 62,
+      "prerequisiteParsing": {
+        "relationRecords": 1478,
+        "structuredRecords": 1475,
+        "unsupportedRecords": 3,
+        "structuredCoveragePercent": 99.8
+      },
+      "degreeApplicability": "course records do not establish program requirements"
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "4e7b88ec1039a13845dd303622e779072eb9f9163738487936dffd009c952ff1",
+      "retrieval": {
+        "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+        "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+        "embedding": "disabled",
+        "semanticCatalog": "disabled-v3-evidence-first",
+        "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "v3-orchestrator-evidence-research-verified-generation"
+      },
+      "approvedMarkdownFiles": 60,
+      "verifiedAnswers": 137,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-11T18:11:34.520Z",
+        "totalRecords": 201,
+        "domains": {
+          "admissions": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-09-29"
+          },
+          "academics": {
+            "records": 43,
+            "reviewedRecords": 43,
+            "latestVerification": "2026-11-11"
+          },
+          "registration": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "graduation": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "financial_aid": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "student_services": {
+            "records": 4,
+            "reviewedRecords": 4,
+            "latestVerification": "2026-09-29"
+          },
+          "housing": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 18,
+            "reviewedRecords": 18,
+            "latestVerification": "2026-10-06"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 59
+      },
+      "sourceEvidence": {
+        "mappedReferences": 197,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-11",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 50,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-10-06",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 4,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "b4b890befa7f196be29f93c814f74a6f6a83a046a46b8013481b6ec480ef52d8"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "mode": "real HTTP configuration",
+  "initialHealthStatus": 200,
+  "initialEndpointIdentity": {
+    "url": "https://uaeu-assistant-88dzkwp8c-awnyhatem40-gmailcoms-projects.vercel.app/api/health",
+    "revision": "6014a9afeba0203e8420bd117e12f461208db459",
+    "contentFingerprint": "4e7b88ec1039a13845dd303622e779072eb9f9163738487936dffd009c952ff1",
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "crossProviderFallback": false,
+    "retrieval": {
+      "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+      "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+      "embedding": "disabled",
+      "semanticCatalog": "disabled-v3-evidence-first",
+      "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+      "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+      "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+      "groundingIsolation": {
+        "claimsPerRequest": 1,
+        "concurrency": 4,
+        "maxClaims": 16,
+        "totalAnswerBudgetMs": 54000,
+        "routeMaxDurationSeconds": 60
+      },
+      "activePath": "v3-orchestrator-evidence-research-verified-generation"
+    },
+    "deploymentMode": "prototype"
+  },
+  "scope": "partial-diagnostic-run",
+  "selectedCaseIds": [
+    "Q005",
+    "Q006",
+    "Q069"
+  ],
+  "expectedCount": 3,
+  "completed": true,
+  "results": [
+    {
+      "id": "Q069",
+      "category": "transport",
+      "question": "How do I apply for a university parking permit?",
+      "expectation": "Give supported vehicle-access permit process and applicable documents.",
+      "executionNumber": 1,
+      "askedAt": "2026-11-11T18:11:41.541Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "How do I apply for a university parking permit?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 2911,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:11:44.452Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Campus Parking Access — Eligible Female Students from Al Ain**\n- The published UAEU vehicle-access permit applies specifically to admitted female students from Al Ain who need access to designated campus parking. UAEU does not establish this service as a general permit for every student, visitor, or employee.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "parking",
+        "evidenceIds": [
+          "guide:al-ain-female-student-campus-parking-permit"
+        ],
+        "guide": {
+          "id": "al-ain-female-student-campus-parking-permit",
+          "title": "Campus Parking Access — Eligible Female Students from Al Ain",
+          "description": "The published UAEU vehicle-access permit applies specifically to admitted female students from Al Ain who need access to designated campus parking. UAEU does not establish this service as a general permit for every student, visitor, or employee.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "admitted female UAEU students from Al Ain"
+          ],
+          "keywords": [
+            "university parking permit",
+            "campus parking permit",
+            "UAEU parking permit",
+            "parking permit for students",
+            "apply for a university parking permit",
+            "campus vehicle access permit",
+            "parking access for female students from Al Ain",
+            "female student parking permit Al Ain"
+          ],
+          "excludeKeywords": [
+            "visitor parking",
+            "employee parking",
+            "staff parking",
+            "parking fine",
+            "parking violation",
+            "parking hours",
+            "parking location"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Check the service eligibility",
+              "instruction": "The published permit service is for admitted female UAEU students from Al Ain. The public service page does not establish a general permit route for other student categories, visitors, or employees.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117"
+            },
+            {
+              "title": "Check for the activation notification",
+              "instruction": "For eligible students, UAEU describes this as a proactive service: watch for the activation notification, then download the authorized mobile application. The service is listed as free and immediate; the page does not list required documents."
+            },
+            {
+              "title": "Contact UAEU if you are eligible but not activated",
+              "instruction": "If you meet the published eligibility but have not received activation, contact UAEU at 800-8238. For other parking categories, ask the Campus Supervision Office because this source does not define their rules."
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Campus Parking Access — Eligible Female Students from Al Ain",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=117",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q005",
+      "category": "documents",
+      "question": "I'm currently enrolled. How do I download an official transcript?",
+      "expectation": "Provide the current-student document service, concrete steps, timing and source.",
+      "conversation": "transcript-thread",
+      "executionNumber": 2,
+      "askedAt": "2026-11-11T18:11:44.455Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I'm currently enrolled. How do I download an official transcript?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 950,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:11:45.405Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Request an Official Transcript — Current Student**\n- Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "transcript",
+        "evidenceIds": [
+          "guide:current-student-official-transcript"
+        ],
+        "guide": {
+          "id": "current-student-official-transcript",
+          "title": "Request an Official Transcript — Current Student",
+          "description": "Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "currently enrolled UAEU students"
+          ],
+          "keywords": [
+            "currently enrolled official transcript",
+            "currently enrolled how do i download an official transcript",
+            "currently enrolled download official transcript",
+            "currently enrolled student transcript",
+            "current student academic transcript",
+            "transcript current student",
+            "download my official transcript",
+            "request an official transcript",
+            "official transcript for a current student",
+            "current student transcript fee",
+            "transcript cost for enrolled student",
+            "transcript request for enrolled student",
+            "academic transcript current student"
+          ],
+          "excludeKeywords": [
+            "alumni",
+            "alumnus",
+            "graduate transcript",
+            "graduated",
+            "former student",
+            "request it for me",
+            "submit it for me"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Open Current Students Documents",
+              "instruction": "Sign in through the official UAEU portal or mobile app and open the Current Students Documents service.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+            },
+            {
+              "title": "Choose the transcript",
+              "instruction": "Select Academic Transcript and choose Arabic or English, then submit the request in the portal or app."
+            },
+            {
+              "title": "Check your UAEU email",
+              "instruction": "The published service lists the transcript as free and gives a normal email delivery target of 10 minutes. Check the delivered document; actual processing can vary. If you are an alumnus or no longer enrolled, use the separate alumni transcript service instead.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Request an Official Transcript — Current Student",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    },
+    {
+      "id": "Q006",
+      "category": "documents",
+      "question": "Will I be charged anything for it?",
+      "expectation": "Retain current-student transcript context and give the applicable free-service fact.",
+      "conversation": "transcript-thread",
+      "executionNumber": 3,
+      "askedAt": "2026-11-11T18:11:46.612Z",
+      "requestMessages": [
+        {
+          "role": "user",
+          "content": "I'm currently enrolled. How do I download an official transcript?"
+        },
+        {
+          "role": "assistant",
+          "content": "**Request an Official Transcript — Current Student**\n- Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page."
+        },
+        {
+          "role": "user",
+          "content": "Will I be charged anything for it?"
+        }
+      ],
+      "status": 200,
+      "durationMs": 2312,
+      "attempts": [
+        {
+          "status": 200,
+          "at": "2026-11-11T18:11:48.924Z"
+        }
+      ],
+      "payload": {
+        "role": "assistant",
+        "content": "**Request an Official Transcript — Current Student**\n- Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.\n- I can walk you through this as a guided checklist, while keeping the final submission on the official UAEU service page.",
+        "source": "guide",
+        "stateLabel": "guided_service",
+        "resolutionState": "VERIFIED",
+        "disposition": "answer",
+        "topic": "transcript",
+        "evidenceIds": [
+          "guide:current-student-official-transcript"
+        ],
+        "guide": {
+          "id": "current-student-official-transcript",
+          "title": "Request an Official Transcript — Current Student",
+          "description": "Currently enrolled students can request an Arabic or English academic transcript through UAEU's Current Students Documents service in the portal or official mobile app. The published service lists the request as free and gives a normal delivery target of 10 minutes by email; this is a target, not a guarantee. Alumni use a separate service.",
+          "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+          "lastVerified": "2026-09-29",
+          "audience": [
+            "currently enrolled UAEU students"
+          ],
+          "keywords": [
+            "currently enrolled official transcript",
+            "currently enrolled how do i download an official transcript",
+            "currently enrolled download official transcript",
+            "currently enrolled student transcript",
+            "current student academic transcript",
+            "transcript current student",
+            "download my official transcript",
+            "request an official transcript",
+            "official transcript for a current student",
+            "current student transcript fee",
+            "transcript cost for enrolled student",
+            "transcript request for enrolled student",
+            "academic transcript current student"
+          ],
+          "excludeKeywords": [
+            "alumni",
+            "alumnus",
+            "graduate transcript",
+            "graduated",
+            "former student",
+            "request it for me",
+            "submit it for me"
+          ],
+          "requiresVerification": false,
+          "steps": [
+            {
+              "title": "Open Current Students Documents",
+              "instruction": "Sign in through the official UAEU portal or mobile app and open the Current Students Documents service.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+            },
+            {
+              "title": "Choose the transcript",
+              "instruction": "Select Academic Transcript and choose Arabic or English, then submit the request in the portal or app."
+            },
+            {
+              "title": "Check your UAEU email",
+              "instruction": "The published service lists the transcript as free and gives a normal email delivery target of 10 minutes. Check the delivered document; actual processing can vary. If you are an alumnus or no longer enrolled, use the separate alumni transcript service instead.",
+              "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=122"
+            }
+          ]
+        },
+        "citations": [
+          {
+            "title": "Request an Official Transcript — Current Student",
+            "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+            "lastVerified": "2026-09-29"
+          }
+        ],
+        "communications": []
+      },
+      "responseCapture": {
+        "kind": "json",
+        "truncated": false
+      },
+      "error": null,
+      "automatedIssues": [],
+      "review": {
+        "status": "pending",
+        "note": "Factual correctness and source support require independent review."
+      }
+    }
+  ],
+  "finishedAt": "2026-11-11T18:11:48.930Z",
+  "localSourceUnchangedDuringRun": true,
+  "finalHealthStatus": 200,
+  "finalHealth": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "6014a9afeba0203e8420bd117e12f461208db459"
+    },
+    "agent": {
+      "architecture": "v3-evidence-first",
+      "v3Enabled": true,
+      "legacySelectorBypassedForUniversityModes": true
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "academicCatalog": {
+      "status": "verified-undergraduate-degree-inventory",
+      "programs": 55,
+      "colleges": 9,
+      "verifiedAt": "2026-11-11",
+      "curriculumCoverage": {
+        "modelled": 55,
+        "legacy_model_review_required": 0,
+        "not_modelled": 0
+      },
+      "curriculumRecordsRequiringIdentityReview": 2
+    },
+    "courseCatalog": {
+      "status": "official-course-catalog-snapshot",
+      "courses": 2791,
+      "verifiedAt": "2026-11-11",
+      "entriesWithoutDescription": 1,
+      "entriesWithoutCreditValue": 1,
+      "prerequisiteEntries": 1393,
+      "corequisiteEntries": 150,
+      "preCorequisiteEntries": 62,
+      "prerequisiteParsing": {
+        "relationRecords": 1478,
+        "structuredRecords": 1475,
+        "unsupportedRecords": 3,
+        "structuredCoveragePercent": 99.8
+      },
+      "degreeApplicability": "course records do not establish program requirements"
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "4e7b88ec1039a13845dd303622e779072eb9f9163738487936dffd009c952ff1",
+      "retrieval": {
+        "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+        "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+        "embedding": "disabled",
+        "semanticCatalog": "disabled-v3-evidence-first",
+        "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "v3-orchestrator-evidence-research-verified-generation"
+      },
+      "approvedMarkdownFiles": 60,
+      "verifiedAnswers": 137,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-11T18:11:42.676Z",
+        "totalRecords": 201,
+        "domains": {
+          "admissions": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-09-29"
+          },
+          "academics": {
+            "records": 43,
+            "reviewedRecords": 43,
+            "latestVerification": "2026-11-11"
+          },
+          "registration": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "graduation": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "financial_aid": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-09-29"
+          },
+          "student_services": {
+            "records": 4,
+            "reviewedRecords": 4,
+            "latestVerification": "2026-09-29"
+          },
+          "housing": {
+            "records": 8,
+            "reviewedRecords": 8,
+            "latestVerification": "2026-09-29"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 18,
+            "reviewedRecords": 18,
+            "latestVerification": "2026-10-06"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-09-29"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 59
+      },
+      "sourceEvidence": {
+        "mappedReferences": 197,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-11",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 50,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-10-06",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 4,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "b4b890befa7f196be29f93c814f74a6f6a83a046a46b8013481b6ec480ef52d8"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "finalEndpointIdentity": {
+    "url": "https://uaeu-assistant-88dzkwp8c-awnyhatem40-gmailcoms-projects.vercel.app/api/health",
+    "revision": "6014a9afeba0203e8420bd117e12f461208db459",
+    "contentFingerprint": "4e7b88ec1039a13845dd303622e779072eb9f9163738487936dffd009c952ff1",
+    "provider": "openai",
+    "model": "gpt-4.1-mini",
+    "crossProviderFallback": false,
+    "retrieval": {
+      "primary": "v3-scoped-evidence-retrieval-and-controlled-official-research",
+      "curriculumExtract": "approved-curriculum-markdown-sections-for-matched-english-questions",
+      "embedding": "disabled",
+      "semanticCatalog": "disabled-v3-evidence-first",
+      "canonicalRendering": "approved-localized-answer-text-unchanged; primary-records-only; record-level-citation-bundles",
+      "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+      "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+      "groundingIsolation": {
+        "claimsPerRequest": 1,
+        "concurrency": 4,
+        "maxClaims": 16,
+        "totalAnswerBudgetMs": 54000,
+        "routeMaxDurationSeconds": 60
+      },
+      "activePath": "v3-orchestrator-evidence-research-verified-generation"
+    },
+    "deploymentMode": "prototype"
+  },
+  "endpointIdentityComparison": {
+    "unchanged": true,
+    "verifiable": true,
+    "reason": "Reported endpoint identity stayed stable"
+  },
+  "runIntegrityIssues": []
+}

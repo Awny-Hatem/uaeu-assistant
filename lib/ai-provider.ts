@@ -30,6 +30,10 @@ export class AiProviderError extends Error {
   publicMessage: string;
   retryable: boolean;
   retryAfterMs?: number;
+  diagnosticCode?: string;
+  diagnosticParam?: string;
+  diagnosticType?: string;
+  diagnosticSchemaIssue?: string;
 
   constructor(args: {
     status: number;
@@ -38,6 +42,10 @@ export class AiProviderError extends Error {
     cause?: unknown;
     retryable?: boolean;
     retryAfterMs?: number;
+    diagnosticCode?: string;
+    diagnosticParam?: string;
+    diagnosticType?: string;
+    diagnosticSchemaIssue?: string;
   }) {
     super(args.publicMessage);
     this.name = "AiProviderError";
@@ -46,6 +54,10 @@ export class AiProviderError extends Error {
     this.publicMessage = args.publicMessage;
     this.retryable = args.retryable === true;
     this.retryAfterMs = args.retryAfterMs;
+    this.diagnosticCode = args.diagnosticCode;
+    this.diagnosticParam = args.diagnosticParam;
+    this.diagnosticType = args.diagnosticType;
+    this.diagnosticSchemaIssue = args.diagnosticSchemaIssue;
     if (args.cause) {
       this.cause = args.cause;
     }
@@ -78,7 +90,17 @@ function retryAfterMs(header: string | null): number | undefined {
 
 function openAiHttpError(response: Response, data: Record<string, unknown>): AiProviderError {
   const detail = data.error && typeof data.error === 'object'
-    ? data.error as { code?: unknown; type?: unknown } : {};
+    ? data.error as { code?: unknown; type?: unknown; param?: unknown; message?: unknown } : {};
+  const safeDiagnostic = (value: unknown) => typeof value === "string" && /^[A-Za-z0-9_.\[\]-]{1,100}$/.test(value) ? value : undefined;
+  const schemaTokens = new Set(["properties", "claims", "items", "text", "evidenceIds", "clarification", "disposition", "type", "required", "additionalProperties", "enum", "minItems", "maxItems", "strict", "format"]);
+  let diagnosticSchemaIssue: string | undefined;
+  if (detail.code === "invalid_json_schema" && typeof detail.message === "string") {
+    const pathText = detail.message.match(/(?:In )?context\s*=\s*\(([^)]*)\)/i)?.[1] ?? "";
+    const path = [...pathText.matchAll(/[A-Za-z][A-Za-z0-9_-]*/g)].map(([token]) => token).filter((token) => schemaTokens.has(token));
+    const messageWithoutPath = detail.message.replace(/(?:In )?context\s*=\s*\([^)]*\)/ig, "");
+    const issue = [...schemaTokens].find((token) => new RegExp(`\\b${token}\\b`, "i").test(messageWithoutPath));
+    diagnosticSchemaIssue = `${issue ?? "schema_validation"}${path.length ? ` at ${path.join(".")}` : ""}`.slice(0, 180);
+  }
   const quotaCodes = new Set([
     'insufficient_quota', 'credit_balance_exhausted', 'organization_spend_limit_exceeded',
     'project_spend_limit_exceeded', 'organization_usage_limit_exceeded', 'billing_hard_limit_reached',
@@ -100,6 +122,10 @@ function openAiHttpError(response: Response, data: Record<string, unknown>): AiP
       server ? 'OpenAI is temporarily unavailable. Please try again later.' : 'OpenAI rejected the request configuration.',
     retryable: !quota && !auth && (rate || server),
     retryAfterMs: retryAfterMs(response.headers.get('retry-after')),
+    diagnosticCode: safeDiagnostic(detail.code),
+    diagnosticParam: safeDiagnostic(detail.param),
+    diagnosticType: safeDiagnostic(detail.type),
+    diagnosticSchemaIssue,
   });
 }
 
@@ -133,14 +159,18 @@ function openAiKeys(): OpenAiKey[] {
 }
 
 function shouldFailOverOpenAiKey(error: unknown): boolean {
-  // A backup key can recover quota, authentication, rate-limit, transient
-  // server, network, timeout and malformed-provider responses. Invalid request
-  // shapes and exhausted answer deadlines are deterministic for every key and
-  // must fail without multiplying provider calls.
-  return error instanceof AiProviderError && ![
-    "ANSWER_DEADLINE_EXCEEDED",
-    "OPENAI_BAD_REQUEST",
-    "OPENAI_HTTP_ERROR",
+  // Rotate credentials only for errors a different credential may recover.
+  // Incomplete/empty/invalid model output is not a key failure: trying every
+  // backup masks the useful root cause and wastes calls (notably on long review
+  // schemas). Those errors should reach the caller unchanged.
+  return error instanceof AiProviderError && [
+    "OPENAI_QUOTA_EXHAUSTED",
+    "OPENAI_AUTH_ERROR",
+    "OPENAI_RATE_LIMITED",
+    "OPENAI_429_UNCLASSIFIED",
+    "OPENAI_UNAVAILABLE",
+    "OPENAI_NETWORK_ERROR",
+    "OPENAI_TIMEOUT",
   ].includes(error.providerStatus);
 }
 
@@ -162,7 +192,9 @@ export function providerRequestSignal(deadlineAt?: number): AbortSignal {
 
 function maxOutputTokens(provider: "openai" | "gemini" = "openai"): number {
   const configured = Number.parseInt(process.env[provider === "openai" ? "OPENAI_MAX_OUTPUT_TOKENS" : "GEMINI_MAX_OUTPUT_TOKENS"] ?? "", 10);
-  return Number.isFinite(configured) ? Math.max(256, Math.min(1500, configured)) : 1100;
+  // Keep the default conservative for student answers, while allowing offline
+  // evaluation/review jobs to request enough structured output for a full rubric.
+  return Number.isFinite(configured) ? Math.max(256, Math.min(10000, configured)) : 1100;
 }
 
 function providerResult(raw: string, provider: ProviderName, model: string, evidenceIds?: string[]): ProviderResult {
@@ -482,12 +514,20 @@ export function describeAiProviderError(error: unknown): {
   status: number;
   providerStatus: string;
   message: string;
+  diagnosticCode?: string;
+  diagnosticParam?: string;
+  diagnosticType?: string;
+  diagnosticSchemaIssue?: string;
 } {
   if (error instanceof AiProviderError) {
     return {
       status: error.status,
       providerStatus: error.providerStatus,
       message: error.publicMessage,
+      ...(error.diagnosticCode ? { diagnosticCode: error.diagnosticCode } : {}),
+      ...(error.diagnosticParam ? { diagnosticParam: error.diagnosticParam } : {}),
+      ...(error.diagnosticType ? { diagnosticType: error.diagnosticType } : {}),
+      ...(error.diagnosticSchemaIssue ? { diagnosticSchemaIssue: error.diagnosticSchemaIssue } : {}),
     };
   }
 

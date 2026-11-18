@@ -54,7 +54,8 @@ check("Arabic clitics preserve program identity and excluded Medicine is not a t
   assert.match(texts("شو مساقات major electives لعلوم الحاسوب وكم واحد أختار؟"),/CSBP320[\s\S]*CSBP477/);
   const normal=retrieveAcademicEvidence("كم الحد الطبيعي للساعات في الفصل لطالب بكالوريوس غير الطب؟");
   assert.ok(normal?.rows.length);assert.match(normal.rows.map(row=>row.text).join("\n"),/12.19/);
-  assert.ok(normal.rows.every(row=>!row.scope?.subjects?.includes("medicine")));
+  // A row may name Medicine only as the stated exclusion (V3 derives subjects from the title).
+  assert.ok(normal.rows.every(row=>!row.scope?.subjects?.includes("medicine")||/excluding Medicine/u.test(row.text)));
 });
 check("comparison retrieves both degree scopes",()=>{
   const rows=retrieveAcademicEvidence("Compare Computer Science and Information Security total and major elective credits")?.rows ?? [];

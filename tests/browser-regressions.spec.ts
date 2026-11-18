@@ -6,7 +6,12 @@ const guestKey = 'uaeu-chatbot-guest-v4';
 const user = { id: 'qa-account-a', username: 'QA account A', email: 'qa@example.invalid', studentType: 'Current Student', major: 'Computer Science', universityAffiliation: 'general' };
 const otherUser = { ...user, id: 'qa-account-b', username: 'QA account B' };
 const accountKey = 'uaeu-chatbot-account-messages-v1';
+const historyPreferenceKey = 'uaeu-chatbot-save-history-v1';
 const answer = { content: 'The current-student document service is free.', source: 'faq', disposition: 'answer', citations: [] };
+
+test.beforeEach(async ({ page }) => {
+  await page.addInitScript(key => localStorage.setItem(key, 'enabled'), historyPreferenceKey);
+});
 
 type DeferredChatWindow = typeof window & { __deferredChat: { started: boolean; bodyRead: boolean; abortObserved: boolean; release: () => void } };
 
@@ -59,16 +64,146 @@ async function submit(page: Page, question: string) {
   await input.press('Enter');
 }
 
-test('dark mode implementation remains available while its UI control is hidden', async ({ page }) => {
+function serviceGuide(id: string, title: string) {
+  return {
+    id, title, description: `${title} guide`, officialUrl: 'https://www.uaeu.ac.ae/en/student-services/',
+    lastVerified: '2026-11-13', audience: ['current students'], keywords: [title.toLowerCase()],
+    requestDetails: {
+      documents: { en: 'Check the official service page for documents required for your request.', ar: 'تحقق من صفحة الخدمة الرسمية للمستندات المطلوبة.' },
+      deadline: { en: 'Check your current portal notice for the applicable deadline.', ar: 'تحقق من إشعار البوابة للموعد النهائي.' },
+      handoff: { en: 'Continue through the official UAEU service page.', ar: 'تابع عبر صفحة الخدمة الرسمية.' },
+    },
+    steps: [
+      { title: 'Review the eligibility information', instruction: 'Read the official guidance.' },
+      { title: 'Prepare the listed documents', instruction: 'Follow the live service checklist.' },
+    ],
+  };
+}
+
+async function openServiceGuide(page: Page, id: string, title: string) {
   await guest(page);
-  await page.addInitScript(() => localStorage.setItem('uaeu-chatbot-theme-v1', 'dark'));
+  await page.route('**/api/chat', route => route.fulfill({ json: {
+    content: `Guide: ${title}`, source: 'guide', disposition: 'answer', citations: [],
+    guide: serviceGuide(id, title),
+  } }));
+  await page.goto('/');
+  await submit(page, `How do I use ${title}?`);
+  await page.getByRole('button', { name: 'Guide me' }).first().click();
+  await expect(page.getByTestId('service-request-draft')).toBeVisible();
+}
+
+test('reusable request checklist uses existing guide facts across service workflows', async ({ page }) => {
+  for (const [id, title] of [
+    ['financial-aid-application', 'Apply for UAEU Financial Aid'],
+    ['register-for-a-class', 'Register for a class'],
+    ['request-student-document', 'Request a student document'],
+  ]) {
+    await openServiceGuide(page, id, title);
+    const draft = page.getByTestId('service-request-draft');
+    await expect(draft.getByText('Check the official service page for documents required for your request.')).toBeVisible();
+    await expect(draft.getByText('Check your current portal notice for the applicable deadline.')).toBeVisible();
+    await page.getByRole('button', { name: 'Clear draft' }).click();
+    await page.getByRole('button', { name: /Close guide/ }).click();
+  }
+});
+
+test('request draft validates required summary, supports edits and preview, and hands off without submitting', async ({ page }) => {
+  let chatCalls = 0;
+  await guest(page);
+  await page.route('**/api/chat', route => {
+    chatCalls += 1;
+    return route.fulfill({ json: { content: 'Guide', source: 'guide', disposition: 'answer', citations: [], guide: serviceGuide('financial-aid-application', 'Apply for UAEU Financial Aid') } });
+  });
+  await page.goto('/');
+  await submit(page, 'How do I apply for financial aid?');
+  await page.getByRole('button', { name: 'Guide me' }).click();
+
+  const summary = page.getByLabel(/Request summary/);
+  const notes = page.getByLabel(/Details to include/);
+  await summary.fill('');
+  await page.getByRole('button', { name: 'Preview draft' }).click();
+  await expect(page.locator('p[role="alert"]')).toContainText('Add a request summary');
+  await expect(page.getByTestId('request-draft-preview')).toHaveCount(0);
+
+  await summary.fill('Financial aid application question');
+  await notes.fill('I want to confirm which documents apply to my case.');
+  await page.getByRole('checkbox', { name: 'Review the eligibility information' }).check();
+  await page.getByRole('button', { name: 'Preview draft' }).click();
+  const preview = page.getByTestId('request-draft-preview');
+  await expect(preview).toContainText('NOT SUBMITTED');
+  await expect(preview).toContainText('Financial aid application question');
+  await expect(preview).toContainText('I want to confirm which documents apply to my case.');
+  await expect(preview).toContainText('1 of 2 checklist items reviewed');
+  await expect(preview.getByRole('link', { name: /Continue on UAEU official page/ })).toHaveAttribute('href', 'https://www.uaeu.ac.ae/en/student-services/');
+  await expect.poll(() => chatCalls).toBe(1);
+
+  await page.getByRole('button', { name: 'Clear draft' }).click();
+  await expect(summary).toHaveValue('Apply for UAEU Financial Aid');
+  await expect(notes).toHaveValue('');
+  await expect(page.getByRole('checkbox', { name: 'Review the eligibility information' })).not.toBeChecked();
+  await expect(preview).toHaveCount(0);
+  await expect.poll(() => chatCalls).toBe(1);
+});
+
+test('Arabic request draft validates, previews edits, clears, and makes no submission or extra API call', async ({ page }) => {
+  let chatCalls = 0;
+  const apiRequests: string[] = [];
+  page.on('request', request => {
+    const url = new URL(request.url());
+    if (url.pathname.startsWith('/api/')) apiRequests.push(`${request.method()} ${url.pathname}`);
+  });
+  await guest(page);
+  await page.route('**/api/chat', route => {
+    chatCalls += 1;
+    return route.fulfill({ json: { content: 'Guide', source: 'guide', disposition: 'answer', citations: [], guide: serviceGuide('financial-aid-application', 'Apply for UAEU Financial Aid') } });
+  });
+  await page.goto('/');
+  await expect(page.getByTestId('desktop-language')).toHaveCount(0);
+  await submit(page, '\u0643\u064a\u0641 \u0623\u0642\u062f\u0645 \u0639\u0644\u0649 \u0627\u0644\u0645\u0633\u0627\u0639\u062f\u0629 \u0627\u0644\u0645\u0627\u0644\u064a\u0629\u061f');
+  await page.getByRole('button', { name: 'Guide me' }).click();
+
+  const draft = page.getByTestId('service-request-draft');
+  await expect(draft).toBeVisible();
+  await expect(draft.getByRole('heading', { name: 'جهّز طلبك' })).toBeVisible();
+  await expect(draft).toContainText('لا تُدخل كلمات المرور أو رموز التحقق');
+  await expect(draft.getByRole('group', { name: 'قائمة التحقق للإرشاد' })).toBeVisible();
+  const summary = page.getByLabel(/ملخص الطلب/);
+  const notes = page.getByLabel(/تفاصيل لإضافتها/);
+  await summary.fill('');
+  await draft.getByRole('button', { name: 'معاينة المسودة' }).click();
+  await expect(draft.locator('p[role="alert"]')).toContainText('أدخل ملخص الطلب لمعاينة المسودة');
+  await expect(page.getByTestId('request-draft-preview')).toHaveCount(0);
+
+  await summary.fill('استفسار عن طلب المساعدة المالية');
+  await notes.fill('أرغب في التأكد من المستندات المناسبة لحالتي.');
+  await draft.getByRole('button', { name: 'معاينة المسودة' }).click();
+  const preview = page.getByTestId('request-draft-preview');
+  await expect(preview).toContainText('مسودة فقط — لم يتم الإرسال');
+  await expect(preview).toContainText('استفسار عن طلب المساعدة المالية');
+  await expect(preview).toContainText('أرغب في التأكد من المستندات المناسبة لحالتي.');
+  await expect(preview.getByRole('link', { name: 'المتابعة عبر صفحة UAEU الرسمية' })).toHaveAttribute('href', 'https://www.uaeu.ac.ae/en/student-services/');
+  const requestsBeforeClear = [...apiRequests];
+
+  await draft.getByRole('button', { name: 'مسح المسودة' }).click();
+  await expect(summary).toHaveValue('Apply for UAEU Financial Aid');
+  await expect(notes).toHaveValue('');
+  await expect(preview).toHaveCount(0);
+  expect(apiRequests).toEqual(requestsBeforeClear);
+  expect(chatCalls).toBe(1);
+  expect(apiRequests.some(path => /submit|portal|request/i.test(path))).toBe(false);
+});
+
+test('the interface stays light and contains no theme toggle', async ({ page }) => {
+  await guest(page);
+  await page.emulateMedia({ colorScheme: 'dark' });
   await page.goto('/');
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
   await expect(page.getByTestId('mobile-theme-toggle')).toHaveCount(0);
-  await expect(page.locator('html')).toHaveClass(/dark/);
+  await expect(page.locator('html')).not.toHaveClass(/dark/);
+  await expect.poll(() => page.evaluate(() => getComputedStyle(document.documentElement).colorScheme)).toBe('light');
   await page.reload();
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
-  await expect(page.locator('html')).toHaveClass(/dark/);
+  await expect(page.locator('html')).not.toHaveClass(/dark/);
 });
 
 test('keyboard skip link and reduced-motion accessibility hooks are available', async ({ page }) => {
@@ -84,6 +219,192 @@ test('keyboard skip link and reduced-motion accessibility hooks are available', 
   await expect(page.getByRole('log')).toHaveAttribute('aria-busy', 'false');
   await expect(page.getByTestId('chat-input')).toHaveAttribute('aria-describedby', 'chat-hint');
   await expect(page.getByTestId('theme-toggle')).toHaveCount(0);
+});
+
+test('guided academic planner selects a cohort and displays a sourced conditional sequence', async ({ page }) => {
+  await guest(page);
+  let submittedSequencePayload: Record<string, unknown> | undefined;
+  await page.route('**/api/academic/sequence**', async route => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (request.method() === 'POST') {
+      submittedSequencePayload = request.postDataJSON() as Record<string, unknown>;
+      return route.fulfill({ json: {
+        plan: {
+          status: 'CONDITIONAL_PLAN',
+          terms: [{ id: 'term-1', label: 'Fall 2026', creditLimit: 18, credits: 3, courses: [{ code: 'CSBP119', title: 'Introduction to Programming', credits: 3, availability: 'ASSUMED_FUTURE_OFFERING', prerequisiteAssumptions: [] }] }],
+          unscheduled: [], assumptions: ['No confirmed section offering was supplied.'], blockers: [],
+        },
+        courseSources: [{ code: 'CSBP119', title: 'Introduction to Programming', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' }],
+        scope: {
+          programName: 'Bachelor of Science in Computer Science', cohortYear: 2025, curriculumSelectionMode: 'cohort-matched', cohortLabel: 'Fall 2025 cohort',
+          curriculumVersion: '2025', curriculumCredits: 120, curriculumSources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }],
+          reportedInputs: {
+            completedCourseCodes: ['MATH105'], currentCourseCodes: ['CSBP219'], remainingCourseCodes: ['CSBP119', 'CHEM111'],
+            repeatCourseCodes: ['CHEM111'], transferCourseCodes: ['CSBP119'], completedCourseGrades: { MATH105: 'B' },
+            terms: [{ label: 'Fall 2026', maxCredits: 18 }],
+          },
+          transferReview: 'Transfer-credit claims are not counted as completed courses or prerequisite evidence in this plan.',
+          disclaimer: 'This is a conditional sequence, not a degree audit or registration approval.',
+        },
+      } });
+    }
+    if (!url.searchParams.has('programId')) {
+      return route.fulfill({ json: { programs: [{ id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology', curriculumAvailable: true, cohorts: [2025], publishedVersions: [] }] } });
+    }
+    if (!url.searchParams.has('cohortYear')) return route.fulfill({ json: { programId: 'bsc-computer-science', cohorts: [2025], publishedVersions: [] } });
+    return route.fulfill({ json: {
+      program: { id: 'bsc-computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Information Technology' },
+      cohort: { year: 2025, label: 'Fall 2025 cohort', version: '2025', totalCredits: 120, selectionMode: 'cohort-matched' },
+      courses: [
+        { code: 'CSBP119', title: 'Introduction to Programming', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_1000.shtml', verifiedAt: '2026-11-12' } },
+        { code: 'CHEM111', title: 'General Chemistry I', credits: 3, groups: [{ id: 'science-choice', name: 'Science course choice', type: 'ONE_OF_GROUP', chooseCount: 1 }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_2000.shtml', verifiedAt: '2026-11-12' } },
+      ],
+      requirementSummary: { mandatoryCourseCodes: ['CSBP119'], choiceGroups: [{ id: 'science-choice', name: 'Science course choice', type: 'ONE_OF_GROUP', courseCodes: ['BIOC100', 'CHEM111'], chooseCount: 1 }], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
+      unavailableCourses: [], sources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }], limitations: [],
+    } });
+  });
+  await page.goto('/');
+  await page.getByTestId('open-academic-planner').click();
+  const dialog = page.getByTestId('academic-sequence-planner');
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel('Degree program').selectOption('bsc-computer-science');
+  await dialog.getByLabel('Entry cohort year').selectOption('2025');
+  await expect(dialog.getByText(/CSBP119.*Introduction to Programming/)).toBeVisible();
+  await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' }).first()).toHaveAttribute('href', /uaeu\.ac\.ae/);
+  await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
+  const requiredCourse = dialog.getByRole('checkbox', { name: /CSBP119/ });
+  const electiveCourse = dialog.getByRole('checkbox', { name: /CHEM111/ });
+  await expect(requiredCourse).toBeChecked();
+  await electiveCourse.check();
+  await expect(dialog.getByText(/Science course choice: 0 listed option\(s\) reported completed or current; 1 listed option\(s\) selected for this sequence/i)).toBeVisible();
+  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105, CSBP119, CHEM111');
+  await expect(requiredCourse).not.toBeChecked();
+  await expect(electiveCourse).not.toBeChecked();
+  await expect(dialog.getByRole('button', { name: 'Create conditional sequence' })).toBeDisabled();
+  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105');
+  await dialog.getByRole('button', { name: 'Add outstanding required courses (1)' }).click();
+  await electiveCourse.check();
+  await dialog.getByLabel('Courses you are currently taking').fill('CSBP219');
+  await dialog.getByLabel('Grades for completed courses (optional)').fill('MATH105: B');
+  await dialog.getByLabel('Courses to repeat (course codes, comma separated)').fill('CHEM111');
+  await dialog.getByLabel('UAEU courses you expect transfer credit to cover (comma separated)').fill('CSBP119');
+  await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');
+  await dialog.getByLabel('Maximum credits per term').fill('18');
+  await dialog.getByRole('button', { name: 'Create conditional sequence' }).click();
+  await expect(dialog.getByText(/Plan result: CONDITIONAL PLAN/i)).toBeVisible();
+  await expect(dialog.getByText(/CSBP119 — Introduction to Programming/)).toBeVisible();
+  await expect(dialog.getByText(/No confirmed section offering/)).toBeVisible();
+  await expect(dialog.getByRole('link', { name: 'Computer Science curriculum' }).last()).toHaveAttribute('href', /uaeu\.ac\.ae/);
+  expect(submittedSequencePayload?.completedCourseGrades).toEqual({ MATH105: 'B' });
+  expect(submittedSequencePayload?.repeatCourseCodes).toEqual(['CHEM111']);
+  expect(submittedSequencePayload?.transferCourseCodes).toEqual(['CSBP119']);
+  expect(submittedSequencePayload?.remainingCourseCodes).toEqual(['CSBP119', 'CHEM111']);
+  await expect(dialog.getByText(/Transfer-credit claims are not counted as completed courses/)).toBeVisible();
+  await expect(dialog.getByText(/Planned course codes: CSBP119, CHEM111/)).toBeVisible();
+  await dialog.getByLabel('Courses you are currently taking').fill('CSBP219, CSBP320');
+  await expect(dialog.getByText(/Plan result:/i)).toHaveCount(0);
+
+  await dialog.getByRole('button', { name: 'Clear plan inputs' }).click();
+  await expect(dialog.getByLabel('Degree program')).toHaveValue('');
+  await expect(dialog.getByText(/Plan result:/i)).toHaveCount(0);
+  await dialog.getByLabel('Degree program').selectOption('bsc-computer-science');
+  await dialog.getByLabel('Entry cohort year').selectOption('2025');
+  await expect(dialog.getByLabel('Completed course codes (comma separated)')).toHaveValue('');
+  await expect(dialog.getByLabel('Courses you are currently taking')).toHaveValue('');
+  await expect(dialog.getByLabel('Grades for completed courses (optional)')).toHaveValue('');
+  await expect(dialog.getByLabel('Courses to repeat (course codes, comma separated)')).toHaveValue('');
+  await expect(dialog.getByLabel('UAEU courses you expect transfer credit to cover (comma separated)')).toHaveValue('');
+  await expect(dialog.getByLabel('Planning terms (one term per line)')).toHaveValue('');
+  await expect(dialog.getByLabel('Maximum credits per term')).toHaveValue('');
+  await expect(dialog.getByLabel('Compare with another maximum (optional)')).toHaveValue('');
+  await expect(dialog.getByRole('checkbox', { name: /CSBP119/ })).not.toBeChecked();
+  await dialog.getByLabel('Completed course codes (comma separated)').fill('MATH105');
+  const storedBrowserState = await page.evaluate(() => JSON.stringify({
+    local: Object.fromEntries(Object.entries(localStorage)),
+    session: Object.fromEntries(Object.entries(sessionStorage)),
+  }));
+  expect(storedBrowserState).not.toContain('MATH105');
+  await page.reload();
+  await page.getByTestId('open-academic-planner').click();
+  const reloadedDialog = page.getByTestId('academic-sequence-planner');
+  await reloadedDialog.getByLabel('Degree program').selectOption('bsc-computer-science');
+  await reloadedDialog.getByLabel('Entry cohort year').selectOption('2025');
+  await expect(reloadedDialog.getByLabel('Completed course codes (comma separated)')).toHaveValue('');
+});
+
+test('planner lets students explicitly choose a published version without assigning it to their cohort', async ({ page }) => {
+  await guest(page);
+  let submitted: Record<string, unknown> | undefined;
+  await page.route('**/api/academic/sequence**', async route => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (request.method() === 'POST') {
+      submitted = request.postDataJSON() as Record<string, unknown>;
+      return route.fulfill({ json: {
+        plan: { status: 'CONDITIONAL_PLAN', terms: [{ id: 'term-1', label: 'Fall 2026', creditLimit: 18, credits: 3, courses: [{ code: 'CENG205', title: 'Digital Design and Computer Organization', credits: 3, availability: 'ASSUMED_FUTURE_OFFERING', prerequisiteAssumptions: [] }] }], unscheduled: [], assumptions: ['The published curriculum version was selected by the student; UAEU has not confirmed the assigned plan.'], blockers: [] },
+        courseSources: [{ code: 'CENG205', title: 'Digital Design and Computer Organization', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_2948.shtml?id=CENG205', verifiedAt: '2026-11-11' }],
+        scope: {
+          programName: 'Bachelor of Science in Computer Science', cohortYear: null, curriculumSelectionMode: 'published-version-selected', cohortLabel: 'Published current catalog snapshot',
+          curriculumVersion: 'catalog-2026-10', curriculumCredits: 120, curriculumSources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }],
+          reportedInputs: { completedCourseCodes: [], currentCourseCodes: [], remainingCourseCodes: ['CENG205'], repeatCourseCodes: [], transferCourseCodes: [], completedCourseGrades: {}, terms: [{ label: 'Fall 2026', maxCredits: 18 }] },
+          transferReview: 'Transfer-credit claims are not counted as completed courses or prerequisite evidence in this plan.',
+          disclaimer: 'This is a conditional sequence, not a degree audit or registration approval.',
+        },
+      } });
+    }
+    if (!url.searchParams.has('programId')) return route.fulfill({ json: { programs: [{ id: 'computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Computing and Artificial Intelligence', curriculumAvailable: true, cohorts: [], publishedVersions: [{ id: 'cs-catalog-2026-10', version: 'catalog-2026-10-06', cohortLabel: 'Published current catalog snapshot', totalCredits: 120 }] }] } });
+    if (!url.searchParams.has('curriculumVersionId')) return route.fulfill({ json: { programId: 'computer-science', cohorts: [], publishedVersions: [{ id: 'cs-catalog-2026-10', version: 'catalog-2026-10-06', cohortLabel: 'Published current catalog snapshot', totalCredits: 120 }] } });
+    return route.fulfill({ json: {
+      program: { id: 'computer-science', name: 'Bachelor of Science in Computer Science', college: 'College of Computing and Artificial Intelligence' },
+      cohort: { year: null, label: 'Published current catalog snapshot', version: 'catalog-2026-10-06', versionId: 'cs-catalog-2026-10', totalCredits: 120, selectionMode: 'published-version-selected' },
+      courses: [{ code: 'CENG205', title: 'Digital Design and Computer Organization', credits: 3, groups: [{ id: 'required', name: 'Required courses', type: 'REQUIRED_COURSE_SET' }], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/courses/course_2948.shtml?id=CENG205', verifiedAt: '2026-11-11' } }],
+      requirementSummary: { mandatoryCourseCodes: ['CENG205'], choiceGroups: [], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
+      unavailableCourses: [], sources: [{ title: 'Computer Science curriculum', url: 'https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/computer-science.shtml', lastVerified: '2026-11-12' }],
+      limitations: ['This plan version was selected explicitly by you because the published sources do not establish its applicability to your entry cohort. Compare it with your assigned Degree Works plan; the assistant cannot verify your personal assignment.'],
+    } });
+  });
+  await page.goto('/');
+  await page.getByTestId('open-academic-planner').click();
+  const dialog = page.getByTestId('academic-sequence-planner');
+  await dialog.getByLabel('Degree program').selectOption('computer-science');
+  await dialog.getByLabel('Published plan version (confirm in Degree Works)').selectOption('cs-catalog-2026-10');
+  await expect(dialog.getByText(/cannot verify your personal assignment/i)).toBeVisible();
+  await dialog.getByRole('checkbox', { name: /CENG205/ }).check();
+  await dialog.getByLabel('Planning terms (one term per line)').fill('Fall 2026');
+  await dialog.getByLabel('Maximum credits per term').fill('18');
+  await dialog.getByRole('button', { name: 'Create conditional sequence' }).click();
+  await expect(dialog.getByText(/Plan result: CONDITIONAL PLAN/i)).toBeVisible();
+  expect(submitted?.curriculumVersionId).toBe('cs-catalog-2026-10');
+  expect(submitted?.cohortYear).toBeUndefined();
+});
+
+test('continuing Computer Engineering is a separate, explicitly selected Fall-entry plan', async ({ page }) => {
+  await guest(page);
+  await page.route('**/api/academic/sequence**', async route => {
+    const url = new URL(route.request().url());
+    if (!url.searchParams.has('programId')) return route.fulfill({ json: {
+      programs: [],
+      continuingPrograms: [{ id: 'bsc-computer-engineering', name: 'Bachelor of Science in Computer Engineering', college: 'College of Information Technology', publishedVersions: [{ id: 'computer-engineering-catalog-2026-08', version: 'fall-2025-onward', cohortLabel: 'Fall-entry cohorts 2025–2026 onward', totalCredits: 131 }] }],
+    } });
+    return route.fulfill({ json: {
+      program: { id: 'bsc-computer-engineering', name: 'Bachelor of Science in Computer Engineering', college: 'College of Information Technology' },
+      cohort: { year: null, label: 'Fall-entry cohorts 2025–2026 onward', version: 'fall-2025-onward', versionId: 'computer-engineering-catalog-2026-08', totalCredits: 131, selectionMode: 'published-version-selected' },
+      courses: [{ code: 'CENG205', title: 'Digital Design', credits: 3, groups: [], source: { title: 'UAEU catalog', url: 'https://www.uaeu.ac.ae/en/catalog/', verifiedAt: '2026-11-15' } }],
+      requirementSummary: { mandatoryCourseCodes: ['CENG205'], choiceGroups: [], conditionalGroups: [], pathwayChoices: [], creditBlocksNotAssessed: [] },
+      unavailableCourses: [], sources: [{ title: 'Computer Engineering model plan', url: 'https://www.uaeu.ac.ae/en/cit/', lastVerified: '2026-11-15' }],
+      limitations: ['The published 131-credit Computer Engineering plan is labeled for Fall-entry cohorts from 2025–2026 onward; Spring-entry applicability is not established.'],
+    } });
+  });
+  await page.goto('/');
+  await page.getByTestId('open-academic-planner').click();
+  const dialog = page.getByTestId('academic-sequence-planner');
+  const programSelect = dialog.getByLabel('Degree program');
+  await expect(programSelect.locator('option', { hasText: 'continuing students' })).toHaveCount(1);
+  await programSelect.selectOption('bsc-computer-engineering');
+  await dialog.getByLabel('Published plan version (confirm in Degree Works)').selectOption('computer-engineering-catalog-2026-08');
+  await expect(dialog.getByText(/Spring-entry applicability is not established/i)).toBeVisible();
+  await expect(dialog.getByText('Fall-entry cohorts 2025–2026 onward', { exact: true })).toBeVisible();
 });
 
 for (const hungPath of ['/api/auth/session', '/api/history']) {
@@ -120,7 +441,7 @@ for (const hungPath of ['/api/auth/session', '/api/history']) {
   });
 }
 
-test('startup session failure sends guest chat without a lingering authenticated cookie', async ({ page, context }) => {
+test('startup session failure falls back to guest ownership without deleting the local cookie', async ({ page, context }) => {
   await context.addCookies([{ name: 'chat_session', value: 'synthetic-account-b', url: test.info().project.use.baseURL as string, httpOnly: true }]);
   await page.route('**/api/auth/session', route => route.fulfill({ status: 503, json: { error: 'synthetic unavailable' } }));
   let requestHeaders: Record<string, string> | undefined;
@@ -132,7 +453,10 @@ test('startup session failure sends guest chat without a lingering authenticated
   await submit(page, 'Synthetic guest question after a failed session check');
   await expect(page.getByText(answer.content, { exact: true })).toBeVisible();
   expect(requestHeaders?.['x-chat-account-id']).toBe('guest');
-  expect(requestHeaders?.cookie || '').not.toContain('chat_session');
+  // Same-origin browser fetch sends the HttpOnly cookie automatically. The
+  // synthetic value is not a valid signed session, so the server must treat
+  // the request as a guest while leaving the browser's cookie untouched.
+  expect(requestHeaders?.cookie || '').toContain('chat_session=synthetic-account-b');
   expect((await context.cookies()).find(cookie => cookie.name === 'chat_session')?.value).toBe('synthetic-account-b');
 });
 
@@ -177,6 +501,10 @@ test('cross-tab account change pauses on failed reconciliation then loads only t
   await expect(page.getByTestId('chat-input')).toBeEnabled();
   await expect(page.getByText('ACCOUNT A PRIVATE FOLLOW-UP', { exact: true })).toHaveCount(0);
   expect(rejectedRequests).toBe(1);
+  await expect.poll(() => page.evaluate(({ key, userId }) => {
+    const stored = JSON.parse(localStorage.getItem(key) || '{}');
+    return Object.prototype.hasOwnProperty.call(stored, userId);
+  }, { key: accountKey, userId: otherUser.id })).toBe(true);
   const stored = await page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}'), accountKey);
   expect(JSON.stringify(stored[otherUser.id])).not.toContain('ACCOUNT A');
   expect(JSON.stringify(stored[user.id])).toContain('ACCOUNT A PRIVATE HISTORY');
@@ -284,6 +612,36 @@ test('canonical mode and complete generated-source audit survive local history r
   }
 });
 
+test('conversation history is session-only by default and saving requires opt-in', async ({ page }) => {
+  await page.addInitScript(key => localStorage.removeItem(key), historyPreferenceKey);
+  await guest(page);
+  let requestBody: { persistHistory?: boolean } | undefined;
+  await page.route('**/api/chat', async route => {
+    requestBody = route.request().postDataJSON();
+    await route.fulfill({ json: answer });
+  });
+  await page.goto('/');
+  await expect(page.getByRole('checkbox', { name: /save conversation on this device/i })).not.toBeChecked();
+  await submit(page, 'Do not persist this test conversation');
+  await expect(page.getByText(answer.content, { exact: true })).toBeVisible();
+  expect(requestBody?.persistHistory).toBe(false);
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}').messages?.length ?? 0, guestKey)).toBe(0);
+  await page.reload();
+  await expect(page.getByText('Do not persist this test conversation', { exact: true })).toHaveCount(0);
+  await page.getByRole('checkbox', { name: /save conversation on this device/i }).check();
+  await page.route('**/api/chat', async route => {
+    requestBody = route.request().postDataJSON();
+    await route.fulfill({ json: answer });
+  });
+  await submit(page, 'Keep this opted-in test conversation');
+  await expect(page.getByText(answer.content, { exact: true })).toBeVisible();
+  expect(requestBody?.persistHistory).toBe(true);
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}').messages?.some((message: { content: string }) => message.content === 'Keep this opted-in test conversation'), guestKey)).toBe(true);
+  await page.getByRole('checkbox', { name: /save conversation on this device/i }).uncheck();
+  await expect.poll(() => page.evaluate(key => JSON.parse(localStorage.getItem(key) || '{}').messages?.length ?? 0, guestKey)).toBe(0);
+  await expect(page.getByText('Keep this opted-in test conversation', { exact: true })).toBeVisible();
+});
+
 test('restored long Arabic history is bounded before transport', async ({ page }) => {
   const messages = Array.from({length:80}, (_,i) => ({ id:`long-${i}`, role:i%2 ? 'assistant' : 'user', content:'معلومات اختبار طويلة '.repeat(280), source:'faq' }));
   await guest(page, { messages, questionsUsed: 1 });
@@ -329,18 +687,49 @@ test('failed logout does not claim that the account has signed out', async ({ pa
   await expect(page.getByText(/sign.out.*(failed|unavailable)|could not sign out/i).first()).toBeVisible();
 });
 
-test('mobile language selection and Arabic answer direction are available', async ({ page }) => {
+test('mobile language is detected from the question and Arabic answer direction is available', async ({ page }) => {
   await page.setViewportSize({width:390,height:844});
   await guest(page);
   await page.route('**/api/chat', route => route.fulfill({json:{...answer,content:'خدمة كشف الدرجات للطالب الحالي مجانية.'}}));
   await page.goto('/');
-  const selector = page.getByRole('combobox').filter({visible:true}).first();
-  await selector.selectOption('ar');
+  await expect(page.getByTestId('mobile-language')).toHaveCount(0);
   await submit(page, 'كم رسوم كشف الدرجات؟');
   await expect(page.getByText('خدمة كشف الدرجات للطالب الحالي مجانية.',{exact:true})).toBeVisible();
   const arabicAnswer = page.getByText('خدمة كشف الدرجات للطالب الحالي مجانية.', { exact: true });
   expect(await arabicAnswer.evaluate(element => element.closest('[dir]')?.getAttribute('dir'))).toBe('rtl');
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 1)).toBe(true);
+});
+
+test('accessible text-size controls scale the interface and respect their limits', async ({ page }) => {
+  await guest(page);
+  await page.goto('/');
+  const increase = page.getByRole('button', { name: 'Increase text size' });
+  const decrease = page.getByRole('button', { name: 'Decrease text size' });
+  await expect(decrease).toBeDisabled();
+  await increase.click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.fontSize)).toBe('112.5%');
+  await increase.click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.fontSize)).toBe('125%');
+  await expect(increase).toBeDisabled();
+  await expect.poll(() => page.evaluate(() => localStorage.getItem('uaeu-chatbot-text-scale-v1'))).toBe('125');
+  await decrease.click();
+  await expect.poll(() => page.evaluate(() => document.documentElement.style.fontSize)).toBe('112.5%');
+});
+
+test('all four suggested prompts populate the question field', async ({ page }) => {
+  await guest(page);
+  await page.goto('/');
+  const question = page.getByRole('textbox', { name: /your UAEU question/i });
+  const suggestions = [
+    ['Student documents', 'How do I request a To Whom It May Concern letter?'],
+    ['Academic dates', 'Where can I check UAEU academic calendar deadlines?'],
+    ['Library help', 'How can UAEU students get library or research help?'],
+    ['Talk to staff', 'I want to speak to a human advisor.'],
+  ] as const;
+  for (const [label, prompt] of suggestions) {
+    await page.getByRole('button', { name: label, exact: true }).click();
+    await expect(question).toHaveValue(prompt);
+  }
 });
 
 test('authentication dialog is labelled and supports Escape and focus restoration', async ({ page }) => {

@@ -1,34 +1,19 @@
 ---
 status: approved
-title: UAEU Main Library — Opening Hours and Contact
+title: UAEU Main Library - hours source discrepancy and contact
 sourceUrl: https://uaeu.ac.ae/en/library/
-lastVerified: 2026-09-30
+lastVerified: 2026-11-15
 subjects: library, opening-hours, student-services
 ---
-# UAEU Main Library — opening hours and contact
+# UAEU Main Library - hours source discrepancy and contact
 
-The UAEU Main Library is located in the Crescent Building.
+Two official UAEU pages publish conflicting Main Library hours:
 
-## Opening hours
+- The [Main Library page](https://uaeu.ac.ae/en/library/) lists Monday-Thursday 7:30 AM-9:00 PM and Friday 7:30 AM-noon for both male and female schedules. Its footer currently says the page was last updated 12 November 2026, but gives no section-specific update date.
+- The separate [Library Hours page](https://www.uaeu.ac.ae/en/library/libraryhours.shtml), whose footer says last updated 13 March 2026, lists Monday-Thursday 7:30 AM-3:00 PM, Friday 7:30 AM-noon, and Saturday/Sunday closed for both schedules. Its displayed table does not identify the season.
 
-During the currently published schedule:
+Both pages say schedules vary by season, including regular semester, summer and Ramadan. The newer overview does not publish weekend hours. The pages therefore do not establish one current, season-specific opening schedule. Present both published schedules and disclose this conflict; for today's or weekend hours, recommend confirming with the library rather than treating the older seasonal table as current.
 
-- Monday to Thursday: 7:00 AM to 9:00 PM.
-- Friday: 7:00 AM to 12:00 PM.
+## Reference support and location
 
-Library hours can vary depending on the time of year, including the regular semester, summer semester, and Ramadan.
-
-## Reference support
-
-Reference staff are available on site:
-
-- Monday to Thursday until 4:30 PM.
-- Friday until 12:00 PM.
-
-## Contact
-
-Main Library reference phone:
-
-03 713 4671
-
-Students should check the official UAEU library page for the latest schedule because opening hours may change by semester or special period.
+The newer Main Library page places it in the Crescent Building. The Library Hours page lists the reference phone as **+971 3 713 4671**. Reference-staff availability is not the same as building opening hours.

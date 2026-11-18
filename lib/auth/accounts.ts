@@ -51,6 +51,19 @@ export async function getAccount(id: string): Promise<Account | null> {
   return row ? toAccount(row) : null;
 }
 
+/**
+ * V3 sign-in owns accounts (lib/db + sealed session cookie). Profiles, academic
+ * records, topic history and memory live in the libSQL store and reference
+ * accounts(id), so mirror the signed-in V3 user as a row with the same id.
+ * The mirror has no usable password and never signs anyone in.
+ */
+export async function ensureStoreAccount(user: { id: string; username: string; studentType: string; universityAffiliation: "uaeu" | "general" }): Promise<void> {
+  await (await store()).execute({
+    sql: "INSERT OR IGNORE INTO accounts(id,username,email,password_hash,student_type,university_affiliation,created_at) VALUES(?,?,?,?,?,?,?)",
+    args: [user.id, `v3:${user.id}`, null, "!v3-session-account", user.studentType || "current", user.universityAffiliation, Date.now()],
+  });
+}
+
 /** Delete an account and everything stored for it. */
 export async function deleteAccount(id: string): Promise<void> {
   await tx([

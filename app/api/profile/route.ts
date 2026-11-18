@@ -18,7 +18,7 @@ export async function GET(req: Request) {
 export async function PUT(req: Request) {
   const originError = sameOriginGuard(req);
   if (originError) return originError;
-  const limited = rateLimitGuard(req, 'profile:update', { limit: 30, windowMs: 60 * 1000 });
+  const limited = await rateLimitGuard(req, 'profile:update', { limit: 30, windowMs: 60 * 1000 });
   if (limited) return limited;
   const userId = await currentAccountId();
   const ownershipError = accountOwnershipGuard(req, userId);

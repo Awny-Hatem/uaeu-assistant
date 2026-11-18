@@ -4,7 +4,7 @@ import os from "node:os";
 import Module, { createRequire } from "node:module";
 import path from "node:path";
 
-// FR4: JWT sessions, password hashing, profile validation, privacy of the
+// FR4 on V3 sessions: sign-in through V3's sealed session cookie, profile validation, privacy of the
 // student ID, topic history, and personalization gating. Real modules and
 // route handlers; isolated SQLite file through libSQL; mock model; no network.
 const dir = fs.mkdtempSync(path.join(os.tmpdir(), "uaeu-auth-profile-"));
@@ -12,6 +12,7 @@ const dbFile = path.join(dir, "store.db");
 process.env.APP_STORE_URL = `file:${dbFile}`;
 process.env.CHATBOT_DB_PATH = ":memory:";
 process.env.AUTH_JWT_SECRET = "test-only-auth-profile-secret-over-32-characters-long";
+process.env.AUTH_COOKIE_SECRET = "test-only-auth-profile-cookie-secret-over-32-chars";
 process.env.CHATBOT_DEPLOYMENT_MODE = "prototype";
 process.env.AI_PROVIDER = "mock";
 process.env.OPENAI_API_KEY = "";
@@ -55,78 +56,45 @@ async function check(name: string, run: () => Promise<void> | void) {
 }
 
 async function main() {
-  const session = requireModule("../lib/auth/session.ts") as typeof import("../lib/auth/session");
-  const accounts = requireModule("../lib/auth/accounts.ts") as typeof import("../lib/auth/accounts");
   const profiles = requireModule("../lib/profile/store.ts") as typeof import("../lib/profile/store");
   const { personalizeQuery, profilePromptBlock } = requireModule("../lib/profile/personalize.ts") as typeof import("../lib/profile/personalize");
   const { store } = requireModule("../lib/store/client.ts") as typeof import("../lib/store/client");
-  const signup = (requireModule("../app/api/auth/signup/route.ts") as typeof import("../app/api/auth/signup/route")).POST;
-  const login = (requireModule("../app/api/auth/login/route.ts") as typeof import("../app/api/auth/login/route")).POST;
   const sessionRoute = (requireModule("../app/api/auth/session/route.ts") as typeof import("../app/api/auth/session/route")).GET;
   const profileRoute = requireModule("../app/api/profile/route.ts") as typeof import("../app/api/profile/route");
   const chat = (requireModule("../app/api/chat/route.ts") as typeof import("../app/api/chat/route")).POST;
-  const { SignJWT } = await import("jose");
-  const json = (body: unknown, headers: Record<string, string> = {}) => ({ method: "POST", headers: { "content-type": "application/json", origin: "http://localhost", ...headers }, body: JSON.stringify(body) });
+  const json = (body: unknown, headers: Record<string, string> = {}) => ({ method: "POST", headers: { "content-type": "application/json", origin: "http://localhost", ...(jar.get("chat_session") ? { cookie: `chat_session=${jar.get("chat_session")!.value}` } : {}), ...headers }, body: JSON.stringify(body) });
 
-  let userId = "";
-  await check("signup hashes with bcrypt cost 12 and sets httpOnly strict cookies (15 min access, refresh scoped to /api)", async () => {
-    jar = new Map();
-    const res = await signup(new Request("http://localhost/api/auth/signup", json({ username: "sara_cs", email: "sara@uaeu.ac.ae", password: "Secure1234", studentType: "Current Student", major: "computr science" })));
+  const { encodeSessionCookie, SESSION_COOKIE_NAME } = requireModule("../lib/session-cookie.ts") as typeof import("../lib/session-cookie");
+  const { registerSession } = requireModule("../lib/auth-session.ts") as typeof import("../lib/auth-session");
+  const { ensureStoreAccount } = requireModule("../lib/auth/accounts.ts") as typeof import("../lib/auth/accounts");
+  const { currentAccountId } = requireModule("../lib/auth/current.ts") as typeof import("../lib/auth/current");
+  type V3User = import("../lib/session-cookie").SessionCookieUser;
+  // Sign in exactly as V3 does: a sealed, server-registered session cookie.
+  const signIn = async (user: V3User) => {
+    const token = encodeSessionCookie(user);
+    assert.ok(token, "V3 session cookie could be sealed");
+    registerSession(user, token);
+    await ensureStoreAccount(user);
+    jar = new Map([[SESSION_COOKIE_NAME, { value: token }]]);
+  };
+  const sara: V3User = { id: "test-user-sara-0001", username: "sara_cs", email: null, studentType: "current", major: null, universityAffiliation: "uaeu" };
+  const userId = sara.id;
+
+  await check("a V3 session identifies the account and creates its profile-store account on first use", async () => {
+    await signIn(sara);
+    assert.equal(await currentAccountId(), userId);
+    const row = (await (await store()).execute({ sql: "SELECT id FROM accounts WHERE id = ?", args: [userId] })).rows[0];
+    assert.equal(String(row?.id), userId);
+    const res = await profileRoute.PUT(new Request("http://localhost/api/profile", { ...json({ major: "computr science" }, { "x-chat-account-id": userId }), method: "PUT" }));
     assert.equal(res.status, 200);
-    const body = await res.json();
-    userId = body.user.id;
-    assert.equal(body.user.major, "Bachelor of Science in Computer Science", "signup major is resolved to the catalog name");
-    const hash = String((await (await store()).execute({ sql: "SELECT password_hash FROM accounts WHERE id = ?", args: [userId] })).rows[0].password_hash);
-    assert.match(hash, /^\$2[aby]\$12\$/);
-    const access = jar.get(session.ACCESS_COOKIE)!;
-    const refresh = jar.get(session.REFRESH_COOKIE)!;
-    assert.equal(access.options?.httpOnly, true);
-    assert.equal(access.options?.sameSite, "strict");
-    assert.equal(access.options?.maxAge, 900);
-    assert.equal(refresh.options?.httpOnly, true);
-    assert.equal(refresh.options?.path, "/api");
-    const payload = JSON.parse(Buffer.from(access.value.split(".")[1], "base64url").toString());
-    assert.deepEqual(Object.keys(payload).sort(), ["aud", "exp", "iat", "iss", "sid", "sub"], "JWT carries only random IDs and standard claims");
+    assert.equal((await profiles.getProfile(userId)).major, "Bachelor of Science in Computer Science", "a typed major is resolved to the catalog name");
   });
 
   await check("session endpoint returns the user without the student ID", async () => {
     const body = await (await sessionRoute()).json();
     assert.equal(body.user.id, userId);
     assert.equal(body.user.username, "sara_cs");
-  });
-
-  await check("tampered, foreign-key and alg=none tokens are rejected", async () => {
-    const good = jar.get(session.ACCESS_COOKIE)!.value;
-    const [h, p, s] = good.split(".");
-    const forgedPayload = Buffer.from(JSON.stringify({ ...JSON.parse(Buffer.from(p, "base64url").toString()), sub: "someone-else" })).toString("base64url");
-    const none = `${Buffer.from(JSON.stringify({ alg: "none", typ: "JWT" })).toString("base64url")}.${p}.`;
-    const foreign = await new SignJWT({ sid: "x" }).setProtectedHeader({ alg: "HS256" }).setSubject(userId).setIssuer("uaeu-assistant").setAudience("uaeu-assistant-web").setExpirationTime("10m").sign(new TextEncoder().encode("another-secret-that-is-at-least-32-chars"));
-    for (const bad of [`${h}.${forgedPayload}.${s}`, none, foreign, "garbage"]) {
-      const j = { get: (n: string) => (n === session.ACCESS_COOKIE ? { value: bad } : undefined), set: () => undefined };
-      assert.equal(await session.currentUserId(j), null);
-    }
-  });
-
-  await check("an expired access token is renewed from the refresh token, which rotates; a replayed refresh fails", async () => {
-    const oldRefresh = jar.get(session.REFRESH_COOKIE)!.value;
-    const expiredJar: Jar = new Map([[session.REFRESH_COOKIE, { value: oldRefresh }]]);
-    const j = { get: (n: string) => (expiredJar.get(n) ? { value: expiredJar.get(n)!.value } : undefined), set: (n: string, v: string) => { expiredJar.set(n, { value: v }); } };
-    assert.equal(await session.currentUserId(j), userId);
-    assert.notEqual(expiredJar.get(session.REFRESH_COOKIE)!.value, oldRefresh, "refresh token rotated");
-    assert.ok(expiredJar.get(session.ACCESS_COOKIE)?.value, "new access token issued");
-    const replay = { get: (n: string) => (n === session.REFRESH_COOKIE ? { value: oldRefresh } : undefined), set: () => undefined };
-    assert.equal(await session.currentUserId(replay), null, "old refresh token cannot be replayed");
-    jar.set(session.ACCESS_COOKIE, expiredJar.get(session.ACCESS_COOKIE)!);
-    jar.set(session.REFRESH_COOKIE, expiredJar.get(session.REFRESH_COOKIE)!);
-  });
-
-  await check("wrong passwords and unknown users fail the same way", async () => {
-    for (const body of [{ username: "sara_cs", password: "WrongPass99" }, { username: "nobody_here", password: "WrongPass99" }]) {
-      const res = await login(new Request("http://localhost/api/auth/login", json(body)));
-      assert.equal(res.status, 401);
-      assert.deepEqual(await res.json(), { error: "Invalid username or password" });
-    }
-    assert.equal(await accounts.verifyLogin("SARA_CS", null, "Secure1234").then((a) => a?.id), userId, "usernames are case-insensitive");
+    assert.ok(!JSON.stringify(body).includes("studentId"));
   });
 
   await check("profile validation resolves official program names (English, Arabic, typos) and rejects invented ones", async () => {
@@ -179,7 +147,7 @@ async function main() {
     for (const k of Object.keys(originals) as (keyof typeof originals)[]) console[k] = (...a: unknown[]) => { logs.push(a.map(String).join(" ")); };
     try {
       modelInputs.length = 0;
-      const res = await chat(new Request("http://localhost/api/chat", json({ messages: [{ role: "user", content: "How many credits do I need to graduate in my major?" }] }, { "x-chat-account-id": userId })));
+      const res = await chat(new Request("http://localhost/api/chat", json({ messages: [{ role: "user", content: "What does my major say about internships and practical training?" }] }, { "x-chat-account-id": userId })));
       assert.equal(res.status, 200);
     } finally {
       Object.assign(console, originals);
@@ -223,8 +191,8 @@ async function main() {
     jar = new Map();
     const anon = await profileRoute.GET(new Request("http://localhost/api/profile"));
     assert.equal(anon.status, 401);
-    const other = await accounts.createAccount({ username: "omar_it", email: "omar@example.invalid", password: "Secure1234", studentType: "Visitor", universityAffiliation: "general" });
-    await session.startSession(cookieJar(), other.id);
+    const other: V3User = { id: "test-user-omar-0002", username: "omar_it", email: null, studentType: "visitor", major: null, universityAffiliation: "general" };
+    await signIn(other);
     const res = await profileRoute.PUT(new Request("http://localhost/api/profile", { ...json({ major: "Bachelor of Accounting", userId, user_id: userId }, { "x-chat-account-id": other.id }), method: "PUT" }));
     assert.equal(res.status, 200);
     assert.equal((await profiles.getProfile(other.id)).major, "Bachelor of Accounting");
