@@ -395,8 +395,12 @@ check("probation and scholarship scenarios separate public policy from award-spe
   const record = entry("academic-probation-scholarship-interaction");
   const english = "How does UAEU academic probation interact with scholarship eligibility for an international undergraduate student with a 1.95 CGPA who failed a course twice? Please separate verified policy from anything that needs my assigned plan or scholarship terms.";
   const arabic = "هل يؤدي الإنذار الأكاديمي تلقائياً إلى إلغاء المنحة الدراسية؟";
-  assert.equal(matchFaq(english)?.entry.id, record.id);
-  assert.equal(matchFaq(arabic)?.entry.id, record.id);
+  const englishMatch = matchFaq(english);
+  const arabicMatch = matchFaq(arabic);
+  assert.equal(englishMatch?.entry.id, record.id);
+  assert.ok((englishMatch?.score ?? 0) >= 950, "English transfer request must enter the deterministic V3 reviewed-answer path");
+  assert.equal(arabicMatch?.entry.id, record.id);
+  assert.ok((arabicMatch?.score ?? 0) >= 950, "Arabic transfer request must enter the deterministic V3 reviewed-answer path");
   assert.match(record.answer_en, /1\.95.*below that threshold/s);
   assert.match(record.answer_en, /does \*\*not\*\* establish that probation.*automatically cancels every scholarship/i);
   assert.match(record.answer_en, /award notice|award name/i);
@@ -412,14 +416,33 @@ check("major-change answers include the published dean-action deadline and only 
   const policy = source(record, "3_undergraduate_registration_and_enrollment").evidenceText ?? "";
   assert.match(record.answer_en, /no later than the end of the first week of the subsequent regular semester/i);
   assert.match(record.answer_en, /does not give a number of days from submission/i);
-  assert.match(record.answer_en, /19.{1,2}30 April 2027.*Spring 2027/s);
-  assert.match(record.answer_en, /not.*list a Fall 2026 internal-transfer window/i);
-  assert.doesNotMatch(record.answer_en, /16.{1,2}27 November 2026/);
+  assert.match(record.answer_en, /16.{1,2}27 November 2026.*Spring 2027/s);
+  assert.doesNotMatch(record.answer_en, /19.{1,2}30 April 2027.*Spring 2027/s);
+  assert.ok(record.citations.some(item => item.url.includes("new_students.shtml") && /16 November through Friday 27 November 2026/.test(item.evidenceText ?? "")));
   assert.match(record.answer_ar, /AE-03/);
   assert.match(policy, /no later than the end of the first week of the subsequent regular semester/i);
   const thirdYear = entry("change-major-third-year");
   assert.match(thirdYear.answer_en, /no later than the end of the first week of the subsequent regular semester/i);
+  assert.match(thirdYear.answer_en, /16.{1,2}27 November 2026.*Spring 2027/s);
   assert.match(thirdYear.answer_ar, /AE-03/);
+});
+
+check("internal college transfers route to bilingual, source-backed internal-transfer guidance", () => {
+  const record = entry("internal-college-transfer");
+  const english = "what are the requirements to transfer from college of education to college of engineering";
+  const arabic = "ما شروط التحويل من كلية التربية إلى كلية الهندسة؟";
+  assert.equal(matchFaq(english)?.entry.id, record.id);
+  assert.equal(matchFaq(arabic)?.entry.id, record.id);
+  assert.match(record.answer_en, /enrolled and active.*not on academic probation/s);
+  assert.match(record.answer_en, /normally allowed one internal transfer/s);
+  assert.match(record.answer_en, /more than 50%/s);
+  assert.match(record.answer_en, /does not publish one universal GPA/i);
+  assert.match(record.answer_ar, /مسجلاً ونشطاً.*ألا تكون تحت الإنذار الأكاديمي/s);
+  assert.match(record.answer_ar, /لا تنشر الخدمة العامة معدلاً تراكمياً موحداً/);
+  assert.ok(record.citations.some(item => item.url.includes("serviceId=94")));
+  assert.ok(record.citations.some(item => item.url.endsWith("college-transfer2024.pdf")));
+  assert.ok(record.citations.some(item => item.url.includes("Calendar?culture=en")));
+  assert.equal(matchFaq("How do I transfer to UAEU from another university?")?.entry.id, "admissions-transfer-application");
 });
 
 check("tuition payment answer discloses the official bank-transfer conflict", () => {

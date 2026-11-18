@@ -379,8 +379,8 @@ check("major-change workflow answers third-year intent without promising approva
   assert.match(guide.description, /outside the College of Medicine and Health Sciences/u);
   assert.match(guide.steps.map(step => step.instruction).join(" "), /does not state a third-year cutoff/u);
   assert.match(guide.steps.map(step => step.instruction).join(" "), /after at least one month/u);
-  assert.match(guide.steps.map(step => step.instruction).join(" "), /internal-transfer window/u);
-  assert.match(guide.steps.map(step => step.instruction).join(" "), /19–30 April 2027.*does not list a Fall 2026 internal-transfer window/u);
+  assert.match(guide.steps.map(step => step.instruction).join(" "), /internal transfer is a separate procedure/u);
+  assert.match(guide.steps.map(step => step.instruction).join(" "), /16–27 November 2026.*Spring 2027/u);
   assert.match(guide.steps.map(step => step.instruction).join(" "), /no later than the end of the first week of the subsequent regular semester/u);
   assert.match(guide.verificationNote!, /2018-08-12.*supersession is not established.*end of the first week/u);
   assert.equal(findServiceGuide("\u0643\u064a\u0641 \u0623\u063a\u064a\u0631 \u062a\u062e\u0635\u0635\u064a")?.id, "change-undergraduate-major");

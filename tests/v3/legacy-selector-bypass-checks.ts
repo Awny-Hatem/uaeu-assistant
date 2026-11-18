@@ -86,6 +86,17 @@ async function main() {
   assert.match(String(calendar.payload.content), /official UAEU academic calendar/i);
   assert.match(JSON.stringify(calendar.payload.citations), /webapps\.uaeu\.ac\.ae\/calendar\/index\.aspx/);
 
+  const internalCollegeTransfer = await ask(
+    "what are the requirements to transfer from college of education to college of engineering",
+    "203.0.113.222",
+  );
+  assert.equal(internalCollegeTransfer.status, 200);
+  assert.equal(internalCollegeTransfer.payload.stateLabel, "v3_reviewed_answer");
+  assert.equal(internalCollegeTransfer.payload.faqId, "internal-college-transfer");
+  assert.match(String(internalCollegeTransfer.payload.content), /enrolled and active.*not on academic probation/s);
+  assert.match(String(internalCollegeTransfer.payload.content), /Engineering advising.*current GPA/i);
+  assert.match(JSON.stringify(internalCollegeTransfer.payload.citations), /serviceId=94/);
+
   const englishPasswordReset = await ask(
     "I've forgotten the password for my university account. What should I do?",
     "203.0.113.217",
