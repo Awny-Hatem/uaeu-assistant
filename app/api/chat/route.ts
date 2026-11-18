@@ -1885,10 +1885,12 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   if (!identifiedCourse && academic?.rows.length && explicitlyNamedPrograms.some(program => !academic?.identifiers?.some(label => normalizeQuery(label) === program))) academic = null;
   const missingCorpusSubject = resolution.needsClarification && !resolution.usedContext && !identifiedCourse && !corpusIdentity.entityLabels?.length && !isProgramRecommendation(routingQuery) && !(/\b(?:catalog|catalogue)\b|كتالوج|دليل/u.test(normalizeQuery(routingQuery)) && understandQuery(routingQuery).years.length);
   const unverifiedProgramIdentity = academic?.gap === "program" && !identifiedCourse && !corpusIdentity.programs?.length && !corpusIdentity.colleges?.length;
+  const academicTopic = Boolean(corpusIdentity.programs?.length || corpusIdentity.colleges?.length || identifiedCourse) ||
+    /\b(?:study plan|model plan|curriculum|semester (?:one|two|[1-8])|first semester|credit hours?|total credits?)\b|خطة|الخطة الدراسية|الفصل (?:ال)?(?:اول|أول|ثاني|اخير|أخير)|مساق|مقرر|ساعات معتمد|مجموع (?:ال)?ساعات/iu.test(routingQuery);
   const expansionEvidence = v3EvidenceMode || faqHit ? [] : majorRecommendation ? await hybridRetrieve(routingQuery, 8, deadlineAt)
-    // Otherwise the corpus joins ordinary retrieval (retrieveContext) after the
-    // answer selector, except to fill a scoped academic gap here.
-    : academic?.gap && academic.gap !== "ambiguous" && !missingCorpusSubject && !unverifiedProgramIdentity ? await hybridRetrieve(routingQuery, 8, deadlineAt) : [];
+    // Academic topics (programs, courses, study plans, semesters, credits) search the
+    // official corpus before the loose selector; service questions keep the selector.
+    : (academic?.gap || academicTopic) && academic?.gap !== "ambiguous" && !academic?.rows.length && !exactPrepared && !missingCorpusSubject && !unverifiedProgramIdentity ? await hybridRetrieve(routingQuery, 8, deadlineAt) : [];
   if (academic?.gap && expansionEvidence.length) academic = { ...academic, rows: expansionEvidence, gap: undefined };
   if (academic?.gap) {
     const identities = academic.identifiers?.join(" / ") ?? "";
