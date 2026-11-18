@@ -167,3 +167,15 @@ Awny's main had no new commits; Ali chose to merge feature/v3-course-answer-scop
   Regression 3 rerun reused saved answers (0.1 s median); treat it as not re-measured.
 - NEXT: the regressions still trail pre-merge by ~40–45 per 600 (V3 handlers answering academic questions); analyse
   regression 1–3 non-correct cases by stateLabel as done for phrasing, fix, rerun non-correct only.
+
+## Recheck after regression fixes (build 0935c75 / KE b8d529d), non-correct cases rerun with fresh labels
+| Suite | Correct | Partial (citation-only) | Incorrect | Pre-merge |
+|---|---|---|---|---|
+| Examiner 600 | 550 | 43 (19) | 7 | 565 / 28 / 7 |
+| Phrasing 399 | 371 | 25 (15) | 3 | 378 / 15 / 6 |
+| Regression 1 (594) | 581 | 6 (4) | 7 | 580 / 8 / 6 |
+| Regression 2 (595) | 570 | 16 (8) | 9 | 581 / 6 / 8 |
+| Regression 3 (593) | 569 | 15 (0) | 9 | — |
+| Memory 94 | 91 | 2 | 1 | 92 / 2 / 0 |
+| Dr. Fady 35 | 35 | 0 | 0 | — |
+No provider/network errors in this recheck. Remaining gap is mostly citation-only partials in examiner and phrasing.

@@ -33,3 +33,4 @@ Costs are the app's own `usage.estimatedUsd` per answer (provider-returned usage
 | V3 merge + offline suites (2026-11-18) | Claude | mock provider only | $0 | $0 | unchanged |
 | final suites partial (stopped for Dr. Fady fixes) + Fady runs + phrasing 399 ×2 (fix2, fix3 running) | Claude | ~207 + 70 + ~800 answers | ~$2.5 (app est.) | check real balance | ~$9.7 (app est.) |
 | v3final suites (phrasing, examiner, regression 1–3 partial, memory, browser) + fix4/fix5 rechecks | Claude | ~2,600 answers | ~$6 (app est.) | check real balance | ~$16 (app est.) |
+| recheck reruns (final6 + final7) and fix5 | Claude | ~1,300 answers | ~$3.5 (app est.) | check real balance | ~$19.5 (app est.) |
