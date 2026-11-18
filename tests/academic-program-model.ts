@@ -1934,6 +1934,16 @@ const missingProgram = assessProgramSemesterPlanConversation([{
 }], "en");
 assert.match(missingProgram?.clarification ?? "", /Which degree program/);
 assert.equal(missingProgram?.plan, undefined);
+const registrationOpeningIsNotAStudyPlan = assessProgramSemesterPlanConversation([{
+  role: "user", content: "When does course registration open for next semester?",
+}], "en");
+assert.equal(registrationOpeningIsNotAStudyPlan, null,
+  "an administrative registration date must reach the reviewed calendar answer, not ask for a degree program");
+const registrationCalendarWordingIsNotAStudyPlan = assessProgramSemesterPlanConversation([{
+  role: "user", content: "When is registration for CSBP319 starting next term?",
+}], "en");
+assert.equal(registrationCalendarWordingIsNotAStudyPlan, null,
+  "a course-specific registration opening date is not a semester-plan request");
 const commFollowUp = assessProgramSemesterPlanConversation([
   { role: "user", content: "For Communication Engineering, what courses are in semester 1?" },
   { role: "assistant", content: "Which published cohort/source label applies to your Communication Engineering plan?" },

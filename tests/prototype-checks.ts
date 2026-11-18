@@ -1103,7 +1103,9 @@ async function main() {
         assert.match(displayedFacts, /does not (?:state|set) a third-year cutoff|third year is not identified/i);
         assert.match(displayedFacts, /not an approval guarantee|not a guarantee|does not guarantee approval/i);
         assert.match(displayedFacts, /no later than the end of the first week of the subsequent regular semester/i);
-        assert.match(displayedFacts, /does not list a Fall 2026 internal-transfer window/i);
+        assert.match(displayedFacts, /16[–-]27 November 2026[\s\S]*Spring 2027/i);
+        assert.doesNotMatch(displayedFacts, /19[–-]30 April 2027[\s\S]*Spring 2027/i,
+          "April calendar dates must not be mislabeled as the Spring 2027 internal-transfer window");
         assert.doesNotMatch(displayedFacts, /Computer Science second semester|Information Security/i);
         assertOfficialCitation(result);
       },

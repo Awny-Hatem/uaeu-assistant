@@ -638,6 +638,12 @@ function requestedSemesterNumber(text: string): number | undefined {
 
 function semesterScheduleIntent(text: string): boolean {
   const normalized = normalizeSemesterDigits(text);
+  // A registration-opening question is about an administrative calendar event,
+  // not a request for the courses in a degree-plan semester. Without this gate,
+  // "course registration ... next semester" is mistaken for a missing-program
+  // curriculum question and the specific reviewed registration-date answer is
+  // never reached.
+  if (/\b(?:course\s+)?(?:registration|enrollment)\b.{0,45}\b(?:open(?:s|ing)?|start(?:s|ing)?|begin(?:s|ning)?|date)\b|\bwhen\b.{0,45}\b(?:course\s+)?(?:registration|enrollment)\b/iu.test(normalized)) return false;
   const mentionsSemester = /\b(?:semester|term)\b|\u0627\u0644\u0641\u0635\u0644|\u0627\u0644\u062a\u0631\u0645/u.test(normalized);
   if (!mentionsSemester) return false;
   if (/\bwhich\s+semester\b/i.test(normalized) && /\b[A-Z]{2,6}\s*\d{3}\b/i.test(normalized) &&
