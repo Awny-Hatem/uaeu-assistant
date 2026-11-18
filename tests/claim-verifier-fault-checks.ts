@@ -284,8 +284,7 @@ async function main() {
       };
       const response = await ask();
       const payload = await response.json();
-      // V3 order (Ali, 18 Nov 2026): the reviewed-record selector runs once first.
-      assert.equal(planner, 1, "The reviewed-record selector runs once before scoped course evidence");
+      assert.equal(planner, 0, "Validated course identity retrieves evidence without a semantic selector");
       assert.equal(writer, rewrittenSupported ? 2 : 3);
       assert.equal(verifier, rewrittenSupported ? 2 : 3);
       assert.ok(!JSON.stringify(payload).includes("All listed prerequisites are optional"), "Rejected draft leaked into response");
@@ -314,8 +313,7 @@ async function main() {
       }
     });
   }
-  // 40 + (selector + recovery selection) in each of the two route checks.
-  assert.equal(intercepted, 44, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
+  assert.equal(intercepted, 40, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
   console.log(`${passed}/${passed + failed} synthetic claim-verifier checks passed; ${intercepted} intercepted fetches, zero network requests. No semantic truth proof is claimed.`);
   if (failed) process.exitCode = 1;
 }

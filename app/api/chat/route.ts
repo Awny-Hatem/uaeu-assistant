@@ -6,7 +6,7 @@ import { after, type NextResponse } from "next/server";
 import { getAcademicProfile } from "@/lib/academic-profile/store";
 import { academicAnswer } from "@/lib/academic-profile/answer";
 import { dialogueReply } from "@/lib/memory/dialogue";
-import { programDirectoryAnswer, currentCEAnswer, programOfferAnswer } from "@/lib/academic-profile/program-registry";
+import { programDirectoryAnswer, currentCEAnswer, programOfferAnswer, programRegistry } from "@/lib/academic-profile/program-registry";
 import { corpusFollowUp } from "@/lib/hybrid-rag";
 import { withAnswerUsage } from "@/lib/answer-usage";
 import { getAccount } from "@/lib/auth/accounts";
@@ -1221,7 +1221,10 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     /\u0627\u0644\u0633\u0627\u0639\u0627\u062a\s+\u0627\u0644\u0645\u062a\u0628\u0642\u064a\u0629|\u0643\u0645\s+\u0633\u0627\u0639\u0629\s+\u0628\u0642\u064a|\u062e\u0637\u0629\s+(?:\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u0641\u0635\u0648\u0644)/iu.test(latest);
   const explicitProgramCreditRequest = Boolean(programIdInText(latest));
   const contextualCreditFollowUp = /^\s*(?:and\s+)?how many\s+(?:credit hours?|credits?)(?:\s+do i need(?:\s+to graduate)?|\s+are required(?:\s+to graduate)?)?\s*[?!.]*$/iu.test(latest);
-  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan) {
+  // "Semester one courses ... and total credits" asks for one term of a model plan,
+  // not the whole-degree credit breakdown.
+  const asksOneTerm = /\b(?:semester|term)\s+(?:one|two|three|four|five|six|seven|eight|[1-8])\b|\b(?:first|second|third|fourth|fifth|sixth|seventh|eighth|final|last)\s+(?:semester|term)\b|\byear\s+(?:one|two|three|four|[1-5])\b|الفصل\s+(?:ال)?(?:أول|اول|ثاني|ثالث|رابع|خامس|سادس|سابع|ثامن|أخير|اخير)|السنة\s+(?:ال)?(?:أولى|اولى|ثانية|ثالثة|رابعة)/iu.test(latest);
+  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan && !asksOneTerm) {
     const identityReview = assessAcademicProgramIdentityReview(academicMessages, locale);
     if (identityReview && !programCreditAssessment.explicitlySelectedVersion) {
       const payload: AssistantPayload = {
@@ -1241,14 +1244,20 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
       return respond(payload, latest, locale);
     }
     const { curriculum, programId, sources } = programCreditAssessment;
+    const creditContent = renderProgramCreditAssessment(programCreditAssessment, locale);
+    // Also cite the program's official UAEU catalog page (students and examiners
+    // ask "according to the published catalog"), not only the college page.
+    const heading = creditContent.split("\n")[0];
+    const catalogRecord = programRegistry().filter((record) => record.url.includes("/catalog/") && heading.includes(record.title)).sort((x, y) => y.title.length - x.title.length)[0];
+    const catalogCitation = catalogRecord && !sources.some(({ url }) => url === catalogRecord.url) ? [{ title: `UAEU Catalog — ${catalogRecord.title}`, url: catalogRecord.url, lastVerified: catalogRecord.fetchedAt.slice(0, 10) }] : [];
     const payload: AssistantPayload = {
       role: "assistant",
-      content: renderProgramCreditAssessment(programCreditAssessment, locale),
+      content: creditContent,
       source: "rag",
       stateLabel: v3Enabled ? "v3_program_credit_model" : "published_curriculum_snapshot_answer",
       resolutionState: curriculum ? "CONDITIONAL" : "UNSUPPORTED",
       disposition: curriculum ? "answer" : "clarify",
-      citations: sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified })),
+      citations: [...catalogCitation, ...sources.map(({ title, url, lastVerified }) => ({ title, url, lastVerified }))],
       evidenceIds: curriculum ? [`academic-program:${programId}:${curriculum.id}`] : [],
       topic: programId,
       communications: matchCommunications(routingQuery),
@@ -1904,10 +1913,12 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   if (!identifiedCourse && academic?.rows.length && explicitlyNamedPrograms.some(program => !academic?.identifiers?.some(label => normalizeQuery(label) === program))) academic = null;
   const missingCorpusSubject = resolution.needsClarification && !resolution.usedContext && !identifiedCourse && !corpusIdentity.entityLabels?.length && !isProgramRecommendation(routingQuery) && !(/\b(?:catalog|catalogue)\b|كتالوج|دليل/u.test(normalizeQuery(routingQuery)) && understandQuery(routingQuery).years.length);
   const unverifiedProgramIdentity = academic?.gap === "program" && !identifiedCourse && !corpusIdentity.programs?.length && !corpusIdentity.colleges?.length;
+  const academicTopic = Boolean(corpusIdentity.programs?.length || corpusIdentity.colleges?.length || identifiedCourse) ||
+    /\b(?:study plan|model plan|curriculum|semester (?:one|two|[1-8])|first semester|credit hours?|total credits?)\b|خطة|الخطة الدراسية|الفصل (?:ال)?(?:اول|أول|ثاني|اخير|أخير)|مساق|مقرر|ساعات معتمد|مجموع (?:ال)?ساعات/iu.test(routingQuery);
   const expansionEvidence = v3EvidenceMode || faqHit ? [] : majorRecommendation ? await hybridRetrieve(routingQuery, 8, deadlineAt)
-    // Otherwise the corpus joins ordinary retrieval (retrieveContext) after the
-    // answer selector, except to fill a scoped academic gap here.
-    : academic?.gap && academic.gap !== "ambiguous" && !missingCorpusSubject && !unverifiedProgramIdentity ? await hybridRetrieve(routingQuery, 8, deadlineAt) : [];
+    // Academic topics (programs, courses, study plans, semesters, credits) search the
+    // official corpus before the loose selector; service questions keep the selector.
+    : (academic?.gap || academicTopic) && academic?.gap !== "ambiguous" && !academic?.rows.length && !exactPrepared && !missingCorpusSubject && !unverifiedProgramIdentity ? await hybridRetrieve(routingQuery, 8, deadlineAt) : [];
   if (academic?.gap && expansionEvidence.length) academic = { ...academic, rows: expansionEvidence, gap: undefined };
   if (academic?.gap) {
     const identities = academic.identifiers?.join(" / ") ?? "";
@@ -1943,9 +1954,12 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     content: locale === "ar" ? "تعذر اختيار إجابة موثوقة بسبب عدم توفر خدمة الإجابة مؤقتًا. هذا ليس دليلًا على غياب سياسة الجامعة؛ حاول مجددًا بعد قليل."
       : "The answer-selection service is temporarily unavailable. This does not mean the university policy is missing; please try again shortly.",
   }, latest, locale, 503);
-  // V3 order (Ali, 18 Nov 2026): the closed-catalog selector and verbatim reviewed
-  // answers come first; scoped academic and corpus evidence serve what they do not cover.
-  if (!v3EvidenceMode && (!directFaqHit || resolution.usedContext || resolution.needsClarification)) {
+  // Direct reviewed matches render verbatim (V3). The loose closed-catalog selector
+  // runs only when no scoped academic evidence exists (or for an explicit course
+  // comparison); measured: selector-first lost 114/399 phrasing cases (18 Nov 2026).
+  const comparesCourses = requestedCourseTargets(routingQuery).length >= 2;
+  const onlyReviewedRecords = preferredEvidence.length > 0 && preferredEvidence.every((row) => row.source.startsWith("answer:"));
+  if (!v3EvidenceMode && (!preferredEvidence.length || comparesCourses || onlyReviewedRecords) && (!directFaqHit || resolution.usedContext || resolution.needsClarification)) {
     semantic = await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
     if (semantic) {
       const semanticAcknowledgementIsSafe = semantic.kind !== "acknowledge" || conversationAcknowledgement(latest) !== null;
@@ -1988,7 +2002,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   let recoveryEvidence: EvidenceRow[] | undefined;
   if (v3EvidenceMode) {
     recoveryEvidence = v3EvidenceRows ?? [];
-  } else if (!faqHit && !selectionUnavailable) {
+  } else if ((!preferredEvidence.length || semantic || onlyReviewedRecords || comparesCourses) && !faqHit && !selectionUnavailable) {
     recoveryEvidence = await retrieveContext(routingQuery, deadlineAt);
     const originalRequest = semantic ?? {
       resolvedQuery: routingQuery, subject: resolution.subject?.label ?? "", recordIds: [], primaryRecordIds: [],

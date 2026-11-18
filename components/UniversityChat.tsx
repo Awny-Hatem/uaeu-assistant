@@ -1286,7 +1286,7 @@ export function UniversityChat() {
                     >
                       {message.role === "assistant" ? (
                         <div className="markdown-body">
-                          <ReactMarkdown remarkPlugins={[remarkGfm]} urlTransform={safeMarkdownUrl}>
+                          <ReactMarkdown remarkPlugins={[remarkGfm]} urlTransform={safeMarkdownUrl} components={{ a: ({ node: _node, ...props }) => { void _node; return <a {...props} target="_blank" rel="noopener noreferrer" />; } }}>
                             {message.content}
                           </ReactMarkdown>
                         </div>

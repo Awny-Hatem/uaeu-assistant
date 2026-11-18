@@ -8,11 +8,11 @@ const OFFICIAL = /^https:\/\/(?:[a-z]+\.)?uaeu\.ac\.ae\//i;
 // Per case: every pattern must match the final answer (EN pattern | AR pattern).
 const CHECKS = {
   FADY01: { need: [/program|برنامج/i, /admitted|التحقت/i, /study plan|الخطة الدراسية/i, /prerequisite|المتطلبات السابقة/i, /Degree Works/i, /120/, /2\.00/], cite: true },
-  FADY02: { need: [/CLOSED SECTION override/i, /College Advising Unit|وحدة الإرشاد/i, /add\/drop|الحذف والإضافة|Register for Classes/i], cite: true },
-  FADY03: { need: [/Register for Classes/i, /View Sections/i, /term|الفصل/i], noProgramQuestion: true, cite: true },
+  FADY02: { need: [/CLOSED SECTION override/i, /academic advisor|المرشد الأكاديمي/i, /student ID|رقمك الجامعي/i, /CRN/, /registration-override/, /add\/drop|الحذف والإضافة|Register for Classes/i], cite: true },
+  FADY03: { need: [/Browse Classes|تصفح الشعب/i, /StudentRegistrationSsb/, /Summer 2027|صيف 2027/i], noProgramQuestion: true, cite: true },
   FADY04: { need: [/study plan|الخطة الدراسية|خطة/i], turnNeeds: [[/program|برنامج/i], [/year and semester|admitted|سنة|التحقت/i], [/Degree Works/i, /advisor|مرشد/i]] },
   FADY05: { need: [/Register for Classes/i, /Add/, /Submit/, /Registered/], cite: true },
-  FADY06: { need: [/CLOSED SECTION override/i, /College Advising Unit|وحدة الإرشاد/i, /Registered/i], cite: true },
+  FADY06: { need: [/academic advisor|المرشد الأكاديمي/i, /registration-override/, /Registered/i], cite: true },
   FADY07: { need: [/\|\s*A\s*\|/, /4\.0/, /(?:credit hours|الساعات)/i, /3\.12/], cite: true },
   FADY08: { need: [/8:00/, /5:00|17:00|5:00 مساء/i], cite: false },
   FADY09: { need: [/eServices|الخدمات الإلكترونية/i, /week|الأسبوع/i, /refund|الاسترداد/i, /clearance|إخلاء/i], cite: true },

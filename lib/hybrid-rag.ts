@@ -191,6 +191,10 @@ async function corpusRetrieve(query: string, topK = 8, deadlineAt?: number): Pro
     // Feeds are discovery metadata, never a readable public answer source.
     if (/\.xml(?:[?#]|$)/iu.test(c.url)) return false;
     if (!historicalRequest && c.temporal === "historical") return false;
+    // Time-bound operational documents (registration programmes, exam keys and
+    // schedules, calendars, fee sheets) from past academic years are not current
+    // guidance; use them only when the student asks about that year.
+    if (!historicalRequest && staleOperationalSource(`${c.url} ${c.title ?? ""}`)) return false;
     // A current calendar page also lists terms that have ended; drop those
     // sections unless the question names that year.
     if (!historicalRequest && endedCalendarTerm(c.heading, wantedYears)) return false;
@@ -405,4 +409,12 @@ export function endedCalendarTerm(heading: string, wantedYears: readonly (string
   const startMonth = { fall: 7, spring: 0, summer: 5 }[m[1].toLowerCase() as 'fall' | 'spring' | 'summer'];
   const ended = new Date(Number(m[2]), startMonth + 5, 1);
   return ended < now;
+}
+
+const OPERATIONAL_DOC = /registration[_\s-]?program|final[_\s-]?exams?|exams?[_\s-]?(?:schedule|key|timetable)|class[_\s-]?schedule|timetable|calendar|fees?|rates|tuition|refund|orientation|faq|summer|admission|guide/iu;
+/** An operational document whose newest year is before the 2025–26 academic year. */
+export function staleOperationalSource(text: string, currentAcademicYearStart = 2025): boolean {
+  if (!OPERATIONAL_DOC.test(text)) return false;
+  const years = [...text.matchAll(/(?<!\d)(20[0-4]\d)/gu)].map((m) => Number(m[1]));
+  return years.length > 0 && Math.max(...years) < currentAcademicYearStart;
 }
