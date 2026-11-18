@@ -362,7 +362,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
   const discrepancyFacts = creditDiscrepancy?.appliesTo ?? (creditDiscrepancy ? ["creditHours"] : []);
   const discrepancyCoversCredits = discrepancyFacts.includes("creditHours");
   const discrepancyCoversPrerequisites = discrepancyFacts.includes("prerequisite");
-  if (asksCredits && !discrepancyCoversCredits && record.creditHours !== null) lines.push(locale === "ar" ? `- الساعات المعتمدة الموضحة في المصدر المستشهد به: **${record.creditHours}**.` : `- Credit hours shown in the cited source: **${record.creditHours}**.`);
+  if (asksCredits && !discrepancyCoversCredits && record.creditHours !== null) lines.push(locale === "ar" ? `- **الساعات المعتمدة: ${record.creditHours}** (حسب سجل الفهرس المستشهد به).` : `- Credit hours shown in the cited source: **${record.creditHours}**.`);
   else if (asksCredits && !discrepancyCoversCredits) lines.push(locale === "ar" ? "- لا يعرض هذا السجل عدد الساعات." : "- This catalog entry does not display a credit-hour value.");
   const prerequisiteRule = !prerequisiteUnsupported ? getCurrentPrerequisiteRule(record.code) : null;
   const ruleCourseCodes = prerequisiteRule ? [...new Set(prerequisiteExpressionCodes(prerequisiteRule.expression).map((item) => item.toUpperCase()))].sort() : [];

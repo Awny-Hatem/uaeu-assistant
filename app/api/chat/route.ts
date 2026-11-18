@@ -1239,7 +1239,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // The structured credit model covers bachelor curricula; a master's, doctoral or
   // Doctor of Medicine question must not receive a bachelor's credit total.
   const asksOtherDegreeLevel = /\b(?:master'?s?|msc|m\.sc|mba|mpa|phd|ph\.d|doctorate|doctoral|doctor of|dba|postgraduate|graduate (?:program|degree|studies))\b|ماجستير|دكتوراه|الدراسات العليا|دكتور في الطب/iu.test(latest);
-  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan && !asksOneTerm && !asksOtherDegreeLevel && !/\bdoctor\b|\btuition\b|\bfees?\b|\bcost\b|\baed\b|per credit|\bdifference\b|\bcompare\b|\bversus\b|\bvs\.?\b|رسوم|الفرق|قارن/iu.test(latest)) {
+  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan && !asksOneTerm && !asksOtherDegreeLevel && !/micro[- ]?credential|\bminor\b|\bdiploma\b|\bcertificate\b|شهادة مصغرة|تخصص فرعي|دبلوم|\bdoctor\b|\btuition\b|\bfees?\b|\bcost\b|\baed\b|per credit|\bdifference\b|\bcompare\b|\bversus\b|\bvs\.?\b|رسوم|الفرق|قارن/iu.test(latest)) {
     const identityReview = assessAcademicProgramIdentityReview(academicMessages, locale);
     if (identityReview && !programCreditAssessment.explicitlySelectedVersion) {
       const payload: AssistantPayload = {
@@ -1929,7 +1929,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   const missingCorpusSubject = resolution.needsClarification && !resolution.usedContext && !identifiedCourse && !corpusIdentity.entityLabels?.length && !isProgramRecommendation(routingQuery) && !(/\b(?:catalog|catalogue)\b|كتالوج|دليل/u.test(normalizeQuery(routingQuery)) && understandQuery(routingQuery).years.length);
   const unverifiedProgramIdentity = academic?.gap === "program" && !identifiedCourse && !corpusIdentity.programs?.length && !corpusIdentity.colleges?.length;
   const academicTopic = Boolean(corpusIdentity.programs?.length || corpusIdentity.colleges?.length || identifiedCourse) ||
-    /\b(?:study plan|model plan|curriculum|semester (?:one|two|[1-8])|first semester|credit hours?|total credits?|credit requirement|master'?s?|msc|phd|doctorate|doctoral|doctor|medicine|scholarships?|tuition|per credit|bachelor'?s? (?:of|in)|admission requirements?|minimum (?:gpa|average|score)|ielts|toefl|school average)\b|ماجستير|دكتوراه|معدل|خطة|الخطة الدراسية|الفصل (?:ال)?(?:اول|أول|ثاني|اخير|أخير)|مساق|مقرر|ساعات معتمد|مجموع (?:ال)?ساعات/iu.test(routingQuery);
+    /\b(?:study plan|model plan|curriculum|semester (?:one|two|[1-8])|first semester|credit hours?|total credits?|credit requirement|master'?s?|msc|phd|doctorate|doctoral|doctor|medicine|scholarships?|tuition|per credit|bachelor'?s? (?:of|in)|admission requirements?|minimum (?:gpa|average|score)|ielts|toefl|school average)\b|ماجستير|دكتوراه|دكتور|الطب|معدل|خطة|الخطة الدراسية|الفصل (?:ال)?(?:اول|أول|ثاني|اخير|أخير)|مساق|مقرر|ساعات معتمد|مجموع (?:ال)?ساعات/iu.test(routingQuery);
   const expansionEvidence = v3EvidenceMode || faqHit ? [] : majorRecommendation ? await hybridRetrieve(routingQuery, 8, deadlineAt)
     // Academic topics (programs, courses, study plans, semesters, credits) search the
     // official corpus before the loose selector; service questions keep the selector.
@@ -1946,7 +1946,9 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     if (shouldPersistServerSide && userId) saveMessage(userId, "assistant", payload.content, payload.source, payload, expectedHistoryGeneration);
     return respond(payload, latest, locale);
   }
-  const preferredEvidence: EvidenceRow[] = academic?.rows.length ? academic.rows : expansionEvidence;
+  const asksMedicine = /\bmedicine\b|\bmedical\b|\bMD\b|الطب/u.test(routingQuery);
+  const scopedRows = (academic?.rows ?? []).filter((row) => !(asksMedicine && /excluding Medicine|excludes? (?:the )?College of Medicine|باستثناء (?:كلية )?الطب/iu.test(row.text.slice(0, 400))));
+  const preferredEvidence: EvidenceRow[] = scopedRows.length ? scopedRows : asksMedicine && academic?.rows.length ? await hybridRetrieve(routingQuery, 8, deadlineAt) : expansionEvidence;
   let semantic: SemanticRoute | null = null;
   let selectionUnavailable = false;
   const selectionFailure = (reason: "provider_unavailable" | "invalid_contract") => {
@@ -1972,7 +1974,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // Direct reviewed matches render verbatim (V3). The loose closed-catalog selector
   // runs only when no scoped academic evidence exists (or for an explicit course
   // comparison); measured: selector-first lost 114/399 phrasing cases (18 Nov 2026).
-  const comparesCourses = requestedCourseTargets(routingQuery).length >= 2;
+  const comparesCourses = requestedCourseTargets(routingQuery).length >= 2 && /\b(?:compare|comparison|versus|vs\.?|difference|differences)\b|قارن|مقارنة|الفرق/iu.test(routingQuery);
   const onlyReviewedRecords = preferredEvidence.length > 0 && preferredEvidence.every((row) => row.source.startsWith("answer:"));
   if (!v3EvidenceMode && (!preferredEvidence.length || comparesCourses || onlyReviewedRecords) && (!directFaqHit || resolution.usedContext || resolution.needsClarification)) {
     semantic = await resolveSemanticRoute(sanitized, locale, deadlineAt, selectionFailure);
@@ -2067,7 +2069,9 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   }
   // Prefer directly matched, reviewed service guidance over broader synthesis
   // after exact canonical answers have already had a chance to resolve the turn.
-  const candidateGuide = findServiceGuide(v3EvidenceMode ? `${answerRequest}\n${routingQuery}` : routingQuery);
+  // A guide card lists steps, not a phone number or email; contact questions need the record.
+  const asksContactDetail = /\b(?:phone|telephone|tel|email|e-mail|extension|contact number)\b|رقم (?:الهاتف|التواصل)|هاتف|ايميل|البريد الإلكتروني/iu.test(latest);
+  const candidateGuide = asksContactDetail ? null : findServiceGuide(v3EvidenceMode ? `${answerRequest}\n${routingQuery}` : routingQuery);
   const guide = candidateGuide && (!v3EvidenceMode || !candidateGuide.requiresVerification) && !hasScopedContextualReviewedHit
     ? candidateGuide
     : null;
