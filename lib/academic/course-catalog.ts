@@ -283,6 +283,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
   const asksWhatToCompleteBeforeCourse = Boolean(code) &&
     /\b(?:what|which)\s+(?:must|should|do)\s+i\s+(?:complete|finish|pass|take)\s+before\b/u.test(normalized);
   const arabicNormalized = question.normalize("NFC").replace(/[\u064B-\u065F\u0670]/gu, "").replace(/[أإآ]/gu, "ا");
+  const asksArabicPrerequisiteFacts = /متطلب.{0,30}(?:سابق|مصاحب|منشور|مذكور)|حالة\s+المتطلب/u.test(arabicNormalized);
   const asksArabicCourseFact = /(?:متطلبات\s+(?:مادة|مقرر)|عدد\s+ال?ساعات?|كم\s+(?:(?:عدد\s+)?ال?)?(?:ساعات?|ساعة)|ساعاتها|متطلبا?\s+(?:سابقا?|مصاحبا?)|المتطلبات?\s+(?:السابقة|المصاحبة)|كيف\s+يسم[يى]|(?:اسم|عنوان)\s+(?:ال?مقرر|ال?مادة)|(?:الاسم|العنوان)\s+المنشور\s+ل(?:لمقرر|لمادة)|المتطلب\s+(?:السابق|المصاحب))/u.test(arabicNormalized);
   const additionalIntent = additionalCatalogIntent(question, targetCourseCode);
   const asksArabicCreditHours = /\u0643\u0645\s+(?:\u0633\u0627\u0639\u0629|\u0633\u0627\u0639\u062a\u0647\u0627)|\u0627\u0644\u0633\u0627\u0639\u0627\u062a\s+\u0627\u0644\u0645\u0639\u062a\u0645\u062f\u0629/u.test(question);
@@ -348,8 +349,8 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
   const lines = [`**${record.code} ${record.title}**`];
   const asksCredits = /\b(?:credit|credits|credit hours?|hours?)\b|ساعات|ساعة/iu.test(question) || asksArabicCreditHours;
   const candidateDiscrepancy = loadCreditDiscrepancies().get(code);
-  const asksPrerequisiteFacts = asksCourseEligibility || additionalIntent?.fact === "prerequisite" ||
-    /\b(?:prerequisites?|pre-?reqs?)\b|المتطلبات السابقة/iu.test(question);
+  const asksPrerequisiteFacts = asksCourseEligibility || asksWhatToCompleteBeforeCourse || additionalIntent?.fact === "prerequisite" ||
+    asksArabicPrerequisiteFacts || /\b(?:prerequisites?|pre-?reqs?)\b|المتطلب(?:ات)?\s+(?:السابقة|السابق|المصاحبة|المصاحب)/iu.test(question);
   const requestedFacts: CatalogFactKind[] = [];
   if (asksCredits) requestedFacts.push("creditHours");
   if (asksPrerequisiteFacts) requestedFacts.push("prerequisite");
@@ -369,7 +370,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     ruleCourseCodes.every((item, index) => item === catalogPrerequisiteCodes[index]);
   let prerequisiteRuleSource: { title: string; url: string; lastVerified: string } | undefined;
   if (creditDiscrepancy) lines.push(creditDiscrepancy.message[locale]);
-  if (record.prerequisiteText && !discrepancyCoversPrerequisites) {
+  if (asksPrerequisiteFacts && record.prerequisiteText && !discrepancyCoversPrerequisites) {
     if (prerequisiteUnsupported) {
       lines.push(`- ${locale === "ar" ? "نص المتطلب السابق في الفهرس" : "Catalog prerequisite wording"}: ${record.prerequisiteText}.`);
       lines.push(locale === "ar"
@@ -390,8 +391,8 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
     }
   }
   else if (!record.prerequisiteText && asksPrerequisiteFacts) lines.push(locale === "ar" ? "- لا يعرض هذا السجل قسماً للمتطلبات السابقة؛ وهذا لا يثبت عدم وجود قيود تسجيل أخرى." : "- This catalog entry does not show a prerequisite section; that does not establish that no other registration restrictions apply.");
-  if (record.corequisiteText) lines.push(locale === "ar" ? `- المتطلبات المصاحبة: ${record.corequisiteText}.` : `- Corequisites: ${record.corequisiteText}.`);
-  if (record.preCorequisiteText) {
+  if (asksPrerequisiteFacts && record.corequisiteText) lines.push(locale === "ar" ? `- المتطلبات المصاحبة: ${record.corequisiteText}.` : `- Corequisites: ${record.corequisiteText}.`);
+  if ((asksPrerequisiteFacts || asksConcurrencyRule) && record.preCorequisiteText) {
     if (asksConcurrencyRule) {
       lines.push(locale === "ar"
         ? `- يعني وسم السابق/المصاحب أن ${record.preCorequisiteText} يمكن استيفاؤه بإكماله قبل ${record.code} أو بالتسجيل فيه بالتزامن؛ لذلك يسمح الفهرس بتسجيلهما في الفصل نفسه، مع مراعاة الحد الأدنى للدرجة والتحقق من الخطة والمقاعد المتاحة.`
@@ -400,7 +401,7 @@ export function answerOfficialCourseCatalogQuestion(question: string, locale: "e
       lines.push(locale === "ar" ? `- متطلب سابق/مصاحب كما يسميه الفهرس: ${record.preCorequisiteText}.` : `- Pre/Co requirement as labeled by the catalog: ${record.preCorequisiteText}.`);
     }
   }
-  if (/description|tell me about|what is/iu.test(question) && record.description) lines.push(locale === "ar" ? `- وصف المقرر المنشور (بالإنجليزية): ${record.description}` : `- Published course description: ${record.description}`);
+  if (/description|describe|tell me about/iu.test(question) && record.description) lines.push(locale === "ar" ? `- وصف المقرر المنشور (بالإنجليزية): ${record.description}` : `- Published course description: ${record.description}`);
   lines.push(locale === "ar"
     ? "هذا سجل فهرس المقرر، ولا يحدد وحده البرنامج أو سنة الدفعة التي ينطبق عليها، ولا يؤكد أهليتك الشخصية أو توفر شعبة."
     : "This is a course-catalog record. It does not establish which degree or cohort requires the course, personal registration eligibility, or current section availability.");

@@ -13,6 +13,12 @@ assert.match(credits.content, /Data Structures/u);
 assert.match(credits.content, /Credit hours shown in the cited source: \*\*3\*\*/u);
 assert.equal(credits.source?.url, "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319");
 
+const creditOnly = answerOfficialCourseCatalogQuestion("What is the published credit value of course ACCT120 at UAEU?", "en");
+assert(creditOnly, "a direct credit-value question resolves from the official catalog");
+assert.match(creditOnly.content, /Credit hours shown in the cited source: \*\*3\*\*/u);
+assert.doesNotMatch(creditOnly.content, /Prerequisites as stated|Published course description|managerial accounting concepts/u,
+  "a credit-only question does not append prerequisites or a long course description");
+
 const geol654Credits = answerOfficialCourseCatalogQuestion("How many credit hours is GEOL654?", "en");
 assert(geol654Credits, "the official GEOL654 course record includes a credit value");
 assert.equal(geol654Credits.resolutionState, "VERIFIED");
