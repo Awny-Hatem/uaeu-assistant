@@ -336,7 +336,7 @@ function resolutionLabel(state: UiMessage["resolutionState"], language: "en" | "
   const labels: Record<NonNullable<UiMessage["resolutionState"]>, { en: string; ar: string }> = {
     VERIFIED: { en: "Verified from sources", ar: "تم التحقق من المصادر" },
     CONDITIONAL: { en: "Conditional guidance", ar: "إرشادات مشروطة" },
-    MISSING_CONTEXT: { en: "More information needed", ar: "مطلوب مزيد من المعلومات" },
+    MISSING_CONTEXT: { en: "Quick question", ar: "سؤال سريع" },
     CONFLICTED: { en: "Sources conflict", ar: "تعارض في المصادر" },
     STALE: { en: "Source may be outdated", ar: "قد يكون المصدر قديمًا" },
     AUTHORIZATION_REQUIRED: { en: "Sign-in required", ar: "يلزم تسجيل الدخول" },

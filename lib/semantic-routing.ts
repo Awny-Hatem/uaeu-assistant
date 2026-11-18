@@ -263,6 +263,9 @@ export function canonicalEntriesForSemanticRoute(route: SemanticRoute): FaqEntry
   for (const id of ids) {
     const entry = entries.find((entry) => entry.id === id);
     if (!entry || !allowed.has(`answer:${id}`)) return [];
+    // Records written for one long examiner scenario are not answers to a short,
+    // general student question ("How should I plan my bachelor?").
+    if (Math.min(...entry.questions.map((question) => question.length)) > 120 && route.resolvedQuery.length < 100) return [];
     const scope = faqScope(entry);
     const meaning = understandQuery(route.resolvedQuery);
     // A benefits-only paragraph does not answer whether an award is guaranteed.

@@ -162,7 +162,9 @@ async function main() {
     assert.equal(body.answerStatus, "unavailable");
     assert.equal(body.disposition, "clarify");
     assert.ok(!String(body.content).includes("987654321"));
-    assert.deepEqual(body.citations, []);
+    // Student-facing fallback: official links only, no reviewer internals.
+    assert.ok(body.citations.every((citation: { url: string }) => /^https:\/\/(?:[a-z]+\.)?uaeu\.ac\.ae\//u.test(citation.url)));
+    assert.doesNotMatch(String(body.content), /withheld|source-support|narrower verified record/i);
   });
   console.log(`${passed}/${passed + failed} synthetic source-evidence checks passed; ${intercepted} intercepted fetches, zero network requests. This is not an entailment proof.`);
   if (failed) process.exitCode = 1;

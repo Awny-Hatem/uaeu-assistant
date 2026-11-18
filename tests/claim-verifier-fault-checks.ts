@@ -307,7 +307,9 @@ async function main() {
         assert.equal(payload.disposition, "clarify");
         assert.equal(payload.grounding.status, "rejected");
         assert.deepEqual(payload.grounding.reasonCodes, ["contradiction"]);
-        assert.deepEqual(payload.citations, []);
+        // Student-facing fallback: official links only, no reviewer internals.
+        assert.ok(payload.citations.every((citation: { url: string }) => /^https:\/\/(?:[a-z]+\.)?uaeu\.ac\.ae\//u.test(citation.url)));
+        assert.doesNotMatch(String(payload.content), /withheld|source-support|narrower verified record/i);
         assert.ok(!payload.claims?.length);
       }
     });
