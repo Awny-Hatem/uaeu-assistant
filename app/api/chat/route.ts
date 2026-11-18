@@ -1227,7 +1227,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   // The structured credit model covers bachelor curricula; a master's, doctoral or
   // Doctor of Medicine question must not receive a bachelor's credit total.
   const asksOtherDegreeLevel = /\b(?:master'?s?|msc|m\.sc|mba|mpa|phd|ph\.d|doctorate|doctoral|doctor of|dba|postgraduate|graduate (?:program|degree|studies))\b|ماجستير|دكتوراه|الدراسات العليا|دكتور في الطب/iu.test(latest);
-  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan && !asksOneTerm && !asksOtherDegreeLevel) {
+  if (programCreditAssessment && (explicitProgramCreditRequest || contextualCreditFollowUp) && !asksForPersonalCreditBalanceOrPlan && !asksOneTerm && !asksOtherDegreeLevel && !/\bdoctor\b|\btuition\b|\bfees?\b|\bcost\b|\baed\b|per credit|\bdifference\b|\bcompare\b|\bversus\b|\bvs\.?\b|رسوم|الفرق|قارن/iu.test(latest)) {
     const identityReview = assessAcademicProgramIdentityReview(academicMessages, locale);
     if (identityReview && !programCreditAssessment.explicitlySelectedVersion) {
       const payload: AssistantPayload = {
@@ -1917,7 +1917,7 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
   const missingCorpusSubject = resolution.needsClarification && !resolution.usedContext && !identifiedCourse && !corpusIdentity.entityLabels?.length && !isProgramRecommendation(routingQuery) && !(/\b(?:catalog|catalogue)\b|كتالوج|دليل/u.test(normalizeQuery(routingQuery)) && understandQuery(routingQuery).years.length);
   const unverifiedProgramIdentity = academic?.gap === "program" && !identifiedCourse && !corpusIdentity.programs?.length && !corpusIdentity.colleges?.length;
   const academicTopic = Boolean(corpusIdentity.programs?.length || corpusIdentity.colleges?.length || identifiedCourse) ||
-    /\b(?:study plan|model plan|curriculum|semester (?:one|two|[1-8])|first semester|credit hours?|total credits?|credit requirement|master'?s?|msc|phd|doctorate|doctoral|doctor of medicine|bachelor'?s? (?:of|in)|admission requirements?|minimum (?:gpa|average|score)|ielts|toefl|school average)\b|ماجستير|دكتوراه|معدل|خطة|الخطة الدراسية|الفصل (?:ال)?(?:اول|أول|ثاني|اخير|أخير)|مساق|مقرر|ساعات معتمد|مجموع (?:ال)?ساعات/iu.test(routingQuery);
+    /\b(?:study plan|model plan|curriculum|semester (?:one|two|[1-8])|first semester|credit hours?|total credits?|credit requirement|master'?s?|msc|phd|doctorate|doctoral|doctor|medicine|scholarships?|tuition|per credit|bachelor'?s? (?:of|in)|admission requirements?|minimum (?:gpa|average|score)|ielts|toefl|school average)\b|ماجستير|دكتوراه|معدل|خطة|الخطة الدراسية|الفصل (?:ال)?(?:اول|أول|ثاني|اخير|أخير)|مساق|مقرر|ساعات معتمد|مجموع (?:ال)?ساعات/iu.test(routingQuery);
   const expansionEvidence = v3EvidenceMode || faqHit ? [] : majorRecommendation ? await hybridRetrieve(routingQuery, 8, deadlineAt)
     // Academic topics (programs, courses, study plans, semesters, credits) search the
     // official corpus before the loose selector; service questions keep the selector.
