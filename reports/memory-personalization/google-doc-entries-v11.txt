@@ -1,0 +1,113 @@
+[Memory] [Personalization] Summary — build memory-v11 (fixes for the three v10 manual-review defects)
+Tester name: Claude (continuing Codex)
+Date: 10 November 2026
+Version tested: Local — http://localhost:3003/ and http://localhost:3000/ — feat/memory-personalization (build memory-v11, commit d1d1c59)
+What changed since v10:
+• MF19: a question about the previous answer ("you mentioned", "you said") is now answered from that answer only, and translation turns no longer hide the subject.
+• MP02: study-plan PDFs that print two semesters side by side are split into one list per semester before the model reads them.
+• MF06: an Arabic request starting with أخبرني (and similar openers) now gets an Arabic reply even when it contains an English program name, and translations keep the university's official name.
+Results:
+• Memory/personalization evals (94 scenarios): 93 correct and 1 partly correct automated. After manual review, 94 correct. M2-CQ076 lists all six first-semester courses and 16 credits but doesn't repeat the words "first semester".
+• Browser memory test: 17/17.
+• Browser examiner: 100/100, and every rendered page matches the API.
+• Examiner, all 600 submissions: 600 correct (v10: 599 correct, 1 partly correct).
+• Phrasing (399): 394 correct, 4 partly correct, 1 incorrect (v10: 391/5/3).
+• Regression (1,782): 1765 correct, 12 partly correct, 5 incorrect (v10: 1764/11/7).
+How the run went: the first full run was disrupted when the Mac went to sleep on battery, so OpenAI couldn't be reached and about 380 requests failed. All non-correct cases were rerun twice with the Mac kept awake. The totals combine the full run with those reruns.
+Remaining non-correct cases, reviewed by hand:
+• KE148 (3 of 5 phrasings) and KE269-V4: the source check withheld the answer, so the reply is a safe refusal with no answer. KE148 already failed this way on v10.
+• EX077-V3 (an Arabic question about the absence rule, written without hamzas): asks for clarification instead of answering, on both v10 and v11.
+• The partly correct cases (EX006-V3, EX010-V1, EX080-V2, EX099-V2, KE258-V2, KE258-V4, KE285-V3, KE280 ×4, KE286-V3, KE260, KE260-V4) are unchanged from v10.
+• KE277-V3 and KE260-V3 are correct on manual review; only the check wording failed.
+• NQ190 (where to find the sports and recreation schedule) has given the same answer on v9, v10 and v11. It points to the Student Activities page without noting the source date, and the grade flips between partly correct and incorrect.
+The three fixed scenarios, then the browser memory test, follow.
+
+[Memory] MF06 — Multi-turn follow-up (4 turns)
+Tester name: Claude (continuing Codex)
+Date: 10 November 2026
+Version tested: Local — http://localhost:3003/ — feat/memory-personalization (build memory-v11)
+Who asked: Guest (no account). Each message was sent alone; earlier turns came only from server memory.
+Question or scenario: أخبرني عن برنامج Bachelor of Science in Petroleum Engineering → كم ساعة يحتاج؟ → وللماجستير؟ → Translate that to English.
+Expected answer: turn 2: 132 credit hours | turn 3: 30 credit hours | turn 4: 30 credit hours; reply in English
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-petroleum-engineering.shtml, https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml, https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_petroleum_engineering_study_plan.pdf
+Complete conversation:
+Student: أخبرني عن برنامج Bachelor of Science in Petroleum Engineering
+Assistant: برنامج بكالوريوس العلوم في هندسة البترول في جامعة الإمارات العربية المتحدة هو برنامج جامعي تحت كلية الهندسة وقسم الهندسة الكيميائية والبترولية. يركز البرنامج على الأنشطة الهندسية تحت سطح الأرض المتعلقة بإنتاج الهيدروكربونات مثل النفط والغاز، ويهدف إلى تعظيم الاسترداد الاقتصادي للهيدروكربونات من المكامن باستخدام فهم تفصيلي لسلوك النفط والماء والغاز ضمن الصخور المسامية تحت ضغط عال. يتطلب البرنامج معرفة بتخصصات أخرى مثل الجيولوجيا وفيزياء البترول والجيولوجيا البترولية، ويستخدم تقنيات متقدمة في النمذجة الحاسوبية وتحليل الاحتمالات لتحسين أدوات مهندس البترول. البرنامج معتمد من لجنة اعتماد الهندسة ABET.
+يهدف البرنامج إلى إعداد خريجين ينجحون في مجالات متعددة مرتبطة بهندسة البترول، مع تطوير مهارات القيادة والابتكار والالتزام المهني والأخلاقي، وتعزيز التعلم مدى الحياة.
+Sources shown: https://www.uaeu.ac.ae/en/catalog/summary/search.xml, https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml
+Student: كم ساعة يحتاج؟
+Assistant: برنامج بكالوريوس العلوم في هندسة البترول يتطلب على الأقل 132 ساعة معتمدة لإكمال الدرجة العلمية.
+Sources shown: https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-petroleum-engineering.shtml
+Student: وللماجستير؟
+Assistant: برنامج ماجستير العلوم في هندسة البترول يتطلب حد أدنى 30 ساعة معتمدة لإكمال الدرجة العلمية.
+Sources shown: https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-petroleum-engineering.shtml
+Student: Translate that to English.
+Assistant: The Master of Science program in Petroleum Engineering requires a minimum of 30 credit hours to complete the degree.
+Sources shown: none
+Result: ✅ Correct
+What went wrong, if anything: Nothing. Retest of the v10 defect: on v10 turn 1 got an English reply and the turn 4 translation called UAEU "University of Emirates". Both are fixed: the Arabic question now gets an Arabic reply and the translation keeps the correct name.
+Was the cited source relevant? Yes, the expected official page was cited.
+Was the response unusually slow? No (8.183s, 2.83s, 2.873s, 1.54s).
+
+[Memory] MF19 — Multi-turn follow-up (3 turns)
+Tester name: Claude (continuing Codex)
+Date: 10 November 2026
+Version tested: Local — http://localhost:3003/ — feat/memory-personalization (build memory-v11)
+Who asked: Guest (no account). Each message was sent alone; earlier turns came only from server memory.
+Question or scenario: What are the prerequisites for CSBP 219? → Translate that to Arabic. → What was the minimum grade you mentioned?
+Expected answer: turn 1: CSBP119; minimum grade D | turn 2: CSBP119; reply in Arabic | turn 3: minimum grade D, about CSBP119 / CSBP219
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219
+Complete conversation:
+Student: What are the prerequisites for CSBP 219?
+Assistant: The prerequisite for CSBP219 Object Oriented Programming is completing CSBP119 Algorithms and Problem Solving with a minimum grade of D.
+Sources shown: https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219
+Student: Translate that to Arabic.
+Assistant: المتطلب السابق لمادة CSBP219 برمجة كائنية التوجه (Object Oriented Programming) هو إكمال مادة CSBP119 الخوارزميات وحل المشكلات (Algorithms and Problem Solving) بدرجة لا تقل عن D.
+Sources shown: none
+Student: What was the minimum grade you mentioned?
+Assistant: The minimum grade mentioned is a minimum grade of D in CSBP119, the prerequisite for CSBP219.
+Sources shown: none
+Result: ✅ Correct
+What went wrong, if anything: Nothing. Retest of the v10 defect: on v10 turn 3 lost the subject after the translation turn and named GEOL100 and MATH105. Turn 3 now answers from the previous answer: D in CSBP119, the prerequisite for CSBP219.
+Was the cited source relevant? Yes, the expected official page was cited.
+Was the response unusually slow? No (2.355s, 1.182s, 1.506s).
+
+[Personalization] MP02 — Signed-in personalization (1 turn)
+Tester name: Claude (continuing Codex)
+Date: 10 November 2026
+Version tested: Local — http://localhost:3003/ — feat/memory-personalization (build memory-v11)
+Who asked: Signed-in test account; saved profile: major Bachelor of Science in Computer Science, year 1. Each message was sent alone; earlier turns came only from server memory.
+Question or scenario: What is my study plan for year 1 second semester?
+Expected answer: turn 1: CSBP219; MATH110; CENG202; says it used the saved profile
+Official UAEU source supporting the expected answer: https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf
+Complete conversation:
+Student: What is my study plan for year 1 second semester?
+Assistant: For your saved major, Bachelor of Science in Computer Science (Cohort Fall 2025 and onwards), the Year 1 Second Semester courses are: CENG202 Discrete Mathematics (3 credits, prerequisite MATH105), MATH110 Calculus II (3 credits, prerequisite MATH105), CSBP219 Object-Oriented Programming (3 credits, prerequisite CSBP119), CENG205 Digital Design & Computer Organization (3 credits), CSBP221 Programming Lab II (1 credit, corequisite CSBP219), and MATH140 Linear Algebra (3 credits), totaling 16 credit hours.
+Sources shown: https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf#page=1
+Result: ✅ Correct
+What went wrong, if anything: Nothing. Retest of the v10 defect: on v10 the list also included Culture Elective 1, a first-semester course. The list now matches the official PDF exactly: six courses, 16 credits.
+Was the cited source relevant? Yes, the expected official page was cited.
+Was the response unusually slow? No (3.877s).
+
+[Memory] [Personalization] Browser test — sign in, ask, refresh, restart the server, continue
+Tester name: Claude (continuing Codex)
+Date: 9 November 2026
+Version tested: Local — http://localhost:3000/ — feat/memory-personalization (build memory-v11), system Chrome via Playwright; the server process was stopped and started again between the two phases.
+✅ (before) guest follow-up uses server memory (Bachelor of Law, 130 credits) — The Bachelor of Law program at UAEU requires a minimum of 130 credit hours to complete the degree.
+✅ (before) memory cookie is httpOnly and SameSite=Lax, not readable by page script
+✅ (before) after a refresh with local storage wiped, the conversation is restored from the server
+✅ (before) sign-up succeeds and sets session cookies
+✅ (before) auth cookies are httpOnly and SameSite=Strict
+✅ (before) profile page resolves an Arabic major to the catalog program
+✅ (before) the profile page shows only the last 4 digits of the student ID
+✅ (before) signed-in answer uses the saved major and says so (120 credits) — For your saved major, Bachelor of Science in Computer Science, you need a minimum of 120 credit hours to graduate. This includes 21 credit hours of general education, 41 credit hours of college requir
+✅ (before) still signed in after a refresh
+✅ (after) guest memory survives a server restart
+✅ (after) after the restart a follow-up is still resolved from memory (College of Law) — UAE University has a College of Law among its nine colleges.
+✅ (after) Clear conversation deletes the server copy
+✅ (after) a reload after Clear shows an empty conversation
+✅ (after) signed-in session survives a server restart
+✅ (after) signed-in memory survives the restart
+✅ (after) logout ends the session
+✅ (after) cookies copied before logout no longer authenticate
+Result: 17/17 steps passed.

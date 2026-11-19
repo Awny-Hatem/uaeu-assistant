@@ -187,27 +187,27 @@ export function AuthModal({
   }
 
   const inputClass =
-    "w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm font-medium text-zinc-800 outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder-zinc-500";
+    "w-full rounded-lg border border-zinc-200 bg-white px-4 py-3 text-sm font-medium text-zinc-800 outline-none transition placeholder-zinc-400 focus:border-[#E0182D] focus:ring-2 focus:ring-[#E0182D]/20    ";
 
   const needsMajor =
     studentType === "Current Student" || studentType === "Applicant";
 
   return (
-    <dialog ref={dialogRef} aria-labelledby="auth-title" aria-describedby="auth-description" lang={language} dir={ar ? "rtl" : "ltr"} onCancel={(event) => { event.preventDefault(); requestClose(); }} className="fixed inset-0 z-50 m-0 hidden h-full max-h-none w-full max-w-none items-start justify-center overflow-y-auto overscroll-contain bg-white/85 px-4 py-4 backdrop-blur-md open:flex sm:py-6 dark:bg-zinc-950/85">
+    <dialog ref={dialogRef} aria-labelledby="auth-title" aria-describedby="auth-description" lang={language} dir={ar ? "rtl" : "ltr"} onCancel={(event) => { event.preventDefault(); requestClose(); }} className="fixed inset-0 z-50 m-0 hidden h-full max-h-none w-full max-w-none items-start justify-center overflow-y-auto overscroll-contain bg-white/85 px-4 py-4 backdrop-blur-md open:flex sm:py-6">
       <motion.div
         initial={{ opacity: 0, y: 18, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ type: "spring", stiffness: 320, damping: 28 }}
         className="relative my-2 w-full max-w-lg sm:my-4 sm:max-w-2xl"
       >
-        <div className="flex max-h-[calc(100svh-2rem)] flex-col overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-xl shadow-zinc-200/60 dark:border-zinc-800 dark:bg-zinc-900 dark:shadow-black/40">
-          <div className="relative shrink-0 border-b border-zinc-100 bg-zinc-50 px-5 py-5 text-zinc-950 sm:px-7 sm:py-6 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100">
+        <div className="flex max-h-[calc(100svh-2rem)] flex-col overflow-hidden rounded-lg border border-zinc-200 bg-white shadow-xl shadow-zinc-200/60">
+          <div className="relative shrink-0 border-b border-zinc-100 bg-zinc-50 px-5 py-5 text-zinc-950 sm:px-7 sm:py-6">
             {onClose && (
               <button
                 type="button"
                 onClick={requestClose}
                 disabled={closeBlocked}
-                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-950 dark:hover:bg-white/10 dark:hover:text-white"
+                className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-zinc-400 transition hover:bg-zinc-200 hover:text-zinc-950"
                 aria-label={ar ? "إغلاق تسجيل الدخول" : "Close sign in"}
                 data-testid="auth-close"
               >
@@ -222,12 +222,12 @@ export function AuthModal({
               className="h-auto w-44 object-contain sm:w-52"
             />
             <h1 id="auth-title" className="mt-4 text-xl font-bold tracking-tight">{title}</h1>
-            <p id="auth-description" className="mt-2 text-sm leading-6 text-zinc-600 dark:text-zinc-300">
+            <p id="auth-description" className="mt-2 text-sm leading-6 text-zinc-600">
               {subtitle}
             </p>
           </div>
 
-          <div className="grid shrink-0 grid-cols-2 border-b border-zinc-100 dark:border-zinc-800">
+          <div className="grid shrink-0 grid-cols-2 border-b border-zinc-100">
             <button
               type="button"
               aria-pressed={mode === "login"}
@@ -239,7 +239,7 @@ export function AuthModal({
               className={`flex items-center justify-center gap-2 py-3 text-sm font-semibold transition ${
                 mode === "login"
                   ? "border-b-2 border-[#E0182D] text-[#E0182D]"
-                  : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                  : "text-zinc-400 hover:text-zinc-600 "
               }`}
             >
               <LogIn size={15} />
@@ -256,7 +256,7 @@ export function AuthModal({
               className={`flex items-center justify-center gap-2 py-3 text-sm font-semibold transition ${
                 mode === "signup"
                   ? "border-b-2 border-[#E0182D] text-[#E0182D]"
-                  : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+                  : "text-zinc-400 hover:text-zinc-600 "
               }`}
             >
               <UserPlus size={15} />
@@ -273,7 +273,7 @@ export function AuthModal({
                   exit={{ height: 0, opacity: 0 }}
                   className="overflow-hidden"
                 >
-                  <div role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700 dark:border-rose-800 dark:bg-rose-950/40 dark:text-rose-300">
+                  <div role="alert" className="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-sm font-medium text-rose-700">
                     {error}
                     {sessionUncertain && (
                       <button type="button" disabled={loading} onClick={() => void retrySessionCheck()} className="mt-2 block rounded-lg border border-current px-3 py-2 font-semibold disabled:opacity-50">
@@ -286,7 +286,7 @@ export function AuthModal({
             </AnimatePresence>
 
             <div className="space-y-2">
-              <label htmlFor="auth-username" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              <label htmlFor="auth-username" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                 {mode === "login" ? ar ? "اسم المستخدم أو البريد الإلكتروني" : "Username or email" : ar ? "اسم المستخدم" : "Username"}
               </label>
               <div className="relative">
@@ -319,7 +319,7 @@ export function AuthModal({
                   className="overflow-hidden"
                 >
                   <div className="space-y-2">
-                    <label htmlFor="auth-email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                    <label htmlFor="auth-email" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                       {ar ? "البريد الإلكتروني" : "Email"}
                     </label>
                     <div className="relative">
@@ -345,7 +345,7 @@ export function AuthModal({
             </AnimatePresence>
 
             <div className="space-y-2">
-              <label htmlFor="auth-password" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              <label htmlFor="auth-password" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                 {ar ? "كلمة المرور" : "Password"}
               </label>
               <div className="relative">
@@ -364,7 +364,7 @@ export function AuthModal({
                 <button
                   type="button"
                   onClick={() => setShowPassword((s) => !s)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 transition hover:text-zinc-600 dark:hover:text-zinc-200"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-zinc-400 transition hover:text-zinc-600"
                   aria-label={showPassword ? ar ? "إخفاء كلمة المرور" : "Hide password" : ar ? "إظهار كلمة المرور" : "Show password"}
                   aria-pressed={showPassword}
                 >
@@ -372,7 +372,7 @@ export function AuthModal({
                 </button>
               </div>
               {mode === "signup" && (
-                <p className="text-xs font-medium leading-5 text-zinc-500 dark:text-zinc-400">
+                <p className="text-xs font-medium leading-5 text-zinc-500">
                   {ar ? "8 أحرف على الأقل مع حرف إنجليزي ورقم؛ الحد الأقصى 72 بايت UTF-8." : "Use at least 8 characters with a letter and a number; maximum 72 UTF-8 bytes."}
                 </p>
               )}
@@ -388,7 +388,7 @@ export function AuthModal({
                 >
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <p id="auth-profile-label" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      <p id="auth-profile-label" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                         {ar ? "نوع المستخدم" : "Profile"}
                       </p>
                       <div role="group" aria-labelledby="auth-profile-label" className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -401,7 +401,7 @@ export function AuthModal({
                             className={`rounded-lg border px-3 py-2.5 text-left text-xs font-semibold transition ${
                               studentType === type.value
                                 ? "border-[#E0182D] bg-[#E0182D] text-white shadow-sm"
-                                : "border-zinc-200 text-zinc-600 hover:border-zinc-400 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-500"
+                                : "border-zinc-200 text-zinc-600 hover:border-zinc-400   "
                             }`}
                           >
                             {ar ? ["زائر / ولي أمر", "متقدم للدراسة", "طالب حالي في الجامعة", "خريج"][index] : type.label}
@@ -419,7 +419,7 @@ export function AuthModal({
                           className="overflow-hidden"
                         >
                           <div className="space-y-2">
-                            <label htmlFor="auth-major" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                            <label htmlFor="auth-major" className="block text-xs font-semibold uppercase tracking-wider text-zinc-500">
                               {ar ? "الكلية / التخصص" : "College / Major"}
                             </label>
                             <div className="relative">
@@ -449,7 +449,7 @@ export function AuthModal({
             <button
               type="submit"
               disabled={closeBlocked}
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E0182D] px-4 py-3.5 text-sm font-bold text-white shadow-md shadow-rose-200 transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60 dark:shadow-rose-900/30"
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#E0182D] px-4 py-3.5 text-sm font-bold text-white shadow-md shadow-rose-200 transition hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
             >
               {loading ? (
                 <span className="animate-pulse">

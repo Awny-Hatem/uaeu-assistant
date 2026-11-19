@@ -1,21 +1,28 @@
 ---
 status: approved
 title: UAEU Course Catalog — ISEC421 Risk Analysis and Management
-sourceUrl: https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC421
-lastVerified: 2026-09-29
-courseCodes: ISEC421
-subjects: risk-analysis,information-security
-degreeLevel: undergraduate
-sourceSection: Risk Analysis and Management (ISEC421)
 ---
+
 # ISEC421 Risk Analysis and Management
 
-ISEC421 is a 2-credit undergraduate course. It requires both STAT210 Probability and Statistics and ITBP301 Security Principles & Practice, with a minimum grade of D in each. These are two prerequisites, not alternatives or corequisites.
+## English
 
-The course concerns information-security risk assessment, threat and vulnerability analysis, risk treatment and contingency planning. The catalog includes qualitative and quantitative assessment and risk-management standards.
+The official sources conflict:
 
-The record was inspected on 29 September 2026. It does not confirm a student's cohort equivalencies, completed prerequisites, or available sections.
+- The current course-detail catalog lists ISEC421 as **3 credits** and requires **CSBP320 and ITBP301**, with a minimum grade of D in each.
+- The Fall 2025-onward BSc Information Security model plan lists ISEC421 as **2 credits** and lists **STAT210 and ITBP301** as prerequisites.
+- UAEU does not explain the differences. Do not describe the model-plan prerequisite as the universal course-catalog prerequisite. For registration, follow the assigned Degree Works plan and confirm with CIT advising. This public information does not verify personal eligibility or completed courses.
 
-## المتطلبات السابقة
+## Arabic
 
-مساق ISEC421 تحليل المخاطر وإدارتها من ساعتين معتمدتين. يشترط إكمال المساقين معاً: STAT210 الاحتمالات والإحصاء وITBP301 مبادئ وممارسات الأمن، بدرجة لا تقل عن D في كل منهما. ليسا بديلين أحدهما عن الآخر.
+يوجد تعارض بين المصادر الرسمية:
+
+- يذكر فهرس تفاصيل المقرر الحالي أن ISEC421 من **3 ساعات** ومتطلباه السابقان **CSBP320 وITBP301** بدرجة D على الأقل لكل منهما.
+- تذكر خطة بكالوريوس أمن المعلومات ابتداءً من خريف 2025 أن ISEC421 من **ساعتين** ومتطلباه السابقان **STAT210 وITBP301**.
+- لا توضح الجامعة سبب الاختلاف. لا تعرض متطلب الخطة النموذجية على أنه متطلب فهرس المقرر في جميع الحالات. للتسجيل، اتبع خطة Degree Works المخصصة لك وأكدها مع الإرشاد الأكاديمي؛ هذه المعلومات لا تتحقق من أهليتك الشخصية أو مقرراتك المكتملة.
+
+## Official sources reviewed 2026-11-17
+
+- [Course detail catalog](https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISEC421)
+- [Fall 2025-onward Information Security model plan](https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bsc_in_is_study_plan_fall_2025_onwards.pdf)
+- [Information Security degree requirements](https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml)

@@ -1,0 +1,465 @@
+
+> uaeu-chatbot@0.1.0 test:offline
+> npm test && npm run test:qa-audit && npm run test:pipeline && npm run test:observed-source-scope && npm run test:semantic && npm run test:canonical && npm run test:content && npm run test:grounding && npm run test:security && npm run test:source-response && npm run test:deadline && npm run test:integrity && npm run eval:common && npm run eval:alignment
+
+
+> uaeu-chatbot@0.1.0 test
+> tsx tests/prototype-checks.ts
+
+PASS guest limit defaults to 10 questions
+PASS a self-entered UAEU email is not verified institutional identity
+PASS AI provider can be swapped for deterministic mock mode
+PASS an explicitly selected provider never silently switches vendors
+PASS encrypted local-account fallback stays below browser cookie limits
+PASS signup fails before inserting when cookie encryption is not configured
+PASS verified answer packs load unique entries with official citations
+PASS verified answer-pack health requires complete fresh packs
+PASS harmless conversational wrappers preserve every standalone verified route
+PASS Arabic prepared evidence remains reachable through tailored generation
+PASS CSBP319 answer gives the exact prerequisite and pre/corequisite grades
+PASS Computer Science second-semester question returns the cohort study plan
+PASS Data Structures registration question returns course-specific instructions
+PASS R06 contextual follow-up keeps Data Structures as the course subject
+PASS D05 contextual follow-up keeps enrollment certificate as the document
+PASS F07 contextual follow-up keeps scholarship as the eligibility subject
+PASS A05 future admissions follow-up retains its cycle without substituting a dated calendar
+PASS Arabic verified question returns the Arabic canonical answer
+PASS medical emergency answer gives UAE ambulance and police numbers
+PASS self-harm crisis answer gives immediate numbers and stay-with-someone guidance
+PASS common suicide-risk phrasings receive emotional-crisis guidance
+PASS short acknowledgements do not replay the previous answer or handoff
+PASS greetings and capability questions receive a concrete bilingual scope answer
+PASS K04 routes an explicit request for the right person to human handoff
+PASS database course question returns the course prerequisite, not library help
+PASS recommendation letter does not false-route to student document guide
+PASS visa renewal documents route to the visa checklist, not student documents
+PASS scholarship deadline does not false-route to the academic calendar
+PASS qualified status, fee, deadline, and duration questions receive substantive scoped answers
+PASS a new named topic does not inherit the previous course context
+PASS ambiguous follow-ups retain the last explicit service subject
+PASS unique one-edit typos in meaningful words still reach the intended answer
+PASS technical-support contact questions return the verified UITS details
+PASS student document workflow returns the verified guided service
+PASS Arabic student document wording still routes to the guide
+PASS guided service data contains the verified service facts and steps
+PASS lexical retrieval keeps both sections needed by a compound housing question
+PASS RAG citations omit weak unrelated sources but retain requested comparisons
+PASS course citations prefer a specific record while preserving a plan-only fallback
+PASS an escalation-only provider reply always becomes visible scoped text
+PASS embedding loader rejects an index built with the wrong model
+PASS invalid API input is rejected
+PASS chat API rejects non-JSON content
+PASS chat API blocks cross-origin browser posts
+PASS browser-supplied system messages are rejected
+
+> uaeu-chatbot@0.1.0 test:qa-audit
+> tsx tests/qa-audit-regressions.ts
+
+PASS course formatting and validated transpositions preserve identity
+PASS transfer credit and future admissions stay in their policy workflows
+PASS new program facts depend on their new official document
+PASS masters and bachelors never share a degree-credit record
+PASS me pronoun and IT college name do not create degree targets
+PASS Arabic and English first-semester questions select the same plan
+PASS IT abbreviation does not borrow Information Security
+PASS Arabic clitics preserve program identity and excluded Medicine is not a target
+PASS comparison retrieves both degree scopes
+PASS an ambiguous comparison follow-up is clarified before selection
+PASS a lab follow-up retains program and cohort
+PASS IT conflict uses separate catalog and model citations
+PASS catalog year and qualification are preserved
+PASS prerequisite completeness catches missing concurrent conditions
+PASS prior-only prerequisites cannot silently become concurrent
+PASS pronoun one is not an unsupported numeric fact
+PASS academic-year abbreviations are not telephone numbers
+PASS unapproved hosts are excluded from approved knowledge
+QA audit regressions: 18 checks passed; synthetic checks are not a live accuracy score.
+
+> uaeu-chatbot@0.1.0 test:pipeline
+> tsx tests/pipeline-regressions.ts && tsx tests/independent-scope-regressions.ts && tsx tests/admission-calendar-regressions.ts && tsx tests/curriculum-retrieval.ts
+
+PASS pipeline regressions (32 isolated route calls plus semantic/evidence assertions)
+PASS explicitly negated category is not positive applicant scope
+PASS plural population comparison retains both categories
+PASS category correction keeps established subject, degree and year
+PASS third-turn document follow-up retains intervening category update
+PASS weekday continuation retains named branch despite an assistant error
+PASS standalone category fragment does not invent an admission subject
+PASS named new service resets admission scope
+PASS academic load paraphrase recalls complete load policy
+PASS transferred credit quantity is not semester load
+PASS external academic credit does not refer back to a prerequisite course: Are modules completed at my former university recognized toward a UAEU degree?
+PASS external academic credit does not refer back to a prerequisite course: Can coursework from another institution reduce the credits I still need for my degree here?
+PASS external academic credit does not refer back to a prerequisite course: How is academic credit from my previous university assessed after I move to UAEU?
+PASS a genuine previous-course reference still resolves the earlier course
+PASS housing transfer does not become academic credit recognition
+PASS a completed course code cannot replace an external-credit question
+PASS withdrawal morphology recalls the governing course policy
+PASS unknown future calendar cannot borrow a published year
+PASS private approval result cannot be answered by public application steps
+PASS postgraduate load cannot borrow undergraduate policy
+PASS target course is distinct from student-reported completed course
+PASS unknown identifier/title conflict is not silently corrected
+PASS library borrowing cannot acquire an unrelated academic-load policy
+22/22 independent synthetic scope checks passed; no network calls. These are contract/recall regressions, not factual certification.
+PASS degree-application paraphrase retains international correction: What do I need to apply for an undergraduate degree?
+PASS degree-application paraphrase retains international correction: How do I submit an application for an undergraduate program?
+PASS degree-application paraphrase retains international correction: I am applying for a bachelor's degree. What paperwork is required?
+PASS degree-application paraphrase retains international correction: What are the documents for applying for a bachelor degree?
+PASS third turn preserves degree, corrected category and year without old nationality
+PASS third turn retains an explicitly supplied UAE-national category
+PASS postgraduate application does not inherit undergraduate label: How do I apply for a master's degree?
+PASS postgraduate application does not inherit undergraduate label: I am applying for a PhD program. What are the requirements?
+PASS degree wording does not hijack graduation or rule applicability: How do I apply to graduate this semester?
+PASS degree wording does not hijack graduation or rule applicability: How do I apply for a degree certificate?
+PASS degree wording does not hijack graduation or rule applicability: Does that minimum GPA rule apply to undergraduate students?
+PASS degree wording does not hijack graduation or rule applicability: Does the deadline apply to master's students?
+PASS graduation-rule applicability retains graduation instead of admission
+PASS semester-start identity and unknown-year gate: On what date does Spring 2028 start?
+PASS semester-start identity and unknown-year gate: When will the Fall 2031 term begin?
+PASS semester-start identity and unknown-year gate: What is the starting date of the Spring 2031 semester?
+PASS semester-start identity and unknown-year gate: متى يبدأ فصل ربيع 2031؟
+PASS future semester follow-up keeps the requested term and year
+PASS a supported published-year question still recalls the semester-start record
+PASS plural applications closing retain admissions deadline and future year
+PASS housing applications closing are not hijacked by admissions or semester dates
+PASS add/drop remains course registration rather than semester start: What is the last date for adding classes in Fall 2026?
+PASS add/drop remains course registration rather than semester start: What is the last date for dropping classes in Spring 2027?
+PASS add/drop remains course registration rather than semester start: When is the last day to add a course in Spring 2027?
+PASS another service cannot borrow academic semester dates: When does the housing application start for Spring 2031?
+PASS another service cannot borrow academic semester dates: What date does my visa application start for Spring 2031?
+PASS another service cannot borrow academic semester dates: When does the scholarship application start in Spring 2031?
+PASS another service cannot borrow academic semester dates: When does registration for CSBP319 start in Spring 2031?
+PASS another service cannot borrow academic semester dates: What is the housing deadline for Spring 2031?
+PASS another service cannot borrow academic semester dates: When is the visa renewal deadline for Spring 2031?
+PASS another service cannot borrow academic semester dates: When do admission applications for Fall 2031 start?
+PASS named service change does not retain the previous calendar year
+32/32 admission/calendar variant checks passed; zero network calls. Parser/scope coverage only, not factual certification.
+Curriculum retrieval: 19 evidence/orchestration cases and source ablations passed. Live generated accuracy is measured separately.
+
+> uaeu-chatbot@0.1.0 test:observed-source-scope
+> tsx tests/observed-source-scope-checks.ts
+
+PASS mixed Arabic/English archive kinds keep the exact historical PDF
+PASS program college and native title come from their own XML reference, never the combined summary
+PASS current identity projection cannot answer a historical offering request
+PASS program identity lookup cannot replace the requested accreditation facet
+PASS program existence alone does not satisfy the requested college facet
+PASS aggregate credit comparison selects the two degree breakdowns rather than an unrelated cohort model
+PASS Arabic comparison retains both source-owned totals, elective counts and minimum qualification
+PASS another program sharing the same number cannot mask an omitted degree total
+PASS a source minimum is not silently converted to an exact total
+PASS guarantee requests retain capacity rules and cannot fall back to benefits-only evidence
+PASS scholarship intent correction does not turn a recommendation into an admission-category interrogation
+PASS Arabic prospective-student requirements remain admissions, not a degree-plan gap
+PASS English and Arabic live-seat reads stop before any provider or private-record lookup
+13/13 observed scope checks passed; no live-generation success is claimed.
+
+> uaeu-chatbot@0.1.0 test:semantic
+> tsx tests/semantic-fault-checks.ts
+
+PASS planner cannot invent a missing applicant category
+PASS planner cannot invent a missing degree level
+PASS planner cannot invent a calendar year or term
+PASS an old admissions year cannot become a new graduation year
+PASS an old applicant category cannot become a new housing category
+PASS a graduation scope follow-up cannot become admissions
+PASS a later enrollment-proof document replaces an old password subject
+PASS planner cannot change explicit Fall to Spring in the same year
+PASS planner cannot replace the active earlier year on a dates follow-up
+PASS historical course mention cannot replace the latest explicit target
+PASS a canceled course cannot be resurrected by an unresolved pronoun
+PASS prior international applicant scope cannot silently become national
+PASS prior postgraduate scope cannot silently become undergraduate
+PASS repeating the same subject does not erase the active year and term
+PASS repeating admissions does not erase the active applicant category
+PASS unknown selected record ID is rejected
+PASS unknown explicit course cannot be silently corrected to a known one
+PASS malformed planner shape is rejected
+PASS non-JSON planner output is rejected
+PASS applying to graduate is a graduation procedure, not admission
+PASS a GPA rule applying to a college is not admission to that college
+PASS provider failure cannot create an approved semantic route
+PASS completed and prerequisite-object codes do not displace the actual target
+PASS Arabic completed-course context preserves the requested target
+PASS comparisons retain each requested course's own evidence
+PASS claim contract rejects unknown, absent and multiple source IDs
+PASS source-ID validation is explicitly not a claim-entailment guarantee
+PASS empty-evidence planner clarification cannot publish fabricated university facts
+AI generation error: The answer service returned an invalid evidence contract.
+PASS zero-claim answer-writer clarification cannot bypass claim evidence requirements
+AI generation error: The answer service returned an invalid evidence contract.
+PASS cited answer-writer clarification cannot bypass claim evidence requirements
+30/30 synthetic semantic fault checks passed; 29 fetches intercepted, zero network calls.
+
+> uaeu-chatbot@0.1.0 test:canonical
+> tsx tests/canonical-rendering-checks.ts
+
+PASS primary record excludes related supporting records
+PASS unknown and duplicate primary IDs fail closed
+PASS wrong course and unknown course cannot borrow a canonical catalog answer
+PASS international policy cannot become a national or unspecified answer
+PASS unpublished future dates cannot borrow a current calendar
+PASS unknown personal status does not dump an application FAQ
+PASS housing prices alone are not a scholarship coverage answer
+PASS a question comparing populations cannot invent exclusive degree scope
+PASS unrequested multiple primary answers are rejected
+PASS malicious invented primary selection is rejected even with valid support
+PASS omitting the required primary selection field is invalid
+PASS non-exact English request uses reviewed evidence and a checked writer
+PASS Arabic non-exact request also reaches the checked writer
+PASS explicit course comparison preserves separate course evidence
+PASS source retry feedback identifies the exact unsupported numeric token
+PASS recovery selection receives full approved bodies and preserves the request
+PASS recovery cannot invent IDs, duplicate records or rewrite scope
+PASS recovery filters incompatible scope and an exhausted deadline before network
+PASS route recovers reviewed evidence then invokes the factual writer
+PASS a null compact selection cannot turn external credit into an unresolved previous-course reference
+PASS a genuine previous-course question without history still needs the missing subject
+PASS reviewed common equivalency rule does not require nationality
+PASS ordinary admission requirements retain category clarification
+PASS a valid but irrelevant compact primary must pass the full-body selector
+PASS lossy credit-load rewrite cannot replace the original requested facet
+PASS academic standing cannot use course-repeat GPA overlap as its primary
+PASS transaction request receives checked public evidence plus chat boundary
+PASS selector outage is not mislabeled as absent university evidence
+28 canonical selection/rendering checks passed; 52 intercepted provider calls, including checked writers; zero network requests. These synthetic checks are not a live accuracy score.
+
+> uaeu-chatbot@0.1.0 test:content
+> tsx tests/academic-content-checks.ts && tsx tests/service-content-checks.ts && tsx tests/knowledge-portability-checks.ts
+
+PASS academic records remain bilingual, unique, bounded and officially sourced
+PASS shared school equivalency does not require a nationality-specific scope
+PASS an accredited school qualification and applicable equivalency are not interchangeable alternatives
+PASS shared international source summaries retain the curriculum condition
+PASS scholarship coverage states the five awards and applicable entrant cohort in both languages
+PASS housing fee exemption is not equated with sponsor payment
+PASS award benefits and housing charges preserve separate source support
+PASS medical answer gives current MD structure without importing a historical degree
+PASS CMHS policy exclusion is not proof that its numeric GPA must differ
+PASS medical answer does not infer program-specific application dates from a calendar
+PASS graduation application dates explicitly combine AE06 and calendar in both languages
+PASS calendar evidence labels last-drop dates rather than pretending to be a graduation procedure
+PASS risk-analysis prerequisites preserve AND and minimum grade in both languages
+PASS database prerequisite alternatives remain OR, separately scoped from the cohort plan
+PASS probation preserves AND dismissal and the compound additional-semester exception
+15/15 academic content regression checks passed (offline; not factual certification)
+PASS 45 service records retain bilingual answers and mapped official sources
+PASS insurance ISO contact is supported by visa source, not borrowed by health-card source
+PASS software examples are explicitly historical in both languages with independent contact support
+PASS historical handbook advice keeps its date in both visible answers
+PASS dining uses the current primary campus overview and does not invent live hours
+PASS Wi-Fi offers concrete support without fabricating a configuration
+PASS MFA absence claims are confined to inspected sources; careers uses its public procedure
+PASS housing cost does not infer scholarship exceptions
+PASS housing cost contains only sourced prices, not an unsupported historical price comparison
+PASS move-in date is not assumed to be supplied in assignment email
+PASS housing processing caveat remains attached to processing, not confirmation
+PASS counseling keeps disclosure exceptions separate from academic-record exclusion
+PASS national emergency numbers precede a dated campus-security contact
+PASS club founding GPA is not turned into a general membership requirement
+PASS remote e-resource licence limits retain their own policy citation
+15/15 curated-service content regression checks passed (no network; not factual certification)
+6/6 knowledge portability assertions passed: line-ending equivalence, complete bilingual text and unchanged approval guards; no network calls.
+
+> uaeu-chatbot@0.1.0 test:grounding
+> tsx tests/source-evidence-fault-checks.ts && tsx tests/claim-verifier-fault-checks.ts
+
+PASS policy exclusions cannot become negative GPA or deadline rules
+PASS unmapped multisource records expose no claim evidence
+PASS partly mapped records expose only each mapped source's own facts
+PASS identity-only rows cannot inherit a full catalog excerpt
+PASS reviewed single-source records retain their explicit fallback contract
+PASS a date belonging only to another source cannot borrow a policy ID
+PASS fabricated amounts and years are rejected
+PASS Arabic numerals and grouped amounts retain valid numeric support
+PASS Arabic morning and evening clocks retain time identity without admitting changed hours
+PASS equivalent written-month and ISO dates do not create a false rejection
+PASS changing a month cannot reuse the same day and year as support
+PASS a different full course prefix cannot borrow matching numeric suffix
+PASS email support requires a complete address rather than a suffix substring
+PASS unrelated digits cannot be concatenated into a supported phone
+PASS formatting the same published UAE phone does not reject it
+PASS one source's missing timetable does not prove a universal absence
+PASS course identity alone cannot establish registration entitlement
+PASS valid IDs and matching numeric tokens still do not prove semantic entailment
+Answer grounding rejected {
+  reasonCodes: [ 'unsupported_critical_token' ],
+  rewriteCount: 0,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+Answer grounding rejected {
+  reasonCodes: [ 'unsupported_critical_token' ],
+  rewriteCount: 1,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+Answer grounding rejected {
+  reasonCodes: [ 'unsupported_critical_token' ],
+  rewriteCount: 2,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+AI generation error: Generated claims failed source support checks.
+PASS route bounds unsupported numeric claims to two revisions then withholds them
+19/19 synthetic source-evidence checks passed; 3 intercepted fetches, zero network requests. This is not an entailment proof.
+PASS verifier diagnostics cannot invent correction text
+PASS complete correctly assigned verdict coverage is accepted regardless of order
+PASS missing verdict cannot approve an unchecked claim
+PASS duplicate index cannot replace the missing claim
+PASS extra verdicts are rejected
+PASS negative, out-of-range, fractional and string indices are rejected
+PASS unknown source ID is rejected even with a supported verdict
+PASS known but misassigned source IDs cannot approve the other claim
+PASS invalid statuses and missing required verdict fields are rejected
+PASS extra properties and free-form verifier prose are not accepted
+PASS all three negative verdict types fail closed with distinct reason codes
+PASS cross-source delivery attribution fails when its own-source verdict is unsupported
+PASS a forged supported semantic verdict remains a documented trust boundary
+PASS each provider request sees one source and claim, never its neighboring pair or requested comparison
+PASS isolated negative verdicts aggregate at their original claim index
+PASS one isolated call cannot claim a neighboring source ID or original global index
+PASS sixteen claims have complete isolated coverage with at most four concurrent calls
+PASS more than sixteen claims fail closed before fanout
+PASS empty evidence and unknown assigned source fail before any provider call
+PASS empty claim list makes no provider call and asserts no university fact
+PASS malformed provider verdict JSON is rejected
+PASS provider failure cannot silently approve a claim
+Answer grounding rejected {
+  reasonCodes: [ 'contradiction' ],
+  rewriteCount: 0,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+PASS route verifies a single rewrite and exposes only its displayed claims
+Answer grounding rejected {
+  reasonCodes: [ 'contradiction' ],
+  rewriteCount: 0,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+Answer grounding rejected {
+  reasonCodes: [ 'contradiction' ],
+  rewriteCount: 1,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+Answer grounding rejected {
+  reasonCodes: [ 'contradiction' ],
+  rewriteCount: 2,
+  claimCount: 1,
+  evidenceIds: [ 'E1S1' ]
+}
+AI generation error: Generated claims failed source support checks.
+PASS route withholds a draft rejected through both bounded revisions
+24/24 synthetic claim-verifier checks passed; 40 intercepted fetches, zero network requests. No semantic truth proof is claimed.
+
+> uaeu-chatbot@0.1.0 test:security
+> tsx tests/ui-security-checks.ts && tsx tests/account-ownership-checks.ts
+
+PASS account assertion rejects stale, missing and guest owners without disclosing actual account
+PASS long English/Arabic threads fit transport, preserve first topic and latest question
+PASS large generated answer cannot poison the next request
+PASS clear/logout/account changes invalidate all pending owners even if fetch ignores abort
+PASS daily usage resets at UAE midnight, not UTC midnight
+PASS self-entered university email does not grant verified privileges
+PASS password validation enforces bcrypt byte boundary including multibyte characters
+PASS corrupt stored response metadata cannot create a broken guide or citation
+PASS audit metadata preserves complete displayed claims and only known bounded reasons
+PASS logout revokes token replay on the current store
+PASS production mode and impossible durable-store declaration fail closed
+PASS durable-store validation normalizes memory and empty paths exactly like SQLite setup
+PASS durable registered session and logout revocation survive fresh server processes
+PASS server history preserves evidence and bounds reads/retention
+PASS malformed auth object bodies return 400, not 500
+PASS history deletion rejects late server writes from an older conversation
+PASS request size guard stops reading chunked bodies at the byte limit
+PASS untrusted forwarded headers cannot rotate rate-limit identities
+PASS Arabic and English topics are aligned without substring false positives
+PASS health exposes build/content identity and missing provider as degraded readiness
+20/20 UI/auth/security checks passed
+52/52 actual-handler account ownership checks passed (48 refusals, 4 controls; in-memory SQLite, no network)
+
+> uaeu-chatbot@0.1.0 test:source-response
+> tsx tests/source-response-checks.ts
+
+9/9 source-response integrity checks passed (synthetic, no network)
+
+> uaeu-chatbot@0.1.0 test:deadline
+> tsx tests/provider-deadline-checks.ts && tsx tests/provider-retry-checks.ts
+
+PASS default provider timeout remains twenty seconds without a shared deadline
+PASS shared deadline shortens the configured provider timeout
+PASS provider timeout still caps a long remaining answer budget
+PASS successive calls consume one absolute budget rather than resetting it
+PASS the real deadline signal aborts when its short time budget expires
+PASS expired and non-finite budgets fail before allocating a request signal
+PASS OpenAI receives the remaining shared budget
+PASS expired OpenAI request retains the deadline error and makes no network call
+PASS Gemini receives a shared-deadline signal through its installed SDK
+PASS expired Gemini request retains the deadline error and makes no network call
+OpenAI generation failed; using the explicitly enabled Gemini fallback.
+PASS explicit fallback inherits only the remaining budget
+PASS an exhausted first call cannot start the configured fallback
+12/12 provider-deadline checks passed (synthetic; zero external network)
+PASS a successful response has no retry or extra provider request
+PASS temporary rate limit retries same unchanged request after server minimum plus jitter
+PASS repeated overload stops at three attempts with exponential backoff
+PASS HTTP-date retry hints are honored instead of exponential fallback
+PASS fractional-second and zero delay hints retain nonnegative jitter
+PASS invalid negative retry hints use bounded fallback, not a parsed historical date
+PASS long valid server hints are declined, never shortened into early retries
+PASS insufficient quota and every documented billing/usage code are never retried
+PASS quota type suppresses retries even under HTTP503 or an unfamiliar error code
+PASS auth permissions malformed requests and other nontransient4xx are not retried
+PASS safe machine-readable errors distinguish known rate limits from unclassified429
+PASS transient network failure can recover without changing provider or request body
+PASS body-consumption network failure is covered by the same bounded retry
+PASS timeout or cancellation is not replayed as a transient network error
+PASS a per-call timeout can recover inside a longer unchanged answer budget
+PASS cancellation and insufficient remaining timeout budget never allocate another request
+PASS malformed successful model output is not retried as a transport failure
+PASS null or nonJSON server error body still uses the bounded status classification
+PASS retry requires both its delay and a minimum remaining attempt budget
+PASS a timer that wakes beyond the deadline cannot allocate another request
+PASS standalone calls share one20s budget instead of restarting it for each retry
+PASS late response is rejected even if the transport ignores its abort signal
+PASS response-body consumption is actually aborted by the remaining deadline
+23/23 provider retry checks passed (synthetic; zero external network)
+
+> uaeu-chatbot@0.1.0 test:integrity
+> node tests/evaluation-integrity-checks.mjs && node tests/examiner-integrity-checks.mjs
+
+PASS full fixture and partial selections reject empty, unknown and duplicate IDs
+PASS conversation groups cannot be split by partial runs
+PASS endpoint comparison detects build, content, provider and redirect changes
+PASS response capture preserves JSON answer text and explicitly identifies truncated failure bodies
+PASS source snapshot includes application source and root build configurations
+PASS renderer binds reviews to exact run bytes and preserves answer content
+PASS renderer refuses successful factual assessments for execution or mock failures
+PASS claim audit is escaped, labelled as a safeguard, and does not replace the actual answer
+PASS canonical report labels selection separately and does not invent per-claim verification
+PASS missing provider metadata is not misreported as proof of no provider call
+PASS renderer refuses successful reviews for unresolved run integrity and displays boundary metadata
+PASS renderer discloses truncated failure record lengths and hashes in HTML and Markdown
+12/12 evaluation-integrity checks passed
+6/6 examiner evaluation-integrity fault checks passed; no network or model accuracy is claimed.
+
+> uaeu-chatbot@0.1.0 eval:common
+> tsx scripts/evaluate-common-questions.ts
+
+Evaluated 100 common UAEU questions.
+Mock route regressions only; 1 explicit procedural case(s); mock-retrieval-only cases validate approved evidence availability, not final generated prose or semantic selection.
+Passed: 100
+Failed: 0
+Actual sources: escalated=1, faq=2, mock-retrieval-only=97
+
+> uaeu-chatbot@0.1.0 eval:alignment
+> tsx scripts/evaluate-answer-alignment.ts
+
+Evaluated 80 alignment cases across 31 categories.
+Mock route regressions only; 1 explicit procedural case(s); mock-retrieval-only cases validate approved evidence availability, not final generated prose or semantic selection.
+Passed: 80
+Failed: 0
+Actual sources: escalated=2, faq=2, mock-retrieval-only=76

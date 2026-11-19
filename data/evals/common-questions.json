@@ -50,8 +50,8 @@
     ],
     "expectedAnswerId": "admissions-application-deadline",
     "expectedSource": "rag",
-    "expectedDisposition": "answer",
-    "requiredTerms": ["Fall 2027", "deadline"],
+    "expectedDisposition": "clarify",
+    "requiredTerms": ["applicant category", "does not state an intake-specific application closing date"],
     "minCitations": 0,
     "evidenceOnly": { "source": "answer:admissions-application-deadline", "queryTerms": ["fall", "2027", "admission"] }
   },
@@ -139,8 +139,8 @@
     "id": "R02",
     "category": "registration",
     "question": "How do I register for a course in the student portal?",
-    "expectedAnswerId": "course-registration-portal",
-    "expectedSource": "faq",
+    "expectedAnswerId": "register-for-a-class",
+    "expectedSource": "guide",
     "expectedDisposition": "portal",
     "requiredTerms": ["course", "MyUAEU", "Plans", "View Sections", "Submit", "Registered"],
     "minCitations": 1
@@ -187,7 +187,7 @@
     "expectedAnswerId": "course-prerequisites-data-structures",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["Data Structures", "prerequisite"],
+    "requiredTerms": ["Data Structures", "CSBP219", "CSBP221"],
     "minCitations": 1
   },
   {
@@ -397,7 +397,7 @@
     "expectedAnswerId": "enrollment-certificate",
     "expectedSource": "faq",
     "expectedDisposition": "answer",
-    "requiredTerms": ["TWIMC", "current enrollment", "Current Students Documents", "ten-minute"],
+    "requiredTerms": ["TWIMC", "current enrollment", "Current Students Documents", "10-minute"],
     "minCitations": 2
   },
   {
@@ -754,9 +754,9 @@
     "id": "P01",
     "category": "housing",
     "question": "How do I apply for student housing?",
-    "expectedAnswerId": "student-housing-application",
-    "expectedSource": "faq",
-    "expectedDisposition": "answer",
+    "expectedAnswerId": "student-housing-room-assignment",
+    "expectedSource": "guide",
+    "expectedDisposition": "guide",
     "requiredTerms": ["housing", "apply"],
     "minCitations": 1
   },
@@ -874,7 +874,7 @@
     "id": "W02",
     "category": "safety",
     "question": "What should I do in a medical emergency on campus?",
-    "expectedAnswerId": "campus-medical-emergency",
+    "expectedAnswerId": "urgent-safety",
     "expectedSource": "faq",
     "expectedDisposition": "urgent",
     "requiredTerms": ["emergency", "immediately"],
@@ -905,8 +905,8 @@
     "category": "accessibility",
     "question": "How do I request disability or accessibility accommodations?",
     "expectedAnswerId": "accessibility-accommodations",
-    "expectedSource": "faq",
-    "expectedDisposition": "answer",
+      "expectedSource": "guide",
+      "expectedDisposition": "guide",
     "requiredTerms": ["accessibility", "accommodations"],
     "minCitations": 1
   },

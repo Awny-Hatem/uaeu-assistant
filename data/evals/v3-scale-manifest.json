@@ -1,0 +1,77 @@
+{
+  "schemaVersion": 1,
+  "title": "UAEU V3 scale evaluation corpus",
+  "generatedAt": "2026-11-18T01:45:27.818Z",
+  "generator": "scripts/generate-v3-scale-eval.mjs",
+  "caseCount": 10000,
+  "uniqueInteractionCount": 10000,
+  "uniqueLatestTurnCount": 9950,
+  "languageCounts": {
+    "en": 4000,
+    "ar": 4000,
+    "hi": 500,
+    "ur": 500,
+    "fr": 500,
+    "es": 500
+  },
+  "domainCounts": {
+    "course-catalog": 6400,
+    "published-curriculum": 2000,
+    "service-workflow": 240,
+    "admissions": 172,
+    "registration": 112,
+    "courses": 81,
+    "programs": 22,
+    "advising": 15,
+    "calendar": 21,
+    "exams": 42,
+    "academics": 63,
+    "documents": 70,
+    "graduation": 70,
+    "fees": 77,
+    "scholarships": 55,
+    "financial-aid": 14,
+    "it": 98,
+    "it-safety": 14,
+    "library": 84,
+    "campus-services": 28,
+    "housing": 55,
+    "transport": 28,
+    "dining": 14,
+    "student-life": 14,
+    "recreation": 14,
+    "events": 14,
+    "health": 14,
+    "wellbeing": 13,
+    "safety": 39,
+    "accessibility": 13,
+    "international": 65,
+    "careers": 26,
+    "alumni": 13
+  },
+  "languageMix": "40% English, 40% Arabic, 5% each Hindi, Urdu, French, and Spanish",
+  "purpose": "Evaluation and stress testing only; these cases are not used by runtime retrieval, training, or answer selection.",
+  "limitations": [
+    "Generated course/curriculum expectations are derived mechanically from the checked-in source snapshots and have not each received independent human factual adjudication.",
+    "Scenario cases inherit answer-route expectations from the existing common/alignment fixtures; generated wording variants are correlated probes, not 1,600 independent factual questions.",
+    "This corpus is not evidence of production accuracy. Run cases against a pinned build and independently review consequential outputs before reporting a factual score.",
+    "Curriculum applicability labels are published labels and do not establish a student's assigned cohort plan.",
+    "Unsupported prerequisite source text is labeled unresolved and must not be converted to an eligibility conclusion."
+  ],
+  "inputs": {
+    "courseCatalog": "data/academic/course-catalog.json",
+    "curricula": "data/academic/program-curricula.json",
+    "scenarioFixtures": [
+      "data/evals/common-questions.json",
+      "data/evals/alignment-questions.json"
+    ],
+    "verifiedAnswerSnapshots": [
+      "data/verified-answers/academic.json",
+      "data/verified-answers/student-services.json"
+    ]
+  },
+  "outputs": [
+    "data/evals/v3-scale-questions.jsonl",
+    "data/evals/v3-scale-manifest.json"
+  ]
+}

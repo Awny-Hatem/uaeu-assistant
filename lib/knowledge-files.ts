@@ -14,6 +14,10 @@ export type KnowledgeDocument = {
   sourceUrl: string;
   lastVerified: string;
   curriculum?: boolean;
+  program?: string;
+  qualification?: string;
+  aliases?: string[];
+  archiveYear?: string;
   scope?: EvidenceScope;
 };
 
@@ -25,6 +29,7 @@ function officialUaeuUrl(value: string): boolean {
     const host = url.hostname.toLowerCase();
     return (
       url.protocol === "https:" &&
+      !/(?:webtest|cms)/i.test(host) &&
       (host === "uaeu.ac.ae" || host.endsWith(".uaeu.ac.ae"))
     );
   } catch {
@@ -79,6 +84,10 @@ export function parseApprovedDocument(
     sourceUrl: metadata.sourceurl,
     lastVerified: metadata.lastverified,
     curriculum: metadata.curriculum === "true",
+    program: metadata.program,
+    qualification: metadata.qualification,
+    aliases: metadata.aliases?.split("|").map(alias => alias.trim()).filter(Boolean),
+    archiveYear: metadata.archiveyear,
     scope: {
       courseCodes: metadata.coursecodes?.split(",").map((code) => code.trim().toUpperCase()),
       subjects: metadata.subjects?.split(",").map((subject) => subject.trim()),
@@ -109,7 +118,7 @@ export function knowledgeFingerprint(): string {
   for (const document of loadKnowledgeMarkdown()) {
     hash.update(document.filename);
     hash.update("\0");
-    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, curriculum: document.curriculum, scope: document.scope }));
+    hash.update(JSON.stringify({ content: document.content, title: document.title, sourceUrl: document.sourceUrl, lastVerified: document.lastVerified, curriculum: document.curriculum, scope: document.scope, program: document.program, qualification: document.qualification, aliases: document.aliases, archiveYear: document.archiveYear }));
     hash.update("\0");
   }
   return hash.digest("hex");
@@ -248,6 +257,9 @@ export type EvidenceRow = {
   citations?: Citation[];
   scope?: EvidenceScope;
   title?: string;
+  retrievedAt?: string;
+  freshnessStatus?: "current" | "stale" | "unknown";
+  trustStatus?: "approved" | "verified_official" | "discovered";
 };
 
 const FACT_EVIDENCE: Partial<Record<FactIntent, RegExp>> = {
@@ -282,7 +294,9 @@ export function evidenceIsRelevant(query: string, text: string, identity: string
   if (!wanted.codes.length && relevantSubjects.length && !relevantSubjects.some((subject) => subjects.includes(subject))) return false;
   // Explicit policy relationships must be evidenced together, not by separate unrelated words.
   for (const concept of ["violation", "suspension", "gpa", "professor", "library"]) {
-    if (new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(query) && !new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(text)) return false;
+    const conceptIsInSource = new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(text);
+    const explicitlyScopedToLibrary = concept === "library" && scope.subjects?.includes("library");
+    if (new RegExp(`\\b${concept}(?:s)?\\b`, "i").test(query) && !conceptIsInSource && !explicitlyScopedToLibrary) return false;
   }
   if (wanted.intents.includes("deadline")) {
     const domain = wanted.subjects.filter((subject) => ["admissions", "graduation", "tuition", "scholarship", "visa", "housing"].includes(subject));
@@ -369,7 +383,11 @@ export function retrieveVerifiedEvidence(query: string, topK = 5): EvidenceRow[]
     const codeMatch = meaning.codes.some((code) => scope.courseCodes?.includes(code));
     const coverage = matched.length / Math.max(1, qTokens.size);
     if (!codeMatch && (matched.length < 2 || coverage < (topicMatch ? 0.2 : 0.65))) continue;
-    rows.push({ text, title, scope, source: `answer:${entry.id}`, score: matched.length * 2 + (codeMatch ? 8 : 0) + 4, citations: entry.citations });
+    const normalizedQuery = normalizeForLexical(query);
+    const exactReviewedPhrase = [...entry.questions, ...(entry.matchPhrases ?? [])]
+      .map(normalizeForLexical)
+      .some((phrase) => phrase.length >= 12 && normalizedQuery.includes(phrase));
+    rows.push({ text, title, scope, source: `answer:${entry.id}`, score: matched.length * 2 + (codeMatch ? 8 : 0) + 4 + (exactReviewedPhrase ? 12 : 0), citations: entry.citations });
   }
   rows.sort((a, b) => b.score - a.score);
   // The fact guard runs on the assembled relevant evidence so a compound request can

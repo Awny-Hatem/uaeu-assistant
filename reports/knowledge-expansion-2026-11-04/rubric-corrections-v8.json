@@ -1,0 +1,5257 @@
+{
+  "method": "Preserve rawv34 and baseline artifacts; independently reassess both against identical corrected checks. No runtime imports these fixtures. HTTP errors and actual missing facts remain failures.",
+  "changes": [
+    {
+      "id": "EX013",
+      "before": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "ABET"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "Computing|الحوسبة"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/cit/about/accreditation.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "ABET"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "Computing|الحوسبة"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/cit/about/accreditation.shtml",
+          "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX040",
+      "before": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "forbidden": [
+          "CSBP219[^.!?\\n]*before or alongside",
+          "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+          "CSBP219[^.!?\\n]*before or concurrently"
+        ],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "forbidden": [
+          "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+          "CSBP219[^.!?\\n]*before or concurrently",
+          "CSBP\\s*219\\s+(?:can|may)\\s+be\\s+(?:completed|taken)\\s+before\\s+or\\s+(?:alongside|concurrent)",
+          "(?:take|taking)\\s+CSBP\\s*219\\s+(?:alongside|concurrent)"
+        ],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX061",
+      "before": {
+        "checks": [
+          {
+            "name": "letters",
+            "any": [
+              "two",
+              "2"
+            ]
+          },
+          {
+            "name": "CV",
+            "any": [
+              "curriculum vitae",
+              "\\bCV\\b"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+          "https://www.uaeu.ac.ae/en/about/policies/pdf/graduateprograms/3_the_phd_programs-en.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "letters",
+            "any": [
+              "two",
+              "2",
+              "رسالتان",
+              "رسالتين",
+              "خطابان",
+              "خطابين"
+            ]
+          },
+          {
+            "name": "CV",
+            "any": [
+              "curriculum vitae",
+              "\\bCV\\b",
+              "سيرة ذاتية",
+              "السيرة الذاتية"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+          "https://www.uaeu.ac.ae/en/about/policies/pdf/graduateprograms/3_the_phd_programs-en.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX065",
+      "before": {
+        "checks": [
+          {
+            "name": "tuition",
+            "any": [
+              "tuition"
+            ]
+          },
+          {
+            "name": "housing exclusion",
+            "any": [
+              "not.*hous|exclud.*hous|housing.*not|doesn.t.*hous"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "tuition",
+            "any": [
+              "tuition",
+              "رسوم\\s+(?:الدراسة|الدراسية)"
+            ]
+          },
+          {
+            "name": "housing exclusion",
+            "any": [
+              "not.*hous|exclud.*hous|housing.*not|doesn.t.*hous",
+              "لا\\s+(?:تشمل|تغطي)[^.]*السكن"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX066",
+      "before": {
+        "checks": [
+          {
+            "name": "one",
+            "any": [
+              "only one",
+              "one scholarship",
+              "cannot combine",
+              "not.*combine"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "one",
+            "any": [
+              "only one",
+              "one scholarship",
+              "cannot combine",
+              "not.*combine",
+              "لا يجوز[^.]*الجمع[^.]*منحة",
+              "لا يمكن[^.]*الجمع",
+              "منحة دراسية واحدة"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX073",
+      "before": {
+        "checks": [
+          {
+            "name": "grievance",
+            "any": [
+              "unfair|mistreatment"
+            ]
+          },
+          {
+            "name": "appeal",
+            "any": [
+              "incorrect|erroneous|exception"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/9_student_academic_grievances_and_appeals-en.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "grievance",
+            "any": [
+              "unfair|mistreatment",
+              "(?:الشكوى|التظلم).{0,100}(?:غير عادلة|سوء معاملة)"
+            ]
+          },
+          {
+            "name": "appeal",
+            "any": [
+              "incorrect|erroneous|exception",
+              "(?:الاستئناف|استئناف).{0,100}(?:خاطئ|خطأ|استثناء)"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/9_student_academic_grievances_and_appeals-en.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX075",
+      "before": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "any": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "any": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "any": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "any": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+          "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX080",
+      "before": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "Blackboard|بلاك"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "Sign In|تسجيل الدخول"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "any": [
+              "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+          "https://www.uaeu.ac.ae/en/admission/orientation/",
+          "https://jobnavigator.uaeu.ac.ae/login.jsp"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "Blackboard|بلاك"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "any": [
+              "Sign In|تسجيل الدخول"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "any": [
+              "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+              "لا أستطيع",
+              "لا يمكنني",
+              "لا تعطي.*المساعد",
+              "لا.*(?:رؤية|الوصول).*محتوى"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+          "https://www.uaeu.ac.ae/en/admission/orientation/",
+          "https://jobnavigator.uaeu.ac.ae/login.jsp"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX084",
+      "before": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "both|male.{0,70}female|للطلاب.{0,40}الطالبات|الطلاب.{0,40}الطالبات"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/restaurants/"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "any": [
+              "both|male.{0,70}female|للطلاب.{0,40}الطالبات|الطلاب.{0,40}الطالبات",
+              "صالتان",
+              "ساحتان",
+              "واحدة.*(?:أخرى|اخرى)"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/restaurants/"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "EX091",
+      "before": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "cannot.*(?:access|confirm|certify|verify)",
+              "not.*(?:access|confirmation|certification)",
+              "لا.*(?:أستطيع|استطيع|أملك|املك)",
+              "لا يمكنني"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "college",
+              "registration",
+              "الكلية",
+              "التسجيل",
+              "كليتك"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/",
+          "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "cannot.*(?:access|confirm|certify|verify)",
+              "not.*(?:access|confirmation|certification)",
+              "لا.*(?:أستطيع|استطيع|أملك|املك)",
+              "لا يمكنني",
+              "لا أستطيع"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "college",
+              "registration",
+              "الكلية",
+              "التسجيل",
+              "كليتك",
+              "القبول والتسجيل"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/",
+          "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "CQ040",
+      "before": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "forbidden": [
+          "CSBP219[^.!?\\n]*before or alongside",
+          "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+          "CSBP219[^.!?\\n]*before or concurrently"
+        ],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "forbidden": [
+          "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+          "CSBP219[^.!?\\n]*before or concurrently",
+          "CSBP\\s*219\\s+(?:can|may)\\s+be\\s+(?:completed|taken)\\s+before\\s+or\\s+(?:alongside|concurrent)",
+          "(?:take|taking)\\s+CSBP\\s*219\\s+(?:alongside|concurrent)"
+        ],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "CQ060",
+      "before": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "2026"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "MATH\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "any": [
+              "2025"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "any": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "any": [
+              "2026"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "any": [
+              "MATH\\s*105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE303",
+      "before": {
+        "checks": [
+          {
+            "name": "unverified course",
+            "any": [
+              "not.*(?:find|verify)|no.*(?:record|verified)|don.t know|unverified|could not"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "unverified course",
+            "any": [
+              "not.*(?:find|verify)|no.*(?:record|verified)|don.t know|unverified|could not",
+              "لم أجد.*(?:مساق|سجل)",
+              "لا أعرف.*موثق",
+              "لا تتوفر.*(?:أدلة|موثق)"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE304",
+      "before": {
+        "checks": [
+          {
+            "name": "unverified",
+            "any": [
+              "not.*(?:verify|find)|don.t know|unverified|could not|no verified"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "unverified",
+            "any": [
+              "not.*(?:verify|find)|don.t know|unverified|could not|no verified",
+              "لا أعرف إجابة موثقة",
+              "لم أتحقق من البرنامج"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE306",
+      "before": {
+        "checks": [
+          {
+            "name": "unverified date",
+            "any": [
+              "not.*(?:verify|verified)|no.*verified|don.t know|unverified"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/calendar/index.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "unverified date",
+            "any": [
+              "not.*(?:verify|verified)|no.*verified|don.t know|unverified",
+              "لا.*(?:موثقة|موثق)",
+              "لا تتوفر.*موثق"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/calendar/index.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE307",
+      "before": {
+        "checks": [
+          {
+            "name": "capability",
+            "any": [
+              "cannot|can.t|not.*access|unable|not.*verify|don.t have access"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": []
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "capability",
+            "any": [
+              "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+              "لا أستطيع",
+              "لا يمكنني"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": []
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE308",
+      "before": {
+        "checks": [
+          {
+            "name": "boundary",
+            "any": [
+              "cannot|can.t|not.*confirm|not.*certif|not.*access"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": []
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "boundary",
+            "any": [
+              "cannot|can.t|not.*confirm|not.*certif|not.*access",
+              "لا أستطيع",
+              "لا يمكنني"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": []
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE309",
+      "before": {
+        "checks": [
+          {
+            "name": "no guarantee",
+            "any": [
+              "not.*guarantee|no guarantee|not.*automatic|not.*entitl"
+            ]
+          },
+          {
+            "name": "seats",
+            "any": [
+              "seats|availab"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "no guarantee",
+            "any": [
+              "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+              "لا يضمن",
+              "لا تضمن"
+            ]
+          },
+          {
+            "name": "seats",
+            "any": [
+              "seats|availab",
+              "capacity[- ]limited",
+              "المقاعد",
+              "الطاقة الاستيعابية"
+            ]
+          }
+        ],
+        "forbidden": [],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE172",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ACCT101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4977.shtml?id=ACCT101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ACCT101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4977.shtml?id=ACCT101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE173",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "AERO215"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2945.shtml?id=AERO215"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "AERO215"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2945.shtml?id=AERO215"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE174",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "AGRB200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4971.shtml?id=AGRB200"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "AGRB200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4971.shtml?id=AGRB200"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE175",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ANAT605"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2894.shtml?id=ANAT605"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ANAT605"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2894.shtml?id=ANAT605"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE176",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ARAG200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4971.shtml?id=ARAG200"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ARAG200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4971.shtml?id=ARAG200"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE177",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ARB106"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=ARB106"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ARB106"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=ARB106"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE178",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ARCH302"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2898.shtml?id=ARCH302"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ARCH302"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2898.shtml?id=ARCH302"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE179",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BANA200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4976.shtml?id=BANA200"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BANA200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4976.shtml?id=BANA200"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE180",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)4\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BCHM361"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=BCHM361"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)4\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)4(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:أربع|اربعة|أربعة)(?:\\s*\\(4\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BCHM361"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=BCHM361"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE181",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BIOC100"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BIOC100"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOC100"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE182",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BIOE212"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOE212"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BIOE212"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOE212"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE183",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BIOL105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOL105"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BIOL105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BIOL105"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE185",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BION210"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BION210"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BION210"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=BION210"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE186",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BMB601"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2901.shtml?id=BMB601"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BMB601"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2901.shtml?id=BMB601"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE187",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BMSC700"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2901.shtml?id=BMSC700"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BMSC700"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2901.shtml?id=BMSC700"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE188",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BSTA110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=BSTA110"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "BSTA110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=BSTA110"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE189",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CANB601"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2958.shtml?id=CANB601"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CANB601"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2958.shtml?id=CANB601"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE190",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CENG110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2948.shtml?id=CENG110"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CENG110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2948.shtml?id=CENG110"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE191",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CHEM111"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CHEM111"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2905.shtml?id=CHEM111"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE192",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CHIN101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=CHIN101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CHIN101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=CHIN101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE194",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CHSS700"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=CHSS700"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CHSS700"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=CHSS700"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE195",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)1\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CIVL200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2906.shtml?id=CIVL200"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)1\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)1(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:واحدة|واحد)(?:\\s*\\(1\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CIVL200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2906.shtml?id=CIVL200"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE196",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)6\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CLSM360"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2946.shtml?id=CLSM360"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)6\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)6(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ست|ستة)(?:\\s*\\(6\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CLSM360"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2946.shtml?id=CLSM360"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE197",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CMCE800"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=CMCE800"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)0(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CMCE800"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=CMCE800"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE198",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CMHS702"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=CMHS702"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CMHS702"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=CMHS702"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE199",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CMPH600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=CMPH600"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CMPH600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2907.shtml?id=CMPH600"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE200",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COFA760"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4972.shtml?id=COFA760"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COFA760"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4972.shtml?id=COFA760"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE201",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)1\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSC501"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSC501"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)1\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)1(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:واحدة|واحد)(?:\\s*\\(1\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSC501"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSC501"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE202",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSD910"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSD910"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)0(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSD910"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSD910"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE203",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)9\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSR698"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSR698"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)9\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)9(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSR698"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSR698"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE204",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSS633"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSS633"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "COSS633"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2957.shtml?id=COSS633"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE205",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CPSE600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2904.shtml?id=CPSE600"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)0(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CPSE600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2904.shtml?id=CPSE600"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE206",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CSBP112"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP112"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CSBP112"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP112"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE207",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CSPG701"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSPG701"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CSPG701"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSPG701"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE208",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CSR651"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2996.shtml?id=CSR651"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CSR651"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2996.shtml?id=CSR651"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE209",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CURR101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2910.shtml?id=CURR101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "CURR101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2910.shtml?id=CURR101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE210",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "DBA711"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5017.shtml?id=DBA711"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "DBA711"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5017.shtml?id=DBA711"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE211",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ECBP614"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ECBP614"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ECBP614"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ECBP614"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE212",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ECOM320"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2912.shtml?id=ECOM320"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ECOM320"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2912.shtml?id=ECOM320"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE213",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ECON105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2911.shtml?id=ECON105"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ECON105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2911.shtml?id=ECON105"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE215",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ENG150"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=ENG150"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)0\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)0(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ENG150"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=ENG150"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE216",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ENGL601"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=ENGL601"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ENGL601"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=ENGL601"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE218",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ENVE700"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2906.shtml?id=ENVE700"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ENVE700"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2906.shtml?id=ENVE700"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE219",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ESPU240"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=ESPU240"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ESPU240"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=ESPU240"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE220",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)1\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ETHC600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2962.shtml?id=ETHC600"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)1\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)1(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:واحدة|واحد)(?:\\s*\\(1\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ETHC600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2962.shtml?id=ETHC600"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE221",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "EWR215"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=EWR215"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "EWR215"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=EWR215"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE222",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FCH101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=FCH101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FCH101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=FCH101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE223",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FDSC250"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4972.shtml?id=FDSC250"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FDSC250"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4972.shtml?id=FDSC250"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE224",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FINC110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2911.shtml?id=FINC110"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FINC110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2911.shtml?id=FINC110"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE225",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FOED101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2910.shtml?id=FOED101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FOED101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2910.shtml?id=FOED101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE226",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FORS600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=FORS600"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "FORS600"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=FORS600"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE227",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GBUS201"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5017.shtml?id=GBUS201"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GBUS201"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5017.shtml?id=GBUS201"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE228",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEAE101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=GEAE101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEAE101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=GEAE101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE229",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEAR200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEAR200"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEAR200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEAR200"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE230",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEBS220"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5018.shtml?id=GEBS220"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEBS220"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5018.shtml?id=GEBS220"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE231",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEEM110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEEM110"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEEM110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEEM110"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE232",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEHP111"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4970.shtml?id=GEHP111"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEHP111"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4970.shtml?id=GEHP111"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE233",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEIE222"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5018.shtml?id=GEIE222"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEIE222"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5018.shtml?id=GEIE222"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE234",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEIS100"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEIS100"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEIS100"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEIS100"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE235",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEIT112"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=GEIT112"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEIT112"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=GEIT112"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE236",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GELW111"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2964.shtml?id=GELW111"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GELW111"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2964.shtml?id=GELW111"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE237",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GENG215"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2914.shtml?id=GENG215"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)2\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)2(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:اثنتين|اثنان|اثنين)(?:\\s*\\(2\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GENG215"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2914.shtml?id=GENG215"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE238",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEO200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4969.shtml?id=GEO200"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEO200"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4969.shtml?id=GEO200"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE239",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEOG650"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4969.shtml?id=GEOG650"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEOG650"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4969.shtml?id=GEOG650"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE240",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEOL100"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2929.shtml?id=GEOL100"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEOL100"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2929.shtml?id=GEOL100"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE241",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GER101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=GER101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GER101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4964.shtml?id=GER101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE242",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GESU121"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=GESU121"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GESU121"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2902.shtml?id=GESU121"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE243",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEZD110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEZD110"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "GEZD110"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2897.shtml?id=GEZD110"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE244",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HIS105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4965.shtml?id=HIS105"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HIS105"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4965.shtml?id=HIS105"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE245",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HORT534"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4971.shtml?id=HORT534"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HORT534"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4971.shtml?id=HORT534"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE246",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HRMD310"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5017.shtml?id=HRMD310"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HRMD310"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_5017.shtml?id=HRMD310"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE247",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HSR140"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2924.shtml?id=HSR140"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HSR140"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2924.shtml?id=HSR140"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE248",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HSSR101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4967.shtml?id=HSSR101"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "HSSR101"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_4967.shtml?id=HSSR101"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE249",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ISBP631"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISBP631"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ISBP631"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ISBP631"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE251",
+      "before": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ITBP218"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP218"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "course credits",
+            "any": [
+              "(?<!\\d)3\\s*(?:credit|hour|ساعة|ساعات|ساعه)",
+              "(?<!\\d)3(?:\\s*\\)?\\s*[-–]?\\s*)(?:credit|hour|ساع)",
+              "(?:ثلاث|ثلاثة)(?:\\s*\\(3\\))?\\s*ساع"
+            ]
+          },
+          {
+            "name": "correct course identity",
+            "any": [
+              "ITBP218"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/catalog/courses/course_2931.shtml?id=ITBP218"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE255",
+      "before": {
+        "checks": [
+          {
+            "name": "letters",
+            "any": [
+              "two",
+              "2"
+            ]
+          },
+          {
+            "name": "CV",
+            "any": [
+              "curriculum vitae",
+              "\\bCV\\b"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/cgs/admission.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "letters",
+            "any": [
+              "two",
+              "2",
+              "رسالتان",
+              "رسالتين",
+              "خطابان",
+              "خطابين"
+            ]
+          },
+          {
+            "name": "CV",
+            "any": [
+              "curriculum vitae",
+              "\\bCV\\b",
+              "سيرة ذاتية",
+              "السيرة الذاتية"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/cgs/admission.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE259",
+      "before": {
+        "checks": [
+          {
+            "name": "coordinator",
+            "any": [
+              "college coordinator"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "coordinator",
+            "any": [
+              "college coordinator",
+              "منسق"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE260",
+      "before": {
+        "checks": [
+          {
+            "name": "student",
+            "any": [
+              "student"
+            ]
+          },
+          {
+            "name": "housing",
+            "any": [
+              "accommodation|housing"
+            ]
+          },
+          {
+            "name": "insurance",
+            "any": [
+              "insurance"
+            ]
+          },
+          {
+            "name": "books",
+            "any": [
+              "textbooks|books"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "student",
+            "any": [
+              "student",
+              "يتحمل الطالب"
+            ]
+          },
+          {
+            "name": "housing",
+            "any": [
+              "accommodation|housing",
+              "السكن"
+            ]
+          },
+          {
+            "name": "insurance",
+            "any": [
+              "insurance",
+              "التأمين",
+              "التامين"
+            ]
+          },
+          {
+            "name": "books",
+            "any": [
+              "textbooks|books",
+              "الكتب"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE265",
+      "before": {
+        "checks": [
+          {
+            "name": "tuition",
+            "any": [
+              "tuition"
+            ]
+          },
+          {
+            "name": "housing exclusion",
+            "any": [
+              "not.*hous|exclud.*hous|housing.*not|doesn.t.*hous"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "tuition",
+            "any": [
+              "tuition",
+              "رسوم\\s+(?:الدراسة|الدراسية)"
+            ]
+          },
+          {
+            "name": "housing exclusion",
+            "any": [
+              "not.*hous|exclud.*hous|housing.*not|doesn.t.*hous",
+              "لا\\s+(?:تشمل|تغطي)[^.]*السكن"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE270",
+      "before": {
+        "checks": [
+          {
+            "name": "excluded",
+            "any": [
+              "exclud|not.*GPA|doesn.t.*GPA"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "excluded",
+            "any": [
+              "exclud|not.*GPA|doesn.t.*GPA",
+              "لا تدخل.*حساب",
+              "مستثناة.*المعدل"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE274",
+      "before": {
+        "checks": [
+          {
+            "name": "third",
+            "any": [
+              "third"
+            ]
+          },
+          {
+            "name": "dismissal",
+            "any": [
+              "dismiss"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/5_academic_standing_enrollment_eligibility_and_progress-en.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "third",
+            "any": [
+              "third",
+              "الإنذار الأكاديمي الثالث",
+              "الانذار الاكاديمي الثالث"
+            ]
+          },
+          {
+            "name": "dismissal",
+            "any": [
+              "dismiss",
+              "فصله أكاديمي",
+              "فصله اكاديمي",
+              "فصله.*الجامعة"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/5_academic_standing_enrollment_eligibility_and_progress-en.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE276",
+      "before": {
+        "checks": [
+          {
+            "name": "grievance",
+            "any": [
+              "unfair|mistreatment"
+            ]
+          },
+          {
+            "name": "appeal",
+            "any": [
+              "incorrect|erroneous|exception"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/9_student_academic_grievances_and_appeals-en.pdf"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "grievance",
+            "any": [
+              "unfair|mistreatment",
+              "(?:الشكوى|التظلم).{0,100}(?:غير عادلة|سوء معاملة)"
+            ]
+          },
+          {
+            "name": "appeal",
+            "any": [
+              "incorrect|erroneous|exception",
+              "(?:الاستئناف|استئناف).{0,100}(?:خاطئ|خطأ|استثناء)"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/9_student_academic_grievances_and_appeals-en.pdf"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE280",
+      "before": {
+        "checks": [
+          {
+            "name": "medical",
+            "any": [
+              "medical"
+            ]
+          },
+          {
+            "name": "form",
+            "any": [
+              "application form"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/health_club/membership.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "medical",
+            "any": [
+              "medical",
+              "فحص طبي"
+            ]
+          },
+          {
+            "name": "form",
+            "any": [
+              "application form",
+              "نموذج.*عضوية"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/health_club/membership.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE282",
+      "before": {
+        "checks": [
+          {
+            "name": "pool",
+            "any": [
+              "swimming pool"
+            ]
+          },
+          {
+            "name": "crossfit",
+            "any": [
+              "CrossFit"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/health_club/sports-facilities.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "pool",
+            "any": [
+              "swimming pool",
+              "مسبح.*أولمبي",
+              "مسبح.*اولمبي"
+            ]
+          },
+          {
+            "name": "crossfit",
+            "any": [
+              "CrossFit",
+              "كروس فت"
+            ]
+          }
+        ],
+        "forbidden": [
+          "(?:لا|لم).{0,20}(?:تذكر|تسرد|يذكر|يسرد).{0,40}كروس"
+        ],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/health_club/sports-facilities.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE285",
+      "before": {
+        "checks": [
+          {
+            "name": "both",
+            "any": [
+              "both|male and female"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/restaurants/index.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "both",
+            "any": [
+              "both|male and female",
+              "صالتان",
+              "ساحتان",
+              "واحدة.*(?:أخرى|اخرى)"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/campus_life/restaurants/index.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE286",
+      "before": {
+        "checks": [
+          {
+            "name": "local",
+            "any": [
+              "Thiqa"
+            ]
+          },
+          {
+            "name": "international",
+            "any": [
+              "Daman"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/student-services/health-services/hi-cards.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "local",
+            "any": [
+              "Thiqa",
+              "ثقة"
+            ]
+          },
+          {
+            "name": "international",
+            "any": [
+              "Daman",
+              "ضمان"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/student-services/health-services/hi-cards.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE287",
+      "before": {
+        "checks": [
+          {
+            "name": "visa",
+            "any": [
+              "visa"
+            ]
+          },
+          {
+            "name": "approval",
+            "any": [
+              "approv"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/student-services/health-services/hi-cards.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "visa",
+            "any": [
+              "visa"
+            ]
+          },
+          {
+            "name": "approval",
+            "any": [
+              "approv",
+              "اعتماد",
+              "الموافقة",
+              "موافقة"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/student-services/health-services/hi-cards.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE289",
+      "before": {
+        "checks": [
+          {
+            "name": "cleaning",
+            "any": [
+              "data cleaning"
+            ]
+          },
+          {
+            "name": "visualization",
+            "any": [
+              "visuali[sz]ation"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/library/research-data-services.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "cleaning",
+            "any": [
+              "data cleaning",
+              "تنظيف"
+            ]
+          },
+          {
+            "name": "visualization",
+            "any": [
+              "visuali[sz]ation",
+              "تصوير.*بياني",
+              "تمثيل.*بصري",
+              "تصور.*بياني"
+            ]
+          }
+        ],
+        "forbidden": [
+          "لا\\s+(?:تذكر|تقدم)[^.]{0,70}(?:تنظيف|تصويرها)"
+        ],
+        "sources": [
+          "https://www.uaeu.ac.ae/en/library/research-data-services.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE290",
+      "before": {
+        "checks": [
+          {
+            "name": "free",
+            "any": [
+              "free"
+            ]
+          },
+          {
+            "name": "graduate",
+            "any": [
+              "graduate"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/library/uaeu-libraries-editing-services-and-ithenticate-check.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "free",
+            "any": [
+              "free",
+              "مجانا",
+              "مجانًا",
+              "مجانية"
+            ]
+          },
+          {
+            "name": "graduate",
+            "any": [
+              "graduate",
+              "الدراسات العليا"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/library/uaeu-libraries-editing-services-and-ithenticate-check.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE292",
+      "before": {
+        "checks": [
+          {
+            "name": "summer",
+            "any": [
+              "summer"
+            ]
+          },
+          {
+            "name": "Ramadan",
+            "any": [
+              "Ramadan"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/library/libraryhours.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "summer",
+            "any": [
+              "summer",
+              "الصيف"
+            ]
+          },
+          {
+            "name": "Ramadan",
+            "any": [
+              "Ramadan",
+              "رمضان"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/library/libraryhours.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE293",
+      "before": {
+        "checks": [
+          {
+            "name": "year",
+            "any": [
+              "1976"
+            ]
+          },
+          {
+            "name": "founder",
+            "any": [
+              "Zayed"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/overview.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "year",
+            "any": [
+              "1976"
+            ]
+          },
+          {
+            "name": "founder",
+            "any": [
+              "Zayed",
+              "الشيخ زايد"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/overview.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE294",
+      "before": {
+        "checks": [
+          {
+            "name": "count",
+            "any": [
+              "nine",
+              "9"
+            ]
+          },
+          {
+            "name": "college",
+            "any": [
+              "Computing and Artificial Intelligence"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/overview.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "count",
+            "any": [
+              "nine",
+              "9",
+              "تسع"
+            ]
+          },
+          {
+            "name": "college",
+            "any": [
+              "Computing and Artificial Intelligence",
+              "الحوسبة.*الذكاء الاصطناعي"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/overview.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE297",
+      "before": {
+        "checks": [
+          {
+            "name": "education",
+            "any": [
+              "education"
+            ]
+          },
+          {
+            "name": "research",
+            "any": [
+              "research"
+            ]
+          },
+          {
+            "name": "service",
+            "any": [
+              "community"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "education",
+            "any": [
+              "education",
+              "التعليم"
+            ]
+          },
+          {
+            "name": "research",
+            "any": [
+              "research",
+              "البحث"
+            ]
+          },
+          {
+            "name": "service",
+            "any": [
+              "community",
+              "خدمة.*المجتمع"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    },
+    {
+      "id": "KE298",
+      "before": {
+        "checks": [
+          {
+            "name": "diversity",
+            "any": [
+              "diversity"
+            ]
+          },
+          {
+            "name": "integrity",
+            "any": [
+              "integrity"
+            ]
+          },
+          {
+            "name": "transparency",
+            "any": [
+              "transparen"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+        ]
+      },
+      "after": {
+        "checks": [
+          {
+            "name": "diversity",
+            "any": [
+              "diversity",
+              "التنوع"
+            ]
+          },
+          {
+            "name": "integrity",
+            "any": [
+              "integrity",
+              "النزاهة"
+            ]
+          },
+          {
+            "name": "transparency",
+            "any": [
+              "transparen",
+              "الشفافية"
+            ]
+          }
+        ],
+        "forbidden": null,
+        "sources": [
+          "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+        ]
+      },
+      "reason": "Equivalent bilingual/format wording, audited official alternative source, or a corrected over-broad requirement/negative check; factual expectations are not replaced by the output"
+    }
+  ]
+}

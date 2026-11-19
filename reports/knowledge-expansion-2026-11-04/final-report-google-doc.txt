@@ -1,0 +1,57 @@
+[Examiner] [Regression] Knowledge expansion: final report
+Tester name: Claude (continuing Codex's run)
+Date: 7 November 2026
+Version tested: Local build knowledge-v47 at http://localhost:3000/ and http://localhost:3003/, branch feat/uaeu-knowledge-expansion (local commit ff5a28d, not pushed)
+Status: FINAL. This replaces the provisional 95/3/2 figure in the continuation index above, and the entries above are unchanged.
+Complete conversations: every question, full reply, citations, timing and result is kept in the repository under reports/knowledge-expansion-2026-11-04/ (examiner-all-v47.json, examiner-phrasing-v47.json, regression-v47-1/2/3.json plus the -rerun files, browser-v47.json). v47-summary.md gives the totals.
+
+Results (automated rubric and official-source check; every ❌ reply was read by hand)
+Examiner 100 main questions: 100 ✅, 0 ⚠️, 0 ❌.
+Examiner 600 (main plus 5 rewordings each): 592 ✅, 7 ⚠️, 1 ❌.
+Harder phrasing pass, 399 questions (typos, short casual wording, Arabic spelling slips): 384 ✅, 11 ⚠️, 4 ❌.
+Full regression, 1,782 questions: 1,753 ✅, 21 ⚠️, 8 ❌. Earlier v43 result: 1,671 ✅, 46 ⚠️, 65 ❌.
+Real browser pass (100 examiner conversations typed into the chat UI): 100 ✅. Every reply rendered the same text the API returned, all 103 turns returned HTTP 200, median 2.6 s, slowest 8.3 s.
+Speed: Examiner mean 3.4 s, p95 6.8 s, slowest 13.9 s, no reply over 20 s. Slow? No.
+Repeated replies: exact repeats across differently worded questions fell from 50 pairs (v45) to 23, and near-identical pairs fell from 92 to 56. This is reduced but not eliminated.
+Was the source relevant: the right official page was cited in every ✅ case. Weak or old sources remain on KE280 (2017 booklet), KE286 (PhD handbook used for a general question) and EX002 (accreditation page used for the founding date).
+
+Fixed in this round
+GenEd credit total in Arabic and with typos: it now uses the catalog total of 21 credits and no longer an undated page.
+Arabic contact hours: answered as the general contact point's hours, Monday to Thursday 8:00 AM to 5:00 PM and Friday 8:00 AM to 3:00 PM (https://www.uaeu.ac.ae/en/contact/index.shtml).
+Arabic housing buses: answered from https://www.uaeu.ac.ae/en/campus_life/residential/
+Spelling tolerance: common typos (crdit, semister), program names written with ه instead of ة, and link words such as "bachelor law" now match the program.
+Replies are written for the question's own wording instead of copying a stored reply.
+Checker errors were corrected only after reading the official pages; no fact checks were loosened.
+
+Knowledge added on this branch (each answer cites the official page)
+About UAEU, founding, colleges, enrollment and quoted rankings: https://www.uaeu.ac.ae/en/about/overview.shtml
+Vision, mission and values: https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml
+Chancellor and Vice Chancellor: https://www.uaeu.ac.ae/en/about/chancellor/general-enquiries.shtml and https://www.uaeu.ac.ae/en/vc/index.shtml
+Address, general contact and hours: https://www.uaeu.ac.ae/en/contact/index.shtml
+Accreditation (CAA, programmatic, ABET for IT, CAEP for Education): https://www.uaeu.ac.ae/en/accreditation/caa.shtml and https://www.uaeu.ac.ae/en/accreditation/prog_accred.shtml
+Research centres: https://www.uaeu.ac.ae/en/research/centers/index.shtml
+Student exchange, incoming and outgoing: https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml
+Spring 2027 internal transfer and key dates: https://www.uaeu.ac.ae/en/dvcsae/registration/new_students.shtml and https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en
+Attendance, grading, good standing, grievances and appeals (undergraduate policies 3, 4, 5 and 9): https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/
+Graduate study modes and PhD application documents: https://www.uaeu.ac.ae/en/cgs/admission.shtml
+Elite scholarship benefits: https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml
+Library hours, reference desk, scanning limits, LIWA Tipasa loans, title requests and research data help: https://www.uaeu.ac.ae/en/library/
+Sports facilities: https://www.uaeu.ac.ae/en/campus_life/health_club/sports-facilities.shtml
+Eleven step-by-step service guides (applications, withdrawal, transcript, housing, fee payment, graduation, major change and others).
+
+Remaining issues, most important first
+(1) The source check sometimes withholds a correct answer (KE148 in all four wordings, KE154-V4, EX081-V5, EX015-V3). The student sees "withheld" instead of the credit total.
+(2) Two Arabic questions written with ه in place of ة are not linked to their topic (EX077-V3 absence rule, EX089-V3 clubs), so the bot asks the student to restate.
+(3) KE257-V3: the Arabic graduate study-modes question still leaves out full-time and part-time.
+(4) Follow-ups about the AE-04 grading policy lose the topic (KE269-V4, KE270-V4).
+(5) EX079-V2: a casual transcript question is answered with the "To Whom It May Concern" letter service.
+(6) Some answers are thin on details the page does publish: the college count (KE294-V4), elective credit totals (EX047, CQ048) and local insurance (KE286).
+(7) Exact repeated replies are down to 23 pairs but still present.
+(8) Production: the deployment bundle is very large, and on Vercel the database lives in temporary storage, so accounts and history do not persist there.
+
+Testing caveats, stated plainly
+The OpenAI credit balance ran out during the first v47 run (6 November, about 20:30). 67 regression questions and 97 browser conversations got a "service unavailable" reply. After the top-up I reran exactly those questions and the whole browser pass on the same build, and all of them passed. The first attempt is kept in the repository as evidence.
+The v46 run files show runtimeUnchanged=false because source files were edited while it ran. The served build stayed v46 the whole time, as the health checks before and after confirm. The v47 numbers above do not have this problem.
+A v45 full run was stopped at about 7 % to include a fix. Its partial results are kept and marked "interrupted".
+These are automated rubric scores checked against official UAEU pages; they are not a guarantee for every possible question.
+END OF TESTING

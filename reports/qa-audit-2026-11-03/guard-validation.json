@@ -1,0 +1,991 @@
+{
+  "startedAt": "2026-11-03T20:28:09.646Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "guard-validation",
+  "methodology": "Fixed expected-fact and citation checks, not an independent official-source truth proof. Human review required for semantic completeness. Published audit47/17/38 is separate from this automated local baseline.",
+  "publishedHumanBaseline": {
+    "correct": 47,
+    "partial": 17,
+    "incorrect": 38
+  },
+  "results": [
+    {
+      "id": "CQ039",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "csbp319",
+      "turns": [
+        "What are the prerequisites for CSBP319 Data Structures?"
+      ],
+      "expected": "CSBP219 minimum D; CSBP221 pre/corequisite minimum D, not two mandatory prior completions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*219"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "CSBP\\s*221"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "alongside",
+            "concurrent",
+            "pre.?co",
+            "متزامن",
+            "معه",
+            "مع المساق",
+            "corequisite"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "conversation": [
+        {
+          "user": "What are the prerequisites for CSBP319 Data Structures?",
+          "status": 200,
+          "seconds": 4.909,
+          "payload": {
+            "role": "assistant",
+            "content": "The prerequisites for CSBP319 Data Structures are CSBP219 with a minimum grade of D, and CSBP221 which can be taken either as a prerequisite or corequisite with a minimum grade of D, meaning it may be taken before or alongside CSBP319 as allowed by the registration system.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Course Catalog — CSBP319 Data Structures",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "CSBP319",
+            "evidenceIds": [
+              "02-csbp319-data-structures.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The prerequisites for CSBP319 Data Structures are CSBP219 with a minimum grade of D, and CSBP221 which can be taken either as a prerequisite or corequisite with a minimum grade of D, meaning it may be taken before or alongside CSBP319 as allowed by the registration system.",
+                "evidenceIds": [
+                  "02-csbp319-data-structures.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true
+      }
+    },
+    {
+      "id": "CQ040",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "csbp319",
+      "turns": [
+        "can i do CSBP 319 while taking CSBP 221 in the same semester?"
+      ],
+      "expected": "CSBP221 is pre/corequisite; concurrent may be allowed, but CSBP219 minimum D and other registration conditions still matter.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*219"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "CSBP\\s*221"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "alongside",
+            "concurrent",
+            "pre.?co",
+            "متزامن",
+            "معه",
+            "مع المساق",
+            "corequisite"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "forbidden": [
+        "CSBP219[^.!?\\n]*before or alongside",
+        "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently"
+      ],
+      "conversation": [
+        {
+          "user": "can i do CSBP 319 while taking CSBP 221 in the same semester?",
+          "status": 200,
+          "seconds": 5.366,
+          "payload": {
+            "role": "assistant",
+            "content": "You can take CSBP319 Data Structures while taking CSBP221 in the same semester because CSBP221 is listed as a prerequisite or corequisite with a minimum grade of D, and it may be taken before or alongside CSBP319 as allowed by the registration system.\n\nCSBP219 is also a prerequisite for CSBP319 with a minimum grade of D, so it must be completed before or concurrently as well.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Course Catalog — CSBP319 Data Structures",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "CSBP319",
+            "evidenceIds": [
+              "02-csbp319-data-structures.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can take CSBP319 Data Structures while taking CSBP221 in the same semester because CSBP221 is listed as a prerequisite or corequisite with a minimum grade of D, and it may be taken before or alongside CSBP319 as allowed by the registration system.",
+                "evidenceIds": [
+                  "02-csbp319-data-structures.md#E1S1"
+                ]
+              },
+              {
+                "text": "CSBP219 is also a prerequisite for CSBP319 with a minimum grade of D, so it must be completed before or concurrently as well.",
+                "evidenceIds": [
+                  "02-csbp319-data-structures.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true
+      }
+    },
+    {
+      "id": "CQ042",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "mech348",
+      "turns": [
+        "Can I take MECH 348 alongside MECH 340?"
+      ],
+      "expected": "MECH340 is Pre/Co; concurrent may be permitted; MECH210 prerequisite minimum D remains.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml?id=MECH348"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MECH\\s*210"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MECH\\s*340"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "concurrent",
+            "Pre.?Co",
+            "متزامن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "conversation": [
+        {
+          "user": "Can I take MECH 348 alongside MECH 340?",
+          "status": 200,
+          "seconds": 3.326,
+          "payload": {
+            "role": "assistant",
+            "content": "MECH348 Fluid Mechanics Lab can be taken concurrently with MECH340 Fluid Mechanics, as MECH340 is listed as a pre/corequisite that may be completed beforehand or taken at the same time, subject to university enrollment rules.\n\nMECH348 requires MECH210 Measurement and Instrumentation Lab with a minimum grade of D as a prerequisite, but MECH210 is not a pre/corequisite for MECH348.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites",
+                "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml",
+                "lastVerified": "2026-10-06"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "MECH348",
+            "evidenceIds": [
+              "33-mechanical-engineering-course-prerequisites.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "MECH348 Fluid Mechanics Lab can be taken concurrently with MECH340 Fluid Mechanics, as MECH340 is listed as a pre/corequisite that may be completed beforehand or taken at the same time, subject to university enrollment rules.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              },
+              {
+                "text": "MECH348 requires MECH210 Measurement and Instrumentation Lab with a minimum grade of D as a prerequisite, but MECH210 is not a pre/corequisite for MECH348.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*210"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*340"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "concurrent",
+              "Pre.?Co",
+              "متزامن"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true
+      }
+    },
+    {
+      "id": "CQ063",
+      "original": true,
+      "focus": "Weird Case",
+      "group": "diploma-scope",
+      "turns": [
+        "Is an old UAEU diploma course listing enough to prove that a graduate diploma is accepting applications now?"
+      ],
+      "expected": "No. Historical listings do not prove current intake availability; consult current graduate offerings and admissions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+        "https://www.uaeu.ac.ae/en/cgs/programs.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "historical",
+            "old",
+            "تاريخ",
+            "قديم"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "current",
+            "now",
+            "حالي"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "not.*(?:prove|establish|confirm)",
+            "doesn.t.*(?:prove|establish)",
+            "لا.*(?:يثبت|تثبت|يعني|يؤكد)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "⚠️ Partly correct",
+      "conversation": [
+        {
+          "user": "Is an old UAEU diploma course listing enough to prove that a graduate diploma is accepting applications now?",
+          "status": 200,
+          "seconds": 2.529,
+          "payload": {
+            "role": "assistant",
+            "content": "An old course listing or historical accreditation entry for a UAEU graduate diploma only establishes historical context and does not prove that the graduate diploma is currently accepting applications.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU graduate offerings — historical diploma scope",
+                "url": "https://www.uaeu.ac.ae/en/cgs/programs.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "certificate",
+            "evidenceIds": [
+              "56-diploma-offering-scope.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "An old course listing or historical accreditation entry for a UAEU graduate diploma only establishes historical context and does not prove that the graduate diploma is currently accepting applications.",
+                "evidenceIds": [
+                  "56-diploma-offering-scope.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "historical",
+              "old",
+              "تاريخ",
+              "قديم"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "current",
+              "now",
+              "حالي"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "not.*(?:prove|establish|confirm)",
+              "doesn.t.*(?:prove|establish)",
+              "لا.*(?:يثبت|تثبت|يعني|يؤكد)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true
+      }
+    },
+    {
+      "id": "NQ115",
+      "original": false,
+      "focus": "Phrasing Sensitivity",
+      "group": "mech348",
+      "turns": [
+        "هل أقدر آخذ mech-348 مع mech 340؟"
+      ],
+      "expected": "MECH210 prerequisite minimum D; MECH340 pre/corequisite minimum D, not strictly concurrent.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml?id=MECH348",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MECH\\s*210"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MECH\\s*340"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "concurrent",
+            "Pre.?Co",
+            "متزامن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": null,
+      "conversation": [
+        {
+          "user": "هل أقدر آخذ mech-348 مع mech 340؟",
+          "status": 502,
+          "seconds": 5.032,
+          "payload": {
+            "role": "assistant",
+            "content": "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة؛ الإجابات المحفوظة الموثقة ما زالت متاحة.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 1,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "MECH\\s*210"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "MECH\\s*340"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "concurrent",
+              "Pre.?Co",
+              "متزامن"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3"
+        ],
+        "requiresHumanReview": true
+      }
+    },
+    {
+      "id": "NQ179",
+      "original": false,
+      "focus": "Phrasing Sensitivity",
+      "group": "csbp411-facets",
+      "turns": [
+        "CSBP411 Machine Learning: prerequisite and pre/co requirements please"
+      ],
+      "expected": "Current official CSBP411 course record: CSBP301 minimum gradeD,3credit hours. STAT210 is not listed as a prerequisite in this record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP411"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*301"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\bD\\b"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": null,
+      "conversation": [
+        {
+          "user": "CSBP411 Machine Learning: prerequisite and pre/co requirements please",
+          "status": 502,
+          "seconds": 5.115,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. You can retry; verified stored answers remain available.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 1,
+              "reasonCodes": [
+                "contradiction"
+              ]
+            },
+            "clarificationReason": "contradiction"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "CSBP\\s*301"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "\\bD\\b"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2"
+        ],
+        "requiresHumanReview": true
+      }
+    },
+    {
+      "original": false,
+      "auditResult": null,
+      "focus": "Weakness",
+      "group": "ceremony",
+      "turns": [
+        "What are the official attire guidelines for participating in UAEU’s graduation ceremony?"
+      ],
+      "expected": "No current attire rule is established in the checked commencement page. Do not invent a dress code.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/commencement"
+      ],
+      "checks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "not.*(?:verify|verified|establish|publish)|no.*verified|لا.*(?:يتوفر|تتوفر|أملك|استطيع|أستطيع)|لم أجد"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "NQ194",
+      "conversation": [
+        {
+          "user": "What are the official attire guidelines for participating in UAEU’s graduation ceremony?",
+          "status": 200,
+          "seconds": 0.956,
+          "payload": {
+            "role": "assistant",
+            "content": "I could not verify the requested information for graduation from the available official evidence. The subject is clear; the missing information is an official record that establishes this specific fact.",
+            "source": "escalated",
+            "responseMode": "grounded_generation",
+            "stateLabel": "model_escalation",
+            "citations": [
+              {
+                "title": "UAEU commencement — lookup page; current attire rules unverified",
+                "url": "https://www.uaeu.ac.ae/en/commencement/",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "clarify",
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "graduation",
+            "evidenceIds": [],
+            "claims": [],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "clarificationReason": "missing_official_evidence"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Requested fact or honest scope",
+            "passed": true,
+            "patterns": [
+              "not.*(?:verify|verified|establish|publish)|no.*verified|لا.*(?:يتوفر|تتوفر|أملك|استطيع|أستطيع)|لم أجد"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "9f105aa4b7a6e18e5e68ce4a08c308e6762ccc23db78b9a3325500940a27cb7d",
+    "files": 105
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "84da287f229d5660b3895273715a0e26419623158e8e1e253a4ab077a17d7b52",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "dbea6c03aa10bf341b863aa5193c99857252d541188a99a2b087acd469d9635e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "counts": {
+    "correct": 5,
+    "partial": 0,
+    "incorrect": 2
+  },
+  "finishedAt": "2026-11-03T20:28:38.308Z",
+  "runtimeAfter": {
+    "sha256": "9f105aa4b7a6e18e5e68ce4a08c308e6762ccc23db78b9a3325500940a27cb7d",
+    "files": 105
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "84da287f229d5660b3895273715a0e26419623158e8e1e253a4ab077a17d7b52",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "dbea6c03aa10bf341b863aa5193c99857252d541188a99a2b087acd469d9635e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "originalCounts": {
+    "correct": 4,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "newCounts": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 2
+  },
+  "identicalAnswerGroups": []
+}

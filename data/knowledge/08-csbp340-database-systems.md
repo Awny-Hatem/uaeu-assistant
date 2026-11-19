@@ -14,6 +14,6 @@ The current UAEU catalog identifies CSBP340 Database Systems as a three-credit c
 
 ## Prerequisite route
 
-The current catalog displays CSBP319 with a minimum grade of D or CSBP323 with a minimum grade of D as the prerequisite route. The Fall 2025 BSc Computer Science model plan places CSBP340 after CSBP319.
+The current catalog prerequisite field lists CSBP319 and CSBP323 with minimum grade D, then ends with a dangling ?or.? The published text does not establish the Boolean relationship or whether another alternative is missing. Do not answer this as an approved OR route. The Fall 2025 BSc Computer Science model plan places CSBP340 after CSBP319 for that cohort, but does not resolve the incomplete catalog field.
 
 Students must use the rule attached to their own program and cohort in the live degree audit and registration portal.

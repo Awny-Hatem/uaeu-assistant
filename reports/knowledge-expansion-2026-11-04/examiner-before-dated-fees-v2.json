@@ -1,0 +1,1180 @@
+{
+  "startedAt": "2026-11-04T08:31:17.190Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "examiner-before-dated-fees-v2",
+  "fixture": "examiner-scenarios/examiner_100.json",
+  "fixtureSha256": "c46284405487e26e03523a67effc95c8fd1a6a51cd447e4a54b804b67159ff9e",
+  "methodology": "100 distinct examiner scenarios, each with five alternate phrasings. Ground truth uses official UAEU primary sources and previously independently reviewed source fixtures; source-fetch and semantic-review states are tracked explicitly. HTTP200 and a matching number alone are not proof. A single-cohort calculus question is not required to explain an unrequested earlier cohort. Boundary notices are measured separately from factual-answer FAQ similarity.",
+  "results": [
+    {
+      "focus": "Examiner",
+      "group": "mpa-fee",
+      "turns": [
+        "For academic year 2025–2026, what published tuition per credit and application fee apply to the UAEU Master of Professional Accounting?"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX058",
+      "category": "Admissions and money",
+      "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX058",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For academic year 2025–2026, what published tuition per credit and application fee apply to the UAEU Master of Professional Accounting?",
+          "status": 200,
+          "seconds": 6.101,
+          "payload": {
+            "role": "assistant",
+            "content": "For the academic year 2025–2026, the UAEU Master of Professional Accounting program requires 36 credit hours with a tuition fee of 2750 AED per credit hour and an application fee of 200 AED.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master Programs",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Master Programs"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "admissions",
+            "evidenceIds": [
+              "corpus:943aeb8b89768581d18f:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the academic year 2025–2026, the UAEU Master of Professional Accounting program requires 36 credit hours with a tuition fee of 2750 AED per credit hour and an application fee of 200 AED.",
+                "evidenceIds": [
+                  "corpus:943aeb8b89768581d18f:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6096,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 28,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.6e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7804,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 71,
+                  "estimatedUsd": 0.0032352
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1936,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0008160000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9768,
+              "outputTokens": 97,
+              "knownUsageUsd": 0.004051760000000001,
+              "estimatedUsd": 0.004051760000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "mpa-fee",
+      "turns": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX058-V1",
+      "category": "Admissions and money",
+      "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX058",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "status": 200,
+          "seconds": 6.37,
+          "payload": {
+            "role": "assistant",
+            "content": "For the academic year 2025–2026, the tuition fee for the UAEU Master of Professional Accounting program is 2750 AED per credit hour, and the application fee is 200 AED.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master Programs",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Master Programs"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "tuition",
+            "evidenceIds": [
+              "corpus:943aeb8b89768581d18f:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the academic year 2025–2026, the tuition fee for the UAEU Master of Professional Accounting program is 2750 AED per credit hour, and the application fee is 200 AED.",
+                "evidenceIds": [
+                  "corpus:943aeb8b89768581d18f:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6366,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 28,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.6e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 8075,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 67,
+                  "estimatedUsd": 0.0027611999999999997
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1932,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0008144000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 10035,
+              "outputTokens": 93,
+              "knownUsageUsd": 0.00357616,
+              "estimatedUsd": 0.00357616,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "mpa-fee",
+      "turns": [
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX058-V2",
+      "category": "Admissions and money",
+      "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX058",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "status": 200,
+          "seconds": 5.78,
+          "payload": {
+            "role": "assistant",
+            "content": "For the academic year 2025–2026, the tuition fee per credit hour for the Master of Professional Accounting at UAEU is 2750 AED, and the application fee is 200 AED.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master Programs",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Master Programs"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "tuition",
+            "evidenceIds": [
+              "corpus:943aeb8b89768581d18f:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the academic year 2025–2026, the tuition fee per credit hour for the Master of Professional Accounting at UAEU is 2750 AED, and the application fee is 200 AED.",
+                "evidenceIds": [
+                  "corpus:943aeb8b89768581d18f:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5776,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 35,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 7.000000000000001e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 8089,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 67,
+                  "estimatedUsd": 0.0027668000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1932,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0008144000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 10056,
+              "outputTokens": 93,
+              "knownUsageUsd": 0.0035819000000000007,
+              "estimatedUsd": 0.0035819000000000007,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "mpa-fee",
+      "turns": [
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX058-V3",
+      "category": "Admissions and money",
+      "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX058",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "status": 200,
+          "seconds": 5.483,
+          "payload": {
+            "role": "assistant",
+            "content": "For the academic year 2025–2026, the UAEU Master of Professional Accounting program requires 36 credit hours with a tuition fee of 2750 AED per credit hour and an application fee of 200 AED.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master Programs",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Master Programs"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "tuition",
+            "evidenceIds": [
+              "corpus:943aeb8b89768581d18f:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the academic year 2025–2026, the UAEU Master of Professional Accounting program requires 36 credit hours with a tuition fee of 2750 AED per credit hour and an application fee of 200 AED.",
+                "evidenceIds": [
+                  "corpus:943aeb8b89768581d18f:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5479,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 32,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 6.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 8083,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 71,
+                  "estimatedUsd": 0.0027708000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1936,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0008160000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 10051,
+              "outputTokens": 97,
+              "knownUsageUsd": 0.0035874400000000008,
+              "estimatedUsd": 0.0035874400000000008,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "mpa-fee",
+      "turns": [
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX058-V4",
+      "category": "Admissions and money",
+      "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX058",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+          "status": 200,
+          "seconds": 1.502,
+          "payload": {
+            "role": "assistant",
+            "content": "**حدد الرسم المطلوب**\nاذكر اسم البرنامج أو الخدمة وفئة الطالب والفصل؛ تختلف الرسوم بحسب هذه البيانات وسأعطيك المبلغ المنشور المناسب إن كان متاحًا.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "citations": [],
+            "communications": [],
+            "escalationReason": "sensitive_policy",
+            "disposition": "clarify",
+            "clarificationReason": "missing_official_evidence",
+            "evidenceIds": [],
+            "usage": {
+              "elapsedMs": 1500,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "mpa-fee",
+      "turns": [
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX058-V5",
+      "category": "Admissions and money",
+      "arabicQuestion": "ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "For academic year2025–2026, hey, What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Please explain to a new UAEU student: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "For academic year2025–2026, Give a concise advisor checklist: What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+        "للعام الأكاديمي2025–2026: ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+        "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX058",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "للعام الأكاديمي2025–2026: UAEU — ما رسوم الساعة ورسوم التقديم للماجستير المهني في المحاسبة حسب جدول 2025–2026؟",
+          "status": 200,
+          "seconds": 1.559,
+          "payload": {
+            "role": "assistant",
+            "content": "**حدد الرسم المطلوب**\nاذكر اسم البرنامج أو الخدمة وفئة الطالب والفصل؛ تختلف الرسوم بحسب هذه البيانات وسأعطيك المبلغ المنشور المناسب إن كان متاحًا.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "citations": [],
+            "communications": [],
+            "escalationReason": "sensitive_policy",
+            "disposition": "clarify",
+            "clarificationReason": "missing_official_evidence",
+            "evidenceIds": [],
+            "usage": {
+              "elapsedMs": 1556,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "c2532053d01277a5fab15c9ee08ca6a2952adb12539664ae910e81db761e29a0",
+    "files": 4293,
+    "servingSnapshot": "/private/tmp/uaeu-before-examiner-2026-11-04"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "before-examiner-v9"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "fd312494647f13d8273b10ef82cc21190cf1b15d8b7a17195484bb740e9101e7",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 82102,
+        "vectors": 82102,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "96504ede09183deccea657fe0d46e57ab2d03cb8e9b377e9b0e56187b3e54e60",
+        "generatedAt": "2026-11-04T06:21:56.453Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 4,
+    "partial": 0,
+    "incorrect": 2
+  },
+  "finishedAt": "2026-11-04T08:31:45.584Z",
+  "runtimeAfter": {
+    "sha256": "c2532053d01277a5fab15c9ee08ca6a2952adb12539664ae910e81db761e29a0",
+    "files": 4293,
+    "servingSnapshot": "/private/tmp/uaeu-before-examiner-2026-11-04"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "before-examiner-v9"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "fd312494647f13d8273b10ef82cc21190cf1b15d8b7a17195484bb740e9101e7",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 82102,
+        "vectors": 82102,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "96504ede09183deccea657fe0d46e57ab2d03cb8e9b377e9b0e56187b3e54e60",
+        "generatedAt": "2026-11-04T06:21:56.453Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 5.78,
+    "p95": 6.37,
+    "max": 6.37
+  },
+  "usage": {
+    "measuredAnswers": 6,
+    "totalAnswers": 6,
+    "estimatedUsd": 0.014797260000000003,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "EX058",
+      "EX058-V3"
+    ],
+    [
+      "EX058-V4",
+      "EX058-V5"
+    ]
+  ]
+}

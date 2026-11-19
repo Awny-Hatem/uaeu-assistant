@@ -1,0 +1,1558 @@
+{
+  "startedAt": "2026-11-04T08:53:54.232Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "examiner-targeted-v16",
+  "fixture": "examiner-scenarios/examiner_100.json",
+  "fixtureSha256": "1897354dc040ee3ffaef8abb5dbce5263e0d3331c1dc8b07f4e2897f1fe2e209",
+  "methodology": "100 distinct examiner scenarios, each with five alternate phrasings. Ground truth uses official UAEU primary sources and previously independently reviewed source fixtures; source-fetch and semantic-review states are tracked explicitly. HTTP200 and a matching number alone are not proof. A single-cohort calculus question is not required to explain an unrequested earlier cohort. Boundary notices are measured separately from factual-answer FAQ similarity.",
+  "results": [
+    {
+      "turns": [
+        "What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?"
+      ],
+      "expected": "The official catalog lists Computer Science; Computer and Artificial Intelligence Engineering; Data Science and Artificial Intelligence; Information Security; and Information Technology. Separate full degrees from minors or microcredentials.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|علوم الحاسوب"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computer and Artificial Intelligence Engineering|هندسة الحاسوب"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Data Science|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Information Security|أمن المعلومات|امن المعلومات"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+          ]
+        }
+      ],
+      "id": "EX035",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+        "Please explain to a new UAEU student: What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+        "Give a concise advisor checklist: What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+        "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+        "UAEU — ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX035",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+          "status": 200,
+          "seconds": 7.453,
+          "payload": {
+            "role": "assistant",
+            "content": "The UAEU College of Information Technology (CIT) offers five undergraduate Bachelor of Science degrees: Computer and Artificial Intelligence Engineering; Computer Science; Data Science and Artificial Intelligence; Information Security; and Information Technology.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — CIT Bachelor Degrees",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Information Technology; LEVEL=Undergraduate; Bachelor titles; minors and micro-credentials excluded",
+                "evidenceText": "The official program finder labels the college College of Information Technology(CIT) and lists five full undergraduate Bachelor of Science degrees: Computer and Artificial Intelligence Engineering; Computer Science; Data Science and Artificial Intelligence; Information Security; Information Technology. Minors and micro-credentials are separate qualifications and are excluded from this degree-only list. Use the college label printed in this source when attributing this list; do not claim that this XML itself calls the college Computing and Artificial Intelligence. A catalog listing does not guarantee that an intake is open or establish personal admission eligibility."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "Undergraduate degrees offered by UAEU's College of Computing and Artificial Intelligence (CIT)",
+            "evidenceIds": [
+              "answer:cit-undergraduate-degree-directory#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The UAEU College of Information Technology (CIT) offers five undergraduate Bachelor of Science degrees: Computer and Artificial Intelligence Engineering; Computer Science; Data Science and Artificial Intelligence; Information Security; and Information Technology.",
+                "evidenceIds": [
+                  "answer:cit-undergraduate-degree-directory#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7440,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 20903,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 79,
+                  "estimatedUsd": 0.0084876
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2589,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 67,
+                  "estimatedUsd": 0.0005668000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1111,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0004940000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 24603,
+              "outputTokens": 177,
+              "knownUsageUsd": 0.0095484,
+              "estimatedUsd": 0.0095484,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Computer Science|علوم الحاسوب"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Computer and Artificial Intelligence Engineering|هندسة الحاسوب"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "Data Science|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "Information Security|أمن المعلومات|امن المعلومات"
+            ]
+          },
+          {
+            "name": "Required fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "category": "Admissions and money",
+      "language": "en",
+      "focus": "Examiner",
+      "turns": [
+        "Does a UAEU PhD application need recommendation letters and a CV?"
+      ],
+      "expected": "Two letters of recommendation and curriculum vitae are among required documents.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+        "https://www.uaeu.ac.ae/en/about/policies/pdf/graduateprograms/3_the_phd_programs-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "letters",
+          "any": [
+            "two",
+            "2"
+          ]
+        },
+        {
+          "name": "CV",
+          "any": [
+            "curriculum vitae",
+            "\\bCV\\b"
+          ]
+        }
+      ],
+      "sourceQuote": " arabic proficiency certificate is required for admission into a phd’s program whose language of instruction is arabic. two letters of recommendation curriculum vitae copy of valid passport copy of identity card (for uae residence) copy of family book (uae nationality only) personal photo for further phd information or enquiries, please contact us by email. email: pg@uaeu.ac.ae applican",
+      "sourceBodySha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "id": "EX061",
+      "arabicQuestion": "",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, Does a UAEU PhD application need recommendation letters and a CV?",
+        "Please explain to a new UAEU student: Does a UAEU PhD application need recommendation letters and a CV?",
+        "Give a concise advisor checklist: Does a UAEU PhD application need recommendation letters and a CV?",
+        "أجب بالعربية عن هذا السؤال المتعلق بجامعة الإمارات: Does a UAEU PhD application need recommendation letters and a CV?",
+        "UAEU — أجب بالعربية عن هذا السؤال المتعلق بUAEU: Does a UAEU PhD application need recommendation letters and a CV?"
+      ],
+      "followUpQuestion": null,
+      "parentId": "EX061",
+      "conversation": [
+        {
+          "user": "Does a UAEU PhD application need recommendation letters and a CV?",
+          "status": 200,
+          "seconds": 6.687,
+          "payload": {
+            "role": "assistant",
+            "content": "A UAEU PhD application requires two letters of recommendation and a curriculum vitae as part of the application documents.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Graduate Programs Admissions — PhD",
+                "url": "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PhD Program > Required Documents",
+                "evidenceText": "The UAEU Graduate Programs Admissions page lists Two Letters of Recommendation and Curriculum Vitae in the PhD application documents. These are among its required documents, not the entire application checklist or a guarantee of admission. Program-specific admission conditions and application deadlines must also be checked."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "PhD application requirements",
+            "evidenceIds": [
+              "answer:phd-application-recommendations-cv#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "A UAEU PhD application requires two letters of recommendation and a curriculum vitae as part of the application documents.",
+                "evidenceIds": [
+                  "answer:phd-application-recommendations-cv#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6672,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 20891,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.008465199999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2511,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 48,
+                  "estimatedUsd": 0.0005052
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1022,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00045840000000000003
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 24424,
+              "outputTokens": 147,
+              "knownUsageUsd": 0.0094288,
+              "estimatedUsd": 0.0094288,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "letters",
+            "passed": true,
+            "patterns": [
+              "two",
+              "2"
+            ]
+          },
+          {
+            "name": "CV",
+            "passed": true,
+            "patterns": [
+              "curriculum vitae",
+              "\\bCV\\b"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "category": "Admissions and money",
+      "language": "en",
+      "focus": "Examiner",
+      "turns": [
+        "Does the Elite Students 100% UAEU scholarship cover housing and application fees?"
+      ],
+      "expected": "Tuition only; housing and admissionapplicationfees excluded.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "tuition",
+          "any": [
+            "tuition"
+          ]
+        },
+        {
+          "name": "housing exclusion",
+          "any": [
+            "not.*hous|exclud.*hous|housing.*not|doesn.t.*hous"
+          ]
+        }
+      ],
+      "sourceQuote": " (6.5) in the al ain arabic language test . scholarship benefits: a 100% discount on tuition fees only (the scholarship does not cover housing & admission application fees). scholarship continuation conditions: maintaining a cumulative gpa of no less than (3.8) throughout the study duration at uaeu. registering for a minimum of (15) credit hours per regular semester. the student ",
+      "sourceBodySha256": "eccb014a2e836ac6c0f1aaa1f7a9d27d13b790c22382c7050c534cc2b05a0271",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "id": "EX065",
+      "arabicQuestion": "",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, Does the Elite Students 100% UAEU scholarship cover housing and application fees?",
+        "Please explain to a new UAEU student: Does the Elite Students 100% UAEU scholarship cover housing and application fees?",
+        "Give a concise advisor checklist: Does the Elite Students 100% UAEU scholarship cover housing and application fees?",
+        "أجب بالعربية عن هذا السؤال المتعلق بجامعة الإمارات: Does the Elite Students 100% UAEU scholarship cover housing and application fees?",
+        "UAEU — أجب بالعربية عن هذا السؤال المتعلق بUAEU: Does the Elite Students 100% UAEU scholarship cover housing and application fees?"
+      ],
+      "followUpQuestion": null,
+      "parentId": "EX065",
+      "conversation": [
+        {
+          "user": "Does the Elite Students 100% UAEU scholarship cover housing and application fees?",
+          "status": 502,
+          "seconds": 6.329,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 1,
+              "reasonCodes": [
+                "unsupported_critical_token"
+              ]
+            },
+            "clarificationReason": "unsupported_critical_token",
+            "usage": {
+              "elapsedMs": 6323,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 20900,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 69,
+                  "estimatedUsd": 0.0084704
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2734,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 100,
+                  "estimatedUsd": 0.0012536000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3037,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 107,
+                  "estimatedUsd": 0.001386
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26671,
+              "outputTokens": 276,
+              "knownUsageUsd": 0.01111,
+              "estimatedUsd": 0.01111,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "tuition",
+            "passed": false,
+            "patterns": [
+              "tuition"
+            ]
+          },
+          {
+            "name": "housing exclusion",
+            "passed": false,
+            "patterns": [
+              "not.*hous|exclud.*hous|housing.*not|doesn.t.*hous"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "tuition",
+          "housing exclusion"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "When do Spring 2027 classes begin at UAEU, and what is the last day to add a course?"
+      ],
+      "expected": "The live official calendar lists Classes Begin on Monday4January2027 within the combined reporting/classes heading, and last day to add on Friday15January2027. Do not substitute another year’s January dates.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "4|04|fourth|الرابع"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "15|fifteenth|الخامس عشر"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "2027"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "January|يناير"
+          ]
+        }
+      ],
+      "id": "EX076",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تبدأ محاضرات ربيع 2027 وما آخر يوم لإضافة مساق؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, When do SPRING2027 classes begin at UAEU, and what is the last day to add a course?",
+        "Please explain to a new UAEU student: When do spring-2027 classes begin at UAEU, and what is the last day to add a course?",
+        "Give a concise advisor checklist: When do spring 2027 classes begin at UAEU, and what is the last day to add a course?",
+        "When do SPRING 2027 classes begin at UAEU, and what is the last day to add a course? Please answer directly.",
+        "متى تبدأ محاضرات ربيع 2027 وما آخر يوم لإضافة مساق؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX076",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "When do Spring 2027 classes begin at UAEU, and what is the last day to add a course?",
+          "status": 200,
+          "seconds": 5.2,
+          "payload": {
+            "role": "assistant",
+            "content": "For the Spring Semester 2027 at UAEU, classes begin on Monday, 4 January 2027.\n\nThe last day to add courses for the Spring Semester 2027 is Friday, 15 January 2027.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Academic Calendar — Spring2027",
+                "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Spring Semester2027 > Classes Begin; Add and drop begins; Last day to add courses; Last day to withdraw and drop without failure",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For Spring Semester2027, the official UAEU academic calendar lists Classes Begin on Monday4January2027. Add and drop begins on4January2027. The Last day to add courses is Friday15January2027. The Last day to withdraw and drop without failure is Friday5February2027. These are published Spring2027 university calendar events, not proof of an individual registration appointment, eligibility or available seat."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "calendar",
+            "evidenceIds": [
+              "answer:calendar-spring-2027-key-dates#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the Spring Semester 2027 at UAEU, classes begin on Monday, 4 January 2027.",
+                "evidenceIds": [
+                  "answer:calendar-spring-2027-key-dates#E1S1"
+                ]
+              },
+              {
+                "text": "The last day to add courses for the Spring Semester 2027 is Friday, 15 January 2027.",
+                "evidenceIds": [
+                  "answer:calendar-spring-2027-key-dates#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5185,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 20914,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 75,
+                  "estimatedUsd": 0.008485600000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2685,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 84,
+                  "estimatedUsd": 0.0006324
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1107,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0004924
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1107,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0004924
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 25813,
+              "outputTokens": 221,
+              "knownUsageUsd": 0.010102800000000002,
+              "estimatedUsd": 0.010102800000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "4|04|fourth|الرابع"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "15|fifteenth|الخامس عشر"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "2027"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "January|يناير"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "How can a currently enrolled student request an official transcript in Arabic or English?"
+      ],
+      "expected": "Use Current Students Documents in UAEU portal/app; select Arabic or English Academic Transcript and submit. Free service with published10minute delivery target; completed document is sent by university email, not a private lookup by this bot.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "transcript|كشف"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Arabic|العربية"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "English|الإنجليزية|الانجليزية"
+          ]
+        }
+      ],
+      "id": "EX079",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, How can a currently enrolled student request an official transcript in Arabic or English?",
+        "Please explain to a new UAEU student: How can a currently enrolled student request an official transcript in Arabic or English?",
+        "Give a concise advisor checklist: How can a currently enrolled student request an official transcript in Arabic or English?",
+        "كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟",
+        "UAEU — كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX079",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "How can a currently enrolled student request an official transcript in Arabic or English?",
+          "status": 200,
+          "seconds": 2.851,
+          "payload": {
+            "role": "assistant",
+            "content": "A currently enrolled student can request an official transcript in Arabic or English by accessing the Current Students Documents service through the official UAEU portal or app using UAE Pass or university credentials, then selecting either Academic Transcript Arabic or Academic Transcript English and submitting the request.\n\nAfter submitting the request, the student can track it in the My Requests section and will receive the processed transcript at their university email address.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "guide": {
+              "id": "current-student-transcript",
+              "title": "Official transcript for a current student",
+              "titleAr": "كشف درجات رسمي لطالب حالي",
+              "description": "This document workflow is for currently enrolled students; alumni use a separate service.",
+              "descriptionAr": "هذه الخدمة للطلبة المسجلين حالياً، وللخريجين خدمة منفصلة.",
+              "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+              "lastVerified": "2026-11-04",
+              "audience": [
+                "current-student"
+              ],
+              "keywords": [
+                "official transcript steps",
+                "current student transcript guide",
+                "خطوات طلب كشف درجات",
+                "كيف اطلب كشف درجات رسمي",
+                "order an official transcript",
+                "request an official transcript"
+              ],
+              "excludeKeywords": [
+                "historical",
+                "old catalog",
+                "medical graduation",
+                "تاريخي"
+              ],
+              "requiresVerification": true,
+              "verificationNote": "Use the current official page for portal labels, applicable term and eligibility. This checklist does not submit a request or verify your private university record. The document service does not give this chatbot access to the private transcript.",
+              "verificationNoteAr": "تحقق من المسميات والفصل والأهلية في الصفحة الرسمية الحالية. لا ترسل هذه القائمة الطلب ولا تتحقق من سجلك الجامعي الخاص.",
+              "scopeNote": "The document service does not give this chatbot access to the private transcript.",
+              "steps": [
+                {
+                  "title": "Open Current Students Documents",
+                  "titleAr": "افتح وثائق الطلبة الحاليين",
+                  "instruction": "Open Current Students Documents: sign in through the official UAEU portal or app and choose the document service.",
+                  "instructionAr": "افتح وثائق الطلبة الحاليين: سجل الدخول عبر بوابة الجامعة أو تطبيقها الرسمي واختر خدمة الوثائق.",
+                  "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+                },
+                {
+                  "title": "Select the transcript",
+                  "titleAr": "حدد كشف الدرجات",
+                  "instruction": "Select the transcript: choose Academic Transcript Arabic or Academic Transcript English, then submit the request.",
+                  "instructionAr": "حدد كشف الدرجات: اختر كشف الدرجات بالعربية أو بالإنجليزية ثم أرسل الطلب.",
+                  "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+                },
+                {
+                  "title": "Track delivery",
+                  "titleAr": "تابع التسليم",
+                  "instruction": "Track delivery: use My Requests and check your university email for the processed document.",
+                  "instructionAr": "تابع التسليم: استخدم My Requests وتحقق من بريدك الجامعي لاستلام الوثيقة بعد المعالجة.",
+                  "url": "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+                }
+              ],
+              "sources": [
+                {
+                  "title": "UAEU Current Students Documents Service",
+                  "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+                  "lastVerified": "2026-11-04",
+                  "evidenceText": "For currently enrolled students, Current Students Documents is accessed through the official UAEU portal or app with UAE Pass or university credentials. Choose Academic Transcript Arabic or Academic Transcript English, then submit the request. This is the current-student service, distinct from alumni documents.",
+                  "sourceSha256": "a9caf71661cd33233dd65bdb93c25e6091d0c0b3c199b2559cdefea029f57dee"
+                },
+                {
+                  "title": "UAEU Current Students Documents User Guide",
+                  "url": "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf",
+                  "lastVerified": "2026-11-04",
+                  "sourceVersion": "Version 2.0, 2026",
+                  "sourceSection": "Pages 4–6: document selection, My Requests and university-email delivery",
+                  "evidenceText": "The official2026 Current Students Documents User Guide, pages4–6, describes selecting the requested document, submitting it, tracking it in My Requests and receiving the processed document at the university email address. This source establishes these document-delivery steps, not a service fee or delivery-time guarantee.",
+                  "sourceSha256": "cd53ef465880b8f838124f925829174f1fd27e53ea091697b685fc453d95f950"
+                }
+              ]
+            },
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Current Students Documents Service",
+                "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+                "lastVerified": "2026-11-04",
+                "evidenceText": "For currently enrolled students, Current Students Documents is accessed through the official UAEU portal or app with UAE Pass or university credentials. Choose Academic Transcript Arabic or Academic Transcript English, then submit the request. This is the current-student service, distinct from alumni documents.",
+                "sourceSha256": "a9caf71661cd33233dd65bdb93c25e6091d0c0b3c199b2559cdefea029f57dee"
+              },
+              {
+                "title": "UAEU Current Students Documents User Guide",
+                "url": "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Version 2.0, 2026",
+                "sourceSection": "Pages 4–6: document selection, My Requests and university-email delivery",
+                "evidenceText": "The official2026 Current Students Documents User Guide, pages4–6, describes selecting the requested document, submitting it, tracking it in My Requests and receiving the processed document at the university email address. This source establishes these document-delivery steps, not a service fee or delivery-time guarantee.",
+                "sourceSha256": "cd53ef465880b8f838124f925829174f1fd27e53ea091697b685fc453d95f950"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "transcript",
+            "evidenceIds": [
+              "guide:current-student-transcript:0#E1S1",
+              "guide:current-student-transcript:1#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "A currently enrolled student can request an official transcript in Arabic or English by accessing the Current Students Documents service through the official UAEU portal or app using UAE Pass or university credentials, then selecting either Academic Transcript Arabic or Academic Transcript English and submitting the request.",
+                "evidenceIds": [
+                  "guide:current-student-transcript:0#E1S1"
+                ]
+              },
+              {
+                "text": "After submitting the request, the student can track it in the My Requests section and will receive the processed transcript at their university email address.",
+                "evidenceIds": [
+                  "guide:current-student-transcript:1#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2843,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2778,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 115,
+                  "estimatedUsd": 0.0012952
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1028,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0004608000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1042,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00046640000000000006
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4848,
+              "outputTokens": 177,
+              "knownUsageUsd": 0.0022224000000000002,
+              "estimatedUsd": 0.0022224000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "transcript|كشف"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Arabic|العربية"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "English|الإنجليزية|الانجليزية"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "I forgot my UAEU password. Where is the official recovery portal, and how can I contact UITS for help?"
+      ],
+      "expected": "Use the official UAEU Password Self-Service portal. Public UITS support information gives Helpdesk@uaeu.ac.ae and +9713 7136111; the assistant does not reset credentials or request a password/OTP.",
+      "sources": [
+        "https://selfservice.uaeu.ac.ae/",
+        "https://jobnavigator.uaeu.ac.ae/login.jsp"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Self[ .-]?Service|selfservice\\.uaeu\\.ac\\.ae|استعادة|كلمة المرور|كلمة مرور"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Helpdesk@uaeu\\.ac\\.ae"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "6111"
+          ]
+        }
+      ],
+      "id": "EX081",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "نسيت كلمة مرور حساب الجامعة، أين بوابة الاستعادة الرسمية وكيف أتواصل مع UITS للمساعدة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, I forgot my UAEU password. Where is the official recovery portal, and how can I contact UITS for help?",
+        "Please explain to a new UAEU student: I forgot my UAEU password. Where is the official recovery portal, and how can I contact UITS for help?",
+        "Give a concise advisor checklist: I forgot my UAEU password. Where is the official recovery portal, and how can I contact UITS for help?",
+        "نسيت كلمة مرور حساب الجامعة، أين بوابة الاستعادة الرسمية وكيف أتواصل مع UITS للمساعدة؟",
+        "UAEU — نسيت كلمة مرور حساب الجامعة، أين بوابة الاستعادة الرسمية وكيف أتواصل مع UITS للمساعدة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX081",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "I forgot my UAEU password. Where is the official recovery portal, and how can I contact UITS for help?",
+          "status": 200,
+          "seconds": 6.461,
+          "payload": {
+            "role": "assistant",
+            "content": "The official UAEU password recovery portal is https://selfservice.uaeu.ac.ae/ where you can reset your password.\n\nIf you need further assistance, you can contact the UITS Help Desk at phone +9713 7136111 or email Helpdesk@uaeu.ac.ae.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Password Self-Service portal",
+                "url": "https://selfservice.uaeu.ac.ae/",
+                "lastVerified": "2026-11-04",
+                "evidenceText": "The official selfservice.uaeu.ac.ae root responds200 and redirects by public JavaScript to showLogin.cc, titled UAE University - Password SelfService Plus. This establishes the official portal route, not the current button wording or any individual account status."
+              },
+              {
+                "title": "UITS support information on UAEU Job Navigator",
+                "url": "https://jobnavigator.uaeu.ac.ae/login.jsp",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Important Notes; University IT Services support block",
+                "evidenceText": "The public Job Navigator page says students who do not remember their UAEU email password should contact UITS Help Desk. Its University IT Services contact block publishes +9713 7136111 and Helpdesk@uaeu.ac.ae. This is a public support route, not evidence that the assistant can access an account or reset a password."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "password",
+            "evidenceIds": [
+              "answer:account-password-reset#E1S1",
+              "answer:account-password-reset#E1S2"
+            ],
+            "claims": [
+              {
+                "text": "The official UAEU password recovery portal is https://selfservice.uaeu.ac.ae/ where you can reset your password.",
+                "evidenceIds": [
+                  "answer:account-password-reset#E1S1"
+                ]
+              },
+              {
+                "text": "If you need further assistance, you can contact the UITS Help Desk at phone +9713 7136111 or email Helpdesk@uaeu.ac.ae.",
+                "evidenceIds": [
+                  "answer:account-password-reset#E1S2"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6453,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 20916,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 63,
+                  "estimatedUsd": 0.0084672
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2687,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 97,
+                  "estimatedUsd": 0.00123
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1001,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00045000000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1041,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00046600000000000005
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 25645,
+              "outputTokens": 222,
+              "knownUsageUsd": 0.0106132,
+              "estimatedUsd": 0.0106132,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Self[ .-]?Service|selfservice\\.uaeu\\.ac\\.ae|استعادة|كلمة المرور|كلمة مرور"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Helpdesk@uaeu\\.ac\\.ae"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "6111"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?"
+      ],
+      "expected": "Give conditional, source-grounded suggestions such as Computer Science or Data Science and AI based on their published descriptions, distinguish their focus, and state that a suggestion does not establish admission eligibility or a guarantee.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|Data Science|علوم الحاسوب|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "not guarantee|does not guarantee|cannot guarantee|no guarantee|لا.{0,25}ضمان|لا.{0,25}يضمن|ليس.{0,25}ضمان"
+          ]
+        }
+      ],
+      "id": "EX099",
+      "category": "Tricky and conversational",
+      "focus": "Examiner",
+      "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Not yet tested",
+      "variants": [
+        "hey, I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+        "Please explain to a new UAEU student: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+        "Give a concise advisor checklist: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+        "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+        "UAEU — أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "parentId": "EX099",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "status": 200,
+          "seconds": 4.425,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers an Artificial Intelligence Minor designed for undergraduate students from all majors except Computer Science, Data Science and AI, and Mathematics in Data Science programs, which provides AI knowledge and skills to supplement their primary studies.\n\nAdmission to the Artificial Intelligence Minor requires a minimum GPA of 3.0 and a prerequisite course CSBP119 with a minimum grade of B+, with conditions if capacity is exceeded, so admission is not guaranteed.\n\nWhich applicant category applies: UAE national/child of an Emirati mother, international applicant, or child of a UAEU employee?",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "undergraduate_programs_2025_2026.pdf",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf#page=267",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PDF page 267"
+              }
+            ],
+            "disposition": "clarify",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:a8f25c0e909449d2e0d7:338#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers an Artificial Intelligence Minor designed for undergraduate students from all majors except Computer Science, Data Science and AI, and Mathematics in Data Science programs, which provides AI knowledge and skills to supplement their primary studies.",
+                "evidenceIds": [
+                  "corpus:a8f25c0e909449d2e0d7:338#E2S1"
+                ]
+              },
+              {
+                "text": "Admission to the Artificial Intelligence Minor requires a minimum GPA of 3.0 and a prerequisite course CSBP119 with a minimum grade of B+, with conditions if capacity is exceeded, so admission is not guaranteed.",
+                "evidenceIds": [
+                  "corpus:a8f25c0e909449d2e0d7:338#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "clarificationReason": "additional_scope_needed",
+            "usage": {
+              "elapsedMs": 4418,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 22,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6610,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 127,
+                  "estimatedUsd": 0.0028472
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1517,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006564000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1516,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000656
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9665,
+              "outputTokens": 189,
+              "knownUsageUsd": 0.00416004,
+              "estimatedUsd": 0.00416004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Computer Science|Data Science|علوم الحاسوب|علم البيانات|علوم البيانات"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "not guarantee|does not guarantee|cannot guarantee|no guarantee|لا.{0,25}ضمان|لا.{0,25}يضمن|ليس.{0,25}ضمان"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "e431beacaf7597aa7ddf6883e22ef304ed10cc961cfa7291b7b8d3cb7f38e083",
+    "files": 5150,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat/uaeu-knowledge-expansion-v16"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "d660ad21833c690b2ed65f6ca7b883c5656a5496f6364d8b99f49456b9cc7950",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 89559,
+        "vectors": 89559,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "fe88111c5d6a93510286285284d00748a033e482eed721ecbe90041e4765e756",
+        "generatedAt": "2026-11-04T08:07:52.058Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 147,
+      "sourceEvidence": {
+        "mappedReferences": 196,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "concurrency": 3,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 5,
+    "partial": 1,
+    "incorrect": 1
+  },
+  "finishedAt": "2026-11-04T08:54:14.566Z",
+  "runtimeAfter": {
+    "sha256": "e431beacaf7597aa7ddf6883e22ef304ed10cc961cfa7291b7b8d3cb7f38e083",
+    "files": 5150,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat/uaeu-knowledge-expansion-v16"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "d660ad21833c690b2ed65f6ca7b883c5656a5496f6364d8b99f49456b9cc7950",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 89559,
+        "vectors": 89559,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "fe88111c5d6a93510286285284d00748a033e482eed721ecbe90041e4765e756",
+        "generatedAt": "2026-11-04T08:07:52.058Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 147,
+      "sourceEvidence": {
+        "mappedReferences": 196,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 6.329,
+    "p95": 7.453,
+    "max": 7.453
+  },
+  "usage": {
+    "measuredAnswers": 7,
+    "totalAnswers": 7,
+    "estimatedUsd": 0.05718564000000001,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

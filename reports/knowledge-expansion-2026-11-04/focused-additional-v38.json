@@ -1,0 +1,1766 @@
+{
+  "startedAt": "2026-11-05T06:55:57.935Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "focused-additional-v38",
+  "fixture": "reports/knowledge-expansion-2026-11-04/fixture-combined-v38.json",
+  "fixtureSha256": "26cb60d4528a96f40c58063cb5c8f57d07d57c2f3a38ba1a36801700cc1c8adc",
+  "methodology": "One shared 2.3-second request-start limiter, at most3 in flight. Original195 plus329 new scenarios; all alternate phrasings. Automated official-source rubric, then semantic review. Candidate71k snapshot, not full crawl completion.",
+  "results": [
+    {
+      "id": "KE307",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "Can you see whether I have a live seat in CSBP219 tomorrow?"
+      ],
+      "expected": "Cannot access live seats or personal registration; no fabricated record lookup.",
+      "sources": [],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "capability",
+          "any": [
+            "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+            "لا أستطيع",
+            "لا يمكنني"
+          ]
+        }
+      ],
+      "variants": [
+        "Check my actual CSBP 219 seat reservation right now.",
+        "هل تستطيع رؤية حجز مقعدي الفعلي في CSBP219 الآن؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE307",
+      "conversation": [
+        {
+          "user": "Can you see whether I have a live seat in CSBP219 tomorrow?",
+          "status": 200,
+          "seconds": 0.039,
+          "payload": {
+            "role": "assistant",
+            "content": "I cannot view live seat availability or your personal registration record. Check the official registration system or Admission and Registration; a published study plan does not establish live seats.",
+            "source": "conversation",
+            "stateLabel": "privacy_capability_boundary",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 36,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "capability",
+            "passed": true,
+            "patterns": [
+              "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+              "لا أستطيع",
+              "لا يمكنني"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE307-V1",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "Check my actual CSBP 219 seat reservation right now."
+      ],
+      "expected": "Cannot access live seats or personal registration; no fabricated record lookup.",
+      "sources": [],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "capability",
+          "any": [
+            "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+            "لا أستطيع",
+            "لا يمكنني"
+          ]
+        }
+      ],
+      "variants": [
+        "Check my actual CSBP 219 seat reservation right now.",
+        "هل تستطيع رؤية حجز مقعدي الفعلي في CSBP219 الآن؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE307",
+      "conversation": [
+        {
+          "user": "Check my actual CSBP 219 seat reservation right now.",
+          "status": 200,
+          "seconds": 0.066,
+          "payload": {
+            "role": "assistant",
+            "content": "I cannot view live seat availability or your personal registration record. Check the official registration system or Admission and Registration; a published study plan does not establish live seats.",
+            "source": "conversation",
+            "stateLabel": "privacy_capability_boundary",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 61,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "capability",
+            "passed": true,
+            "patterns": [
+              "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+              "لا أستطيع",
+              "لا يمكنني"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE307-V2",
+      "category": "conversation-boundaries",
+      "language": "ar",
+      "focus": "Weird Case",
+      "turns": [
+        "هل تستطيع رؤية حجز مقعدي الفعلي في CSBP219 الآن؟"
+      ],
+      "expected": "Cannot access live seats or personal registration; no fabricated record lookup.",
+      "sources": [],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "capability",
+          "any": [
+            "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+            "لا أستطيع",
+            "لا يمكنني"
+          ]
+        }
+      ],
+      "variants": [
+        "Check my actual CSBP 219 seat reservation right now.",
+        "هل تستطيع رؤية حجز مقعدي الفعلي في CSBP219 الآن؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE307",
+      "conversation": [
+        {
+          "user": "هل تستطيع رؤية حجز مقعدي الفعلي في CSBP219 الآن؟",
+          "status": 200,
+          "seconds": 0.07,
+          "payload": {
+            "role": "assistant",
+            "content": "لا أستطيع الاطلاع على المقاعد المتاحة مباشرةً أو على سجل تسجيلك الشخصي. تحقق عبر نظام التسجيل الرسمي أو القبول والتسجيل؛ الخطة المنشورة لا تثبت توفر مقعد فعلي.",
+            "source": "conversation",
+            "stateLabel": "privacy_capability_boundary",
+            "disposition": "answer",
+            "citations": [],
+            "usage": {
+              "elapsedMs": 58,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "capability",
+            "passed": true,
+            "patterns": [
+              "cannot|can.t|not.*access|unable|not.*verify|don.t have access",
+              "لا أستطيع",
+              "لا يمكنني"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE309",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "I got98% in high school and IELTS7.5. Am I guaranteed the full UAEU undergraduate scholarship?"
+      ],
+      "expected": "No guarantee; other eligibility requirements and allocated seats apply.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "no guarantee",
+          "any": [
+            "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+            "لا يضمن",
+            "لا تضمن"
+          ]
+        },
+        {
+          "name": "seats",
+          "any": [
+            "seats|availab",
+            "capacity[- ]limited",
+            "المقاعد",
+            "الطاقة الاستيعابية"
+          ]
+        }
+      ],
+      "variants": [
+        "Do98% and IELTS7.5 automatically entitle me to the full scholarship?",
+        "هل حصولي على 98% وIELTS7.5 يضمن منحة البكالوريوس كاملة؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE309",
+      "conversation": [
+        {
+          "user": "I got98% in high school and IELTS7.5. Am I guaranteed the full UAEU undergraduate scholarship?",
+          "status": 200,
+          "seconds": 3.017,
+          "payload": {
+            "role": "assistant",
+            "content": "Achieving 98% in Grade 12 and an IELTS score of 7.5 meets the published eligibility thresholds for the UAEU Elite 100% undergraduate scholarship for new international students and children of UAEU employees from 2025–2026 onward.\n\nHowever, the scholarship is tuition-only, capacity-limited, and not guaranteed; the final eligibility decision is made solely by UAEU.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Undergraduate Scholarships",
+                "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "2025–2026-onward category scope; Elite, Talented and Employee-Child award eligibility and continuation"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "scholarship",
+            "evidenceIds": [
+              "answer:scholarship-eligibility#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "Achieving 98% in Grade 12 and an IELTS score of 7.5 meets the published eligibility thresholds for the UAEU Elite 100% undergraduate scholarship for new international students and children of UAEU employees from 2025–2026 onward.\n\nHowever, the scholarship is tuition-only, capacity-limited, and not guaranteed; the final eligibility decision is made solely by UAEU.",
+                "evidenceIds": [
+                  "answer:scholarship-eligibility#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3013,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3658,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 119,
+                  "estimatedUsd": 0.0016536
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2053,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008708
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5711,
+              "outputTokens": 150,
+              "knownUsageUsd": 0.0025244,
+              "estimatedUsd": 0.0025244,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "no guarantee",
+            "passed": true,
+            "patterns": [
+              "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+              "لا يضمن",
+              "لا تضمن"
+            ]
+          },
+          {
+            "name": "seats",
+            "passed": true,
+            "patterns": [
+              "seats|availab",
+              "capacity[- ]limited",
+              "المقاعد",
+              "الطاقة الاستيعابية"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE309-V1",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "Do98% and IELTS7.5 automatically entitle me to the full scholarship?"
+      ],
+      "expected": "No guarantee; other eligibility requirements and allocated seats apply.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "no guarantee",
+          "any": [
+            "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+            "لا يضمن",
+            "لا تضمن"
+          ]
+        },
+        {
+          "name": "seats",
+          "any": [
+            "seats|availab",
+            "capacity[- ]limited",
+            "المقاعد",
+            "الطاقة الاستيعابية"
+          ]
+        }
+      ],
+      "variants": [
+        "Do98% and IELTS7.5 automatically entitle me to the full scholarship?",
+        "هل حصولي على 98% وIELTS7.5 يضمن منحة البكالوريوس كاملة؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE309",
+      "conversation": [
+        {
+          "user": "Do98% and IELTS7.5 automatically entitle me to the full scholarship?",
+          "status": 200,
+          "seconds": 7.319,
+          "payload": {
+            "role": "assistant",
+            "content": "Achieving 98% in the General Secondary School Certificate and an IELTS score of 7.5 are eligibility conditions for the Chancellor’s Scholarship for Elite Students at UAEU, but meeting these criteria does not guarantee or automatically entitle a student to the full scholarship, as scholarships are awarded subject to the availability of allocated seats and other conditions.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Undergraduate Scholarships",
+                "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Scholarships > Chancellor’s Scholarship for Elite Students (100% Discount on Tuition Fees)"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "scholarship",
+            "evidenceIds": [
+              "corpus:2c8ef573a574c03b3084:1#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "Achieving 98% in the General Secondary School Certificate and an IELTS score of 7.5 are eligibility conditions for the Chancellor’s Scholarship for Elite Students at UAEU, but meeting these criteria does not guarantee or automatically entitle a student to the full scholarship, as scholarships are awarded subject to the availability of allocated seats and other conditions.",
+                "evidenceIds": [
+                  "corpus:2c8ef573a574c03b3084:1#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7311,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22283,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 116,
+                  "estimatedUsd": 0.0090988
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 19,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7202,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 94,
+                  "estimatedUsd": 0.0030312000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2039,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008652
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 31543,
+              "outputTokens": 241,
+              "knownUsageUsd": 0.01299558,
+              "estimatedUsd": 0.01299558,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "no guarantee",
+            "passed": true,
+            "patterns": [
+              "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+              "لا يضمن",
+              "لا تضمن"
+            ]
+          },
+          {
+            "name": "seats",
+            "passed": true,
+            "patterns": [
+              "seats|availab",
+              "capacity[- ]limited",
+              "المقاعد",
+              "الطاقة الاستيعابية"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE309-V2",
+      "category": "conversation-boundaries",
+      "language": "ar",
+      "focus": "Weird Case",
+      "turns": [
+        "هل حصولي على 98% وIELTS7.5 يضمن منحة البكالوريوس كاملة؟"
+      ],
+      "expected": "No guarantee; other eligibility requirements and allocated seats apply.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "no guarantee",
+          "any": [
+            "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+            "لا يضمن",
+            "لا تضمن"
+          ]
+        },
+        {
+          "name": "seats",
+          "any": [
+            "seats|availab",
+            "capacity[- ]limited",
+            "المقاعد",
+            "الطاقة الاستيعابية"
+          ]
+        }
+      ],
+      "variants": [
+        "Do98% and IELTS7.5 automatically entitle me to the full scholarship?",
+        "هل حصولي على 98% وIELTS7.5 يضمن منحة البكالوريوس كاملة؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE309",
+      "conversation": [
+        {
+          "user": "هل حصولي على 98% وIELTS7.5 يضمن منحة البكالوريوس كاملة؟",
+          "status": 200,
+          "seconds": 2.405,
+          "payload": {
+            "role": "assistant",
+            "content": "الحصول على 98% في الصف الثاني عشر وIELTS 7.5 يحقق شروط الحد الأدنى لمنحة النخبة 100% التي تغطي الرسوم الدراسية كاملة، لكن المنحة ليست مضمونة حيث تعتمد على توفر المقاعد والقرار النهائي لجامعة الإمارات.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Undergraduate Scholarships",
+                "url": "https://www.uaeu.ac.ae/en/admission/undergraduate-scholarships.shtml",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "2025–2026-onward category scope; Elite, Talented and Employee-Child award eligibility and continuation"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "scholarship",
+            "evidenceIds": [
+              "answer:scholarship-eligibility#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "الحصول على 98% في الصف الثاني عشر وIELTS 7.5 يحقق شروط الحد الأدنى لمنحة النخبة 100% التي تغطي الرسوم الدراسية كاملة، لكن المنحة ليست مضمونة حيث تعتمد على توفر المقاعد والقرار النهائي لجامعة الإمارات.",
+                "evidenceIds": [
+                  "answer:scholarship-eligibility#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2400,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3684,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 86,
+                  "estimatedUsd": 0.0016112000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2032,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008624
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5716,
+              "outputTokens": 117,
+              "knownUsageUsd": 0.0024736000000000003,
+              "estimatedUsd": 0.0024736000000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "no guarantee",
+            "passed": false,
+            "patterns": [
+              "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+              "لا يضمن",
+              "لا تضمن"
+            ]
+          },
+          {
+            "name": "seats",
+            "passed": true,
+            "patterns": [
+              "seats|availab",
+              "capacity[- ]limited",
+              "المقاعد",
+              "الطاقة الاستيعابية"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "no guarantee"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE316",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU course catalog PDF for2015-2016. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified coursePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE316",
+      "conversation": [
+        {
+          "user": "Please provide the official UAEU course catalog PDF for2015-2016. Keep it labelled as that historical edition.",
+          "status": 200,
+          "seconds": 3.153,
+          "payload": {
+            "role": "assistant",
+            "content": "The official UAEU course catalog PDF for the academic year 2015-2016 is available as a historical edition and can be accessed at https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf. This document is specifically labelled as the UAEU course catalog 2015–2016 — historical edition and should be used when referencing that academic year.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU course catalog 2015–2016 — historical edition",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf",
+                "lastVerified": "2026-11-04"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "60-catalog-course-2015_2016.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The official UAEU course catalog PDF for the academic year 2015-2016 is available as a historical edition and can be accessed at https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf. This document is specifically labelled as the UAEU course catalog 2015–2016 — historical edition and should be used when referencing that academic year.",
+                "evidenceIds": [
+                  "60-catalog-course-2015_2016.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3150,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3085,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 108,
+                  "estimatedUsd": 0.0014068
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1502,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006504000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4587,
+              "outputTokens": 139,
+              "knownUsageUsd": 0.0020572,
+              "estimatedUsd": 0.0020572,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE316-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "UAEU 2015-2016 course catalog archive please."
+      ],
+      "expected": "Link the actual verified coursePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE316",
+      "conversation": [
+        {
+          "user": "UAEU 2015-2016 course catalog archive please.",
+          "status": 200,
+          "seconds": 2.369,
+          "payload": {
+            "role": "assistant",
+            "content": "The official UAEU course catalog for the academic year 2015–2016 is available as a historical edition in PDF format at https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf. This document serves as the official record for that academic year and should be used for reference to courses and requirements specific to 2015–2016.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU course catalog 2015–2016 — historical edition",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf",
+                "lastVerified": "2026-11-04"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "60-catalog-course-2015_2016.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The official UAEU course catalog for the academic year 2015–2016 is available as a historical edition in PDF format at https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf. This document serves as the official record for that academic year and should be used for reference to courses and requirements specific to 2015–2016.",
+                "evidenceIds": [
+                  "60-catalog-course-2015_2016.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2365,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3063,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 106,
+                  "estimatedUsd": 0.0008188000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1500,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006496000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4563,
+              "outputTokens": 137,
+              "knownUsageUsd": 0.0014684000000000001,
+              "estimatedUsd": 0.0014684000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE316-V2",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "أريد دليل course الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "expected": "Link the actual verified coursePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE316",
+      "conversation": [
+        {
+          "user": "أريد دليل course الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي.",
+          "status": 200,
+          "seconds": 2.187,
+          "payload": {
+            "role": "assistant",
+            "content": "هذا هو دليل المقررات الرسمي لجامعة الإمارات العربية المتحدة للعام الدراسي 2015-2016، وهو إصدار تاريخي خاص بذلك العام ولا يثبت استمرار البرامج أو الشروط في الوقت الحاضر.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU course catalog 2015–2016 — historical edition",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf",
+                "lastVerified": "2026-11-04"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "60-catalog-course-2015_2016.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "هذا هو دليل المقررات الرسمي لجامعة الإمارات العربية المتحدة للعام الدراسي 2015-2016، وهو إصدار تاريخي خاص بذلك العام ولا يثبت استمرار البرامج أو الشروط في الوقت الحاضر.",
+                "evidenceIds": [
+                  "60-catalog-course-2015_2016.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2183,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3105,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0013507999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1462,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006344000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4567,
+              "outputTokens": 99,
+              "knownUsageUsd": 0.0019852,
+              "estimatedUsd": 0.0019852,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE327",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU undergraduate catalog PDF for2019-2020. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE327",
+      "conversation": [
+        {
+          "user": "Please provide the official UAEU undergraduate catalog PDF for2019-2020. Keep it labelled as that historical edition.",
+          "status": 200,
+          "seconds": 2.516,
+          "payload": {
+            "role": "assistant",
+            "content": "The official UAEU undergraduate catalog PDF for the 2019-2020 academic year is available as a historical edition and can be accessed at: https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU undergraduate catalog 2019–2020 — historical edition",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf",
+                "lastVerified": "2026-11-04"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "71-catalog-undergraduate-2019_2020.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The official UAEU undergraduate catalog PDF for the 2019-2020 academic year is available as a historical edition and can be accessed at: https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf",
+                "evidenceIds": [
+                  "71-catalog-undergraduate-2019_2020.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2511,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3096,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 84,
+                  "estimatedUsd": 0.0013728000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1483,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006428000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4579,
+              "outputTokens": 115,
+              "knownUsageUsd": 0.0020156,
+              "estimatedUsd": 0.0020156,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2019"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE327-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "UAEU 2019-2020 undergraduate catalog archive please."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE327",
+      "conversation": [
+        {
+          "user": "UAEU 2019-2020 undergraduate catalog archive please.",
+          "status": 200,
+          "seconds": 2.284,
+          "payload": {
+            "role": "assistant",
+            "content": "The official UAEU undergraduate catalog for the academic year 2019–2020 is available as a historical edition in PDF format, which can be used as a reference for that specific year but does not guarantee current program availability or admission eligibility.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU undergraduate catalog 2019–2020 — historical edition",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf",
+                "lastVerified": "2026-11-04"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "71-catalog-undergraduate-2019_2020.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The official UAEU undergraduate catalog for the academic year 2019–2020 is available as a historical edition in PDF format, which can be used as a reference for that specific year but does not guarantee current program availability or admission eligibility.",
+                "evidenceIds": [
+                  "71-catalog-undergraduate-2019_2020.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2276,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3074,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 74,
+                  "estimatedUsd": 0.000772
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1473,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006388
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4547,
+              "outputTokens": 105,
+              "knownUsageUsd": 0.0014108,
+              "estimatedUsd": 0.0014108,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2019"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE327-V2",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE327",
+      "conversation": [
+        {
+          "user": "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي.",
+          "status": 200,
+          "seconds": 1.894,
+          "payload": {
+            "role": "assistant",
+            "content": "هذا هو الدليل الرسمي لبرامج البكالوريوس في جامعة الإمارات للعام الأكاديمي 2019-2020، وهو إصدار تاريخي خاص بذلك العام ولا يثبت استمرار البرامج أو الشروط في الوقت الحاضر.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU undergraduate catalog 2019–2020 — historical edition",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf",
+                "lastVerified": "2026-11-04"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "71-catalog-undergraduate-2019_2020.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "هذا هو الدليل الرسمي لبرامج البكالوريوس في جامعة الإمارات للعام الأكاديمي 2019-2020، وهو إصدار تاريخي خاص بذلك العام ولا يثبت استمرار البرامج أو الشروط في الوقت الحاضر.",
+                "evidenceIds": [
+                  "71-catalog-undergraduate-2019_2020.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 1889,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3116,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 73,
+                  "estimatedUsd": 0.0007872
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1472,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006384000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4588,
+              "outputTokens": 104,
+              "knownUsageUsd": 0.0014256000000000002,
+              "estimatedUsd": 0.0014256000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2019"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "7b2570abd3c1a912c6e11766a5ae0b8771a180eb25253a91e52740106f467478",
+    "files": 8453,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat-uaeu-knowledge-expansion-v38-awaiting-live-retest"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "8946e1b15f80d9d57a86b7b81a1bda26775a5f0e3d918e7fca836809e6ee5a7c",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "3984dc514f13b7288bd77765b128524c837be2e2bd03b0c55193fe8447a511ac",
+        "generatedAt": "2026-11-04T16:56:55.674Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 154,
+      "sourceEvidence": {
+        "mappedReferences": 204,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/focused-additional-v38-fixture.json",
+  "gradingBefore": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 3,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 11,
+    "partial": 1,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-05T06:56:27.420Z",
+  "runtimeAfter": {
+    "sha256": "7b2570abd3c1a912c6e11766a5ae0b8771a180eb25253a91e52740106f467478",
+    "files": 8453,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat-uaeu-knowledge-expansion-v38-awaiting-live-retest"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "8946e1b15f80d9d57a86b7b81a1bda26775a5f0e3d918e7fca836809e6ee5a7c",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "3984dc514f13b7288bd77765b128524c837be2e2bd03b0c55193fe8447a511ac",
+        "generatedAt": "2026-11-04T16:56:55.674Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 154,
+      "sourceEvidence": {
+        "mappedReferences": 204,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 2.369,
+    "p95": 7.319,
+    "max": 7.319
+  },
+  "usage": {
+    "measuredAnswers": 12,
+    "totalAnswers": 12,
+    "estimatedUsd": 0.028356379999999997,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "KE307",
+      "KE307-V1"
+    ]
+  ]
+}

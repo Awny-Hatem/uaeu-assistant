@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { createHmac } from "node:crypto";
 
 type JsonResult<T> =
   | { ok: true; data: T }
@@ -170,7 +171,7 @@ export function sameOriginGuard(req: Request): NextResponse | null {
   return jsonNoStore({ error: "Cross-origin request blocked." }, { status: 403 });
 }
 
-function clientAddress(req: Request): string {
+export function requestClientIdentity(req: Request): string {
   // Forwarded addresses are trusted only when a controlled proxy replaces them.
   if (process.env.TRUST_PROXY_HEADERS !== "enabled" && process.env.VERCEL !== "1") return "local";
   return (
@@ -184,9 +185,94 @@ export function rateLimitGuard(
   req: Request,
   scope: string,
   options: RateLimitOptions,
+): Promise<NextResponse | null> {
+  const redisUrl = (process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL)?.trim();
+  const redisToken = (process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN)?.trim();
+  if (redisUrl && redisToken) {
+    return sharedRateLimitGuard(req, scope, options, redisUrl, redisToken);
+  }
+  if (process.env.CHATBOT_DEPLOYMENT_MODE === "production") {
+    return Promise.resolve(serviceUnavailable("Shared rate limiting is not configured."));
+  }
+  return Promise.resolve(instanceRateLimitGuard(req, scope, options));
+}
+
+function serviceUnavailable(message: string): NextResponse {
+  return jsonNoStore({ error: message }, { status: 503 });
+}
+
+async function sharedRateLimitGuard(
+  req: Request,
+  scope: string,
+  options: RateLimitOptions,
+  redisUrl: string,
+  redisToken: string,
+): Promise<NextResponse | null> {
+  let endpoint: URL;
+  try {
+    endpoint = new URL(redisUrl);
+  } catch {
+    return serviceUnavailable("Shared rate limiting is misconfigured.");
+  }
+  // REST bearer credentials must never be sent over plaintext HTTP.
+  if (endpoint.protocol !== "https:") {
+    return serviceUnavailable("Shared rate limiting is misconfigured.");
+  }
+
+  const identity = options.identity?.trim().toLowerCase() || requestClientIdentity(req);
+  const digest = createHmac("sha256", process.env.AUTH_COOKIE_SECRET?.trim() || redisToken)
+    .update(`${scope}:${identity}`).digest("hex");
+  const bucketKey = `uaeu:rl:${digest}`;
+  const windowMs = Math.max(1, Math.floor(options.windowMs));
+  const script = [
+    "local count = redis.call('INCR', KEYS[1])",
+    "if count == 1 then redis.call('PEXPIRE', KEYS[1], ARGV[1]) end",
+    "return {count, redis.call('PTTL', KEYS[1])}",
+  ].join("\n");
+
+  try {
+    const response = await fetch(endpoint, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${redisToken}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(["EVAL", script, "1", bucketKey, String(windowMs)]),
+      cache: "no-store",
+      signal: AbortSignal.timeout(2_000),
+    });
+    if (!response.ok) return serviceUnavailable("Shared rate limiting is temporarily unavailable.");
+    const payload = await response.json() as { result?: unknown; error?: unknown };
+    if (payload.error || !Array.isArray(payload.result) || payload.result.length < 2) {
+      return serviceUnavailable("Shared rate limiting returned an invalid response.");
+    }
+    const count = Number(payload.result[0]);
+    const ttlMs = Number(payload.result[1]);
+    if (!Number.isSafeInteger(count) || !Number.isFinite(ttlMs) || ttlMs < 0) {
+      return serviceUnavailable("Shared rate limiting returned an invalid response.");
+    }
+    if (count <= options.limit) return null;
+    const retryAfter = Math.max(1, Math.ceil(ttlMs / 1000));
+    const limited = jsonNoStore(
+      { error: "Too many requests. Please wait a moment and try again." },
+      { status: 429 },
+    );
+    limited.headers.set("Retry-After", String(retryAfter));
+    return limited;
+  } catch {
+    // Fail closed when a shared store is configured or required. Falling back
+    // to instance memory would silently restore per-instance rate limits.
+    return serviceUnavailable("Shared rate limiting is temporarily unavailable.");
+  }
+}
+
+function instanceRateLimitGuard(
+  req: Request,
+  scope: string,
+  options: RateLimitOptions,
 ): NextResponse | null {
   const now = Date.now();
-  const identity = options.identity?.trim().toLowerCase() || clientAddress(req);
+  const identity = options.identity?.trim().toLowerCase() || requestClientIdentity(req);
   const key = `${scope}:${identity}`;
   const bucket = buckets.get(key);
 

@@ -1,6 +1,6 @@
 /** Independent synthetic scope/recall checks. No held-out fixture, HTTP or model calls. */
 import assert from "node:assert/strict";
-import { understandQuery, resolveConversation } from "../lib/query-understanding";
+import { isCorrectionQuery, understandQuery, resolveConversation } from "../lib/query-understanding";
 import { canonicalCandidateIds, canonicalEntriesForSemanticRoute, requestedCourseTargets, type SemanticRoute } from "../lib/semantic-routing";
 import { courseIdentityConflict } from "../lib/faq";
 
@@ -26,6 +26,11 @@ try {
   });
   check("plural population comparison retains both categories", () => {
     assert.deepEqual(new Set(understandQuery("Do UAE nationals and international applicants have different English requirements?").applicantCategories), new Set(["national", "international"]));
+  });
+  check("Arabic correction openers are recognized without topic labels", () => {
+    assert.equal(isCorrectionQuery("لا، أقصد هندسة الحاسوب."), true);
+    assert.equal(isCorrectionQuery("عفواً، كنت أقصد هندسة الحاسوب."), true);
+    assert.equal(isCorrectionQuery("هندسة الحاسوب"), false, "a plain topic mention is not automatically treated as a correction");
   });
   check("category correction keeps established subject, degree and year", () => {
     const result = resolve("What are international undergraduate admission requirements for Fall 2027?", "I am a UAE national instead.");
@@ -84,6 +89,34 @@ try {
     const result = resolve("I am international.");
     assert.equal(result.subject, undefined);
     assert.equal(result.needsClarification, true);
+  });
+  check("source-verification wrapper stays standalone without earlier chat context", () => {
+    const result = resolve("Please distinguish confirmed information from anything I must verify: How do I use the official UAEU service for Ask a Librarian — Research Help?");
+    assert.equal(result.subject?.key, "library");
+    assert.equal(result.usedContext, false);
+    assert.match(result.query, /Ask a Librarian/);
+  });
+  check("application materials question remains requirements after category follow-up", () => {
+    const initial = understandQuery("What do I need to apply for an undergraduate degree?");
+    assert.ok(initial.intents.includes("requirements"));
+    assert.equal(initial.intents.includes("apply"), false);
+    const result = resolve(
+      "What do I need to apply for an undergraduate degree?",
+      "I am an international applicant, not a UAE national.",
+    );
+    const meaning = understandQuery(result.query);
+    assert.equal(result.subject?.key, "admissions");
+    assert.equal(result.usedContext, true);
+    assert.ok(result.intents.includes("requirements"));
+    assert.ok(!result.intents.includes("apply"));
+    assert.equal(meaning.applicantCategory, "international");
+    assert.equal(meaning.degreeLevel, "undergraduate");
+    assert.match(result.query, /Requested fact: requirements/);
+  });
+  check("how-to-apply question remains an application procedure request", () => {
+    const meaning = understandQuery("How do I apply for an undergraduate degree?");
+    assert.ok(meaning.intents.includes("apply"));
+    assert.equal(meaning.intents.includes("requirements"), false);
   });
   check("named new service resets admission scope", () => {
     const result = resolve("What are international undergraduate admission requirements for Fall 2027?", "How do I reset my password?");

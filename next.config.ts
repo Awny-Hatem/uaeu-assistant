@@ -31,8 +31,25 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
+  // Allow side-by-side local candidate builds without replacing a running preview.
+  distDir: process.env.NEXT_BUILD_OUTPUT_DIR?.trim() || ".next",
   poweredByHeader: false,
   serverExternalPackages: ["better-sqlite3"],
+  // Runtime retrieval uses the built search index. Keep local account data and
+  // ingestion/QA artifacts out of every production trace.
+  outputFileTracingExcludes: {
+    "/*": [
+      "./data/chatbot.db*",
+      "./data/corpus/embedding-cache.sqlite*",
+      "./data/corpus/embedding-usage.jsonl",
+      "./data/corpus/embedding-attempts.jsonl",
+      "./data/corpus/chunks.jsonl",
+      "./data/knowledge/crawled/**",
+      "./data/knowledge/INDEX.md",
+      "./reports/**",
+      "./.uaeu-crawl/**",
+    ],
+  },
   async headers() {
     return [
       {

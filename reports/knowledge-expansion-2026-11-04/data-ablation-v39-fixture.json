@@ -1,0 +1,1894 @@
+{
+  "methodology": "Controlled old-data comparison: identical final code; actual old approved data; exact same questions and corrected source expectations as the expanded-data runs. No missing before answer is invented. Final same-code control includes exchange, Arabic course-category naming, credit comparison and graduation scope.",
+  "cases": [
+    {
+      "turns": [
+        "Who founded UAEU, and when was it established?"
+      ],
+      "expected": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "1976"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Zayed|زايد"
+          ]
+        }
+      ],
+      "id": "EX001",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, Who founded UAEU, and when was it established?",
+        "Please explain to a new UAEU student: Who founded UAEU, and when was it established?",
+        "Give a concise advisor checklist: Who founded UAEU, and when was it established?",
+        "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+        "UAEU — متى تأسست UAEU ومن مؤسسها؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "d98dbb28d0dd425e998635fa86894ca8b7c0c15143cd2fa1c39dfc17e0bfd6b1"
+      }
+    },
+    {
+      "turns": [
+        "Where is UAEU located?"
+      ],
+      "expected": "The official contact page locates UAEU in Al Ain, Abu Dhabi, UAE, with the postal address P.O. Box 15551, Sheik Khalifa Bin Zayed St, Asharij, Shiebat Al Oud.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Al[ -]?Ain|العين"
+          ]
+        }
+      ],
+      "id": "EX002",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "أين تقع جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, Where is UAEU located?",
+        "Please explain to a new UAEU student: Where is UAEU located?",
+        "Give a concise advisor checklist: Where is UAEU located?",
+        "أين تقع جامعة الإمارات؟",
+        "UAEU — أين تقع UAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "6ffedc06e10257f6f690e1ed5f589842b6f566397c82126333d17e62ad3d262f"
+      }
+    },
+    {
+      "turns": [
+        "How many colleges does UAEU have, and what are their names?"
+      ],
+      "expected": "The UAEU overview lists nine colleges: Business and Economics; Education; Engineering; Agriculture and Veterinary Medicine; Humanities and Social Sciences; Computing and Artificial Intelligence; Law; Medicine and Health Sciences; and Science.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "nine|9|تسع"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computing|الحوسبة"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Law|القانون"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Engineering|الهندسة"
+          ]
+        }
+      ],
+      "id": "EX003",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "كم عدد كليات جامعة الإمارات وما أسماؤها؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, How many colleges does UAEU have, and what are their names?",
+        "Please explain to a new UAEU student: How many colleges does UAEU have, and what are their names?",
+        "Give a concise advisor checklist: How many colleges does UAEU have, and what are their names?",
+        "كم عدد كليات جامعة الإمارات وما أسماؤها؟",
+        "UAEU — كم عدد كليات UAEU وما أسماؤها؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "ae29475ce7c466dd05802bda8a9832d712eec24c7e03fef50b076c67e8efa4aa"
+      }
+    },
+    {
+      "turns": [
+        "Who is the Vice Chancellor of UAEU?"
+      ],
+      "expected": "The official Vice Chancellor message is signed by Prof. Ahmed Ali Alraeesi, Vice Chancellor of United Arab Emirates University.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/vc/index.shtml",
+        "https://www.uaeu.ac.ae/ar/vc/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Ahmed|أحمد|احمد"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Alraeesi|الرئيسي"
+          ]
+        }
+      ],
+      "id": "EX005",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "من هو مدير جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, Who is the Vice Chancellor of UAEU?",
+        "Please explain to a new UAEU student: Who is the Vice Chancellor of UAEU?",
+        "Give a concise advisor checklist: Who is the Vice Chancellor of UAEU?",
+        "من هو مدير جامعة الإمارات؟",
+        "UAEU — من هو مدير UAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "1a02955f5b3544877e6bff3b438ca622719e3f05dbaa12276417c23bde1d31e4"
+      }
+    },
+    {
+      "turns": [
+        "What is UAEU’s vision?"
+      ],
+      "expected": "UAEU’s published vision emphasizes leadership and innovation in higher education, research and community service at national and international levels.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "innovat(?:ion|or)|ابتكار"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "research|بحث"
+          ]
+        }
+      ],
+      "id": "EX006",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما رؤية جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What is UAEU’s vision?",
+        "Please explain to a new UAEU student: What is UAEU’s vision?",
+        "Give a concise advisor checklist: What is UAEU’s vision?",
+        "ما رؤية جامعة الإمارات؟",
+        "UAEU — ما رؤية UAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "f8009d8091dd5b43ed2c4a0c7f8eebeb363562a34d54495e5feb0da2e0ed1e59"
+      }
+    },
+    {
+      "turns": [
+        "What values does UAEU publish?"
+      ],
+      "expected": "Published UAEU values include respect for heritage and cultural diversity, integrity and transparency, a collaborative work environment, leadership and continuous learning, effective decision-making, effective communication, and dedication to knowledge.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "integrity|نزاهة"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "transparency|شفافية"
+          ]
+        }
+      ],
+      "id": "EX008",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما القيم المنشورة لجامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What values does UAEU publish?",
+        "Please explain to a new UAEU student: What values does UAEU publish?",
+        "Give a concise advisor checklist: What values does UAEU publish?",
+        "ما القيم المنشورة لجامعة الإمارات؟",
+        "UAEU — ما القيم المنشورة لUAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "922bbca268147ea11b929d0d773688e00aff9ff46cc30b394517ca667f78af13"
+      }
+    },
+    {
+      "turns": [
+        "What working hours does UAEU’s general Contact page publish?"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What working hours does UAEU’s general Contact page publish?",
+        "Please explain to a new UAEU student: What working hours does UAEU’s general Contact page publish?",
+        "Give a concise advisor checklist: What working hours does UAEU’s general Contact page publish?",
+        "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+        "UAEU — ما ساعات العمل في صفحة التواصل العامة للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "ef2d4e52e17b55cdf7cd2563a6894dc86b933261c4197e5eb1fe4be80477d55c"
+      }
+    },
+    {
+      "turns": [
+        "What research centers and institutes are listed by UAEU?"
+      ],
+      "expected": "The official directory lists the Emirates Center for Happiness Research; National Space Science and Technology Center; Zayed Bin Sultan Center for Health Sciences; National Water and Energy Center; Human Capital Research Center; Emirates Center for Mobility Research; Khalifa Center for Genetic Engineering and Biotechnology; Center for Public Policy and Leadership; Center for Artificial Intelligence and Digital Innovation; Emirates Center for Entrepreneurship Research; Desert Environment Research Center; and Mouza Bint Suhail Center for Exceptional Children.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/research/centers/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Space|الفضاء"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Water|مياه"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Artificial Intelligence|الذكاء الاصطناعي"
+          ]
+        }
+      ],
+      "id": "EX015",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما مراكز ومعاهد البحث التي تسردها جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What research centers and institutes are listed by UAEU?",
+        "Please explain to a new UAEU student: What research centers and institutes are listed by UAEU?",
+        "Give a concise advisor checklist: What research centers and institutes are listed by UAEU?",
+        "ما مراكز ومعاهد البحث التي تسردها جامعة الإمارات؟",
+        "UAEU — ما مراكز ومعاهد البحث التي تسردها UAEU؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "287be6b3efa3bed94e454b959a8fbfb22b2e913320548ea369bbb83339889ae3"
+      }
+    },
+    {
+      "turns": [
+        "What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?"
+      ],
+      "expected": "The official catalog lists Computer Science; Computer and Artificial Intelligence Engineering; Data Science and Artificial Intelligence; Information Security; and Information Technology. Separate full degrees from minors or microcredentials.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Computer Science|علوم الحاسوب"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computer and Artificial Intelligence Engineering|هندسة الحاسوب"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "Data Science|علم البيانات|علوم البيانات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "Information Security|أمن المعلومات|امن المعلومات"
+          ]
+        },
+        {
+          "name": "Required fact 5",
+          "any": [
+            "Information Technology|تقنية المعلومات|تكنولوجيا المعلومات"
+          ]
+        }
+      ],
+      "id": "EX035",
+      "category": "Programs and study plans",
+      "focus": "Examiner",
+      "arabicQuestion": "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "hey, What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+        "Please explain to a new UAEU student: What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+        "Give a concise advisor checklist: What undergraduate degrees does UAEU’s College of Computing and Artificial Intelligence, also called CIT, offer?",
+        "ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟",
+        "UAEU — ما برامج البكالوريوس التي تطرحها كلية الحوسبة والذكاء الاصطناعي، المعروفة أيضاً باسم CIT؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "f51c04fc0970fe7c80472c8c4930d4b7b232100ac9457a50cb5b0df52a9fceee"
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "cs-first",
+      "turns": [
+        "In the UAEU Fall 2025 Computer Science plan, what courses should I take in the first semester?"
+      ],
+      "expected": "For the Fall 2025 CS model plan: 16 credits comprising GEAE101 (3), MATH105 (3), CSBP119 (3), PHYS105 (3), Culture Elective 1 (3), CSBP121 (1). State cohort; do not substitute second semester.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MATH\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*119"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "CSBP\\s*121"
+          ]
+        },
+        {
+          "name": "Expected fact 6",
+          "any": [
+            "\\b16\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 7",
+          "any": [
+            "first semester",
+            "semester 1",
+            "semester one",
+            "الفصل.*(?:اول|أول)",
+            "اول فصل",
+            "أول فصل",
+            "first[ -]term",
+            "first[ -]semester",
+            "begin with",
+            "start with"
+          ]
+        },
+        {
+          "name": "Applicable model cohort",
+          "any": [
+            "2025"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX036",
+      "category": "Programs and courses",
+      "arabicQuestion": "أنا طالب علوم حاسوب من دفعة خريف 2025، ما مساقات الفصل الأول ومجموع ساعاتها؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, In the UAEU FALL2025 CS plan, what courses should I take in the first semester?",
+        "Please explain to a new UAEU student: In the UAEU fall-2025 Computer Science plan, what courses should I take in the first semester?",
+        "Give a concise advisor checklist: In the UAEU fall 2025 Computer Science plan, what courses should I take in the first semester?",
+        "In the UAEU FALL 2025 Computer Science plan, what courses should I take in the first semester? Please answer directly.",
+        "أنا طالب علوم حاسوب من دفعة خريف 2025، ما مساقات الفصل الأول ومجموع ساعاتها؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "4be9132f931237be2d0dd39f842d089d7eb6900a5b2e2b2e941c620158e2c44c"
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "csbp319",
+      "turns": [
+        "can i do CSBP 319 while taking CSBP 221 in the same semester?"
+      ],
+      "expected": "CSBP221 is pre/corequisite; concurrent may be allowed, but CSBP219 minimum D and other registration conditions still matter.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*219"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "CSBP\\s*221"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "alongside",
+            "concurrent",
+            "pre.?co",
+            "متزامن",
+            "معه",
+            "مع المساق",
+            "corequisite"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "forbidden": [
+        "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+        "CSBP219[^.!?\\n]*before or concurrently",
+        "CSBP\\s*219\\s+(?:can|may)\\s+be\\s+(?:completed|taken)\\s+before\\s+or\\s+(?:alongside|concurrent)",
+        "(?:take|taking)\\s+CSBP\\s*219\\s+(?:alongside|concurrent)"
+      ],
+      "id": "EX040",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل أستطيع أخذ CSBP 319 مع CSBP 221 في الفصل نفسه؟ وما المتطلب السابق الذي يبقى مطلوباً؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "❌ Main API incorrect; fix/retest pending",
+      "variants": [
+        "hey, can i do CSBP319 while taking CSBP221 in the same semester?",
+        "Please explain to a new UAEU student: can i do csbp-319 while taking csbp-221 in the same semester?",
+        "Give a concise advisor checklist: can i do csbp 319 while taking csbp 221 in the same semester?",
+        "can i do CSPB 319 while taking CSPB 221 in the same semester? Please answer directly.",
+        "هل أستطيع أخذ CSBP 319 مع CSBP 221 في الفصل نفسه؟ وما المتطلب السابق الذي يبقى مطلوباً؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "incorrect",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "beddd72de4cbd57415796d2cbcd1331f820b7604dff01a0324fca7da792475e3"
+      }
+    },
+    {
+      "category": "Admissions and money",
+      "language": "en",
+      "focus": "Examiner",
+      "turns": [
+        "What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?"
+      ],
+      "expected": "IELTS Academic6.5 or equivalent, less than2years old; stated exemptions may apply.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "IELTS",
+          "any": [
+            "6\\.5"
+          ]
+        },
+        {
+          "name": "age",
+          "any": [
+            "(?:less than|under)\\s+(?:two|2)\\s+years",
+            "أقل من (?:سنتين|عامين)",
+            "اقل من (?:سنتين|عامين)",
+            "أقل من\\s*2\\s*(?:سنة|سنوات|عام)",
+            "اقل من\\s*2\\s*(?:سنة|سنوات|عام)"
+          ]
+        }
+      ],
+      "sourceQuote": " recognized by the uae ministry of education, with a minimum cumulative gpa of 2.5 on a 4.0 scale or its equivalent. 3. a score of 6.5 or higher on the ielts academic exam or equivalent, for all disciplines in which the main language of instruction is english or the dissertation must be written in english. this test score must be less than two years old at the time of app",
+      "sourceBodySha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "id": "EX060",
+      "arabicQuestion": "",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?",
+        "Please explain to a new UAEU student: What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?",
+        "Give a concise advisor checklist: What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?",
+        "أجب بالعربية عن هذا السؤال المتعلق بجامعة الإمارات: What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?",
+        "UAEU — أجب بالعربية عن هذا السؤال المتعلق بUAEU: What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?"
+      ],
+      "followUpQuestion": null,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "1b0ebd5b9b8456e79e6216d72d120ea46e639ee2883c30358bfa4ac7a1ba8164"
+      }
+    },
+    {
+      "turns": [
+        "For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "15264d606daa849ea76ffd552a69a2b77dd0c7cb4777806b6fa50c9c142b083f"
+      }
+    },
+    {
+      "turns": [
+        "When do Spring 2027 classes begin at UAEU, and what is the last day to add a course?"
+      ],
+      "expected": "The live official calendar lists Classes Begin on Monday4January2027 within the combined reporting/classes heading, and last day to add on Friday15January2027. Do not substitute another year’s January dates.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "4|04|fourth|الرابع"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "15|fifteenth|الخامس عشر"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "2027"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "January|يناير"
+          ]
+        }
+      ],
+      "id": "EX076",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تبدأ محاضرات ربيع 2027 وما آخر يوم لإضافة مساق؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, When do SPRING2027 classes begin at UAEU, and what is the last day to add a course?",
+        "Please explain to a new UAEU student: When do spring-2027 classes begin at UAEU, and what is the last day to add a course?",
+        "Give a concise advisor checklist: When do spring 2027 classes begin at UAEU, and what is the last day to add a course?",
+        "When do SPRING 2027 classes begin at UAEU, and what is the last day to add a course? Please answer directly.",
+        "متى تبدأ محاضرات ربيع 2027 وما آخر يوم لإضافة مساق؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "98603a61053921852cf7b7550ba4695451696c790f6f3b98e32529c055424496"
+      }
+    },
+    {
+      "turns": [
+        "What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?"
+      ],
+      "expected": "15% absence gives FA; accepted valid circumstances can give AW; waived absence may not exceed12.5%; preserve the non-CMHS undergraduate scope.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "15"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "FA"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "AW"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "12\\.5"
+          ]
+        }
+      ],
+      "id": "EX077",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+        "Please explain to a new UAEU student: What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+        "Give a concise advisor checklist: What is the published undergraduate attendance rule, excluding Medicine and Health Sciences?",
+        "ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟",
+        "UAEU — ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "3a7122d1b4fa53cfb701499795ca067897c1c4e1afca40afdd00c948b2279fa9"
+      }
+    },
+    {
+      "turns": [
+        "How can a currently enrolled student request an official transcript in Arabic or English?"
+      ],
+      "expected": "Use Current Students Documents in UAEU portal/app; select Arabic or English Academic Transcript and submit. Free service with published10minute delivery target; completed document is sent by university email, not a private lookup by this bot.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "transcript|كشف"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Arabic|العربية"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "English|الإنجليزية|الانجليزية"
+          ]
+        }
+      ],
+      "id": "EX079",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "hey, How can a currently enrolled student request an official transcript in Arabic or English?",
+        "Please explain to a new UAEU student: How can a currently enrolled student request an official transcript in Arabic or English?",
+        "Give a concise advisor checklist: How can a currently enrolled student request an official transcript in Arabic or English?",
+        "كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟",
+        "UAEU — كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "63515593001ad4c6bad2a60f95501012836ad5c435d389d86066f3f842c02bcd"
+      }
+    },
+    {
+      "turns": [
+        "How can a UAEU student book a routine counseling appointment, and is it free?"
+      ],
+      "expected": "The UAEU counseling service is free for students, with booking-system, walk-in or email routes. Its assistance phone is not established as a telephone-booking channel.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=116"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "free|مجاني"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "book|appointment|حجز|موعد"
+          ]
+        }
+      ],
+      "id": "EX082",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف يحجز طالب الجامعة موعد إرشاد نفسي اعتيادياً وهل الخدمة مجانية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "hey, How can a UAEU student book a routine counseling appointment, and is it free?",
+        "Please explain to a new UAEU student: How can a UAEU student book a routine counseling appointment, and is it free?",
+        "Give a concise advisor checklist: How can a UAEU student book a routine counseling appointment, and is it free?",
+        "كيف يحجز طالب الجامعة موعد إرشاد نفسي اعتيادياً وهل الخدمة مجانية؟",
+        "UAEU — كيف يحجز طالب الجامعة موعد إرشاد نفسي اعتيادياً وهل الخدمة مجانية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "653f27aaeb43424295bd9a0136d816718840fd1e5e4024bfce0c647c57b3b70d"
+      }
+    },
+    {
+      "turns": [
+        "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?"
+      ],
+      "expected": "Suggest a relevant published full degree, such as Computer Science, Data Science and Artificial Intelligence, or Computer and Artificial Intelligence Engineering, explaining its published AI/programming focus conditionally. A suggestion is not personal admission approval; do not substitute a minor for a major.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "relevant full-degree option",
+          "any": [
+            "Computer Science",
+            "Data Science",
+            "Computer and Artificial Intelligence Engineering",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر",
+            "علم البيانات",
+            "علوم البيانات",
+            "هندسة الحاسوب"
+          ]
+        },
+        {
+          "name": "published fit with interest",
+          "any": [
+            "programming",
+            "artificial intelligence",
+            "machine learning",
+            "intelligent",
+            "البرمجة",
+            "الذكاء الاصطناعي",
+            "تعلم الآلة"
+          ]
+        }
+      ],
+      "id": "EX099",
+      "category": "Tricky and conversational",
+      "focus": "Examiner",
+      "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+        "Please explain to a new UAEU student: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+        "Give a concise advisor checklist: I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+        "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+        "UAEU — أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "377e3719766083233c90b10d3e39eb7db5458833dd80d8c0fc181fe1dd90615b"
+      }
+    },
+    {
+      "id": "KE316",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU course catalog PDF for2015-2016. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified coursePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE317",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU graduate catalog PDF for2015-2016. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified graduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/grgrogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies graduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "suite": "expansion"
+    },
+    {
+      "id": "KE318",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU undergraduate catalog PDF for2015-2016. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/ugprogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies undergraduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "suite": "expansion"
+    },
+    {
+      "id": "KE319",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU course catalog PDF for2016-2017. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified coursePDF for2016-2017; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/course_catalog_2016_2017.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2016"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2016-2017 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2016-2017 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE320",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU course catalog PDF for2017-2018. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified coursePDF for2017-2018; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/course_catalog_2017_2018_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2017"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2017-2018 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2017-2018 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE321",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU graduate catalog PDF for2017-2018. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified graduatePDF for2017-2018; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/graduate_programs_2017_2018_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2017"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2017-2018 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2017-2018 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE322",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU course catalog PDF for2018-2019. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified coursePDF for2018-2019; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/course_catalog_2018_2019.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2018"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2018-2019 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2018-2019 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE323",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU graduate catalog PDF for2018-2019. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified graduatePDF for2018-2019; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/graduate_programs_2018_2019.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2018"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2018-2019 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2018-2019 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE324",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU undergraduate catalog PDF for2018-2019. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2018-2019; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2018_2019.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2018"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2018-2019 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2018-2019 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE325",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU course catalog PDF for2019-2020. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified coursePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/course-catalog_2019-2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 course catalog archive please.",
+        "أريد دليل course الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE326",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU graduate catalog PDF for2019-2020. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified graduatePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/graduate_programs_2019_2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE327",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU undergraduate catalog PDF for2019-2020. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2019-2020; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2019_2020_.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2019"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2019-2020 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2019-2020 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE278",
+      "category": "student-life-services",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "How can I email UAEU's Ask a Librarian reference service?"
+      ],
+      "expected": "libref@uaeu.ac.ae.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/library/askalibrarian.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "email",
+          "any": [
+            "libref@uaeu\\.ac\\.ae"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, how can I email UAEU's Ask a Librarian reference service?",
+        "How can I email United Arab Emirates University's Ask a Librarian reference service?",
+        "ما البريد الإلكتروني لخدمة اسأل أمين المكتبة؟",
+        "How can I email UAEU's Ask a Librarian reference service? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "on contact us staff directory location frequently asked questions ask a librarian by e-mail: submit a query by emailing libref@uaeu.ac.ae and a librarian will answer you. by phone: call us at the reference desk during the library hours at 03-7134671, fax: 03-7655990 in-person: visit the reference desk during the library hours eform: ask-a-librarian jun 11, 2026",
+      "sourceBodySha256": "c93b6553b2880b4034d559e7e27588f537d0fbe1473dbebbb45a621e323e1881",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE279",
+      "category": "student-life-services",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "What reference desk telephone is listed by UAEU Ask a Librarian?"
+      ],
+      "expected": "03-7134671, duringlibraryhours.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/library/askalibrarian.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "phone",
+          "any": [
+            "0?3[ -]*713[ -]*4671"
+          ]
+        }
+      ],
+      "variants": [
+        "Please tell me what reference desk telephone is listed by UAEU Ask a Librarian?",
+        "What reference desk telephone is listed by United Arab Emirates University Ask a Librarian?",
+        "ما هاتف مكتب المراجع لخدمة اسأل أمين المكتبة؟",
+        "What reference desk telephone is listed by UAEU Ask a Librarian? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": " libref@uaeu.ac.ae and a librarian will answer you. by phone: call us at the reference desk during the library hours at 03-7134671, fax: 03-7655990 in-person: visit the reference desk during the library hours eform: ask-a-librarian jun 11, 2026",
+      "sourceBodySha256": "c93b6553b2880b4034d559e7e27588f537d0fbe1473dbebbb45a621e323e1881",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE281",
+      "category": "student-life-services",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Which UAEU sports buildings are listed for male and female users?"
+      ],
+      "expected": "G1male,B1female.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/campus_life/health_club/sports-facilities.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "male building",
+          "any": [
+            "G1"
+          ]
+        },
+        {
+          "name": "female building",
+          "any": [
+            "B1"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, which UAEU sports buildings are listed for male and female users?",
+        "Which United Arab Emirates University sports buildings are listed for male and female users?",
+        "ما مبنيا الأنشطة الرياضية للطلاب والطالبات؟",
+        "Which UAEU sports buildings are listed for male and female users? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "s opening hours monday – thursday from 08:30 am – 08:30 pm, friday from 0 7.30 am – 12:00 pm location sports activities building g1 - male sports activities building b1 - female share sports activities unit > sports facilities > do you find this content helpful? yes no send cancel thank you for your feedback. sports activities unit > sports facilities > عفوا لايوجد محت",
+      "sourceBodySha256": "971a0adc305b2227bd0be06817a4c3c69d3b0ed86c05486784f709876f936c4e",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE282",
+      "category": "student-life-services",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Does the published UAEU sports-facilities page list a swimming pool and CrossFit hall?"
+      ],
+      "expected": "Yes, OlympicSwimmingPool andCrossFitHall arelisted; not proof of liveopening orbookings.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/campus_life/health_club/sports-facilities.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "pool",
+          "any": [
+            "swimming pool",
+            "مسبح.*أولمبي",
+            "مسبح.*اولمبي"
+          ]
+        },
+        {
+          "name": "crossfit",
+          "any": [
+            "CrossFit",
+            "كروس فت"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, does the published UAEU sports-facilities page list a swimming pool and CrossFit hall?",
+        "Does the published United Arab Emirates University sports-facilities page list a swimming pool and CrossFit hall?",
+        "هل تسرد صفحة المرافق الرياضية مسبحاً أولمبياً وقاعة كروس فت؟",
+        "Does the published UAEU sports-facilities page list a swimming pool and CrossFit hall? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "pment and aspirations of the desired sports excellence of the united arab emirates. facilities include: outdoor courts (olympic swimming pool - fitness hall - crossfit hall - ground tennis - beach volleyball) indoor courts (futsal - basket - volleyball - badminton - table tennis) sports facilities are open to all uaeu students , faculty and staff as follows: sports facilities op",
+      "sourceBodySha256": "971a0adc305b2227bd0be06817a4c3c69d3b0ed86c05486784f709876f936c4e",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "forbidden": [
+        "(?:لا|لم).{0,20}(?:تذكر|تسرد|يذكر|يسرد).{0,40}كروس"
+      ]
+    },
+    {
+      "id": "KE289",
+      "category": "student-life-services",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Does UAEU Library Research Data Services offer data cleaning and visualization help?"
+      ],
+      "expected": "Bothdatacleaninganddatavisualizationarelisted.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/library/research-data-services.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "cleaning",
+          "any": [
+            "data cleaning",
+            "تنظيف"
+          ]
+        },
+        {
+          "name": "visualization",
+          "any": [
+            "visuali[sz]ation",
+            "تصوير.*بياني",
+            "تمثيل.*بصري",
+            "تصور.*بياني"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, does UAEU Library Research Data Services offer data cleaning and visualization help?",
+        "Does United Arab Emirates University Library Research Data Services offer data cleaning and visualization help?",
+        "هل تساعد خدمات البيانات البحثية في تنظيف البيانات وتصويرها بيانياً؟",
+        "Does UAEU Library Research Data Services offer data cleaning and visualization help? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "isualizations for your data and your target audience. we even have a dgx-1 supercomputer for machine learning modeling! data cleaning most large data sets have flaws that need to be fixed before they can be used properly. we can help with that! data management planning & open science we can help you create better data management plans and meet funder requirements for you",
+      "sourceBodySha256": "57fbd49babdf464e4269cca5facd9e586a60a3f0a1d7fe09ecfe3212f9aa8427",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "forbidden": [
+        "لا\\s+(?:تذكر|تقدم)[^.]{0,70}(?:تنظيف|تصويرها)"
+      ]
+    },
+    {
+      "id": "KE295",
+      "category": "university-people",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "What approximate enrollment does UAEU's overview page state?"
+      ],
+      "expected": "Approximately20,000+Emiratiandinternationalstudents,asthatpagepublished,notverifiedlivetotal.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "enrollment",
+          "any": [
+            "20,?000"
+          ]
+        }
+      ],
+      "variants": [
+        "Please tell me what approximate enrollment does UAEU's overview page state?",
+        "What approximate enrollment does United Arab Emirates University's overview page state?",
+        "ما العدد التقريبي للطلبة المذكور في صفحة التعريف بالجامعة؟",
+        "What approximate enrollment does UAEU's overview page state? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "an al nahyan, uaeu aspires to become a comprehensive, research-intensive university and currently enrolls approximately 20,000+ emirati and international students. as the uae’s flagship university, uaeu offers a full range of accredited, high-quality graduate and undergraduate programs through nine colleges: business and economics; education; engineering; agricultu",
+      "sourceBodySha256": "1553e6d4689eb28735a362d5cde24f983b0b19fe8bd7aac5bc272e4b02e2f940",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "id": "KE296",
+      "category": "university-people",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "What Arab and world rankings are quoted on UAEU's overview page? Keep them attributed to that page."
+      ],
+      "expected": "Pagequotes#5ArabWorldand#229worldwide; donotinventrankingorganization/year.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Arab rank",
+          "any": [
+            "\\b5\\b"
+          ]
+        },
+        {
+          "name": "world rank",
+          "any": [
+            "229"
+          ]
+        }
+      ],
+      "variants": [
+        "Please tell me what Arab and world rankings are quoted on UAEU's overview page? Keep them attributed to that page.",
+        "What Arab and world rankings are quoted on United Arab Emirates University's overview page? Keep them attributed to that page.",
+        "ما الترتيبان العربي والعالمي المذكوران في صفحة التعريف مع نسبتهما إلى الصفحة؟",
+        "What Arab and world rankings are quoted on UAEU's overview page? Keep them attributed to that page. Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "on which are advancing knowledge in critical areas ranging from water resources to cancer treatments. uaeu is currently ranked #5 in the arab world and #229 worldwide. uaeu’s academic programs have been developed in partnership with employers, so our graduates are in high demand. uaeu alumni hold key positions in industry, commerce, and government throughout the regi",
+      "sourceBodySha256": "1553e6d4689eb28735a362d5cde24f983b0b19fe8bd7aac5bc272e4b02e2f940",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion"
+    },
+    {
+      "turns": [
+        "How does a UAEU undergraduate apply for outgoing student exchange?"
+      ],
+      "expected": "A UAEU undergraduate wishing to study for up to two semesters at a partner institution applies through the college coordinator for student exchange. The partner agreement determines tuition arrangements; the student bears transportation, accommodation, insurance and textbook costs.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "coordinator|منسق"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "cost|expenses|تكاليف"
+          ]
+        }
+      ],
+      "id": "EX017",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف يقدم طالب البكالوريوس في الجامعة على التبادل الخارجي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, How does a UAEU undergraduate apply for outgoing student exchange?",
+        "Please explain to a new UAEU student: How does a UAEU undergraduate apply for outgoing student exchange?",
+        "Give a concise advisor checklist: How does a UAEU undergraduate apply for outgoing student exchange?",
+        "كيف يقدم طالب البكالوريوس في الجامعة على التبادل الخارجي؟",
+        "UAEU — كيف يقدم طالب البكالوريوس في الجامعة على التبادل الخارجي؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "7f02679622417ae36ca70999261ade88629d0d905f645de796cbaea0ca91eabc"
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "csbp319-facets",
+      "turns": [
+        "Is CSBP319 a required course for Computer Science?"
+      ],
+      "expected": "3-credit required college course; do not answer only registration instructions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*319"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "mandatory",
+            "required",
+            "إجباري",
+            "اجباري",
+            "إلزامي",
+            "الزامي",
+            "من متطلبات",
+            "ليس.*اختياري"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX045",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل CSBP 319 من متطلبات تخصص علوم الحاسوب؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "❌ Main API incorrect; fix/retest pending",
+      "variants": [
+        "hey, Is CSBP319 a required course for CS?",
+        "Please explain to a new UAEU student: Is csbp-319 a required course for Computer Science?",
+        "Give a concise advisor checklist: Is csbp 319 a required course for Computer Science?",
+        "Is CSPB 319 a required course for Computer Science? Please answer directly.",
+        "هل CSBP 319 من متطلبات تخصص علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "incorrect",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "3fc8325f48180458ebe3ee5a4408ca06fdcac260300ea779b0e516225f3fff90"
+      },
+      "forbidden": [
+        "كلية علوم الحاسوب"
+      ]
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?"
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "❌ Main API incorrect; fix/retest pending",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "incorrect",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "be98b24778f3595691b77d62d89b2ba1d5329841fbd22c98f56d4a2f1d87567e"
+      }
+    },
+    {
+      "turns": [
+        "What QS global and THE global rankings are currently displayed on UAEU’s homepage?"
+      ],
+      "expected": "The homepage snapshot inspected on4November2026 displays QS global217 and THE global235. The homepage’s short figures do not by themselves establish each ranking edition. Do not substitute the229 figure on the separate overview page.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "217"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "235"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "QS"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "THE|Times|تايمز"
+          ]
+        }
+      ],
+      "id": "EX100",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما تصنيفا QS العالمي وTHE العالمي المعروضان حالياً في الصفحة الرئيسية للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "hey, What QS global and THE global rankings are currently displayed on UAEU’s homepage?",
+        "Please explain to a new UAEU student: What QS global and THE global rankings are currently displayed on UAEU’s homepage?",
+        "Give a concise advisor checklist: What QS global and THE global rankings are currently displayed on UAEU’s homepage?",
+        "ما تصنيفا QS العالمي وTHE العالمي المعروضان حالياً في الصفحة الرئيسية للجامعة؟",
+        "UAEU — ما تصنيفا QS العالمي وTHE العالمي المعروضان حالياً في الصفحة الرئيسية للجامعة؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v23.json",
+        "build": "feat/uaeu-knowledge-expansion-v23",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T15:40:26.632Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f8ff171c77c26a85776435fa086bc26b72653c9101f7fee521cfdd8c7569d01"
+      }
+    }
+  ]
+}
