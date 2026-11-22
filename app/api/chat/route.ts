@@ -2,6 +2,7 @@
 import { hybridRetrieve, expandCorpusQuery } from "@/lib/hybrid-rag";
 import { retrieveAcademicEvidence } from "@/lib/academic-retrieval";
 import { semesterPlanAnswer } from "@/lib/academic/semester-plan-answer";
+import { expertiseAnswer } from "@/lib/academic/expertise-answer";
 import { cookies } from "next/headers";
 import { after, type NextResponse } from "next/server";
 import { corpusFollowUp } from "@/lib/hybrid-rag";
@@ -1051,6 +1052,14 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     if (guestCookieToSet) response.cookies.set(GUEST_SESSION_COOKIE_NAME, guestCookieToSet, guestSessionCookieOptions());
     return response;
   };
+
+  // Research collaboration, expert finding and lab questions (Ali, 22 Nov 2026): match the topic
+  // against official faculty profiles' research areas and list every relevant person.
+  const expertise = expertiseAnswer(originalLatest, locale);
+  if (expertise) {
+    const payload: AssistantPayload = { role: "assistant", content: expertise.content, source: "rag", stateLabel: expertise.disposition === "answer" ? "faculty_expertise" : "clarify_collaboration_field", disposition: expertise.disposition, citations: expertise.citations };
+    return respond(payload, originalLatest, locale);
+  }
 
   // Program semester plans: "first semester as a Cybersecurity student" is answered
   // from the matching official cohort plan; without a program, ask once.
