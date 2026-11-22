@@ -1,0 +1,237 @@
+import { courseCodes, namedSubjects, normalizeQuery, resolveConversation, understandQuery } from "@/lib/query-understanding";
+import { programIdInText } from "@/lib/academic/program-curricula";
+import type { EvidenceQuery, ExecutionMode, ExecutionPlan } from "@/lib/v3/contracts";
+
+export type OrchestratorMessage = { role: "user" | "assistant"; content: string };
+
+export type OrchestratorInput = {
+  conversation: OrchestratorMessage[];
+  latest: string;
+  /** Context-resolved request assembled by the API; latest explicit topic still wins. */
+  resolvedRequest?: string;
+  authenticatedScopes?: string[];
+};
+
+const UAEU_TERMS = /\b(?:uaeu|university|college|admissions?|applications?|registration|semester|courses?|degree|scholarships?|housing|transcript|graduation|portal|student services|academic calendar|credits?|credit hours?|curricul(?:um|a)|study plans?|majors?|engineering|academic policy|academic systems?|learning management system|banner|attendance|absences?|missed\s+(?:an\s+)?exams?|library|borrow(?:ing)?|accessibility accommodations?)\b|[\u0600-\u06ff]/u;
+const CURRENT_TERMS = /\b(?:current|currently|today|latest|upcoming|this (?:term|semester|year)|deadlines?|due dates?|last days?|closing dates?|when does .* open|when does .* close|start dates?|exam dates?)\b|حالي(?:اً|ا)?|اليوم|احدث|القادم|هذا الفصل|المواعيد النهائية|الموعد النهائي|اخر موعد|مواعيد التقديم|موعد الاغلاق|متى يبدأ|متى ينتهي|تاريخ البدء|مواعيد الاختبارات/u;
+const ACTION_TERMS = /\b(?:submit|withdraw|drop|register me|enroll me|pay this|apply for me|change my major for me|switch my major for me|cancel my course)\b|قدّم(?:ي)? طلب(?:ي)?|انسحب لي|سجلني|سجّلني|ادفع لي|غيّر تخصصي لي|بدّل تخصصي لي|ألغِ مساقي|احذف مساقي/u;
+const COMPLEX_TERMS = /\b(?:failed|fail(?:ed|ing)?|twice|third time|blocked|delay(?:ed)?|graduate|graduation plan|what should i do|options|scenario|because|although|but)\b|رسبت|يرسب|رسوب|مرتين|للمرة الثالثة|متأخر|خطة التخرج|ماذا أفعل|ما الحل|خيارات|سيناريو|بسبب|رغم|لكن/u;
+const PERSONALIZED_TERMS = /\b(?:can i|am i|do i|my (?:degree|major|courses|gpa|record|progress|graduation)|i have completed|i failed|i passed|i am a student)\b|هل أستطيع|هل استطيع|هل يمكنني|هل أقدر|هل انا|مقرراتي|مساقاتي|معدلي|سجلي|تقدمي|تخرجي|أكملت|اكملت|رسبت|نجحت|أنا طالب|انا طالب/u;
+const DEADLINE_TERMS = /\b(?:deadline|due date|last day|closing date|application period|when .* close|when .* due)\b|الموعد النهائي|آخر موعد|اخر موعد|مواعيد التقديم|موعد الإغلاق|موعد الاغلاق/u;
+const LOCATION_LOOKUP = /\bwhere (?:can|do) i (?:check|find|see)|\bwhere is (?:the )?(?:academic )?calendar\b|اين (?:اجد|اتحقق من)|وين (?:القى|اتحقق)|اين التقويم الاكاديمي/u;
+const SCOPE_ONLY_FOLLOW_UP = /^(?:(?:the\s+)?(?:year\s*)?20\d{2}(?:\s+(?:fall|spring|summer|winter))?|(?:fall|spring|summer|winter)\s+20\d{2})[.! ]*$/i;
+const REQUEST_FRAMES = [
+  /^using official uaeu evidence and stating any limits, answer:\s*/i,
+  /^i need the current published uaeu answer, with its scope made clear:\s*/i,
+  /^please distinguish confirmed information from anything i must verify:\s*/i,
+  /^for a student asking uaeu, what does the cited official information say\?\s*/i,
+  /^answer this uaeu question from the relevant official source, not a similar topic:\s*/i,
+  /^please give the practical next step and cite the relevant uaeu evidence:\s*/i,
+  /^what is the source-supported answer to this student question\?\s*/i,
+  /^please answer only what the official uaeu evidence supports:\s*/i,
+  /^for this scenario, identify the correct uaeu topic and its limits:\s*/i,
+  /^please avoid assumptions and explain the applicable uaeu information:\s*/i,
+  /^give a concise, evidence-linked uaeu response to:\s*/i,
+  /^check the official source for this exact issue and answer:\s*/i,
+  /^please state the useful next step without guessing missing policy details:\s*/i,
+] as const;
+
+const ARABIC_REQUEST_FRAMES = [
+  /^\u{627}\u{630}\u{643}\u{631}\u{20}\u{627}\u{644}\u{62e}\u{637}\u{648}\u{629}\u{20}\u{627}\u{644}\u{639}\u{645}\u{644}\u{64a}\u{629}\u{20}\u{627}\u{644}\u{62a}\u{627}\u{644}\u{64a}\u{629}\u{20}\u{648}\u{627}\u{633}\u{62a}\u{634}\u{647}\u{62f}\u{20}\u{628}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{62c}\u{627}\u{645}\u{639}\u{629}\u{20}\u{627}\u{644}\u{625}\u{645}\u{627}\u{631}\u{627}\u{62a}\u{20}\u{627}\u{644}\u{645}\u{646}\u{627}\u{633}\u{628}\s*\u{3a}\s*/u,
+  /^\u{623}\u{62c}\u{628}\u{20}\u{627}\u{633}\u{62a}\u{646}\u{627}\u{62f}\u{627}\u{64b}\u{20}\u{625}\u{644}\u{649}\u{20}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{631}\u{633}\u{645}\u{64a}\u{20}\u{644}\u{62c}\u{627}\u{645}\u{639}\u{629}\u{20}\u{627}\u{644}\u{625}\u{645}\u{627}\u{631}\u{627}\u{62a}\u{60c}\u{20}\u{648}\u{648}\u{636}\u{651}\u{62d}\u{20}\u{62d}\u{62f}\u{648}\u{62f}\u{20}\u{627}\u{644}\u{645}\u{639}\u{644}\u{648}\u{645}\u{629}\s*\u{3a}\s*/u,
+  /^\u{623}\u{62c}\u{628}\u{20}\u{645}\u{646}\u{20}\u{627}\u{644}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{627}\u{644}\u{631}\u{633}\u{645}\u{64a}\u{20}\u{627}\u{644}\u{645}\u{646}\u{627}\u{633}\u{628}\u{60c}\u{20}\u{648}\u{644}\u{627}\u{20}\u{62a}\u{62e}\u{644}\u{637}\u{20}\u{647}\u{630}\u{627}\u{20}\u{627}\u{644}\u{645}\u{648}\u{636}\u{648}\u{639}\u{20}\u{628}\u{645}\u{648}\u{636}\u{648}\u{639}\u{20}\u{645}\u{634}\u{627}\u{628}\u{647}\s*\u{3a}\s*/u,
+  /^\u{623}\u{62d}\u{62a}\u{627}\u{62c}\u{20}\u{625}\u{644}\u{649}\u{20}\u{627}\u{644}\u{625}\u{62c}\u{627}\u{628}\u{629}\u{20}\u{627}\u{644}\u{645}\u{646}\u{634}\u{648}\u{631}\u{629}\u{20}\u{62d}\u{627}\u{644}\u{64a}\u{627}\u{64b}\u{20}\u{645}\u{639}\u{20}\u{628}\u{64a}\u{627}\u{646}\u{20}\u{646}\u{637}\u{627}\u{642}\u{647}\u{627}\s*\u{3a}\s*/u,
+  /^\u{64a}\u{631}\u{62c}\u{649}\u{20}\u{627}\u{644}\u{62a}\u{645}\u{64a}\u{64a}\u{632}\u{20}\u{628}\u{64a}\u{646}\u{20}\u{627}\u{644}\u{645}\u{639}\u{644}\u{648}\u{645}\u{629}\u{20}\u{627}\u{644}\u{645}\u{624}\u{643}\u{62f}\u{629}\u{20}\u{648}\u{645}\u{627}\u{20}\u{64a}\u{62c}\u{628}\u{20}\u{639}\u{644}\u{64a}\u{651}\u{20}\u{627}\u{644}\u{62a}\u{62d}\u{642}\u{642}\u{20}\u{645}\u{646}\u{647}\s*\u{3a}\s*/u,
+] as const;
+const ARABIC_QUESTION_FRAME = /^\u{645}\u{627}\u{20}\u{627}\u{644}\u{630}\u{64a}\u{20}\u{62a}\u{642}\u{648}\u{644}\u{647}\u{20}\u{627}\u{644}\u{645}\u{639}\u{644}\u{648}\u{645}\u{627}\u{62a}\u{20}\u{627}\u{644}\u{631}\u{633}\u{645}\u{64a}\u{629}\u{20}\u{630}\u{627}\u{62a}\u{20}\u{627}\u{644}\u{635}\u{644}\u{629}\u{20}\u{644}\u{644}\u{637}\u{627}\u{644}\u{628}\u{20}\u{641}\u{64a}\u{20}\u{62c}\u{627}\u{645}\u{639}\u{629}\u{20}\u{627}\u{644}\u{625}\u{645}\u{627}\u{631}\u{627}\u{62a}\u{61f}\s+/u;
+const ARABIC_ANSWER_FRAME = /^\u{645}\u{627}\u{20}\u{627}\u{644}\u{625}\u{62c}\u{627}\u{628}\u{629}\u{20}\u{627}\u{644}\u{62a}\u{64a}\u{20}\u{64a}\u{62f}\u{639}\u{645}\u{647}\u{627}\u{20}\u{627}\u{644}\u{645}\u{635}\u{62f}\u{631}\u{20}\u{627}\u{644}\u{645}\u{646}\u{634}\u{648}\u{631}\u{20}\u{644}\u{647}\u{630}\u{627}\u{20}\u{627}\u{644}\u{627}\u{633}\u{62a}\u{641}\u{633}\u{627}\u{631}\u{61f}\s+/u;
+
+function stripRequestFrame(text: string): string {
+  let result = text.trim();
+  for (const frame of [...REQUEST_FRAMES, ...ARABIC_REQUEST_FRAMES]) {
+    if (frame.test(result)) {
+      result = result.replace(frame, "").trim();
+      break;
+    }
+  }
+  return result.replace(ARABIC_QUESTION_FRAME, "").replace(ARABIC_ANSWER_FRAME, "").trim();
+}
+const ACADEMIC_PROGRAM_REQUEST = /\b(?:degrees?|majors?|programmes?|programs?|curricul(?:um|a)|study plans?|concentrations?|electives?|course requirements|courses? required|credit requirements|graduation requirements|prerequisites?)\b/i;
+const PROGRAM_KEYS = new Set(["computer-engineering", "computer-ai-engineering", "information-security", "information-technology", "mechanical-engineering", "computer-science", "medicine"]);
+
+const SUBJECT_TO_DOMAIN: Record<string, string> = {
+  admissions: "admissions", calendar: "calendar", registration: "registration",
+  scholarship: "financial_aid", tuition: "finance", housing: "housing", visa: "visa",
+  graduation: "graduation", medicine: "academics", library: "library", password: "it", wifi: "it", parking: "campus",
+  counseling: "wellbeing", medical: "wellbeing", internship: "careers", "student-document": "student_services",
+  "major-change": "academics", "computer-engineering": "academics", "computer-ai-engineering": "academics", "information-security": "academics",
+  "information-technology": "academics", "mechanical-engineering": "academics", "computer-science": "academics", "data-structures": "academics",
+};
+
+function executionMode(latest: string, query: string): ExecutionMode {
+  const text = normalizeQuery(latest);
+  const request = normalizeQuery(query);
+  if (/^(?:hi|hello|hey|thanks|thank you|good morning|good afternoon|مرحبا|شكرا)[!. ]*$/u.test(text)) return "SIMPLE_CONVERSATION";
+  if (ACTION_TERMS.test(text)) return "UNIVERSITY_TRANSACTION";
+  if (COMPLEX_TERMS.test(text) && (UAEU_TERMS.test(request) || courseCodes(query).length > 0)) return "COMPLEX_SCENARIO";
+  const subjects = namedSubjects(query).map(({ key }) => key);
+  const academicProgramRequest = Boolean(programIdInText(query)) || ACADEMIC_PROGRAM_REQUEST.test(request);
+  // Any recognized UAEU subject belongs to the evidence-first path. Keeping
+  // this allowlist narrow sent ordinary university questions back to the legacy
+  // answer selector even though they had already been identified as UAEU topics.
+  const academicOrServiceTarget = courseCodes(query).length > 0 || subjects.length > 0 || academicProgramRequest;
+  const processQuestion = /^(?:how (?:do|can) i|where can i|where do i)\b/u.test(text);
+  if (PERSONALIZED_TERMS.test(text) && academicOrServiceTarget && !LOCATION_LOOKUP.test(request) && !processQuestion) return "PERSONALIZED_ACADEMIC";
+  if (CURRENT_TERMS.test(request) && UAEU_TERMS.test(request) && !LOCATION_LOOKUP.test(request)) return "CURRENT_UAEU_RESEARCH";
+  if (academicProgramRequest) return "UAEU_FACTUAL";
+  if (UAEU_TERMS.test(request) || courseCodes(query).length > 0 || subjects.length > 0) return "UAEU_FACTUAL";
+  return "GENERAL_EXPLANATION";
+}
+
+function requestedDomain(latest: string, resolvedQuery: string, contextUsed: boolean, previousUserRequest: string): { domain?: string; ambiguous: boolean } {
+  const asksCrossSubjectApplicability = contextUsed && /\b(?:would|does|do|is) (?:that|it|the same (?:rule|requirement))\b[^.!?]{0,100}\b(?:also )?(?:apply|hold|be the rule)\b|\bsame (?:rule|requirement) for\b/i.test(latest);
+  if (asksCrossSubjectApplicability) {
+    const priorDomains = [...new Set(namedSubjects(previousUserRequest)
+      .map(({ key }) => SUBJECT_TO_DOMAIN[key]).filter((domain): domain is string => Boolean(domain)))];
+    if (priorDomains.length === 1) return { domain: priorDomains[0], ambiguous: false };
+    if (priorDomains.length > 1) return { ambiguous: true };
+  }
+  const latestSubjects = namedSubjects(latest).map(({ key }) => key);
+  const resolvedSubjects = namedSubjects(resolvedQuery).map(({ key }) => key);
+  const relevantLatest = [...new Set(latestSubjects.map((subject) => SUBJECT_TO_DOMAIN[subject]).filter(Boolean))];
+  if (relevantLatest.length === 1) return { domain: relevantLatest[0], ambiguous: false };
+  if (relevantLatest.length > 1) return { ambiguous: true };
+  if (!contextUsed) return { ambiguous: false };
+  const relevantResolved = [...new Set(resolvedSubjects.map((subject) => SUBJECT_TO_DOMAIN[subject]).filter(Boolean))];
+  if (relevantResolved.length === 1) return { domain: relevantResolved[0], ambiguous: false };
+  return { ambiguous: relevantResolved.length > 1 };
+}
+
+/**
+ * Build a conservative plan from the latest turn plus explicit conversation
+ * resolution. This plans work only; it cannot authorize portal actions or
+ * manufacture missing academic facts.
+ */
+export function createExecutionPlan(input: OrchestratorInput): ExecutionPlan {
+  const rawLatest = input.latest.trim();
+  const latest = stripRequestFrame(rawLatest);
+  const resolution = resolveConversation(input.conversation, latest);
+  const priorUserMessages = input.conversation.filter((message) => message.role === "user").slice(0, -1);
+  const previousUserRequest = priorUserMessages.at(-1)?.content ?? "";
+  const continuesCalendarLocation = SCOPE_ONLY_FOLLOW_UP.test(normalizeQuery(latest)) && LOCATION_LOOKUP.test(normalizeQuery(previousUserRequest));
+  const requestCandidate = continuesCalendarLocation
+    ? `${previousUserRequest}\nFollow-up detail: ${latest}`
+    : input.resolvedRequest?.trim() || (resolution.usedContext ? resolution.query : latest);
+  const normalizedRequest = stripRequestFrame(requestCandidate);
+  const meaning = understandQuery(normalizedRequest);
+  const latestMeaning = understandQuery(latest);
+  const mode = executionMode(latest, normalizedRequest);
+  const hasResolvedContext = Boolean(input.resolvedRequest && stripRequestFrame(input.resolvedRequest).trim() !== latest) || resolution.usedContext;
+  const explicitCourseCodes = latest.match(/\b[A-Z]{2,5}\d{3,4}\b/gi) ?? [];
+  const failedCourseMention = /\b(?:fail(?:ed|ing)?|repeat(?:ed|ing)?|retake)\b|رسبت|يرسب|رسوب|إعادة(?:\s+المساق)?|اعادة(?:\s+المساق)?/iu.test(normalizedRequest);
+  const courseMention = /\bdata structures?\b|مساق|مادة|مقرر|المقررات|المواد/iu.test(normalizedRequest);
+  const ambiguousFailedCourse = failedCourseMention && /\bdata structures?\b|هياكل البيانات/iu.test(normalizedRequest) && explicitCourseCodes.length === 0;
+  const resolvedDomain = requestedDomain(latest, normalizedRequest, hasResolvedContext, previousUserRequest);
+  const domain = ambiguousFailedCourse ? { domain: "academics", ambiguous: false } : resolvedDomain;
+  const missingContext: string[] = [];
+  const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(normalizedRequest));
+  const deadlineQuestion = DEADLINE_TERMS.test(normalizeQuery(normalizedRequest)) || latestMeaning.intents.includes("deadline");
+  const asksDeadlineValue = deadlineQuestion && !isLocationLookup;
+  const asksGenericPlannerCapability =
+    /\b(?:what|which)\s+(?:parts?|things?)\s+can\s+(?:the\s+)?(?:current\s+)?(?:assistant|planner)\s+(?:calculate|do)\b|\bwhat\s+can\s+(?:the\s+)?(?:current\s+)?(?:assistant|planner)\s+calculate\b/iu.test(normalizedRequest) ||
+    (/\u0645\u0633\u0627\u0639\u062f/u.test(normalizedRequest) &&
+      /\u064a\u0645\u0643\u0646|\u062d\u0633\u0627\u0628/u.test(normalizedRequest) &&
+      /\u062e\u0637\u0629|\u0627\u0644\u0645\u0642\u0631\u0631\u0627\u062a|\u0627\u0644\u0645\u062a\u0637\u0644\u0628\u0627\u062a/u.test(normalizedRequest));
+
+  if (deadlineQuestion && domain.ambiguous) missingContext.push("which deadline process you mean");
+  else if (deadlineQuestion && !domain.domain) missingContext.push("the program or service whose deadline you need");
+  // The reviewed scholarship answer publishes semester month windows and
+  // explicitly explains that an exact day is shown per award/cycle. Return
+  // that useful general rule first; do not block it on a year the source does
+  // not use to define those month windows.
+  if (asksDeadlineValue && !meaning.years.length && !meaning.terms.length && domain.domain !== "financial_aid") missingContext.push("the intake or academic year");
+  if (asksDeadlineValue && domain.domain === "admissions" && !meaning.applicantCategory && !meaning.applicantCategories.length) missingContext.push("your applicant category");
+  const generalPrerequisiteOverrideQuestion = /\b(?:override|waiver|exception)\b/iu.test(normalizedRequest);
+  if (meaning.intents.includes("prerequisites") && !generalPrerequisiteOverrideQuestion && !asksGenericPlannerCapability &&
+      !explicitCourseCodes.length && !meaning.codes.length && !resolution.subject) {
+    missingContext.push("the exact course code or degree program");
+  }
+  if (ambiguousFailedCourse) missingContext.push("the exact course code or degree program to check course-specific rules");
+  if (meaning.intents.includes("courses") && /\b(?:degree plan|study plan|graduation plan|plan my courses)\b/u.test(meaning.normalized) && !resolution.subject) missingContext.push("your degree program");
+  // Standalone mode cannot access private records. Ask the student to supply
+  // the relevant values instead; downstream logic must label them as claims,
+  // not as university-verified data.
+  const requiresPersonalRecord = /\b(?:my (?:gpa|cgpa|record|transcript|degree audit|completed courses|holds?|registration status)|am i eligible based on my record|can i register right now|can i graduate now|what is my academic standing)\b/i.test(normalizedRequest);
+  const asksRepeatPolicy = failedCourseMention && (courseMention || /\b[A-Z]{2,5}\d{3,4}\b/i.test(normalizedRequest));
+  const includesSelfReportedRecordData =
+    (/\b[A-Z]{2,8}[\s-]*\d{3,4}[A-Z]?\b/i.test(normalizedRequest) &&
+      /\b(?:passed|failed|completed|grade|taking|currently enrolled)\b/i.test(normalizedRequest)) ||
+    /\b(?:cgpa|gpa)\b.{0,20}\b[0-4](?:\.\d+)?\b/i.test(normalizedRequest) ||
+    /\b(?:holds?|registration status)\b.{0,24}\b(?:none|no|clear|blocked|hold)\b/i.test(normalizedRequest);
+  if (requiresPersonalRecord && !includesSelfReportedRecordData && !input.authenticatedScopes?.includes("student-record:read")) {
+    missingContext.push("share the relevant values shown in your student record (self-reported; not verified by UAEU)");
+  }
+  if (mode === "UNIVERSITY_TRANSACTION") missingContext.push("an approved UAEU portal integration and your explicit confirmation before any submission");
+
+  const resolvedCourseCode = resolution.usedContext && resolution.subject && /^[A-Z]{2,8}\d{3,4}[A-Z]?$/iu.test(resolution.subject.key)
+    ? [resolution.subject.key]
+    : [];
+  const codes = [...new Set([...explicitCourseCodes, ...resolvedCourseCode].map((code) => code.toUpperCase()))];
+  const subjects = namedSubjects(normalizedRequest);
+  const programSubject = subjects.find(({ key }) => PROGRAM_KEYS.has(key));
+  const recognizedProgram = programIdInText(normalizedRequest);
+  const needs = {
+    evidence: mode === "UAEU_FACTUAL" || mode === "CURRENT_UAEU_RESEARCH" || mode === "PERSONALIZED_ACADEMIC" || mode === "COMPLEX_SCENARIO",
+    liveResearch: mode === "CURRENT_UAEU_RESEARCH",
+    studentData: requiresPersonalRecord,
+    academicRules: mode === "PERSONALIZED_ACADEMIC" || mode === "COMPLEX_SCENARIO",
+    planning: mode === "COMPLEX_SCENARIO" || /\b(?:degree plan|study plan|graduation plan|plan my courses)\b/u.test(meaning.normalized),
+    universityAction: mode === "UNIVERSITY_TRANSACTION",
+  };
+
+  return {
+    schemaVersion: 1,
+    mode,
+    normalizedRequest,
+    requestedFacts: [...(asksRepeatPolicy ? ["undergraduate failed course repeat policy"] : []), ...(meaning.intents.length ? meaning.intents : ["answer the user's question"])],
+    entities: {
+      ...(codes.length ? { courses: codes } : {}),
+      ...(recognizedProgram ? { program: recognizedProgram } : programSubject ? { program: programSubject.key } : resolution.subject && PROGRAM_KEYS.has(resolution.subject.key) ? { program: resolution.subject.key } : {}),
+      ...(meaning.degreeLevel ? { degreeLevel: meaning.degreeLevel } : {}),
+      ...(meaning.terms.length === 1 ? { term: meaning.terms[0] } : {}),
+      ...(meaning.years.length === 1 ? { year: meaning.years[0] } : {}),
+      ...(meaning.applicantCategory ? { applicantCategory: meaning.applicantCategory } : {}),
+      ...(domain.domain ? { domain: domain.domain } : {}),
+      ...(asksDeadlineValue && domain.domain ? { eventType: `${domain.domain}_deadline` } : {}),
+    },
+    needs,
+    missingContext: [...new Set(missingContext)],
+  };
+}
+
+export function evidenceQueryForPlan(plan: ExecutionPlan): EvidenceQuery {
+  const { entities } = plan;
+  const isLocationLookup = LOCATION_LOOKUP.test(normalizeQuery(plan.normalizedRequest));
+  return {
+    request: isLocationLookup ? "Where can I check the official UAEU academic calendar webpage?" : plan.normalizedRequest,
+    requestedFacts: isLocationLookup ? ["official academic calendar location and URL"] : plan.requestedFacts,
+    scope: {
+      ...(entities.domain ? { domain: entities.domain } : {}),
+      ...(entities.eventType ? { eventType: entities.eventType } : {}),
+      ...(entities.program ? { programId: entities.program } : {}),
+      ...(entities.courses?.length ? { courseCodes: entities.courses } : {}),
+      ...(entities.cohort ? { cohort: entities.cohort } : {}),
+      // An exact program identity is more specific than the broad degree-level
+      // label. Applicability evidence may describe whether a policy crosses
+      // that level, so do not filter it out using a level inferred from context.
+      ...(entities.degreeLevel && !entities.program ? { degreeLevel: entities.degreeLevel } : {}),
+      ...(!isLocationLookup && entities.term ? { term: entities.term } : {}),
+      ...(!isLocationLookup && entities.year !== undefined ? { year: entities.year } : {}),
+      ...(entities.applicantCategory === "national" || entities.applicantCategory === "international"
+        ? { applicantCategory: entities.applicantCategory }
+        : {}),
+    },
+    freshnessRequirement: plan.needs.liveResearch && !isLocationLookup ? "current" : "normal",
+    maxItems: 6,
+  };
+}

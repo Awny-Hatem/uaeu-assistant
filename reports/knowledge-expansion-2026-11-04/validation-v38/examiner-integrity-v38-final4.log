@@ -1,0 +1,19 @@
+
+> uaeu-chatbot@0.1.0 test:integrity
+> node tests/evaluation-integrity-checks.mjs && node tests/examiner-integrity-checks.mjs && tsx tests/primary-review-contract-checks.ts
+
+PASS full fixture and partial selections reject empty, unknown and duplicate IDs
+PASS conversation groups cannot be split by partial runs
+PASS endpoint comparison detects build, content, provider and redirect changes
+PASS response capture preserves JSON answer text and explicitly identifies truncated failure bodies
+PASS source snapshot includes application source and root build configurations
+PASS renderer binds reviews to exact run bytes and preserves answer content
+PASS renderer refuses successful factual assessments for execution or mock failures
+PASS claim audit is escaped, labelled as a safeguard, and does not replace the actual answer
+PASS canonical report labels selection separately and does not invent per-claim verification
+PASS missing provider metadata is not misreported as proof of no provider call
+PASS renderer refuses successful reviews for unresolved run integrity and displays boundary metadata
+PASS renderer discloses truncated failure record lengths and hashes in HTML and Markdown
+12/12 evaluation-integrity checks passed
+6/6 examiner evaluation-integrity fault checks passed; no network or model accuracy is claimed.
+16/16 primary-review contract checks passed; expected-source facts cannot rescue an absent actual answer or citation. No model accuracy is claimed.

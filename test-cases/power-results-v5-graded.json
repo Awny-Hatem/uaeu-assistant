@@ -1,0 +1,4137 @@
+{
+  "gradedAt": "2026-11-17T16:04:02.314Z",
+  "source": "test-cases/power-results-v5.json",
+  "judgeModel": "gpt-4.1-mini",
+  "method": "LLM verdict against the rubric and an official reference built from project data; non-correct verdicts are hand-reviewed.",
+  "cases": [
+    {
+      "id": "POWER001",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the next semester's courses from the official 2026/2027 catalog and model plan, excluded passed courses, and noted prerequisite conditions accurately based on the student's current progress.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1383,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 54,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1437
+      }
+    },
+    {
+      "id": "POWER002",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits required, earned, and in progress, but the breakdown by requirement block is not supported by the official reference and may be inaccurate or invented. The rubric requires stating recorded requirement, earned credits, in-progress credits, and amount not yet earned, which the assistant partially fulfills.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1275,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 75,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1350
+      }
+    },
+    {
+      "id": "POWER003",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified all unfulfilled elective slots and distinguished between general education themes, free electives, and major electives without promising approval or seats, aligning well with the official reference and rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1376,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1428
+      }
+    },
+    {
+      "id": "POWER004",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified that the student does not meet the prerequisites for CSBP319, citing the required minimum grade D in CSBP219 and CSBP221, which are not met according to the student's record. The assistant also correctly noted that concurrent enrollment is conditional and not a completed prerequisite.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1387,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1460
+      }
+    },
+    {
+      "id": "POWER005",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits (0), identifies in-progress credits (12), and lists unfinished blocks without certifying graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1186,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1233
+      }
+    },
+    {
+      "id": "POWER006",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1090,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1127
+      }
+    },
+    {
+      "id": "POWER007",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated course recorded and appropriately asks for course code to identify any impact, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1121,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 45,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1166
+      }
+    },
+    {
+      "id": "POWER008",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly provides official registration steps and the appropriate portal link without claiming to register courses or access live records, fully meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1321,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1364
+      }
+    },
+    {
+      "id": "POWER009",
+      "group": "personalized",
+      "account": "cedar",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified CSBP119 as 'Algorithms and Problem Solving', its credit value, printed category, and term from the official study plan and catalog.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1351,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1398
+      }
+    },
+    {
+      "id": "POWER010",
+      "group": "personalized-ar",
+      "account": "cedar",
+      "verdict": "partial",
+      "comment": "الرد صحيح في حساب الساعات المكتسبة والقيد الدراسة والمتبقية، لكنه يضيف تفاصيل عن متطلبات التعليم العام والكليات والتخصصات التي لم تذكر في المرجع الرسمي، مما قد يسبب بعض الالتباس. كما أن المجموع المتبقي يجب أن يكون 120 وليس 120 لم تُكتسب بعد مع 12 قيد الدراسة.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1296,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 90,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1386
+      }
+    },
+    {
+      "id": "POWER011",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "partial",
+      "comment": "The assistant correctly identifies the next semester's courses and excludes passed courses, matching the official plan and catalog. However, it incorrectly states that the prerequisite for ITBP301 is not met, while the official reference does not specify prerequisites for ITBP301, and it does not confirm prerequisites for CSBP340, which should be noted as unknown. The assistant also does not explicitly mention the exclusion of passed courses or the total credits remaining as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1421,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 106,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1527
+      }
+    },
+    {
+      "id": "POWER012",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned (28), in progress (13), and remaining (92) matching the reference, but incorrectly breaks down credits by requirement blocks not supported by the official record or rubric, which only requires total credits and status. Also, the assistant adds a note about Degree Works and advisor not requested by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1316,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 82,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1398
+      }
+    },
+    {
+      "id": "POWER013",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified unfulfilled elective slots and distinguished between currently published options and confirmed cohort eligibility without promising seats or approvals.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1417,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1456
+      }
+    },
+    {
+      "id": "POWER014",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly checked the prerequisite CSBP219 as met and the pre/corequisite CSBP221 as conditional concurrent enrollment, matching the official catalog and student record. The response cites the specific course CSBP319 and follows the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1454,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 62,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1516
+      }
+    },
+    {
+      "id": "POWER015",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits, identifies unfinished blocks, and does not certify graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1233,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1272
+      }
+    },
+    {
+      "id": "POWER016",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1147,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1184
+      }
+    },
+    {
+      "id": "POWER017",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated attempt recorded and appropriately asks for the course code to identify any affected requirements, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1178,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1225
+      }
+    },
+    {
+      "id": "POWER018",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly provided official registration steps and the appropriate portal link without claiming to register courses or access live records, fully meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1292,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1335
+      }
+    },
+    {
+      "id": "POWER019",
+      "group": "personalized",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified GEAE101 as a required course in Year 1 Semester 1 with the correct category and credit details matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1404,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 45,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1449
+      }
+    },
+    {
+      "id": "POWER020",
+      "group": "personalized-ar",
+      "account": "maple",
+      "verdict": "correct",
+      "comment": "الإجابة صحيحة حيث تم حساب الساعات المكتسبة والقيد الدراسة والمتبقية بدقة وفق السجل الرسمي وخطة الدراسة، وتمت الإجابة باللغة العربية كما هو مطلوب.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1335,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1387
+      }
+    },
+    {
+      "id": "POWER021",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the next semester as Year 4 Semester 2 with the exact courses and credit count from the official plan, excluded passed courses, and noted the prerequisite condition for ITBP481. No invented sequences were added.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1451,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 61,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1512
+      }
+    },
+    {
+      "id": "POWER022",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned (82), in progress (12), and remaining (48) matching the official record and requirement. However, the breakdown by requirement blocks is not supported by the official reference and appears invented, which is not requested by the rubric.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1490,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 68,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1558
+      }
+    },
+    {
+      "id": "POWER023",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified unfulfilled elective slots and distinguished current published options without promising approval or seats, aligning with the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1521,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1563
+      }
+    },
+    {
+      "id": "POWER024",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly checked the prerequisites CSBP219 and CSBP221 with minimum grade D for CSBP319 using the official catalog and student record, and noted concurrent enrollment as conditional.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1588,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1639
+      }
+    },
+    {
+      "id": "POWER025",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits (82), identifies unfinished blocks, and does not certify graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1381,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1422
+      }
+    },
+    {
+      "id": "POWER026",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1283,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1320
+      }
+    },
+    {
+      "id": "POWER027",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated attempt recorded and appropriately asks for a course code to identify any affected requirements, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1314,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1361
+      }
+    },
+    {
+      "id": "POWER028",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "partial",
+      "comment": "The assistant correctly describes the general registration process and portal navigation but does not provide the official registration steps or the exact registration/portal link as required by the rubric. It also includes some details not confirmed by the official reference provided.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1560,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 60,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1620
+      }
+    },
+    {
+      "id": "POWER029",
+      "group": "personalized",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified ESPU1081 as a required course in Year 1 Semester 1 with the correct category and credits, matching the official reference and rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1509,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1557
+      }
+    },
+    {
+      "id": "POWER030",
+      "group": "personalized-ar",
+      "account": "willow",
+      "verdict": "correct",
+      "comment": "الإجابة صحيحة حيث تم حساب الساعات المكتسبة والقيد الدراسة والمتبقية بدقة وفق السجل الرسمي وخطة الدراسة، وتمت الإجابة باللغة العربية كما هو مطلوب.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1513,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1565
+      }
+    },
+    {
+      "id": "POWER031",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the next semester's courses according to the official plan, excluded passed courses, and noted prerequisite conditions and credit discrepancies without inventing sequences.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1445,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1491
+      }
+    },
+    {
+      "id": "POWER032",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned, in progress, and remaining, matching the reference. However, the breakdown by requirement blocks is not supported by the official reference or student record, thus partially meeting the rubric.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1308,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 57,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1365
+      }
+    },
+    {
+      "id": "POWER033",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified unfulfilled elective slots and distinguished current published options without promising approval or seats, aligning with the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1422,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1464
+      }
+    },
+    {
+      "id": "POWER034",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified CSBP219 as a prerequisite with minimum grade D met, and CSBP221 as a pre/corequisite with minimum grade D currently in progress, making enrollment conditional. The response aligns with the official catalog and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1446,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 63,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1509
+      }
+    },
+    {
+      "id": "POWER035",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits, identifies unfinished blocks, does not certify graduation, and notes the need for official audit, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1243,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1289
+      }
+    },
+    {
+      "id": "POWER036",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1139,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1176
+      }
+    },
+    {
+      "id": "POWER037",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated attempt recorded and appropriately asks for a course code to identify any affected requirements, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1170,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1217
+      }
+    },
+    {
+      "id": "POWER038",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly describes the official registration steps and provides the appropriate portal link without claiming to register courses or access live records, meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1261,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 44,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1305
+      }
+    },
+    {
+      "id": "POWER039",
+      "group": "personalized",
+      "account": "birch",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified GEAE101 as a required course in Year 1 Semester 1 with the correct category and credit details matching the official plan and catalog.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1395,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1442
+      }
+    },
+    {
+      "id": "POWER040",
+      "group": "personalized-ar",
+      "account": "birch",
+      "verdict": "partial",
+      "comment": "الرد صحيح في حساب الساعات المكتسبة والقيد والدراسة والمتبقية، لكنه يضيف تفاصيل عن متطلبات التعليم العام والكليات والتخصصات التي ليست موجودة في المرجع الرسمي المقدم، مما قد يسبب بعض الالتباس.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1328,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 66,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1394
+      }
+    },
+    {
+      "id": "POWER041",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the next semester's courses according to the official plan, excluded passed courses, and noted prerequisite conditions based on in-progress courses.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1686,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 44,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1730
+      }
+    },
+    {
+      "id": "POWER042",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned (103), in progress (16), and remaining (29) matching the record and requirement. However, the breakdown by requirement blocks is not supported by the official reference data provided and may be inaccurate or incomplete, thus missing a required element of the rubric.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1669,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1742
+      }
+    },
+    {
+      "id": "POWER043",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the unfulfilled elective slots for Year 4 Semester 2 without promising approval or seats, and distinguished that eligibility and offerings need confirmation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1633,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 53,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1686
+      }
+    },
+    {
+      "id": "POWER044",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified that the student does not meet the prerequisites for CSBP319, citing the required courses CSBP219 and CSBP221 with minimum grade D, consistent with the official catalog and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1790,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 57,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1847
+      }
+    },
+    {
+      "id": "POWER045",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits (103), identifies in-progress credits (16), and notes unfinished blocks without certifying graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1573,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1620
+      }
+    },
+    {
+      "id": "POWER046",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1482,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1519
+      }
+    },
+    {
+      "id": "POWER047",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated course recorded and does not invent any downstream eligibility or GPA decisions, complying with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1513,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 45,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1558
+      }
+    },
+    {
+      "id": "POWER048",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "partial",
+      "comment": "The assistant correctly describes the general registration process and portal link but does not provide the official registration steps explicitly as required by the rubric. The assistant also does not mention the exact registration link or step-by-step instructions from the official references.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1767,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 61,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1828
+      }
+    },
+    {
+      "id": "POWER049",
+      "group": "personalized",
+      "account": "elm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified MATH130 as a required course in Year 1 Semester 1 with the correct printed category and credits, matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1745,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1791
+      }
+    },
+    {
+      "id": "POWER050",
+      "group": "personalized-ar",
+      "account": "elm",
+      "verdict": "partial",
+      "comment": "الرد صحيح في حساب الساعات المكتسبة والقيد والدراسة والمتبقية، لكنه لم يقدم ملاحظة تدقيق رسمية كما طلبت، ولم يذكر الملاحظة الرسمية المطلوبة في التقييم.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1689,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 58,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1747
+      }
+    },
+    {
+      "id": "POWER051",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "partial",
+      "comment": "The assistant correctly identified the next semester's courses from the official plan and excluded passed courses. However, it incorrectly marked some prerequisites as 'not-met' without confirming from the student's completed courses, and did not explicitly state prerequisite conditions as required by the rubric. Also, it did not mention the exact catalog and entry season explicitly as per the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1795,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 84,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1879
+      }
+    },
+    {
+      "id": "POWER052",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned (55), in progress (15), and remaining (92) matching the reference. However, the breakdown by requirement blocks is not supported by the official reference data and is not requested by the rubric, so it is extra and potentially inaccurate. The assistant meets the rubric on credit counts but adds unverified detail.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1632,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 84,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1716
+      }
+    },
+    {
+      "id": "POWER053",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the unfulfilled elective slot and appropriately distinguished current published options from confirmed eligibility without promising approval or a seat.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1564,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1604
+      }
+    },
+    {
+      "id": "POWER054",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly checked the prerequisites CSBP219 and CSBP221 for CSBP319 against the student's record and catalog requirements, noting they are not met. The response aligns with the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1753,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 56,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1809
+      }
+    },
+    {
+      "id": "POWER055",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits (55), identifies in-progress credits (15), and lists unfinished blocks without certifying graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1548,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1595
+      }
+    },
+    {
+      "id": "POWER056",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record. The assistant also appropriately refers to Degree Works and the advisor for official audit, meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1445,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 54,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1499
+      }
+    },
+    {
+      "id": "POWER057",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated course recorded and appropriately asks for a course code to provide specific impact, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1476,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1522
+      }
+    },
+    {
+      "id": "POWER058",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly provided official registration steps and the appropriate portal link without claiming to register courses or access live records, fully meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1738,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1781
+      }
+    },
+    {
+      "id": "POWER059",
+      "group": "personalized",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified MATH1110 as a Year 1 Semester 1 course, its credit hours, and printed category exactly matching the official study plan and catalog.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1699,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 49,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1748
+      }
+    },
+    {
+      "id": "POWER060",
+      "group": "personalized-ar",
+      "account": "pine",
+      "verdict": "correct",
+      "comment": "الإجابة صحيحة حيث تم حساب الساعات المكتسبة والقيد الدراسة والمتبقية بدقة وفق السجل الرسمي وخطة الدراسة، وتم تقديم ملاحظة تدقيق رسمية كما هو مطلوب.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1652,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 55,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1707
+      }
+    },
+    {
+      "id": "POWER061",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the next semester as Year 4 Semester 2, listed all required courses and electives, excluded passed courses, and noted prerequisite conditions accurately without inventing sequences.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1705,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1756
+      }
+    },
+    {
+      "id": "POWER062",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly counted unique passing completed courses and in-progress credits, matched the total required credits, and provided a detailed breakdown by requirement category as per the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1642,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1692
+      }
+    },
+    {
+      "id": "POWER063",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the unfulfilled elective slots and clearly distinguished that eligibility and approval are not confirmed, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1624,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1666
+      }
+    },
+    {
+      "id": "POWER064",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly checked the prerequisites CSBP219 and CSBP221 for CSBP319 against the student's record and catalog requirements, noting they are not met and explaining concurrent enrollment conditions.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1749,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1800
+      }
+    },
+    {
+      "id": "POWER065",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly used earned credits, identified unfinished blocks, and did not certify graduation, aligning with the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1532,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1572
+      }
+    },
+    {
+      "id": "POWER066",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1441,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1478
+      }
+    },
+    {
+      "id": "POWER067",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that repeated passed courses count once and failed attempts earn no credits, aligns with the rubric and reference, and does not invent downstream eligibility or GPA decisions.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1527,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 49,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1576
+      }
+    },
+    {
+      "id": "POWER068",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly provided official registration steps and the appropriate portal link without claiming to register courses or access live records, fully meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1666,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1709
+      }
+    },
+    {
+      "id": "POWER069",
+      "group": "personalized",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified MATH130 as Calculus I for Engineering, its credit value, category, and the term it is taken (Year 1, Semester 1) exactly matching the official study plan and catalog.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1704,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 59,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1763
+      }
+    },
+    {
+      "id": "POWER070",
+      "group": "personalized-ar",
+      "account": "ash",
+      "verdict": "correct",
+      "comment": "الإجابة صحيحة حيث تم حساب الساعات المكتسبة والقيد الدراسة والمتبقية بدقة وفق السجل الرسمي وخطة الدراسة، وتمت الإجابة باللغة العربية كما هو مطلوب.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1663,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1715
+      }
+    },
+    {
+      "id": "POWER071",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "partial",
+      "comment": "The assistant correctly identifies the next semester as Year 3 Semester 2 and lists the correct courses from the official plan. However, it fails to exclude passed courses (none passed yet for these) and does not explicitly mention prerequisite conditions from the catalog, only stating 'unknown'. Also, it does not mention the exclusion of in-progress courses or the exact credit deficit. The assistant correctly notes that recommendations remain conditional due to in-progress courses.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1339,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 102,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1441
+      }
+    },
+    {
+      "id": "POWER072",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned, in progress, and remaining per the student record and requirement of 120 credits. However, the breakdown by requirement blocks is not supported by the official reference or student record and may be inaccurate or incomplete, thus missing the rubric's requirement for accurate credit accounting by category.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1321,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 76,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1397
+      }
+    },
+    {
+      "id": "POWER073",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified all unfulfilled elective slots according to the official study plan and student record, and appropriately cautioned that eligibility and approval are not confirmed.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1392,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1438
+      }
+    },
+    {
+      "id": "POWER074",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "correct",
+      "comment": "The assistant correctly checked the prerequisites CSBP219 and CSBP221 for CSBP319 against the student's record and noted they are not met, following the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1437,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1487
+      }
+    },
+    {
+      "id": "POWER075",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits, identifies unfinished blocks, and does not certify graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1232,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1271
+      }
+    },
+    {
+      "id": "POWER076",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1129,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1166
+      }
+    },
+    {
+      "id": "POWER077",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated attempt recorded and appropriately asks for course code to identify any affected requirements, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1157,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1203
+      }
+    },
+    {
+      "id": "POWER078",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "partial",
+      "comment": "The assistant correctly describes the general registration process and portal navigation but incorrectly states that students must insert courses into Degree Works to register, which is not supported by the official reference or rubric. The assistant also does not provide the official registration link as required by the rubric.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1264,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 67,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1331
+      }
+    },
+    {
+      "id": "POWER079",
+      "group": "personalized",
+      "account": "olive",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified MATH115 as a required course in the Bachelor of Economics program, its category as a Gen Ed Course (Cluster 1: Area 5: Quantitative Reasoning), and its term as Year 1, Semester 1, matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1391,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 71,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1462
+      }
+    },
+    {
+      "id": "POWER080",
+      "group": "personalized-ar",
+      "account": "olive",
+      "verdict": "partial",
+      "comment": "الإجابة صحيحة في حساب الساعات المكتسبة والقيد والدراسة والمتبقية، لكنها لم تذكر الملاحظة الرسمية للتدقيق كما طلبت التعليمات، ولم تذكر الملاحظة الرسمية (official-audit note).",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1342,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 64,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1406
+      }
+    },
+    {
+      "id": "POWER081",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the next semester (Year 2 Semester 2) courses from the official 2025/2026 catalog, excluded passed courses, and noted prerequisite conditions and credit discrepancies as per the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1450,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 60,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1510
+      }
+    },
+    {
+      "id": "POWER082",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "partial",
+      "comment": "The assistant correctly states total credits earned, in progress, and remaining per the record and requirement, but the breakdown by requirement blocks is not supported by the official reference or student record and may be inaccurate or invented. The assistant also correctly notes that credit total alone does not satisfy all requirements.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 1354,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 72,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1426
+      }
+    },
+    {
+      "id": "POWER083",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified all unfulfilled elective slots and distinguished current published options without promising approval or seats, fully aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1451,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1494
+      }
+    },
+    {
+      "id": "POWER084",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified CSBP219 as a prerequisite with minimum grade D met, and CSBP221 as a pre/corequisite with minimum grade D currently in progress, making enrollment conditional. The response aligns with the official catalog and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1451,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 63,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1514
+      }
+    },
+    {
+      "id": "POWER085",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits, identifies unfinished blocks, and does not certify graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1281,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1320
+      }
+    },
+    {
+      "id": "POWER086",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified the minor as 'Minor in Artificial Intelligence' and accurately cited the current official requirements, distinguishing the note about CSBP301 not being required for Information Technology majors. The response aligns with the official reference and rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1411,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 61,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1472
+      }
+    },
+    {
+      "id": "POWER087",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly states there is no failed or repeated attempt recorded and appropriately asks for the course code without inventing any eligibility or GPA decisions, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1175,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1225
+      }
+    },
+    {
+      "id": "POWER088",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly provided official registration steps and the appropriate portal link without claiming to register courses or access live records, fully meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1364,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1407
+      }
+    },
+    {
+      "id": "POWER089",
+      "group": "personalized",
+      "account": "palm",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified GEAE101 as Academic English for Humanities and STEM, a 3-credit General Education course under Theme 2, taken in Year 1 Semester 1, matching the official study plan and catalog.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1424,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 59,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1483
+      }
+    },
+    {
+      "id": "POWER090",
+      "group": "personalized-ar",
+      "account": "palm",
+      "verdict": "partial",
+      "comment": "الرد صحيح في حساب الساعات المكتسبة والقيد والدراسة والمتبقية، لكنه لم يذكر الملاحظة الرسمية للتدقيق كما طلبت المعايير، كما أن توزيع الساعات حسب الفئات غير موضح في المرجع الرسمي بدقة.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1375,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 67,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1442
+      }
+    },
+    {
+      "id": "POWER091",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies the program, catalog, and current model position, and appropriately states the lack of a validated semester model for the next term without inventing a sequence, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 456,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 56,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 512
+      }
+    },
+    {
+      "id": "POWER092",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "partial",
+      "comment": "The assistant correctly states the total required credits, earned credits, in-progress credits, and credits not yet earned, matching the official reference. However, the breakdown by requirement block is not supported by the official reference and may be inaccurate or hallucinated.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 496,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 64,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 560
+      }
+    },
+    {
+      "id": "POWER093",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies the lack of a matching semester model and appropriately refers the student to official audit sources without promising any seats or approvals.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 409,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 451
+      }
+    },
+    {
+      "id": "POWER094",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly identified that the student does not meet the prerequisite CSBP219 with minimum grade D and the pre/corequisite CSBP221 with minimum grade D for CSBP319, citing the official course record and student's current record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 665,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 61,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 726
+      }
+    },
+    {
+      "id": "POWER095",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly uses earned credits, identifies unfinished blocks, and does not certify graduation, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 470,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 509
+      }
+    },
+    {
+      "id": "POWER096",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that no minor is recorded for the student, consistent with the official record showing an empty minors list.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 368,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 407
+      }
+    },
+    {
+      "id": "POWER097",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly states no failed or repeated attempts are recorded and appropriately asks for course code without inventing eligibility or GPA decisions.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 400,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 440
+      }
+    },
+    {
+      "id": "POWER098",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly provides the official registration steps and the appropriate portal link without claiming to register courses or access live records, fully meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 537,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 44,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 581
+      }
+    },
+    {
+      "id": "POWER099",
+      "group": "personalized",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "The assistant correctly states that ITCO601 is not found in the matching plan for the student's major and semester, and appropriately notes that this does not imply the course is unnecessary or disallowed as an elective, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 618,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 63,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 681
+      }
+    },
+    {
+      "id": "POWER100",
+      "group": "personalized-ar",
+      "account": "juniper",
+      "verdict": "correct",
+      "comment": "الإجابة صحيحة حيث تم ذكر عدد الساعات المكتسبة والقيد الدراسة والمتبقية بشكل دقيق وفق السجل الرسمي، وتمت الإشارة إلى المراجعة الرسمية.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 510,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 561
+      }
+    },
+    {
+      "id": "POWER101",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite course and minimum grade as per the official catalog record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 521,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 32,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 553
+      }
+    },
+    {
+      "id": "POWER102",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite course and minimum grade as per the official record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 518,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 31,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 549
+      }
+    },
+    {
+      "id": "POWER103",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite course and minimum grade as per the official catalog record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 518,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 32,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 550
+      }
+    },
+    {
+      "id": "POWER104",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite course and minimum grade as per the official catalog record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 518,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 32,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 550
+      }
+    },
+    {
+      "id": "POWER105",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly identified the prerequisite course CSBP119 with a minimum grade D, but the course code was initially misstated as CSPB219 instead of CSBP219, which should have been clarified rather than assumed. The assistant also slightly misnamed CSBP119 as 'Algorithms and Problem Solving' which is not confirmed by the reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 538,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 83,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 621
+      }
+    },
+    {
+      "id": "POWER106",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite course CSBP119 with a minimum grade D for CSBP219, matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 539,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 579
+      }
+    },
+    {
+      "id": "POWER107",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite course CSBP119 with a minimum grade D for CSBP219 as per the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 532,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 572
+      }
+    },
+    {
+      "id": "POWER108",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states that CSBP219 has no corequisites and accurately identifies CSBP119 with minimum grade D as the prerequisite, matching the official record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 526,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 572
+      }
+    },
+    {
+      "id": "POWER109",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite and absence of corequisites for CSBP219 as per the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 524,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 36,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 560
+      }
+    },
+    {
+      "id": "POWER110",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the prerequisite CSBP119 with a minimum grade D for CSBP219, matching the official catalog record.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 714,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 754
+      }
+    },
+    {
+      "id": "POWER111",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states the credit hours and prerequisite requirements for CSBP219 and CSBP319 as per the official catalog, including the minimum grade D and the prerequisite/corequisite relation for CSBP221 in CSBP319.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 846,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 59,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 905
+      }
+    },
+    {
+      "id": "POWER112",
+      "group": "phrasing",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly explained the prerequisite for CSBP219 and did not invent any information about corequisites, aligning with the official reference and rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 555,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 598
+      }
+    },
+    {
+      "id": "POWER113",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies its creators as UAEU students from the College of Computing and Artificial Intelligence (CCAI), matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 351,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 393
+      }
+    },
+    {
+      "id": "POWER114",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies itself as built by UAEU students from the College of Computing and Artificial Intelligence (CCAI), matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 351,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 394
+      }
+    },
+    {
+      "id": "POWER115",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies itself as built by UAEU students from the College of Computing and Artificial Intelligence (CCAI), matching the official reference. It responds appropriately to the user's intent without adding incorrect information.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 351,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 55,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 406
+      }
+    },
+    {
+      "id": "POWER116",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly states its capabilities related to UAEU programs and services but does not mention the College of Computing and Artificial Intelligence or the specific Bachelor program as per the official reference, missing key details.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 342,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 54,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 396
+      }
+    },
+    {
+      "id": "POWER117",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly states it uses official university pages and documents and mentions source links, which aligns with the reference to official sources. However, it does not address the 2025 source conflict or ask for the missing entry cohort as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 344,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 65,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 409
+      }
+    },
+    {
+      "id": "POWER118",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies itself as developed by students from the College of Computing and Artificial Intelligence (CCAI), matching the official reference and responding appropriately in Arabic.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 349,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 395
+      }
+    },
+    {
+      "id": "POWER119",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies itself as a UAE University AI assistant developed by CCAI students, matching the official reference and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 348,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 389
+      }
+    },
+    {
+      "id": "POWER120",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly states reliance on official UAE University pages and documents without fabricating specific sources, aligning with the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 355,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 395
+      }
+    },
+    {
+      "id": "POWER121",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly greets the student and offers relevant help, but it does not address the student's specific program or cohort details as per the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 340,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 44,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 384
+      }
+    },
+    {
+      "id": "POWER122",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly offers help relevant to a prospective master's applicant but does not address the specific program names or cohorts from the official reference, nor does it ask for the missing entry cohort as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 342,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 56,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 398
+      }
+    },
+    {
+      "id": "POWER123",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly greets the student and offers help related to study plans and university services, aligning with the rubric's intent to respond in the user's language and context. However, it does not ask for the missing entry cohort or expose the 2025 source conflict as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 350,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 423
+      }
+    },
+    {
+      "id": "POWER124",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant's response is polite and invites further questions, aligning with the conversational intent and rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 308,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 34,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 342
+      }
+    },
+    {
+      "id": "POWER125",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant's farewell is appropriate and aligns with the conversational intent without introducing errors or irrelevant information.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 310,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 34,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 344
+      }
+    },
+    {
+      "id": "POWER126",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly greets and invites questions about university services but does not address the user's greeting or provide any information about UAE University or its programs as per the rubric and reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 337,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 387
+      }
+    },
+    {
+      "id": "POWER127",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly responded to the student's question about the academic calendar and accurately recalled the first question when asked.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 397,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 36,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 433
+      }
+    },
+    {
+      "id": "POWER128",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly acknowledged the student's major and offered relevant help options, but did not mention or clarify the missing entry cohort or the 2025 source conflict as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 360,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 51,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 411
+      }
+    },
+    {
+      "id": "POWER129",
+      "group": "conversation",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies its creators as UAEU students from the College of Computing and Artificial Intelligence (CCAI), matching the official reference and responding appropriately in Arabic as per the user's language.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 381,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 433
+      }
+    },
+    {
+      "id": "POWER130",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly asks for the missing entry cohort and provides a detailed study plan for Fall 2022 entry, which aligns with the student's information. However, it uses the old college name 'College of Information Technology' instead of the current 'College of Computing and Artificial Intelligence (CCAI)' and does not mention the updated degree name 'Bachelor of Science in Computer and Artificial Intelligence Engineering' as per the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 672,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 98,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 770
+      }
+    },
+    {
+      "id": "POWER131",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly identified the next semester courses for Fall 2025 entry but used the outdated program name 'IT' instead of the current 'College of Computing and Artificial Intelligence' and did not address the 2025 source conflict as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 685,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 66,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 751
+      }
+    },
+    {
+      "id": "POWER132",
+      "group": "conversation",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly identifies the current name of the Computer Engineering program and its concentrations, but it introduces details about credits and pathways not present in the official reference. The assistant also correctly offers to match older catalogs by admit year, which aligns with the rubric's instruction to ask for missing entry cohort.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 604,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 677
+      }
+    },
+    {
+      "id": "POWER133",
+      "group": "directory",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly lists all the verified undergraduate programs in the College of Engineering and provides links, but it incorrectly groups some programs into combined departments (e.g., Chemical & Petroleum Engineering, Civil & Environmental Engineering, Electrical and Communication Engineering, Mechanical and Aero Space Engineering) which is not specified in the official reference. The official reference only lists programs without departmental grouping, so the grouping is an invention and not verified.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 920,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 96,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1016
+      }
+    },
+    {
+      "id": "POWER134",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly listed all graduate programs in the College of Engineering, grouped by department, with links to each program page, matching the official reference exactly and following the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1472,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 49,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1521
+      }
+    },
+    {
+      "id": "POWER135",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All undergraduate programs in the College of Science are listed accurately, grouped by department, with correct links and no minors included.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 895,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 934
+      }
+    },
+    {
+      "id": "POWER136",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All graduate programs listed match the official reference, grouped correctly by department with appropriate links; no minors or incorrect classifications included.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1366,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1405
+      }
+    },
+    {
+      "id": "POWER137",
+      "group": "directory",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly lists all five undergraduate programs and provides links, but incorrectly groups them into departments not verified by the official reference, which only specifies the college name and programs without departmental divisions.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 729,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 781
+      }
+    },
+    {
+      "id": "POWER138",
+      "group": "directory",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly lists all graduate programs and provides links, but incorrectly groups them by departments not verified in the official reference, which does not specify departments.",
+      "hallucination": true,
+      "usage": {
+        "input_tokens": 710,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 45,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 755
+      }
+    },
+    {
+      "id": "POWER139",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly listed all undergraduate programs in the College of Business and Economics, grouped by department, with links to each program page as per the official reference and rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 933,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 981
+      }
+    },
+    {
+      "id": "POWER140",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All graduate programs in the College of Business and Economics are correctly listed and grouped by department with appropriate links, matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 589,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 630
+      }
+    },
+    {
+      "id": "POWER141",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly listed the Bachelor of Law program under the College of Law as per the official reference and provided a valid link.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 365,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 405
+      }
+    },
+    {
+      "id": "POWER142",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All graduate programs in the College of Law are listed accurately and grouped by department with correct links; no minors or raw XML included.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 486,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 527
+      }
+    },
+    {
+      "id": "POWER143",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All undergraduate programs in the College of Education are listed correctly, grouped by department, with appropriate links. No minors are misclassified as degrees.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 550,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 43,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 593
+      }
+    },
+    {
+      "id": "POWER144",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All graduate programs in the College of Education are listed and grouped by department with links, matching the official reference exactly.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 993,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 38,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1031
+      }
+    },
+    {
+      "id": "POWER145",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All undergraduate programs listed match the official reference, grouped by department with correct program names and links; no minors are included.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1347,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1386
+      }
+    },
+    {
+      "id": "POWER146",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly listed all graduate programs in the College of Humanities and Social Sciences, grouped by department, with appropriate links, fully matching the official reference and rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 925,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 973
+      }
+    },
+    {
+      "id": "POWER147",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All undergraduate programs in the College of Medicine and Health Sciences are correctly listed and grouped by department with appropriate links, matching the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 621,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 42,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 663
+      }
+    },
+    {
+      "id": "POWER148",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All graduate programs listed match the official reference, grouped by department with correct program names and links; no minors or raw XML included.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1136,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 41,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1177
+      }
+    },
+    {
+      "id": "POWER149",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All undergraduate programs in the College of Agriculture and Veterinary Medicine are listed correctly, grouped by department, with links to readable program pages as per the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 713,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 759
+      }
+    },
+    {
+      "id": "POWER150",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "All graduate programs in the College of Agriculture and Veterinary Medicine are listed correctly, grouped by department, with appropriate links. No minors or unverified programs are included.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 642,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 689
+      }
+    },
+    {
+      "id": "POWER151",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant provided a complete, directory-derived list of UAEU STEM bachelor programs with official program links and correctly scoped STEM fields as per the official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1955,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 45,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2000
+      }
+    },
+    {
+      "id": "POWER152",
+      "group": "directory",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant provided a comprehensive, directory-derived list of UAEU postgraduate programs with official links, correctly reflecting the current college names and program titles, including the College of Computing and Artificial Intelligence and its STEM scope.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 5052,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 56,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 5108
+      }
+    },
+    {
+      "id": "POWER153",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly lists the undergraduate programs in CCAI with accurate names and provides official sources. It meets the rubric by citing official readable sources and distinguishing public information.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 668,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 716
+      }
+    },
+    {
+      "id": "POWER154",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly outlines the application process for international undergraduates at UAEU, citing the official UAEU admissions page and providing accurate requirements without inventing details.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 419,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 46,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 465
+      }
+    },
+    {
+      "id": "POWER155",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly provides detailed housing application information for UAEU applicants, cites an official source, and distinguishes public guidance from private access. The response aligns well with the rubric and official reference.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 400,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 52,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 452
+      }
+    },
+    {
+      "id": "POWER156",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly provided the official UAEU academic calendar link and described its contents accurately, meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 349,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 386
+      }
+    },
+    {
+      "id": "POWER157",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly lists all graduate engineering programs from the official reference and provides relevant official sources. However, it does not distinguish public guidance from live private access nor requests any missing applicant details, which the rubric requires.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 1467,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 57,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1524
+      }
+    },
+    {
+      "id": "POWER158",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly describes the MSc in Information Technology Management curriculum and cites an official source, but it does not distinguish public guidance from live private access or request any missing applicant details as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 394,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 55,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 449
+      }
+    },
+    {
+      "id": "POWER159",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant provides detailed graduate admission requirements and cites the official UAEU College of Graduate Studies page, fulfilling the citation and public guidance criteria. However, it does not distinguish public guidance from live private access explicitly, nor does it request any genuinely missing applicant details, which the rubric requires.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 526,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 71,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 597
+      }
+    },
+    {
+      "id": "POWER160",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly provides public university graduate application guidance with official contact details and sources, meeting the rubric requirements without hallucination.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 399,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 39,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 438
+      }
+    },
+    {
+      "id": "POWER161",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly lists all the Bachelor of Science programs in the College of Science at UAEU with accurate links, fulfilling the rubric's requirement to cite official sources. However, it does not distinguish public guidance from live private access nor requests any missing applicant details, which are required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 892,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 73,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 965
+      }
+    },
+    {
+      "id": "POWER162",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant provides relevant safety information and cites official sources, but does not clearly distinguish public guidance from private access or request missing applicant details as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 415,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 47,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 462
+      }
+    },
+    {
+      "id": "POWER163",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly provides the official source for student housing information at UAEU and distinguishes it as public guidance.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 337,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 36,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 373
+      }
+    },
+    {
+      "id": "POWER164",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly describes UAEU's student transportation services with accurate details and cites official sources. The response meets the rubric by providing public university service information and relevant references.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 460,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 508
+      }
+    },
+    {
+      "id": "POWER165",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly lists UAEU research centers and cites an official source, meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 394,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 34,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 428
+      }
+    },
+    {
+      "id": "POWER166",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies the UAEU Development Partnership Unit and Research Office as points of contact for research partnerships, cites official sources, and distinguishes public guidance from private access.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 406,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 48,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 454
+      }
+    },
+    {
+      "id": "POWER167",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies the relevant UAEU unit and provides official contact information with sources, meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 373,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 37,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 410
+      }
+    },
+    {
+      "id": "POWER168",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly provided official faculty contact details with relevant sources and distinguished public information from private access.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 421,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 34,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 455
+      }
+    },
+    {
+      "id": "POWER169",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly provides the official password reset portal and contact details for help, citing relevant official sources as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 371,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 411
+      }
+    },
+    {
+      "id": "POWER170",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant provides useful library access information and cites an official source, but does not distinguish public guidance from live private access or request any missing applicant details as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 420,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 50,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 470
+      }
+    },
+    {
+      "id": "POWER171",
+      "group": "guest",
+      "account": null,
+      "verdict": "correct",
+      "comment": "The assistant correctly identifies where add/drop dates are published and cites official UAEU sources with specific examples, meeting the rubric requirements.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 419,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 40,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 459
+      }
+    },
+    {
+      "id": "POWER172",
+      "group": "guest",
+      "account": null,
+      "verdict": "partial",
+      "comment": "The assistant correctly states it cannot access Degree Works or private records and offers to help with course planning, but it does not cite an official source or request missing applicant details as required by the rubric.",
+      "hallucination": false,
+      "usage": {
+        "input_tokens": 343,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 54,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 397
+      }
+    }
+  ],
+  "finishedAt": "2026-11-17T16:07:40.895Z"
+}

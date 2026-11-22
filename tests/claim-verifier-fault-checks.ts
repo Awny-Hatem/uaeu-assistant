@@ -46,6 +46,8 @@ let intercepted = 0;
 const realFetch = globalThis.fetch;
 let respond: (request: Record<string, unknown>) => unknown | Promise<unknown> = () => { throw new Error("Unexpected provider call"); };
 globalThis.fetch = async (input, init) => {
+  // Corpus query embeddings fall back to lexical ranking; not a model call.
+  if (String(input).endsWith("/v1/embeddings")) throw new Error("Embeddings are unavailable in this test");
   intercepted++;
   assert.equal(String(input), "https://api.openai.com/v1/responses", "External request blocked");
   const output = await respond(JSON.parse(String(init?.body)));
@@ -58,6 +60,14 @@ async function check(name: string, fn: () => void | Promise<void>) {
 }
 
 async function main() {
+  await check("verifier diagnostics cannot invent correction text", () => {
+    const claim = answer.claims[0];
+    const valid = parse([{claimIndex:0,evidenceId:claim.evidenceIds[0],status:"unsupported_detail",unsupportedText:claim.text.slice(0,20)}, ...supported.slice(1)]);
+    assert.equal(valid.reasonCodes[0], "unsupported_detail");
+    invalid([{...supported[0],status:"unsupported_detail",unsupportedText:"Invented university policy"}, ...supported.slice(1)]);
+    invalid([{...supported[0],unsupportedText:claim.text.slice(0,20)}, ...supported.slice(1)]);
+  });
+
   await check("complete correctly assigned verdict coverage is accepted regardless of order", () => {
     assert.equal(parse(supported).valid, true);
     assert.equal(parse([...supported].reverse()).valid, true);
@@ -244,7 +254,7 @@ async function main() {
     body: JSON.stringify({ messages: [{ role: "user", content: "I completed CSBP119 but CSBP219 remains pending. Can I take Data Structures?" }] }),
   }));
   for (const rewrittenSupported of [true, false]) {
-    await check(rewrittenSupported ? "route verifies a single rewrite and exposes only its displayed claims" : "route withholds a twice-rejected semantic draft with bounded failure metadata", async () => {
+    await check(rewrittenSupported ? "route verifies a single rewrite and exposes only its displayed claims" : "route withholds a draft rejected through both bounded revisions", async () => {
       let planner = 0;
       let writer = 0;
       let verifier = 0;
@@ -261,9 +271,9 @@ async function main() {
         }
         if (format.name === "grounded_answer") {
           writer++;
-          assert.ok(writer <= 2, "Unbounded rewrite attempt");
+          assert.ok(writer <= 3, "Unbounded rewrite attempt");
           return {
-            claims: [{ text: writer === 1 || !rewrittenSupported ? "All listed prerequisites are optional." : "The source identifies CSBP319 as Data Structures.", evidenceIds: [format.schema.properties.claims.items.properties.evidenceIds.items.enum[0]] }],
+            claims: [{ text: writer === 1 || !rewrittenSupported ? "All listed prerequisites are optional." : "CSBP319 Data Structures requires CSBP219 with a minimum grade of D, and CSBP221 is a prerequisite or corequisite with a minimum grade of D.", evidenceIds: [format.schema.properties.claims.items.properties.evidenceIds.items.enum[0]] }],
             clarification: "", disposition: "answer",
           };
         }
@@ -274,11 +284,11 @@ async function main() {
       };
       const response = await ask();
       const payload = await response.json();
-      assert.equal(planner, 1);
-      assert.equal(writer, 2);
-      assert.equal(verifier, 2);
+      assert.equal(planner, 0, "Validated course identity retrieves evidence without a semantic selector");
+      assert.equal(writer, rewrittenSupported ? 2 : 3);
+      assert.equal(verifier, rewrittenSupported ? 2 : 3);
       assert.ok(!JSON.stringify(payload).includes("All listed prerequisites are optional"), "Rejected draft leaked into response");
-      assert.equal(payload.grounding.rewriteCount, 1);
+      assert.equal(payload.grounding.rewriteCount, rewrittenSupported ? 1 : 2);
       if (rewrittenSupported) {
         assert.equal(response.status, 200);
         assert.equal(payload.grounding.status, "checked");
@@ -296,12 +306,14 @@ async function main() {
         assert.equal(payload.disposition, "clarify");
         assert.equal(payload.grounding.status, "rejected");
         assert.deepEqual(payload.grounding.reasonCodes, ["contradiction"]);
-        assert.deepEqual(payload.citations, []);
+        // Student-facing fallback: official links only, no reviewer internals.
+        assert.ok(payload.citations.every((citation: { url: string }) => /^https:\/\/(?:[a-z]+\.)?uaeu\.ac\.ae\//u.test(citation.url)));
+        assert.doesNotMatch(String(payload.content), /withheld|source-support|narrower verified record/i);
         assert.ok(!payload.claims?.length);
       }
     });
   }
-  assert.equal(intercepted, 42, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
+  assert.equal(intercepted, 40, "All expected fetches, including bounded same-provider retries, are intercepted; none may be hidden");
   console.log(`${passed}/${passed + failed} synthetic claim-verifier checks passed; ${intercepted} intercepted fetches, zero network requests. No semantic truth proof is claimed.`);
   if (failed) process.exitCode = 1;
 }

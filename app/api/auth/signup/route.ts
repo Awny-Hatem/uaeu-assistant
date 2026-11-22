@@ -38,7 +38,7 @@ export async function POST(req: Request) {
   if (originError) return originError;
   if (!runtimeContract().allowed) return jsonNoStore({ error: 'Account access is unavailable in this deployment configuration.' }, { status: 503 });
 
-  const limited = rateLimitGuard(req, 'auth:signup', {
+  const limited = await rateLimitGuard(req, 'auth:signup', {
     limit: 8,
     windowMs: 60 * 1000,
   });

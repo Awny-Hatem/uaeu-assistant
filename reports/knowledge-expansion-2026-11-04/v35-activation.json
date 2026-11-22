@@ -1,0 +1,38 @@
+{
+  "at": "2026-11-04T18:49:48.540559+00:00",
+  "priorFrozenRuns": [
+    "examiner-all-v34",
+    "regression-v34-1",
+    "regression-v34-2"
+  ],
+  "files": [
+    "app/api/chat/route.ts",
+    "lib/query-understanding.ts",
+    "lib/claim-verifier.ts",
+    "lib/prompts.ts",
+    "lib/hybrid-rag.ts",
+    "lib/academic-coverage.ts",
+    "lib/academic-retrieval.ts",
+    "data/verified-answers/observed-source-gaps.json",
+    "data/knowledge/60-catalog-course-2015_2016.md",
+    "data/knowledge/33-mechanical-engineering-course-prerequisites.md",
+    "data/knowledge/67-catalog-graduate-2018_2019.md",
+    "data/knowledge/66-catalog-course-2018_2019.md",
+    "data/knowledge/68-catalog-undergraduate-2018_2019.md",
+    "data/knowledge/64-catalog-course-2017_2018.md",
+    "data/knowledge/65-catalog-graduate-2017_2018.md",
+    "data/knowledge/61-catalog-graduate-2015_2016.md",
+    "data/knowledge/62-catalog-undergraduate-2015_2016.md",
+    "data/knowledge/63-catalog-course-2016_2017.md",
+    "data/knowledge/70-catalog-graduate-2019_2020.md",
+    "data/knowledge/69-catalog-course-2019_2020.md",
+    "data/knowledge/71-catalog-undergraduate-2019_2020.md",
+    "tests/observed-retrieval-checks.ts",
+    "examiner-scenarios/examiner_100.json",
+    "reports/knowledge-expansion-2026-11-04/fixture-combined-v35.json"
+  ],
+  "newCuratedDocuments": 12,
+  "newReviewedAnswers": 5,
+  "indexRebuildRequired": false,
+  "reason": "New documents use the existing root curated-document loader; the crawled dense corpus is unchanged. All altered code will be rebuilt."
+}

@@ -1,0 +1,489 @@
+{
+  "startedAt": "2026-11-09T09:06:34.121Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "mem11-check1-a",
+  "fixture": "reports/knowledge-expansion-2026-11-04/fixture-regression-v45-1.json",
+  "fixtureSha256": "9d44deaba84c751c90b40bd556d7d2afe30f1d68c2dc2271b0691e5f289f4504",
+  "methodology": "One shared 2.3-second request-start limiter, at most3 in flight. Original195 plus329 new scenarios; all alternate phrasings. Automated official-source rubric, then semantic review. Candidate71k snapshot, not full crawl completion.",
+  "results": [
+    {
+      "id": "CQ100",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "is-final",
+      "turns": [
+        "خطة أمن المعلومات دفعة 2025-2026 دخول الخريف، شو مواد آخر فصل تدريس قبل التدريب؟"
+      ],
+      "expected": "Semester8:ISEC412,ISEC422,ITBP481,ISEC413 each3;ISEC4231;total13. Internship semester9 ITBP4966.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "ISEC\\s*412"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "ISEC\\s*422"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "ITBP\\s*481"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "ISEC\\s*413"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "ISEC\\s*423"
+          ]
+        },
+        {
+          "name": "Expected fact 6",
+          "any": [
+            "\\b13\\b"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "suite": "legacy",
+      "parentId": "CQ100",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "خطة أمن المعلومات دفعة 2025-2026 دخول الخريف، شو مواد آخر فصل تدريس قبل التدريب؟",
+          "status": 200,
+          "seconds": 3.496,
+          "payload": {
+            "role": "assistant",
+            "content": "في الفصل الدراسي الثامن من السنة الرابعة، وهو آخر فصل تدريس قبل التدريب العملي، توجد المواد التالية في خطة بكالوريوس أمن المعلومات دفعة 2025-2026: ISEC412 التحليل الجنائي الرقمي (3 ساعات معتمدة)، ISEC422 سياسة الأمن والقوانين والحكومة (3 ساعات معتمدة)، ITBP481 مشروع التخرج النهائي II (3 ساعات معتمدة)، ISEC413 هندسة وأليات الأمن (3 ساعات معتمدة)، وISEC423 مختبر أمن الأنظمة (1 ساعة معتمدة)، بإجمالي 13 ساعة معتمدة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU BSc Information Security — 2025–2026 and 2022–2023 Model Plans",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_security_study_plan.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "2025–2026 cohort onwards: Fall entrants, 120 credits"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "internship",
+            "evidenceIds": [
+              "13-information-security-cohort-plans.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "في الفصل الدراسي الثامن من السنة الرابعة، وهو آخر فصل تدريس قبل التدريب العملي، توجد المواد التالية في خطة بكالوريوس أمن المعلومات دفعة 2025-2026: ISEC412 التحليل الجنائي الرقمي (3 ساعات معتمدة)، ISEC422 سياسة الأمن والقوانين والحكومة (3 ساعات معتمدة)، ITBP481 مشروع التخرج النهائي II (3 ساعات معتمدة)، ISEC413 هندسة وأليات الأمن (3 ساعات معتمدة)، وISEC423 مختبر أمن الأنظمة (1 ساعة معتمدة)، بإجمالي 13 ساعة معتمدة.",
+                "evidenceIds": [
+                  "13-information-security-cohort-plans.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3484,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3458,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 153,
+                  "estimatedUsd": 0.001052
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1546,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006680000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5004,
+              "outputTokens": 184,
+              "knownUsageUsd": 0.0017200000000000002,
+              "estimatedUsd": 0.0017200000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "ISEC\\s*412"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "ISEC\\s*422"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "ITBP\\s*481"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "ISEC\\s*413"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "ISEC\\s*423"
+            ]
+          },
+          {
+            "name": "Expected fact 6",
+            "passed": true,
+            "patterns": [
+              "\\b13\\b"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "cc7d3ec98c9a41c97eb9144240ca4cb5367acb2964d093620e1e621c82fb5d8f",
+    "files": 8466,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v11"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/mem11-check1-a-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-09T09:06:40.758Z",
+  "runtimeAfter": {
+    "sha256": "cc7d3ec98c9a41c97eb9144240ca4cb5367acb2964d093620e1e621c82fb5d8f",
+    "files": 8466,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v11"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 3.496,
+    "p95": 3.496,
+    "max": 3.496
+  },
+  "usage": {
+    "measuredAnswers": 1,
+    "totalAnswers": 1,
+    "estimatedUsd": 0.0017200000000000002,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

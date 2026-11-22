@@ -1,0 +1,233 @@
+---
+title: glossary-of-terms.pdf
+sourceUrl: https://www.uaeu.ac.ae/en/vc/oie/pdf/glossary-of-terms.pdf
+status: approved
+language: en
+lastVerified: 2026-11-04
+subject: university-people
+catalogYear: not stated
+temporalStatus: undated-current-page
+audience: public; exact eligibility as published in sections
+topicId: /vc/oie/pdf/glossary-of-terms.pdf
+extraction: text-extracted-layout-review-required
+sourceSha256: 9d37f3cb8259ef3ec90baba73992fc027b3899105ef2963fad3dc5fce489d1e0
+sourceDate: not inferred from verification date
+---
+# glossary-of-terms.pdf
+
+Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
+
+## PDF page 1
+Accreditation
+       Professional system evaluating higher institution and programs. It is the recognition that an
+       institution or programs meet the standards and requirements of a particular agency.
+ Action Verb
+
+       An active verb such as apply, evaluate that describes an observable (and measurable)
+       performance in learning.
+
+ Aggregation
+
+       A process of grouping distinct or varied data together and considering them as a whole.
+
+ Alignment Matrix
+       A matrix (table) that shows connection or relationship between two set of categories, such as
+       connection between the courses in a curriculum and the Program Learning Outcomes (PLOs), or
+       the connection between assessment methods and learning outcomes.
+ Analytic Rubric
+       A type of rubric that produces separate, holistic scoring of specified characteristics of a product
+       or behavior.
+ Assessment
+       Systematic collection, review, and use of evidence to make decision about students, curricula,
+       program, process, and/or policy.
+ Assessment Cycle
+       A sequence of step or phases of an assessment process that is repeated once the sequence is
+       finished.
+ Assessment Method
+       A tool that is used to collect evidence of student learning, such as assignments, activities,
+       artifacts. There is “direct assessment method” and “indirect assessment method.
+ Assessment Plan
+       A document that outlines and describes in advance what will be assessed, when it will be
+       assessed, how it will be assessed, and how the results of the assessment will be used for
+       improvement.
+ Assessment Process
+
+       A  document that outlines and describes assessment activities, including defining program goals,
+       driving program outcomes, determining expected performance level, checking for alignment,
+       selecting or designing appropriate  assessment methods, implementing assessment methods,
+       collecting data or evidence on how well student have achieved the expected learning outcomes,
+       using  assessment results to develop actions that will improve student learning, and finally
+       reviewing the goals and learning outcomes for the program.
+
+## PDF page 2
+Attitude
+       A person’s feeling toward particular objects, situations, or ideas.
+ Authentic assessment
+       Type of performance assessment in which students are required to use their knowledge to do
+       meaningful tasks which involve actively generating a response to a question; performance
+       assessment that require student to do “real world” activities; For example assessing critical
+       thinking skills by asking students to analyze news, or for example, assessing ability of social work
+       students to integrate what they learn in the class by giving them real word problem and asking
+       them to suggest or propose solution that take into account social context.
+ Benchmark
+       A point of reference for measurement; a standard of performance or achievement against which
+       assessment results can be judged.
+ Bloom's Taxonomy
+       A particular classification system used to define and distinguish different levels of human
+       cognition. Educators have typically used Bloom’s taxonomy to inform or guide the development
+       of assessments, curriculum, and instructional methods such as questioning strategies.
+ Capstone Project
+       A culminating project or experience, in which students are required to review, synthesis, and
+       apply what they have learned over the course of their college experience. Capstone projects
+       generally take place in the student’s final year of study.
+ Checklist
+       Type of survey format that provide a list of options that participant can select
+ Closing the Loop
+       The process of using assessment results of courses and programs to improve student learning—
+       by developing appropriate remedial actions to address discovered deficiencies.
+ Course Assessment
+       Assessment to determine the extent to which a specific course is achieving its learning
+       outcomes.
+ Criterion-referenced
+       A form of assessment in which student performance is compared to pre-determined
+       performance criteria or standards.
+ Curriculum Alignment
+       A visual representation that shows how required courses are aligned with learning outcomes.
+ Direct Assessments
+
+## PDF page 3
+Assessments that involve examination of products produced by students (e.g. papers, projects,
+       presentations, capstones, e-portfolios, exit exams, embedded questions, standardized tests,
+       thesis, dissertations).
+ Embedded Assessments
+       Program assessments that are embedded or built into regular course activities; Also,
+       assessments activities that involve collecting data/evidence on program learning outcomes by
+       extracting course assignments. Embedded assessments use some or all student work that is
+       graded to test achievement of program learning outcomes.
+ Embedded Exams or Quizzes
+       Collecting data/evidence on learning outcomes by using specific questions that are embedded in
+       exams. These questions are analyzed and used for program assessment purposes.
+ Evaluation
+       Process of making judgments about the quality of a program or student learning based on
+       assessment results.
+ Evidence
+       Student work, other direct and Indirect evidence that demonstrates what students have learned.
+ Expected Achievement Level
+       Specific target or minimum performance standard to describe the extent to which outcomes has
+       been met; the minimum requirements for a program to declare itself successful. Example: 70%
+       of students score 3 or higher on a lab skills assessment.
+ Focus Groups
+       Planned, structured discussion among homogenous groups of 6                    -10 people who are guided
+       through discussion of a series of open         -ended questions about their beliefs, attitudes, and
+       experiences.
+ Formative Assessment
+
+       Assessment that takes place during the learning process. It is intended to provide feedback on to
+       improve what is being assessed. Students may receive feedback on their progress                       during the
+       learning process, and hence faculty might modify assignm                ents or classroom activities.
+
+ Goals
+       Broad, general statement of what the program, course, or activity intends to accomplish. Goals
+       describe what the university expects students to achieve, expressed in general terms. Goals
+       should be consistent with (i.e. flow from) the mission of the program and the mission of the
+       institution.
+ Holistic Rubric
+
+       A type of rubric that produce a global, holistic         score for a product or performance.
+
+## PDF page 4
+Indirect Assessments
+       Assessments that involve examination of evidence of students’ perceptions of how well they
+       achieved learning (e.g., alumni, employer, and student surveys, interviews, exit interview of
+       graduates, focus groups).
+ Instrument
+       An assessment tool used to collect data, such as a standardized test, exam, interview, or survey.
+ Learning Outcomes
+       Clear, specific, concise, and measurable statements that describe the significant and essential
+       knowledge, skills, or attitudes that students are expected to be able to demonstrate by the time
+       they finish a learning experience. There are three levels of learning outcomes: course learning
+       outcome (CLO), program learning outcome (PLO), and institution learning outcome (ILO)..
+ Likert Scale
+       Type of survey format in which respondents are asked to indicate the degree of agreement.
+       Responses generally ranged from strongly agree to strongly disagree.
+ Mission
+       A statement of the purpose of program, department, college, or institution. Its reason for
+       existing. The mission statement guides the actions and decision-making process of the program,
+       college etc.
+ Norm-referenced
+       Assessment in which student performances are compared to a larger group.
+ Objective
+       An objective is the narrowest statement describing what a student should know or be able to do
+       at the end of a specific lesson plan. An objective must be observable and measurable.
+ Performance Assessment
+       Assessment that requires students to generate a response to a question rather than choose from
+       a set of responses provided to them.
+ Portfolio
+       Collection of students work over time, in which students are often required to reflect on their
+       growth and achievement with respect to defined learning outcomes and standards.
+ Portfolio Assessment
+
+
+       Assessment based on judgment made about the collection of work, usually drawn from students
+       work over time. A portfolio becomes an assessment when: (1) the assessment purpose is clearly
+       defined; (2) there are specific criteria for determining what is put in the portfolio by whom; and
+       (3) there are defined criteria for assessing either the collection or individual pieces. These criteria
+       are then used to make judgments about performance.
+
+## PDF page 5
+Qualifications Framework for the Emirates  (QFE)
+       A unified framework for identifying key elements of qualifications offered by institutions in the
+       UAE. All institutions providing higher education in the UAE are required to align their program
+       learning outcomes with QF Emirates.
+ Qualitative Assessment
+       A type of assessment method that involves using non-numeric data such as, unstructured
+       response options, conversation, text, audio, or video, and usually analyzed by looking for themes
+       or patterns.
+ Quantitative Assessment
+       A type of assessment method that involves using numeric data such as structured,
+       predetermined response options that can be summarized into meaningful numbers that can be
+       displayed readily and analyzed statistically.
+ Rater
+       Individual who judges or evaluates student performance on an assessment against specific
+       criteria
+ Reliability
+       The extent to which an assessment method or tool produces consistent results. Reliability is a
+       precondition for validity.
+ Rubric
+       A set of scoring criteria used to evaluate the quality of students’ performance on assigned tasks.
+       The criteria are written so that students are able to learn what must be done to achieve a
+       particular outcome and improve their performance.
+ Signature Assignment
+       A specific task, problem, case, project, test or assignment that provides direct evidence of the
+       achievement of one or more learning outcomes at a particular level.
+ Standardized Test
+       A test for which procedure, administration, test masteries, and scoring rules are fixed so the
+       assessment is same at different time and place.
+ Standards
+       A description of defined levels of quality/performance/achievement, or skills required in in
+       student work.
+ Student Learning Outcomes
+
+
+       Student learning outcomes (SLOs) are a written statement of specific observable or measurable
+       achievement a participant will be able to demonstrate as a result of participation in a given
+       learning activity.
+
+## PDF page 6
+Summative Assessment
+       A particular assessment design to determine whether or not the learning outcomes have been
+       achieved at the end of a course or program. Students may not receive any feedback about their
+       performance other than overall all score or grade.
+ Survey
+       A questionnaire (set of questions) that used to collect information about believes, attitudes, or
+       experiences.
+ Triangulation
+       Using multiple lines of evidence to test a particular conclusion (direct and indirect). It refers to
+       the collection and comparison of data from different sources to answer a question.
+ Validity
+       The extent to which an assessment method or tool measures what it claims to measure. A valid
+       assessment instrument is required before valid inferences can be made.
+ Value-Added Assessment
+       Quantifying the improvement in students learning by determining how much students have
+       gained through engagement in the learning activities. For example, a measure of how much
+       improvement in student composition skills occurs as a result of writ                ing assignments.

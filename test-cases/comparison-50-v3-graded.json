@@ -1,0 +1,2274 @@
+{
+  "gradedAt": "2026-11-17T16:41:52.674Z",
+  "source": "test-cases/comparison-50-v3.json",
+  "judgeModel": "gpt-4.1-mini",
+  "method": "Blind A/B order (seeded by case id), official reference from project data, rubric from the test case; deterministic checks computed separately.",
+  "pairs": [
+    {
+      "id": "POWER001",
+      "account": "cedar",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly lists the exact courses for Year 1 Semester 2 from the official study plan, excludes passed courses, and notes prerequisite conditions, fulfilling the rubric fully and accurately. Answer B contains an error by listing MATH140 as Discrete Mathematics (it is Linear Algebra I), and mislabels CENG202 and CENG205 as Computer Engineering courses, which is not supported by the reference. It also lacks prerequisite condition notes and is less precise. Therefore, A is better.",
+      "judgeUsage": {
+        "input_tokens": 1616,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 148,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1764
+      }
+    },
+    {
+      "id": "POWER002",
+      "account": "cedar",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "tie",
+      "reason": "Both answers correctly state the required credits, earned credits, in-progress credits, and credits not yet earned, fully addressing the rubric. Both use the supplied student record appropriately without hallucination. Answer A provides a clear summary and additional breakdown of credit categories, while Answer B gives a detailed breakdown by requirement block and notes that credit total alone does not satisfy all requirements. Both are accurate and complete, so neither is clearly better.",
+      "judgeUsage": {
+        "input_tokens": 1575,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 135,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1710
+      }
+    },
+    {
+      "id": "POWER011",
+      "account": "maple",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Both answers correctly identify the next semester courses based on the student's catalog and model position, excluding passed courses and aligning with the official plan. Both are personalized using the student's record. However, Answer B is better because it explicitly states the semester, credits, and prerequisite conditions, noting that some prerequisites need confirmation and that in-progress courses are not yet passed, which aligns with the rubric's requirement to expose prerequisite conditions and caution about course sequencing. Answer A lacks this detail and does not mention prerequisites or conditional recommendations.",
+      "judgeUsage": {
+        "input_tokens": 1680,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 152,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1832
+      }
+    },
+    {
+      "id": "POWER012",
+      "account": "maple",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly states the required credits, earned credits, in-progress credits, and credits not yet earned exactly as per the official reference. It also breaks down the credits by requirement blocks, which aligns with the rubric's expectation for completeness. Answer B correctly lists completed and in-progress credits but introduces planned credits not mentioned in the reference, which is a hallucination. It also does not clearly state the credits not yet earned as per the rubric and mixes planned credits with in-progress, leading to a less precise answer. Therefore, A is more accurate, complete, and aligned with the rubric and reference.",
+      "judgeUsage": {
+        "input_tokens": 1775,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 170,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1945
+      }
+    },
+    {
+      "id": "POWER021",
+      "account": "willow",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "general",
+      "reason": "Answer B correctly uses the student's record and official study plan to identify the next semester's course (ITBP481) without inventing extra courses or conflicting with the official plan. It is personalized and accurate. Answer A lists multiple 'student choice' electives not supported by the official plan for Year 4 Semester 2, which only includes ITBP481 and student choice electives, but the number and credits do not match the official plan exactly, and it incorrectly states 15 credits instead of the official 12 credits for that semester. Also, it states prerequisites needing confirmation without clear basis. Therefore, Answer B is more accurate, complete, and faithful to the official reference.",
+      "judgeUsage": {
+        "input_tokens": 1764,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 185,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1949
+      }
+    },
+    {
+      "id": "POWER022",
+      "account": "willow",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly uses the supplied student record data exactly as given, providing accurate counts of earned, in-progress, and remaining credits per requirement block, matching the official reference. It also correctly states the total credits earned (82), in progress (12), and remaining (48), consistent with the official record. Answer A contains inaccuracies such as overstating completed credits (~112 vs 82), misallocating credits to categories not supported by the reference, and including planned courses not in the record, which constitutes hallucination. Therefore, B is more accurate, complete, and faithful to the official data.",
+      "judgeUsage": {
+        "input_tokens": 1950,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 170,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2120
+      }
+    },
+    {
+      "id": "POWER031",
+      "account": "birch",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B directly uses the official study plan for Year 2 Semester 2 from the 2025/2026 catalog, matches the student's current position, excludes passed courses, and notes prerequisite conditions and discrepancies without inventing courses or sequences. Answer A invents courses not in the official plan for that semester (e.g., ITBP321, ITBP322, CSBP316, ITBP270) and incorrectly assigns semester and year, thus hallucinating and providing less accurate guidance.",
+      "judgeUsage": {
+        "input_tokens": 1915,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 148,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2063
+      }
+    },
+    {
+      "id": "POWER032",
+      "account": "birch",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly states the total credits required, earned, in progress, and not yet earned exactly as per the official reference (130 required, 28 earned, 16 in progress, 102 left). It also provides a detailed breakdown by requirement blocks consistent with the program structure, fulfilling the rubric's demand for completeness. Answer B correctly counts completed and in-progress credits but incorrectly calculates credits left as 86 by subtracting in-progress credits from the total required, which is misleading since in-progress credits are not yet earned. It also lacks the required breakdown by requirement blocks. Therefore, A is more accurate and complete.",
+      "judgeUsage": {
+        "input_tokens": 1666,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 174,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1840
+      }
+    },
+    {
+      "id": "POWER041",
+      "account": "elm",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly uses the student's exact catalog and current model position to infer the next semester courses, excludes passed courses, and notes prerequisite conditions without inventing any sequence. It matches the official study plan for Year 4 Semester 2 and does not hallucinate any information. Answer B contains a hallucination by stating a future semester (Spring 2027) and incorrectly naming MECH590 as 'Final Year Project I' and MECH450 as 'Final Year Project II', which are not in the official reference. It also adds advice and assumptions not fully supported by the reference, making it less precise and partially incomplete. Therefore, Answer A is better.",
+      "judgeUsage": {
+        "input_tokens": 2069,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 182,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2251
+      }
+    },
+    {
+      "id": "POWER042",
+      "account": "elm",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly uses the official reference data, accurately states the earned, in-progress, and remaining credits, and breaks down the requirements by category as per the rubric. It does not hallucinate any data and is personalized to the student's record. Answer A contains incorrect credit totals (129 completed credits vs. 103 in the reference), miscounts in-progress and planned credits, and invents planned courses not in the reference, thus hallucinating. Therefore, B is more accurate, complete, and reliable.",
+      "judgeUsage": {
+        "input_tokens": 2021,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 151,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2172
+      }
+    },
+    {
+      "id": "POWER051",
+      "account": "pine",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B strictly follows the official study plan for Year 3 Semester 2, correctly infers the next model position, excludes passed courses, and exposes prerequisite conditions as required by the rubric. It uses the supplied student record appropriately and does not invent any dates or semesters, unlike Answer A which incorrectly states the next semester as Spring 2027 and current semester as Fall 2026, which are not supported by the reference. Answer A also adds advice about GPA and academic probation not requested by the rubric, and invents semester dates, constituting hallucination. Therefore, B is more accurate, complete, and aligned with the rubric.",
+      "judgeUsage": {
+        "input_tokens": 2172,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 178,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2350
+      }
+    },
+    {
+      "id": "POWER052",
+      "account": "pine",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly states the total required credits, earned credits, in-progress credits, and credits not yet earned exactly as per the official reference, and it aligns with the rubric by excluding planned credits and focusing on completed and in-progress credits only. It also provides a breakdown by requirement block, which is relevant and accurate. Answer B incorrectly sums completed credits as 59 instead of 55, includes planned credits (next term) which are not part of the rubric's instructions, and states a remaining credit count of 55 which conflicts with the official 92 credits not yet earned. Additionally, Answer B invents planned courses and their credits not present in the reference, constituting hallucination. Therefore, Answer A is more accurate, complete, and aligned with the rubric and reference.",
+      "judgeUsage": {
+        "input_tokens": 2119,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 206,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2325
+      }
+    },
+    {
+      "id": "POWER061",
+      "account": "ash",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly uses the student's exact catalog and model position, excludes passed courses, and lists the next semester courses per the official plan without inventing or contradicting information. It also notes prerequisite conditions as required by the rubric. Answer B invents future semesters (Fall 2026, Spring 2027) not supported by the reference, which is a hallucination, and is less precise about prerequisites and course status. Therefore, A is more accurate, complete, and aligned with the rubric.",
+      "judgeUsage": {
+        "input_tokens": 2071,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 150,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2221
+      }
+    },
+    {
+      "id": "POWER062",
+      "account": "ash",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly states the earned credits as 94, in progress as 13, and not yet earned as 38, matching the official reference exactly. It also breaks down credits by requirement block accurately, reflecting the student's record and the rubric's expectations. Answer A incorrectly calculates completed credits as 107 instead of 94, leading to an incorrect total of credits left. Both answers are personalized and avoid hallucination, but B is more accurate and aligns better with the official data.",
+      "judgeUsage": {
+        "input_tokens": 2191,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 147,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2338
+      }
+    },
+    {
+      "id": "POWER071",
+      "account": "olive",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly identifies the next semester as Year 3 Semester 2 per the official plan and lists the exact courses from the official model plan, excluding passed courses and noting prerequisites as unknown, which aligns with the rubric. It uses the student's catalog and model position accurately without inventing details. Answer A incorrectly states the current semester as Fall 2026 (not supported by the reference), misnames ACCT225 as 'Intermediate Financial Accounting' instead of 'Fundamental of Cost & Management Accounting', and invents a timeline (Spring 2027) not in the reference, constituting hallucination. Although A is personalized and attempts completeness, it contains errors and hallucinations. Therefore, B is better.",
+      "judgeUsage": {
+        "input_tokens": 1656,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 192,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1848
+      }
+    },
+    {
+      "id": "POWER072",
+      "account": "olive",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly uses the student record and official reference data to provide an accurate count of credits earned, in progress, and remaining, aligned with the rubric. It also breaks down credits by requirement blocks, which is part of completeness. Answer B attempts a detailed breakdown but contains inaccuracies such as counting transfer courses not in the record, planned courses not in progress, and miscounting completed credits (54 vs. 48 in the official record). It also hallucinates course statuses and includes courses not confirmed in the reference. Therefore, A is more accurate, complete, and faithful to the official data.",
+      "judgeUsage": {
+        "input_tokens": 2237,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 171,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2408
+      }
+    },
+    {
+      "id": "POWER081",
+      "account": "palm",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A directly uses the official study plan for the student's exact catalog and model position, excludes passed courses, and notes prerequisite conditions without inventing sequences. It correctly identifies the next semester as Year 2 Semester 2 and lists the courses accordingly, matching the official reference. Answer B, while personalized and detailed, contains hallucinations such as incorrect course names (e.g., ITBP218 is Entrepreneurship and New Venture Creation, not Information Technology Ethics; ITBP270 is Professional Responsibility, not Database Systems; CSBP301 is Artificial Intelligence, not Computer Architecture; CSBP340 is Database Systems, not Software Engineering) and incorrect semester timing (refers to Spring 2027 instead of Fall 2025). It also invents a sequence not fully supported by the official plan and mislabels courses, thus reducing correctness and introducing hallucinations. Therefore, Answer A is better.",
+      "judgeUsage": {
+        "input_tokens": 2221,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 225,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 2446
+      }
+    },
+    {
+      "id": "POWER082",
+      "account": "palm",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B fully answers the question per the rubric by stating the recorded requirement, earned credits, in-progress credits, and amount not yet earned, including a breakdown by requirement blocks. Answer A correctly calculates completed and in-progress credits and the total required credits but does not state the amount not yet earned explicitly or break down the credits by requirement blocks, so it is less complete.",
+      "judgeUsage": {
+        "input_tokens": 1691,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 125,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1816
+      }
+    },
+    {
+      "id": "POWER091",
+      "account": "juniper",
+      "question": [
+        "What should I take next semester?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A provides specific course codes and a sequence that are not present in the official reference, constituting hallucination. It attempts to answer fully and uses the student's record, but invents details. Answer B correctly states that the official plan or sequence is missing and refuses to invent a sequence, aligning with the rubric instructions. It is correct, personalized, and does not hallucinate, though it is only partially complete as it does not suggest courses but appropriately defers to official sources. Therefore, B is better.",
+      "judgeUsage": {
+        "input_tokens": 791,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 153,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 944
+      }
+    },
+    {
+      "id": "POWER092",
+      "account": "juniper",
+      "question": [
+        "How many credits do I have left?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Both answers correctly state the required, earned, and not yet earned credits and break down the requirements similarly, fulfilling the rubric. However, Answer B includes a specific URL not present in the official reference, constituting hallucination. Answer A avoids hallucination and is equally complete and personalized, making it the better answer.",
+      "judgeUsage": {
+        "input_tokens": 723,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 114,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 837
+      }
+    },
+    {
+      "id": "POWER101",
+      "account": null,
+      "question": [
+        "What are the prerequisites for CSBP 219?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [
+          "CSBP118"
+        ],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly states the prerequisite as CSBP119 with a minimum grade of D, matching the official record exactly and fully answering the question. Answer A incorrectly states the prerequisite as CSBP118 or equivalent, which contradicts the official record, and does not fully answer the question.",
+      "judgeUsage": {
+        "input_tokens": 650,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 107,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 757
+      }
+    },
+    {
+      "id": "POWER102",
+      "account": null,
+      "question": [
+        "What are the prerequisites for CSBP219?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [
+          "CSBP111"
+        ],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly states the exact prerequisite course code CSBP119 with the minimum grade D as per the official reference, fully answering the question without adding or inventing information. Answer B incorrectly names the course as Data Structures and Algorithms and suggests CSBP111 as a prerequisite, which contradicts the official record, and includes a recommendation to check the catalog, which is unnecessary here. Therefore, Answer A is more accurate and complete.",
+      "judgeUsage": {
+        "input_tokens": 671,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 136,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 807
+      }
+    },
+    {
+      "id": "POWER103",
+      "account": null,
+      "question": [
+        "what are the prerequisits for csbp-219?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [
+          "CSBP111"
+        ],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly states the exact prerequisite course code CSBP119 with the minimum grade D as per the official reference, fully answering the question. Answer A does not provide the official prerequisite, instead giving a vague and incorrect suggestion, and recommends checking elsewhere, thus it is incomplete and incorrect.",
+      "judgeUsage": {
+        "input_tokens": 701,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 108,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 809
+      }
+    },
+    {
+      "id": "POWER104",
+      "account": null,
+      "question": [
+        "what is the pre requisite for csbp 219?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 0,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [
+          "CSBP111"
+        ],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly states the exact prerequisite course code (CSBP119) and the minimum grade (D) as per the official reference, fully answering the question. Answer B does not provide the specific prerequisite from the official record, instead speculating and advising to check the catalog, thus it is incomplete and less correct.",
+      "judgeUsage": {
+        "input_tokens": 719,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 114,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 833
+      }
+    },
+    {
+      "id": "POWER105",
+      "account": null,
+      "question": [
+        "What are the prerequisites for CSPB 219?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly identifies the intended course code CSBP219 and accurately states the prerequisite CSBP119 with a minimum grade D as per the official record. Answer A incorrectly treats CSPB219 as a biology course with unrelated prerequisites, inventing course details not in the reference, thus is incorrect and hallucinates.",
+      "judgeUsage": {
+        "input_tokens": 681,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 113,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 794
+      }
+    },
+    {
+      "id": "POWER106",
+      "account": null,
+      "question": [
+        "\u0647\u0644 \u0644\u0645\u0633\u0627\u0642 CSBP 219 \u0645\u062a\u0637\u0644\u0628\u0627\u062a \u0633\u0627\u0628\u0642\u0629\u061f"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A directly states the exact prerequisite course code CSBP119 with the minimum grade D as per the official reference, fully answering the question correctly and completely. Answer B is more general and does not specify the exact prerequisite, providing only general advice and thus is less complete and less correct.",
+      "judgeUsage": {
+        "input_tokens": 762,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 108,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 870
+      }
+    },
+    {
+      "id": "POWER107",
+      "account": null,
+      "question": [
+        "\u0634\u0648 \u0644\u0627\u0632\u0645 \u0623\u062e\u0644\u0635 \u0642\u0628\u0644 CSBP219\u061f"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [
+          "CSBP101",
+          "CSBP102"
+        ],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B correctly states the exact prerequisite course code CSBP119 with the minimum grade D as per the official reference, fully answering the question. Answer A is vague, does not specify the exact prerequisite course or minimum grade, and suggests general advice rather than the specific prerequisite, so it is less correct and incomplete.",
+      "judgeUsage": {
+        "input_tokens": 809,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 113,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 922
+      }
+    },
+    {
+      "id": "POWER108",
+      "account": null,
+      "question": [
+        "CSBP 219 corequisite?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A directly uses the official course record to state the prerequisite and explicitly confirms that there are no corequisites, fully answering the question as per the rubric. Answer B does not provide the corequisite information, instead giving general advice and speculation without referencing the official record, thus incomplete and less correct.",
+      "judgeUsage": {
+        "input_tokens": 760,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 110,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 870
+      }
+    },
+    {
+      "id": "POWER109",
+      "account": null,
+      "question": [
+        "Does CSBP219 have a corequisite?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Both answers correctly state that CSBP219 does not have a corequisite and mention the prerequisite CSBP119 with a minimum grade D, aligning with the official record. Answer B is more concise and directly answers the question without unnecessary speculation or advice, making it clearer and more complete per the rubric.",
+      "judgeUsage": {
+        "input_tokens": 675,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 110,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 785
+      }
+    },
+    {
+      "id": "POWER110",
+      "account": null,
+      "question": [
+        "Can I study CSBP-219 without CSBP119?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B directly and accurately states the prerequisite requirement as per the official catalog: CSBP119 with a minimum grade D is required before taking CSBP219. Answer A is cautious and suggests checking but does not explicitly confirm the prerequisite, thus less complete and less correct.",
+      "judgeUsage": {
+        "input_tokens": 935,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 104,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1039
+      }
+    },
+    {
+      "id": "POWER111",
+      "account": null,
+      "question": [
+        "\u0642\u0627\u0631\u0646 \u0645\u062a\u0637\u0644\u0628\u0627\u062a CSBP219 \u0648CSBP319"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [
+          "CSBP101",
+          "CSBP102"
+        ],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly and completely states the prerequisite requirements for both CSBP219 and CSBP319 as per the official reference, including minimum grades and co/prerequisite relations, without inventing any information. Answer B is vague, incorrect about course levels and prerequisites, and invents course codes not in the reference, thus hallucinating.",
+      "judgeUsage": {
+        "input_tokens": 1158,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 117,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1275
+      }
+    },
+    {
+      "id": "POWER112",
+      "account": null,
+      "question": [
+        "What is the difference between a prerequisite and a corequisite for CSBP219?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "general",
+      "reason": "Answer A fully explains the difference between prerequisite and corequisite in general terms and correctly states that the prerequisite must be completed before CSBP219, while corequisite must be taken simultaneously. It also advises checking the official catalog for specifics, which is appropriate. Answer B correctly states the prerequisite course and minimum grade but does not explain the difference between prerequisite and corequisite as requested by the question, making it less complete.",
+      "judgeUsage": {
+        "input_tokens": 799,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 133,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 932
+      }
+    },
+    {
+      "id": "POWER133",
+      "account": null,
+      "question": [
+        "List all undergraduate programs in the College of Engineering."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A fully lists all undergraduate programs in the College of Engineering as per the official reference, grouped by department, and links each program page, matching the rubric requirements. Answer B omits some programs (e.g., Communication Engineering, Aerospace Engineering), incorrectly includes Computer Engineering which is now under the College of Computing and Artificial Intelligence, and does not provide links. Therefore, A is more accurate, complete, and aligned with the rubric.",
+      "judgeUsage": {
+        "input_tokens": 893,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 137,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1030
+      }
+    },
+    {
+      "id": "POWER134",
+      "account": null,
+      "question": [
+        "List all graduate programs in the College of Engineering."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B fully lists the graduate programs in the College of Engineering as per the official reference, grouped by department with links to program pages, matching the rubric requirements. Answer A includes some incorrect programs (e.g., Master of Science in Computer Engineering, which is not listed in the reference and belongs to a different college), and is incomplete and less precise. Both answers use the student record context correctly (or the question is not personal), but A contains hallucinated program names not in the reference.",
+      "judgeUsage": {
+        "input_tokens": 1346,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 149,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1495
+      }
+    },
+    {
+      "id": "POWER135",
+      "account": null,
+      "question": [
+        "List all undergraduate programs in the College of Science."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly lists all undergraduate programs in the College of Science as per the official reference, grouped by department with links to program pages, fully meeting the rubric requirements. Answer B includes programs not listed in the official reference (Statistics, Environmental Science), which is a hallucination, and does not fully answer the question as per the rubric.",
+      "judgeUsage": {
+        "input_tokens": 880,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 118,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 998
+      }
+    },
+    {
+      "id": "POWER136",
+      "account": null,
+      "question": [
+        "List all graduate programs in the College of Science."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B fully lists all graduate programs in the College of Science as per the official reference, grouped by department with program names matching exactly, fulfilling the rubric requirements. Answer A provides an incomplete and partially inaccurate list without grouping or linking, and misses several programs and PhD specifics.",
+      "judgeUsage": {
+        "input_tokens": 1238,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 106,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1344
+      }
+    },
+    {
+      "id": "POWER137",
+      "account": null,
+      "question": [
+        "List all undergraduate programs in the College of Computing and Artificial Intelligence."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly lists all the undergraduate programs as per the official reference, grouped by department, and provides links to each program page, fully meeting the rubric requirements. Answer B incorrectly lists 'Bachelor of Science in Artificial Intelligence' and omits 'Information Technology' and 'Computer and Artificial Intelligence Engineering,' thus containing errors and incomplete information. It also lacks grouping and links, and introduces hallucinated program names not in the reference.",
+      "judgeUsage": {
+        "input_tokens": 792,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 135,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 927
+      }
+    },
+    {
+      "id": "POWER138",
+      "account": null,
+      "question": [
+        "List all graduate programs in the College of Computing and Artificial Intelligence."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B accurately lists all graduate programs as per the official reference, grouped by department, and includes links to program pages, fulfilling the rubric requirements. Answer A lists programs not present in the official reference and misses the correct program names, thus contains hallucinations and is incomplete.",
+      "judgeUsage": {
+        "input_tokens": 823,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 105,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 928
+      }
+    },
+    {
+      "id": "POWER139",
+      "account": null,
+      "question": [
+        "List all undergraduate programs in the College of Business and Economics."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A fully lists all undergraduate programs in the College of Business and Economics as per the official reference, grouped by department with links to each program page, matching the rubric requirements. Answer B provides a partial list and groups programs under a general BBA degree with some inaccuracies (e.g., Management Information Systems is not listed in the official reference), and lacks department grouping or links, thus less complete and contains hallucination.",
+      "judgeUsage": {
+        "input_tokens": 953,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 134,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1087
+      }
+    },
+    {
+      "id": "POWER140",
+      "account": null,
+      "question": [
+        "List all graduate programs in the College of Business and Economics."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly lists all graduate programs from the official directory, grouped by department, and provides links to each program page as required by the rubric. It does not include any unverified programs or minors. Answer B lists several programs not present in the official reference and misses the Doctorate and other listed programs, thus containing hallucinations and incomplete information. Therefore, Answer A is better.",
+      "judgeUsage": {
+        "input_tokens": 703,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 127,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 830
+      }
+    },
+    {
+      "id": "POWER141",
+      "account": null,
+      "question": [
+        "List all undergraduate programs in the College of Law."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer B fully meets the rubric by listing the verified undergraduate program, grouping by department (Public Law), and providing a link to the readable program page. Answer A is correct and personalized but less complete as it does not group by department or provide a link.",
+      "judgeUsage": {
+        "input_tokens": 530,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 102,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 632
+      }
+    },
+    {
+      "id": "POWER142",
+      "account": null,
+      "question": [
+        "List all graduate programs in the College of Law."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A correctly lists all graduate programs in the College of Law as per the official reference, groups them by department, and provides links to each program page, fully meeting the rubric requirements. Answer B introduces programs and specializations not present in the official reference, including 'Master of Laws (LL.M.)' and various specializations, which are hallucinated and incorrect. It also fails to list all verified programs and does not provide links, thus incomplete and incorrect.",
+      "judgeUsage": {
+        "input_tokens": 629,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 143,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 772
+      }
+    },
+    {
+      "id": "POWER153",
+      "account": null,
+      "question": [
+        "Which undergraduate programs are in CCAI?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A provides a detailed and accurate list of undergraduate programs in CCAI with official program names and links, fully aligning with the official reference. It also distinguishes public guidance by citing official sources. Answer B lists some programs but includes 'Bachelor of Science in Artificial Intelligence,' which is not mentioned in the official reference, and lacks citations or links. Both answers use the student record context appropriately, but A is more complete and precise.",
+      "judgeUsage": {
+        "input_tokens": 748,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 137,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 885
+      }
+    },
+    {
+      "id": "POWER154",
+      "account": null,
+      "question": [
+        "How do I apply to UAEU as an international undergraduate?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "general",
+      "reason": "Answer A provides a more complete and structured response covering all key steps of the application process, including document preparation, submission, decision, enrollment, visa, and accommodation, and it cites the official admissions portal. Answer B, while correct, is less complete as it omits some procedural details such as enrollment steps and visa/accommodation guidance, and it does not cite an official source explicitly. Both answers correctly use the general information without hallucination and personalize appropriately.",
+      "judgeUsage": {
+        "input_tokens": 953,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 142,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1095
+      }
+    },
+    {
+      "id": "POWER155",
+      "account": null,
+      "question": [
+        "What housing information is available for applicants?"
+      ],
+      "rag": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 0,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "general",
+      "reason": "Answer A provides specific procedural details and fees that are not supported or mentioned in the official reference, constituting hallucination and incorrectness. It also fails to cite any official source or distinguish public guidance from private access. Answer B gives a general but accurate overview of housing information, aligns with the rubric by citing the official UAE University website as the source, distinguishes public guidance, and advises contacting the university for missing details. Although it is general, it correctly answers the question without unsupported specifics.",
+      "judgeUsage": {
+        "input_tokens": 747,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 148,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 895
+      }
+    },
+    {
+      "id": "POWER156",
+      "account": null,
+      "question": [
+        "Where is the academic calendar?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "general",
+      "reason": "Answer A provides a more complete response by explaining where to find the academic calendar on the official UAE University website, distinguishes between public guidance and private access (student portal), and offers further assistance, aligning well with the rubric. Answer B gives a direct link but lacks explanation about public versus private access and does not invite further interaction or clarify missing applicant details, making it less complete.",
+      "judgeUsage": {
+        "input_tokens": 554,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 126,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 680
+      }
+    },
+    {
+      "id": "POWER157",
+      "account": null,
+      "question": [
+        "List all graduate programs in Engineering."
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": true,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 1,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A provides a detailed, fully accurate list of graduate programs in Engineering exactly matching the official reference, including program names and links, fulfilling the rubric's requirement for citing a relevant official source. It distinguishes public guidance by linking to official pages and implicitly invites further inquiry if needed. Answer B gives a partial and somewhat inaccurate list, including 'Computer Engineering' which is not listed under the College of Engineering graduate programs in the reference (it's under the College of Computing and Artificial Intelligence), thus hallucinating a program. It also lacks citation of an official source and does not fully list all programs, making it less complete and less correct.",
+      "judgeUsage": {
+        "input_tokens": 1327,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 176,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1503
+      }
+    },
+    {
+      "id": "POWER158",
+      "account": null,
+      "question": [
+        "What is the MSc in Information Technology Management curriculum?"
+      ],
+      "rag": {
+        "correct": 0,
+        "complete": 0,
+        "personalized": 0,
+        "hallucination": true,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 1,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": true,
+        "languageMatch": true
+      },
+      "winner": "general",
+      "reason": "Answer A provides a general but accurate description of a typical MSc in Information Technology Management curriculum, aligns with the rubric by citing the need to check the official UAE University source, and does not contradict the reference. Answer B provides specific course codes and credit hours not found in the official reference, which is considered hallucination and thus incorrect and incomplete. Therefore, A is better.",
+      "judgeUsage": {
+        "input_tokens": 692,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 125,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 817
+      }
+    },
+    {
+      "id": "POWER159",
+      "account": null,
+      "question": [
+        "What are the general graduate admission requirements?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 1,
+        "personalized": 0,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Answer A provides specific, detailed admission requirements including GPA thresholds, English proficiency scores, and required documents, which aligns well with the rubric's demand for public university service and relevant official guidance. It also distinguishes between master's and PhD requirements and mentions conditional admission criteria. Answer B, while generally correct and comprehensive, is more generic and lacks citation of an official source or distinction between public guidance and private access. It also does not request missing applicant details as explicitly as A does.",
+      "judgeUsage": {
+        "input_tokens": 863,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 145,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 1008
+      }
+    },
+    {
+      "id": "POWER160",
+      "account": null,
+      "question": [
+        "Who can help me with a graduate application?"
+      ],
+      "rag": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "general": {
+        "correct": 2,
+        "complete": 2,
+        "personalized": 1,
+        "hallucination": false,
+        "officialLink": false,
+        "unknownCourseCodes": [],
+        "outdatedName": false,
+        "languageMatch": true
+      },
+      "winner": "rag",
+      "reason": "Both answers correctly identify sources of help for graduate applications and provide accurate information without hallucinations. However, Answer A directly cites a specific official source (College of Graduate Studies contact details and online application page), fulfilling the rubric's requirement to cite a relevant official readable source. Answer B provides general guidance and multiple options but lacks specific official contact details or citations. Both answers distinguish public guidance from private access and offer to assist further, but Answer A is more precise and aligned with the rubric.",
+      "judgeUsage": {
+        "input_tokens": 641,
+        "input_tokens_details": {
+          "cache_write_tokens": 0,
+          "cache_write_tokens_details": {
+            "ttl_12h_tokens": 0,
+            "ttl_30m_tokens": 0
+          },
+          "cached_tokens": 0
+        },
+        "output_tokens": 147,
+        "output_tokens_details": {
+          "reasoning_tokens": 0
+        },
+        "total_tokens": 788
+      }
+    }
+  ],
+  "finishedAt": "2026-11-17T16:43:31.942Z",
+  "deterministicNote": "Unknown course codes count only tokens whose prefix is a real UAEU subject prefix and that are not in the UAEU course identity list."
+}

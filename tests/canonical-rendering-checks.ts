@@ -24,6 +24,9 @@ let recoverySelected: unknown;
 let selectorUnavailable = false;
 let recoveryRequest: { request: string; candidates: { id: string; answer: string }[] } | undefined;
 globalThis.fetch = async (input, init) => {
+  // Corpus query embeddings (knowledge expansion) are not selector calls; the
+  // hybrid search falls back to lexical ranking when they are unavailable.
+  if (String(input).endsWith("/v1/embeddings")) throw new Error("Embeddings are unavailable in this test");
   calls++;
   assert.equal(String(input), "https://api.openai.com/v1/responses");
   const request = JSON.parse(String(init?.body));
@@ -82,6 +85,12 @@ async function main() {
     assert.equal(response.status, 200);
     return response.json();
   };
+  await check("generic prerequisite terminology cannot borrow a course-specific policy", () => {
+    const question = "Explain the difference between a prerequisite and a corequisite using a simple hypothetical example.";
+    selected = route({ resolvedQuery: question, primaryRecordIds: ["course-prerequisites-data-structures"], targetCourseCodes: [] });
+    assert.equal(matchFaq(question), null);
+    assert.deepEqual(canonicalEntriesForSemanticRoute(selected as SemanticRoute), []);
+  });
   await check("English canonical body is byte-faithful with honest record provenance", async () => {
     selected = route({ recordIds: ["academic-advisor-contact"] });
     const payload = await ask("How do I check a blocking hold before trying to enroll?");
@@ -214,7 +223,8 @@ async function main() {
     assert.doesNotMatch(payload.content, /could not verify|missing official evidence/i);
     assert.deepEqual(payload.citations, []);
   });
-  assert.equal(calls, 31);
+  // Two academic probes now search the official corpus before the selector.
+  assert.equal(calls, 29);
   console.log(`${passed} canonical selection/rendering checks passed; ${calls} intercepted selector calls, no network and no factual writer calls.`);
 }
 main().catch((error) => { console.error(error); process.exitCode = 1; }).finally(() => { globalThis.fetch = originalFetch; });

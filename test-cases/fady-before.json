@@ -1,0 +1,283 @@
+{
+  "base": "http://127.0.0.1:3012",
+  "ranAt": "2026-11-18T09:55:25.242Z",
+  "results": [
+    {
+      "id": "FADY01",
+      "turns": [
+        {
+          "question": "How should I plan my bachelor?",
+          "status": 200,
+          "answer": "**What a course planner can calculate and what must be verified**\n- From an approved course and program record, the assistant can check published **prerequisites and corequisites**, calculate the credits in a specified model plan, and show which published requirement each course is intended to satisfy.\n- It cannot infer that two courses are academically light or heavy from their titles, confirm section availability, or certify that you personally may register. Those conclusions require the applicable program and catalog year, your completed and in-progress courses and grades, the official degree audit, and current registration data.\n- A **120-credit** target is therefore a planning constraint, not a graduation guarantee. Provide your program, cohort/catalog year, completed courses and grades, and preferred load; the result should be labelled a conditional plan until the official audit and portal confirm it.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU Catalog — CSBP319 Data Structures",
+              "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+              "lastVerified": "2026-11-16"
+            },
+            {
+              "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+              "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY02",
+      "turns": [
+        {
+          "question": "How to raise ceiling?",
+          "status": 200,
+          "answer": "**Undergraduate credit load — excluding Medicine and Health Sciences**\n- Regular-semester normal load: **12–19 credits**. Academic probation maximum: **13**.\n- After completing Foundation and with good academic standing, up to **22 credits** is permitted under either published route: **22 or fewer credits remain for the degree**, or **at least 36 credits earned with CGPA 3.6 or above**.\n- **In other circumstances**, more than 19 credits requires the **Dean or Assistant Dean of the student's college**. The two qualifying routes above are distinct from this exception-approval route.\n- Below 12 credits requires an exception: fewer than 12 remain, Foundation/proficiency requirements are unfinished, or Dean/Assistant Dean approval in another circumstance.\n- Summer standard maximum **6**, honors/expected graduates up to **9**, probation up to **4**. These published undergraduate rules are not a graduate-program limit.\n- The cited policy is effective 12 August 2018 and lists its next review as due 1 September 2021. I have not verified whether it has been superseded; confirm the current rule with your college before relying on it for an individual decision.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU Undergraduate Registration and Enrollment Policy",
+              "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY03",
+      "turns": [
+        {
+          "question": "How can I view the list of courses offered for the upcoming summer term?",
+          "status": 200,
+          "answer": "**Modeling a stale course-offering constraint**\n- Preserve **Spring 2028** as the student’s target, but treat the old Fall-only statement as stale or unconfirmed until a current catalog, timetable, or department source verifies the offering.\n- Compute the prerequisite sequence and show the earliest feasible placement; then model an alternative only if an official equivalent or alternate term is published.\n- Label the result as a risk and do not promise Spring 2028. If current offering data is unavailable, say that the target cannot be certified and route the student to the department or advising unit for confirmation.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+              "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        },
+        {
+          "question": "Bachelor of Science in Computer Science",
+          "status": 200,
+          "answer": "The official program finder labels the college College of Information Technology(CIT) and lists five full undergraduate Bachelor of Science degrees: Computer and Artificial Intelligence Engineering; Computer Science; Data Science and Artificial Intelligence; Information Security; Information Technology. Minors and micro-credentials are separate qualifications and are excluded from this degree-only list. Use the college label printed in this source when attributing this list; do not claim that this XML itself calls the college Computing and Artificial Intelligence. A catalog listing does not guarantee that an intake is open or establish personal admission eligibility.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [],
+          "model": "gpt-4.1-mini"
+        },
+        {
+          "question": "How can I view the list of courses offered for the upcoming summer term?",
+          "status": 200,
+          "answer": "**Conditional Computer Science plan**\n- A useful plan must identify the Computer Science catalog/cohort, compare your unofficial completed-course list against the published requirements, evaluate each prerequisite/corequisite, and keep each term at or below 15 credits.\n- The result can explain remaining requirements and prerequisite order, but it remains a **conditional plan** until the official degree audit, completed-course grades, transfer decisions, and current section availability are confirmed.\n- I cannot claim an official graduation date from an unofficial list or a model plan; show the missing program, catalog year, course list and grades so the plan can be computed with those limits.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+              "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Catalog — CSBP319 Data Structures",
+              "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+              "lastVerified": "2026-11-16"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY04",
+      "turns": [
+        {
+          "question": "How do I know which courses I should register for next semester?",
+          "status": 200,
+          "answer": "What is your UAEU program?",
+          "source": "conversation",
+          "stateLabel": "academic_planning",
+          "citations": []
+        },
+        {
+          "question": "Bachelor of Science in Computer Science",
+          "status": 200,
+          "answer": "Which year and semester of your study plan are you in now?",
+          "source": "conversation",
+          "stateLabel": "academic_planning",
+          "citations": []
+        },
+        {
+          "question": "Bachelor of Science in Computer Science",
+          "status": 200,
+          "answer": "Which year and semester of your study plan are you in now?",
+          "source": "conversation",
+          "stateLabel": "academic_planning",
+          "citations": []
+        }
+      ]
+    },
+    {
+      "id": "FADY05",
+      "turns": [
+        {
+          "question": "How to add a course?",
+          "status": 200,
+          "answer": "**Add or drop a course**\n- To add: in **Student Registration → Register for Classes**, choose the term, then **Plans → View Sections → Add → Submit**. Verify **Registered**; Add alone leaves the choice pending. The Degree Works plan must be Active & Locked and registration restrictions must be cleared.\n- To drop an existing section, use its **Action → Drop-Web → Submit**, then verify the change in your schedule. Do not stop attending while still registered.\n- **Fall 2026:** add/drop started 17 August; last add **28 August**; last withdraw/drop without failure **18 September**. **Spring 2027:** corresponding dates **4 January**, **15 January**, **5 February**. Dates apply only to the named term; adding and dropping have different deadlines.\n- A withdrawal request and any refund are separately subject to the applicable withdrawal rules and submission date.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU Academic Calendar",
+              "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Course Registration Service Guide",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Withdrawal Deadlines and Financial Obligations",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY06",
+      "turns": [
+        {
+          "question": "How to request a closed section override?",
+          "status": 200,
+          "answer": "**Full course section**\n- The official registration guide names **CLOSED SECTION override** as a request you may make when a section has no seats. This is a request, not a guaranteed place; otherwise select an available course/section that fits.\n- Give the offering college the course/section, alternatives and study-plan or graduation impact so it can assess the request. The published undergraduate policy gives colleges responsibility for section enrollment ceilings and excludes Medicine and Health Sciences.\n- An advisor message or pending selection is not enrollment. Complete **Submit** and verify **Registered** in the official registration screen.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU Undergraduate Registration and Enrollment Policy",
+              "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Course Registration Service Guide",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY07",
+      "turns": [
+        {
+          "question": "How do I calculate my GPA?",
+          "status": 200,
+          "answer": "**GPA and grading scale**\n- UAEU's undergraduate scale is: **A 90–100 = 4.0; A- 87–89 = 3.7; B+ 84–86 = 3.3; B 80–83 = 3.0; B- 77–79 = 2.7; C+ 74–76 = 2.3; C 70–73 = 2.0; C- 67–69 = 1.7; D+ 64–66 = 1.3; D 60–63 = 1.0; F 0–59 = 0.0**.\n- GPA equals the sum of each graded course's **credit hours × quality points**, divided by the attempted credit hours counted in the GPA, and is reported to two decimal places. UAEU calculates both term and cumulative GPA.\n- Transfer and non-degree credits are excluded; special grades and repeated courses follow separate rules. Use the portal for your official personal GPA. The cited scale excludes the College of Medicine and Health Sciences.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU Grades and Grading Policy",
+              "url": "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY08",
+      "turns": [
+        {
+          "question": "What are the university's working hours?",
+          "status": 200,
+          "answer": "UAEU's general Contact page (the university's general contact point) publishes these working hours: Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. Individual colleges, clinics or libraries may publish their own separate hours.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "Contact Us",
+              "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+              "lastVerified": "2026-11-04"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY09",
+      "turns": [
+        {
+          "question": "How to drop out of the uni?",
+          "status": 200,
+          "answer": "**Course withdrawal, dropping and fees**\n- A course can be dropped in the registration screen using **Action → Drop-Web → Submit** within its allowed period. A formal request to withdraw from a course or university, or suspend registration, is submitted through **eServices** under Student Accounts' published procedure. Verify completion; stopping attendance is not a submitted request.\n- Do not assume that every single-course withdrawal after add/drop produces W. AE03's weeks 4–6 W rule concerns **full university withdrawal/leave and all classes**, not a universal single-course rule. Its general undergraduate scope excludes Medicine and Health Sciences.\n- The calendar's last withdraw/drop-without-failure date is **18 September 2026** for Fall and **5 February 2027** for Spring. Deadlines are term-specific.\n- For **Fall 2026 full-semester courses**, requests from **24 August–18 September** qualify for the published 100% refund; after that date full tuition remains due. Monthly/quarterly courses have different schedules, and refunds require completion of the stated clearance.",
+          "source": "faq",
+          "stateLabel": "canonical_semantic_answer",
+          "citations": [
+            {
+              "title": "UAEU Academic Calendar",
+              "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Withdrawal Deadlines and Financial Obligations",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/refunds.shtml",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Course Registration Service Guide",
+              "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/pdf/course-registration-service.pdf",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Undergraduate Registration and Enrollment Procedure",
+              "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+              "lastVerified": "2026-09-29"
+            }
+          ],
+          "model": "gpt-4.1-mini"
+        }
+      ]
+    },
+    {
+      "id": "FADY10",
+      "turns": [
+        {
+          "question": "How to apply for graduation?",
+          "status": 200,
+          "answer": "**Apply for undergraduate graduation**\nThe cited procedure is for undergraduates outside the College of Medicine and Health Sciences; it does not establish medical or postgraduate graduation rules.\n- AE-06 requires submitting the degree application to your **College Advising Unit and the Admission and Registration Deanship by the term's last day to drop without failure**. The calendar labels that day **18 September 2026 for Fall** and **5 February 2027 for Spring**. **Combining this procedure with those calendar dates** gives the scoped application deadlines; the calendar does not separately label them as graduation-application dates.\n- Before submission, review your degree requirements and expected-completion term. Keep a copy or acknowledgment of the application from the receiving office. For a submitted application's status, ask the College Advising Unit or Admission and Registration with your request reference; the published procedure does not establish a specific private tracking screen.\n- The college confirms requirements and Registration certifies the award; an application alone is not graduation approval, and this assistant cannot see your personal application record.\n\n**Policy currency:** The cited policy took effect 12 August 2018 and lists its next review as due 1 September 2021. I have not verified whether a later policy supersedes it; confirm the current rule with your College Advising Unit before relying on this for an individual decision.",
+          "source": "faq",
+          "stateLabel": "verified_answer",
+          "citations": [
+            {
+              "title": "UAEU Degree Completion and Graduation Procedures",
+              "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",
+              "lastVerified": "2026-09-29"
+            },
+            {
+              "title": "UAEU Academic Calendar",
+              "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+              "lastVerified": "2026-09-29"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

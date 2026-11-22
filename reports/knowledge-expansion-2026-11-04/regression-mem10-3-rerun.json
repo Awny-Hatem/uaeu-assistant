@@ -1,0 +1,2998 @@
+{
+  "startedAt": "2026-11-07T11:37:37.305Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "regression-mem10-3-rerun",
+  "fixture": "reports/knowledge-expansion-2026-11-04/regression-mem9-3-fixture.json",
+  "fixtureSha256": "7e6e0638522a2284df2dc19d07aacb2351aedd596ae6e6e06f3d413eea6d094b",
+  "methodology": "One shared 2.3-second request-start limiter, at most3 in flight. Original195 plus329 new scenarios; all alternate phrasings. Automated official-source rubric, then semantic review. Candidate71k snapshot, not full crawl completion.",
+  "results": [
+    {
+      "id": "KE019-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 6 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/creditbearing-microcredential-in-environmental-risk-and-impact-assessment.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)6(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment at UAEU: total credit hours?",
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment في جامعة الإمارات؟",
+        "Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 6 hours",
+      "sourceBodySha256": "b5d39ca712a618edf8695f21df44c6e5d5f08293277295cbac94cfe00f3f9ee6",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE019",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment at uaeu",
+          "status": 200,
+          "seconds": 2.919,
+          "payload": {
+            "role": "assistant",
+            "content": "The Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment at UAEU requires a minimum of 6 credit hours to complete.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/creditbearing-microcredential-in-environmental-risk-and-impact-assessment.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment > Degree Requirements > Required Credit Hours : minimum 6 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:6319e9b928d0e7906459:9#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Credit-Bearing Micro-Credential in Environmental Risk and Impact Assessment at UAEU requires a minimum of 6 credit hours to complete.",
+                "evidenceIds": [
+                  "corpus:6319e9b928d0e7906459:9#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2913,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 24,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4704,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 54,
+                  "estimatedUsd": 0.0013920000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1391,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000606
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6119,
+              "outputTokens": 85,
+              "knownUsageUsd": 0.0019984800000000004,
+              "estimatedUsd": 0.0019984800000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)6(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE148",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Bachelor of Science in the Mathematics of Data Science?"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟",
+        "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "4808d9686f90fbb7cdbcd97420481aa887efdec68a7aa8775365febcbee70412",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE148",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Bachelor of Science in the Mathematics of Data Science?",
+          "status": 502,
+          "seconds": 5.023,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 5018,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 24,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6354,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 52,
+                  "estimatedUsd": 0.0020488000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6908,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 57,
+                  "estimatedUsd": 0.0022783999999999994
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6913,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.0022787999999999997
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 20199,
+              "outputTokens": 165,
+              "knownUsageUsd": 0.00660648,
+              "estimatedUsd": 0.00660648,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "published credit total"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE148-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟",
+        "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "4808d9686f90fbb7cdbcd97420481aa887efdec68a7aa8775365febcbee70412",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE148",
+      "conversation": [
+        {
+          "user": "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?",
+          "status": 502,
+          "seconds": 4.703,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 4698,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 17,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.4000000000000003e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6383,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 52,
+                  "estimatedUsd": 0.0020604
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6930,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 52,
+                  "estimatedUsd": 0.0022792
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6930,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 52,
+                  "estimatedUsd": 0.0022792
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 20260,
+              "outputTokens": 156,
+              "knownUsageUsd": 0.006619140000000001,
+              "estimatedUsd": 0.006619140000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "published credit total"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE148-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟",
+        "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "4808d9686f90fbb7cdbcd97420481aa887efdec68a7aa8775365febcbee70412",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE148",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu",
+          "status": 200,
+          "seconds": 5.517,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in the Mathematics of Data Science at UAEU requires a minimum of 120 credit hours to graduate.\n\nThe Bachelor of Science in Mathematics at UAEU also requires a minimum of 120 credit hours to graduate.\n\nIn the Bachelor of Science in Mathematics program, you also need to complete 21 credit hours of general education requirements.\n\nThe Bachelor of Science in the Mathematics of Data Science program includes 21 credit hours of general education courses as part of its degree requirements.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Mathematics",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mathematics.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in Mathematics > Degree Requirements > Required Credit Hours : minimum 120 hours"
+              },
+              {
+                "title": "Bachelor of Science in the Mathematics of Data Science",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in the Mathematics of Data Science > Degree Requirements > Required Credit Hours : minimum 120 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:0c496b616ed073b9da64:6#E1S1",
+              "corpus:80f351c86999abd2b448:6#E2S1",
+              "corpus:80f351c86999abd2b448:7#E7S1",
+              "corpus:0c496b616ed073b9da64:7#E8S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in the Mathematics of Data Science at UAEU requires a minimum of 120 credit hours to graduate.",
+                "evidenceIds": [
+                  "corpus:80f351c86999abd2b448:6#E2S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Mathematics at UAEU also requires a minimum of 120 credit hours to graduate.",
+                "evidenceIds": [
+                  "corpus:0c496b616ed073b9da64:6#E1S1"
+                ]
+              },
+              {
+                "text": "In the Bachelor of Science in Mathematics program, you also need to complete 21 credit hours of general education requirements.",
+                "evidenceIds": [
+                  "corpus:0c496b616ed073b9da64:7#E8S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in the Mathematics of Data Science program includes 21 credit hours of general education courses as part of its degree requirements.",
+                "evidenceIds": [
+                  "corpus:80f351c86999abd2b448:7#E7S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 2,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5506,
+              "attemptedCalls": 8,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 21,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6513,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 50,
+                  "estimatedUsd": 0.0021092
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7063,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 50,
+                  "estimatedUsd": 0.0029052
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7063,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 157,
+                  "estimatedUsd": 0.0025004000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1446,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000628
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1359,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005932
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1449,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006292
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1336,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000584
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26250,
+              "outputTokens": 381,
+              "knownUsageUsd": 0.00994962,
+              "estimatedUsd": 0.00994962,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE148-V3",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟",
+        "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "4808d9686f90fbb7cdbcd97420481aa887efdec68a7aa8775365febcbee70412",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE148",
+      "conversation": [
+        {
+          "user": "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟",
+          "status": 502,
+          "seconds": 5.154,
+          "payload": {
+            "role": "assistant",
+            "content": "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة أو مراجعة مصدر الجامعة الرسمي مباشرة.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 5149,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 42,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 8.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6481,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.0021108000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7039,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.0023340000000000006
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7039,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.0029100000000000003
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 20601,
+              "outputTokens": 177,
+              "knownUsageUsd": 0.007355640000000001,
+              "estimatedUsd": 0.007355640000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "published credit total"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE148-V4",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Science in the Mathematics of Data Science at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Science in the Mathematics of Data Science at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in the Mathematics of Data Science في جامعة الإمارات؟",
+        "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "4808d9686f90fbb7cdbcd97420481aa887efdec68a7aa8775365febcbee70412",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE148",
+      "conversation": [
+        {
+          "user": "Bachelor of Science in the Mathematics of Data Science UAEU crdit hours plz?",
+          "status": 502,
+          "seconds": 4.398,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 4392,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 16,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6451,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 50,
+                  "estimatedUsd": 0.0020844
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6995,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.002334
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7015,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.0028812
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 20477,
+              "outputTokens": 167,
+              "knownUsageUsd": 0.00729992,
+              "estimatedUsd": 0.00729992,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "published credit total"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE157-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 6 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/creditbearing-microcredential-in-sustainable-resource-management-in-the-built-environment.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)6(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment at UAEU: total credit hours?",
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment في جامعة الإمارات؟",
+        "Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 6 hours",
+      "sourceBodySha256": "5078f1a4205f801779c60d4234c9ab07ddf4393e1dd4ef8eb4e0c272504770af",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE157",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment at uaeu",
+          "status": 200,
+          "seconds": 2.968,
+          "payload": {
+            "role": "assistant",
+            "content": "You need to complete a minimum of 6 credit hours to earn the Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment at UAEU.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/creditbearing-microcredential-in-sustainable-resource-management-in-the-built-environment.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment > Degree Requirements > Required Credit Hours : minimum 6 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:9297e28d9485feccfeb0:9#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You need to complete a minimum of 6 credit hours to earn the Credit-Bearing Micro-Credential in Sustainable Resource Management in the Built Environment at UAEU.",
+                "evidenceIds": [
+                  "corpus:9297e28d9485feccfeb0:9#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2960,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 26,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4783,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.0014316
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1408,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006128
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6217,
+              "outputTokens": 90,
+              "knownUsageUsd": 0.00204492,
+              "estimatedUsd": 0.00204492,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)6(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE254-V3",
+      "category": "admissions-money",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "ما درجة IELTS ومدة صلاحية الاختبار المذكورتان للقبول في دكتوراه تدرس بالإنجليزية؟"
+      ],
+      "expected": "IELTS Academic6.5 or equivalent, less than2years old; stated exemptions may apply.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "IELTS",
+          "any": [
+            "6\\.5"
+          ]
+        },
+        {
+          "name": "age",
+          "any": [
+            "two years",
+            "2 years",
+            "(?:أقل|اقل) من (?:سنتين|عامين)",
+            "يتجاوز.{0,25}(?:سنتين|عامين)"
+          ]
+        }
+      ],
+      "variants": [
+        "Please tell me what IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?",
+        "What IELTS score and test-age limit does the United Arab Emirates University PhD admissions page state for English instruction?",
+        "ما درجة IELTS ومدة صلاحية الاختبار المذكورتان للقبول في دكتوراه تدرس بالإنجليزية؟",
+        "What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": " recognized by the uae ministry of education, with a minimum cumulative gpa of 2.5 on a 4.0 scale or its equivalent. 3. a score of 6.5 or higher on the ielts academic exam or equivalent, for all disciplines in which the main language of instruction is english or the dissertation must be written in english. this test score must be less than two years old at the time of app",
+      "sourceBodySha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE254",
+      "conversation": [
+        {
+          "user": "ما درجة IELTS ومدة صلاحية الاختبار المذكورتان للقبول في دكتوراه تدرس بالإنجليزية؟",
+          "status": 200,
+          "seconds": 4.726,
+          "payload": {
+            "role": "assistant",
+            "content": "للقبول في برنامج دكتوراه يُدرس باللغة الإنجليزية في جامعة الإمارات، الحد الأدنى لدرجة IELTS الأكاديمية هو 6.5، ويجب أن يكون اختبار اللغة صالحًا لمدة أقل من سنتين عند تقديم الطلب.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU College of Graduate Studies Admission",
+                "url": "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Page footer 2026-09-24",
+                "sourceSection": "Masters requirements and conditional admission; PhD requirements and Required Documents for PhD programs",
+                "evidenceText": "Graduate application and requirements\n- Apply through the official online link on the College of Graduate Studies admission page after choosing the degree and program. Program standards can be higher; meeting minimums does not guarantee admission.\n- For a predominantly English-taught master's, the general baseline is a related accredited bachelor's degree, GPA 3.0/4.0 and IELTS Academic 6.0. IELTS 5.5 is a conditional route, not automatic eligibility: reach 6.0 by the end of the first semester, take at most 6 credit hours initially (excluding intensive English), and earn GPA 3.0 in the first 9 credit-bearing hours. Separate conditional GPA routes exist from 2.5; Arabic-taught master's programs list IELTS 4.0.\n- General PhD minimums are master's GPA 3.0, bachelor's GPA 2.5, and IELTS 6.5 for English-medium study/English dissertation; Arabic-medium PhD lists IELTS 5.0. Language-test exemptions and additional college requirements may apply.\n- PhD document checklist: certified bachelor's and master's degree certificates and transcripts; Ministry of Education equivalency/certificate recognition for the previous degree as required; English proficiency certificate; Arabic proficiency certificate for Arabic-medium PhD; two recommendation letters; CV; valid passport for all applicants, plus Emirates ID for UAE residents and family book for UAE nationals; and a personal photo. Passport and ID are not interchangeable alternatives.\nFor English-medium PhD study or an English dissertation, IELTS Academic6.5 or equivalent is required and the test score must be less than two years old at application. The page states two exception routes: a native English speaker with a master’s from an English-medium institution in a country where English is official; or an English-medium master’s graduate with evidence of IELTS Academic6.0 or equivalent at admission to that master’s. Individual colleges may impose additional or higher standards.",
+                "sourceSha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "admissions",
+            "evidenceIds": [
+              "answer:admissions-graduate-application#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "للقبول في برنامج دكتوراه يُدرس باللغة الإنجليزية في جامعة الإمارات، الحد الأدنى لدرجة IELTS الأكاديمية هو 6.5، ويجب أن يكون اختبار اللغة صالحًا لمدة أقل من سنتين عند تقديم الطلب.",
+                "evidenceIds": [
+                  "answer:admissions-graduate-application#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4716,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23114,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 118,
+                  "estimatedUsd": 0.009434399999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3887,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 73,
+                  "estimatedUsd": 0.0016716
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1703,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007308000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 28704,
+              "outputTokens": 222,
+              "knownUsageUsd": 0.0118368,
+              "estimatedUsd": 0.0118368,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "IELTS",
+            "passed": true,
+            "patterns": [
+              "6\\.5"
+            ]
+          },
+          {
+            "name": "age",
+            "passed": true,
+            "patterns": [
+              "two years",
+              "2 years",
+              "(?:أقل|اقل) من (?:سنتين|عامين)",
+              "يتجاوز.{0,25}(?:سنتين|عامين)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE260",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks?"
+      ],
+      "expected": "The student is responsible for those other costs; tuition arrangement follows the partner agreement.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "student",
+          "any": [
+            "student",
+            "يتحمل الطالب"
+          ]
+        },
+        {
+          "name": "housing",
+          "any": [
+            "accommodation|housing",
+            "السكن"
+          ]
+        },
+        {
+          "name": "insurance",
+          "any": [
+            "insurance",
+            "التأمين",
+            "التامين"
+          ]
+        },
+        {
+          "name": "books",
+          "any": [
+            "textbooks|books",
+            "الكتب"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, for outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks?",
+        "For outgoing United Arab Emirates University exchange, who pays for travel, housing, insurance and textbooks?",
+        "في التبادل الخارجي، من يدفع تكاليف السفر والسكن والتأمين والكتب؟",
+        "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodation, insurance, and textbooks. discover more may 6, 2026",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE260",
+      "conversation": [
+        {
+          "user": "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks?",
+          "status": 200,
+          "seconds": 4.492,
+          "payload": {
+            "role": "assistant",
+            "content": "For outgoing UAEU exchange students, the student is responsible for all costs including transportation, accommodation, insurance, and textbooks, while tuition fee arrangements depend on the agreement with the partner university.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Outgoing Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Outgoing Students"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "housing",
+            "evidenceIds": [
+              "corpus:4dea5fbfc2de699966e9:1#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For outgoing UAEU exchange students, the student is responsible for all costs including transportation, accommodation, insurance, and textbooks, while tuition fee arrangements depend on the agreement with the partner university.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:1#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4482,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23098,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 71,
+                  "estimatedUsd": 0.0024792000000000004
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 17,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.4000000000000003e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4991,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 63,
+                  "estimatedUsd": 0.0015212000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1391,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000606
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 29497,
+              "outputTokens": 165,
+              "knownUsageUsd": 0.004606740000000001,
+              "estimatedUsd": 0.004606740000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "student",
+            "passed": true,
+            "patterns": [
+              "student",
+              "يتحمل الطالب"
+            ]
+          },
+          {
+            "name": "housing",
+            "passed": true,
+            "patterns": [
+              "accommodation|housing",
+              "السكن"
+            ]
+          },
+          {
+            "name": "insurance",
+            "passed": true,
+            "patterns": [
+              "insurance",
+              "التأمين",
+              "التامين"
+            ]
+          },
+          {
+            "name": "books",
+            "passed": true,
+            "patterns": [
+              "textbooks|books",
+              "الكتب"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE260-V3",
+      "category": "admissions-money",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "في التبادل الخارجي، من يدفع تكاليف السفر والسكن والتأمين والكتب؟"
+      ],
+      "expected": "The student is responsible for those other costs; tuition arrangement follows the partner agreement.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "student",
+          "any": [
+            "student",
+            "يتحمل الطالب"
+          ]
+        },
+        {
+          "name": "housing",
+          "any": [
+            "accommodation|housing",
+            "السكن"
+          ]
+        },
+        {
+          "name": "insurance",
+          "any": [
+            "insurance",
+            "التأمين",
+            "التامين"
+          ]
+        },
+        {
+          "name": "books",
+          "any": [
+            "textbooks|books",
+            "الكتب"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, for outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks?",
+        "For outgoing United Arab Emirates University exchange, who pays for travel, housing, insurance and textbooks?",
+        "في التبادل الخارجي، من يدفع تكاليف السفر والسكن والتأمين والكتب؟",
+        "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodation, insurance, and textbooks. discover more may 6, 2026",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE260",
+      "conversation": [
+        {
+          "user": "في التبادل الخارجي، من يدفع تكاليف السفر والسكن والتأمين والكتب؟",
+          "status": 200,
+          "seconds": 4.283,
+          "payload": {
+            "role": "assistant",
+            "content": "في التبادل الخارجي، يتحمل الطالب تكاليف السفر والسكن والتأمين والكتب، بينما يتم تحديد ترتيبات الرسوم الدراسية بناءً على اتفاقية الشراكة مع المؤسسة المضيفة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Student Exchange Unit",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Outgoing Students",
+                "evidenceText": "A UAEU undergraduate wishing to study for up to two semesters at a partner institution applies through the college coordinator for student exchange. The partner agreement determines tuition arrangements; the student bears transportation, accommodation, insurance and textbook costs."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "housing",
+            "evidenceIds": [
+              "answer:student-exchange-outgoing#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "في التبادل الخارجي، يتحمل الطالب تكاليف السفر والسكن والتأمين والكتب، بينما يتم تحديد ترتيبات الرسوم الدراسية بناءً على اتفاقية الشراكة مع المؤسسة المضيفة.",
+                "evidenceIds": [
+                  "answer:student-exchange-outgoing#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4272,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23106,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 105,
+                  "estimatedUsd": 0.0025368
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3299,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.0008556
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1343,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005868000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 27748,
+              "outputTokens": 206,
+              "knownUsageUsd": 0.0039792000000000004,
+              "estimatedUsd": 0.0039792000000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "student",
+            "passed": true,
+            "patterns": [
+              "student",
+              "يتحمل الطالب"
+            ]
+          },
+          {
+            "name": "housing",
+            "passed": true,
+            "patterns": [
+              "accommodation|housing",
+              "السكن"
+            ]
+          },
+          {
+            "name": "insurance",
+            "passed": true,
+            "patterns": [
+              "insurance",
+              "التأمين",
+              "التامين"
+            ]
+          },
+          {
+            "name": "books",
+            "passed": true,
+            "patterns": [
+              "textbooks|books",
+              "الكتب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE260-V4",
+      "category": "admissions-money",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks? Please keep the answer focused on this question."
+      ],
+      "expected": "The student is responsible for those other costs; tuition arrangement follows the partner agreement.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "student",
+          "any": [
+            "student",
+            "يتحمل الطالب"
+          ]
+        },
+        {
+          "name": "housing",
+          "any": [
+            "accommodation|housing",
+            "السكن"
+          ]
+        },
+        {
+          "name": "insurance",
+          "any": [
+            "insurance",
+            "التأمين",
+            "التامين"
+          ]
+        },
+        {
+          "name": "books",
+          "any": [
+            "textbooks|books",
+            "الكتب"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, for outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks?",
+        "For outgoing United Arab Emirates University exchange, who pays for travel, housing, insurance and textbooks?",
+        "في التبادل الخارجي، من يدفع تكاليف السفر والسكن والتأمين والكتب؟",
+        "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "the tuition fee arrangement is determined according to the terms outlined in the agreement with the partner university. the student is responsible for all other costs, including transportation, accommodation, insurance, and textbooks. discover more may 6, 2026",
+      "sourceBodySha256": "640a6522eaad5e86f9f92bb1bf41ced0588ec5bfb66fa884f0d92878d0cf340f",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE260",
+      "conversation": [
+        {
+          "user": "For outgoing UAEU exchange, who pays for travel, housing, insurance and textbooks? Please keep the answer focused on this question.",
+          "status": 200,
+          "seconds": 4.631,
+          "payload": {
+            "role": "assistant",
+            "content": "For UAEU students participating in an outgoing exchange program, the student is responsible for all costs including transportation, accommodation, insurance, and textbooks, while tuition fees are arranged according to the agreement with the partner university.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Outgoing Students",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/outgoing-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Outgoing Students"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "housing",
+            "evidenceIds": [
+              "corpus:4dea5fbfc2de699966e9:1#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For UAEU students participating in an outgoing exchange program, the student is responsible for all costs including transportation, accommodation, insurance, and textbooks, while tuition fees are arranged according to the agreement with the partner university.",
+                "evidenceIds": [
+                  "corpus:4dea5fbfc2de699966e9:1#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4621,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23114,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.0024840000000000005
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 26,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5765,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0018388
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1396,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000608
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 30301,
+              "outputTokens": 169,
+              "knownUsageUsd": 0.00493132,
+              "estimatedUsd": 0.00493132,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "student",
+            "passed": true,
+            "patterns": [
+              "student",
+              "يتحمل الطالب"
+            ]
+          },
+          {
+            "name": "housing",
+            "passed": true,
+            "patterns": [
+              "accommodation|housing",
+              "السكن"
+            ]
+          },
+          {
+            "name": "insurance",
+            "passed": true,
+            "patterns": [
+              "insurance",
+              "التأمين",
+              "التامين"
+            ]
+          },
+          {
+            "name": "books",
+            "passed": true,
+            "patterns": [
+              "textbooks|books",
+              "الكتب"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE269-V4",
+      "category": "registration-policies",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "What score range and quality points does UAEU AE-04 list for F? Please keep the answer focused on this question."
+      ],
+      "expected": "F=0–59and0.00qualitypoints.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "score",
+          "any": [
+            "59"
+          ]
+        },
+        {
+          "name": "points",
+          "any": [
+            "0(?:\\.0+)?"
+          ]
+        }
+      ],
+      "variants": [
+        "Please tell me what score range and quality points does UAEU AE-04 list for F?",
+        "What score range and quality points does United Arab Emirates University AE-04 list for F?",
+        "ما نطاق درجة F ونقاطها في لائحة AE-04؟",
+        "What score range and quality points does UAEU AE-04 list for F? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": " 2.70 good + c+ 74 – 76 2.30 good c 70 – 73 2.00 good- c- 67 – 69 1.70 pass + d+ 64 –66 1.30 pass d 60 – 63 1.00 fail f 0 – 59 0.00 failure for absence fa 0.0 0.00 incomplete i - - pass (in pass/fail courses only) p 60 and more excl not passing (no credit awarded) np 0 - 59 excl continuing (satisfactory progress cc - excl in a continuing course) passing grade via ",
+      "sourceBodySha256": "a87db781c5f3ce924521d24bb984cc25963ddcb19efba8bc131b4a97d9e68f5c",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE269",
+      "conversation": [
+        {
+          "user": "What score range and quality points does UAEU AE-04 list for F? Please keep the answer focused on this question.",
+          "status": 200,
+          "seconds": 11.058,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU AE-04 Grades and Grading provides the undergraduate course grading system excluding the College of Medicine and Health Sciences, but it does not specify the score range or quality points for grade F in the available evidence.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU AE-04 Grades and Grading",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/4_grades_and_grading-en.pdf",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Scope; Procedures1 Course Grading System",
+                "evidenceText": "UAEU AE-04 Grades and Grading, effective12August2018, excludes the College of Medicine and Health Sciences. The undergraduate course rating table in its procedures gives gradeA for scores90–100 and4.00 quality points. These are undergraduate ratings, not the separate Medicine system."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "undergraduate grading scale for grade F",
+            "evidenceIds": [
+              "answer:undergraduate-grading-a#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU AE-04 Grades and Grading provides the undergraduate course grading system excluding the College of Medicine and Health Sciences, but it does not specify the score range or quality points for grade F in the available evidence.",
+                "evidenceIds": [
+                  "answer:undergraduate-grading-a#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 11048,
+              "attemptedCalls": 6,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23107,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 66,
+                  "estimatedUsd": 0.0024748
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 25,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1181,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 13,
+                  "estimatedUsd": 0.0004932000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3330,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 63,
+                  "estimatedUsd": 0.0008567999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3809,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 76,
+                  "estimatedUsd": 0.0010692
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1353,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005908
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 32805,
+              "outputTokens": 249,
+              "knownUsageUsd": 0.0054853,
+              "estimatedUsd": 0.0054853,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "score",
+            "passed": false,
+            "patterns": [
+              "59"
+            ]
+          },
+          {
+            "name": "points",
+            "passed": true,
+            "patterns": [
+              "0(?:\\.0+)?"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "score"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE275-V1",
+      "category": "registration-policies",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please tell me what normal regular-semester credit range does UAEU AE-03 publish for undergraduates, excluding Medicine?"
+      ],
+      "expected": "12minimumto19maximum,withseparateexceptions.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/3_undergraduate_registration_and_enrollment-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "minimum",
+          "any": [
+            "12"
+          ]
+        },
+        {
+          "name": "maximum",
+          "any": [
+            "19"
+          ]
+        }
+      ],
+      "variants": [
+        "Please tell me what normal regular-semester credit range does UAEU AE-03 publish for undergraduates, excluding Medicine?",
+        "What normal regular-semester credit range does United Arab Emirates University AE-03 publish for undergraduates, excluding Medicine?",
+        "ما العبء الدراسي المعتاد لغير الطب في الفصل العادي حسب AE-03؟",
+        "What normal regular-semester credit range does UAEU AE-03 publish for undergraduates, excluding Medicine? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "ents affairs 2. study load a) for undergraduate students, the normal minimum registration load in a regular semester is 12 credit hours while the maximum registration is 19 credit hours. b) undergraduate students on academic probation may carry a maximum load of 13 credit hours. c) undergraduate students who have completed foundation requirements, and are in good academic standing, may regi",
+      "sourceBodySha256": "0b9261e256dc19189b9c83aee5471642f2e29bca35bc3857c8f5136609685c5c",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE275",
+      "conversation": [
+        {
+          "user": "Please tell me what normal regular-semester credit range does UAEU AE-03 publish for undergraduates, excluding Medicine?",
+          "status": 200,
+          "seconds": 2.657,
+          "payload": {
+            "role": "assistant",
+            "content": "For UAEU undergraduates excluding Medicine and Health Sciences, the normal regular-semester credit load ranges from 12 to 19 credits.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Undergraduate Registration and Enrollment Policy",
+                "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "Effective 2018-08-12; review due 2021-09-01; no supersession certification",
+                "sourceSection": "Undergraduate registration procedures; scoped to non-CMHS undergraduates",
+                "evidenceText": "Undergraduate credit load — excluding Medicine and Health Sciences\n- Regular-semester normal load: 12–19 credits. Academic probation maximum: 13.\n- After completing Foundation and with good academic standing, up to 22 credits is permitted under either published route: 22 or fewer credits remain for the degree, or at least 36 credits earned with CGPA 3.6 or above.\n- In other circumstances, more than 19 credits requires the Dean or Assistant Dean of the student's college. The two qualifying routes above are distinct from this exception-approval route.\n- Below 12 credits requires an exception: fewer than 12 remain, Foundation/proficiency requirements are unfinished, or Dean/Assistant Dean approval in another circumstance.\n- Summer standard maximum 6, honors/expected graduates up to 9, probation up to 4. These published undergraduate rules are not a graduate-program limit."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:semester-credit-load#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For UAEU undergraduates excluding Medicine and Health Sciences, the normal regular-semester credit load ranges from 12 to 19 credits.",
+                "evidenceIds": [
+                  "answer:semester-credit-load#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2649,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3461,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.0008932
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1479,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006412000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4940,
+              "outputTokens": 84,
+              "knownUsageUsd": 0.0015344,
+              "estimatedUsd": 0.0015344,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "minimum",
+            "passed": true,
+            "patterns": [
+              "12"
+            ]
+          },
+          {
+            "name": "maximum",
+            "passed": true,
+            "patterns": [
+              "19"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "originalSourcePass": false,
+        "equivalentSourceEvidence": [
+          "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/3_undergraduate_registration_and_enrollment-en.pdf"
+        ],
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE290-V3",
+      "category": "student-life-services",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "هل التحرير وفحص iThenticate مجانيان لأعضاء هيئة التدريس وطلبة الدراسات العليا والموظفين؟"
+      ],
+      "expected": "Publishedpageliststhosegroupsforbothfreeservices; notautomaticUGeligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/library/uaeu-libraries-editing-services-and-ithenticate-check.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "free",
+          "any": [
+            "free",
+            "مجانا",
+            "مجانًا",
+            "مجانية"
+          ]
+        },
+        {
+          "name": "graduate",
+          "any": [
+            "graduate",
+            "الدراسات العليا"
+          ]
+        }
+      ],
+      "variants": [
+        "At UAEU, can faculty, graduate students and staff use UAEU Library editing and iThenticate for free?",
+        "Can faculty, graduate students and staff use United Arab Emirates University Library editing and iThenticate for free?",
+        "هل التحرير وفحص iThenticate مجانيان لأعضاء هيئة التدريس وطلبة الدراسات العليا والموظفين؟",
+        "Can faculty, graduate students and staff use UAEU Library editing and iThenticate for free? Please keep the answer focused on this question."
+      ],
+      "sourceQuote": "er manuscript editing and ithenticate, similarity check software services. faculty members, graduate students and staff can use both services for free. manuscript editing: research papers, grant proposals and book chapters or reviews are edited for free for faculty, graduate students and staff only. fill in and email form with manuscript in word format to: smajud@uaeu.ac.ae uaeu faculty ",
+      "sourceBodySha256": "f28cdfc693ad1dab556e6176bfef8f3835c72976a09b2b7787900769b1057cb4",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE290",
+      "conversation": [
+        {
+          "user": "هل التحرير وفحص iThenticate مجانيان لأعضاء هيئة التدريس وطلبة الدراسات العليا والموظفين؟",
+          "status": 200,
+          "seconds": 3.481,
+          "payload": {
+            "role": "assistant",
+            "content": "خدمات مراجعة وتدقيق البحوث، بالإضافة إلى التحقق من نسبة التشابه باستخدام iThenticate، تُقدَّم مجانًا لأعضاء هيئة التدريس وطلاب الدراسات العليا والموظفين في جامعة الإمارات العربية المتحدة.\n\nيمكن لأعضاء هيئة التدريس وطلاب الدراسات العليا والموظفين إرسال بحوثهم للتحقق من نسبة التشابه باستخدام برنامج iThenticate مجانًا.\n\nبإمكان أعضاء هيئة التدريس والموظفين وطلبة الدراسات العليا الاستفادة من خدمات تحرير ومراجعة البحوث مجاناً قبل تقديمها للنشر في مجلات مراجعة الأقران.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "خدمات مراجعة البحوث وكشف التشابه",
+                "url": "https://www.uaeu.ac.ae/ar/library/forms/editingservices-cp.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "استمارات > خدمات مراجعة البحوث وكشف التشابه"
+              },
+              {
+                "title": "مراجعة البحوث وكشف التشابه",
+                "url": "https://www.uaeu.ac.ae/ar/library/uaeu-libraries-editing-services-and-ithenticate-check.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "مراجعة البحوث وكشف التشابه"
+              },
+              {
+                "title": "تحرير مخطوطات البحوث",
+                "url": "https://www.uaeu.ac.ae/ar/library/forms/manuscriptediting.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "استمارات > خدمات تحضيرالبحث للمجلة > خدمة المراجعة التقنية السريعة"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:79f3fa5e7d56ed7837fe:2#E1S1",
+              "corpus:24bf5a39bedde8ac1dad:0#E2S1",
+              "corpus:e5f29f6f3f0a683be19d:4#E3S1"
+            ],
+            "claims": [
+              {
+                "text": "خدمات مراجعة وتدقيق البحوث، بالإضافة إلى التحقق من نسبة التشابه باستخدام iThenticate، تُقدَّم مجانًا لأعضاء هيئة التدريس وطلاب الدراسات العليا والموظفين في جامعة الإمارات العربية المتحدة.",
+                "evidenceIds": [
+                  "corpus:79f3fa5e7d56ed7837fe:2#E1S1"
+                ]
+              },
+              {
+                "text": "يمكن لأعضاء هيئة التدريس وطلاب الدراسات العليا والموظفين إرسال بحوثهم للتحقق من نسبة التشابه باستخدام برنامج iThenticate مجانًا.",
+                "evidenceIds": [
+                  "corpus:24bf5a39bedde8ac1dad:0#E2S1"
+                ]
+              },
+              {
+                "text": "بإمكان أعضاء هيئة التدريس والموظفين وطلبة الدراسات العليا الاستفادة من خدمات تحرير ومراجعة البحوث مجاناً قبل تقديمها للنشر في مجلات مراجعة الأقران.",
+                "evidenceIds": [
+                  "corpus:e5f29f6f3f0a683be19d:4#E3S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3472,
+              "attemptedCalls": 5,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 58,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 0.00000116
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7216,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 177,
+                  "estimatedUsd": 0.0025935999999999997
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1511,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000654
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1693,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007268000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2049,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008692000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 12527,
+              "outputTokens": 270,
+              "knownUsageUsd": 0.00484476,
+              "estimatedUsd": 0.00484476,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "free",
+            "passed": true,
+            "patterns": [
+              "free",
+              "مجانا",
+              "مجانًا",
+              "مجانية"
+            ]
+          },
+          {
+            "name": "graduate",
+            "passed": true,
+            "patterns": [
+              "graduate",
+              "الدراسات العليا"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "NQ108",
+      "original": false,
+      "focus": "Phrasing Sensitivity",
+      "group": "me-total",
+      "turns": [
+        "ME major total credits, please"
+      ],
+      "expected": "132 total credits in current catalog; older cohort plans can differ.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b132\\b"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": null,
+      "suite": "legacy",
+      "parentId": "NQ108",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "ME major total credits, please",
+          "status": 200,
+          "seconds": 2.252,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Mechanical Engineering degree at UAEU requires a total of 132 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering degree requirements and electives",
+                "url": "https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering degree credit breakdown"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "26-mechanical-engineering-degree-requirements.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Mechanical Engineering degree at UAEU requires a total of 132 credit hours.",
+                "evidenceIds": [
+                  "26-mechanical-engineering-degree-requirements.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2240,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3377,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 46,
+                  "estimatedUsd": 0.0008484000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1356,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000592
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4733,
+              "outputTokens": 77,
+              "knownUsageUsd": 0.0014404,
+              "estimatedUsd": 0.0014404,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "\\b132\\b"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "NQ114",
+      "original": false,
+      "focus": "Phrasing Sensitivity",
+      "group": "mech348",
+      "turns": [
+        "MECH 348 pre requisite and co requisite?"
+      ],
+      "expected": "MECH210 prerequisite minimum D; MECH340 pre/corequisite minimum D, not strictly concurrent.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml?id=MECH348",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MECH\\s*210"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MECH\\s*340"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "concurrent",
+            "Pre.?Co",
+            "متزامن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": null,
+      "suite": "legacy",
+      "parentId": "NQ114",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "MECH 348 pre requisite and co requisite?",
+          "status": 200,
+          "seconds": 2.2,
+          "payload": {
+            "role": "assistant",
+            "content": "MECH348 Fluid Mechanics Lab requires that you have completed MECH210 Measurement and Instrumentation Lab with at least a grade of D before enrolling; this is a strict prior prerequisite.\n\nMECH340 Fluid Mechanics must be taken either before or concurrently with MECH348, also with a minimum grade of D, according to university enrollment rules.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites",
+                "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "MECH348",
+            "evidenceIds": [
+              "33-mechanical-engineering-course-prerequisites.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "MECH348 Fluid Mechanics Lab requires that you have completed MECH210 Measurement and Instrumentation Lab with at least a grade of D before enrolling; this is a strict prior prerequisite.\n\nMECH340 Fluid Mechanics must be taken either before or concurrently with MECH348, also with a minimum grade of D, according to university enrollment rules.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2186,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3544,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 105,
+                  "estimatedUsd": 0.0010096
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1545,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006676000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5089,
+              "outputTokens": 136,
+              "knownUsageUsd": 0.0016772000000000002,
+              "estimatedUsd": 0.0016772000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*210"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*340"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "concurrent",
+              "Pre.?Co",
+              "متزامن"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "NQ180",
+      "original": false,
+      "focus": "Phrasing Sensitivity",
+      "group": "mech348",
+      "turns": [
+        "What must I complete before MECH348 Fluid Mechanics Lab?"
+      ],
+      "expected": "MECH210 prerequisite minimum D; MECH340 pre/corequisite minimum D, not strictly concurrent.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml?id=MECH348",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MECH\\s*210"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MECH\\s*340"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "concurrent",
+            "Pre.?Co",
+            "متزامن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": null,
+      "suite": "legacy",
+      "parentId": "NQ180",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What must I complete before MECH348 Fluid Mechanics Lab?",
+          "status": 200,
+          "seconds": 3.361,
+          "payload": {
+            "role": "assistant",
+            "content": "Before taking MECH348 Fluid Mechanics Lab, you must complete MECH210 Measurement and Instrumentation Lab with a minimum grade of D.\n\nYou must also have completed or be concurrently enrolled in MECH340 Fluid Mechanics with a minimum grade of D to take MECH348 Fluid Mechanics Lab.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites",
+                "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "MECH348",
+            "evidenceIds": [
+              "33-mechanical-engineering-course-prerequisites.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "Before taking MECH348 Fluid Mechanics Lab, you must complete MECH210 Measurement and Instrumentation Lab with a minimum grade of D.\n\nYou must also have completed or be concurrently enrolled in MECH340 Fluid Mechanics with a minimum grade of D to take MECH348 Fluid Mechanics Lab.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3347,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3549,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.0009284000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3946,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 95,
+                  "estimatedUsd": 0.0011544
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1535,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006636
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9030,
+              "outputTokens": 179,
+              "knownUsageUsd": 0.0027464,
+              "estimatedUsd": 0.0027464,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*210"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*340"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "concurrent",
+              "Pre.?Co",
+              "متزامن"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "01342fc0c082948291d2d1225cdb94f53ec1b8aec8d9301fbc9d9abeda90871e",
+    "files": 8465,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v10"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/regression-mem10-3-rerun-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 10,
+    "partial": 3,
+    "incorrect": 4
+  },
+  "finishedAt": "2026-11-07T11:38:52.294Z",
+  "runtimeAfter": {
+    "sha256": "01342fc0c082948291d2d1225cdb94f53ec1b8aec8d9301fbc9d9abeda90871e",
+    "files": 8465,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v10"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 4.398,
+    "p95": 11.058,
+    "max": 11.058
+  },
+  "usage": {
+    "measuredAnswers": 17,
+    "totalAnswers": 17,
+    "estimatedUsd": 0.08495672,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "KE148",
+      "KE148-V1",
+      "KE148-V4"
+    ]
+  ]
+}

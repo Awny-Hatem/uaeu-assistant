@@ -1,0 +1,1542 @@
+{
+  "startedAt": "2026-11-17T12:50:44.388Z",
+  "fixture": "test-cases/supplied-six.json",
+  "base": "http://127.0.0.1:3011",
+  "grading": "Unreviewed actual transcripts; no HTTP status is treated as a factual pass.",
+  "cases": [
+    {
+      "id": "SUP01",
+      "title": "UAEU STEM programs",
+      "turns": [
+        "Can you tell me all STEM programs UAEU offers?"
+      ],
+      "expected": "Group the published undergraduate STEM programs by their official colleges, or provide specific college program directory links. Define the requested degree level and avoid calling minors standalone degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/programs/undergraduate/",
+        "https://www.uaeu.ac.ae/en/cit/",
+        "https://www.uaeu.ac.ae/en/cos/programs/undergraduate/"
+      ],
+      "conversation": [
+        {
+          "question": "Can you tell me all STEM programs UAEU offers?",
+          "status": 200,
+          "seconds": 14.286070417000001,
+          "actualAnswer": "UAEU offers a course titled STEM Education in Early Childhood Education (CURR620) which focuses on an interdisciplinary approach to learning in science, technology, engineering, and mathematics.",
+          "actualSources": [
+            {
+              "title": "UAEU Catalog — CURR620 STEM Education in ECE",
+              "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2910.shtml?id=CURR620",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "CURR620 STEM Education in ECE"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers a course titled STEM Education in Early Childhood Education (CURR620) which focuses on an interdisciplinary approach to learning in science, technology, engineering, and mathematics.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Catalog — CURR620 STEM Education in ECE",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2910.shtml?id=CURR620",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "CURR620 STEM Education in ECE"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:5069f5a01dbbf03b6d21:29#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers a course titled STEM Education in Early Childhood Education (CURR620) which focuses on an interdisciplinary approach to learning in science, technology, engineering, and mathematics.",
+                "evidenceIds": [
+                  "corpus:5069f5a01dbbf03b6d21:29#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 11870,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 11,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 2.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6093,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0025460000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1679,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007212000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7783,
+              "outputTokens": 99,
+              "knownUsageUsd": 0.0032674200000000005,
+              "estimatedUsd": 0.0032674200000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP02",
+      "title": "Ambiguous CE followed by Computer Engineering",
+      "turns": [
+        "Does UAEU have a CE program?",
+        "Computer Engineering"
+      ],
+      "expected": "Clarify Civil versus Computer Engineering first; then identify the current Computer and Artificial Intelligence Engineering degree, explain its two concentrations or general pathway, and give readable current sources.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml"
+      ],
+      "conversation": [
+        {
+          "question": "Does UAEU have a CE program?",
+          "status": 200,
+          "seconds": 4.541504542000002,
+          "actualAnswer": "Do you mean Civil Engineering / Computer Engineering? That abbreviation does not identify one program.",
+          "actualSources": [
+            {
+              "title": "UAEU official undergraduate programs",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+              "lastVerified": "2026-11-03"
+            }
+          ],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Do you mean Civil Engineering / Computer Engineering? That abbreviation does not identify one program.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official undergraduate programs",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/index.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_ambiguous",
+            "communications": [],
+            "usage": {
+              "elapsedMs": 4523,
+              "attemptedCalls": 1,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25678,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 58,
+                  "estimatedUsd": 0.010364
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 25678,
+              "outputTokens": 58,
+              "knownUsageUsd": 0.010364,
+              "estimatedUsd": 0.010364,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Computer Engineering",
+          "status": 200,
+          "seconds": 4.977379625000001,
+          "actualAnswer": "Yes, UAEU offers a Bachelor of Science in Computer Engineering program that covers both hardware and software aspects of computing systems and bridges topics in electrical engineering and computer science.",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Computer Engineering",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-engineering.shtml",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Undergraduate Programs > Bachelor of Science in Computer Engineering"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "Yes, UAEU offers a Bachelor of Science in Computer Engineering program that covers both hardware and software aspects of computing systems and bridges topics in electrical engineering and computer science.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Computer Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-engineering.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in Computer Engineering"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-engineering",
+            "evidenceIds": [
+              "corpus:96fe4203b3c6800be916:3#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "Yes, UAEU offers a Bachelor of Science in Computer Engineering program that covers both hardware and software aspects of computing systems and bridges topics in electrical engineering and computer science.",
+                "evidenceIds": [
+                  "corpus:96fe4203b3c6800be916:3#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4954,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 2,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4e-8
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7215,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 59,
+                  "estimatedUsd": 0.0029804000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1663,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007148
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 8880,
+              "outputTokens": 90,
+              "knownUsageUsd": 0.0036952400000000007,
+              "estimatedUsd": 0.0036952400000000007,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP03",
+      "title": "Calendar then Mechanical Engineering project then chat history and identity",
+      "turns": [
+        "Where can I check UAEU academic calendar deadlines?",
+        "I am a mech E student in my third year first semester, when should I take the senior project?",
+        "No, I am a mechanical engineering student, not whatever that is!",
+        "What was my first question?",
+        "Who created you?"
+      ],
+      "expected": "Calendar source; Mechanical Engineering project sequence from the applicable model (ask entry cohort if needed), never VMED580; preserve the correction; recall the first calendar question from chat; identify the student SGP team from CCAI without retrieving a university policy.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/calendar/index.shtml",
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "conversation": [
+        {
+          "question": "Where can I check UAEU academic calendar deadlines?",
+          "status": 200,
+          "seconds": 7.493420374999998,
+          "actualAnswer": "You can check the UAEU academic calendar deadlines on the official UAEU Academic Calendar webpage, such as the Spring 2027 calendar available at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en.",
+          "actualSources": [
+            {
+              "title": "UAEU Academic Calendar — Spring2027",
+              "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Spring Semester2027 > Classes Begin; Add and drop begins; Last day to add courses; Last day to withdraw and drop without failure",
+              "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+              "evidenceText": "For Spring Semester2027, the official UAEU academic calendar lists Classes Begin on Monday4January2027. Add and drop begins on4January2027. The Last day to add courses is Friday15January2027. The Last day to withdraw and drop without failure is Friday5February2027. These are published Spring2027 university calendar events, not proof of an individual registration appointment, eligibility or available seat."
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "You can check the UAEU academic calendar deadlines on the official UAEU Academic Calendar webpage, such as the Spring 2027 calendar available at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Academic Calendar — Spring2027",
+                "url": "https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Spring Semester2027 > Classes Begin; Add and drop begins; Last day to add courses; Last day to withdraw and drop without failure",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For Spring Semester2027, the official UAEU academic calendar lists Classes Begin on Monday4January2027. Add and drop begins on4January2027. The Last day to add courses is Friday15January2027. The Last day to withdraw and drop without failure is Friday5February2027. These are published Spring2027 university calendar events, not proof of an individual registration appointment, eligibility or available seat."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [
+              {
+                "id": "academic-calendar",
+                "title": "Academic Calendar",
+                "description": "Check the official UAEU academic calendar for dates, registration windows, exams, and university deadlines.",
+                "url": "https://webapps.uaeu.ac.ae/calendar/index.aspx",
+                "category": "deadline",
+                "keywords": [
+                  "academic calendar",
+                  "registration date",
+                  "registration window",
+                  "exam schedule",
+                  "final exams",
+                  "add drop",
+                  "semester start",
+                  "university holiday",
+                  "التقويم الأكاديمي",
+                  "مواعيد الامتحانات"
+                ],
+                "lastVerified": "2026-09-16"
+              }
+            ],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "calendar",
+            "evidenceIds": [
+              "answer:calendar-spring-2027-key-dates#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can check the UAEU academic calendar deadlines on the official UAEU Academic Calendar webpage, such as the Spring 2027 calendar available at https://coreservices.uaeu.ac.ae/Calendar/Calendar?culture=en.",
+                "evidenceIds": [
+                  "answer:calendar-spring-2027-key-dates#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7469,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25687,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.010386800000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3354,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 71,
+                  "estimatedUsd": 0.0014552
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1416,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000616
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 30457,
+              "outputTokens": 172,
+              "knownUsageUsd": 0.012458000000000002,
+              "estimatedUsd": 0.012458000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "I am a mech E student in my third year first semester, when should I take the senior project?",
+          "status": 200,
+          "seconds": 7.627671875,
+          "actualAnswer": "For the Senior Research Project course VMED580, students must complete the prerequisite courses VMED425, VMED433, VMED435, VMED444, VMED448, and VMED451 with at least a minimum grade D before enrolling.\n\nThe senior project VMED580 is a prerequisite for the Year 5 clinical core rotations and internship courses, which are taken in Year 5 semesters 1 and 2 after completing all courses from years 1 to 4.\n\nThe senior project (VMED580) is listed in the program structure for the Bachelor of Veterinary Medicine as part of Cluster 5, typically taken before the fifth year internship.",
+          "actualSources": [
+            {
+              "title": "UAEU Catalog — VMED580 Senior Research Project",
+              "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_4973.shtml?id=VMED580",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "VMED580 Senior Research Project"
+            },
+            {
+              "title": "undergraduate_programs_2025_2026.pdf",
+              "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf#page=143",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "PDF page 143"
+            },
+            {
+              "title": "Bachelor of Veterinary Medicine",
+              "url": "https://www.uaeu.ac.ae/en/cavm/departments/undergraduate_programs/veterinary/",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Bachelor of Veterinary Medicine > Bachelor of Veterinary Medicine > Program Structure — continuation 2"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "For the Senior Research Project course VMED580, students must complete the prerequisite courses VMED425, VMED433, VMED435, VMED444, VMED448, and VMED451 with at least a minimum grade D before enrolling.\n\nThe senior project VMED580 is a prerequisite for the Year 5 clinical core rotations and internship courses, which are taken in Year 5 semesters 1 and 2 after completing all courses from years 1 to 4.\n\nThe senior project (VMED580) is listed in the program structure for the Bachelor of Veterinary Medicine as part of Cluster 5, typically taken before the fifth year internship.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Catalog — VMED580 Senior Research Project",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_4973.shtml?id=VMED580",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "VMED580 Senior Research Project"
+              },
+              {
+                "title": "undergraduate_programs_2025_2026.pdf",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf#page=143",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PDF page 143"
+              },
+              {
+                "title": "Bachelor of Veterinary Medicine",
+                "url": "https://www.uaeu.ac.ae/en/cavm/departments/undergraduate_programs/veterinary/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Veterinary Medicine > Bachelor of Veterinary Medicine > Program Structure — continuation 2"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "VMED580",
+            "evidenceIds": [
+              "corpus:fc5992cfc10e8477181a:81#E1S1",
+              "corpus:a8f25c0e909449d2e0d7:190#E2S1",
+              "corpus:9da824776aad6add48b1:3#E4S1"
+            ],
+            "claims": [
+              {
+                "text": "For the Senior Research Project course VMED580, students must complete the prerequisite courses VMED425, VMED433, VMED435, VMED444, VMED448, and VMED451 with at least a minimum grade D before enrolling.",
+                "evidenceIds": [
+                  "corpus:fc5992cfc10e8477181a:81#E1S1"
+                ]
+              },
+              {
+                "text": "The senior project VMED580 is a prerequisite for the Year 5 clinical core rotations and internship courses, which are taken in Year 5 semesters 1 and 2 after completing all courses from years 1 to 4.",
+                "evidenceIds": [
+                  "corpus:a8f25c0e909449d2e0d7:190#E2S1"
+                ]
+              },
+              {
+                "text": "The senior project (VMED580) is listed in the program structure for the Bachelor of Veterinary Medicine as part of Cluster 5, typically taken before the fifth year internship.",
+                "evidenceIds": [
+                  "corpus:9da824776aad6add48b1:3#E4S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7604,
+              "attemptedCalls": 5,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 21,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6155,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 185,
+                  "estimatedUsd": 0.002758
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1662,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007144000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1764,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007552
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1779,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007612000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 11381,
+              "outputTokens": 278,
+              "knownUsageUsd": 0.00498922,
+              "estimatedUsd": 0.00498922,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "No, I am a mechanical engineering student, not whatever that is!",
+          "status": 200,
+          "seconds": 8.084573084000004,
+          "actualAnswer": "The available UAEU Mechanical Engineering first semester model plan for the Fall 2026–27 cohort does not specify when the senior project should be taken in the curriculum.\n\nI cannot view your personal student record; this explains the published rules, not an individual eligibility decision.",
+          "actualSources": [
+            {
+              "title": "UAEU Mechanical Engineering model plan first semester",
+              "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+              "lastVerified": "2026-10-06",
+              "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "The available UAEU Mechanical Engineering first semester model plan for the Fall 2026–27 cohort does not specify when the senior project should be taken in the curriculum.\n\nI cannot view your personal student record; this explains the published rules, not an individual eligibility decision.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The available UAEU Mechanical Engineering first semester model plan for the Fall 2026–27 cohort does not specify when the senior project should be taken in the curriculum.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 2,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8060,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3696,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 64,
+                  "estimatedUsd": 0.0015808000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4192,
+                  "cachedInputTokens": 2944,
+                  "outputTokens": 195,
+                  "estimatedUsd": 0.0011056000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4263,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 65,
+                  "estimatedUsd": 0.0018092
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1449,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006292
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 13600,
+              "outputTokens": 355,
+              "knownUsageUsd": 0.0051248000000000005,
+              "estimatedUsd": 0.0051248000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "What was my first question?",
+          "status": 200,
+          "seconds": 10.927932209000007,
+          "actualAnswer": "Your first question was about where to check UAEU academic calendar deadlines.",
+          "actualSources": [
+            {
+              "title": "Academic Affairs Calendar",
+              "url": "https://www.uaeu.ac.ae/en/dvcaa/academic_personnel/new-inner-page.shtml",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Academic Affairs Calendar > Academic Affairs Calendar"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "Your first question was about where to check UAEU academic calendar deadlines.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Academic Affairs Calendar",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/academic_personnel/new-inner-page.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Academic Affairs Calendar > Academic Affairs Calendar"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [
+              {
+                "id": "academic-calendar",
+                "title": "Academic Calendar",
+                "description": "Check the official UAEU academic calendar for dates, registration windows, exams, and university deadlines.",
+                "url": "https://webapps.uaeu.ac.ae/calendar/index.aspx",
+                "category": "deadline",
+                "keywords": [
+                  "academic calendar",
+                  "registration date",
+                  "registration window",
+                  "exam schedule",
+                  "final exams",
+                  "add drop",
+                  "semester start",
+                  "university holiday",
+                  "التقويم الأكاديمي",
+                  "مواعيد الامتحانات"
+                ],
+                "lastVerified": "2026-09-16"
+              }
+            ],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "calendar",
+            "evidenceIds": [
+              "corpus:ca2b6cfb84601f765c65:0#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "Your first question was about where to check UAEU academic calendar deadlines.",
+                "evidenceIds": [
+                  "corpus:ca2b6cfb84601f765c65:0#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 10905,
+              "attemptedCalls": 6,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25740,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 60,
+                  "estimatedUsd": 0.010392
+                },
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 17,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.4000000000000003e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5886,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 44,
+                  "estimatedUsd": 0.0024248000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1458,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 41,
+                  "estimatedUsd": 0.0006488
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6268,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 40,
+                  "estimatedUsd": 0.0025712000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1454,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006312000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 40823,
+              "outputTokens": 216,
+              "knownUsageUsd": 0.01666834,
+              "estimatedUsd": 0.01666834,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Who created you?",
+          "status": 200,
+          "seconds": 9.647807166999991,
+          "actualAnswer": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+          "actualSources": [
+            {
+              "title": "Overview",
+              "url": "https://www.uaeu.ac.ae/en/about/overview.shtml",
+              "lastVerified": "2026-11-04",
+              "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+              "sourceSection": "Overview",
+              "evidenceText": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan."
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Overview",
+                "url": "https://www.uaeu.ac.ae/en/about/overview.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Overview",
+                "evidenceText": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "AI assistant creation",
+            "evidenceIds": [
+              "answer:university-founding#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+                "evidenceIds": [
+                  "answer:university-founding#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 9632,
+              "attemptedCalls": 5,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 4,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 8e-8
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25724,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 55,
+                  "estimatedUsd": 0.0103776
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 736,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 12,
+                  "estimatedUsd": 0.00031360000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3547,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 54,
+                  "estimatedUsd": 0.0015052000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1280,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005616
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 31291,
+              "outputTokens": 152,
+              "knownUsageUsd": 0.012758080000000002,
+              "estimatedUsd": 0.012758080000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP04",
+      "title": "First-year introduction without a question",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my first year, first semester at UAEU."
+      ],
+      "expected": "Greet Noor, introduce the assistant and suggest relevant help. No unsolicited plan or cannot-verify fallback.",
+      "sources": [],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my first year, first semester at UAEU.",
+          "status": 200,
+          "seconds": 4.1297807080000055,
+          "actualAnswer": "For the first semester of the Bachelor of Science in Information Technology program at UAEU for the 2025–26 cohort, the study plan includes 16 credit hours consisting of these courses: GEAE101 Academic English for Humanities and STEM (3 credits, general education), MATH105 Calculus I (3 credits, college requirement), CSBP119 Algorithms and Problem Solving (3 credits, college requirement), PHYS105 General Physics I (3 credits, college requirement), an approved general-education elective from Theme 6, 7, 8, 9, 10, or 11 (3 credits), and CSBP121 Programming Lab I (1 credit, specialization).",
+          "actualSources": [
+            {
+              "title": "UAEU Information Technology 2025–26 first-semester model plan",
+              "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf",
+              "lastVerified": "2026-10-06",
+              "sourceSection": "Information Technology first semester — Fall 2025–26 entry"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "For the first semester of the Bachelor of Science in Information Technology program at UAEU for the 2025–26 cohort, the study plan includes 16 credit hours consisting of these courses: GEAE101 Academic English for Humanities and STEM (3 credits, general education), MATH105 Calculus I (3 credits, college requirement), CSBP119 Algorithms and Problem Solving (3 credits, college requirement), PHYS105 General Physics I (3 credits, college requirement), an approved general-education elective from Theme 6, 7, 8, 9, 10, or 11 (3 credits), and CSBP121 Programming Lab I (1 credit, specialization).",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Information Technology 2025–26 first-semester model plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Information Technology first semester — Fall 2025–26 entry"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "31-information-technology-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the first semester of the Bachelor of Science in Information Technology program at UAEU for the 2025–26 cohort, the study plan includes 16 credit hours consisting of these courses: GEAE101 Academic English for Humanities and STEM (3 credits, general education), MATH105 Calculus I (3 credits, college requirement), CSBP119 Algorithms and Problem Solving (3 credits, college requirement), PHYS105 General Physics I (3 credits, college requirement), an approved general-education elective from Theme 6, 7, 8, 9, 10, or 11 (3 credits), and CSBP121 Programming Lab I (1 credit, specialization).",
+                "evidenceIds": [
+                  "31-information-technology-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4104,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3461,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 165,
+                  "estimatedUsd": 0.0016484000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1562,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006744000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5023,
+              "outputTokens": 196,
+              "knownUsageUsd": 0.0023228000000000003,
+              "estimatedUsd": 0.0023228000000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP05",
+      "title": "Second-year introduction repeated",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU."
+      ],
+      "expected": "Natural greeting/acknowledgement on each turn; no unsolicited plan, old college name, raw XML citation or cannot-verify fallback.",
+      "sources": [],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 7.089576207999999,
+          "actualAnswer": "You are enrolled in the Bachelor of Science in Information Technology program, which is offered by the College of Information Technology at UAEU and is accredited by ABET.\n\nThis program covers foundational IT knowledge along with current trends like Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.\n\nThe program's study plans and degree requirements are designed to prepare students for professional competence in IT.",
+          "actualSources": [
+            {
+              "title": "UAEU Official Program Finder — bilingual catalog data",
+              "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Bachelor of Science in Information Technology — published program-finder record"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "You are enrolled in the Bachelor of Science in Information Technology program, which is offered by the College of Information Technology at UAEU and is accredited by ABET.\n\nThis program covers foundational IT knowledge along with current trends like Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.\n\nThe program's study plans and degree requirements are designed to prepare students for professional competence in IT.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — bilingual catalog data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Information Technology — published program-finder record"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "corpus:2cbd9a1819b5702cb87d:66#E3S1"
+            ],
+            "claims": [
+              {
+                "text": "You are enrolled in the Bachelor of Science in Information Technology program, which is offered by the College of Information Technology at UAEU and is accredited by ABET.\n\nThis program covers foundational IT knowledge along with current trends like Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.\n\nThe program's study plans and degree requirements are designed to prepare students for professional competence in IT.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:66#E3S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7068,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 24,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7277,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 129,
+                  "estimatedUsd": 0.0031172
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1930,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008216
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9231,
+              "outputTokens": 160,
+              "knownUsageUsd": 0.00393928,
+              "estimatedUsd": 0.00393928,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 4.918799584000007,
+          "actualAnswer": "You are enrolled in the Bachelor of Science in Information Technology program at UAEU's College of Information Technology.\n\nThis undergraduate program offers a strong IT foundation and covers current IT trends such as Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.",
+          "actualSources": [
+            {
+              "title": "UAEU Official Program Finder — bilingual catalog data",
+              "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Bachelor of Science in Information Technology — published program-finder record"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "You are enrolled in the Bachelor of Science in Information Technology program at UAEU's College of Information Technology.\n\nThis undergraduate program offers a strong IT foundation and covers current IT trends such as Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — bilingual catalog data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Information Technology — published program-finder record"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "corpus:2cbd9a1819b5702cb87d:66#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You are enrolled in the Bachelor of Science in Information Technology program at UAEU's College of Information Technology.\n\nThis undergraduate program offers a strong IT foundation and covers current IT trends such as Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:66#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4900,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 37,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 7.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7515,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 91,
+                  "estimatedUsd": 0.0031516
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1902,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008104000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9454,
+              "outputTokens": 122,
+              "knownUsageUsd": 0.00396274,
+              "estimatedUsd": 0.00396274,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "SUP06",
+      "title": "Next semester using earlier IT year and semester",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+        "What should I take next semester?",
+        "Bachelor of Science in Information Technology",
+        "Year three term one"
+      ],
+      "expected": "Keep IT as the only stated program and infer Year 3 Semester 1. Ask for admit term/catalog if unknown, then use that matching official plan. Do not invent Information Security as an earlier-mentioned program.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "conversation": [
+        {
+          "question": "Hi, my name is Noor. I am an IT major in my second year, second semester at UAEU.",
+          "status": 200,
+          "seconds": 2.4059057499999907,
+          "actualAnswer": "Are you asking about an undergraduate, master's, or PhD program?",
+          "actualSources": [],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "Are you asking about an undergraduate, master's, or PhD program?",
+            "source": "escalated",
+            "responseMode": "grounded_generation",
+            "stateLabel": "model_escalation",
+            "citations": [],
+            "disposition": "clarify",
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [],
+            "claims": [],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "clarificationReason": "missing_official_evidence",
+            "usage": {
+              "elapsedMs": 2393,
+              "attemptedCalls": 1,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7277,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 17,
+                  "estimatedUsd": 0.002938
+                }
+              ],
+              "embeddingCacheHits": 1,
+              "inputTokens": 7277,
+              "outputTokens": 17,
+              "knownUsageUsd": 0.002938,
+              "estimatedUsd": 0.002938,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "What should I take next semester?",
+          "status": 200,
+          "seconds": 0.10492004199999792,
+          "actualAnswer": "Do you mean Bachelor of Science in Information Security or Bachelor of Science in Information Technology? More than one subject was mentioned; which one does this follow-up concern?",
+          "actualSources": [],
+          "model": null,
+          "payload": {
+            "role": "assistant",
+            "content": "Do you mean Bachelor of Science in Information Security or Bachelor of Science in Information Technology? More than one subject was mentioned; which one does this follow-up concern?",
+            "source": "escalated",
+            "stateLabel": "clarify_subject",
+            "disposition": "clarify",
+            "citations": [],
+            "clarificationReason": "ambiguous_subject",
+            "communications": [],
+            "usage": {
+              "elapsedMs": 89,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Bachelor of Science in Information Technology",
+          "status": 200,
+          "seconds": 5.130280083000005,
+          "actualAnswer": "The Bachelor of Science in Information Technology at UAEU requires a minimum of 120 credit hours to graduate.\n\nThe program is offered by the College of Information Technology and includes a strong IT foundation with current IT trends such as Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.\n\nIn the last semester, students must take a 6-credit-hour internship (ITBP 496), during which no other courses can be registered.\n\nWhich academic term and year do you mean?",
+          "actualSources": [
+            {
+              "title": "Bachelor of Science in Information Technology",
+              "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Undergraduate Programs > Bachelor of Science in Information Technology > Degree Requirements > Required Credit Hours : minimum 120 hours"
+            },
+            {
+              "title": "UAEU Official Program Finder — bilingual catalog data",
+              "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "Bachelor of Science in Information Technology — published program-finder record"
+            },
+            {
+              "title": "undergraduate_programs_2025_2026.pdf",
+              "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf#page=250",
+              "lastVerified": "2026-11-04",
+              "sourceSection": "PDF page 250"
+            }
+          ],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Information Technology at UAEU requires a minimum of 120 credit hours to graduate.\n\nThe program is offered by the College of Information Technology and includes a strong IT foundation with current IT trends such as Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.\n\nIn the last semester, students must take a 6-credit-hour internship (ITBP 496), during which no other courses can be registered.\n\nWhich academic term and year do you mean?",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in Information Technology > Degree Requirements > Required Credit Hours : minimum 120 hours"
+              },
+              {
+                "title": "UAEU Official Program Finder — bilingual catalog data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Information Technology — published program-finder record"
+              },
+              {
+                "title": "undergraduate_programs_2025_2026.pdf",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf#page=250",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PDF page 250"
+              }
+            ],
+            "disposition": "clarify",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "corpus:dd8d7e01ab4e8dfaf940:6#E2S1",
+              "corpus:2cbd9a1819b5702cb87d:66#E4S1",
+              "corpus:a8f25c0e909449d2e0d7:317#E8S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Information Technology at UAEU requires a minimum of 120 credit hours to graduate.",
+                "evidenceIds": [
+                  "corpus:dd8d7e01ab4e8dfaf940:6#E2S1"
+                ]
+              },
+              {
+                "text": "The program is offered by the College of Information Technology and includes a strong IT foundation with current IT trends such as Cloud Computing, Internet of Things, Mobile/Web Development, and Big Data/Data Analytics.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:66#E4S1"
+                ]
+              },
+              {
+                "text": "In the last semester, students must take a 6-credit-hour internship (ITBP 496), during which no other courses can be registered.",
+                "evidenceIds": [
+                  "corpus:a8f25c0e909449d2e0d7:317#E8S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "clarificationReason": "additional_scope_needed",
+            "usage": {
+              "elapsedMs": 5111,
+              "attemptedCalls": 5,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 6,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 1.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6084,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 143,
+                  "estimatedUsd": 0.0026624
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1743,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007468
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1341,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000586
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1851,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007900000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 11025,
+              "outputTokens": 236,
+              "knownUsageUsd": 0.00478532,
+              "estimatedUsd": 0.00478532,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "question": "Year three term one",
+          "status": 200,
+          "seconds": 5.278368208,
+          "actualAnswer": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+          "actualSources": [],
+          "model": "gpt-4.1-mini",
+          "payload": {
+            "role": "assistant",
+            "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+            "source": "escalated",
+            "responseMode": "grounded_generation",
+            "stateLabel": "model_escalation",
+            "citations": [],
+            "disposition": "clarify",
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [],
+            "claims": [],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "clarificationReason": "missing_official_evidence",
+            "usage": {
+              "elapsedMs": 5265,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 4,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 8e-8
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 8254,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 64,
+                  "estimatedUsd": 0.0034040000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1781,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 58,
+                  "estimatedUsd": 0.0008052000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 8691,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 19,
+                  "estimatedUsd": 0.0035068
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 18730,
+              "outputTokens": 141,
+              "knownUsageUsd": 0.00771608,
+              "estimatedUsd": 0.00771608,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "finishedAt": "2026-11-17T12:52:55.578Z"
+}

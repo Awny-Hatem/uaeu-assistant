@@ -1,0 +1,4688 @@
+{
+  "schemaVersion": 1,
+  "warning": "All identities and academic histories are fictional. Fixtures are provisional until prerequisite and allocation audit completes.",
+  "accounts": [
+    {
+      "slug": "cedar",
+      "label": "Fictional Student Cedar",
+      "scenario": "New undergraduate with no earned credits",
+      "planId": "cs-2026-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Cedar",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "First Year",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Bachelor of Science in Computer Science",
+        "college": "College of Computing and Artificial Intelligence",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "catalogYear": "2026/2027",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 1,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": null,
+        "requiredCredits": 120,
+        "blocks": [
+          {
+            "id": "gened",
+            "title": "General Education requirements",
+            "requiredCredits": 21.0,
+            "courseCodes": [
+              "GEAE101",
+              "GEEM110",
+              "ITBP218",
+              "GESU121"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 38.0,
+            "courseCodes": [
+              "MATH105",
+              "PHYS105",
+              "CENG202",
+              "MATH110",
+              "CSBP219",
+              "CENG205",
+              "BIOC100",
+              "CSBP315",
+              "CSBP319",
+              "ITBP270",
+              "STAT210",
+              "ITBP480",
+              "ITBP481"
+            ]
+          },
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 3.0,
+            "courseCodes": [
+              "CSBP119"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 38.0,
+            "courseCodes": [
+              "MATH140",
+              "CENG210",
+              "CSBP340",
+              "SWEB300",
+              "ITBP301",
+              "CSBP316",
+              "SWEB450",
+              "CSBP461",
+              "CSBP400",
+              "CSBP301",
+              "ITBP321",
+              "CSBP411",
+              "CSBP421",
+              "PHYS135"
+            ]
+          },
+          {
+            "id": "free",
+            "title": "Free electives",
+            "requiredCredits": 2.0,
+            "courseCodes": []
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 12.0,
+            "courseCodes": []
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "ITBP496"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "GEAE101",
+            "title": "Academic English for Humanities and STEM",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH105",
+            "title": "Calculus I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP119",
+            "title": "Algorithms and Problem Solving",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "CENG202",
+              "MATH110",
+              "CSBP219",
+              "CENG205",
+              "MATH140"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.350573+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000001"
+    },
+    {
+      "slug": "maple",
+      "label": "Fictional Student Maple",
+      "scenario": "Second-year CS student",
+      "planId": "cs-2025-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Maple",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Second Year",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Bachelor of Science in Computer Science",
+        "college": "College of Computing and Artificial Intelligence",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2025
+        },
+        "catalogYear": "2025/2026",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 2,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 120,
+        "blocks": [
+          {
+            "id": "gened",
+            "title": "General Education requirements",
+            "requiredCredits": 21.0,
+            "courseCodes": [
+              "GEAE101",
+              "GEEM110",
+              "ITBP218",
+              "GESU121"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 38.0,
+            "courseCodes": [
+              "MATH105",
+              "PHYS105",
+              "CENG202",
+              "MATH110",
+              "CSBP219",
+              "CENG205",
+              "BIOC100",
+              "CSBP315",
+              "CSBP319",
+              "ITBP270",
+              "STAT210",
+              "ITBP480",
+              "ITBP481"
+            ]
+          },
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 3.0,
+            "courseCodes": [
+              "CSBP119"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 40.0,
+            "courseCodes": [
+              "CSBP121",
+              "CSBP221",
+              "MATH140",
+              "CENG210",
+              "CSBP340",
+              "SWEB300",
+              "ITBP301",
+              "CSBP316",
+              "SWEB450",
+              "CSBP461",
+              "CSBP400",
+              "CSBP301",
+              "ITBP321",
+              "CSBP411",
+              "CSBP421",
+              "PHYS135"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 12.0,
+            "courseCodes": []
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "ITBP496"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "GEAE101",
+            "title": "Academic English for Humanities and STEM",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH105",
+            "title": "Calculus I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP119",
+            "title": "Algorithms and Problem Solving",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP121",
+            "title": "Programming Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG202",
+            "title": "Discrete Mathematics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH110",
+            "title": "Calculus II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP219",
+            "title": "Object Oriented Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG205",
+            "title": "Digital Design & Computer Organization",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP221",
+            "title": "Programming Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH140",
+            "title": "Linear Algebra I",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "BIOC100",
+            "title": "111 Basic Biology I /General Chemistry I Choose ONE",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG210",
+            "title": "Communication & Networks Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP315",
+            "title": "Operating Systems Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP319",
+            "title": "Data Structures",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "CSBP340",
+              "ITBP270",
+              "STAT210",
+              "SWEB300",
+              "ITBP301"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351006+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000002"
+    },
+    {
+      "slug": "willow",
+      "label": "Fictional Student Willow",
+      "scenario": "Returning older-catalog IT student",
+      "planId": "it-2022-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Willow",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Fourth Year",
+        "studentStatus": "Returning",
+        "holds": [],
+        "program": "Bachelor of Science in Information Technology",
+        "college": "College of Computing and Artificial Intelligence",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2022
+        },
+        "catalogYear": "2022/2023",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 4,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 130,
+        "blocks": [
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 15.0,
+            "courseCodes": [
+              "ESPU1081",
+              "MATH105",
+              "CSBP119",
+              "GEIT112",
+              "ITBP418"
+            ]
+          },
+          {
+            "id": "gened-3",
+            "title": "General Education — Cluster 3",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "PHYS105",
+              "GESU121"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 37.0,
+            "courseCodes": [
+              "CSBP121",
+              "CSBP221",
+              "CENG210",
+              "ITBP280",
+              "CSBP340",
+              "CENG530",
+              "ITBP301",
+              "CENG529",
+              "ITBP322",
+              "CSBP320",
+              "ITBP321",
+              "ITBP323",
+              "CSBP316",
+              "ITBP324",
+              "CSBP301"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 33.0,
+            "courseCodes": [
+              "CENG202",
+              "MATH110",
+              "CSBP219",
+              "CENG205",
+              "STAT210",
+              "CSBP319",
+              "BIOC100",
+              "CSBP315",
+              "ITBP370",
+              "ITBP480",
+              "ITBP481"
+            ]
+          },
+          {
+            "id": "gened-2",
+            "title": "General Education — Cluster 2",
+            "requiredCredits": 12.0,
+            "courseCodes": [
+              "HSS105",
+              "ISLM100",
+              "ISLM101"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 9.0,
+            "courseCodes": []
+          },
+          {
+            "id": "free",
+            "title": "Free electives",
+            "requiredCredits": 6.0,
+            "courseCodes": []
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 12.0,
+            "courseCodes": [
+              "ITBP495"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "ESPU1081",
+            "title": "Introduction to Academic English for Information Technology I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH105",
+            "title": "Calculus I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP119",
+            "title": "Algorithms and Problem Solving",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEIT112",
+            "title": "Fourth Industrial Revolution",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP121",
+            "title": "Programming Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG202",
+            "title": "Discrete Mathematics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH110",
+            "title": "Calculus II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP219",
+            "title": "Object Oriented Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG205",
+            "title": "Digital Design & Computer Organization",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP221",
+            "title": "Programming Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "HSS105",
+            "title": "Emirates Studies",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT210",
+            "title": "Probability and Statistics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG210",
+            "title": "Communication & Networks Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP319",
+            "title": "Data Structures",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP280",
+            "title": "Information Technology Project Management Exhibition",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GESU121",
+            "title": "Sustainability",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP340",
+            "title": "Database Systems",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG530",
+            "title": "Computer Network Protocols",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP301",
+            "title": "Security Principles & Practice",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG529",
+            "title": "Networking Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP322",
+            "title": "Web and Mobile Systems",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "BIOC100",
+            "title": "111 Basic Biology I /General Chemistry I Choose ONE",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP315",
+            "title": "Operating Systems Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP320",
+            "title": "Data Mining",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP321",
+            "title": "Web Application Development Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP323",
+            "title": "Systems Integration and Administration",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP316",
+            "title": "Human Computer Interaction",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP370",
+            "title": "Professional Responsibility in Information Technology",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP324",
+            "title": "Cloud Computing Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP480",
+            "title": "Senior Graduation Project I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP418",
+            "title": "Entrepreneurship in Information Technology",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP301",
+            "title": "Artificial Intelligence",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ISLM100",
+            "title": "Islamic Culture/Biography of the Prophet \"Sira\"",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "ITBP481"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351064+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000003"
+    },
+    {
+      "slug": "birch",
+      "label": "Fictional Student Birch",
+      "scenario": "IT cohort with a published arithmetic conflict; must not invent a resolved total",
+      "planId": "it-2025-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Birch",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Second Year",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Bachelor of Science in Information Technology",
+        "college": "College of Computing and Artificial Intelligence",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2025
+        },
+        "catalogYear": "2025/2026",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 2,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 130,
+        "blocks": [
+          {
+            "id": "gened",
+            "title": "General Education requirements",
+            "requiredCredits": 21.0,
+            "courseCodes": [
+              "GEAE101",
+              "GEEM110",
+              "GESU121",
+              "ITBP218"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 41.0,
+            "courseCodes": [
+              "MATH105",
+              "CSBP119",
+              "PHYS105",
+              "CENG202",
+              "MATH110",
+              "CSBP219",
+              "CENG205",
+              "STAT210",
+              "CSBP319",
+              "ITBP301",
+              "BIOC100",
+              "CSBP315",
+              "ITBP270",
+              "ITBP480"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 36.0,
+            "courseCodes": [
+              "CSBP121",
+              "CSBP221",
+              "CENG210",
+              "ITBP280",
+              "CSBP340",
+              "CENG530",
+              "ITBP322",
+              "CSBP320",
+              "ITBP321",
+              "ITBP323",
+              "CSBP316",
+              "ITBP324",
+              "CSBP301",
+              "ITBP481"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 10.0,
+            "courseCodes": [
+              "CENG529"
+            ]
+          },
+          {
+            "id": "free",
+            "title": "Free electives",
+            "requiredCredits": 6.0,
+            "courseCodes": []
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "ITBP496"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "GEAE101",
+            "title": "Academic English for Humanities and STEM",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH105",
+            "title": "Calculus I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP119",
+            "title": "Algorithms and Problem Solving",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP121",
+            "title": "Programming Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG202",
+            "title": "Discrete Mathematics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH110",
+            "title": "Calculus II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP219",
+            "title": "Object Oriented Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG205",
+            "title": "Digital Design & Computer Organization",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP221",
+            "title": "Programming Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEEM110",
+            "title": "Contemporary Emirati Studies",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT210",
+            "title": "Probability and Statistics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG210",
+            "title": "Communication & Networks Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP319",
+            "title": "Data Structures",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP280",
+            "title": "Information Technology Project Management Exhibition",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GESU121",
+            "title": "Sustainability",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351096+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": false,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [
+          "Plan sum 120.0 != printed degree total 130",
+          "Minor requirement shown separately; approved course overlap and catalog applicability are not confirmed."
+        ],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000004"
+    },
+    {
+      "slug": "elm",
+      "label": "Fictional Student Elm",
+      "scenario": "Mechanical Engineering approaching final project",
+      "planId": "mechanical-2023-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Elm",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Fourth Year",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Bachelor of Science in Mechanical Engineering",
+        "college": "College of Engineering",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2023
+        },
+        "catalogYear": "2023/2024",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 4,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 132,
+        "blocks": [
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 15.0,
+            "courseCodes": [
+              "MATH130",
+              "ESPU107",
+              "GEIE222",
+              "GEIT112",
+              "MECH585"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 32.0,
+            "courseCodes": [
+              "PHYS105",
+              "PHYS135",
+              "CHEM175",
+              "MATH135",
+              "PHYS110",
+              "PHYS140",
+              "GENG230",
+              "GENG215",
+              "MATH140",
+              "MATH275",
+              "GENG220",
+              "STAT210",
+              "MECH390"
+            ]
+          },
+          {
+            "id": "gened-3",
+            "title": "General Education — Cluster 3",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "CHEM111",
+              "GESU121"
+            ]
+          },
+          {
+            "id": "gened-2",
+            "title": "General Education — Cluster 2",
+            "requiredCredits": 12.0,
+            "courseCodes": [
+              "HSS105",
+              "ISLM101",
+              "GENG315"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 59.0,
+            "courseCodes": [
+              "MECH200",
+              "CIVL240",
+              "MECH210",
+              "MECH240",
+              "MECH305",
+              "MECH315",
+              "MECH340",
+              "MECH348",
+              "ELEC372",
+              "MECH384",
+              "MECH311",
+              "MECH407",
+              "MECH411",
+              "MECH306",
+              "MECH310",
+              "MECH426",
+              "MECH412",
+              "MECH350",
+              "MECH409",
+              "MECH417",
+              "MECH433",
+              "MECH430",
+              "MECH440",
+              "MECH590",
+              "MECH450"
+            ]
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 2.0,
+            "courseCodes": [
+              "MECH485",
+              "MECH490"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 6.0,
+            "courseCodes": []
+          }
+        ],
+        "courses": [
+          {
+            "code": "MATH130",
+            "title": "Calculus I for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS135",
+            "title": "General Physics Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ESPU107",
+            "title": "Introduction to Academic English For Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM111",
+            "title": "General Chemistry I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM175",
+            "title": "Chemistry Lab I for Engineering",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "HSS105",
+            "title": "Emirates Studies",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH135",
+            "title": "Calculus II for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS110",
+            "title": "General Physics II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS140",
+            "title": "General Physics Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG230",
+            "title": "Computer Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG215",
+            "title": "Engineering Ethics",
+            "credits": 2.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH200",
+            "title": "Introduction to Engineering Drawing and Workshop",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ISLM101",
+            "title": "Islamic Culture/Biography of the Prophet \"Sira\"",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH140",
+            "title": "Linear Algebra I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH275",
+            "title": "Ordinary Differential Equations",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG220",
+            "title": "Engineering Thermodynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CIVL240",
+            "title": "Statics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH210",
+            "title": "Measurement and Instrumentation lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH240",
+            "title": "Introduction to Computing Lab in ME",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEIE222",
+            "title": "Fundamentals of Innovation and Entrepreneurship",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH305",
+            "title": "Mechanics of Materials",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH315",
+            "title": "Geometric Modeling",
+            "credits": 2.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH340",
+            "title": "Fluid Mechanics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH348",
+            "title": "Fluid Mechanics Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ELEC372",
+            "title": "Electro-Mechanical Devices",
+            "credits": 2.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH384",
+            "title": "Mathematics for Mech. Eng.",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GESU121",
+            "title": "Sustainability",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH485",
+            "title": "Intrenship I",
+            "credits": 1.0,
+            "term": {
+              "season": "Summer",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "internship",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT210",
+            "title": "Probability and Statistics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH311",
+            "title": "Applied Thermodynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH390",
+            "title": "Engineering Materials",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH407",
+            "title": "Machine Design I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH411",
+            "title": "Heat Transfer",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG315",
+            "title": "Engineering Economics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH306",
+            "title": "Manufacturing Processes",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH310",
+            "title": "Dynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH426",
+            "title": "Thermofluid System Design & Analysis",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH412",
+            "title": "Machine Design II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH350",
+            "title": "Introduction to Mechatronics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEIT112",
+            "title": "Fourth Industrial Revolution",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH490",
+            "title": "Intrenship II",
+            "credits": 1.0,
+            "term": {
+              "season": "Summer",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "internship",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH585",
+            "title": "Design and Critical Thinking in Mechanical Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH409",
+            "title": "Dynamic Systems & Control",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH417",
+            "title": "Kinematics Design of Machinery",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH433",
+            "title": "Introduction to Computer Aided Manufacturing",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH430",
+            "title": "Thermal Engineering Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH440",
+            "title": "Design and Manufacturing Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "MECH590",
+              "MECH450"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351157+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000005"
+    },
+    {
+      "slug": "pine",
+      "label": "Fictional Student Pine",
+      "scenario": "Returning student reporting probation",
+      "planId": "mechanical-2022-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Pine",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Third Year",
+        "studentStatus": "Returning",
+        "holds": [],
+        "program": "Bachelor of Science in Mechanical Engineering",
+        "college": "College of Engineering",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2022
+        },
+        "catalogYear": "2022/2023",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 3,
+          "semester": 1
+        },
+        "academicStanding": "probation",
+        "overallGpa": 1.93,
+        "requiredCredits": 147,
+        "blocks": [
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 15.0,
+            "courseCodes": [
+              "MATH1110",
+              "MATH130",
+              "ESPU107",
+              "GEIE222",
+              "MECH585",
+              "GEIT112"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 32.0,
+            "courseCodes": [
+              "PHYS105",
+              "PHYS135",
+              "CHEM175",
+              "MATH1120",
+              "MATH135",
+              "PHYS110",
+              "PHYS140",
+              "GENG230",
+              "GENG215",
+              "MATH2220",
+              "MATH145",
+              "MATH2210",
+              "MATH270",
+              "GENG220",
+              "STAT210",
+              "MECH390"
+            ]
+          },
+          {
+            "id": "gened-3",
+            "title": "General Education — Cluster 3",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "CHEM111",
+              "GESU121"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 58.0,
+            "courseCodes": [
+              "MECH200",
+              "CIVL240",
+              "MECH210",
+              "MECH240",
+              "MECH305",
+              "MECH315",
+              "MECH340",
+              "MECH348",
+              "ELEC372",
+              "MECH384",
+              "MECH311",
+              "MECH407",
+              "MECH411",
+              "MECH306",
+              "MECH310",
+              "MECH426",
+              "MECH412",
+              "MECH350",
+              "MECH430",
+              "MECH409",
+              "MECH417",
+              "MECH433",
+              "MECH440",
+              "MECH450",
+              "MECH590"
+            ]
+          },
+          {
+            "id": "gened-2",
+            "title": "General Education — Cluster 2",
+            "requiredCredits": 12.0,
+            "courseCodes": [
+              "GENG315",
+              "ISLM100",
+              "ISLM101",
+              "HSS105"
+            ]
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 15.0,
+            "courseCodes": [
+              "MECH495"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 9.0,
+            "courseCodes": [
+              "MECH513",
+              "MECH540",
+              "MECH532"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "MATH130",
+            "title": "Calculus I for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS135",
+            "title": "General Physics Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ESPU107",
+            "title": "Introduction to Academic English For Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM111",
+            "title": "General Chemistry I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM175",
+            "title": "Chemistry Lab I for Engineering",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH1120",
+            "title": "Calculus II for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS110",
+            "title": "General Physics II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS140",
+            "title": "General Physics Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG230",
+            "title": "Computer Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG215",
+            "title": "Engineering Ethics",
+            "credits": 2.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH200",
+            "title": "Introduction to Engineering Drawing and Workshop",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH2220",
+            "title": "Linear Algebra for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH2210",
+            "title": "Differential Equations for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG220",
+            "title": "Engineering Thermodynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CIVL240",
+            "title": "Statics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH210",
+            "title": "Measurement and Instrumentation lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH240",
+            "title": "Introduction to Computing Lab in ME",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH305",
+            "title": "Mechanics of Materials",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH315",
+            "title": "Geometric Modeling",
+            "credits": 2.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH340",
+            "title": "Fluid Mechanics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH348",
+            "title": "Fluid Mechanics Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ELEC372",
+            "title": "Electro-Mechanical Devices",
+            "credits": 2.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH384",
+            "title": "Mathematics for Mech. Eng.",
+            "credits": 3.0,
+            "term": {
+              "season": "Summer",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT210",
+            "title": "Probability and Statistics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH311",
+            "title": "Applied Thermodynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH390",
+            "title": "Engineering Materials",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH407",
+            "title": "Machine Design I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MECH411",
+            "title": "Heat Transfer",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH275",
+            "title": "Ordinary Differential Equations",
+            "credits": 3,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "D",
+            "repeated": false,
+            "blockId": null,
+            "disposition": "fall-through"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "MECH306",
+              "MECH310",
+              "MECH426",
+              "MECH412",
+              "MECH350",
+              "MECH430"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351208+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000006"
+    },
+    {
+      "slug": "ash",
+      "label": "Fictional Student Ash",
+      "scenario": "Repeated failed course followed by completion",
+      "planId": "chemical-2023-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Ash",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Fourth Year",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Bachelor of Science in Chemical Engineering",
+        "college": "College of Engineering",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2023
+        },
+        "catalogYear": "2023/2024",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 4,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 132,
+        "blocks": [
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 15.0,
+            "courseCodes": [
+              "MATH130",
+              "ESPU107",
+              "GEIE222",
+              "CHME585",
+              "GEIT112"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 26.0,
+            "courseCodes": [
+              "PHYS105",
+              "PHYS135",
+              "CHEM175",
+              "MATH135",
+              "PHYS110",
+              "PHYS140",
+              "GENG220",
+              "MATH140",
+              "GENG215",
+              "STAT210",
+              "MATH275"
+            ]
+          },
+          {
+            "id": "gened-3",
+            "title": "General Education — Cluster 3",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "CHEM111",
+              "GESU121"
+            ]
+          },
+          {
+            "id": "gened-2",
+            "title": "General Education — Cluster 2",
+            "requiredCredits": 12.0,
+            "courseCodes": [
+              "ISLM101",
+              "GENG315",
+              "HSS105"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 56.0,
+            "courseCodes": [
+              "CHEM113",
+              "CHME330",
+              "CHEM282",
+              "CHME300",
+              "CHME357",
+              "CHME322",
+              "GENG230",
+              "CHME411",
+              "CHEM377",
+              "CHME390",
+              "CHME360",
+              "CHME421",
+              "CHME413",
+              "CHEM355",
+              "CHME422",
+              "CHME510",
+              "CHME517",
+              "CHME417",
+              "CHME508",
+              "CHME590",
+              "CHME528",
+              "CHME506"
+            ]
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 2.0,
+            "courseCodes": [
+              "CHME485",
+              "CHME490"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 12.0,
+            "courseCodes": []
+          },
+          {
+            "id": "unallocated",
+            "title": "Requirement category unresolved in extraction",
+            "requiredCredits": 3.0,
+            "courseCodes": [
+              "CHME310",
+              "CHME415"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "MATH130",
+            "title": "Calculus I for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS135",
+            "title": "General Physics Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM111",
+            "title": "General Chemistry I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "ESPU107",
+            "title": "Introduction to Academic English For Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM175",
+            "title": "Chemistry Lab I for Engineering",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ISLM101",
+            "title": "Biography of the Prophet \"Sira\"",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH135",
+            "title": "Calculus II for Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS110",
+            "title": "General Physics II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS140",
+            "title": "General Physics Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG220",
+            "title": "Engineering Thermodynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GESU121",
+            "title": "Sustainability",
+            "credits": 3.0,
+            "term": {
+              "season": "Summer",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": true,
+            "blockId": "gened-3",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM113",
+            "title": "General Chemistry II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME330",
+            "title": "Chemical Engineering Fluid Mechanics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH140",
+            "title": "Linear Algebra I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG215",
+            "title": "Engineering Ethics",
+            "credits": 2.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM282",
+            "title": "Organic Chemistry for Non-Majors",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME300",
+            "title": "Introduction to Chemical Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT210",
+            "title": "Probability and Statistics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG315",
+            "title": "Engineering Economics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME357",
+            "title": "Fundamentals of Biochemical Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEIE222",
+            "title": "Fundamentals of Innovation and Entrepreneurship",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH275",
+            "title": "Ordinary Differential Equations",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME322",
+            "title": "Chemical Engineering Thermodynamics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GENG230",
+            "title": "Computer Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME485",
+            "title": "Internship I",
+            "credits": 1.0,
+            "term": {
+              "season": "Summer",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "internship",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME411",
+            "title": "Reactor Design",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM377",
+            "title": "Instrumental Analysis for Chemical Engineering",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME390",
+            "title": "Engineering and Strength of Materials",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME360",
+            "title": "Numerical Methods in Chemical Engineering",
+            "credits": 2.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME421",
+            "title": "Mass Transfer",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME310",
+            "title": "Computer Applications in Chemical Engineering",
+            "credits": 2.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME413",
+            "title": "Heat Transfer",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM355",
+            "title": "Physical Chemistry Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME422",
+            "title": "Unit Operation",
+            "credits": 2.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "HSS105",
+            "title": "Emirates Studies",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME415",
+            "title": "Fluid Mechanics and Heat Transfer lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME490",
+            "title": "Internship II",
+            "credits": 1.0,
+            "term": {
+              "season": "Summer",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "internship",
+            "disposition": "applied"
+          },
+          {
+            "code": "GESU121",
+            "title": "Sustainability",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "failed",
+            "grade": "F",
+            "repeated": true,
+            "blockId": "gened-3",
+            "disposition": "insufficient"
+          },
+          {
+            "code": "CHME510",
+            "title": "Process and Plant Design",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME517",
+            "title": "Mass Transfer Operations",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME585",
+            "title": "Design and Critical Thinking in Chemical Engineering",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHME417",
+            "title": "Mass Transfer and Reactor Design Lab",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEIT112",
+            "title": "Fourth Industrial Revolution",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "CHEM115",
+            "title": "General Chemistry Laboratory I",
+            "credits": 1,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": null,
+            "disposition": "fall-through"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "CHME508",
+              "CHME590",
+              "CHME528",
+              "CHME506"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351277+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000007"
+    },
+    {
+      "slug": "olive",
+      "label": "Fictional Student Olive",
+      "scenario": "Returning Economics student with pending transfer evaluation",
+      "planId": "economics-2022-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Olive",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Third Year",
+        "studentStatus": "Returning",
+        "holds": [],
+        "program": "Bachelor of Economics",
+        "college": "College of Business and Economics",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2022
+        },
+        "catalogYear": "2022/2023",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 3,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 120,
+        "blocks": [
+          {
+            "id": "gened-2",
+            "title": "General Education — Cluster 2",
+            "requiredCredits": 12.0,
+            "courseCodes": [
+              "HSS105",
+              "ISLM100",
+              "ISLM101",
+              "ECON105"
+            ]
+          },
+          {
+            "id": "gened-1",
+            "title": "General Education — Cluster 1",
+            "requiredCredits": 15.0,
+            "courseCodes": [
+              "MATH115",
+              "ESPU104",
+              "GEIT112",
+              "GEIE222"
+            ]
+          },
+          {
+            "id": "unallocated",
+            "title": "Requirement category unresolved in extraction",
+            "requiredCredits": 51.0,
+            "courseCodes": [
+              "ACCT100",
+              "MGMT200",
+              "STAT130",
+              "MIST200",
+              "FINC240",
+              "ECON125",
+              "SCML200",
+              "ESPU240",
+              "MKTG200",
+              "PRVT2652",
+              "PRVT265",
+              "ACCT225",
+              "MGMT415",
+              "PHIL120",
+              "GBUS460"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 18.0,
+            "courseCodes": [
+              "ECON211",
+              "ECON344",
+              "ECON212",
+              "ECON215",
+              "ECON231",
+              "ECON433"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 12.0,
+            "courseCodes": []
+          },
+          {
+            "id": "gened-3",
+            "title": "General Education — Cluster 3",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "GESU121"
+            ]
+          },
+          {
+            "id": "free",
+            "title": "Free electives",
+            "requiredCredits": 6.0,
+            "courseCodes": []
+          }
+        ],
+        "courses": [
+          {
+            "code": "HSS105",
+            "title": "Emirates Studies",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "transfer-pending",
+            "grade": "TR",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH115",
+            "title": "Calculus for Business & Economics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "ESPU104",
+            "title": "Introduction to Academic English For Business",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          },
+          {
+            "code": "ISLM100",
+            "title": "Islamic Culture/Biography of the Prophet \"Sira\"",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2022
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "ACCT100",
+            "title": "Principles of Financial Accounting",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON105",
+            "title": "Principles of Microeconomics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened-2",
+            "disposition": "applied"
+          },
+          {
+            "code": "MGMT200",
+            "title": "Fundamentals of Management",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT130",
+            "title": "Statistics for Business",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "MIST200",
+            "title": "Foundation of MIS & Technologies",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "FINC240",
+            "title": "Principles of Financial Management",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON125",
+            "title": "Principles of Macroeconomics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON211",
+            "title": "Theory of Microeconomics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2023
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "SCML200",
+            "title": "Supply Chain Management & Operations",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "ESPU240",
+            "title": "Business Writing in English",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON344",
+            "title": "Public Economics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON212",
+            "title": "Theory of Macroeconomics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON215",
+            "title": "Money and Banking",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2024
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "MKTG200",
+            "title": "Principles of Marketing",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "PRVT2652",
+            "title": "Business Law (E)",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "unallocated",
+            "disposition": "applied"
+          },
+          {
+            "code": "ECON231",
+            "title": "Econometrics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEIT112",
+            "title": "Fourth Industrial Revolution",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened-1",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [
+          {
+            "term": {
+              "season": "Spring",
+              "year": 2027
+            },
+            "courseCodes": [
+              "ACCT225",
+              "GEIE222"
+            ],
+            "status": "proposed"
+          }
+        ],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351315+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": true,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000008"
+    },
+    {
+      "slug": "palm",
+      "label": "Fictional Student Palm",
+      "scenario": "IT student with a declared AI minor; minor courses remain unmet and the degree-plan total remains disputed",
+      "planId": "it-2025-fall",
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Palm",
+        "degree": "Bachelor",
+        "level": "UG",
+        "classification": "Second Year",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Bachelor of Science in Information Technology",
+        "college": "College of Computing and Artificial Intelligence",
+        "minors": [
+          "Minor in Artificial Intelligence"
+        ],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2025
+        },
+        "catalogYear": "2025/2026",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 2,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": 3.0,
+        "requiredCredits": 130,
+        "blocks": [
+          {
+            "id": "gened",
+            "title": "General Education requirements",
+            "requiredCredits": 21.0,
+            "courseCodes": [
+              "GEAE101",
+              "GEEM110",
+              "GESU121",
+              "ITBP218"
+            ]
+          },
+          {
+            "id": "college",
+            "title": "College requirements",
+            "requiredCredits": 41.0,
+            "courseCodes": [
+              "MATH105",
+              "CSBP119",
+              "PHYS105",
+              "CENG202",
+              "MATH110",
+              "CSBP219",
+              "CENG205",
+              "STAT210",
+              "CSBP319",
+              "ITBP301",
+              "BIOC100",
+              "CSBP315",
+              "ITBP270",
+              "ITBP480"
+            ]
+          },
+          {
+            "id": "major",
+            "title": "Major / specialization requirements",
+            "requiredCredits": 36.0,
+            "courseCodes": [
+              "CSBP121",
+              "CSBP221",
+              "CENG210",
+              "ITBP280",
+              "CSBP340",
+              "CENG530",
+              "ITBP322",
+              "CSBP320",
+              "ITBP321",
+              "ITBP323",
+              "CSBP316",
+              "ITBP324",
+              "CSBP301",
+              "ITBP481"
+            ]
+          },
+          {
+            "id": "major-elective",
+            "title": "Major electives",
+            "requiredCredits": 10.0,
+            "courseCodes": [
+              "CENG529"
+            ]
+          },
+          {
+            "id": "free",
+            "title": "Free electives",
+            "requiredCredits": 6.0,
+            "courseCodes": []
+          },
+          {
+            "id": "internship",
+            "title": "Internship",
+            "requiredCredits": 6.0,
+            "courseCodes": [
+              "ITBP496"
+            ]
+          },
+          {
+            "id": "minor-ai",
+            "title": "AI minor — allocation and cohort applicability pending",
+            "requiredCredits": 18,
+            "courseCodes": [
+              "CSBP219",
+              "CSBP319",
+              "CSBP301",
+              "CSBP411",
+              "CSBP476",
+              "CSBP441",
+              "CSBP491",
+              "CSBP475",
+              "CSBP477"
+            ]
+          }
+        ],
+        "courses": [
+          {
+            "code": "GEAE101",
+            "title": "Academic English for Humanities and STEM",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH105",
+            "title": "Calculus I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP119",
+            "title": "Algorithms and Problem Solving",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "PHYS105",
+            "title": "General Physics I",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP121",
+            "title": "Programming Lab I",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2025
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG202",
+            "title": "Discrete Mathematics",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "MATH110",
+            "title": "Calculus II",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP219",
+            "title": "Object Oriented Programming",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG205",
+            "title": "Digital Design & Computer Organization",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP221",
+            "title": "Programming Lab II",
+            "credits": 1.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GEEM110",
+            "title": "Contemporary Emirati Studies",
+            "credits": 3.0,
+            "term": {
+              "season": "Spring",
+              "year": 2026
+            },
+            "status": "completed",
+            "grade": "B",
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          },
+          {
+            "code": "STAT210",
+            "title": "Probability and Statistics",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "CENG210",
+            "title": "Communication & Networks Fundamentals",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "CSBP319",
+            "title": "Data Structures",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "college",
+            "disposition": "applied"
+          },
+          {
+            "code": "ITBP280",
+            "title": "Information Technology Project Management Exhibition",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "major",
+            "disposition": "applied"
+          },
+          {
+            "code": "GESU121",
+            "title": "Sustainability",
+            "credits": 3.0,
+            "term": {
+              "season": "Fall",
+              "year": 2026
+            },
+            "status": "in-progress",
+            "grade": null,
+            "repeated": false,
+            "blockId": "gened",
+            "disposition": "applied"
+          }
+        ],
+        "planner": [],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351365+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf",
+            "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/minor-in-artificial-intelligence.shtml"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": false,
+        "allCourseCatalogLinks": true,
+        "sourceIssues": [
+          "Plan sum 120.0 != printed degree total 130",
+          "Minor requirement shown separately; approved course overlap and catalog applicability are not confirmed."
+        ],
+        "historyScope": "Model-derived fictional history plus documented prerequisite-driven delays. CSBP221 is aligned with CSBP319 after CSBP219; Elm delays ELEC372; Pine has an additional MATH275 attempt; Ash has an additional CHEM115 lab. Additional attempts are fall-through and do not inflate degree credits. Elective slots remain unselected. Unknown historical conditions are not certified.",
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000009"
+    },
+    {
+      "slug": "juniper",
+      "label": "Fictional Student Juniper",
+      "scenario": "Graduate first-term student; a public curriculum is known, but an individual approved term plan is not supplied",
+      "planId": null,
+      "profile": {
+        "schemaVersion": 1,
+        "displayName": "Fictional Student Juniper",
+        "degree": "Master",
+        "level": "PG",
+        "classification": "Graduate",
+        "studentStatus": "Active",
+        "holds": [],
+        "program": "Master of Science in Information Technology Management",
+        "college": "College of Computing and Artificial Intelligence",
+        "minors": [],
+        "track": null,
+        "admitTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "catalogYear": "2026/2027",
+        "currentTerm": {
+          "season": "Fall",
+          "year": 2026
+        },
+        "modelPosition": {
+          "year": 1,
+          "semester": 1
+        },
+        "academicStanding": "good",
+        "overallGpa": null,
+        "requiredCredits": 30,
+        "blocks": [
+          {
+            "id": "core",
+            "title": "Core courses",
+            "requiredCredits": 6,
+            "courseCodes": [
+              "ITCO601",
+              "ITCO602"
+            ]
+          },
+          {
+            "id": "specialization",
+            "title": "Specialization courses",
+            "requiredCredits": 12,
+            "courseCodes": [
+              "ISBP631",
+              "ISBP632",
+              "ISBP637",
+              "ISBP639"
+            ]
+          },
+          {
+            "id": "option",
+            "title": "Thesis or non-thesis option requirements",
+            "requiredCredits": 12,
+            "courseCodes": []
+          }
+        ],
+        "courses": [],
+        "planner": [],
+        "provenance": {
+          "kind": "fictional-tester",
+          "updatedAt": "2026-11-17T14:05:24.351423+00:00",
+          "sourceUrls": [
+            "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+          ]
+        }
+      },
+      "validation": {
+        "semesterAndDegreeTotals": null,
+        "allCourseCatalogLinks": false,
+        "sourceIssues": [
+          "No published semester-by-semester graduate model has been verified."
+        ],
+        "readiness": "provisional-not-final-advising-fixture"
+      },
+      "studentId": "99000000010"
+    }
+  ]
+}

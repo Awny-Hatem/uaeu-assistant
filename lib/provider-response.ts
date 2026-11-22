@@ -12,11 +12,28 @@ export function finalizeProviderResponse(
 
 export const CLARIFICATION_KINDS = ["", "applicant_category", "degree_level", "term_year", "course_identity", "cohort", "student_status", "campus_or_branch", "request_type", "individual_record", "unverified_fact"] as const;
 
+export const MAX_GROUNDING_REWRITES = 2;
+
 export type GroundedAnswer = {
   claims: { text: string; evidenceIds: string[] }[];
   clarification: typeof CLARIFICATION_KINDS[number];
   disposition: "answer" | "clarify" | "abstain";
 };
+
+/** Preserve the exact rendered passage while checking adjacent paragraphs
+ * supported by the same individual source together. A condition in the next
+ * paragraph can qualify the preceding sentence, but a different source never
+ * supplies that condition. No wording, fact, order or attribution is invented. */
+export function coalesceSourceClaims(answer: GroundedAnswer): GroundedAnswer {
+  const claims: GroundedAnswer['claims'] = [];
+  for (const claim of answer.claims) {
+    const previous = claims.at(-1);
+    if (previous && previous.evidenceIds.length === 1 && claim.evidenceIds.length === 1 && previous.evidenceIds[0] === claim.evidenceIds[0]) {
+      previous.text += '\n\n'+claim.text;
+    } else claims.push({...claim,evidenceIds:[...claim.evidenceIds]});
+  }
+  return {...answer,claims};
+}
 
 export function groundedAnswerSchema(evidenceIds: string[]) {
   return {

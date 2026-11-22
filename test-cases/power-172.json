@@ -1,0 +1,2118 @@
+{
+  "schemaVersion": 1,
+  "methodology": "New scenarios. Expected behavior is a rubric, not a claimed actual answer. Human/source review is required before factual pass labels.",
+  "cases": [
+    {
+      "id": "POWER001",
+      "group": "personalized",
+      "title": "cedar — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER002",
+      "group": "personalized",
+      "title": "cedar — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER003",
+      "group": "personalized",
+      "title": "cedar — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER004",
+      "group": "personalized",
+      "title": "cedar — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER005",
+      "group": "personalized",
+      "title": "cedar — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER006",
+      "group": "personalized",
+      "title": "cedar — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER007",
+      "group": "personalized",
+      "title": "cedar — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER008",
+      "group": "personalized",
+      "title": "cedar — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER009",
+      "group": "personalized",
+      "title": "cedar — course belongs to plan",
+      "turns": [
+        "Is CSBP119 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER010",
+      "group": "personalized-ar",
+      "title": "cedar — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "cedar"
+    },
+    {
+      "id": "POWER011",
+      "group": "personalized",
+      "title": "maple — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER012",
+      "group": "personalized",
+      "title": "maple — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER013",
+      "group": "personalized",
+      "title": "maple — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER014",
+      "group": "personalized",
+      "title": "maple — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER015",
+      "group": "personalized",
+      "title": "maple — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER016",
+      "group": "personalized",
+      "title": "maple — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER017",
+      "group": "personalized",
+      "title": "maple — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER018",
+      "group": "personalized",
+      "title": "maple — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER019",
+      "group": "personalized",
+      "title": "maple — course belongs to plan",
+      "turns": [
+        "Is GEAE101 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER020",
+      "group": "personalized-ar",
+      "title": "maple — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf"
+      ],
+      "account": "maple"
+    },
+    {
+      "id": "POWER021",
+      "group": "personalized",
+      "title": "willow — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER022",
+      "group": "personalized",
+      "title": "willow — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER023",
+      "group": "personalized",
+      "title": "willow — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER024",
+      "group": "personalized",
+      "title": "willow — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER025",
+      "group": "personalized",
+      "title": "willow — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER026",
+      "group": "personalized",
+      "title": "willow — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER027",
+      "group": "personalized",
+      "title": "willow — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER028",
+      "group": "personalized",
+      "title": "willow — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER029",
+      "group": "personalized",
+      "title": "willow — course belongs to plan",
+      "turns": [
+        "Is ESPU1081 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER030",
+      "group": "personalized-ar",
+      "title": "willow — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "willow"
+    },
+    {
+      "id": "POWER031",
+      "group": "personalized",
+      "title": "birch — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER032",
+      "group": "personalized",
+      "title": "birch — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER033",
+      "group": "personalized",
+      "title": "birch — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER034",
+      "group": "personalized",
+      "title": "birch — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER035",
+      "group": "personalized",
+      "title": "birch — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER036",
+      "group": "personalized",
+      "title": "birch — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER037",
+      "group": "personalized",
+      "title": "birch — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER038",
+      "group": "personalized",
+      "title": "birch — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER039",
+      "group": "personalized",
+      "title": "birch — course belongs to plan",
+      "turns": [
+        "Is GEAE101 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER040",
+      "group": "personalized-ar",
+      "title": "birch — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "birch"
+    },
+    {
+      "id": "POWER041",
+      "group": "personalized",
+      "title": "elm — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER042",
+      "group": "personalized",
+      "title": "elm — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER043",
+      "group": "personalized",
+      "title": "elm — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER044",
+      "group": "personalized",
+      "title": "elm — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER045",
+      "group": "personalized",
+      "title": "elm — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER046",
+      "group": "personalized",
+      "title": "elm — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER047",
+      "group": "personalized",
+      "title": "elm — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER048",
+      "group": "personalized",
+      "title": "elm — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER049",
+      "group": "personalized",
+      "title": "elm — course belongs to plan",
+      "turns": [
+        "Is MATH130 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER050",
+      "group": "personalized-ar",
+      "title": "elm — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "elm"
+    },
+    {
+      "id": "POWER051",
+      "group": "personalized",
+      "title": "pine — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER052",
+      "group": "personalized",
+      "title": "pine — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER053",
+      "group": "personalized",
+      "title": "pine — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER054",
+      "group": "personalized",
+      "title": "pine — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER055",
+      "group": "personalized",
+      "title": "pine — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER056",
+      "group": "personalized",
+      "title": "pine — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER057",
+      "group": "personalized",
+      "title": "pine — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER058",
+      "group": "personalized",
+      "title": "pine — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER059",
+      "group": "personalized",
+      "title": "pine — course belongs to plan",
+      "turns": [
+        "Is MATH1110 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER060",
+      "group": "personalized-ar",
+      "title": "pine — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "account": "pine"
+    },
+    {
+      "id": "POWER061",
+      "group": "personalized",
+      "title": "ash — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER062",
+      "group": "personalized",
+      "title": "ash — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER063",
+      "group": "personalized",
+      "title": "ash — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER064",
+      "group": "personalized",
+      "title": "ash — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER065",
+      "group": "personalized",
+      "title": "ash — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER066",
+      "group": "personalized",
+      "title": "ash — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER067",
+      "group": "personalized",
+      "title": "ash — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER068",
+      "group": "personalized",
+      "title": "ash — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER069",
+      "group": "personalized",
+      "title": "ash — course belongs to plan",
+      "turns": [
+        "Is MATH130 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER070",
+      "group": "personalized-ar",
+      "title": "ash — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_chemical_engineering_study_plan.pdf"
+      ],
+      "account": "ash"
+    },
+    {
+      "id": "POWER071",
+      "group": "personalized",
+      "title": "olive — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER072",
+      "group": "personalized",
+      "title": "olive — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER073",
+      "group": "personalized",
+      "title": "olive — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER074",
+      "group": "personalized",
+      "title": "olive — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER075",
+      "group": "personalized",
+      "title": "olive — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER076",
+      "group": "personalized",
+      "title": "olive — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER077",
+      "group": "personalized",
+      "title": "olive — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER078",
+      "group": "personalized",
+      "title": "olive — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER079",
+      "group": "personalized",
+      "title": "olive — course belongs to plan",
+      "turns": [
+        "Is MATH115 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER080",
+      "group": "personalized-ar",
+      "title": "olive — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cbe/pdf/cbe_bsc_economics_study_plan.pdf"
+      ],
+      "account": "olive"
+    },
+    {
+      "id": "POWER081",
+      "group": "personalized",
+      "title": "palm — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER082",
+      "group": "personalized",
+      "title": "palm — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER083",
+      "group": "personalized",
+      "title": "palm — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER084",
+      "group": "personalized",
+      "title": "palm — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER085",
+      "group": "personalized",
+      "title": "palm — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER086",
+      "group": "personalized",
+      "title": "palm — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER087",
+      "group": "personalized",
+      "title": "palm — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER088",
+      "group": "personalized",
+      "title": "palm — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER089",
+      "group": "personalized",
+      "title": "palm — course belongs to plan",
+      "turns": [
+        "Is GEAE101 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER090",
+      "group": "personalized-ar",
+      "title": "palm — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ],
+      "account": "palm"
+    },
+    {
+      "id": "POWER091",
+      "group": "personalized",
+      "title": "juniper — Next semester",
+      "turns": [
+        "What should I take next semester?"
+      ],
+      "expected": "Use this account’s exact catalog and entry season, infer the next model position, exclude passed courses and expose prerequisite conditions. If the official plan conflicts or is missing, say so without inventing a sequence.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER092",
+      "group": "personalized",
+      "title": "juniper — Credits remaining",
+      "turns": [
+        "How many credits do I have left?"
+      ],
+      "expected": "Count completed applied unique passing courses once; exclude in-progress, failed, pending transfer and fall-through. State the recorded requirement, earned credits, in-progress credits and amount not yet earned.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER093",
+      "group": "personalized",
+      "title": "juniper — Electives left",
+      "turns": [
+        "Which electives can I still take?"
+      ],
+      "expected": "Identify unfulfilled matching-model elective slots; distinguish current published options from confirmed cohort eligibility. Never promise a seat or approval.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER094",
+      "group": "personalized",
+      "title": "juniper — Prerequisite check",
+      "turns": [
+        "Can I take CSBP 319 — do I meet its prerequisites?"
+      ],
+      "expected": "Use the actual saved passing attempts, minimum grade conditions, and pre/corequisite relations. In-progress work is conditional, never already passed. Cite the specific course.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER095",
+      "group": "personalized",
+      "title": "juniper — Graduation status",
+      "turns": [
+        "Am I on track to graduate?"
+      ],
+      "expected": "Use earned rather than applied-plus-in-progress credits and identify unfinished recorded blocks. Do not certify graduation or hide unresolved categories/source conflicts.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER096",
+      "group": "personalized",
+      "title": "juniper — Minor",
+      "turns": [
+        "What is in my minor?"
+      ],
+      "expected": "If no minor is recorded say so. For the AI minor, cite its official current requirements and distinguish current rules from unverified historical applicability.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER097",
+      "group": "personalized",
+      "title": "juniper — Failed/repeated work",
+      "turns": [
+        "How does my failed or repeated course affect my progress?"
+      ],
+      "expected": "Count a repeated passed course once. A failed attempt earns no credits. Identify recorded repeat status; do not invent downstream eligibility or an official GPA replacement decision.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER098",
+      "group": "personalized",
+      "title": "juniper — Registration",
+      "turns": [
+        "How do I register my courses at UAEU?"
+      ],
+      "expected": "Give official registration steps and the appropriate registration/portal link. Do not claim to register courses or access the student’s live record.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER099",
+      "group": "personalized",
+      "title": "juniper — course belongs to plan",
+      "turns": [
+        "Is ITCO601 required in my major, and which semester is it normally taken?"
+      ],
+      "expected": "Identify the course only from this exact matching plan; indicate its printed category and term. A course not found is not automatically unnecessary.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER100",
+      "group": "personalized-ar",
+      "title": "juniper — Arabic remaining credits",
+      "turns": [
+        "كم ساعة باقي لي في خطتي؟"
+      ],
+      "expected": "Answer in Arabic. Count the same self-reported earned, in-progress and remaining credits as the English case, with an official-audit note.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/programs/graduate/master-of-science-in-information-technology-management.shtml"
+      ],
+      "account": "juniper"
+    },
+    {
+      "id": "POWER101",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "What are the prerequisites for CSBP 219?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER102",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "What are the prerequisites for CSBP219?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER103",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "what are the prerequisits for csbp-219?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER104",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "what is the pre requisite for csbp 219?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER105",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "What are the prerequisites for CSPB 219?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER106",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "هل لمساق CSBP 219 متطلبات سابقة؟"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER107",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "شو لازم أخلص قبل CSBP219؟"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER108",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "CSBP 219 corequisite?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER109",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "Does CSBP219 have a corequisite?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER110",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "Can I study CSBP-219 without CSBP119?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER111",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "قارن متطلبات CSBP219 وCSBP319"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER112",
+      "group": "phrasing",
+      "title": "Course code variant",
+      "turns": [
+        "What is the difference between a prerequisite and a corequisite for CSBP219?"
+      ],
+      "expected": "Use the specific official course record. Preserve the actual prerequisite/corequisite relation and minimum grades. A transposed unknown code should be clarified rather than invented.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+      ]
+    },
+    {
+      "id": "POWER113",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Who created you?"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER114",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Who are you?"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER115",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "What are you?"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER116",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "What can you do?"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER117",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Where does your information come from?"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER118",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "مين صنعك؟"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER119",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "من أنت؟"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER120",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "ما مصادرك؟"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER121",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Hi, my name is Noor. I am a second year IT student."
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER122",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Hello, I am a prospective master’s applicant."
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER123",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "مرحبا، اسمي نور، أنا طالب في السنة الثانية."
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER124",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Thanks"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER125",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Bye"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER126",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Hi"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER127",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Where can I check UAEU academic calendar deadlines?",
+        "What was my first question?"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER128",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "I study Mechanical Engineering.",
+        "Summarize our chat"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER129",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Who created you?",
+        "لخص محادثتنا"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER130",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Hi, my name is Noor. I am an IT major in my second year, second semester.",
+        "What should I take next semester?",
+        "Fall 2022"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ]
+    },
+    {
+      "id": "POWER131",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "I study IT, Year 2 Semester 2.",
+        "What should I take next semester?",
+        "Fall 2025"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_information_technology_study_plan.pdf"
+      ]
+    },
+    {
+      "id": "POWER132",
+      "group": "conversation",
+      "title": "Conversation and continuity",
+      "turns": [
+        "Does UAEU have a CE program?",
+        "Computer Engineering"
+      ],
+      "expected": "Respond to the actual conversational intent, in its language. Use server history for meta recall; do not retrieve policy for identity or introductions. For planning ask only the missing entry cohort, retain IT, and expose the 2025 source conflict.",
+      "sources": []
+    },
+    {
+      "id": "POWER133",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Engineering."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER134",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Engineering."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER135",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Science."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER136",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Science."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER137",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Computing and Artificial Intelligence."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER138",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Computing and Artificial Intelligence."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER139",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Business and Economics."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER140",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Business and Economics."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER141",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Law."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER142",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Law."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER143",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Education."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER144",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Education."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER145",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Humanities and Social Sciences."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER146",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Humanities and Social Sciences."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER147",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Medicine and Health Sciences."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER148",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Medicine and Health Sciences."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER149",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all undergraduate programs in the College of Agriculture and Veterinary Medicine."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER150",
+      "group": "directory",
+      "title": "College program directory",
+      "turns": [
+        "List all graduate programs in the College of Agriculture and Veterinary Medicine."
+      ],
+      "expected": "List all verified directory records at the requested level for this college; group by department and link each readable program page. No raw XML; do not classify minors as degrees.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/"
+      ]
+    },
+    {
+      "id": "POWER151",
+      "group": "directory",
+      "title": "University program directory",
+      "turns": [
+        "Can you tell me all STEM programs UAEU offers?"
+      ],
+      "expected": "Give a complete directory-derived list for the defined scope, with readable official program links and honest STEM scope.",
+      "sources": []
+    },
+    {
+      "id": "POWER152",
+      "group": "directory",
+      "title": "University program directory",
+      "turns": [
+        "List all postgraduate programs UAEU offers."
+      ],
+      "expected": "Give a complete directory-derived list for the defined scope, with readable official program links and honest STEM scope.",
+      "sources": []
+    },
+    {
+      "id": "POWER153",
+      "group": "guest",
+      "title": "prospective-ug",
+      "turns": [
+        "Which undergraduate programs are in CCAI?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-ug"
+    },
+    {
+      "id": "POWER154",
+      "group": "guest",
+      "title": "prospective-ug",
+      "turns": [
+        "How do I apply to UAEU as an international undergraduate?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-ug"
+    },
+    {
+      "id": "POWER155",
+      "group": "guest",
+      "title": "prospective-ug",
+      "turns": [
+        "What housing information is available for applicants?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-ug"
+    },
+    {
+      "id": "POWER156",
+      "group": "guest",
+      "title": "prospective-ug",
+      "turns": [
+        "Where is the academic calendar?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-ug"
+    },
+    {
+      "id": "POWER157",
+      "group": "guest",
+      "title": "prospective-pg",
+      "turns": [
+        "List all graduate programs in Engineering."
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-pg"
+    },
+    {
+      "id": "POWER158",
+      "group": "guest",
+      "title": "prospective-pg",
+      "turns": [
+        "What is the MSc in Information Technology Management curriculum?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-pg"
+    },
+    {
+      "id": "POWER159",
+      "group": "guest",
+      "title": "prospective-pg",
+      "turns": [
+        "What are the general graduate admission requirements?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-pg"
+    },
+    {
+      "id": "POWER160",
+      "group": "guest",
+      "title": "prospective-pg",
+      "turns": [
+        "Who can help me with a graduate application?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "prospective-pg"
+    },
+    {
+      "id": "POWER161",
+      "group": "guest",
+      "title": "parent",
+      "turns": [
+        "Which programs does UAEU offer in Science?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "parent"
+    },
+    {
+      "id": "POWER162",
+      "group": "guest",
+      "title": "parent",
+      "turns": [
+        "How can a parent find official campus safety information?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "parent"
+    },
+    {
+      "id": "POWER163",
+      "group": "guest",
+      "title": "parent",
+      "turns": [
+        "Where can I find official student housing information?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "parent"
+    },
+    {
+      "id": "POWER164",
+      "group": "guest",
+      "title": "parent",
+      "turns": [
+        "Does UAEU provide student transport?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "parent"
+    },
+    {
+      "id": "POWER165",
+      "group": "guest",
+      "title": "partner",
+      "turns": [
+        "Which research centers does UAEU have?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "partner"
+    },
+    {
+      "id": "POWER166",
+      "group": "guest",
+      "title": "partner",
+      "turns": [
+        "Where should a company ask about a research partnership?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "partner"
+    },
+    {
+      "id": "POWER167",
+      "group": "guest",
+      "title": "partner",
+      "turns": [
+        "Where can another university contact UAEU about collaboration?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "partner"
+    },
+    {
+      "id": "POWER168",
+      "group": "guest",
+      "title": "partner",
+      "turns": [
+        "Where are official faculty contact details?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "partner"
+    },
+    {
+      "id": "POWER169",
+      "group": "guest",
+      "title": "current-without-login",
+      "turns": [
+        "How do I reset my university password?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "current-without-login"
+    },
+    {
+      "id": "POWER170",
+      "group": "guest",
+      "title": "current-without-login",
+      "turns": [
+        "How do I access the university library?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "current-without-login"
+    },
+    {
+      "id": "POWER171",
+      "group": "guest",
+      "title": "current-without-login",
+      "turns": [
+        "Where are add/drop dates published?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "current-without-login"
+    },
+    {
+      "id": "POWER172",
+      "group": "guest",
+      "title": "current-without-login",
+      "turns": [
+        "Can you access my Degree Works audit?"
+      ],
+      "expected": "Answer the requested public university service for this audience, cite a relevant official readable source, distinguish public guidance from live private access, and request genuinely missing applicant details.",
+      "sources": [],
+      "visitorRole": "current-without-login"
+    }
+  ]
+}

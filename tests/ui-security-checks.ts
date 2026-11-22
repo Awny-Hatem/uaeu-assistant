@@ -4,12 +4,14 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { boundOutgoingMessages, ConversationOwnership, dailyUsage, sanitizeAnswerMetadata, uaeDateKey, type ConversationMessage } from "../lib/chat-contract";
+import { boundEvaluationMessages } from "../scripts/evaluation-request-contract.mjs";
 import { passwordError } from "../lib/auth-validation";
 import { runtimeContract } from "../lib/runtime-contract";
 import { getQuotaPlan } from "../lib/access";
 import { accountOwnershipGuard } from "../lib/request-security";
 
 process.env.CHATBOT_DB_PATH = ":memory:";
+process.env.APP_STORE_URL = ":memory:";
 process.env.AUTH_COOKIE_SECRET = "test-only-ui-security-secret-at-least-32-characters";
 delete process.env.CHATBOT_DURABLE_STORAGE;
 delete process.env.CHATBOT_DEPLOYMENT_MODE;
@@ -52,6 +54,8 @@ async function main() {
         }));
         messages[count - 1].content = "What are the prerequisites for the first course I asked about?";
         const bounded = boundOutgoingMessages(messages);
+        assert.deepEqual(boundEvaluationMessages(messages), bounded,
+          "the HTTP evaluation harness sends the same bounded context as the browser chat");
         assert.ok(bounded.length <= 30);
         assert.ok(Buffer.byteLength(JSON.stringify({ locale: "ar", messages: bounded }), "utf8") < 96 * 1024);
         assert.match(bounded[0].content, /CSBP319/);
@@ -61,11 +65,14 @@ async function main() {
   });
 
   await check("large generated answer cannot poison the next request", () => {
-    const bounded = boundOutgoingMessages([
+    const thread = [
       { role: "user", content: "Tell me about housing" },
       { role: "assistant", content: "x".repeat(12000) },
       { role: "user", content: "How much does it cost?" },
-    ]);
+    ] satisfies ConversationMessage[];
+    const bounded = boundOutgoingMessages(thread);
+    assert.deepEqual(boundEvaluationMessages(thread), bounded,
+      "the benchmark applies the same assistant-history truncation as the UI");
     assert.ok(bounded.every((message) => message.content.length <= 6000));
     assert.throws(() => boundOutgoingMessages([{ role: "user", content: "x".repeat(6001) }]));
   });
@@ -109,6 +116,10 @@ async function main() {
     assert.equal(metadata.citations?.length, 1);
     assert.equal(metadata.guide, undefined);
     assert.equal(metadata.disposition, undefined);
+    assert.equal(sanitizeAnswerMetadata({ resolutionState: "VERIFIED" }).resolutionState, "VERIFIED");
+    assert.equal(sanitizeAnswerMetadata({ resolutionState: "APPROVED_BY_AI" }).resolutionState, undefined);
+    assert.equal(sanitizeAnswerMetadata({ citations: [{ title: "policy", evidenceDomain: "academics" }] }).citations?.[0].evidenceDomain, "academics");
+    assert.equal(sanitizeAnswerMetadata({ citations: [{ title: "policy", evidenceDomain: "not a domain!" }] }).citations?.[0].evidenceDomain, undefined);
     const evidence = sanitizeAnswerMetadata({ citations: [
       { title: "source", evidenceText: "Exact source-qualified fact.", sourceVersion: "2026", sourceSection: "Section 1" },
       { title: "oversized evidence", evidenceText: "x".repeat(12001), sourceSection: false },
@@ -129,6 +140,7 @@ async function main() {
     const clean = sanitizeAnswerMetadata({ claims: [claim], grounding });
     assert.deepEqual(clean.claims, [claim]);
     assert.deepEqual(clean.grounding, grounding);
+    assert.deepEqual(sanitizeAnswerMetadata({ grounding: { ...grounding, rewriteCount: 2 } }).grounding, { ...grounding, rewriteCount: 2 });
     for (const claims of [
       [{ ...claim, text: "x".repeat(6001) }],
       Array.from({ length: 17 }, () => claim),
@@ -138,34 +150,37 @@ async function main() {
     ]) assert.equal(sanitizeAnswerMetadata({ claims }).claims, undefined);
     for (const invalid of [
       { ...grounding, reasonCodes: ["private draft or provider exception text"] },
-      { ...grounding, rewriteCount: 2 },
+      { ...grounding, rewriteCount: 3 },
       { ...grounding, reasonCodes: Array.from({ length: 17 }, () => "scope_drift") },
     ]) assert.equal(sanitizeAnswerMetadata({ grounding: invalid }).grounding, undefined);
     assert.equal(sanitizeAnswerMetadata({ claims: [claim], grounding: { ...grounding, status: "rejected" } }).claims, undefined);
   });
 
-  const { default: db } = await import("../lib/db");
-  const { encodeSessionCookie } = await import("../lib/session-cookie");
-  const { registerSession, authenticatedSessionUser, revokeSession } = await import("../lib/auth-session");
-  const { persistChatMessage, readChatHistory, clearChatHistory, historyGeneration } = await import("../lib/chat-history");
   const { readJsonRequest, rateLimitGuard } = await import("../lib/request-security");
   const { classifyTopic } = await import("../lib/analytics");
-  const user = { id: "audit-user", username: "audit", email: "audit@example.com", studentType: "Visitor", major: null, universityAffiliation: "general" as const };
-  db.prepare("INSERT INTO users(id,username,email,password_hash,student_type,major,university_affiliation) VALUES(?,?,?,?,?,?,?)")
-    .run(user.id, user.username, user.email, "test-hash", user.studentType, null, "general");
+  const authSession = await import("../lib/auth/session");
+  const { createAccount } = await import("../lib/auth/accounts");
+  const jarFor = () => {
+    const values = new Map<string, string>();
+    return { values, get: (n: string) => (values.has(n) && values.get(n) !== "" ? { value: values.get(n)! } : undefined), set: (n: string, v: string) => { values.set(n, v); } };
+  };
+  const auditAccount = await createAccount({ username: `audit_${Date.now()}`, email: `audit${Date.now()}@example.com`, password: "AuditPassw0rd", studentType: "Visitor", universityAffiliation: "general" });
 
-  await check("logout revokes token replay on the current store", () => {
-    const token = encodeSessionCookie(user)!;
-    registerSession(user, token);
-    assert.equal(authenticatedSessionUser(token)?.id, user.id);
-    revokeSession(token);
-    assert.equal(authenticatedSessionUser(token), null);
+  await check("logout revokes replay of a still-unexpired access token", async () => {
+    const jar = jarFor();
+    await authSession.startSession(jar, auditAccount.id);
+    assert.equal(await authSession.currentUserId(jar), auditAccount.id);
+    const stolen = jarFor();
+    for (const [k, v] of jar.values) stolen.values.set(k, v);
+    await authSession.endSession(jar);
+    assert.equal(await authSession.currentUserId(stolen), null, "copied access token must stop working after logout");
+    stolen.values.delete(authSession.ACCESS_COOKIE);
+    assert.equal(await authSession.currentUserId(stolen), null, "copied refresh token must stop working after logout");
   });
 
   await check("production mode and impossible durable-store declaration fail closed", () => {
     process.env.CHATBOT_DEPLOYMENT_MODE = "production";
     assert.equal(runtimeContract().allowed, false);
-    assert.equal(authenticatedSessionUser(encodeSessionCookie(user)), null);
     delete process.env.CHATBOT_DEPLOYMENT_MODE;
     process.env.CHATBOT_DURABLE_STORAGE = "enabled";
     assert.equal(runtimeContract().storageConfigurationValid, false);
@@ -200,41 +215,21 @@ async function main() {
     }
   });
 
-  await check("durable registered session and logout revocation survive fresh server processes", () => {
+  await check("signed-in sessions and logout revocation survive fresh server processes", () => {
     const prefix = path.join(tmpdir(), "uaeu-auth-test-");
     const directory = mkdtempSync(prefix);
-    const env = { ...process.env, CHATBOT_DB_PATH: path.join(directory, "sessions.db"), CHATBOT_DURABLE_STORAGE: "enabled", CHATBOT_DEPLOYMENT_MODE: "prototype", VERCEL: "0" };
-    const common = "const db=require('./lib/db.ts').default; const {encodeSessionCookie}=require('./lib/session-cookie.ts'); const {authenticatedSessionUser,registerSession,revokeSession}=require('./lib/auth-session.ts');";
-    const run = (code: string, extra: Record<string, string> = {}) => execFileSync(process.execPath, ["--require", "tsx/cjs", "-e", common + code], { cwd: process.cwd(), env: { ...env, ...extra }, encoding: "utf8" }).trim();
+    const env = { ...process.env, APP_STORE_URL: `file:${path.join(directory, "store.db")}`, CHATBOT_DEPLOYMENT_MODE: "prototype", VERCEL: "0" };
+    const common = "const s=require('./lib/auth/session.ts'); const a=require('./lib/auth/accounts.ts'); const jar=(c)=>{const m=new Map(Object.entries(c||{}));return {m,get:n=>m.get(n)?{value:m.get(n)}:undefined,set:(n,v)=>m.set(n,v)}}; (async()=>{";
+    const run = (code: string, extra: Record<string, string> = {}) => execFileSync(process.execPath, ["--require", "tsx/cjs", "-e", common + code + "})().catch(e=>{console.error(e);process.exit(1)})"], { cwd: process.cwd(), env: { ...env, ...extra }, encoding: "utf8" }).trim();
     try {
-      const token = run("const user={id:'persistent-test',username:'tester',email:'test@example.invalid',studentType:'Visitor',major:null,universityAffiliation:'general'}; db.prepare('INSERT INTO users(id,username,email,password_hash,student_type) VALUES (?,?,?,?,?)').run(user.id,user.username,user.email,'test-only-hash',user.studentType); const token=encodeSessionCookie(user);registerSession(user,token);process.stdout.write(token);db.close();");
-      assert.equal(run("process.stdout.write(String(Boolean(authenticatedSessionUser(process.env.TEST_SESSION))));db.close();", { TEST_SESSION: token }), "true");
-      run("revokeSession(process.env.TEST_SESSION);db.close();", { TEST_SESSION: token });
-      assert.equal(run("process.stdout.write(String(Boolean(authenticatedSessionUser(process.env.TEST_SESSION))));db.close();", { TEST_SESSION: token }), "false");
-      assert.equal(run("db.prepare('DELETE FROM sessions').run(); const user={id:'persistent-test',username:'tester',email:'test@example.invalid',studentType:'Visitor',major:null,universityAffiliation:'general'};process.stdout.write(String(Boolean(authenticatedSessionUser(encodeSessionCookie(user)))));db.close();"), "false");
+      const cookies = run("const acct=await a.createAccount({username:'persist_test',email:'persist@example.invalid',password:'Persist123x',studentType:'Visitor',universityAffiliation:'general'}); const j=jar(); await s.startSession(j,acct.id); process.stdout.write(JSON.stringify(Object.fromEntries(j.m)));");
+      assert.equal(run("process.stdout.write(String(Boolean(await s.currentUserId(jar(JSON.parse(process.env.C))))));", { C: cookies }), "true");
+      run("await s.endSession(jar(JSON.parse(process.env.C)));", { C: cookies });
+      assert.equal(run("process.stdout.write(String(Boolean(await s.currentUserId(jar(JSON.parse(process.env.C))))));", { C: cookies }), "false");
     } finally {
       if (!path.resolve(directory).startsWith(path.resolve(prefix))) throw new Error("Unsafe test cleanup path");
       rmSync(directory, { recursive: true, force: true });
     }
-  });
-
-  await check("server history preserves evidence and bounds reads/retention", () => {
-    process.env.SERVER_CHAT_HISTORY = "enabled";
-    for (let index = 0; index < 85; index += 1) {
-      persistChatMessage(user.id, "assistant", `Answer ${index}`, "faq", {
-        faqId: "test-answer", responseMode: "canonical", disposition: "answer", citations: [{ title: "Official source", url: "https://www.uaeu.ac.ae", lastVerified: "2026-09-29" }],
-      });
-    }
-    const messages = readChatHistory(user.id);
-    assert.equal(messages.length, 80);
-    assert.equal(messages[0].content, "Answer 5");
-    assert.equal(messages.at(-1)?.faqId, "test-answer");
-    assert.equal(messages.at(-1)?.responseMode, "canonical");
-    assert.equal(messages.at(-1)?.citations?.[0].title, "Official source");
-    assert.equal(messages.at(-1)?.disposition, "answer");
-    db.prepare("UPDATE messages SET timestamp = ?").run(Date.now() - 31 * 86400000);
-    assert.equal(readChatHistory(user.id).length, 0);
-    delete process.env.SERVER_CHAT_HISTORY;
   });
 
   await check("malformed auth object bodies return 400, not 500", async () => {
@@ -246,18 +241,6 @@ async function main() {
         assert.equal(response.status, 400);
       }
     }
-  });
-
-  await check("history deletion rejects late server writes from an older conversation", () => {
-    process.env.SERVER_CHAT_HISTORY = "enabled";
-    const previousGeneration = historyGeneration(user.id);
-    persistChatMessage(user.id, "user", "old question", undefined, undefined, previousGeneration);
-    clearChatHistory(user.id);
-    persistChatMessage(user.id, "assistant", "late old answer", "rag", {}, previousGeneration);
-    assert.equal(readChatHistory(user.id).length, 0);
-    persistChatMessage(user.id, "user", "new question", undefined, undefined, historyGeneration(user.id));
-    assert.equal(readChatHistory(user.id)[0].content, "new question");
-    delete process.env.SERVER_CHAT_HISTORY;
   });
 
   await check("request size guard stops reading chunked bodies at the byte limit", async () => {
@@ -272,10 +255,108 @@ async function main() {
     assert.ok(reads < 6);
   });
 
-  await check("untrusted forwarded headers cannot rotate rate-limit identities", () => {
+  await check("untrusted forwarded headers cannot rotate rate-limit identities", async () => {
     delete process.env.TRUST_PROXY_HEADERS;
-    assert.equal(rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "a" } }), "untrusted-test", { limit: 1, windowMs: 60000 }), null);
-    assert.equal(rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "b" } }), "untrusted-test", { limit: 1, windowMs: 60000 })?.status, 429);
+    assert.equal(await rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "a" } }), "untrusted-test", { limit: 1, windowMs: 60000 }), null);
+    assert.equal((await rateLimitGuard(new Request("http://localhost", { headers: { "x-forwarded-for": "b" } }), "untrusted-test", { limit: 1, windowMs: 60000 }))?.status, 429);
+  });
+
+  await check("production rate limiting fails closed without the shared store", async () => {
+    process.env.CHATBOT_DEPLOYMENT_MODE = "production";
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    const response = await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000 });
+    assert.equal(response?.status, 503);
+    assert.equal(runtimeContract().rateLimits, "instance-local");
+    delete process.env.CHATBOT_DEPLOYMENT_MODE;
+  });
+
+  await check("runtime health reports shared quotas when the shared store is configured", () => {
+    const previous = {
+      url: process.env.UPSTASH_REDIS_REST_URL,
+      token: process.env.UPSTASH_REDIS_REST_TOKEN,
+      kvUrl: process.env.KV_REST_API_URL,
+      kvToken: process.env.KV_REST_API_TOKEN,
+      mode: process.env.CHATBOT_DEPLOYMENT_MODE,
+    };
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    process.env.KV_REST_API_URL = "https://redis.example.test";
+    process.env.KV_REST_API_TOKEN = "test-token";
+    process.env.CHATBOT_DEPLOYMENT_MODE = "production";
+    try {
+      const contract = runtimeContract();
+      assert.equal(contract.quotas, "shared-upstash");
+      assert.equal(contract.rateLimits, "shared-upstash");
+      assert.equal(contract.productionReady, true, "standalone service readiness should require shared limits, not UAEU SSO");
+      assert.equal(contract.allowed, true);
+      assert.equal(contract.durableStore, false, "server-side history storage is optional in standalone mode");
+      assert.equal(contract.institutionalIdentity, "not-integrated");
+      assert.equal(contract.personalStudentData, "unavailable");
+    } finally {
+      if (previous.url === undefined) delete process.env.UPSTASH_REDIS_REST_URL;
+      else process.env.UPSTASH_REDIS_REST_URL = previous.url;
+      if (previous.token === undefined) delete process.env.UPSTASH_REDIS_REST_TOKEN;
+      else process.env.UPSTASH_REDIS_REST_TOKEN = previous.token;
+      if (previous.kvUrl === undefined) delete process.env.KV_REST_API_URL;
+      else process.env.KV_REST_API_URL = previous.kvUrl;
+      if (previous.kvToken === undefined) delete process.env.KV_REST_API_TOKEN;
+      else process.env.KV_REST_API_TOKEN = previous.kvToken;
+      if (previous.mode === undefined) delete process.env.CHATBOT_DEPLOYMENT_MODE;
+      else process.env.CHATBOT_DEPLOYMENT_MODE = previous.mode;
+    }
+  });
+
+  await check("shared limiter applies atomic store result and fails closed on backend errors", async () => {
+    const previous = {
+      redisUrl: process.env.UPSTASH_REDIS_REST_URL,
+      redisToken: process.env.UPSTASH_REDIS_REST_TOKEN,
+      kvUrl: process.env.KV_REST_API_URL,
+      kvToken: process.env.KV_REST_API_TOKEN,
+    };
+    delete process.env.UPSTASH_REDIS_REST_URL;
+    delete process.env.UPSTASH_REDIS_REST_TOKEN;
+    process.env.KV_REST_API_URL = "https://redis.example.test";
+    process.env.KV_REST_API_TOKEN = "test-token";
+    const originalFetch = globalThis.fetch;
+    let capturedRequest: { url: string; init?: RequestInit } | undefined;
+    try {
+      globalThis.fetch = (async (input, init) => {
+        capturedRequest = { url: String(input), init };
+        return Response.json({ result: [2, 30000] });
+      }) as typeof fetch;
+      const limited = await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000, identity: "known-test" });
+      assert.equal(limited?.status, 429);
+      assert.equal(limited?.headers.get("retry-after"), "30");
+      assert.equal(capturedRequest?.url, "https://redis.example.test/");
+      assert.equal((capturedRequest?.init?.headers as Record<string, string>).Authorization, "Bearer test-token");
+      const command = JSON.parse(String(capturedRequest?.init?.body)) as string[];
+      assert.equal(command[0], "EVAL");
+      assert.match(command[1], /redis\.call\('INCR'/);
+      assert.match(command[1], /redis\.call\('PEXPIRE'/);
+      assert.equal(command[2], "1");
+      assert.match(command[3], /^uaeu:rl:[a-f0-9]{64}$/);
+      assert.doesNotMatch(command[3], /known-test/);
+      assert.equal(command[4], "60000");
+
+      process.env.KV_REST_API_URL = "http://redis.example.test";
+      assert.equal((await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000 }))?.status, 503,
+        "Redis credentials must not be sent to a plaintext endpoint");
+      process.env.KV_REST_API_URL = "https://redis.example.test";
+      globalThis.fetch = (async () => { throw new Error("backend down"); }) as typeof fetch;
+      assert.equal((await rateLimitGuard(new Request("https://example.test/api/chat"), "chat", { limit: 1, windowMs: 60000 }))?.status, 503);
+    } finally {
+      globalThis.fetch = originalFetch;
+      for (const [key, value] of [
+        ["UPSTASH_REDIS_REST_URL", previous.redisUrl],
+        ["UPSTASH_REDIS_REST_TOKEN", previous.redisToken],
+        ["KV_REST_API_URL", previous.kvUrl],
+        ["KV_REST_API_TOKEN", previous.kvToken],
+      ] as const) {
+        if (value === undefined) delete process.env[key];
+        else process.env[key] = value;
+      }
+    }
   });
 
   await check("Arabic and English topics are aligned without substring false positives", () => {
@@ -288,6 +369,7 @@ async function main() {
     const { GET } = await import("../app/api/health/route");
     process.env.AI_PROVIDER = "intentionally-unconfigured";
     process.env.CHATBOT_BUILD_REVISION = "test-build-revision";
+    process.env.UAEU_AGENT_V3_ENABLED = "disabled";
     delete process.env.VERCEL_GIT_COMMIT_SHA;
     delete process.env.GEMINI_EMBEDDING_SEARCH;
     const response = await GET();
@@ -296,15 +378,28 @@ async function main() {
     assert.equal(health.readiness.generation, false);
     assert.equal(health.build.revision, "test-build-revision");
     assert.match(health.knowledge.contentFingerprint, /^[a-f0-9]{64}$/);
-    assert.equal(health.knowledge.retrieval.activePath, "curriculum-extract-then-lexical");
-    assert.equal(health.knowledge.retrieval.embedding, "disabled");
+    assert.equal(health.knowledge.retrieval.activePath, "curriculum-extract-then-reviewed-answers-then-scoped-academic-and-hybrid-corpus-grounded-generation");
+    assert.equal(health.knowledge.retrieval.embedding,health.knowledge.hybridCorpus.vectors>0?"ready-openai-hybrid":"disabled");
     assert.equal(health.deployment.productionReady, false);
+    assert.ok(health.deployment.productionBlockers.includes("Deployment mode is prototype"),
+      "health should explain that a healthy Preview is intentionally not production-ready");
+    assert.equal(health.agent.v3Enabled, false);
+    process.env.UAEU_AGENT_V3_ENABLED = "enabled";
+    const v3Response = await GET();
+    const v3Health = await v3Response.json();
+    assert.equal(v3Health.agent.architecture, "v3-evidence-first");
+    assert.equal(v3Health.agent.legacySelectorBypassedForUniversityModes, true);
+    assert.equal(v3Health.knowledge.retrieval.activePath, "v3-orchestrator-evidence-research-verified-generation");
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.relationRecords, 1491);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredRecords, 1481);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.unsupportedRecords, 10);
+    assert.equal(v3Health.courseCatalog.prerequisiteParsing.structuredCoveragePercent, 99.3);
+    delete process.env.UAEU_AGENT_V3_ENABLED;
     delete process.env.AI_PROVIDER;
     delete process.env.CHATBOT_BUILD_REVISION;
   });
 
   console.log(`${checks}/${checks} UI/auth/security checks passed`);
-  db.close();
 }
 
 main().catch((error) => { console.error(error); process.exitCode = 1; });

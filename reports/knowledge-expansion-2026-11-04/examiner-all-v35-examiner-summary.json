@@ -1,0 +1,1252 @@
+{
+  "summary": {
+    "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v35.json",
+    "completed": true,
+    "runtimeUnchanged": true,
+    "scenariosSeen": 20,
+    "primaryQuestions": {
+      "correct": 20,
+      "partial": 0,
+      "incorrect": 0
+    },
+    "allSubmissions": {
+      "correct": 112,
+      "partial": 2,
+      "incorrect": 6
+    },
+    "scenariosAllVariantsFactuallyPassing": 15,
+    "scenariosWithoutExactFactualReuseAndAllFactsPassing": 7,
+    "exactFactualReusePairs": 18,
+    "nearIdenticalFactualPairs": 46,
+    "latency": {
+      "mean": 4.046809523809525,
+      "median": 2.903,
+      "p95": 9.314,
+      "max": 25.793,
+      "over20Seconds": 4
+    },
+    "usage": {
+      "measuredAnswers": 126,
+      "totalAnswers": 126,
+      "estimatedUsd": null,
+      "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+    },
+    "limitations": [
+      "These automated scores are provisional, not independent proof of every statement.",
+      "Source relevance and material omissions require semantic review.",
+      "Similarity flags identify possible FAQ-like behavior; they are not hidden by formatting changes.",
+      "Deterministic safety/clarification notices are reported separately from factual RAG reuse; this does not claim their wording varies.",
+      "A finite100-scenario pass cannot guarantee all future examiner questions."
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "EX013",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX013-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX013-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX013-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX013-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX013-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX013": "a5053e98275aa5c5854db58035cbfefa982bc2c9488d16626e301c6ced0e4d33",
+        "EX013-V1": "d376d25299ceae8b27ef9e3430400d05b7e515422745a4d1b2c7bb4a95d55323",
+        "EX013-V2": "a53787b0c5615ce60fefa312062f97afb56deaee6a42e6598b08cc432cf1dd84",
+        "EX013-V3": "b333f971bd70b2f03c57d0f00217da4498592b45ca4a02860c9012e94e5152a8",
+        "EX013-V4": "e1949bcd4724d87d74305152edd6f8788bc0034b94b5949ef46da832e6e0b401",
+        "EX013-V5": "5507e0c141e277baf5e731618f4a072c5e7576df51eb896a66ca2845362dea0a"
+      }
+    },
+    {
+      "id": "EX018",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX018-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX018-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX018-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX018-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX018-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX018",
+          "b": "EX018-V1",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9048,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018",
+          "b": "EX018-V2",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9048,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018",
+          "b": "EX018-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9268,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018",
+          "b": "EX018-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9268,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018-V1",
+          "b": "EX018-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018-V1",
+          "b": "EX018-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9268,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018-V1",
+          "b": "EX018-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9268,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018-V2",
+          "b": "EX018-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9268,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018-V2",
+          "b": "EX018-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9268,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX018-V3",
+          "b": "EX018-V4",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX018": "397a395557e5384cb21a81f72f6f22004cc48d2ef5d7d34a9e8a68b26cbb82c0",
+        "EX018-V1": "24b44476c99a529cdf752fe33a6fe1d88cbbc3a65601e26156591d7a27df9fc7",
+        "EX018-V2": "205380b2711f9a47f02e33fa03f8ec0693e048cfb4e39b5d8b7b7e7f4e16a583",
+        "EX018-V3": "18e47eb8a4ed362028ff8ab8a48d457d7ebaa0b43a81632a0947df1b1276b2b8",
+        "EX018-V4": "56ca746e5bbefb45d61b303891e8c2f0ec4b9a4562bb9e871f122b6945477ea4",
+        "EX018-V5": "b8561f267b035b24f216b25951dfbedb9e633b585680d56db4c79dc4c9e7d00a"
+      }
+    },
+    {
+      "id": "EX036",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX036-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX036-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX036-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX036-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX036-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX036",
+          "b": "EX036-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9744,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX036-V1",
+          "b": "EX036-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9739,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX036": "3bf25ef679804aa991b9d54de351cfc66867a556a5e244c4ef07f010cac9ff61",
+        "EX036-V1": "a8d91cd425a4c85a132faf3df1c9b81aca8098ace8326c12dc4693a41d8c0782",
+        "EX036-V2": "5cc0ad47e511084431c3d80c9f38320268c6637af01701e57a4ed9ac190ef92f",
+        "EX036-V3": "d2390a5f3663802cb1d1645bc641879d7388114076015ad595410c159488cb68",
+        "EX036-V4": "901187830362ad51e50b5316bb47ead191b587c5db33fc133f703fc4a32e2783",
+        "EX036-V5": "c121860a643ea1573ddac765a7b41572937a227658b7cce2bf938f8c7ffa50f0"
+      }
+    },
+    {
+      "id": "EX038",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX038-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX038-V2",
+          "result": "incorrect"
+        },
+        {
+          "id": "EX038-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX038-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX038-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": false,
+      "similarityFlags": [
+        {
+          "a": "EX038",
+          "b": "EX038-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9583,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX038": "8515a5b27e9723b724611bb5308f7a514727faa14762168f80fd30ad0a9d84d0",
+        "EX038-V1": "2b224ce56607f78bb2854edb6d3de468b90420dc3bd9e786c129c1c5b77b9688",
+        "EX038-V2": "cb9b3092ddf7f1c0876a59884a66559b80af9d9fe60fd875f6bbfe917fe6585b",
+        "EX038-V3": "b76c277b8fc5beeebbcfdd895645f71d1a58a6261d4bf274fe187cd9ce2c5e4d",
+        "EX038-V4": "ccb253fe251a39e468dc09651ed56b201a50312391b42553895d8a2e7e5d1385",
+        "EX038-V5": "7f07a8b7c16e6207c537f27af79f59af9b71326b13ca5f0c2dd4a5cda6f58ac9"
+      }
+    },
+    {
+      "id": "EX040",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX040-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX040-V2",
+          "result": "incorrect"
+        },
+        {
+          "id": "EX040-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX040-V4",
+          "result": "incorrect"
+        },
+        {
+          "id": "EX040-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": false,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX040": "d1045f1f3ad6697027b2af77e696135411727bbc75a19959082f7ddbcfe4d735",
+        "EX040-V1": "8aef4fadb55d07475fd88b6b80427c76e2e938129162c90da3e95ae0d91785f2",
+        "EX040-V2": "b5de6ee23012c8cb642622eb5e0f28a3ecd597c4e86eadd4a8022207750f3721",
+        "EX040-V3": "940ebbf7ad9e1c69b4caece6d50cd6b866949cde7431d26d6a47d51c62b49171",
+        "EX040-V4": "a6b99cde4b842a4089d41a72217069cc50ea554921d76b5e9c11defbf3da87ef",
+        "EX040-V5": "b77c45c279caceba29446bb52d6dabbc1023038be65a0e9256a092769e2c3faa"
+      }
+    },
+    {
+      "id": "EX041",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX041-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX041-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX041-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX041-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX041-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX041",
+          "b": "EX041-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9286,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX041": "52ae184a1733ad9e89fd003fdc6cb521a130d3b979feb8e686d1c2164c46361d",
+        "EX041-V1": "5039b1d071f1b38091c49996201f1e28b1bedc4a04dac07f170f94558f3bc54e",
+        "EX041-V2": "b298400c0d5c9fac77dc36575a1fec2e99db9bf5fca8488cd5cd515eaf681f14",
+        "EX041-V3": "2bbd58bc0c2975656c9d067e979060225e7757b220a8f256b3d6edcf23cca62e",
+        "EX041-V4": "6172e30d06a6a6ab804b9998d86988e7736f2ff5865ffa96de33f44c231a514f",
+        "EX041-V5": "c466918ef54a5267ba2b13a9d2fd70e19dfa73fe9497443dcb81617b1c4f43be"
+      }
+    },
+    {
+      "id": "EX045",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX045-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX045-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX045-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX045-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX045-V5",
+          "result": "partial"
+        }
+      ],
+      "allFactsPass": false,
+      "similarityFlags": [
+        {
+          "a": "EX045",
+          "b": "EX045-V1",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045",
+          "b": "EX045-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045",
+          "b": "EX045-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045",
+          "b": "EX045-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9189,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045-V1",
+          "b": "EX045-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045-V1",
+          "b": "EX045-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045-V1",
+          "b": "EX045-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9189,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045-V2",
+          "b": "EX045-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045-V2",
+          "b": "EX045-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9189,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX045-V3",
+          "b": "EX045-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9189,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX045": "e9759a7614144351f240c80a5be16e717f3fd113bf7a9e8acc37a319ab72977a",
+        "EX045-V1": "6e6b1afd80eb2078449eb64dd065a17509581998a54e8d078492339dfbd8d5aa",
+        "EX045-V2": "c69cf9822f7bf419efdd007940b700d5283426d32370427b03aa56c1874bb255",
+        "EX045-V3": "2be237c10bef3d036f374581bbde60d590809ed27c44edd553c97ae8e24f8f71",
+        "EX045-V4": "6d4430d3c0330a5529c8a77383e3c4ce1b0027a3f6e290bfd185e2faf3ae522c",
+        "EX045-V5": "3cf7e7475857beaa6541cc022d236379ede95510ca78005e184fff19e1655586"
+      }
+    },
+    {
+      "id": "EX051",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX051-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX051",
+          "b": "EX051-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX051": "633ac852edb4592d461c34533650efa34dcee43552512bc71464c29f2781a9cd",
+        "EX051-V1": "e9beefb30b18dec9615304231b4b1c4f4582e0abecb775cc8a8b60d78c55d1bb",
+        "EX051-V2": "90e1aa65be6dfd123f9af6d1f006cb484b62aeea21ca25247f77ad600e3805db",
+        "EX051-V3": "a42c439dfe866cff822557381ba9ceb81508e4a57e2758b5a428772f7ee03ea3",
+        "EX051-V4": "75efa27c8254e421029a60e313952bf3acacbeabd38de2b301751557a8c8788d",
+        "EX051-V5": "be869ddaa9198e906ca36313e5f3ce873e4401a3c32f8a0e47ecc40fab7fc8ad"
+      }
+    },
+    {
+      "id": "EX052",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX052-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX052",
+          "b": "EX052-V1",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX052-V4",
+          "b": "EX052-V5",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9143,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX052": "960cd07853b86750451dad0f4f9e4d001dafb94e6e67ae019401602a72463e52",
+        "EX052-V1": "52a43dba52c36f43beffabbe984edd4a3bebdbf36758b5f3a1a8d4c4696ec501",
+        "EX052-V2": "1a91f9225e95ebbc0e33ae6be417543d36ab73dfb4097ce2b4845064f24e2822",
+        "EX052-V3": "471edf9aa1f97a08abaecad4d779340d4a2f4c949392ba848c4e075f3e00475a",
+        "EX052-V4": "2db3ad0a85a256b63ae9d0e413cbbdbac6cb8d71dec93197d8eb1583a0f5e48d",
+        "EX052-V5": "e16ba9dba4d3b09b3bfefc5447354b199a731bd03ff52f7918c2ca1a971a47ab"
+      }
+    },
+    {
+      "id": "EX056",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX056-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX056-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX056-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX056-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX056-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX056-V2",
+          "b": "EX056-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.88,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX056": "1f3c11c077adbcd88424af908d06b840b97bc6a465924e44a94290a192161cea",
+        "EX056-V1": "75224cc21efe15b347a7d130588ceb35631b3b3918c941c0080386a4b7fe1184",
+        "EX056-V2": "b3fd4dae50592965afb2edd7aee1c542c4f9055251e304833d3e7bf8f3b9d0d2",
+        "EX056-V3": "ff4af4c8f040759e7f8000cbce5b004ae7de92714d035bdd48d99b411fb133ce",
+        "EX056-V4": "a4314355b6775966855586cedb60825e307f45a3baa33a874af55829169f0c7d",
+        "EX056-V5": "02939e131fb0da657551867a3ed8a12e65dc1f10b21cdfa8404fcd1607311055"
+      }
+    },
+    {
+      "id": "EX057",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX057-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX057-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX057-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX057-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX057-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX057-V4",
+          "b": "EX057-V5",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX057": "f75ae3fa9878ced1d8d2ea2dbb7bc81c73f5705364de035e223973bce5afae25",
+        "EX057-V1": "9d4403bdcf24c71a3c8b60c60f7abb34e037239da38a8ba0942f731cbcb0c084",
+        "EX057-V2": "89a42c632bed2c145413c4be400b43c23feeb8ac01bf6df76e77f5e0ef05e4e3",
+        "EX057-V3": "4d0a5b42b7351fa244f435e9d829b1582787c16a9fb635cf1996e75d5398e3a1",
+        "EX057-V4": "ebd1b6d5e9ce23407e57a1a557f24b141cf419c401336b952ea537cf79909354",
+        "EX057-V5": "5f0ab8315c4195f91e3804c264ad4dbd41f4f472e4d37bba712e374c737d2efa"
+      }
+    },
+    {
+      "id": "EX058",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX058-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX058-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX058-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX058-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX058-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX058",
+          "b": "EX058-V2",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9057,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX058-V1",
+          "b": "EX058-V2",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.96,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX058-V1",
+          "b": "EX058-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX058-V2",
+          "b": "EX058-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.96,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX058-V4",
+          "b": "EX058-V5",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX058": "48b6b60c063c6b5065110c95d27897def6d28c6a6c2f0beb698cf03ec76e5c24",
+        "EX058-V1": "ac5d777941a8a8d54cf6283523d14d49ab85c5769ece9571e39266d856a98daf",
+        "EX058-V2": "a94279e998e8a82819f5aa2e879601877dad257a1044fffc54760f952f00edc8",
+        "EX058-V3": "9601a46b7e039eabd9105e55762718c5f1158c97d415c2930978a4094eba36b5",
+        "EX058-V4": "6d00ae0beac1e4715e10118e766384e30a7a3e6f09acb0cdf00aee3b2d3a1b4f",
+        "EX058-V5": "9291ce05a5b21a0e2e2ee0794f4316870d07679f7397b9bc32f83acbc8fe763a"
+      }
+    },
+    {
+      "id": "EX069",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX069-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX069-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX069-V3",
+          "result": "partial"
+        },
+        {
+          "id": "EX069-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX069-V5",
+          "result": "incorrect"
+        }
+      ],
+      "allFactsPass": false,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX069": "e32c26b201af36669ea2aef643a8b8d24dba88164ad2e62c06478e3725aaa94e",
+        "EX069-V1": "907c6245653883cc7b73f953ec05512b0bac7157b4827143804f3113594f8eb6",
+        "EX069-V2": "922279c68dda1ef4a55e5c9198a97f9a61f172be47952eee5d32ca4939554de7",
+        "EX069-V3": "b081202b71198853666d78f4af3eaa49d9ae6fa25d99618b2ae65ec4469ef51a",
+        "EX069-V4": "028bb48410b895ff162978d9ee3357b0397e6136768f07f6beb1339b91fc742b",
+        "EX069-V5": "8fae95e47bdcfacd9bb7e0bceb105fe871aaaa5cf79515d604bc27555d01cbc7"
+      }
+    },
+    {
+      "id": "EX070",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX070-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX070-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX070-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX070-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX070-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX070": "311596237d02110a94c339c229ffe74cf61b8d2ada873cb1c5cc94d8bcbf7d75",
+        "EX070-V1": "3e7f8c75a4eb1434a8a0234e93942ae43e48fce79e7375db2b6aad2528b8731c",
+        "EX070-V2": "5dc53f02b30f265f5ec2686b845b4f5bf322e505535b510570531a2fc8b37f3a",
+        "EX070-V3": "c0e25ab794c3d7632508cb535d1446b6ec2acf1b82b5961247a1c64984de18da",
+        "EX070-V4": "a6d61c2641880e05a0b3780d84594cc1189d2bb943f8063829b1cc4eddaa309a",
+        "EX070-V5": "5cb77a4e19733721be10aa534513058701823b416cf3a248b32c34e3c16fd90e"
+      }
+    },
+    {
+      "id": "EX076",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX076-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX076-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX076-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX076-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX076-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX076",
+          "b": "EX076-V2",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9796,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX076",
+          "b": "EX076-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9796,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX076-V1",
+          "b": "EX076-V2",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.88,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX076-V1",
+          "b": "EX076-V4",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.88,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX076-V2",
+          "b": "EX076-V4",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX076": "051c8912ec17d44ad2867c31a56438a245e1e7535ef936f4b655ecdbcd0b0c97",
+        "EX076-V1": "9c2f9794743afbc778f8aeaaae6e56c7ede401fe731bb36fbd88bf074a7c0105",
+        "EX076-V2": "c54c176dcfbbe2610a75c5bf6196e7272a4f0a4822cf39848138c24010fca1ee",
+        "EX076-V3": "d0062b7c74de03a582b8c601618856c7e4d929d4dd61af9f66edf5623ac36747",
+        "EX076-V4": "74355830faec7582bf7d81f4167805ee789a3149a5cbf836491111a7e8a9fd5f",
+        "EX076-V5": "35cc681190a88a26266e6caa4ba3bc49a5b7ec8385521d2be5397a0ac12398eb"
+      }
+    },
+    {
+      "id": "EX078",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX078-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX078-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX078-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX078-V4",
+          "result": "incorrect"
+        },
+        {
+          "id": "EX078-V5",
+          "result": "incorrect"
+        }
+      ],
+      "allFactsPass": false,
+      "similarityFlags": [
+        {
+          "a": "EX078",
+          "b": "EX078-V1",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.913,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX078": "6b46fd0715015676508b7aefd8f1fb8efb0320b0942ed0940316f4ea71410d2d",
+        "EX078-V1": "b9cb2b0538b303948299919df2e0107dd10a141f2a0b6f972f5bd3c610250638",
+        "EX078-V2": "81e757a224751ba6bf355ede3dba7d5f72bf76c66d9dc9cd09fd07a20d979e09",
+        "EX078-V3": "54931e5b21bd1a48d38b2b8acda58118557d8ea87dd5c96751f60d51d19ce632",
+        "EX078-V4": "ea90349631d2001beaccb4c04692aa200e0794a8f309bf96f3333bf659a3fd1d",
+        "EX078-V5": "7dbcfe4b2373c07c69996b0b078a7df660f9d0757e3b4cec384db4dabeef303d"
+      }
+    },
+    {
+      "id": "EX085",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX085-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX085-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX085-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX085-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX085-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX085",
+          "b": "EX085-V1",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX085",
+          "b": "EX085-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX085-V1",
+          "b": "EX085-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX085": "cb4ef262ef6db4953b0b7d751cf01dc61a6072c810bec8e2ec15bfae2f601160",
+        "EX085-V1": "91693761b77de1e14039749072627ae2a57a5414904921ceafe41557eadc1e33",
+        "EX085-V2": "0498d9a9801e1efb37068418654a6eab42f21892fec7d650e48230fd2a21a4e1",
+        "EX085-V3": "8f063492994181eed17eb14861db55631ed4391a6e6b08a5ab9125f399178246",
+        "EX085-V4": "f7f5aba935a4ae64ac6ddbfb835cd77cdfb8625ce58f44e1003e5140919ad725",
+        "EX085-V5": "80984b8b45559c2582a243aafd1ebd8a85383607a1327d4219fa0ac8c91485ca"
+      }
+    },
+    {
+      "id": "EX090",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX090-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX090-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX090",
+          "b": "EX090-V1",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX090",
+          "b": "EX090-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9649,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX090-V1",
+          "b": "EX090-V3",
+          "normalizedIdentical": false,
+          "literalIdentical": false,
+          "similarity": 0.9649,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX090": "45c946570af078afd86a62144cdecfa2f0a1c48763f858cf54e65395723dad93",
+        "EX090-V1": "369eab3adaf40b285b7e9224069c059853ef61dcbfaded933d58b59fabc655e1",
+        "EX090-V2": "dd30c686161cd17896767e0fd03df2c84fe3805f134e3f5b6950348a9f112b55",
+        "EX090-V3": "7edf6df550ac1aa33dc1c3eb5c9c7d643df26002d784c83c6fb1060896a50bee",
+        "EX090-V4": "67dd3369a2004d6de1c0b42eeb8a5a4c5245b0487615adeedc16dace29f5344b",
+        "EX090-V5": "ed527e54562ba4953e4173ec4bee66c04d1ec7dac4978161c1f989ee98a6c571"
+      }
+    },
+    {
+      "id": "EX091",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX091-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX091-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX091-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX091-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX091-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX091": "49c82833b7c64b8d99fb478d7f42c4b7d90b4601556b11530974648c34919957",
+        "EX091-V1": "d7f0bbb7935e1fc7f62d39eecaddb115209aa853357871519759f962c70ffcdf",
+        "EX091-V2": "0481881dc54677643d91734eabbcacfec54f8763724903bff020e5a32a6a7c9c",
+        "EX091-V3": "e4034e4397e0e73809c5ae2886dc977c10a88b49b54e90b1f9f4cb907b07a6ed",
+        "EX091-V4": "cdc296246055f2217fcebc9fb2eac72fd8732580baf789a633409a8c165fa8dc",
+        "EX091-V5": "1b7731aa1870adb550c59a31d5753e850d3ed4cf2300c57a8dead5d1e398fb48"
+      }
+    },
+    {
+      "id": "EX093",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX093-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX093-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX093-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX093-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX093-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX093": "faef592800d6bb82287363f7f4adcb57d1b023a7b97bd59e27fb525e43b38799",
+        "EX093-V1": "74c730cf7b29289c80b87ccc19e374b1115480ce665d8fb813d39bba458aacbd",
+        "EX093-V2": "0ee1948b53b342f0445ccc65ee32e68f3e2c4614add14957792ac5348aab3a57",
+        "EX093-V3": "9f05ade218b326712ae63d5b1aee57db105b82a644986297959d3d8967373777",
+        "EX093-V4": "5a89e53d36ed2443f74a36900bcd55da260b8c1ee276ce6a3008e5186f0699a0",
+        "EX093-V5": "0ec4357cbc198e34f8d8ce1914fbb72fe885e53761b4dd4ca274de6763602431"
+      }
+    }
+  ]
+}

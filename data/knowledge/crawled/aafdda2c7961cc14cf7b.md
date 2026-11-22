@@ -1,0 +1,140 @@
+---
+title: Projects
+sourceUrl: https://www.uaeu.ac.ae/ar/research/centers/nwec/projects-1.shtml
+status: approved
+language: en
+lastVerified: 2026-11-04
+subject: university-people
+catalogYear: not stated
+temporalStatus: undated-current-page
+audience: public; exact eligibility as published in sections
+topicId: /research/centers/nwec/projects-1
+extraction: structured-html
+sourceSha256: 6af3bc72324e6dde951cfc69521049c3620f70a5474130944a90e1fa2b40718f
+sourceDate: not inferred from verification date
+---
+# Projects
+
+Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
+
+## Overview
+الشعار شعار النجمة الذهبية
+
+شعار النجمة الذهبية
+
+بحث قلتر البحث
+
+## عمليات البحث الشائعة
+الخدمات الأخبار اعثر على برنامجك
+
+## المركز الوطني للمياه والطاقة > Projects
+Injection Wells & Aquifer Recharge Study - Abu Dhabi Municipality
+
+This project aimed to provide a full range of consultancy services in the area of storm water drainage and groundwater control including specialized studies, injection wells, engineering modeling and analyses, GIS mapping, specifications development, field investigations and surveys, and landscape concept designs. The focus was devoted to the assessment of the effectiveness of controlling the groundwater levels through pumping of groundwater from the shallow surficial aquifer in injecting the pumped water into the deep limestone aquifer. A three-dimensional numerical groundwater model was developed for the ADM area to fully understand the dynamics of the multilayer aquifer system under pumping and injection and propose the appropriate solutions.
+
+The main objective of the groundwater flow model was to provide a tentative design for an optimum groundwater control system to maintain the groundwater table at a minimum depth of 0.5 m below the ground surface. The analysis of the available and new results including the simulation results indicated that Al Wathba area is the suitable for the implementation of the groundwater control system.
+
+Hydrological Study to Assess Shallow Water Well Leak Incident in Bab Field - ADNOC
+
+The main objective of this study is to incorporate the hydrogeological investigations to understand and identify the sources of the water flow in Bab field. The study was designed to include four work phases, each has its own tasks and activities, including: data collection, site investigations, Data interpretation and gap analysis, and groundwater modeling. The outcomes of this study included the identification of the incident causes and provided the proper recommendations for the mitigation and future actions.
+
+Design and Construction Supervision of a Groundwater Control System in Mahwi Area, Abu Dhabi Emirate - Presidential Guard Command
+
+Design and Construction of a Groundwater Control System in Mahwi Area, Abu Dhabi Emirate. The main objective is to reduce the groundwater level to a minimum depth of 6 m below the ground surface within the area under consideration or to the top of the clay aquitard Gaschran layer if it is encountered at a depth less than 6 m. The target is eliminating to possible leakage of the groundwater into the basement of the building within the selected area. Groundwater simulation models (FEFLOW) will be used to simulate the possible alternatives for the groundwater control systems. The activities of the project will be conducted through three. The total estimated time for the design and construction of the project is 4.5 months to be followed by 2 months of monitoring.
+
+Evaluation of the ASR System and Testing of Capacity Expansion - Sharjah Emirate
+
+
+## المركز الوطني للمياه والطاقة > Projects — continuation 2
+The ASR of Nazwa area included two systems that might be operated for injection and recovery independently or collectively. The first System, “System-1”, included 11 wells and was designed as an independent system, while the second System, “System-2”, consisted of 13 wells. Within the activities of this project, MODFLOW and MT3DMS have been integrated and calibrated to simulate the groundwater levels and flow as well as the groundwater concentration distribution in the vicinity of the ASR system. Different scenarios have been examined to assess the efficiency of the system and identify the most suitable operation parameters. The simulations indicated that, for the current system and its settings, higher efficiency could be obtained for small injection periods and with an injection/recovery rate within the range of 300 to 500m3/day. The recovery efficiency would also be enhanced if the storage period is reduced, and the recovery rate is increased. The freshwater bubble (with a salinity of less than 350 mg/l) has been encountered within 250 m from the injection wells. To increase the capacity of the ASR System to 5 MGD, a total of 36 wells (including 3 spare wells) were needed. The total area of the well-field is 1 x 1 km and the spacing between the wells should be taken as 200 m. The wells should be operated with the same rate (700 m3/day) of injection and recovery. The total capital investment in System 1 and System 2 is almost same.
+
+Groundwater Monitoring Network for the Emirate of Ajman - Ajman Municipality
+
+This project provided consultancy services to assess the groundwater resources of the Ajman Emirate through establishment of a network of groundwater monitoring wells. Establishing a groundwater-monitoring network was deemed important to measure changes in groundwater quality and levels over time. This enabled the monitoring of aquifer flow characteristics and groundwater salinity. Fifteen new monitoring wells were drilled at selected locations in Ajman City with total depths between 20 and 100 m. The data is wireless transmitted to the headquarter office of Ajman Municipality to support the operation and decision making in relation to groundwater management.
+
+Integrated Management Concepts for Sustainability of Public Urban Greenery in Al Ain City - Al Ain Municipality
+
+In a collaborative effort the Al Ain City Municipality, the National Water and Energy Center and the Department of Integrative Agriculture at UAEU are conducting large-scale field experiments to develop water-saving landscaping practices. One of the experiments conducted in the Sulaimi park strives to assess the optimum input levels of fertilizers and irrigation water for eight different native desert plant species cultivated for landscaping purposes. The experiment comparing different species for their water and fertilizer input requirements. All tested plant species are grown either under a high, medium, low or very low level of fertilizer and irrigation water input. It is one of the largest scientific field trials ever conducted on the use of native plants for landscaping in the Region.
+
+Consultancy Study for the Prospective Recreational and Public Services Needs in Al Ain City - Al Ain City Municipality
+
+
+## المركز الوطني للمياه والطاقة > Projects — continuation 3
+The currently applied urban regulations and planning guidelines in Al Ain city might not be fully responsive to the actual needs of the residents of the city, especially in the domain of recreational facilities provision that, if carefully defined, would play an important role in attaining socially, culturally, environmentally and economically sustainable and vibrant city. With the emergence of innovative recreational facilities that reflect the spirit of the current era and with the obvious unattractiveness of some of the existing recreational facilities, this study focuses on portraying a perspective about the actual recreational facilities needs for Al Ain city, mainly from the local community’s point of view. This would help enhance the urban planning and design outputs to better reflect the genuine needs of the residents and, therefore, help create more responsive, attractive, and innovative recreational facilities. The study is conducted in two main phases: Phase 1 and Phase 2, each with two sub-phases A and B.
+
+Oil and Gas Produced Water in Abu Dhabi Emirate: Assessment, Treatment and Reuse - Environment Agency-Abu Dhabi
+
+The main objective of this project was to evaluate the quality and quantity of PW associated with oil and gas industry in an attempt to assess the possible contribution of PW in the water budget of Abu Dhabi Emirate. The National Water Center (NWC), at the United Arab Emirates University, reviewed all available information and data related to the PW to better understand the production volumes, quality, and management options of this water. In addition, The NWC investigated numerous feasible management options and treatment technologies to reduce the salinity as one of the major constrain of PW utilization. Moreover, the NWC examined the sources, characteristics, and extent of different pollutants within the PW. A comprehensive data analysis and assessment were accomplished to characterize the PW and give a comprehensive picture of its quality. Different combined treatment techniques that are applicable for PW were presented. The treatment options and efficiencies were classified based on the end-use goal. The aim was to provide EAD with clear guidelines on selecting appropriate treatment processes according to their inputs.
+
+Specialized Studies for Water Pond Recreational Park development in Khalifa City, Mohamed Bin Zayed City, and West Bani Yas - Abu Dhabi Municipality
+
+
+## المركز الوطني للمياه والطاقة > Projects — continuation 4
+The overall objective of this project was to assess the feasibility of using evaporation ponds as a measure for controlling the groundwater table rise in three selected locations and converting the sites to water lakes and recreational parks with a possibility of developing a botanical garden. To that end, a set of specific complementary studies including Environmental Studies, Urban Contexts, and Infrastructure and Landscape investigations were conducted. The recommended methodology and solution for the control of the groundwater rise problem was based on the outcomes of the specialized studies. The Project presented a synthesis of the Environmental, Climatic and Urban data collection, with an analysis of all results with the intent to identify the optimum scenarios to control the water table rise while prospectively benefitting from it as an integrated element in the design of recreational Parks.
+
+Review of The Current Status of Climate Change Modeling in UAE and the Region - Ministry of Climate Change and Environment Projects (MOCCAE)
+
+The main objective of this project was to the review the literature related to climate change modeling and its impacts on United Arab Emirates (UAE) and the region. Although no new research is proposed at this stage, except for the discussion on the recent rainfall trends in UAE, the existing information and results of previous studies were integrated, discussed, and analyzed to provide a better understanding of possible impacts of climate change on the environmental system of UAE and the region.
+
+Socio-Economic Impact Assessment of Climate Plan of the UAE - Ministry of Climate Change and Environment Projects (MOCCAE)
+
+This project provided two contributions. First, it summarized the results from the (macro-) economic assessments of mitigation, adaptation, and diversification conducted in the UAE. Second, through a literature review of economic studies on climate change policies, it identified steps to improve the UAE’s capability to conduct macro-economic, environmental, and social assessments of climate change policies and impacts.
+
+DEWA Solar Dust Project - Dubai Electricity & Water Authority
+
+Utility-scale PV plants are increasingly being deployed in the desert environment due to lower land use costs, stronger and stable solar radiation and the unshaded clear sky conditions. However, the desert environment brings increased dust accumulation over the PV front surface that reduces the available radiation to the PV cell eventually reducing its power production. The most effective PV cleaning methods involve water-based surface cleaning that incurs tremendous overheads in terms of water supply infrastructure and water use cost. The current project introduces an alternative approach to secure water required for PV cleaning through an onsite atmospheric water generation system. The water generation concept more specifically relies on a novel combination of a natural and powered cooling system. The research can potentially eliminate external water supply for cleaning large scale plants at a very low energy cost.
+
+Differential GPS Survey of Groundwater Monitoring Wells in Abu Dhabi Emirate - Environment Agency-Abu Dhabi
+
+
+## المركز الوطني للمياه والطاقة > Projects — continuation 5
+The project aimed to Conduct high precision survey to obtain precise coordinates and elevations for 500 wells over Abu Dhabi Emirate and establish a reference point at each well for use during future water level measurements. The survey was applied to 500 existing groundwater monitoring wells within Abu Dhabi Emirate to determine their precise coordinates and elevations. These values were utilized by the Environment Agency-Abu Dhabi to establish reference points for water level measurements which are taken either at the top of the casing or at the top of the concrete foundation.
+
+Capacity Building in the Area of Groundwater Hydrogeology and Digital Modeling - Environment Agency-Abu Dhabi
+
+The project main objective was the Capabilities Building in the Area of Groundwater Hydrogeology and Digital Modelling for UAE Staff in Environment Agency – Abu Dhabi by on Job training during the development of a numerical groundwater flow models to support the conjunctive management of both ground- and other water resources in the Eastern Region area. The results of this study provided tools for the evaluation of alternative water resources management scenarios and enhanced the capacity and knowledge of the national engineers from EAD regarding water resources management aspects.
+
+Development and updating a GIS Water Resources Database - Ministry of Environment and Water
+
+The main objective of this project was the development and Updating of a GIS-based Water Resources Database covering the entire United Arab Emirates for the Ministry of Environment and Water.
+
+Assessment of Groundwater Resources and Survey of Wells, UAE - Ministry of Environment and Water
+
+This project focused on the assessment of all types of groundwater resources in UAE. The project resulted in the development of the first digital Hydro Atlas for UAE.
+
+Low-Cost Biological Odor Treatment Using an Adsorption/Desorption Concentrator Unit for Reducing Sulfur Emissions in Nebraska - University of Nebraska, USA
+
+This application proposes the design and testing of an economical odor treatment system that will contribute to lower ambient H 2 S and other gas phase pollutants within the state. The novelty of this project is in the concentrator, which has the potential for new patents and broad implementation. Using adsorption/desorption processes, concentrated H 2 S will result in a smaller reactor volume for a reduced direct and operational costs in a bio-trickling filter (BTF). The project is divided into a series of laboratory experiments to develop the concentrator and field demonstrations at a food composting facility to test efficacy. The laboratory experiments will examine the cyclic adsorption and desorption rates of H 2 S by evaluating raw zeolite and activated carbon manufactured from bituminous and coconut sources in granular, powder, and fibrous forms.
+
+Evaluation of Filter Media Surface Area - Low and Bonar, USA
+
+
+## المركز الوطني للمياه والطاقة > Projects — continuation 6
+Low and Bonar are manufacturer of environmental media for water and air treatment. The overall goal of this study is to assess the surface area and porosity of the proposed undisclosed media to ensure high rates of hydrogen sulfide biodegradation. This will be performed by Measurement of BET surface area and porosity, Initial media screening for hydrogen sulfide biodegradation, and full-scale evaluation of selected medias.
+
+Evaluation of the potential of smart water-flooding to enhance oil - The Petroleum Institute
+
+The primary objectives of the project are to study the possible use of smart water flooding in ASAB oil reservoir, provide ADCO with optimum water flooding strategy, and to enrich the literature with additional information on the mechanics of smart water flooding process. Smart water flooding refers to optimizing oil recovery by tuning the injection water properties such as salinity and ionic composition, whereas it is believed this would change the wettability to more water wet.
+
+This would affect the displacement efficiency, which is one of the critical parameters that controls the success of any miscible or immiscible flooding project. There are little references in the literature that cover the optimization of smart water flooding process in carbonate formations, and this study seeks to cover this gap with particular application to the target UAE reservoir. The project is currently being conducted jointly with the EOR research team from Khalifa University.
+
+Utilization of Ionic Liquids in Enhanced Oil Recovery of Emirati Oil Reservoirs - ADNOC
+
+The utilization of the unconventional hydrocarbon resources would play an important role in the future of the ever-growing world’s energy consumption. The objective of this research is to use benign solvents, namely ionic liquids (ILs) as surfactants for EOR. Different types of commercially available ILs are being investigated. Different factors will be studied in order to determine the ILs that are potential candidates for the use in EOR of Emirati oil reservoirs.
+
+Ionic liquids have many advantages such as biodegradability and biocompatibility as green solvents, chemical compatibility with water, easy preparation, non-toxicity and low prices. The success of utilizing the ILs in enhancing oil recovery for Emirati reservoirs, will make the great portion of oil reserves in the UAE economically feasible.
+
+مشاركة
+
+## المركز الوطني للمياه والطاقة > Projects > هل تجد هذا المحتوى مفيد ؟
+نعم لا
+
+إرسال إلغاء
+
+شكراً على آرائكم.
+
+## المركز الوطني للمياه والطاقة > Projects > Sorry
+There is no English content for this page
+
+## المركز الوطني للمياه والطاقة > Projects > Sorry
+There is a problem in the page you are trying to access.

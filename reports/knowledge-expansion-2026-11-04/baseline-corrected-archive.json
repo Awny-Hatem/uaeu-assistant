@@ -1,0 +1,716 @@
+{
+  "startedAt": "2026-11-04T04:34:24.775Z",
+  "base": "http://127.0.0.1:3001",
+  "label": "baseline-corrected-archive",
+  "fixture": "evals/knowledge-expansion-2026-11-04.json",
+  "fixtureSha256": "b9d4c88f8055c78541a2f29c37400d3b027dd76cc53fe18272e3536570b96f09",
+  "methodology": "Expected facts extracted independently from original official HTML; automated scoring is provisional and requires source/semantic review. Each variant is an isolated conversation unless explicit follow-up turns are listed.",
+  "results": [
+    {
+      "id": "KE317",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU graduate catalog PDF for2015-2016. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified graduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/grgrogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies graduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "parentId": "KE317",
+      "conversation": [
+        {
+          "user": "Please provide the official UAEU graduate catalog PDF for2015-2016. Keep it labelled as that historical edition.",
+          "status": 200,
+          "seconds": 0.18,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (2016) from the available official evidence. I could not verify the requested program or cohort plan; that does not prove it does not exist. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU previous catalogs",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/prev_catalog.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_cohort",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "year",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "year"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE317-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "UAEU 2015-2016 graduate catalog archive please."
+      ],
+      "expected": "Link the actual verified graduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/grgrogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies graduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "parentId": "KE317",
+      "conversation": [
+        {
+          "user": "UAEU 2015-2016 graduate catalog archive please.",
+          "status": 200,
+          "seconds": 0.148,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (2015 / 2016) from the available official evidence. I could not verify the requested program or cohort plan; that does not prove it does not exist. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU previous catalogs",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/prev_catalog.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_cohort",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE317-V2",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "أريد دليل graduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "expected": "Link the actual verified graduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/grgrogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 graduate catalog archive please.",
+        "أريد دليل graduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies graduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "parentId": "KE317",
+      "conversation": [
+        {
+          "user": "أريد دليل graduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي.",
+          "status": 200,
+          "seconds": 4.969,
+          "payload": {
+            "role": "assistant",
+            "content": "**حدد طلب جامعة الإمارات بدقة**\nلم أتمكن من ربط الصياغة بخدمة أو مساق موثق واحد. أرسل اسم الخدمة أو رمز المساق، وحدد هل تريد الخطوات أو الموعد أو الرسوم أو الأهلية أو حالة الطلب.",
+            "source": "escalated",
+            "responseMode": "grounded_generation",
+            "stateLabel": "model_escalation",
+            "citations": [],
+            "disposition": "clarify",
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "graduate catalog 2015-2016",
+            "evidenceIds": [],
+            "claims": [],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "clarificationReason": "missing_official_evidence"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "year",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "year"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE318",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "Please provide the official UAEU undergraduate catalog PDF for2015-2016. Keep it labelled as that historical edition."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/ugprogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies undergraduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "parentId": "KE318",
+      "conversation": [
+        {
+          "user": "Please provide the official UAEU undergraduate catalog PDF for2015-2016. Keep it labelled as that historical edition.",
+          "status": 200,
+          "seconds": 0.135,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (2016) from the available official evidence. I could not verify the requested program or cohort plan; that does not prove it does not exist. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU previous catalogs",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/prev_catalog.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_cohort",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "year",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "year"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE318-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "UAEU 2015-2016 undergraduate catalog archive please."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/ugprogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies undergraduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "parentId": "KE318",
+      "conversation": [
+        {
+          "user": "UAEU 2015-2016 undergraduate catalog archive please.",
+          "status": 200,
+          "seconds": 0.139,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (2015 / 2016) from the available official evidence. I could not verify the requested program or cohort plan; that does not prove it does not exist. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU previous catalogs",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/prev_catalog.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_cohort",
+            "communications": []
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "year",
+            "passed": true,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE318-V2",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "turns": [
+        "أريد دليل undergraduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "expected": "Link the actual verified undergraduatePDF for2015-2016; do not substitute a current catalog.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/ugprogramcatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "year",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "UAEU 2015-2016 undergraduate catalog archive please.",
+        "أريد دليل undergraduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "fixtureCorrection": "Verified opening page identifies undergraduate Programs2015_2016; misleading filename was not used as authority. Earlier loaded test definitions for these IDs are invalid and must be excluded/retested.",
+      "parentId": "KE318",
+      "conversation": [
+        {
+          "user": "أريد دليل undergraduate الرسمي للعام2015-2016 مع توضيح أنه إصدار تاريخي.",
+          "status": 200,
+          "seconds": 4.988,
+          "payload": {
+            "role": "assistant",
+            "content": "**حدد طلب جامعة الإمارات بدقة**\nلم أتمكن من ربط الصياغة بخدمة أو مساق موثق واحد. أرسل اسم الخدمة أو رمز المساق، وحدد هل تريد الخطوات أو الموعد أو الرسوم أو الأهلية أو حالة الطلب.",
+            "source": "escalated",
+            "responseMode": "grounded_generation",
+            "stateLabel": "model_escalation",
+            "citations": [],
+            "disposition": "clarify",
+            "communications": [],
+            "escalationReason": "low_confidence",
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "undergraduate catalog 2015-2016",
+            "evidenceIds": [],
+            "claims": [],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "clarificationReason": "missing_official_evidence"
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "year",
+            "passed": false,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "year"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "881c83e94791522d5f3029cf9ab74de3c109a91add4c6bfcd8014582b53970fc",
+    "files": 99,
+    "servingSnapshot": "/private/tmp/uaeu-expansion-baseline-2026-11-04"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "25e5edf7bc92c7730971c55b35976b90bea42806c5852c30d6336cde0c8bf353",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 0,
+    "partial": 2,
+    "incorrect": 4
+  },
+  "finishedAt": "2026-11-04T04:34:43.993Z",
+  "runtimeAfter": {
+    "sha256": "881c83e94791522d5f3029cf9ab74de3c109a91add4c6bfcd8014582b53970fc",
+    "files": 99,
+    "servingSnapshot": "/private/tmp/uaeu-expansion-baseline-2026-11-04"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "unknown"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "25e5edf7bc92c7730971c55b35976b90bea42806c5852c30d6336cde0c8bf353",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "disabled",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "exact-simple-FAQ-only; other requests use source-specific evidence and tailored generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-retrieval-then-exact-FAQ-or-grounded-generation"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 0.18,
+    "p95": 4.988,
+    "max": 4.988
+  },
+  "usage": {
+    "measuredAnswers": 0,
+    "totalAnswers": 6,
+    "estimatedUsd": null,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "KE317",
+      "KE318"
+    ],
+    [
+      "KE317-V1",
+      "KE318-V1"
+    ],
+    [
+      "KE317-V2",
+      "KE318-V2"
+    ]
+  ]
+}

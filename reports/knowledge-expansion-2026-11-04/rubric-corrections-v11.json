@@ -1,0 +1,23 @@
+{
+  "at": "2026-11-05T06:57:35.380920+00:00",
+  "changes": [
+    {
+      "id": "KE309",
+      "criterion": "no guarantee",
+      "before": [
+        "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+        "لا يضمن",
+        "لا تضمن"
+      ],
+      "after": [
+        "not.*guarantee|no guarantee|not.*automatic|not.*entitl",
+        "لا يضمن",
+        "لا تضمن",
+        "ليست مضمون|غير مضمون|ليس مضمون"
+      ],
+      "reason": "Actual Arabic answer said المنحة ليست مضمونة and retained seats; faithful Arabic negative was not recognized by the old regex. This is a grading correction, not a chatbot knowledge improvement."
+    }
+  ],
+  "questionsChanged": false,
+  "oldResponsesChanged": false
+}

@@ -1,0 +1,64 @@
+import assert from "node:assert/strict";
+import { answerProgramCatalogQuestion, loadUndergraduateProgramCatalog } from "../lib/academic/undergraduate-program-catalog";
+
+const catalog = loadUndergraduateProgramCatalog();
+assert.equal(catalog.programs.length, 55, "the official snapshot lists 55 undergraduate degree programs including the MD program");
+assert.equal(new Set(catalog.programs.map(({ college }) => college)).size, 9);
+assert.equal(new Set(catalog.programs.map(({ id }) => id)).size, catalog.programs.length);
+assert.ok(catalog.programs.every(({ url }) => new URL(url).hostname.endsWith("uaeu.ac.ae")));
+assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "modelled").length, 55);
+assert.equal(catalog.programs.filter(({ curriculumStatus }) => curriculumStatus === "legacy_model_review_required").length, 0);
+assert.equal(catalog.curriculumRecordsRequiringIdentityReview.length, 2);
+
+const allPrograms = answerProgramCatalogQuestion("Which degrees does UAEU offer?", "en");
+assert.ok(allPrograms);
+assert.equal(allPrograms.count, 55);
+assert.match(allPrograms.content, /College of Business and Economics/);
+assert.match(allPrograms.content, /Bachelor of Science in Cybersecurity/);
+assert.match(allPrograms.content, /Doctor of Medicine/);
+assert.match(allPrograms.content, /Mathematics of Data Science/);
+
+const businessPrograms = answerProgramCatalogQuestion("Which undergraduate majors does the College of Business and Economics offer?", "en");
+assert.ok(businessPrograms);
+assert.equal(businessPrograms.count, 8);
+assert.ok(businessPrograms.content.includes("Bachelor of Finance and Banking"));
+assert.doesNotMatch(businessPrograms.content, /College of Engineering/);
+
+assert.equal(answerProgramCatalogQuestion("What courses does the Computer Science program offer?", "en"), null, "course questions must not be mistaken for a degree inventory request");
+assert.equal(answerProgramCatalogQuestion("Can I change my major after third year?", "en"), null, "personal major-change questions must not trigger the inventory response");
+assert.equal(answerProgramCatalogQuestion("What is the tuition cost for the program I want?", "en"), null, "a program tuition question must not trigger the degree inventory response");
+
+const namedProgramIdentity = answerProgramCatalogQuestion(
+  "For the published curriculum label 'Current published degree page', which degree title and college are recorded for Bachelor of Science in Statistics and Data Analytics? Cite the version-specific source.",
+  "en",
+);
+assert.ok(namedProgramIdentity, "a question about one named degree's catalog identity must resolve directly");
+assert.equal(namedProgramIdentity.count, 1);
+assert.equal(namedProgramIdentity.college, "College of Business and Economics");
+assert.match(namedProgramIdentity.content, /Bachelor of Science in Statistics and Data Analytics[\s\S]*College of Business and Economics/u);
+assert.equal(namedProgramIdentity.citation.url, catalog.programs.find(({ id }) => id === "statistics-and-data-analytics")?.url);
+
+assert.equal(answerProgramCatalogQuestion(
+  "For the published curriculum label 'Fall-entry cohort', which degree title and college are recorded for Bachelor of Science in Statistics and Data Analytics?",
+  "en",
+)?.count, 1, "a named-program field lookup must not return all degrees from its college");
+
+console.log("UAEU program catalog checks passed: all 55 official degrees across 9 colleges have structured curriculum evidence, catalog-only coverage states, college filtering, and scope guards.");
+
+void import("../app/api/health/route").then(async ({ GET }) => {
+  const response = await GET();
+  const payload = await response.json();
+  const versions = (await import("../lib/academic/program-curricula")).listAcademicPrograms().flatMap((program) => program.curriculumVersions);
+  const unresolved = versions.filter((version) => version.cohortMapping === "unresolved").length;
+  const verified = versions.filter((version) => version.cohortMapping === "verified").length;
+  assert.deepEqual(payload.academicCatalog.cohortApplicability, {
+    curriculumVersions: versions.length,
+    explicitlyUnresolvedMappings: unresolved,
+    explicitlyVerifiedMappings: verified,
+    versionsWithoutApplicabilityReview: 0,
+  }, "health reports reviewed and unresolved scope mappings without silently treating missing metadata as verified");
+  console.log("Health cohort applicability checks passed: every curriculum version has an explicit scope status.");
+}).catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
