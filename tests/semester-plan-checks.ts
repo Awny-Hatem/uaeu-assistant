@@ -1,42 +1,98 @@
 import assert from "node:assert/strict";
 import { semesterPlanAnswer } from "../lib/academic/semester-plan-answer";
 
-// Program semester plans from the official model study plans (Ali's manual test, 22 Nov 2026).
+// Program semester plans from the official model study plans (Ali's manual tests, 22 Nov 2026).
+// Expected codes and printed semester totals were read from the official PDFs.
 const asked = "Which program are you in, and when were you admitted (for example Fall 2026)?";
+const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth"];
 let passed = 0;
 const check = (name: string, run: () => void) => { run(); passed += 1; console.log(`ok - ${name}`); };
+const ask = (q: string, locale: "en" | "ar" = "en", history: { role: string; content: string }[] = []) => semesterPlanAnswer(q, history, locale);
+const totals = (content: string) => [...content.matchAll(/Total: \*\*(\d+) credit hours?\*\*/gu)].map((m) => Number(m[1]));
 
 check("a semester question without a program asks for the program once", () => {
-  const r = semesterPlanAnswer("What should I take in my first semester?", [], "en");
+  const r = ask("What should I take in my first semester?");
   assert.equal(r?.disposition, "clarify");
   assert.match(r!.content, /Which program are you in/);
-  assert.equal(semesterPlanAnswer("What should I take in my first semester?", [{ role: "user", content: "What should I take in my first semester?" }, { role: "assistant", content: asked }], "en"), null, "never asks twice");
+  assert.equal(ask("What should I take in my first semester?", "en", [{ role: "user", content: "What should I take in my first semester?" }, { role: "assistant", content: asked }]), null, "never asks twice");
 });
-check("Cybersecurity first semester comes from the 2026-2027 plan with both official links", () => {
-  for (const q of ["What should I take in my first semester as a Cybersecurity student?", "first semester courses cyber security", "what do i take in 1st semester cybersecurity"]) {
-    const r = semesterPlanAnswer(q, [], "en")!;
-    assert.equal(r.disposition, "answer", q);
-    for (const code of ["GEAE101", "MATH105", "CSBP119", "CENG221", "GEIT113"]) assert.match(r.content, new RegExp(code), q);
-    assert.match(r.content, /15 credit hours/);
+
+// cit_bsc_cybersecurity_study_plan.pdf, 2026-2027 cohort (Fall entry).
+const CYBER_TOTALS = [15, 15, 15, 14, 12, 13, 16, 14, 6];
+check("Cybersecurity: all 9 semesters match the PDF totals, with both official links", () => {
+  CYBER_TOTALS.forEach((total, i) => {
+    const r = ask(`What should I take in my ${ORD[i]} semester as a Cybersecurity student?`)!;
+    assert.equal(r.disposition, "answer", ORD[i]);
+    assert.deepEqual(totals(r.content), [total], ORD[i]);
+    assert.match(r.content, /former name, Information Security/);
     assert.ok(r.citations.some((c) => c.url === "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_cybersecurity_study_plan.pdf"));
     assert.ok(r.citations.some((c) => c.url === "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-cybersecurity.shtml"));
-  }
+  });
+  const first = ask("What should I take in my first semester as a Cybersecurity student?")!.content;
+  for (const code of ["GEAE101", "MATH105", "CSBP119", "CENG221", "GEIT113"]) assert.match(first, new RegExp(code));
+});
+
+// cit_bsc_computer_and_artificial_intelligence_engineering_study_plan.pdf, 2026-2027 cohort, three tracks:
+// AI Systems Engineering / Robotics and Autonomous Systems / General pathway.
+const CAIE: { codes: string[]; totals: number[] }[] = [
+  { codes: ["GEAE101", "MATH105", "CSBP119", "PHYS105", "CENG110", "PHYS135"], totals: [16] },
+  { codes: ["CENG202", "MATH110", "CSBP219", "CENG205", "MATH140"], totals: [15] },
+  { codes: ["CENG210", "CENG201", "CENG231", "PHYS110", "STAT210", "GEEM110"], totals: [16] },
+  { codes: ["MATH275", "CENG221", "CSBP315", "CENG310", "BIOC100", "PHYS140", "CENG315"], totals: [17] },
+  { codes: ["ITBP301", "CENG340", "CENG529", "GESU121", "CENG320", "CENG341", "CENG500", "CENG570"], totals: [17, 17, 17] },
+  { codes: ["CENG324", "CENG325", "CENG328", "CENG329", "ITBP270", "CSBP319", "CENG510", "CENG560"], totals: [13, 16, 16] },
+  { codes: ["ITBP218", "ITBP480", "CENG525", "CENG540", "CENG585", "CENG590"], totals: [15, 15, 15] },
+  { codes: ["ITBP481", "CENG550", "CENG595"], totals: [12, 12, 12] },
+  { codes: ["ITBP496"], totals: [6] },
+];
+check("Computer and AI Engineering: every semester's courses and printed totals match the PDF", () => {
+  CAIE.forEach(({ codes, totals: expected }, i) => {
+    for (const name of ["Computer and AI Engineering", "Computer & AI Engineering", "Computer and Artificial Intelligence Engineering"]) {
+      const r = ask(`What should I take in my ${ORD[i]} semester as a ${name} student?`)!;
+      assert.equal(r.disposition, "answer", `${name} ${ORD[i]}`);
+      for (const code of codes) assert.match(r.content, new RegExp(code), `${name} ${ORD[i]} ${code}`);
+      assert.deepEqual(totals(r.content), expected, `${name} ${ORD[i]}`);
+      assert.match(r.content, /former name, Computer Engineering/);
+      assert.ok(r.citations.some((c) => c.url === "https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_and_artificial_intelligence_engineering_study_plan.pdf"));
+      assert.ok(r.citations.some((c) => c.url === "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml"));
+    }
+  });
+});
+check("the 0-credit course printed in the AI Systems plan is flagged, not corrected", () => {
+  const r = ask("What should I take in my sixth semester as a Computer and AI Engineering student?")!;
+  assert.match(r.content, /\*\*CENG510\*\* AI Systems Deployment \(0 credits\)/);
+  assert.match(r.content, /printed numbers don't fully add up/);
+  assert.doesNotMatch(ask("What should I take in my first semester as a Computer and AI Engineering student?")!.content, /don't fully add up/);
+});
+check("formatting: singular credit and Total on its own block", () => {
+  const r = ask("What should I take in my first semester as a Computer and AI Engineering student?")!.content;
+  assert.match(r, /\*\*PHYS135\*\* General Physics Lab I \(1 credit\)/);
+  assert.match(r, /\n\nTotal: \*\*16 credit hours\*\*/);
 });
 check("a reply naming only the program continues the earlier semester question", () => {
-  const r = semesterPlanAnswer("Cybersecurity", [{ role: "user", content: "What should I take in my first semester?" }, { role: "assistant", content: asked }], "en")!;
+  const r = ask("Cybersecurity", "en", [{ role: "user", content: "What should I take in my first semester?" }, { role: "assistant", content: asked }])!;
   assert.match(r.content, /CENG221/);
 });
 check("Arabic program and semester names", () => {
-  const r = semesterPlanAnswer("ما مواد الفصل الأول في تخصص الأمن السيبراني؟", [], "ar")!;
+  const r = ask("ما مواد الفصل الأول في تخصص الأمن السيبراني؟", "ar")!;
   assert.match(r.content, /الفصل الأول/); assert.match(r.content, /GEIT113/);
+  assert.match(ask("ما مواد الفصل الأول في هندسة الحاسوب والذكاء الاصطناعي؟", "ar")!.content, /CENG110/);
 });
 check("an earlier admission year selects the earlier cohort plan (former Information Security name)", () => {
-  const r = semesterPlanAnswer("What courses are in semester 3 of Information Security for 2023 fall admits?", [], "en")!;
+  const r = ask("What courses are in semester 3 of Information Security for 2023 fall admits?")!;
   assert.match(r.content, /2022–2023 cohort/); assert.match(r.content, /CSBP319/);
 });
 check("specific-course and offering questions are left to other handlers", () => {
-  assert.equal(semesterPlanAnswer("Can I take CSBP319 in my first semester?", [], "en"), null);
-  assert.equal(semesterPlanAnswer("Which courses are offered in the first semester of summer?", [], "en"), null);
-  assert.equal(semesterPlanAnswer("Which courses should I register next semester?", [], "en"), null);
+  assert.equal(ask("Can I take CSBP319 in my first semester?"), null);
+  assert.equal(ask("Which courses are offered in the first semester of summer?"), null);
+  assert.equal(ask("Which courses should I register next semester?"), null);
 });
 console.log(`semester-plan checks: ${passed} passed`);
+check("a catalog program without a parsed plan is recognised and points to its official page", () => {
+  for (const q of ["What should I take in my first semester as a Marketing student?", "What should I take in my first semester in Biology?"]) {
+    const r = ask(q)!;
+    assert.equal(r.disposition, "answer", q);
+    assert.match(r.citations[0].url ?? "", /^https:\/\/www\.uaeu\.ac\.ae\/en\/catalog\/undergraduate\/programs\//u);
+  }
+});
+console.log(`semester-plan checks (with catalog fallback): ${passed} passed`);
