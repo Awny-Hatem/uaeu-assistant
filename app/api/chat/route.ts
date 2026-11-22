@@ -1,6 +1,7 @@
 // Ported from feat/student-profiles-and-power (FR3 memory, FR4 profiles, planner, dialogue).
 import { hybridRetrieve, expandCorpusQuery } from "@/lib/hybrid-rag";
 import { retrieveAcademicEvidence } from "@/lib/academic-retrieval";
+import { semesterPlanAnswer } from "@/lib/academic/semester-plan-answer";
 import { cookies } from "next/headers";
 import { after, type NextResponse } from "next/server";
 import { getAcademicProfile } from "@/lib/academic-profile/store";
@@ -1054,6 +1055,15 @@ async function handleChat(req: Request, memory: MemoryRequest = {}) {
     if (guestCookieToSet) response.cookies.set(GUEST_SESSION_COOKIE_NAME, guestCookieToSet, guestSessionCookieOptions());
     return response;
   };
+
+  // Program semester plans: "first semester as a Cybersecurity student" is answered
+  // from the matching official cohort plan; without a program, ask once.
+  // Reviewed records written for a plan question and V3's own semester handler (V3 mode) go first.
+  const semesterPlan = !isV3Enabled() && (matchFaq(originalLatest)?.score ?? 0) < 1000 && !retrieveCurriculumAnswer(originalLatest) ? semesterPlanAnswer(originalLatest, (retainedMessages as ChatMessage[]).slice(0, -1), locale) : null;
+  if (semesterPlan) {
+    const payload: AssistantPayload = { role: "assistant", content: semesterPlan.content, source: semesterPlan.citations.length ? "rag" : "escalated", stateLabel: semesterPlan.disposition === "answer" ? "program_semester_plan" : "clarify_program", disposition: semesterPlan.disposition, citations: semesterPlan.citations, ...(semesterPlan.disposition === "clarify" ? { clarificationReason: "own_program_unknown" } : {}) };
+    return respond(payload, originalLatest, locale);
+  }
 
   // Ported early handlers (dialogue, directory, planner, translation, recall, record boundaries).
   let dialogueHistory=(retainedMessages as ChatMessage[]).slice(0,-1);
