@@ -164,9 +164,10 @@ async function main() {
     "What courses are listed for year one semester two in the Computer Science study plan?",
     "203.0.113.232",
   );
-  assert.equal(computerScienceSecondSemester.payload.stateLabel, "v3_reviewed_answer");
-  assert.equal(computerScienceSecondSemester.payload.faqId, "computer-science-second-semester-plan");
-  assert.match(String(computerScienceSecondSemester.payload.content), /CENG202[\s\S]*MATH110[\s\S]*CSBP219[\s\S]*CENG205[\s\S]*CSBP221[\s\S]*MATH140[\s\S]*16 credits/i);
+  // One semester-plan path for every program: the current (2026-2027) official Computer Science plan.
+  assert.equal(computerScienceSecondSemester.payload.stateLabel, "program_semester_plan");
+  assert.match(String(computerScienceSecondSemester.payload.content), /CENG202[\s\S]*MATH110[\s\S]*CSBP219[\s\S]*CENG205[\s\S]*MATH140[\s\S]*15 credit hours/i);
+  assert.match(JSON.stringify(computerScienceSecondSemester.payload.citations), /cit_bsc_computer_science_study_plan\.pdf/);
   assert.doesNotMatch(String(computerScienceSecondSemester.payload.content), /Required major courses|major electives/i);
 
   const academicStandingConsequence = await ask(

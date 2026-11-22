@@ -48,6 +48,11 @@ async function main() {
     assert.equal(response.status, 200, question);
     const answer = await response.json();
     assert.equal(answer.source, "rag", question);
+    // Semester questions take the single semester-plan path (current official cohort plan, plan PDF cited).
+    if (answer.stateLabel === "program_semester_plan") {
+      assert.ok(answer.citations.some((citation: { url: string }) => /study_plan\.pdf$/u.test(citation.url)), question);
+      continue;
+    }
     assert.equal(answer.stateLabel, "curriculum_extract", question);
     assert.match(answer.content, expected, question);
     assert.ok(answer.evidenceIds.includes(result.evidenceId), question);

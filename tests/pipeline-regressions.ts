@@ -47,14 +47,14 @@ async function main() {
   try {
     const computerEngineeringPlan = await ask("Which courses should I take in the second semester of Computer Engineering?");
     assert.notEqual(computerEngineeringPlan.faqId, "computer-science-second-semester-plan");
-    assert.equal(computerEngineeringPlan.stateLabel, "v3_program_semester_plan");
-    assert.equal(computerEngineeringPlan.topic, "bsc-computer-engineering");
+    // One semester-plan path for every program (Ali, 22 Nov 2026): Computer Engineering is answered
+    // from its own newest official plan, never from the Computer Science record.
+    assert.equal(computerEngineeringPlan.stateLabel, "program_semester_plan");
     assert.match(observedGuestSetCookie ?? "", /chat_guest_id=/u, "chat route issues its quota identity cookie on the response");
-    assert.match(computerEngineeringPlan.content, /Which published cohort\/source label/u);
-    assert.ok(computerEngineeringPlan.citations?.some((citation: { url?: string }) => citation.url?.endsWith("bsc_computer_engineering_study_plan.pdf")));
+    assert.match(computerEngineeringPlan.content, /Bachelor of Science in Computer Engineering — Year 1, Semester 2/u);
+    assert.match(computerEngineeringPlan.content, /called Bachelor of Science in Computer and Artificial Intelligence Engineering/u);
+    assert.ok(computerEngineeringPlan.citations?.some((citation: { url?: string }) => citation.url?.endsWith("cit_bsc_computer_and_artificial_intelligence_engineering_study_plan.pdf")));
     assert.doesNotMatch(JSON.stringify(computerEngineeringPlan.citations), /bscs_study_plan_fall_2025/u);
-    assert.doesNotMatch(computerEngineeringPlan.content, /\b(?:CSBP219|CENG202|MATH110|MATH140)\b/u,
-      "the Computer Science semester answer's distinctive course list must not leak into Computer Engineering");
   } finally {
     if (priorProgramFlag === undefined) delete process.env.UAEU_AGENT_V3_ENABLED;
     else process.env.UAEU_AGENT_V3_ENABLED = priorProgramFlag;

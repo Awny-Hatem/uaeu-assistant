@@ -19,6 +19,11 @@ const FORMER_NAMES: Record<string, { en: string; ar: string }> = {
   "Bachelor of Science in Cybersecurity": { en: "Information Security", ar: "أمن المعلومات" },
   "Bachelor of Science in Computer and Artificial Intelligence Engineering": { en: "Computer Engineering", ar: "هندسة الحاسوب" },
 };
+// Former title -> current title (the inverse of FORMER_NAMES).
+const CURRENT_NAMES: Record<string, { en: string; ar: string }> = {
+  "Bachelor of Science in Information Security": { en: "Bachelor of Science in Cybersecurity", ar: "بكالوريوس العلوم في الأمن السيبراني" },
+  "Bachelor of Science in Computer Engineering": { en: "Bachelor of Science in Computer and Artificial Intelligence Engineering", ar: "بكالوريوس العلوم في هندسة الحاسوب والذكاء الاصطناعي" },
+};
 let cache: ProgramPlans[] | undefined;
 function programs(): ProgramPlans[] {
   if (cache) return cache;
@@ -109,7 +114,11 @@ function citations(program: ProgramPlans, plan: CohortPlan): Citation[] {
 }
 
 const courseLine = (course: PlanCourse, ar: boolean) => {
-  const name = course.code ? `**${course.code}** ${course.title ?? ""}`.trim() : course.options?.length ? `${course.title ?? (ar ? "اختيار" : "Choice")}: ${course.options.join(ar ? " أو " : " or ")}` : course.title ?? "";
+  const elective = !course.code && !course.options?.length && /student choice|elective/iu.test(course.title ?? "");
+  const name = course.code ? `**${course.code}** ${course.title ?? ""}`.trim()
+    : course.options?.length ? `${course.title ?? (ar ? "اختيار" : "Choice")}: ${course.options.join(ar ? " أو " : " or ")}`
+    : elective ? `${ar ? "مادة اختيارية" : "Elective"}${course.type ? ` (${course.type.replace(/^Gen\.? ?Ed\.? ?/iu, "Gen. Ed. ")})` : ""}`
+    : course.title ?? "";
   return `- ${name}${course.credits !== undefined ? ` (${course.credits} ${ar ? (course.credits === 1 ? "ساعة" : "ساعات") : course.credits === 1 ? "credit" : "credits"})` : ""}`;
 };
 
@@ -157,10 +166,12 @@ export function semesterPlanAnswer(latest: string, history: { role: string; cont
   const credits = (n: number) => ar ? `${n} ${n === 1 ? "ساعة معتمدة" : "ساعة معتمدة"}` : `${n} credit ${n === 1 ? "hour" : "hours"}`;
   const former = FORMER_NAMES[program.title];
   const renamed = former ? (ar ? ` (كان البرنامج يسمى ${former.ar} للدفعات السابقة)` : ` (earlier cohorts studied it under its former name, ${former.en})`) : "";
+  const current = CURRENT_NAMES[program.title];
+  const nowCalled = current ? (ar ? ` (يسمى البرنامج ${current.ar} ابتداءً من دفعة 2026–2027)` : ` (from the 2026–2027 cohort the program is called ${current.en})`) : "";
   const semesterName = position.year === 1 && position.semester === 1 ? (ar ? "الفصل الأول" : "first semester") : (ar ? `السنة ${position.year}، الفصل ${position.semester}` : `Year ${position.year}, Semester ${position.semester}`);
   const blocks: string[] = [
     `**${ar ? program.titleAr ?? program.title : program.title} — ${semesterName}**`,
-    ar ? `حسب [الخطة الدراسية الرسمية](${plan.sourceUrl}) لدفعة ${cohort} فما بعد (الدخول في ${entry})${renamed}:` : `From the [official study plan](${plan.sourceUrl}) for the ${cohort} cohort onwards (${entry} entry)${renamed}:`,
+    ar ? `حسب [الخطة الدراسية الرسمية](${plan.sourceUrl}) لدفعة ${cohort} فما بعد (الدخول في ${entry})${renamed}${nowCalled}:` : `From the [official study plan](${plan.sourceUrl}) for the ${cohort} cohort onwards (${entry} entry)${renamed}${nowCalled}:`,
   ];
   const identical = terms.every((x) => x.term.courses.map(key).join(";") === terms[0].term.courses.map(key).join(";"));
   const trackNames = terms.map((x) => x.plan.track).filter(Boolean) as string[];
@@ -186,7 +197,7 @@ export function semesterPlanAnswer(latest: string, history: { role: string; cont
   const uniqueOthers = [...new Set(others)];
   if (assumed && uniqueOthers.length) blocks.push(ar ? `إذا التحقت في دفعة أخرى (${uniqueOthers.join("، ")}) فأخبرني لأعرض خطتك.` : `If you were admitted in another cohort (${uniqueOthers.join(", ")}), tell me and I'll show your plan.`);
   blocks.push(ar
-    ? `راجع Degree Works ومرشدك الأكاديمي قبل التسجيل؛ قد تختلف خطتك المعتمدة عن النموذج.${program.catalogUrl ? ` صفحة البرنامج: [${program.titleAr ?? program.title}](${program.catalogUrl}).` : ""}`
-    : `Check Degree Works and your academic advisor before registering; your assigned plan can differ from the model.${program.catalogUrl ? ` Program page: [${program.title}](${program.catalogUrl}).` : ""}`);
+    ? `راجع Degree Works ومرشدك الأكاديمي قبل التسجيل؛ قد تختلف خطتك المعتمدة عن النموذج.${program.catalogUrl ? ` صفحة البرنامج: [${current?.ar ?? program.titleAr ?? program.title}](${program.catalogUrl}).` : ""}`
+    : `Check Degree Works and your academic advisor before registering; your assigned plan can differ from the model.${program.catalogUrl ? ` Program page: [${current?.en ?? program.title}](${program.catalogUrl}).` : ""}`);
   return { disposition: "answer", citations: cites, content: blocks.filter(Boolean).join("\n\n") };
 }
