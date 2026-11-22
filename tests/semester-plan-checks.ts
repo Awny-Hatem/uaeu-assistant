@@ -58,6 +58,31 @@ check("Computer and AI Engineering: every semester's courses and printed totals 
     }
   });
 });
+// cit_bsc_computer_science_study_plan.pdf, 2026-2027 cohort (Fall entry), read from the rendered PDF.
+const CS: { codes: string[]; total: number }[] = [
+  { codes: ["GEAE101", "MATH105", "CSBP119", "PHYS105"], total: 15 },
+  { codes: ["CENG202", "MATH110", "CSBP219", "CENG205", "MATH140"], total: 15 },
+  { codes: ["BIOC100", "CHEM111", "CENG210", "CSBP315", "CSBP319"], total: 15 },
+  { codes: ["CSBP340", "ITBP270", "STAT210", "SWEB300", "ITBP301"], total: 14 },
+  { codes: ["CSBP316", "GEEM110", "SWEB450", "ITBP218"], total: 15 },
+  { codes: ["CSBP461", "CSBP400", "CSBP301", "ITBP321", "GESU121"], total: 15 },
+  { codes: ["CSBP411", "CSBP421", "ITBP480"], total: 12 },
+  { codes: ["PHYS135", "ITBP481"], total: 13 },
+  { codes: ["ITBP496"], total: 6 },
+];
+check("Computer Science: every semester of the 2026-2027 plan matches the PDF, in the shared template", () => {
+  CS.forEach(({ codes, total }, i) => {
+    const r = ask(`What should I take in my ${ORD[i]} semester as a computer science student?`)!;
+    assert.equal(r.disposition, "answer", ORD[i]);
+    for (const code of codes) assert.match(r.content, new RegExp(code), `${ORD[i]} ${code}`);
+    assert.deepEqual(totals(r.content), [total], ORD[i]);
+    assert.match(r.content, /^\*\*Bachelor of Science in Computer Science — /u);
+    assert.match(r.content, /2026–2027 cohort onwards \(Fall entry\):/u);
+    assert.match(r.content, /Check Degree Works and your academic advisor before registering/u);
+    assert.doesNotMatch(r.content, /former name|not a determination|published curriculum, not a check|bscs_study_plan_fall_2025/u);
+    assert.deepEqual(r.citations.map((c) => c.url), ["https://www.uaeu.ac.ae/en/cit/pdf/cit_bsc_computer_science_study_plan.pdf", "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"]);
+  });
+});
 check("the 0-credit course printed in the AI Systems plan is flagged, not corrected", () => {
   const r = ask("What should I take in my sixth semester as a Computer and AI Engineering student?")!;
   assert.match(r.content, /\*\*CENG510\*\* AI Systems Deployment \(0 credits\)/);

@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { semesterPlanAnswer } from "../lib/academic/semester-plan-answer";
 
 process.env.AI_PROVIDER = "mock";
 process.env.SERVER_CHAT_HISTORY = "";
@@ -368,6 +369,11 @@ async function main() {
               `${entry.id} guide route must retain its matching official source`);
             assert.ok(arabicText.test(result.data.content ?? ""),
               `${entry.id} guided answer must remain in Arabic`);
+            continue;
+          }
+          // Program semester questions take the single semester-plan path for every program.
+          if (semesterPlanAnswer(arabicQuery, [], "ar")?.disposition === "answer") {
+            assert.equal(result.data.stateLabel, "program_semester_plan", `${entry.id} semester-plan path`);
             continue;
           }
           if (
