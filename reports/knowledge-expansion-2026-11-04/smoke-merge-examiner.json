@@ -1,0 +1,1351 @@
+{
+  "startedAt": "2026-11-10T10:31:19.806Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "smoke-merge-examiner",
+  "fixture": "examiner-scenarios/examiner_100_phrasing.json",
+  "fixtureSha256": "bb83756e96876b123e4d72065f039e4da75ea0508b57f1c5ad80af451cc98687",
+  "methodology": "Build examiner_100_phrasing.json: harder phrasing variants per scenario.\n\nEach scenario keeps its main question, expected facts, checks and sources.\nIts variants are replaced by three deterministic perturbations:\n  1. typo  - common misspellings / swapped letters, lower case, no '?'\n  2. short - casual compressed form (filler words dropped, lower case)\n  3. ar-typo - the Arabic variant with everyday spelling slips\nFacts and rubric are unchanged, so any failure is phrasing sensitivity.",
+  "results": [
+    {
+      "turns": [
+        "Who founded UAEU, and when was it established?"
+      ],
+      "expected": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/overview.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "1976"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Zayed|زايد"
+          ]
+        }
+      ],
+      "id": "EX001",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "متى تأسست جامعة الإمارات ومن مؤسسها؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "who fouded uaue, and when was it established",
+        "who founded uaeu and when was established?",
+        "متي تاسست جامعه الامارات ومن مؤسسها"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "19c9a631ed16483aecfbf7fc5308bc7ae391d1c22a8cf638b548e16e059c9767"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX001",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Who founded UAEU, and when was it established?",
+          "status": 200,
+          "seconds": 1.898,
+          "payload": {
+            "role": "assistant",
+            "content": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Overview",
+                "url": "https://www.uaeu.ac.ae/en/about/overview.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Overview",
+                "evidenceText": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-founding#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "United Arab Emirates University was founded in 1976 by the late Sheikh Zayed Bin Sultan Al Nahyan.",
+                "evidenceIds": [
+                  "answer:university-founding#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 1889,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3235,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 48,
+                  "estimatedUsd": 0.0007947999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1280,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005616
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4515,
+              "outputTokens": 79,
+              "knownUsageUsd": 0.0013563999999999998,
+              "estimatedUsd": 0.0013563999999999998,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "1976"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Zayed|زايد"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "How does a UAEU undergraduate apply for outgoing student exchange?"
+      ],
+      "expected": "A UAEU undergraduate wishing to study for up to two semesters at a partner institution applies through the college coordinator for student exchange. The partner agreement determines tuition arrangements; the student bears transportation, accommodation, insurance and textbook costs.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "coordinator|منسق"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "cost|expenses|تكاليف"
+          ]
+        }
+      ],
+      "id": "EX017",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف يقدم طالب البكالوريوس في الجامعة على التبادل الخارجي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how does a uaue undergraduate aply for outgoing student exchange",
+        "how uaeu undergraduate apply outgoing student exchange?",
+        "كيف يقدم طالب البكالوريوس في الجامعه علي التبادل الخارجي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "7df3277ff102a3f9e5c95bd4eb8511d87344ac6fbc6fd831b41bf4c20464aeef"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX017",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "How does a UAEU undergraduate apply for outgoing student exchange?",
+          "status": 200,
+          "seconds": 4.773,
+          "payload": {
+            "role": "assistant",
+            "content": "A UAEU undergraduate who wishes to study for up to two semesters at a partner institution should apply through the college coordinator for student exchange.\n\nThe tuition fees depend on the partner agreement, but the student is responsible for transportation, accommodation, insurance, and textbook costs.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Student Exchange Unit",
+                "url": "https://www.uaeu.ac.ae/en/admission/studentexchange/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Outgoing Students",
+                "evidenceText": "A UAEU undergraduate wishing to study for up to two semesters at a partner institution applies through the college coordinator for student exchange. The partner agreement determines tuition arrangements; the student bears transportation, accommodation, insurance and textbook costs."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "student-exchange",
+            "evidenceIds": [
+              "answer:student-exchange-outgoing#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "A UAEU undergraduate who wishes to study for up to two semesters at a partner institution should apply through the college coordinator for student exchange.\n\nThe tuition fees depend on the partner agreement, but the student is responsible for transportation, accommodation, insurance, and textbook costs.",
+                "evidenceIds": [
+                  "answer:student-exchange-outgoing#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4758,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3281,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 90,
+                  "estimatedUsd": 0.0008803999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1353,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005908
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4634,
+              "outputTokens": 121,
+              "knownUsageUsd": 0.0014712,
+              "estimatedUsd": 0.0014712,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "coordinator|منسق"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "cost|expenses|تكاليف"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "csbp319",
+      "turns": [
+        "can i do CSBP 319 while taking CSBP 221 in the same semester?"
+      ],
+      "expected": "CSBP221 is pre/corequisite; concurrent may be allowed, but CSBP219 minimum D and other registration conditions still matter.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "CSBP\\s*219"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "CSBP\\s*221"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "alongside",
+            "concurrent",
+            "pre.?co",
+            "متزامن",
+            "معه",
+            "مع المساق",
+            "corequisite",
+            "same semester",
+            "at the same time",
+            "while taking"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "forbidden": [
+        "CSBP219[^.!?\\n]*(?:can|may) be taken concurrently",
+        "CSBP219[^.!?\\n]*before or concurrently",
+        "CSBP\\s*219\\s+(?:can|may)\\s+be\\s+(?:completed|taken)\\s+before\\s+or\\s+(?:alongside|concurrent)",
+        "(?:take|taking)\\s+CSBP\\s*219\\s+(?:alongside|concurrent)"
+      ],
+      "id": "EX040",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل أستطيع أخذ CSBP 319 مع CSBP 221 في الفصل نفسه؟ وما المتطلب السابق الذي يبقى مطلوباً؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "can i do csbp 319 while taking csbp 221 in the same semster",
+        "csbp 319 while taking csbp 221 same semester?",
+        "هل استطيع اخذ CSBP 319 مع CSBP 221 في الفصل نفسه وما المتطلب السابق الذي يبقي مطلوباً"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "74f6173a384221f3685de444f7abdd9774e0e79d72485f77f7b0a9e8ed1ae587"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX040",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "can i do CSBP 319 while taking CSBP 221 in the same semester?",
+          "status": 200,
+          "seconds": 4.436,
+          "payload": {
+            "role": "assistant",
+            "content": "You can take CSBP319 Data Structures while taking CSBP221 in the same semester since CSBP221 is listed as a prerequisite or corequisite for CSBP319, allowing concurrent enrollment with a minimum grade requirement of D.\n\nHowever, you must have completed CSBP219 with at least a grade of D before taking CSBP319, as it is a prior prerequisite that cannot be taken concurrently.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Course Catalog — CSBP319 Data Structures",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP319",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "CSBP319",
+            "evidenceIds": [
+              "02-csbp319-data-structures.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can take CSBP319 Data Structures while taking CSBP221 in the same semester since CSBP221 is listed as a prerequisite or corequisite for CSBP319, allowing concurrent enrollment with a minimum grade requirement of D.\n\nHowever, you must have completed CSBP219 with at least a grade of D before taking CSBP319, as it is a prior prerequisite that cannot be taken concurrently.",
+                "evidenceIds": [
+                  "02-csbp319-data-structures.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4423,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3659,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 117,
+                  "estimatedUsd": 0.0010747999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1663,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007148
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5322,
+              "outputTokens": 148,
+              "knownUsageUsd": 0.0017896,
+              "estimatedUsd": 0.0017896,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*219"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*221"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "alongside",
+              "concurrent",
+              "pre.?co",
+              "متزامن",
+              "معه",
+              "مع المساق",
+              "corequisite",
+              "same semester",
+              "at the same time",
+              "while taking"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "category": "Admissions and money",
+      "language": "en",
+      "focus": "Examiner",
+      "turns": [
+        "What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?"
+      ],
+      "expected": "IELTS Academic6.5 or equivalent, less than2years old; stated exemptions may apply.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cgs/admission.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "IELTS",
+          "any": [
+            "6\\.5"
+          ]
+        },
+        {
+          "name": "age",
+          "any": [
+            "(?:less than|under)\\s+(?:two|2)\\s+years",
+            "أقل من (?:سنتين|عامين)",
+            "اقل من (?:سنتين|عامين)",
+            "أقل من\\s*2\\s*(?:سنة|سنوات|عام)",
+            "اقل من\\s*2\\s*(?:سنة|سنوات|عام)",
+            "يتجاوز.{0,25}(?:سنتين|عامين)",
+            "(?:not|no) (?:be )?(?:more|older) than (?:two|2) years"
+          ]
+        }
+      ],
+      "sourceQuote": " recognized by the uae ministry of education, with a minimum cumulative gpa of 2.5 on a 4.0 scale or its equivalent. 3. a score of 6.5 or higher on the ielts academic exam or equivalent, for all disciplines in which the main language of instruction is english or the dissertation must be written in english. this test score must be less than two years old at the time of app",
+      "sourceBodySha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "id": "EX060",
+      "arabicQuestion": "",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what ielts score and test-age limit does the uaue phd admisions page state for english instruction",
+        "ielts score and test-age limit uaeu phd admissions page state english instruction?",
+        "اجب بالعربيه عن هذا السؤال المتعلق بجامعه الامارات: What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?"
+      ],
+      "followUpQuestion": null,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "fd75dbe5f3d3cc0de39be7b9de744c23edca6cd745210bc6be9a56b39e9c023c"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX060",
+      "conversation": [
+        {
+          "user": "What IELTS score and test-age limit does the UAEU PhD admissions page state for English instruction?",
+          "status": 200,
+          "seconds": 13.31,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU requires an IELTS Academic score of 6.5 or equivalent for English-medium PhD study or an English dissertation, and the IELTS test score must be less than two years old at the time of application.\n\nThere are exceptions if the applicant is a native English speaker with a master's degree from an English-medium institution in a country where English is official, or if the applicant graduated from an English-medium master's program with evidence of IELTS Academic 6.0 or equivalent at admission to that master's.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU College of Graduate Studies Admission",
+                "url": "https://www.uaeu.ac.ae/en/cgs/admission.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Page footer 2026-09-24",
+                "sourceSection": "Masters requirements and conditional admission; PhD requirements and Required Documents for PhD programs",
+                "evidenceText": "Graduate application and requirements\n- Apply through the official online link on the College of Graduate Studies admission page after choosing the degree and program. Program standards can be higher; meeting minimums does not guarantee admission.\n- For a predominantly English-taught master's, the general baseline is a related accredited bachelor's degree, GPA 3.0/4.0 and IELTS Academic 6.0. IELTS 5.5 is a conditional route, not automatic eligibility: reach 6.0 by the end of the first semester, take at most 6 credit hours initially (excluding intensive English), and earn GPA 3.0 in the first 9 credit-bearing hours. Separate conditional GPA routes exist from 2.5; Arabic-taught master's programs list IELTS 4.0.\n- General PhD minimums are master's GPA 3.0, bachelor's GPA 2.5, and IELTS 6.5 for English-medium study/English dissertation; Arabic-medium PhD lists IELTS 5.0. Language-test exemptions and additional college requirements may apply.\n- PhD document checklist: certified bachelor's and master's degree certificates and transcripts; Ministry of Education equivalency/certificate recognition for the previous degree as required; English proficiency certificate; Arabic proficiency certificate for Arabic-medium PhD; two recommendation letters; CV; valid passport for all applicants, plus Emirates ID for UAE residents and family book for UAE nationals; and a personal photo. Passport and ID are not interchangeable alternatives.\nFor English-medium PhD study or an English dissertation, IELTS Academic6.5 or equivalent is required and the test score must be less than two years old at application. The page states two exception routes: a native English speaker with a master’s from an English-medium institution in a country where English is official; or an English-medium master’s graduate with evidence of IELTS Academic6.0 or equivalent at admission to that master’s. Individual colleges may impose additional or higher standards.",
+                "sourceSha256": "0f7cff06ee8242de7fc38a77e607d64f9b08fba80f072937f9432c3ce8170727"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "admissions",
+            "evidenceIds": [
+              "answer:admissions-graduate-application#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU requires an IELTS Academic score of 6.5 or equivalent for English-medium PhD study or an English dissertation, and the IELTS test score must be less than two years old at the time of application.\n\nThere are exceptions if the applicant is a native English speaker with a master's degree from an English-medium institution in a country where English is official, or if the applicant graduated from an English-medium master's program with evidence of IELTS Academic 6.0 or equivalent at admission to that master's.",
+                "evidenceIds": [
+                  "answer:admissions-graduate-application#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 13298,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25707,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 66,
+                  "estimatedUsd": 0.0103884
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3877,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 138,
+                  "estimatedUsd": 0.0017716000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1758,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007528000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 31342,
+              "outputTokens": 235,
+              "knownUsageUsd": 0.0129128,
+              "estimatedUsd": 0.0129128,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "IELTS",
+            "passed": true,
+            "patterns": [
+              "6\\.5"
+            ]
+          },
+          {
+            "name": "age",
+            "passed": true,
+            "patterns": [
+              "(?:less than|under)\\s+(?:two|2)\\s+years",
+              "أقل من (?:سنتين|عامين)",
+              "اقل من (?:سنتين|عامين)",
+              "أقل من\\s*2\\s*(?:سنة|سنوات|عام)",
+              "اقل من\\s*2\\s*(?:سنة|سنوات|عام)",
+              "يتجاوز.{0,25}(?:سنتين|عامين)",
+              "(?:not|no) (?:be )?(?:more|older) than (?:two|2) years"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "scan",
+      "turns": [
+        "Can I request a scan of an entire textbook from UAEU Library in one day?"
+      ],
+      "expected": "No: one article perissue or onechapter perbook perday within10percent printedwork.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/library/scanservice.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "chapter",
+            "فصل"
+          ]
+        },
+        {
+          "name": "Published daily limit for the requested book scan",
+          "any": [
+            "per day",
+            "a day",
+            "في اليوم",
+            "يومياً",
+            "يوميًا",
+            "يوميا",
+            "single day",
+            "one day",
+            "يوم واحد"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "10\\s*%"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX086",
+      "category": "Student services",
+      "arabicQuestion": "هل أستطيع طلب مسح كتاب دراسي كامل من مكتبة الجامعة في يوم واحد؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "can i request a scan of an entire textbook from uaue libary in one day",
+        "request scan entire textbook from uaeu library one day?",
+        "هل استطيع طلب مسح كتاب دراسي كامل من مكتبه الجامعه في يوم واحد"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "6ab19a0f5a3e0e8ab1df739236076507c5b65948920524279f41a7b5fefcafa2"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX086",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Can I request a scan of an entire textbook from UAEU Library in one day?",
+          "status": 200,
+          "seconds": 6.041,
+          "payload": {
+            "role": "assistant",
+            "content": "No, you cannot request a scan of an entire textbook from UAEU Library in one day; the scan service limits requests to one journal article per issue or one chapter per book per day, and only up to 10% of the printed work to comply with copyright law.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Library — Scan Service Online Form",
+                "url": "https://uaeu.ac.ae/en/library/scanservice.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Notes — copyright restriction",
+                "evidenceText": "To comply with copyright law, the form restricts requests to one journal article per issue or one chapter per book in a single day, up to 10% of the printed work."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "library",
+            "evidenceIds": [
+              "answer:library-online-scan-copyright-limit#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "No, you cannot request a scan of an entire textbook from UAEU Library in one day; the scan service limits requests to one journal article per issue or one chapter per book per day, and only up to 10% of the printed work to comply with copyright law.",
+                "evidenceIds": [
+                  "answer:library-online-scan-copyright-limit#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6031,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 25700,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0103888
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3255,
+                  "cachedInputTokens": 3072,
+                  "outputTokens": 81,
+                  "estimatedUsd": 0.00051
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1319,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005772
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 30274,
+              "outputTokens": 180,
+              "knownUsageUsd": 0.011476,
+              "estimatedUsd": 0.011476,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "chapter",
+              "فصل"
+            ]
+          },
+          {
+            "name": "Published daily limit for the requested book scan",
+            "passed": true,
+            "patterns": [
+              "per day",
+              "a day",
+              "في اليوم",
+              "يومياً",
+              "يوميًا",
+              "يوميا",
+              "single day",
+              "one day",
+              "يوم واحد"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "10\\s*%"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "17876aa50a6e2fecc395859477fd11102494334b65d937512204033e513177fe",
+    "files": 8468,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "merge-main"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9301f3aefb46a514293942206caa8067fed16b04221ac56e92c2b2d90c77b6af",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 174,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-10T10:31:23.158Z",
+        "totalRecords": 252,
+        "domains": {
+          "admissions": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "academics": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-04"
+          },
+          "registration": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-11-04"
+          },
+          "graduation": {
+            "records": 9,
+            "reviewedRecords": 9,
+            "latestVerification": "2026-11-03"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-11-03"
+          },
+          "financial_aid": {
+            "records": 7,
+            "reviewedRecords": 7,
+            "latestVerification": "2026-11-04"
+          },
+          "student_services": {
+            "records": 11,
+            "reviewedRecords": 11,
+            "latestVerification": "2026-11-04"
+          },
+          "housing": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-11-04"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 106
+      },
+      "sourceEvidence": {
+        "mappedReferences": 234,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 51,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/smoke-merge-examiner-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 5,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-10T10:31:54.091Z",
+  "runtimeAfter": {
+    "sha256": "17876aa50a6e2fecc395859477fd11102494334b65d937512204033e513177fe",
+    "files": 8468,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "merge-main"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9301f3aefb46a514293942206caa8067fed16b04221ac56e92c2b2d90c77b6af",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 174,
+      "coverage": {
+        "schemaVersion": 1,
+        "status": "seed-corpus",
+        "generatedAt": "2026-11-10T10:31:57.146Z",
+        "totalRecords": 252,
+        "domains": {
+          "admissions": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "academics": {
+            "records": 22,
+            "reviewedRecords": 22,
+            "latestVerification": "2026-11-04"
+          },
+          "registration": {
+            "records": 15,
+            "reviewedRecords": 15,
+            "latestVerification": "2026-11-04"
+          },
+          "graduation": {
+            "records": 9,
+            "reviewedRecords": 9,
+            "latestVerification": "2026-11-03"
+          },
+          "finance": {
+            "records": 6,
+            "reviewedRecords": 6,
+            "latestVerification": "2026-11-03"
+          },
+          "financial_aid": {
+            "records": 7,
+            "reviewedRecords": 7,
+            "latestVerification": "2026-11-04"
+          },
+          "student_services": {
+            "records": 11,
+            "reviewedRecords": 11,
+            "latestVerification": "2026-11-04"
+          },
+          "housing": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "visa": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "library": {
+            "records": 21,
+            "reviewedRecords": 21,
+            "latestVerification": "2026-11-05"
+          },
+          "it": {
+            "records": 10,
+            "reviewedRecords": 10,
+            "latestVerification": "2026-11-05"
+          },
+          "wellbeing": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-09-29"
+          },
+          "careers": {
+            "records": 2,
+            "reviewedRecords": 2,
+            "latestVerification": "2026-11-04"
+          },
+          "campus": {
+            "records": 5,
+            "reviewedRecords": 5,
+            "latestVerification": "2026-09-29"
+          },
+          "general": {
+            "records": 0,
+            "reviewedRecords": 0,
+            "latestVerification": null
+          }
+        },
+        "unclassifiedRecords": 106
+      },
+      "sourceEvidence": {
+        "mappedReferences": 234,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 81,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 51,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 4.773,
+    "p95": 13.31,
+    "max": 13.31
+  },
+  "usage": {
+    "measuredAnswers": 5,
+    "totalAnswers": 5,
+    "estimatedUsd": 0.029006,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

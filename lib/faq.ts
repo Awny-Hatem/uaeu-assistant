@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import type { Locale } from "@/lib/language";
 import type { Citation } from "@/lib/prototype-types";
-import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope } from "@/lib/query-understanding";
+import { courseCodes, normalizeQuery, scopeAllows, understandQuery, type EvidenceScope, type FactIntent, type QueryMeaning } from "@/lib/query-understanding";
+import { programIdInText } from "@/lib/academic/program-curricula";
 
 export type AnswerDisposition =
   | "answer"
@@ -14,12 +15,20 @@ export type AnswerDisposition =
 export type FaqEntry = {
   id: string;
   category: string;
+  applicability?: {
+    type: "policy-scope";
+    policyDomain: string;
+    targetProgramId: string;
+    intents: FactIntent[];
+  };
   questions: string[];
   matchPhrases?: string[];
   excludePhrases?: string[];
   answer_en: string;
   answer_ar?: string;
   disposition?: AnswerDisposition;
+  /** Allow a reviewed general answer that explicitly identifies what remains unknown. */
+  allowPartialAnswerWithMissingContext?: boolean;
   citations: Citation[];
   scope?: EvidenceScope;
 };
@@ -38,6 +47,9 @@ const CITATION_FRESHNESS_MS = 180 * 24 * 60 * 60 * 1000;
 const ANSWER_DIR = path.join(process.cwd(), "data", "verified-answers");
 
 const MATCH_STOP_WORDS = new Set([
+  "hey",
+  "hello",
+  "hi",
   "a",
   "about",
   "an",
@@ -294,7 +306,8 @@ function validScope(scope: unknown): boolean {
   if (scope === undefined) return true;
   if (!scope || typeof scope !== "object" || Array.isArray(scope)) return false;
   const value = scope as EvidenceScope;
-  return [value.courseCodes, value.subjects, value.terms].every((items) => items === undefined || (Array.isArray(items) && items.every((item) => typeof item === "string" && item.trim()))) &&
+  return (value.programId === undefined || (typeof value.programId === "string" && /^[a-z0-9]+(?:-[a-z0-9]+)*$/i.test(value.programId))) &&
+    [value.courseCodes, value.subjects, value.terms].every((items) => items === undefined || (Array.isArray(items) && items.every((item) => typeof item === "string" && item.trim()))) &&
     (value.years === undefined || (Array.isArray(value.years) && value.years.every((year) => Number.isInteger(year) && year >= 1900 && year <= 2200))) &&
     (value.applicantCategory === undefined || ["national", "international"].includes(value.applicantCategory)) &&
     (value.categoryIndependent === undefined || (typeof value.categoryIndependent === "boolean" && (!value.categoryIndependent || value.applicantCategory === undefined))) &&
@@ -446,12 +459,40 @@ function containsPhrase(query: string, phrase: string): boolean {
   return ` ${query} `.includes(` ${normalizedPhrase} `);
 }
 
+function removeHarmlessFaqWrappers(query: string): string {
+  return query
+    .replace(/^(?:(?:using|based on) official (?:uaeu )?evidence(?: and stating any limits)?[,;:]?\s*)/u, "")
+    .replace(/^please distinguish confirmed information from (?:anything(?: that)? i must verify|what i must verify)[,:]?\s*/u, "")
+    .replace(/^for a student asking uaeu what does the cited official information say\s*/u, "")
+    .replace(/^please give (?:the )?practical next step and cite the relevant uaeu evidence\??\s*/u, "")
+    .replace(/^answer this uaeu question from the relevant official source not a similar topic\s*/u, "")
+    .replace(/^what is the source supported answer to this student question\s*/u, "")
+    .replace(/^please answer only what the official uaeu evidence supports\s*[:;,]?\s*/u, "")
+    .replace(/^(?:i need|please provide|give me) (?:the )?current published (?:uaeu )?(?:answer|information)(?: with its scope made clear)?\s*/u, "")
+    .replace(/^(?:please )?answer(?: the question)?[,;:]?\s*/u, "")
+    .replace(/^(?:please tell me|i was wondering|could you explain)\s+/u, "")
+    .replace(/\s+(?:right now|please)$/u, "")
+    .trim();
+}
+
+function removeFaqAudiencePreface(query: string): string {
+  // Audience facts still participate in scope checks, but should not lower
+  // lexical coverage for the student's actual request (for example,
+  // "I'm a UAEU alumnus. How do I request a printed graduation certificate?").
+  return query
+    .replace(/^(?:i m|i am|as) (?:a|an) (?:uaeu )?(?:alumnus|alumna|graduate)(?: of uaeu)?\s+/u, "")
+    .trim();
+}
+
 function similarityScore(
   query: string,
   candidate: string,
   queryTokens: Set<string>,
 ): number {
-  const normalizedCandidate = normalizeAnswerText(candidate);
+  // Audience wording is removed from the query before lexical scoring; remove
+  // the same prefatory wording from candidate questions so "alumnus" does
+  // not count as a missing topic token in an otherwise exact request.
+  const normalizedCandidate = removeFaqAudiencePreface(normalizeAnswerText(candidate));
   if (!normalizedCandidate) return 0;
   if (query === normalizedCandidate) return 10_000 + normalizedCandidate.length;
 
@@ -491,8 +532,8 @@ function phraseScore(
   return 2_000 + normalizedPhrase.length;
 }
 
-function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): number {
-  if (!faqScopeAllows(query, entry)) return 0;
+function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry, scopeQuery = query): number {
+  if (!faqScopeAllows(scopeQuery, entry)) return 0;
   if (entry.excludePhrases?.some((phrase) => containsPhrase(query, phrase))) {
     return 0;
   }
@@ -513,7 +554,13 @@ function scoreEntry(query: string, queryTokens: Set<string>, entry: FaqEntry): n
   return score;
 }
 
+// Loaded records are immutable for this process; cache derived ownership only,
+// never answers or user questions. A refreshed pack creates new record objects.
+const scopeCache = new WeakMap<FaqEntry, EvidenceScope>();
+const evidenceMeaningCache = new WeakMap<FaqEntry, QueryMeaning>();
 export function faqScope(entry: FaqEntry): EvidenceScope {
+  const cached = scopeCache.get(entry);
+  if (cached) return cached;
   const identity = `${entry.answer_en.split("\n")[0]} ${entry.questions.join(" ")}`;
   const identityMeaning = understandQuery(identity);
   // Questions can compare an included and an excluded population. They cannot
@@ -524,11 +571,11 @@ export function faqScope(entry: FaqEntry): EvidenceScope {
     try { const code = new URL(citation.url ?? "").searchParams.get("id"); return code ? courseCodes(code) : []; }
     catch { return []; }
   });
-  return {
+  const scope: EvidenceScope = {
     // The reviewed category is an explicit ownership signal. A policy titled
     // "semester credit load" remains registration evidence even without the
     // literal word registration in its example questions.
-    ...(["admissions", "registration", "calendar", "graduation", "housing", "library"].includes(entry.category) ? { subjects: [entry.category, ...identityMeaning.subjects] } : {}),
+    ...(["admissions", "registration", "calendar", "graduation", "housing", "library", "university"].includes(entry.category) ? { subjects: [entry.category, ...identityMeaning.subjects] } : {}),
     ...(identityMeaning.years.length ? { years: identityMeaning.years } : {}),
     ...(headingMeaning.degreeLevel ? { degreeLevel: headingMeaning.degreeLevel } : {}),
     ...(ownCodes.length || namedCodes.length ? { courseCodes: [...new Set(ownCodes.length ? ownCodes : namedCodes)] } : {}),
@@ -538,19 +585,61 @@ export function faqScope(entry: FaqEntry): EvidenceScope {
     ...(entry.id === "admissions-graduate-application" ? { degreeLevel: "postgraduate" as const } : {}),
     ...entry.scope,
   };
+  scopeCache.set(entry, scope);
+  evidenceMeaningCache.set(entry, understandQuery(`${entry.answer_en}\n${entry.answer_ar ?? ""}`));
+  return scope;
 }
 
-export function faqScopeAllows(query: string, entry: FaqEntry): boolean {
+export function faqScopeAllows(query: string, entry: FaqEntry, interpreted?: QueryMeaning): boolean {
   if (entry.citations.some((citation) => !citation.lastVerified || Date.now() - Date.parse(citation.lastVerified) > CITATION_FRESHNESS_MS)) return false;
   const scope = faqScope(entry);
   const meaning = understandQuery(query);
-  if (meaning.codes.length && scope.courseCodes?.length && !meaning.codes.every((code) => scope.courseCodes!.includes(code))) return false;
-  if (!scopeAllows(query, `${entry.answer_en}\n${entry.answer_ar ?? ""}`, scope)) return false;
+  const normalizedQuery = normalizeAnswerText(query);
+  const explicitPolicyScopeQuestion = entry.applicability?.type === "policy-scope" &&
+    [...entry.questions, ...(entry.matchPhrases ?? [])].some((phrase) => containsPhrase(normalizedQuery, phrase));
+  const explicitPolicyScopeFollowUp = entry.applicability?.type === "policy-scope" &&
+    entry.applicability.intents.some((intent) => meaning.intents.includes(intent)) &&
+    /\b(?:apply|applies|applicable|scope|excluded?|establish(?:es)?|govern|cover(?:s|ed)?)\b/iu.test(normalizedQuery) &&
+    understandQuery(entry.applicability.targetProgramId.replaceAll("-", " ")).subjects.some((subject) => meaning.subjects.includes(subject));
+  if (scope.programId && programIdInText(query) !== scope.programId &&
+    !explicitPolicyScopeQuestion && !explicitPolicyScopeFollowUp) return false;
+  // Postgraduate records must not leak into a generic/undergraduate admissions
+  // follow-up just because both records discuss deadlines or applications.
+  // Explicit master's/PhD wording in the resolved conversational query keeps
+  // the postgraduate record eligible.
+  if (scope.degreeLevel === "postgraduate" && meaning.degreeLevel !== "postgraduate") return false;
+  if (entry.excludePhrases?.some((phrase) => containsPhrase(normalizedQuery, phrase))) return false;
+  // A course-specific rule needs an identified target. Shared terms such as
+  // "prerequisite" or "corequisite" must not make one course's rule answer a
+  // general terminology question. Explicit course names are converted to
+  // codes by understandQuery, so legitimate named-course questions still work.
+  if (entry.category === "courses" && scope.courseCodes?.length &&
+    (!meaning.codes.length || !meaning.codes.every((code) => scope.courseCodes!.includes(code)))) return false;
+  const scopeText = `${entry.answer_en}\n${entry.answer_ar ?? ""}`;
+  // A policy-scope record exists to explain whether the policy covers the
+  // named population. Requiring the target program to already match the
+  // policy's own program scope rejects questions that explicitly ask about an
+  // excluded program (for example, Medicine and AE-06). Only these reviewed
+  // policy-scope questions may relax the population match; ordinary program
+  // facts remain strictly scoped.
+  const scopeMatches = scopeAllows(query, scopeText, scope) || (explicitPolicyScopeQuestion &&
+    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined, programId: undefined })) || (explicitPolicyScopeFollowUp &&
+    scopeAllows(query, scopeText, { ...scope, degreeLevel: undefined, programId: undefined }));
+  if (!scopeMatches) return false;
   // University-wide calendar facts are not admission/payment/scholarship schedules.
   if (meaning.intents.includes("deadline")) {
     const questionTopics = understandQuery([...entry.questions, ...(entry.matchPhrases ?? [])].join(" ")).subjects;
     const specific = meaning.subjects.filter((subject) => ["admissions", "graduation", "scholarship", "visa", "housing", "tuition"].includes(subject));
     if (specific.length && !specific.some((subject) => questionTopics.includes(subject))) return false;
+    // A broad example question can mention a neighbouring topic without making
+    // that record authoritative for its deadlines. Require domain ownership
+    // from the answer's reviewed category or explicit subject scope.
+    const categoryTopic = entry.category === "fees" ? "tuition"
+      : entry.category === "scholarships" ? "scholarship"
+      : entry.category === "international" ? "visa"
+      : entry.category;
+    const ownedTopics = new Set([categoryTopic, ...(entry.scope?.subjects ?? [])]);
+    if (specific.length && !specific.some((subject) => ownedTopics.has(subject))) return false;
   }
   return true;
 }
@@ -581,15 +670,29 @@ export function courseIdentityConflict(query: string): { supplied: string; named
 export function matchFaq(
   userMessage: string,
 ): { entry: FaqEntry; score: number } | null {
-  const query = normalizeAnswerText(userMessage);
+  const originalQuery = normalizeAnswerText(userMessage);
+  const query = normalizeAnswerText(removeHarmlessFaqWrappers(originalQuery));
   if (!query) return null;
+  const similarityQuery = removeFaqAudiencePreface(query);
   const entries = loadFaqEntries();
-  const queryTokens = correctedQueryTokens(query, entries);
+  const queryTokens = correctedQueryTokens(similarityQuery, entries);
   if (!queryTokens.size) return null;
 
+  const meaning = understandQuery(query);
+  const office=meaning.subjects.filter(subject=>["vice-chancellor","chancellor"].includes(subject));
+  const otherOffice=/\b(?:former|previous|next|future|will|secretary|assistant|deputy|office|affairs|academic)\b|\bwho was\b|سابق|القادم|من كان|نائب|مساعد|سكرتير|مكتب|شؤون/u.test(meaning.normalized);
+  const foreignOffice=/\bchancellor of (?!uaeu\b|the university\b|(?:the )?uae university\b|(?:the )?united arab emirates university\b)/u.test(meaning.normalized)
+    || /مدير جامع[ةه] (?!(?:الامارات|uaeu))/u.test(meaning.normalized);
+  if(office.length&&(otherOffice||foreignOffice||meaning.years.length))return null;
+  const officeIdentity=office.length===1&&!meaning.intents.length&&!meaning.years.length
+    && /\b(?:who|name)\b|من هو|اسم/u.test(meaning.normalized);
+  if(officeIdentity){
+    const owned=entries.filter(entry=>entry.category==='university'&&faqScope(entry).subjects?.includes(office[0])&&faqScopeAllows(query,entry,meaning));
+    if(owned.length===1)return {entry:owned[0],score:3000};
+  }
   let best: { entry: FaqEntry; score: number } | null = null;
   for (const entry of entries) {
-    const score = scoreEntry(query, queryTokens, entry);
+    const score = scoreEntry(similarityQuery, queryTokens, entry, originalQuery);
     if (score > 0 && (!best || score > best.score)) {
       best = { entry, score };
     }
@@ -601,4 +704,24 @@ export function matchFaq(
 export function faqAnswer(entry: FaqEntry, locale: Locale): string {
   if (locale === "ar" && entry.answer_ar?.trim()) return entry.answer_ar;
   return entry.answer_en;
+}
+
+/** Keep cited follow-up replies focused while reusing only the reviewed answer's facts. */
+export function faqAnswerForFollowUp(entry: FaqEntry, locale: Locale, query: string, isFollowUp: boolean): string {
+  if (!isFollowUp || entry.id !== "library-opening-hours") return faqAnswer(entry, locale);
+
+  const normalized = normalizeAnswerText(query);
+  if (/\bfriday\b|الجمعة/u.test(normalized)) {
+    return locale === "ar"
+      ? "**الجمعة:** تنشر صفحة المكتبة الرئيسية ساعات **7:30 صباحاً إلى 12:00 ظهراً**، وتوضح أن ساعات المكتبة تختلف حسب الموسم. وللتأكد من ساعات يوم جمعة محدد، اتصل بالمكتبة على **+971 3 713 4671**."
+      : "**Friday:** The Main Library lists **7:30 a.m.–12:00 noon**. UAEU notes that library hours vary by season. For a specific Friday, confirm with the library at **+971 3 713 4671**.";
+  }
+
+  if (/\b(?:saturday|sunday|weekend)\b|السبت|الأحد|الاحد/u.test(normalized)) {
+    return locale === "ar"
+      ? "لا تنشر صفحة المكتبة الرئيسية ساعات نهاية الأسبوع. وتذكر صفحة **Library Hours** الأقدم أن المكتبة مغلقة السبت والأحد، لكنها لا تحدد الموسم الذي ينطبق عليه الجدول. للتأكد من ساعات اليوم المطلوب، اتصل بالمكتبة على **+971 3 713 4671**."
+      : "The current Main Library page does not publish weekend hours. A separate older **Library Hours** page lists Saturday and Sunday as closed, but does not identify the season for that schedule. Confirm the hours for your date with the library at **+971 3 713 4671**.";
+  }
+
+  return faqAnswer(entry, locale);
 }

@@ -1,0 +1,312 @@
+{
+ "startedAt": "2026-11-09T08:55:59.497Z",
+ "base": "http://127.0.0.1:3003",
+ "label": "memory-v11-focus-d",
+ "results": [
+  {
+   "id": "MF19",
+   "suite": "followup",
+   "turns": [
+    "What are the prerequisites for CSBP 219?",
+    "Translate that to Arabic.",
+    "What was the minimum grade you mentioned?"
+   ],
+   "turnGrades": [
+    {
+     "checks": [
+      {
+       "name": "Expected fact 1",
+       "any": [
+        "CSBP\\s*119"
+       ]
+      },
+      {
+       "name": "Expected fact 2",
+       "any": [
+        "\\bD\\b"
+       ]
+      }
+     ],
+     "sources": [
+      "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219"
+     ],
+     "needsCitation": true,
+     "basis": "CQ024"
+    },
+    {
+     "checks": [
+      {
+       "name": "Expected fact 1",
+       "any": [
+        "CSBP\\s*119"
+       ]
+      },
+      {
+       "name": "answers in Arabic",
+       "any": [
+        "[؀-ۿ]{3,}(?:\\s+[؀-ۿ]{2,}){3,}"
+       ]
+      }
+     ],
+     "sources": [],
+     "needsCitation": false,
+     "basis": "CQ024"
+    },
+    {
+     "checks": [
+      {
+       "name": "Expected fact 2",
+       "any": [
+        "\\bD\\b"
+       ]
+      }
+     ],
+     "sources": [],
+     "needsCitation": false,
+     "basis": "CQ024"
+    }
+   ],
+   "checks": [
+    {
+     "name": "Expected fact 2",
+     "any": [
+      "\\bD\\b"
+     ]
+    }
+   ],
+   "sources": [],
+   "needsCitation": false,
+   "conversation": [
+    {
+     "user": "What are the prerequisites for CSBP 219?",
+     "status": 200,
+     "seconds": 5.449,
+     "payload": {
+      "role": "assistant",
+      "content": "The prerequisite for CSBP219 Object Oriented Programming is completing CSBP119 Algorithms and Problem Solving with a minimum grade of D.",
+      "source": "rag",
+      "responseMode": "grounded_generation",
+      "stateLabel": "local_db",
+      "citations": [
+       {
+        "title": "UAEU Course Catalog — CSBP219 Object Oriented Programming",
+        "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml?id=CSBP219",
+        "lastVerified": "2026-09-29"
+       }
+      ],
+      "disposition": "answer",
+      "communications": [],
+      "provider": "openai",
+      "model": "gpt-4.1-mini",
+      "topic": "CSBP219",
+      "evidenceIds": [
+       "09-csbp219-object-oriented-programming.md#E1S1"
+      ],
+      "claims": [
+       {
+        "text": "The prerequisite for CSBP219 Object Oriented Programming is completing CSBP119 Algorithms and Problem Solving with a minimum grade of D.",
+        "evidenceIds": [
+         "09-csbp219-object-oriented-programming.md#E1S1"
+        ]
+       }
+      ],
+      "grounding": {
+       "status": "checked",
+       "rewriteCount": 0,
+       "reasonCodes": []
+      },
+      "usage": {
+       "elapsedMs": 5089,
+       "attemptedCalls": 2,
+       "unmeteredAttempts": 0,
+       "calls": [
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "answer-writer",
+         "inputTokens": 3474,
+         "cachedInputTokens": 3328,
+         "outputTokens": 53,
+         "estimatedUsd": 0.0004760000000000001
+        },
+        {
+         "model": "gpt-4.1-mini",
+         "purpose": "selection-or-verification",
+         "inputTokens": 1435,
+         "cachedInputTokens": 0,
+         "outputTokens": 31,
+         "estimatedUsd": 0.0006236
+        }
+       ],
+       "embeddingCacheHits": 0,
+       "inputTokens": 4909,
+       "outputTokens": 84,
+       "knownUsageUsd": 0.0010996,
+       "estimatedUsd": 0.0010996,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "Translate that to Arabic.",
+     "status": 200,
+     "seconds": 1.141,
+     "payload": {
+      "role": "assistant",
+      "content": "المتطلب السابق لمادة CSBP219 برمجة كائنية التوجه (Object Oriented Programming) هو إكمال مادة CSBP119 الخوارزميات وحل المشكلات (Algorithms and Problem Solving) بدرجة لا تقل عن D.",
+      "source": "conversation",
+      "stateLabel": "translation",
+      "disposition": "answer",
+      "citations": [],
+      "usage": {
+       "elapsedMs": 1119,
+       "attemptedCalls": 0,
+       "unmeteredAttempts": 0,
+       "calls": [],
+       "embeddingCacheHits": 0,
+       "inputTokens": 0,
+       "outputTokens": 0,
+       "knownUsageUsd": 0,
+       "estimatedUsd": 0,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    },
+    {
+     "user": "What was the minimum grade you mentioned?",
+     "status": 200,
+     "seconds": 0.95,
+     "payload": {
+      "role": "assistant",
+      "content": "The minimum grade mentioned is a minimum grade of D in CSBP119, the prerequisite for CSBP219.",
+      "source": "conversation",
+      "stateLabel": "recall",
+      "disposition": "answer",
+      "citations": [],
+      "usage": {
+       "elapsedMs": 932,
+       "attemptedCalls": 0,
+       "unmeteredAttempts": 0,
+       "calls": [],
+       "embeddingCacheHits": 0,
+       "inputTokens": 0,
+       "outputTokens": 0,
+       "knownUsageUsd": 0,
+       "estimatedUsd": 0,
+       "priceSource": {
+        "verified": "2026-11-04",
+        "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+        "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+       },
+       "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+      }
+     }
+    }
+   ],
+   "assessment": {
+    "result": "correct",
+    "turns": [
+     {
+      "turn": 1,
+      "basis": "CQ024",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "Expected fact 1",
+        "passed": true,
+        "patterns": [
+         "CSBP\\s*119"
+        ]
+       },
+       {
+        "name": "Expected fact 2",
+        "passed": true,
+        "patterns": [
+         "\\bD\\b"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     },
+     {
+      "turn": 2,
+      "basis": "CQ024",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "Expected fact 1",
+        "passed": true,
+        "patterns": [
+         "CSBP\\s*119"
+        ]
+       },
+       {
+        "name": "answers in Arabic",
+        "passed": true,
+        "patterns": [
+         "[؀-ۿ]{3,}(?:\\s+[؀-ۿ]{2,}){3,}"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     },
+     {
+      "turn": 3,
+      "basis": "CQ024",
+      "result": "correct",
+      "checks": [
+       {
+        "name": "Expected fact 2",
+        "passed": true,
+        "patterns": [
+         "\\bD\\b"
+        ]
+       }
+      ],
+      "sourcePass": true,
+      "httpPass": true,
+      "officialOnly": true,
+      "unrelated": [],
+      "missing": [],
+      "requiresHumanReview": true
+     }
+    ],
+    "gradedTurns": 3,
+    "missing": [],
+    "sourcePass": true,
+    "unrelated": []
+   },
+   "serverTurnsAfter": 6
+  }
+ ],
+ "finishedAt": "2026-11-09T08:56:08.213Z",
+ "summary": {
+  "bySuite": {
+   "followup": {
+    "correct": 1,
+    "partial": 0,
+    "incorrect": 0
+   }
+  },
+  "total": 1
+ }
+}

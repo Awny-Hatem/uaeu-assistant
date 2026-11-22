@@ -1,0 +1,760 @@
+{
+  "startedAt": "2026-11-04T07:00:05.805Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "probe-final-v9",
+  "fixture": "evals/qa-audit-2026-11-03.json",
+  "fixtureSha256": "23ff207efd641941cc178b319da68bbcb532e7d0f197e2889b005a7b085690c5",
+  "results": [
+    {
+      "id": "CQ042",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "mech348",
+      "turns": [
+        "Can I take MECH 348 alongside MECH 340?"
+      ],
+      "expected": "MECH340 is Pre/Co; concurrent may be permitted; MECH210 prerequisite minimum D remains.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml?id=MECH348"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MECH\\s*210"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MECH\\s*340"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "concurrent",
+            "Pre.?Co",
+            "متزامن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "parentId": "CQ042",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Can I take MECH 348 alongside MECH 340?",
+          "status": 200,
+          "seconds": 8.113,
+          "payload": {
+            "role": "assistant",
+            "content": "You can take MECH348 Fluid Mechanics Lab alongside MECH340 Fluid Mechanics, as MECH340 is listed as a pre/corequisite with a minimum grade of D, allowing concurrent enrollment subject to university rules.\n\nHowever, you must have completed MECH210 Measurement and Instrumentation Lab with at least a D grade before taking MECH348.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites",
+                "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "MECH348",
+            "evidenceIds": [
+              "33-mechanical-engineering-course-prerequisites.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can take MECH348 Fluid Mechanics Lab alongside MECH340 Fluid Mechanics, as MECH340 is listed as a pre/corequisite with a minimum grade of D, allowing concurrent enrollment subject to university rules.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              },
+              {
+                "text": "However, you must have completed MECH210 Measurement and Instrumentation Lab with at least a D grade before taking MECH348.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8097,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2736,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 106,
+                  "estimatedUsd": 0.001264
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1173,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005108000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1157,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005044
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5066,
+              "outputTokens": 158,
+              "knownUsageUsd": 0.0022792,
+              "estimatedUsd": 0.0022792,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*210"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*340"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "concurrent",
+              "Pre.?Co",
+              "متزامن"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ060",
+      "original": true,
+      "focus": "Weird Case",
+      "group": "me-cohort",
+      "turns": [
+        "For the UAEU Fall 2026-2027 Mechanical Engineering model, is the first calculus course MATH105 or MATH130?"
+      ],
+      "expected": "Official model PDF page2: Fall2026–27 model uses MATH130 Calculus I for Engineering(3); Fall2025–26 uses MATH105. Keep cohort and entry term separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "2026"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "MATH\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "2025"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "parentId": "CQ060",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For the UAEU Fall 2026-2027 Mechanical Engineering model, is the first calculus course MATH105 or MATH130?",
+          "status": 200,
+          "seconds": 5.24,
+          "payload": {
+            "role": "assistant",
+            "content": "For the Fall 2026-27 cohort of the UAEU Mechanical Engineering program, the first calculus course is MATH130 Calculus I for Engineering, not MATH105.\n\nThe previous cohort, Fall 2025-26, used MATH105 as the first calculus course, but this was changed to MATH130 for Fall 2026-27.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering model plan first semester",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "MATH105",
+            "evidenceIds": [
+              "27-mechanical-engineering-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the Fall 2026-27 cohort of the UAEU Mechanical Engineering program, the first calculus course is MATH130 Calculus I for Engineering, not MATH105.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              },
+              {
+                "text": "The previous cohort, Fall 2025-26, used MATH105 as the first calculus course, but this was changed to MATH130 for Fall 2026-27.",
+                "evidenceIds": [
+                  "27-mechanical-engineering-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5238,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2708,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 62,
+                  "estimatedUsd": 0.0006064000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2958,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 111,
+                  "estimatedUsd": 0.0013608000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1115,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00048760000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1116,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00048800000000000004
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7897,
+              "outputTokens": 225,
+              "knownUsageUsd": 0.0029428,
+              "estimatedUsd": 0.0029428,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "2025"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "original": false,
+      "auditResult": null,
+      "focus": "Weakness",
+      "group": "housing",
+      "turns": [
+        "What are the student housing options at UAEU and how do I apply?"
+      ],
+      "expected": "Explain the official Rooms Assignment service and its applicable eligibility/payment/availability limits.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"
+      ],
+      "checks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "room|housing|سكن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "NQ188",
+      "parentId": "NQ188",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What are the student housing options at UAEU and how do I apply?",
+          "status": 200,
+          "seconds": 4.552,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers student housing through its Rooms Assignment Service, where students can select their preferred building and room after enrollment and meeting the distance requirement of living more than 50 km outside Al Ain.\n\nTo apply for housing, students must sign in using UAE Pass or UAEU credentials, pay the applicable fees (no installments or fee exemptions are available), and then receive confirmation of their room assignment by email.\n\nInternational students are required to pay the housing fees before entry, and the housing assignment process typically takes about 5 minutes with immediate delivery, though availability is not guaranteed.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Rooms Assignment Service",
+                "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "Conditions and Requirements; FAQ on installments and exemptions",
+                "evidenceText": "For new student housing, UAEU's Rooms Assignment Service requires enrollment and living more than 50 km outside Al Ain. Sign in with UAE Pass or UAEU credentials, pay applicable fees, select building/room, and receive assignment confirmation by email. International students pay before entry; no installments or fee exemptions are offered in the FAQ. Published completion is 5 minutes, delivery immediate, neither guaranteeing availability. The inspected page supplies no application closing date; absence here is not evidence that no deadline exists."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "housing",
+            "evidenceIds": [
+              "answer:student-housing-application#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers student housing through its Rooms Assignment Service, where students can select their preferred building and room after enrollment and meeting the distance requirement of living more than 50 km outside Al Ain.",
+                "evidenceIds": [
+                  "answer:student-housing-application#E1S1"
+                ]
+              },
+              {
+                "text": "To apply for housing, students must sign in using UAE Pass or UAEU credentials, pay the applicable fees (no installments or fee exemptions are available), and then receive confirmation of their room assignment by email.",
+                "evidenceIds": [
+                  "answer:student-housing-application#E1S1"
+                ]
+              },
+              {
+                "text": "International students are required to pay the housing fees before entry, and the housing assignment process typically takes about 5 minutes with immediate delivery, though availability is not guaranteed.",
+                "evidenceIds": [
+                  "answer:student-housing-application#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4551,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2555,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 163,
+                  "estimatedUsd": 0.0012828
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1033,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045480000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1025,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0004516
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1031,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045400000000000003
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5644,
+              "outputTokens": 241,
+              "knownUsageUsd": 0.0026432,
+              "estimatedUsd": 0.0026432,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Requested fact or honest scope",
+            "passed": true,
+            "patterns": [
+              "room|housing|سكن"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "685a57e05b275ed2676d71253d95efee84bf065a1fd54207cead590b38ac140a",
+    "files": 4294,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat/uaeu-knowledge-expansion-v9"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "fd312494647f13d8273b10ef82cc21190cf1b15d8b7a17195484bb740e9101e7",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 82102,
+        "vectors": 82102,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "96504ede09183deccea657fe0d46e57ab2d03cb8e9b377e9b0e56187b3e54e60",
+        "generatedAt": "2026-11-04T06:21:56.453Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 3,
+    "partial": 0,
+    "incorrect": 0
+  },
+  "finishedAt": "2026-11-04T07:00:25.580Z",
+  "runtimeAfter": {
+    "sha256": "685a57e05b275ed2676d71253d95efee84bf065a1fd54207cead590b38ac140a",
+    "files": 4294,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat/uaeu-knowledge-expansion-v9"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "fd312494647f13d8273b10ef82cc21190cf1b15d8b7a17195484bb740e9101e7",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 82102,
+        "vectors": 82102,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "96504ede09183deccea657fe0d46e57ab2d03cb8e9b377e9b0e56187b3e54e60",
+        "generatedAt": "2026-11-04T06:21:56.453Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 5.24,
+    "p95": 8.113,
+    "max": 8.113
+  },
+  "usage": {
+    "measuredAnswers": 3,
+    "totalAnswers": 3,
+    "estimatedUsd": 0.0078652,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

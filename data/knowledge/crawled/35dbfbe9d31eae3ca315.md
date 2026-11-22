@@ -1,0 +1,79 @@
+---
+title: Graduate Research Fellowships for UAE Nationals
+sourceUrl: https://www.uaeu.ac.ae/en/cgs/grf_uae_nationals.shtml
+status: approved
+language: en
+lastVerified: 2026-11-04
+subject: academics
+catalogYear: not stated
+temporalStatus: undated-current-page
+audience: public; exact eligibility as published in sections
+topicId: /cgs/grf_uae_nationals
+extraction: structured-html
+sourceSha256: 1b6728c8afba945b9f247765bbbd7456f7ad45efbc31bb08a17cd7f6126880c1
+sourceDate: not inferred from verification date
+---
+# Graduate Research Fellowships for UAE Nationals
+
+Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
+
+## Overview
+Skip to main content
+
+ENTER
+
+Customer pulse
+Customer Pulse Survey
+
+## Graduate Research Fellowships for UAE Nationals > Graduate Research Fellowships for UAE Nationals
+Fellowships
+
+Award Benefits
+
+Graduate Research Fellowships are granted to eligible students and provide a partial package of benefits, which includes full tuition waiver and health insurance.
+
+Health insurance is provided to UAE national students if needed.
+
+Student Eligibility Requirements
+Applicants for Graduate Research Fellowships must meet the following criteria:
+
+General requirements:
+
+Student must enroll full-time in a minimum of 9 graduate credits per semester.
+
+Student must not be financially sponsored by any other organization or hold any active employment.
+
+Student must have a GPA of 3.5 or higher in the Master's degree.
+
+Student must have and maintain a GPA of 3.5 or higher at the PhD level.
+
+Duration of Awards
+
+Fellowships are awarded for a maximum period of 4 years.
+
+A faculty member may request only one semester extension for a Scholarship with documented justification. The request must be made during the first month of the student's last semester of the award term.
+
+A Fellowship award is valid for its duration provided the student
+
+Continues to meet the eligibility criteria every semester and
+
+Receives very good performance appraisal from his/her research supervisor based on an evaluation that the supervisor completes of the student's research work and submits it to the College of Graduate Studies at the end of each semester.
+
+If the recipient of an award becomes ineligible by failing to meet any of the aforementioned requirements, he/she will forfeit the award automatically and will be notified by the College of Graduate Studies accordingly.
+
+Duties and Expectations
+
+Each Fellowship recipient must devote a minimum of 10 hours per week throughout the year to work as a research assistant with his/her faculty supervisor.
+
+Each Fellowship recipient is required to publish one research paper in a refereed, indexed journal in the student's discipline area of research.
+
+Fellowship recipients may accept other duties only at UAEU in order to work as, for example, teaching or administrative assistants, and earn a stipend provided the new assignment does not interfere with the student's Fellowship duties and does not entail more than 10 hours of work per week. The student must obtain a written permission from his/her Fellowship supervisor prior to accepting any such assignment and forward it to the College of Graduate Studies.
+
+All Fellowship recipients are expected to participate in activities that empower their research training at the college and university levels, when possible and in coordination with their supervisors. Furthermore, students are expected to present and publish their research outcomes under the guidance of their supervisors.
+
+Availability of Opportunities
+Opportunities for Fellowships are normally available at the time of the student's admission into the PhD program. The number of awards made each year may vary depending on the availability of funds.
+
+To apply, complete and submit an application ( link ) with all required documents.
+
+Mar 15, 2026

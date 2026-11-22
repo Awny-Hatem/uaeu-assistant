@@ -1,0 +1,2072 @@
+{
+  "summary": {
+    "completeRun": true,
+    "runtimeUnchanged": false,
+    "afterArtifact": "reports/knowledge-expansion-2026-11-04/probe-expanded-v3.json",
+    "scenarioDefinitions": 327,
+    "newScenarioDefinitions": 327,
+    "legacyScenarioDefinitions": 0,
+    "submittedVariants": 9,
+    "main": {
+      "correct": 3,
+      "partial": 0,
+      "incorrect": 0
+    },
+    "all": {
+      "correct": 8,
+      "partial": 1,
+      "incorrect": 0
+    },
+    "beforePaired": {
+      "correct": 0,
+      "partial": 3,
+      "incorrect": 6
+    },
+    "paired": 9,
+    "unpaired": [],
+    "byCategory": {
+      "academics": {
+        "correct": 5,
+        "partial": 0,
+        "incorrect": 0
+      },
+      "conversation-boundaries": {
+        "correct": 3,
+        "partial": 1,
+        "incorrect": 0
+      }
+    },
+    "byLanguage": {
+      "ar": {
+        "correct": 1,
+        "partial": 1,
+        "incorrect": 0
+      },
+      "en": {
+        "correct": 7,
+        "partial": 0,
+        "incorrect": 0
+      }
+    },
+    "latency": {
+      "median": 6.031,
+      "p95": 7.438,
+      "max": 7.438,
+      "over70SecondHarnessAnomalies": 0
+    },
+    "usage": {
+      "answers": 10,
+      "diagnostics": 10,
+      "unknownCostAnswers": 0,
+      "knownUsageUsd": 0.018581520000000004,
+      "estimatedUsd": 0.018581520000000004,
+      "baselineCost": "unknown: old build did not return provider usage"
+    },
+    "identicalFactualParaphraseGroups": [
+      [
+        "KE032-V2",
+        "KE032-V4"
+      ]
+    ],
+    "reviewed": 0,
+    "reviewedImprovements": [],
+    "limitations": [
+      "Automated regex scores are provisional without semantic/source review.",
+      "An unchanged index/source fingerprint is required for a frozen comparison.",
+      "Before batches are sequential; throughput batches with concurrency3 are not directly comparable latency benchmarks.",
+      "Unavailable provider usage is unknown, not zero.",
+      "All previous invalid fixture definitions and failed attempts are retained in their original artifacts."
+    ]
+  },
+  "results": [
+    {
+      "id": "KE032",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Ecology and Environmental Sciences?"
+      ],
+      "expected": "The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)54(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+        "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+        "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 54 hours",
+      "sourceBodySha256": "e868180342d3ee0f3860a7ea14e6ff9a361207a7f6f7be9ac72455f451a8bdbc",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE032",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Ecology and Environmental Sciences?",
+          "status": 200,
+          "seconds": 4.569,
+          "payload": {
+            "role": "assistant",
+            "content": "The Doctor of Philosophy in Ecology and Environmental Sciences requires a minimum of 54 credit hours to complete.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Doctor of Philosophy in Ecology and Environmental Sciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Doctor of Philosophy in Ecology and Environmental Sciences > Degree Requirements > Required Credit Hours : minimum 54 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Doctor of Philosophy in Ecology and Environmental Sciences requires a minimum of 54 credit hours to complete.",
+                "evidenceIds": [
+                  "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4553,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 23,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.6000000000000004e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3024,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 46,
+                  "estimatedUsd": 0.0012832
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1021,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045000000000000004
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4068,
+              "outputTokens": 72,
+              "knownUsageUsd": 0.0017336600000000001,
+              "estimatedUsd": 0.0017336600000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)54(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-programs.json",
+        "conversation": [
+          {
+            "user": "According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Ecology and Environmental Sciences?",
+            "status": 200,
+            "seconds": 4.522,
+            "payload": {
+              "role": "assistant",
+              "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+              "source": "escalated",
+              "responseMode": "grounded_generation",
+              "stateLabel": "model_escalation",
+              "citations": [],
+              "disposition": "clarify",
+              "communications": [],
+              "escalationReason": "low_confidence",
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "Doctor of Philosophy in Ecology and Environmental Sciences credit requirements",
+              "evidenceIds": [],
+              "claims": [],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "missing_official_evidence"
+            }
+          }
+        ],
+        "assessment": {
+          "result": "incorrect",
+          "checks": [
+            {
+              "name": "published credit total",
+              "passed": false,
+              "patterns": [
+                "(?<!\\d)54(?!\\d)"
+              ]
+            }
+          ],
+          "sourcePass": false,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "published credit total"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE032-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?"
+      ],
+      "expected": "The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)54(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+        "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+        "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 54 hours",
+      "sourceBodySha256": "e868180342d3ee0f3860a7ea14e6ff9a361207a7f6f7be9ac72455f451a8bdbc",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE032",
+      "conversation": [
+        {
+          "user": "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+          "status": 200,
+          "seconds": 6.192,
+          "payload": {
+            "role": "assistant",
+            "content": "The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Doctor of Philosophy in Ecology and Environmental Sciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Doctor of Philosophy in Ecology and Environmental Sciences > Degree Requirements > Required Credit Hours : minimum 54 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours.",
+                "evidenceIds": [
+                  "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6188,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 16,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3081,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.0013076000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1022,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045040000000000005
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4119,
+              "outputTokens": 73,
+              "knownUsageUsd": 0.0017583200000000003,
+              "estimatedUsd": 0.0017583200000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)54(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-programs.json",
+        "conversation": [
+          {
+            "user": "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+            "status": 200,
+            "seconds": 4.098,
+            "payload": {
+              "role": "assistant",
+              "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+              "source": "escalated",
+              "responseMode": "grounded_generation",
+              "stateLabel": "model_escalation",
+              "citations": [],
+              "disposition": "clarify",
+              "communications": [],
+              "escalationReason": "low_confidence",
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "Doctor of Philosophy in Ecology and Environmental Sciences credit hours",
+              "evidenceIds": [],
+              "claims": [],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "missing_official_evidence"
+            }
+          }
+        ],
+        "assessment": {
+          "result": "incorrect",
+          "checks": [
+            {
+              "name": "published credit total",
+              "passed": false,
+              "patterns": [
+                "(?<!\\d)54(?!\\d)"
+              ]
+            }
+          ],
+          "sourcePass": false,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "published credit total"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE032-V2",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu"
+      ],
+      "expected": "The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)54(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+        "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+        "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 54 hours",
+      "sourceBodySha256": "e868180342d3ee0f3860a7ea14e6ff9a361207a7f6f7be9ac72455f451a8bdbc",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE032",
+      "conversation": [
+        {
+          "user": "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+          "status": 200,
+          "seconds": 6.031,
+          "payload": {
+            "role": "assistant",
+            "content": "The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours to complete.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Doctor of Philosophy in Ecology and Environmental Sciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Doctor of Philosophy in Ecology and Environmental Sciences > Degree Requirements > Required Credit Hours : minimum 54 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours to complete.",
+                "evidenceIds": [
+                  "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6028,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 20,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.0000000000000003e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3016,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 49,
+                  "estimatedUsd": 0.0012848000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1024,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045120000000000007
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4060,
+              "outputTokens": 75,
+              "knownUsageUsd": 0.0017364000000000004,
+              "estimatedUsd": 0.0017364000000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)54(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-programs.json",
+        "conversation": [
+          {
+            "user": "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+            "status": 200,
+            "seconds": 5.007,
+            "payload": {
+              "role": "assistant",
+              "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+              "source": "escalated",
+              "responseMode": "grounded_generation",
+              "stateLabel": "model_escalation",
+              "citations": [],
+              "disposition": "clarify",
+              "communications": [],
+              "escalationReason": "low_confidence",
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "Doctor of Philosophy in Ecology and Environmental Sciences credit requirements",
+              "evidenceIds": [],
+              "claims": [],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "missing_official_evidence"
+            }
+          }
+        ],
+        "assessment": {
+          "result": "incorrect",
+          "checks": [
+            {
+              "name": "published credit total",
+              "passed": false,
+              "patterns": [
+                "(?<!\\d)54(?!\\d)"
+              ]
+            }
+          ],
+          "sourcePass": false,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "published credit total"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE032-V3",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟"
+      ],
+      "expected": "The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)54(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+        "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+        "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 54 hours",
+      "sourceBodySha256": "e868180342d3ee0f3860a7ea14e6ff9a361207a7f6f7be9ac72455f451a8bdbc",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE032",
+      "conversation": [
+        {
+          "user": "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+          "status": 200,
+          "seconds": 6.204,
+          "payload": {
+            "role": "assistant",
+            "content": "الحد الأدنى للساعات المعتمدة المطلوبة لبرنامج دكتوراه في علم البيئة والعلوم البيئية هو 54 ساعة معتمدة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Doctor of Philosophy in Ecology and Environmental Sciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Doctor of Philosophy in Ecology and Environmental Sciences > Degree Requirements > Required Credit Hours : minimum 54 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "الحد الأدنى للساعات المعتمدة المطلوبة لبرنامج دكتوراه في علم البيئة والعلوم البيئية هو 54 ساعة معتمدة.",
+                "evidenceIds": [
+                  "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6201,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 41,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 8.200000000000001e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3082,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.0007463999999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1031,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045400000000000003
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4154,
+              "outputTokens": 82,
+              "knownUsageUsd": 0.00120122,
+              "estimatedUsd": 0.00120122,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)54(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-programs.json",
+        "conversation": [
+          {
+            "user": "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+            "status": 200,
+            "seconds": 3.858,
+            "payload": {
+              "role": "assistant",
+              "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+              "source": "escalated",
+              "responseMode": "grounded_generation",
+              "stateLabel": "model_escalation",
+              "citations": [],
+              "disposition": "clarify",
+              "communications": [],
+              "escalationReason": "low_confidence",
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "Doctor of Philosophy in Ecology and Environmental Sciences credit hours",
+              "evidenceIds": [],
+              "claims": [],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "missing_official_evidence"
+            }
+          }
+        ],
+        "assessment": {
+          "result": "incorrect",
+          "checks": [
+            {
+              "name": "published credit total",
+              "passed": false,
+              "patterns": [
+                "(?<!\\d)54(?!\\d)"
+              ]
+            }
+          ],
+          "sourcePass": false,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "published credit total"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": false
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE032-V4",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?"
+      ],
+      "expected": "The published catalog entry states minimum 54 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)54(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Doctor of Philosophy in Ecology and Environmental Sciences at UAEU: total credit hours?",
+        "hey how many credits do i need for Doctor of Philosophy in Ecology and Environmental Sciences at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Ecology and Environmental Sciences في جامعة الإمارات؟",
+        "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 54 hours",
+      "sourceBodySha256": "e868180342d3ee0f3860a7ea14e6ff9a361207a7f6f7be9ac72455f451a8bdbc",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE032",
+      "conversation": [
+        {
+          "user": "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?",
+          "status": 200,
+          "seconds": 6.011,
+          "payload": {
+            "role": "assistant",
+            "content": "The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours to complete.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Doctor of Philosophy in Ecology and Environmental Sciences",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-ecology-and-environmental-sciences.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Graduate Programs > Doctor of Philosophy in Ecology and Environmental Sciences > Degree Requirements > Required Credit Hours : minimum 54 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Doctor of Philosophy in Ecology and Environmental Sciences at UAEU requires a minimum of 54 credit hours to complete.",
+                "evidenceIds": [
+                  "corpus:b2bcbd9b7cd7677112c8:5#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6010,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 16,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3081,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 49,
+                  "estimatedUsd": 0.0013108000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1024,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045120000000000007
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4121,
+              "outputTokens": 75,
+              "knownUsageUsd": 0.0017623200000000004,
+              "estimatedUsd": 0.0017623200000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)54(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-programs.json",
+        "conversation": [
+          {
+            "user": "Doctor of Philosophy in Ecology and Environmental Sciences UAEU crdit hours plz?",
+            "status": 200,
+            "seconds": 3.892,
+            "payload": {
+              "role": "assistant",
+              "content": "**Please identify the UAEU request**\nI could not reliably map that wording to one approved service or course. Send the service name or course code and say whether you need steps, a deadline, fees, eligibility, or status.",
+              "source": "escalated",
+              "responseMode": "grounded_generation",
+              "stateLabel": "model_escalation",
+              "citations": [],
+              "disposition": "clarify",
+              "communications": [],
+              "escalationReason": "low_confidence",
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "Doctor of Philosophy in Ecology and Environmental Sciences credit hours",
+              "evidenceIds": [],
+              "claims": [],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "missing_official_evidence"
+            }
+          }
+        ],
+        "assessment": {
+          "result": "incorrect",
+          "checks": [
+            {
+              "name": "published credit total",
+              "passed": false,
+              "patterns": [
+                "(?<!\\d)54(?!\\d)"
+              ]
+            }
+          ],
+          "sourcePass": false,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "published credit total"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE310",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "Compare total credits of the UAEU Bachelor of Science in Mechanical Engineering and Master of Science in Mechanical Engineering."
+      ],
+      "expected": "Bachelor132credits; master30credits, separately labelled and sourced.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "bachelor",
+          "any": [
+            "132"
+          ]
+        },
+        {
+          "name": "master",
+          "any": [
+            "30"
+          ]
+        }
+      ],
+      "variants": [
+        "BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?",
+        "قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE310",
+      "conversation": [
+        {
+          "user": "Compare total credits of the UAEU Bachelor of Science in Mechanical Engineering and Master of Science in Mechanical Engineering.",
+          "status": 200,
+          "seconds": 6.039,
+          "payload": {
+            "role": "assistant",
+            "content": "The UAEU Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours.\n\nThe UAEU Master of Science in Mechanical Engineering requires a minimum of 30 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering degree requirements and electives",
+                "url": "https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering degree credit breakdown"
+              },
+              {
+                "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "26-mechanical-engineering-degree-requirements.md#E1S1",
+              "44-master-mechanical-engineering-catalog.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The UAEU Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours.",
+                "evidenceIds": [
+                  "26-mechanical-engineering-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "The UAEU Master of Science in Mechanical Engineering requires a minimum of 30 credit hours.",
+                "evidenceIds": [
+                  "44-master-mechanical-engineering-catalog.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6036,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2846,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 74,
+                  "estimatedUsd": 0.0012568000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1076,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00047200000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1017,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00044840000000000006
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4939,
+              "outputTokens": 126,
+              "knownUsageUsd": 0.0021772000000000002,
+              "estimatedUsd": 0.0021772000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "bachelor",
+            "passed": true,
+            "patterns": [
+              "132"
+            ]
+          },
+          {
+            "name": "master",
+            "passed": true,
+            "patterns": [
+              "30"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-additional.json",
+        "conversation": [
+          {
+            "user": "Compare total credits of the UAEU Bachelor of Science in Mechanical Engineering and Master of Science in Mechanical Engineering.",
+            "status": 200,
+            "seconds": 2.332,
+            "payload": {
+              "role": "assistant",
+              "content": "The UAEU Master of Science in Mechanical Engineering program requires a minimum of 30 credit hours for completion.",
+              "source": "rag",
+              "responseMode": "grounded_generation",
+              "stateLabel": "local_db",
+              "citations": [
+                {
+                  "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                  "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                  "lastVerified": "2026-11-03",
+                  "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+                }
+              ],
+              "disposition": "answer",
+              "communications": [],
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "mechanical-engineering",
+              "evidenceIds": [
+                "44-master-mechanical-engineering-catalog.md#E1S1"
+              ],
+              "claims": [
+                {
+                  "text": "The UAEU Master of Science in Mechanical Engineering program requires a minimum of 30 credit hours for completion.",
+                  "evidenceIds": [
+                    "44-master-mechanical-engineering-catalog.md#E1S1"
+                  ]
+                }
+              ],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              }
+            }
+          }
+        ],
+        "assessment": {
+          "result": "partial",
+          "checks": [
+            {
+              "name": "bachelor",
+              "passed": false,
+              "patterns": [
+                "132"
+              ]
+            },
+            {
+              "name": "master",
+              "passed": true,
+              "patterns": [
+                "30"
+              ]
+            }
+          ],
+          "sourcePass": true,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "bachelor"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE310-V1",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?"
+      ],
+      "expected": "Bachelor132credits; master30credits, separately labelled and sourced.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "bachelor",
+          "any": [
+            "132"
+          ]
+        },
+        {
+          "name": "master",
+          "any": [
+            "30"
+          ]
+        }
+      ],
+      "variants": [
+        "BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?",
+        "قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE310",
+      "conversation": [
+        {
+          "user": "BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?",
+          "status": 200,
+          "seconds": 4.515,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours.\n\nThe Master of Science in Mechanical Engineering requires a minimum of 30 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering degree requirements and electives",
+                "url": "https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering degree credit breakdown"
+              },
+              {
+                "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "26-mechanical-engineering-degree-requirements.md#E1S1",
+              "44-master-mechanical-engineering-catalog.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours.",
+                "evidenceIds": [
+                  "26-mechanical-engineering-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "The Master of Science in Mechanical Engineering requires a minimum of 30 credit hours.",
+                "evidenceIds": [
+                  "44-master-mechanical-engineering-catalog.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4513,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2826,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.0012424
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1015,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00044760000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1074,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00047120000000000007
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4915,
+              "outputTokens": 122,
+              "knownUsageUsd": 0.0021612000000000003,
+              "estimatedUsd": 0.0021612000000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "bachelor",
+            "passed": true,
+            "patterns": [
+              "132"
+            ]
+          },
+          {
+            "name": "master",
+            "passed": true,
+            "patterns": [
+              "30"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-additional.json",
+        "conversation": [
+          {
+            "user": "BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?",
+            "status": 200,
+            "seconds": 2.427,
+            "payload": {
+              "role": "assistant",
+              "content": "The Master of Science in Mechanical Engineering program at UAEU requires a minimum of 30 credit hours.",
+              "source": "rag",
+              "responseMode": "grounded_generation",
+              "stateLabel": "local_db",
+              "citations": [
+                {
+                  "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                  "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                  "lastVerified": "2026-11-03",
+                  "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+                }
+              ],
+              "disposition": "answer",
+              "communications": [],
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "mechanical-engineering",
+              "evidenceIds": [
+                "44-master-mechanical-engineering-catalog.md#E1S1"
+              ],
+              "claims": [
+                {
+                  "text": "The Master of Science in Mechanical Engineering program at UAEU requires a minimum of 30 credit hours.",
+                  "evidenceIds": [
+                    "44-master-mechanical-engineering-catalog.md#E1S1"
+                  ]
+                }
+              ],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              }
+            }
+          }
+        ],
+        "assessment": {
+          "result": "partial",
+          "checks": [
+            {
+              "name": "bachelor",
+              "passed": false,
+              "patterns": [
+                "132"
+              ]
+            },
+            {
+              "name": "master",
+              "passed": true,
+              "patterns": [
+                "30"
+              ]
+            }
+          ],
+          "sourcePass": true,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "bachelor"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE310-V2",
+      "category": "conversation-boundaries",
+      "language": "ar",
+      "focus": "Weird Case",
+      "turns": [
+        "قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه."
+      ],
+      "expected": "Bachelor132credits; master30credits, separately labelled and sourced.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/eng/programs/graduate/master-of-science-in-mechanical-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "bachelor",
+          "any": [
+            "132"
+          ]
+        },
+        {
+          "name": "master",
+          "any": [
+            "30"
+          ]
+        }
+      ],
+      "variants": [
+        "BS Mechanical Engineering vs MSc Mechanical Engineering: total hours?",
+        "قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه."
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE310",
+      "conversation": [
+        {
+          "user": "قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه.",
+          "status": 200,
+          "seconds": 7.438,
+          "payload": {
+            "role": "assistant",
+            "content": "برنامج ماجستير العلوم في الهندسة الميكانيكية يتطلب حدًا أدنى من 30 ساعة معتمدة.\n\nهل تقصد برنامج بكالوريوس أم ماجستير أم دكتوراه؟",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+              }
+            ],
+            "disposition": "clarify",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "44-master-mechanical-engineering-catalog.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "برنامج ماجستير العلوم في الهندسة الميكانيكية يتطلب حدًا أدنى من 30 ساعة معتمدة.",
+                "evidenceIds": [
+                  "44-master-mechanical-engineering-catalog.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "clarificationReason": "additional_scope_needed",
+            "usage": {
+              "elapsedMs": 7436,
+              "attemptedCalls": 5,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2582,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 84,
+                  "estimatedUsd": 0.0011672
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1078,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 27,
+                  "estimatedUsd": 0.00047440000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1084,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00047520000000000006
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2831,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 56,
+                  "estimatedUsd": 0.001222
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1084,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00047520000000000006
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 8659,
+              "outputTokens": 219,
+              "knownUsageUsd": 0.0038140000000000005,
+              "estimatedUsd": 0.0038140000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "bachelor",
+            "passed": false,
+            "patterns": [
+              "132"
+            ]
+          },
+          {
+            "name": "master",
+            "passed": true,
+            "patterns": [
+              "30"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "bachelor"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "partial",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-additional.json",
+        "conversation": [
+          {
+            "user": "قارن ساعات بكالوريوس الهندسة الميكانيكية وماجستير التخصص نفسه.",
+            "status": 200,
+            "seconds": 4.16,
+            "payload": {
+              "role": "assistant",
+              "content": "برنامج ماجستير العلوم في الهندسة الميكانيكية في جامعة الإمارات يتطلب على الأقل 30 ساعة معتمدة.",
+              "source": "rag",
+              "responseMode": "grounded_generation",
+              "stateLabel": "local_db",
+              "citations": [
+                {
+                  "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                  "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                  "lastVerified": "2026-11-03",
+                  "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+                }
+              ],
+              "disposition": "answer",
+              "communications": [],
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "mechanical-engineering",
+              "evidenceIds": [
+                "44-master-mechanical-engineering-catalog.md#E1S1"
+              ],
+              "claims": [
+                {
+                  "text": "برنامج ماجستير العلوم في الهندسة الميكانيكية في جامعة الإمارات يتطلب على الأقل 30 ساعة معتمدة.",
+                  "evidenceIds": [
+                    "44-master-mechanical-engineering-catalog.md#E1S1"
+                  ]
+                }
+              ],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 1,
+                "reasonCodes": []
+              }
+            }
+          }
+        ],
+        "assessment": {
+          "result": "partial",
+          "checks": [
+            {
+              "name": "bachelor",
+              "passed": false,
+              "patterns": [
+                "132"
+              ]
+            },
+            {
+              "name": "master",
+              "passed": true,
+              "patterns": [
+                "30"
+              ]
+            }
+          ],
+          "sourcePass": true,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "bachelor"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    },
+    {
+      "id": "KE312",
+      "category": "conversation-boundaries",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "Compare the Bachelor of Science in Mechanical Engineering and Master of Science in Horticulture credit requirements.",
+        "What about its first semester?"
+      ],
+      "expected": "The comparison has two programs; clarify which program before answering its plan.",
+      "sources": [],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "clarify",
+          "any": [
+            "which|do you mean|clarif|specify"
+          ]
+        }
+      ],
+      "variants": [],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE312",
+      "conversation": [
+        {
+          "user": "Compare the Bachelor of Science in Mechanical Engineering and Master of Science in Horticulture credit requirements.",
+          "status": 200,
+          "seconds": 3.712,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours, including 21 credit hours of general education, 35 credit hours of College of Engineering required courses, 68 credit hours of Mechanical Engineering specialization courses, 2 credit hours for internships, and 6 credit hours of specialization electives.\n\nThe Master of Science in Horticulture requires a minimum of 36 credit hours in total for the degree.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering degree requirements and electives",
+                "url": "https://uaeu.ac.ae/en/eng/programs/undergraduate/bachelor-of-science-in-mechanical-engineering.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Mechanical Engineering degree credit breakdown"
+              },
+              {
+                "title": "UAEU Master of Science in Horticulture — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Master of Science in Horticulture — degree credit requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "mechanical-engineering",
+            "evidenceIds": [
+              "26-mechanical-engineering-degree-requirements.md#E1S1",
+              "46-master-horticulture-catalog.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Mechanical Engineering requires a total of 132 credit hours, including 21 credit hours of general education, 35 credit hours of College of Engineering required courses, 68 credit hours of Mechanical Engineering specialization courses, 2 credit hours for internships, and 6 credit hours of specialization electives.",
+                "evidenceIds": [
+                  "26-mechanical-engineering-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "The Master of Science in Horticulture requires a minimum of 36 credit hours in total for the degree.",
+                "evidenceIds": [
+                  "46-master-horticulture-catalog.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3709,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2797,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 122,
+                  "estimatedUsd": 0.001314
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1039,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045720000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1061,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00046600000000000005
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4897,
+              "outputTokens": 174,
+              "knownUsageUsd": 0.0022372,
+              "estimatedUsd": 0.0022372,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        },
+        {
+          "user": "What about its first semester?",
+          "status": 200,
+          "seconds": 1.424,
+          "payload": {
+            "role": "assistant",
+            "content": "Do you mean Master of Science in Horticulture or Bachelor of Science in Mechanical Engineering? More than one subject was mentioned; which one does this follow-up concern?",
+            "source": "escalated",
+            "stateLabel": "clarify_subject",
+            "disposition": "clarify",
+            "citations": [],
+            "clarificationReason": "ambiguous_subject",
+            "communications": [],
+            "usage": {
+              "elapsedMs": 1422,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "clarify",
+            "passed": true,
+            "patterns": [
+              "which|do you mean|clarif|specify"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      },
+      "suite": "expansion",
+      "finalResult": "correct",
+      "before": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/baseline-additional.json",
+        "conversation": [
+          {
+            "user": "Compare the Bachelor of Science in Mechanical Engineering and Master of Science in Horticulture credit requirements.",
+            "status": 200,
+            "seconds": 2.446,
+            "payload": {
+              "role": "assistant",
+              "content": "The Master of Science in Mechanical Engineering requires a minimum of 30 credit hours for the degree.\n\nThe Master of Science in Horticulture requires a minimum of 36 credit hours for the degree.\n\nAre you asking about an undergraduate, master's, or PhD program?",
+              "source": "rag",
+              "responseMode": "grounded_generation",
+              "stateLabel": "local_db",
+              "citations": [
+                {
+                  "title": "UAEU Master of Science in Mechanical Engineering — program requirements",
+                  "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-mechanical-engineering.shtml",
+                  "lastVerified": "2026-11-03",
+                  "sourceSection": "Master of Science in Mechanical Engineering — degree credit requirement"
+                },
+                {
+                  "title": "UAEU Master of Science in Horticulture — program requirements",
+                  "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml",
+                  "lastVerified": "2026-11-03",
+                  "sourceSection": "Master of Science in Horticulture — degree credit requirement"
+                }
+              ],
+              "disposition": "clarify",
+              "communications": [],
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "mechanical-engineering",
+              "evidenceIds": [
+                "44-master-mechanical-engineering-catalog.md#E1S1",
+                "46-master-horticulture-catalog.md#E2S1"
+              ],
+              "claims": [
+                {
+                  "text": "The Master of Science in Mechanical Engineering requires a minimum of 30 credit hours for the degree.",
+                  "evidenceIds": [
+                    "44-master-mechanical-engineering-catalog.md#E1S1"
+                  ]
+                },
+                {
+                  "text": "The Master of Science in Horticulture requires a minimum of 36 credit hours for the degree.",
+                  "evidenceIds": [
+                    "46-master-horticulture-catalog.md#E2S1"
+                  ]
+                }
+              ],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "additional_scope_needed"
+            }
+          },
+          {
+            "user": "What about its first semester?",
+            "status": 200,
+            "seconds": 2.962,
+            "payload": {
+              "role": "assistant",
+              "content": "Among the listed courses for the Bachelor of Science in Mechanical Engineering Fall 2026–27 cohort first semester, the credit hours total 17 and include MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits).\n\nAre you asking about an undergraduate, master's, or PhD program?",
+              "source": "rag",
+              "responseMode": "grounded_generation",
+              "stateLabel": "local_db",
+              "citations": [
+                {
+                  "title": "UAEU Mechanical Engineering model plan first semester",
+                  "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf",
+                  "lastVerified": "2026-10-06",
+                  "sourceSection": "Mechanical Engineering first semester — Fall 2026–27 cohort"
+                }
+              ],
+              "disposition": "clarify",
+              "communications": [],
+              "provider": "openai",
+              "model": "gpt-4.1-mini",
+              "topic": "mechanical-engineering",
+              "evidenceIds": [
+                "27-mechanical-engineering-first-semester.md#E1S1"
+              ],
+              "claims": [
+                {
+                  "text": "Among the listed courses for the Bachelor of Science in Mechanical Engineering Fall 2026–27 cohort first semester, the credit hours total 17 and include MATH130 Calculus I for Engineering (3 credits), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), and GEEM110 Contemporary Emirati Studies (3 credits).",
+                  "evidenceIds": [
+                    "27-mechanical-engineering-first-semester.md#E1S1"
+                  ]
+                }
+              ],
+              "grounding": {
+                "status": "checked",
+                "rewriteCount": 0,
+                "reasonCodes": []
+              },
+              "clarificationReason": "additional_scope_needed"
+            }
+          }
+        ],
+        "assessment": {
+          "result": "incorrect",
+          "checks": [
+            {
+              "name": "clarify",
+              "passed": false,
+              "patterns": [
+                "which|do you mean|clarif|specify"
+              ]
+            }
+          ],
+          "sourcePass": true,
+          "httpPass": true,
+          "officialOnly": true,
+          "unrelated": [],
+          "missing": [
+            "clarify"
+          ],
+          "requiresHumanReview": true,
+          "languagePass": true
+        }
+      },
+      "reviewStatus": "automated official-source rubric; semantic review still required"
+    }
+  ]
+}

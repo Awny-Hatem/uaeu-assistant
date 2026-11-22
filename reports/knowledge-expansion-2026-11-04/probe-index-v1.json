@@ -1,0 +1,1309 @@
+{
+  "startedAt": "2026-11-04T02:13:36.145Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "probe-index-v1",
+  "fixture": "evals/knowledge-expansion-2026-11-04.json",
+  "fixtureSha256": "5c48d24135ccfb94b3df3dfa67eee3f2f0dad0e7eb35304cc90ada08534e7144",
+  "methodology": "Expected facts extracted independently from original official HTML; automated scoring is provisional and requires source/semantic review. Each variant is an isolated conversation unless explicit follow-up turns are listed.",
+  "results": [
+    {
+      "id": "KE001",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Bachelor-Master Accelerated Option in Architectural Engineering?"
+      ],
+      "expected": "The published catalog entry states minimum 162 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/bachelormaster-accelerated-option-in-architectural-engineering.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)162(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor-Master Accelerated Option in Architectural Engineering at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor-Master Accelerated Option in Architectural Engineering at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor-Master Accelerated Option in Architectural Engineering في جامعة الإمارات؟",
+        "Bachelor-Master Accelerated Option in Architectural Engineering UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 162 hours",
+      "sourceBodySha256": "4d1a93dfddff20d90fed7b0d14709133555daaf7405b10c5f075e12942752e56",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE001",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Bachelor-Master Accelerated Option in Architectural Engineering?",
+          "status": 200,
+          "seconds": 3.16,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor-Master Accelerated Option in Architectural Engineering requires a minimum of 162 credit hours in total.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor-Master Accelerated Option in Architectural Engineering",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/bachelormaster-accelerated-option-in-architectural-engineering.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Required Credit Hours : minimum 162 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:327dc60436fe9eb48f71:6#E3S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor-Master Accelerated Option in Architectural Engineering requires a minimum of 162 credit hours in total.",
+                "evidenceIds": [
+                  "corpus:327dc60436fe9eb48f71:6#E3S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3150,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 25,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5426,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 47,
+                  "estimatedUsd": 0.0022456
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1004,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00044320000000000004
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6455,
+              "outputTokens": 73,
+              "estimatedUsd": 0.0026893,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)162(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE010",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Bachelor-Master Accelerated Option in Horticulture?"
+      ],
+      "expected": "The published catalog entry states minimum 150 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/bachelormaster-accelerated-option-in-horticulture.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)150(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor-Master Accelerated Option in Horticulture at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor-Master Accelerated Option in Horticulture at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor-Master Accelerated Option in Horticulture في جامعة الإمارات؟",
+        "Bachelor-Master Accelerated Option in Horticulture UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 150 hours",
+      "sourceBodySha256": "3da25a43e4de26978c6feb35c7fcfac4ad097debf0e66492c0f5db05d6ba00da",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE010",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Bachelor-Master Accelerated Option in Horticulture?",
+          "status": 200,
+          "seconds": 3.069,
+          "payload": {
+            "role": "assistant",
+            "content": "The UAEU Master of Science in Horticulture program requires a minimum of 36 credit hours for completion.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Master of Science in Horticulture — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-horticulture.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Master of Science in Horticulture — degree credit requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "46-master-horticulture-catalog.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The UAEU Master of Science in Horticulture program requires a minimum of 36 credit hours for completion.",
+                "evidenceIds": [
+                  "46-master-horticulture-catalog.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3066,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2474,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 19,
+                  "estimatedUsd": 0.00102
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2686,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 54,
+                  "estimatedUsd": 0.0011608000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1039,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00045720000000000005
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6199,
+              "outputTokens": 99,
+              "estimatedUsd": 0.002638,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)150(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "published credit total"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE020",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Credit-Bearing Micro-Credential in Financial Engineering?"
+      ],
+      "expected": "The published catalog entry states minimum 6 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/creditbearing-microcredential-in-financial-engineering.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)6(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Credit-Bearing Micro-Credential in Financial Engineering at UAEU: total credit hours?",
+        "hey how many credits do i need for Credit-Bearing Micro-Credential in Financial Engineering at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Credit-Bearing Micro-Credential in Financial Engineering في جامعة الإمارات؟",
+        "Credit-Bearing Micro-Credential in Financial Engineering UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 6 hours",
+      "sourceBodySha256": "75cb2dc94e46e65552af64031061facb9f18f7f9d4981eb467b41546aa887eee",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE020",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Credit-Bearing Micro-Credential in Financial Engineering?",
+          "status": 504,
+          "seconds": 21.702,
+          "payload": {
+            "role": "assistant",
+            "content": "I could not complete the answer because the answer service is temporarily unavailable. Please try again shortly; verified stored answers remain available.",
+            "source": "error",
+            "stateLabel": "provider_error",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 0,
+              "reasonCodes": [
+                "verification_unavailable"
+              ]
+            },
+            "clarificationReason": "verification_unavailable",
+            "usage": {
+              "elapsedMs": 21700,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 24,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.8e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5295,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 46,
+                  "estimatedUsd": 0.0021915999999999997
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5319,
+              "outputTokens": 46,
+              "estimatedUsd": 0.00219208,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": false,
+            "patterns": [
+              "(?<!\\d)6(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "published credit total"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE050",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Special Education?"
+      ],
+      "expected": "The published catalog entry states minimum 60 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-special-education.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)60(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Doctor of Philosophy in Special Education at UAEU: total credit hours?",
+        "hey how many credits do i need for Doctor of Philosophy in Special Education at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Doctor of Philosophy in Special Education في جامعة الإمارات؟",
+        "Doctor of Philosophy in Special Education UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 60 hours",
+      "sourceBodySha256": "6d71e40a2b02287d48ec4b51229495bb15e3f2ec61a9379013f221cd1ceda44e",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE050",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Doctor of Philosophy in Special Education?",
+          "status": 200,
+          "seconds": 2.226,
+          "payload": {
+            "role": "assistant",
+            "content": "The Doctor of Philosophy in Special Education program at UAEU requires a minimum of 60 credit hours according to its catalog entry.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Doctor of Philosophy in Special Education — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/doctor-of-philosophy-in-special-education.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Doctor of Philosophy in Special Education — degree credit requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "50-doctorate-special-education-catalog.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Doctor of Philosophy in Special Education program at UAEU requires a minimum of 60 credit hours according to its catalog entry.",
+                "evidenceIds": [
+                  "50-doctorate-special-education-catalog.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2223,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2470,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 51,
+                  "estimatedUsd": 0.0010696
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1043,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0004588000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3513,
+              "outputTokens": 77,
+              "estimatedUsd": 0.0015284,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)60(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE080",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Master of Science in Genomic Medicine ?"
+      ],
+      "expected": "The published catalog entry states minimum 33 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)33(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Master of Science in Genomic Medicine  at UAEU: total credit hours?",
+        "hey how many credits do i need for Master of Science in Genomic Medicine  at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Master of Science in Genomic Medicine  في جامعة الإمارات؟",
+        "Master of Science in Genomic Medicine  UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 33 hours",
+      "sourceBodySha256": "585b76693b431b7c341606b7b104317e075a5eb9c38bd42a7911d05b2c04acbc",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE080",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Master of Science in Genomic Medicine ?",
+          "status": 200,
+          "seconds": 3.509,
+          "payload": {
+            "role": "assistant",
+            "content": "The Master of Science in Genomic Medicine requires a minimum of 33 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master of Science in Genomic Medicine",
+                "url": "https://www.uaeu.ac.ae/en/catalog/graduate/programs/master-of-science-in-genomic-medicine.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Required Credit Hours : minimum 33 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:dc540202ddf07ee73c3c:3#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Master of Science in Genomic Medicine requires a minimum of 33 credit hours.",
+                "evidenceIds": [
+                  "corpus:dc540202ddf07ee73c3c:3#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3506,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 22,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5840,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 43,
+                  "estimatedUsd": 0.0024048000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 996,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00044000000000000007
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6858,
+              "outputTokens": 69,
+              "estimatedUsd": 0.0028452400000000006,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)33(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE100",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Bachelor of Arts in Geography?"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-arts-in-geography.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Arts in Geography at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Arts in Geography at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Arts in Geography في جامعة الإمارات؟",
+        "Bachelor of Arts in Geography UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "b050a3a204dab4936a03cb8b4aa34ead5226c15cb68f9e029896dc22496a04d3",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE100",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Bachelor of Arts in Geography?",
+          "status": 200,
+          "seconds": 2.119,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Arts in Geography at UAEU requires a minimum of 120 credit hours to complete the degree.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Bachelor of Arts in Geography — program requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-arts-in-geography.shtml",
+                "lastVerified": "2026-11-03",
+                "sourceSection": "Bachelor of Arts in Geography — degree credit requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "38-bachelor-geography-catalog.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Arts in Geography at UAEU requires a minimum of 120 credit hours to complete the degree.",
+                "evidenceIds": [
+                  "38-bachelor-geography-catalog.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2117,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2464,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 48,
+                  "estimatedUsd": 0.0010624
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1040,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0004576
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3504,
+              "outputTokens": 74,
+              "estimatedUsd": 0.00152,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE130",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Bachelor of Science in Computer Science?"
+      ],
+      "expected": "The published catalog entry states minimum 120 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)120(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Bachelor of Science in Computer Science at UAEU: total credit hours?",
+        "hey how many credits do i need for Bachelor of Science in Computer Science at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Bachelor of Science in Computer Science في جامعة الإمارات؟",
+        "Bachelor of Science in Computer Science UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 120 hours",
+      "sourceBodySha256": "0bf81454d4e621600f0589d1fe5a7d757cdea4d72e39204f2c31123ebe1db861",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE130",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Bachelor of Science in Computer Science?",
+          "status": 200,
+          "seconds": 2.526,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Computer Science at UAEU requires a minimum of 120 credit hours for graduation, including general education, college requirements, major requirements, internship, major electives, and free electives.\n\nFor the Fall 2025 cohort, the official study plan for the Bachelor of Science in Computer Science totals 120 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU BSc Computer Science Study Plan — Fall 2025 Cohort",
+                "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+                "lastVerified": "2026-09-16",
+                "sourceSection": "# BSc Computer Science model plan — Fall 2025 cohort"
+              },
+              {
+                "title": "UAEU Computer Science degree requirements and major electives",
+                "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science degree credit breakdown"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "07-computer-science-study-plan-fall-2025.md#E1S1",
+              "28-computer-science-degree-requirements.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Computer Science at UAEU requires a minimum of 120 credit hours for graduation, including general education, college requirements, major requirements, internship, major electives, and free electives.",
+                "evidenceIds": [
+                  "28-computer-science-degree-requirements.md#E2S1"
+                ]
+              },
+              {
+                "text": "For the Fall 2025 cohort, the official study plan for the Bachelor of Science in Computer Science totals 120 credit hours.",
+                "evidenceIds": [
+                  "07-computer-science-study-plan-fall-2025.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2524,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2677,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 104,
+                  "estimatedUsd": 0.0012372000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1009,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00044520000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1015,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00044760000000000004
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4701,
+              "outputTokens": 156,
+              "estimatedUsd": 0.00213,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)120(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE160",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "",
+      "turns": [
+        "According to its UAEU catalog entry, how many credits are required for Minor in  Artificial Intelligence?"
+      ],
+      "expected": "The published catalog entry states minimum 18 credit hours. Preserve the exact qualification; this does not establish a current intake or personal eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/minor-in--artificial-intelligence.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "published credit total",
+          "any": [
+            "(?<!\\d)18(?!\\d)"
+          ]
+        }
+      ],
+      "variants": [
+        "Minor in  Artificial Intelligence at UAEU: total credit hours?",
+        "hey how many credits do i need for Minor in  Artificial Intelligence at uaeu",
+        "كم عدد الساعات المطلوبة لبرنامج Minor in  Artificial Intelligence في جامعة الإمارات؟",
+        "Minor in  Artificial Intelligence UAEU crdit hours plz?"
+      ],
+      "sourceQuote": "Required Credit Hours : minimum 18 hours",
+      "sourceBodySha256": "291ec340c4086eb1a4b25ee121a3b78a67e64e5c77b854e41a4e4e77ed9fcbd1",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "parentId": "KE160",
+      "conversation": [
+        {
+          "user": "According to its UAEU catalog entry, how many credits are required for Minor in  Artificial Intelligence?",
+          "status": 200,
+          "seconds": 2.393,
+          "payload": {
+            "role": "assistant",
+            "content": "The Minor in Artificial Intelligence at UAEU requires a minimum of 18 credit hours.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Minor in Artificial Intelligence",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/minor-in--artificial-intelligence.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Required Credit Hours : minimum 18 hours"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:b950264dbc3c3a5e7ce0:4#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Minor in Artificial Intelligence at UAEU requires a minimum of 18 credit hours.",
+                "evidenceIds": [
+                  "corpus:b950264dbc3c3a5e7ce0:4#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2391,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 20,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.0000000000000003e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5083,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 43,
+                  "estimatedUsd": 0.002102
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 990,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0004376
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6093,
+              "outputTokens": 69,
+              "estimatedUsd": 0.0025399999999999997,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "published credit total",
+            "passed": true,
+            "patterns": [
+              "(?<!\\d)18(?!\\d)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "f9d5760179fa983504a1e95981857e7e34dd5a3170649cd585b4273354640bcc",
+    "files": 442,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "local-expansion-in-progress"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "547791e14e8d02e0ec54350a6ab7e32dd7201c96210e3d1ba7acb97ae716c14a",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts are evidence; all factual answers use tailored source-checked generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 3275,
+        "vectors": 3275,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "8215d7f4353edbb7a742204d6061a657f4a19c098f7a8ab96c2c2a0964f18f63",
+        "generatedAt": "2026-11-04T02:07:17.960Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "counts": {
+    "correct": 6,
+    "partial": 0,
+    "incorrect": 2
+  },
+  "finishedAt": "2026-11-04T02:14:17.263Z",
+  "runtimeAfter": {
+    "sha256": "f9d5760179fa983504a1e95981857e7e34dd5a3170649cd585b4273354640bcc",
+    "files": 442,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "local-expansion-in-progress"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "547791e14e8d02e0ec54350a6ab7e32dd7201c96210e3d1ba7acb97ae716c14a",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts are evidence; all factual answers use tailored source-checked generation",
+        "generationEvidence": "source-specific-reviewed-summaries; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 3275,
+        "vectors": 3275,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "8215d7f4353edbb7a742204d6061a657f4a19c098f7a8ab96c2c2a0964f18f63",
+        "generatedAt": "2026-11-04T02:07:17.960Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 3.069,
+    "p95": 21.702,
+    "max": 21.702
+  },
+  "usage": {
+    "measuredAnswers": 8,
+    "totalAnswers": 8,
+    "estimatedUsd": 0.01808302,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

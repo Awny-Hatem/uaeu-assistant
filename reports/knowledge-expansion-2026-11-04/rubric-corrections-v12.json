@@ -1,0 +1,369 @@
+{
+  "at": "2026-11-05T07:52:18.727885+00:00",
+  "changes": [
+    {
+      "fixture": "examiner-scenarios/examiner_100.json",
+      "id": "EX047",
+      "beforeChecks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "four",
+            "\\b4\\b",
+            "أربع",
+            "اربع"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*320"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "CSBP\\s*477"
+          ]
+        },
+        {
+          "name": "elective credit total or faithful course-count equivalent",
+          "any": [
+            "12",
+            "four.{0,30}(?:three|3)|(?:four|أربع|4).{0,50}(?:courses|مساق|مقرر)"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "Major-elective requirement four courses or equivalent 12 credits",
+          "any": [
+            "\\b12\\b",
+            "four",
+            "\\b4\\b",
+            "أربع",
+            "اربع"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "four",
+            "\\b4\\b",
+            "أربع",
+            "اربع"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*320"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "CSBP\\s*477"
+          ]
+        },
+        {
+          "name": "elective credit total or faithful course-count equivalent",
+          "any": [
+            "12",
+            "four.{0,30}(?:three|3)|(?:four|أربع|4).{0,50}(?:courses|مساق|مقرر)"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+      ],
+      "afterSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+      ]
+    },
+    {
+      "fixture": "examiner-scenarios/examiner_100.json",
+      "id": "EX050",
+      "beforeChecks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b132\\b"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "General education 21 credits",
+          "any": [
+            "\\b21\\b"
+          ]
+        },
+        {
+          "name": "College requirements 35 credits",
+          "any": [
+            "\\b35\\b"
+          ]
+        },
+        {
+          "name": "Major requirements 68 credits",
+          "any": [
+            "\\b68\\b"
+          ]
+        },
+        {
+          "name": "Internship two credits",
+          "any": [
+            "\\b2\\b|two|ساعت"
+          ]
+        },
+        {
+          "name": "Major electives six credits",
+          "any": [
+            "\\b6\\b|six|ست(?:ة|ه)?"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "afterSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ]
+    },
+    {
+      "fixture": "examiner-scenarios/examiner_100.json",
+      "id": "EX084",
+      "beforeChecks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "both|male.{0,70}female|للطلاب.{0,40}الطالبات|الطلاب.{0,40}الطالبات",
+            "صالتان",
+            "ساحتان",
+            "واحدة.*(?:أخرى|اخرى)"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "both|male.{0,70}female|للطلاب.{0,40}الطالبات|الطلاب.{0,40}الطالبات",
+            "صالتان",
+            "ساحتان",
+            "واحدة.*(?:أخرى|اخرى)"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://www.uaeu.ac.ae/en/campus_life/restaurants/"
+      ],
+      "afterSources": [
+        "https://www.uaeu.ac.ae/en/campus_life/restaurants/",
+        "https://www.uaeu.ac.ae/ar/campus_life/restaurants/overview.shtml"
+      ]
+    },
+    {
+      "fixture": "examiner-scenarios/examiner_100.json",
+      "id": "EX086",
+      "beforeChecks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "chapter",
+            "فصل"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "article",
+            "مقال"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "10\\s*%"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "chapter",
+            "فصل"
+          ]
+        },
+        {
+          "name": "Published daily limit for the requested book scan",
+          "any": [
+            "per day",
+            "a day",
+            "في اليوم",
+            "يومياً",
+            "يوميًا",
+            "يوميا"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "10\\s*%"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://www.uaeu.ac.ae/en/library/scanservice.shtml"
+      ],
+      "afterSources": [
+        "https://www.uaeu.ac.ae/en/library/scanservice.shtml"
+      ]
+    },
+    {
+      "fixture": "examiner-scenarios/examiner_100.json",
+      "id": "EX087",
+      "beforeChecks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "room|housing|سكن"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "room|housing|سكن"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"
+      ],
+      "afterSources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106",
+        "https://www.uaeu.ac.ae/ar/admission/orientation/male_housing.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/orientation/female_housing.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/orientation/room_allocation.shtml"
+      ]
+    },
+    {
+      "fixture": "reports/knowledge-expansion-2026-11-04/fixture-combined-v39.json",
+      "id": "CQ052",
+      "beforeChecks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b132\\b"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "General education 21 credits",
+          "any": [
+            "\\b21\\b"
+          ]
+        },
+        {
+          "name": "College requirements 35 credits",
+          "any": [
+            "\\b35\\b"
+          ]
+        },
+        {
+          "name": "Major requirements 68 credits",
+          "any": [
+            "\\b68\\b"
+          ]
+        },
+        {
+          "name": "Internship two credits",
+          "any": [
+            "\\b2\\b|two|ساعت"
+          ]
+        },
+        {
+          "name": "Major electives six credits",
+          "any": [
+            "\\b6\\b|six|ست(?:ة|ه)?"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "afterSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ]
+    },
+    {
+      "fixture": "evals/qa-audit-2026-11-03.json",
+      "id": "CQ052",
+      "beforeChecks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b132\\b"
+          ]
+        }
+      ],
+      "afterChecks": [
+        {
+          "name": "General education 21 credits",
+          "any": [
+            "\\b21\\b"
+          ]
+        },
+        {
+          "name": "College requirements 35 credits",
+          "any": [
+            "\\b35\\b"
+          ]
+        },
+        {
+          "name": "Major requirements 68 credits",
+          "any": [
+            "\\b68\\b"
+          ]
+        },
+        {
+          "name": "Internship two credits",
+          "any": [
+            "\\b2\\b|two|ساعت"
+          ]
+        },
+        {
+          "name": "Major electives six credits",
+          "any": [
+            "\\b6\\b|six|ست(?:ة|ه)?"
+          ]
+        }
+      ],
+      "beforeSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ],
+      "afterSources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-mechanical-engineering.shtml"
+      ]
+    }
+  ],
+  "questionTextsChanged": false,
+  "priorAnswersChanged": false,
+  "rationale": [
+    "A four-course answer need not repeat an unasked 12-credit subtotal.",
+    "A requested category breakdown must include each category; its unasked grand total is not mandatory. This tightens the old total-only check.",
+    "A book-scan question requires the daily chapter limit, not a recital of the separate journal-article rule.",
+    "Arabic food-service and orientation-housing sources are independently relevant alternate originals, not asserted byte-identical aliases. Source-level semantic review is still required."
+  ]
+}

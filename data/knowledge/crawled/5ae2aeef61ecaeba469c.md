@@ -1,0 +1,707 @@
+---
+title: measure1_2022caep-annual-report.pdf
+sourceUrl: https://www.uaeu.ac.ae/en/cedu/about/measure1_2022caep-annual-report.pdf
+status: approved
+language: en
+lastVerified: 2026-11-04
+subject: university-people
+college: College of Education
+catalogYear: not stated
+temporalStatus: undated-current-page
+audience: public; exact eligibility as published in sections
+topicId: /cedu/about/measure1_2022caep-annual-report.pdf
+extraction: text-extracted-layout-review-required
+sourceSha256: 6f66579e3d89911784dce3b20ef363adf51d2a6229afe0f6d279a553c5292dae
+sourceDate: not inferred from verification date
+---
+# measure1_2022caep-annual-report.pdf
+
+Source applicability: undated-current-page. Verification date confirms access, not the effective date of every rule. Undated, legacy and cohort facts must retain their labels.
+
+## PDF page 1
+2022 CAEP Annual Report – Accountability Measures
+
+
+
+Measure 1: Completer Effectiveness
+         1.1 Completer impact in contributing to P-12 student-learning growth
+
+                   1.1.1 State-level data of student performance
+                                       The Ministry of Education (MOE) has its own standardized tests to measure
+                             the learning growth of P-12 students. As a government entity responsible for the
+                             education standards of the entire United Arab Emirates (UAE), they can be relied
+                             upon to ensure that the data they use is both valid and reliable and therefore are
+                             likely to meet CAEP standards. Thus, data relating to the performance of students
+                             whose teacher is a completer of the College of Education (CEDU) was requested.
+                                       The MOE was able to collate and provide the average performance of the
+                             students under the completer from different classes. Table 1 shows the data quality
+                             for student’s average assessment. It can be gleaned that data was limited to only 8
+                             completers for 2020 and 5 completers for 2021, covering 5 to 6 average number of
+                             classes per completer. Overall average assessment of K1 to Grade 9 students are
+                             presented.
+
+
+                   Table 1.1
+                   Students’ average assessment score under completers’ classes
+
+                                                     Details                                   2020                 2021
+                             Grade Level                                                      K1 to 2              1 to 9
+                             Average Number of Classes Covered                                   6                    5
+                                Maximum Number of Classes Covered                               20                   10
+                                Minimum Number of Classes Covered                                1                    3
+                             Overall Average Score                                            84.44                88.42
+                                Maximum Score                                                 100.00               100.00
+                                Minimum Score                                                  0.00                59.69
+                             Number of Completers                                                8                    5
+
+                                       During the 2021 evaluation, the overall average assessment score of
+                             students taught by the completers was satisfactory (88.42). This score is much higher
+                             than the overall average assessment scores (84.44) during 2020. The students’
+                             performance evaluation during these two periods positively illustrates the quality
+                             and effectiveness of the completers in teaching and learning (see Figure 1.1).
+
+
+
+
+## PDF page 1 — continuation 2
+                                                                                                                                     1
+
+## PDF page 2
+Figure 1.1
+
+                    2020 & 2021 students’ average assessment scores under completers’ classes
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                              Note. 2019 data from MOE; 2021 Data from ESE
+
+
+                    1.1.2 Completers’ Action Research/ Case Studies
+
+                                        CEDU includes case studies conducted by completers in their teaching
+                              context to make a change and foster growth in their students’ teaching and learning.
+                              Requests were sent to receive such information from completers, including details
+                              on maintaining confidentiality and anonymity of the completers and the students
+                              and schools involved. A template was devised for completers to fill with regards to
+                              the growth. We encouraged completers to include qualitative and quantitative data
+                              to indicate their students’ development pertinence to their action plans.
+
+                                        Six SPED completers responded to the request and shared their action
+                              research/ case studies, showing their positive impact on P-12 student-learning
+                              growth. Table 1.2 (see Appendix) summarizes the information about how the
+                              completers were able to take action on the needs of their students. It also shows the
+                              completers’ initiative, self-responsibility, creativity, innovativeness, and passion for
+                              teaching, which benefited their students. Furthermore, the completers showed that
+                              they could partner with families, school support groups, and professionals to make
+                              decisions and implement their action strategies.  These attributes indicate that the
+                              completers can cope with challenges in the practice of their profession.
+
+
+
+
+
+                                                                                                                                        2
+
+## PDF page 3
+Table 1.3 shows the completers exuded the program outcomes based on
+                                how they addressed the concerns encountered in their classes. This information
+                                indicates that the completers have been well-prepared to address challenges in the
+                                practice of their profession. It also shows their capacity to use research skills and
+                                their growth as professionals.
+
+
+                     Table 1.3
+
+                     Learning outcomes exuded by completers after implementation of action strategies
+
+                                                                                                        Completers' Action Strategies
+                                                 SPED Program Outcomes*                                          and Outcomes
+                                                                                                     C1      C2      C3      C4      C5     C6
+
+                                     1.    Acquire thorough knowledge of the
+                                           philosophical, historical, and legal                                              ✓
+                                           foundation of the education of exceptional
+                                           children.
+                                     2.    Use multiple assessment data in making
+                                           educational decisions for students with                    ✓       ✓              ✓               ✓
+                                           exceptionalities.
+                                     3.    Locate and critically use relevant,
+                                           meaningful, and evidence-based
+                                           instructional and assistive technologies that                             ✓       ✓       ✓       ✓
+                                           will promote maximum learning and social
+                                           and emotional growth in students with
+                                           exceptionalities.
+                                     4.    Establish a research-based responsive
+                                           learning environment for students with                     ✓              ✓       ✓       ✓       ✓
+                                           exceptionalities.
+                                     5.    Examine the cultural and social contexts in
+                                           which students with exceptionalities live and              ✓       ✓      ✓               ✓       ✓
+                                           learn.
+                                     6.    Assess children with exceptionalities'
+                                           language development and communication                     ✓                      ✓               ✓
+                                           skills using research-based practices.
+                                     7.    Use effective communication skills (oral and
+                                           writing) and diverse collaborative models to
+
+## PDF page 3 — continuation 2
+                                           promote the well-being of individuals with                 ✓                      ✓       ✓       ✓
+                                           exceptionalities across a wide range of
+                                           settings.
+                                     8.    Manage consistently and sensitively ethical
+                                           practices and professionalism in the area of               ✓       ✓      ✓       ✓       ✓       ✓
+                                           Special Education.
+                                     9.    Design research-based and appropriate
+                                           learning experiences for students with                     ✓       ✓      ✓       ✓       ✓       ✓
+                                           exceptionalities in the academic subject
+                                           matter content of the general curriculum.
+                                *2020-2021
+
+                                                                                                                                                 3
+
+## PDF page 4
+1.2 Completer effectiveness in applying professional knowledge, skills, and dispositions
+
+                   1.2.1 Annual performance evaluation of completers under Federal Authority
+
+                                       The Federal Authority for Government Human Resources (FAHR) established
+                             a Performance Management System, which applies to all entities under the federal
+                             government and the Ministry of Education (MOE). It aims to link the individual
+                             performance to the strategic directions of the Federal Government. The line
+                             manager accomplishes the annual performance evaluation, with the individual
+                             objectives or KPIs identified and agreed by the employee and the immediate head.
+                             This is conducted every November to December. The FAHR has adopted a 5-point
+                             scale assessment by Cabinet Resolution No. 35 of 2020. The performance data
+                             presented in Figure 1.2.1 was by the previous 4-point scale used by the FAHR: 1-
+                             Needs Improvement, 2-Meets Expectations, 3- Above Expectations, 4- Notably
+                             Exceeds Expectations.
+
+                                       Data for 43 completers who reported their employment under government
+                             schools was requested from the Emirates Schools Establishment (ESE) for the period
+                             of 2019, 2020, and 2021. ESE was able to provide the 2019 and 2020 data. Eighty-
+                             eight percent of the completers are teachers while 12% hold administrative positions
+                             (i.e., School Principal, Vice Principal, Chief Student Affairs, etc.). Moreover, 67% or 29
+                             out of the 43 completers have evaluations that can be compared for the two
+                             identified years, 33% were not appraised because they were newly hired, and hence
+                             there is no available data.
+
+                                       Results indicate that the percentage of completers who meet expectations
+                             has increased. During the 2020 evaluation period, more of the completers (93%)
+                             under the federal authority met the expectations and performed their work by the
+                             established objectives. However, in 2019, 7% performed above expectations, and
+                             71% met the expectations.
+
+                                       Furthermore, for 2019 and 2020, the overall median score (from 1–4-point
+                             scales) is 2, and the average mean score is 1.71 and 1.93, respec              tively. Paired sample
+                             t-test of the performance scores revealed that the completers                ’ performance had
+                             significantly increased (t (24) =-2.531, p=0.017) from 2019 (M= 1.59, SD= .78) to 2020
+                             (M=1.90, SD=.31). This illustrates that the UAE-CEDU completers’ performance is
+
+## PDF page 4 — continuation 2
+                             satisfactory according to the criteria developed by the FAHR               and continuously
+                             improving. A disaggregated data analysis, split by programs, is not possible due to
+                             the limited identification information provided by the data source.
+
+                                       Figure 1.3 shows the percentage distribution of completers based on their
+                             annual performance assessment in 2019 (Fall) and 2020.
+
+
+
+
+                                                                                                                                     4
+
+## PDF page 5
+Figure 1.3
+                    Annual Performance Evaluation of Completers under Federal Authority (2019 & 2020)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Note. Data sourced from ESE; N = 29; Data cannot be disaggregated due to the limited completer information
+                    provided by the data source.
+
+
+
+                    1.2.2     Teacher Observations
+
+                                        Teacher observations are conducted quantitatively to determine teachers'
+                              performance in their teaching methods, instructional activities, and preparation and
+                              learning materials.  Annually, teachers under federal authority undergo teaching
+                              observations to help them improve their teaching-learning quality. Thus, data on
+                              completers’ performance during teaching observations were requested from
+                              Emirates School Establishments (ESE) to determine their effectiveness in applying
+                              their knowledge and skills in teaching.
+
+                                        Figure 1.4 shows the completers’ performance during teaching observation
+                              over the past three years, 2017/2018 to 2019/2020. The performance of the
+                              completers has significantly increased from 2017/2018 (M=77.52, SD=5.70) to
+                              2018/2019 (M=81.10, SD=5.54), as revealed in the analysis using paired sample t-test
+                              (t (20) =-5.438, p<0.001); it has also significantly increased 2018/2019 (M=81.10,
+                              SD=5.54) to 2019/2020 (M83.24, SD=5.05) with paired sample t-test analysis (t (20)
+                              =-4.614, p<0.001). This analysis implies that the completers have improved their
+                              teaching-learning qualities over three years.
+
+
+
+                                                                                                                                         5
+
+## PDF page 6
+Figure 1.4
+
+                   Completers’ teaching observation
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                             Note. N=23, including two completers with no data for two years
+
+
+
+                   1.2.3     Employer Assessment of the Completer Compared to non-UAEU Completer
+
+                                       Another indicator used to determine the teaching effectiveness is the
+                             assessment of UAEU-CEDU completers compared to a non-UAEU completer by
+                             employers (principals or academic leads). Employers were asked to compare the
+                             performance of UAEU completers with other teachers who completed their
+                             preparation from other universities in terms of four domains, namely: planning and
+                             preparation; classroom environment, instruction; and professional responsibility.
+                             Ratings were completed using a 3-point scale: ‘Less than others’; ‘same as others’;
+                             ‘Better than others’, which were scored 1-3 respectively.
+
+                                       Another indicator used to determine the teaching effectiveness is the
+                             assessment of UAEU-CEDU completers compared to non-UAEU completers by
+                             employers (principals or academic leads). Employers were asked to compare the
+                             performance of UAEU completers with other teachers who completed their
+                             preparation from other universities in terms of four domains: planning and
+                             preparation, classroom environment, instruction, and professional responsibility.
+                             Ratings were conducted using a 3-point scale: ‘Less than others’; ‘same as others’;
+                             ‘Better than others’, scored 1-3, respectively.
+
+                                       In 2021, the employers rated the UAEU-CEDU completers an overall mean of
+                             2.59 (SD = 0.96) or 86.50% (see Figure 1.4). The percentage scores in four subscales
+                             range from 85.33% to 87.67%. Paired samples t-tests were used to look for
+
+                                                                                                                                     6
+
+## PDF page 7
+differences among the four subscales. There are no significant differences in the
+                              assessment rating according to what the completers are being compared on,
+                              whether planning and preparation, instruction, or classroom environment.
+
+
+
+                    Figure 1.4
+
+                    2021 Assessment of UAEU-CEDU teaching effectiveness when compared to non-UAEU
+                    completer
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Note. Mean score was converted to % teaching effectiveness, M/m x 100, where M= mean score and m = 4,
+                    highest credit; Data cannot be disaggregated due to the limited completer information provided by the data
+                    source.
+
+
+
+                              Furthermore, when principals or academic leads compare the UAEU-CEDU
+                    completer, in terms of the four subscales, to their colleagues who are non-UAEU completers,
+                    63% of the completers were better than others in planning and preparation, 59% were better
+                    than others in a classroom environment, 66% in instruction, and 67% in professional
+                    responsibility (see Figure 1.5).
+
+                              These data, aligned to the framework used in our capstone and student teaching
+                    programs, indicate that the pedagogical emphasis provided through our programs (planning
+                    & preparation; classroom environment; instruction; professional responsibility) positively
+                    impacts our completers’ performances in the field. The data collected from the employers is
+                    reassuring; they show our program preparation is in line with the stakeholders’ standards.
+                              The results show no area of weakness for this indicator.
+
+
+
+
+                                                                                                                                         7
+
+## PDF page 8
+Figure 1.5
+
+                    Percentage distribution of UAEU-CEDU completers when compared, in terms of the four
+                    subscales, to non-UAEU completer (2021)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                    Note. N=79 UAEU-CEDU Completers; Data cannot be disaggregated due to the limited completer information
+                    provided by the data source.
+
+
+                              The performance of UAEU completers concerning non-UAEU, as assessed by
+                    employers, is significantly higher than those evaluated in the previous years. As shown in
+                    Table 1.4, the overall mean score of the completers in 2018 was 2.25 (75%), 2.1 (67%) in
+                    2019, and 2.59 (86%) in 2021. Kruskal-Wallis test of the mean scores of the completers, when
+                    compared with non-UAEU-CEDU completers from subsequent time-point scales, revealed a
+                    significant difference in their teaching effectiveness (H (2) = 23.825, p=<.001). There was no
+                    significant difference in completers' teaching effectiveness assessment scores between 2018
+                    and 2019 (H (2) = 10.051, p=0985). However, there is a substantial difference between the
+                    teaching effectiveness mean scores in 2018 and 2021 (H (2) = 36.8313, p=<.001) and
+                    between 2019 and 2021 (H (2) = 26.762, p=.001).
+
+                              Data shows our completers' overall performance (see Figure 1.6) as perceived by
+                    their employers compared to graduates from other non-UAEU institutions. Overall, CEDU
+                    completers’ performances were ranked higher by employers than those who completed their
+                    programs elsewhere. Thus, reflecting positively on our program. The results show no area of
+                    weakness for this indicator.
+
+                                                                                                                                       8
+
+## PDF page 9
+Table 1.4
+
+          Performance UAEU-CEDU completers in terms of the four subscales across three years
+
+                      Subscale                                                            Mean (SD) - %
+                                                            2018                         2019                  2020                  2021
+          Planning and Preparation                   2.22 (0.80)-83.33            2.00 (0.59)-66.67              *           2.58 (0.94)-86.08
+          Classroom Environment                      2.44 (0.51)-81.33            1.96 (0.55)-65.33              *           2.56 (0.88)-85.33
+          Instruction                                2.22 (0.64)-74.00            2.08 (0.72)-69.33              *           2.61 (0.99)-86.92
+          Professional Responsibility                2.11 (0.64)-70.33            2.00 (0.74)-66.67              *           2.63 (1.02)-87.76
+          Overall                                    2.25 (0.65)-75.00            2.01 (0.65)-67.00              *           2.59 (0.96)-86.50
+          *Unable to do data collection due to pandemic
+
+
+                     Figure 1.6
+                     Performance UAEU-CEDU completers in terms of the four subscales across three years
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                     Note. No assessment was made in 2020 due to the pandemic         ; Data cannot be disaggregated due to the limited
+                     completer information provided by the data source.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                             9
+
+## PDF page 10
+APPENDIX
+
+  Table 1.2
+  Summary of completers’ action research/case studies
+
+                                                                                                      Initial                                                                      Formal Action Strategies Taken
+                     Concerns                 Student/s             Basis of Concern                 Actions
+Completer          Encountered                Involved                                                Taken                             Activities                              Action                  Materials and                  Duration                    Outcome
+                                                                                                    (informal)                                                              Implementer                 Methods Used               (Days/Months)
+
+     1            The low                 Students of              Parents see their             Hold a                Meeting with parents                              The problem was            Group discussions;             Five months            The student was
+                  academic level          determination            child’s disability as a       meeting with                  Discussed their son’s school             solved                     Parents Consultation;                                 diagnosed with
+                  of a student            (Secondary               stigma; the student           the school                     and academic status and                  collaboratively by         Used Wexler                                           moderate intellectual
+                                          School)                  cannot recognize              support team                   informed them of teachers’               the school                 intelligence test,                                    disability.
+                                                                   basic words such as           and discuss                    reports of other subjects                support team,              learning difficulties
+                                                                   a plane or a ship,            the student's                  (mathematics, science, etc.              which consists of          scale) & medical                                      The student was
+                                                                   and some symptoms             situation.                    Asked for their consent to               the special                report.                                               included to receive
+                                                                   that indicate a                                              include their son in special             education teacher                                                                special education
+                                                                   problem with the                                             education service and to                 (COMPLETER)-                                                                     services.
+
+## PDF page 10 — continuation 2
+                                                                   student are                                                  begin the process of                     psychologist -
+                                                                   observed, for                                                diagnosing the student at the            social worker -                                                                  The student is assisted
+                                                                   example, difficulty                                          school.                                  nurse – other                                                                    in exams.
+                                                                   pronouncing some                                            Asked the parents to bring a             teachers                                                                                -providing an
+                                                                   letters and words,                                           medical report showing the               (mathematics,                                                                            assistant teacher
+                                                                   frequent distraction,                                        student’s disability.                    Arabic) – and the                                                                        for the student
+                                                                   and lack of attention.                              Spreading awareness on the                        school principal.
+                                                                                                                       importance of disclosing the student’s                                                                                             Transferring a student
+                                                                                                                       disability, if any.                                                                                                                to a speech pathologist
+
+                                                                                                                       Referred the student to a
+                                                                                                                       psychologist after obtaining the
+                                                                                                                       consent of the parents
+
+
+
+     2            Some students           High School              Students’ academic            Conducted a           Collaboration with my team, family,               I and my school            Meetings and                   Two terms              Students received a
+                  with intellectual       Students with            level, IEP, and               meeting with          and rehabilitation centers. (Some of              support team.              interviews with the                                   career in rehabilitation
+
+## PDF page 10 — continuation 3
+                  disabilities need       Intellectual             evaluation                    the learning          my student’s parents rejected the                                            concerned people.                                     and became
+                  career                  Disability                                             support team          suggestion, and some understand                                              Workshops for                                         independent person.
+                  rehabilitation                                                                 at my school          the need for career rehabilitation.)                                         students with
+                  programs                                                                       to discuss the                                                                                     determined parents.
+                  because their                                                                  student               Conducted career rehabilitation
+                  academic ability                                                               situation.            programs and workshops.
+                  cannot be
+                  improved
+                  anymore.
+
+
+
+
+                                                                                                                                                                                                                                                                                        10
+
+## PDF page 11
+Initial                                                                       Formal Action Strategies Taken
+                      Concerns                 Student/s              Basis of Concern                 Actions
+Completer           Encountered                 Involved                                                Taken                              Activities                               Action                   Materials and                  Duration                     Outcome
+                                                                                                      (informal)                                                                Implementer                  Methods Used                (Days/Months)
+
+      3           Parents do not           Students of              Student rates drop.            Attended               Formal meetings with the guardian.                 Inclusion team in          PowerPoint                       One year               Student progresses;
+                  accept their             determination-                                          various                                                                   the school
+                  child's disability.      cycle one (1-4)          Difficulty in the              workshops to           Interviews with the student.                       Principal - Deputy         Presentation                                            Student's self-
+                                                                    progress and                   diversify                                                                 - Special                                                                          confidence increased
+                                                                    development of                 education              Shared activities with peers.                      Education                  Publications                                            like coming to school,
+                                                                    students due to the            strategies.                                                               Teacher -                                                                          not fighting;
+                                                                    lack of support and                                                                                      Psychologist -             Messages
+                                                                    acceptance of                  Through                                                                   Social Worker -                                                                    Students formed good
+                                                                    parents for a                  workshops                                                                 Subject Teacher -          Workshops                                               relationships with
+
+## PDF page 11 — continuation 2
+                                                                    disability                     and meetings,                                                             Parent                                                                             peers;
+                                                                                                   parents’
+                                                                    Lack of confidence in          awareness of                                                                                                                                                 The parent accepted
+                                                                    the student                    the two types                                                                                                                                                and understood the
+                                                                                                   of disability.                                                                                                                                               type of disability and
+                                                                    Escape from classes                                                                                                                                                                         supported the student.
+                                                                    and school                     Inclusion of
+                                                                                                   students in
+                                                                                                   classes and
+                                                                                                   events
+      4           Difficulty in            High School              Struggled in applying          Browsed                Contacted Al-Joud Center, which has                Special                    Consultation &                   One month              Diagnosed 17
+                  applying the             special needs            the scale because it           through some           many special education teachers in                 Education                  Training;                                               students;
+                  diagnostic scale         students (from           was the first time,            centers and            the nearby schools.                                Teacher                    Diagnostic Scale
+                  (Jordanian               grades 9, 10,            and had little                 contacts                                                                  (COMPLETER)                (Jordanian                                              The scale helped in
+                  Excellence) for          and 12)                  experience with it.                                   Al-Joud Center sent a special                      and Special                Excellence)                                             knowing the level of
+
+## PDF page 11 — continuation 3
+                  students with                                                                                           education specialist to introduce the              Education                                                                          learning difficulty of the
+                  learning                                                                                                diagnostic scale.                                  Specialists                                                                        students.
+                  difficulties.
+                                                                                                                          Trained and applied the scale to one                                                                                                  Able to make an
+                                                                                                                          student.                                                                                                                              individual educational
+                                                                                                                                                                                                                                                                plan and goals for
+                                                                                                                                                                                                                                                                students, which guided
+                                                                                                                                                                                                                                                                the teaching and
+                                                                                                                                                                                                                                                                learning process.
+      5           A Parent is              An 11-year-old           The student shows              Started to             Observation                                        Special                    Task analysis                    Five days in           The student has
+                  concerned that           student with             inappropriate                  take a                 Conducted team meetings                            Education                  (Used different types            the week, in           reduced his problem
+                  the student              autism                   behavior like                  baseline               Implemented strategy (task analysis)               Teacher                    of toothbrushes- with            the morning. It        behavior regarding
+
+## PDF page 11 — continuation 4
+                  cannot brush                                      aggression and                 regarding the                                                             (COMPLETER)                the light or with the            takes around           brushing his teeth.
+                  his teeth.                                        resistance to crying           student’s                                                                 and other                  music; with                      30 minutes.
+                                                                    while we present a             ability to brush                                                          teachers                   applications that                                       Students continued to
+                                                                    brushing teeth task.           his teeth. And                                                                                       involve some music                                      practice at home with
+                                                                                                   used                                                                                                                                                         the parents’ guidance
+                                                                                                   reinforcement                                                                                                                                                (the video was sent as
+                                                                                                   to minimize                                                                                                                                                  a guide)
+                                                                                                   the problem
+                                                                                                   behavior.
+
+
+
+                                                                                                                                                                                                                                                                                               11
+
+## PDF page 12
+Initial                                                                            Formal Action Strategies Taken
+                       Concerns                  Student/s                Basis of Concern                   Actions
+Completer            Encountered                  Involved                                                    Taken                                Activities                                 Action                    Materials and                    Duration                      Outcome
+                                                                                                            (informal)                                                                    Implementer                   Methods Used                 (Days/Months)
+
+      6            Classroom                 (Primary school,           Observed difficulties            Identifying the         Modified assignments and tasks for                    Teacher                     Processes:                        Term 2019-               Improved reading and
+                   differentiation:          middle school,             in reading skills                low achievers           the low achiever and for students                     (COMPLETER)                 -Modifying the                    2020                     writing skills of the
+                   Teaching                  high school)                                                and students            who face reading and writing                          and sometimes in            curriculum. For example,                                   students were
+                   students with                                        Observed difficulties            who face                difficulties                                          collaboration with          second language                                            observed.
+                   various learning          1.      Second             in writing skills                difficulties in                                                               other teachers              learners face challenges
+                   abilities and                     language                                            reading and             Conducted additional sessions for                                                 in understanding the                                       Improved speaking
+                                                                                                                                                                                                                   meaning of the text, so
+                   styles is my                      students           Low scores in the                writing based           improving reading and writing in the                                              the teacher needs to                                       and listening skills of
+                   biggest                           (low               midterm and final                on the                  resources room (using intervention                                                attach a lot of pictures                                   the students were
+
+## PDF page 12 — continuation 2
+                   challenge. Had                    achievers)         exams                            classroom               plans)                                                                            within the text so that                                    observed.
+                   three categories          2.      Second                                              observation                                                                                               students can understand
+                   of students in                    language           Lack of class                    and exam                Assigned some of the high achievers                                               the meaning.                                               Higher scores in
+                   each class                        students           participation and                scores                  to help the low achiever by mixing the                                            -Using translation in the                                  exams and tasks
+                                                                                                                                                                                                                   exams and classes to
+                   (high achiever,                   with               interaction                                              students in the group                                                             clarify the meaning of the
+                   moderate                          reading                                                                                                                                                       content.                                                   Better interactions in
+                   achiever, and                     difficulties                                                                                                                                                  -Giving the words’ lists of                                the classroom
+                   low achiever).            3.      Second                                                                                                                                                        each topic with
+                   Each type                         language                                                                                                                                                      expressive pictures to
+                   needs special                     students                                                                                                                                                      help students understand
+                   teaching                          with                                                                                                                                                          the meaning of them
+                                                                                                                                                                                                                   They simplify grammar
+
+## PDF page 12 — continuation 3
+                   methods and                       writing                                                                                                                                                       by showing similar
+                   activities that fit               difficulties                                                                                                                                                  grammar in the first
+                   the students'                                                                                                                                                                                   language so the students
+                   learning styles                                                                                                                                                                                 can understand the
+                   and academic                                                                                                                                                                                    usage of the given
+                   performance.                                                                                                                                                                                    lesson.
+                   Sometimes,                                                                                                                                                                                      -Using a  Choral reading
+                   students cannot                                                                                                                                                                                 strategy, especially with
+                                                                                                                                                                                                                   children
+                   consider the
+                   individual                                                                                                                                                                                      Materials: Intervention
+                   differences in                                                                                                                                                                                  plans to develop reading
+                   the same                                                                                                                                                                                        and writing skills through
+                   session due to                                                                                                                                                                                  strategies prepared by
+                   the lack of time                                                                                                                                                                                schoolteachers.
+
+## PDF page 12 — continuation 4
+                   and                                                                                                                                                                                             Strategies aim to improve
+                                                                                                                                                                                                                   reading fluency and
+                   commitment to                                                                                                                                                                                   grammar, and creative
+                   finish the                                                                                                                                                                                      writing.
+                   curriculum
+                   before the end                                                                                                                                                                                  Products: Using tapes to
+                   of the term.                                                                                                                                                                                    teach language and
+                                                                                                                                                                                                                   develop listening and
+                                                                                                                                                                                                                   speaking skills.
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                              12

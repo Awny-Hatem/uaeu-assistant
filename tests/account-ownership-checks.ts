@@ -4,7 +4,8 @@ import path from "node:path";
 import type Database from "better-sqlite3";
 
 // Real route/auth/history code with sealed test cookies and an isolated SQLite
-// database. Only the Next request-cookie accessor is substituted. This is not
+// database. Chat receives its signed session cookie on the Request; other
+// handlers use the substituted Next cookie accessor. This is not
 // an HTTP/browser test. Every network/model call is forbidden and counted.
 process.env.CHATBOT_DB_PATH = ":memory:";
 process.env.AUTH_COOKIE_SECRET = "test-only-peer-account-boundary-secret-over-32-characters";
@@ -135,6 +136,7 @@ async function main() {
       for (const [endpoint, method, handler] of endpoints) {
         const headers: Record<string, string> = { "content-type": "application/json" };
         if (expected !== null) headers["x-chat-account-id"] = expected;
+        if (endpoint === "chat" && token) headers.cookie = `chat_session=${token}`;
         const before = sideEffects();
         const response = await handler(new Request(`http://localhost/api/${endpoint}`, {
           method, headers,
@@ -157,7 +159,7 @@ async function main() {
 
   activeToken = goodB;
   process.env.SERVER_CHAT_HISTORY = "enabled";
-  const accountHeaders = { "x-chat-account-id": "peer-account-b" };
+  const accountHeaders = { "x-chat-account-id": "peer-account-b", cookie: `chat_session=${goodB}` };
   let response = await history.GET(new Request("http://localhost/api/history", { headers: accountHeaders }));
   assert.equal(response.status, 200);
   const ownHistory = await response.json() as { messages: { content: string }[] };

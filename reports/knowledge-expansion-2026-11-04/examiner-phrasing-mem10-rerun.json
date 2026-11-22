@@ -1,0 +1,4337 @@
+{
+  "startedAt": "2026-11-07T11:35:22.963Z",
+  "base": "http://127.0.0.1:3003",
+  "label": "examiner-phrasing-mem10-rerun",
+  "fixture": "reports/knowledge-expansion-2026-11-04/examiner-phrasing-mem9-fixture.json",
+  "fixtureSha256": "bb83756e96876b123e4d72065f039e4da75ea0508b57f1c5ad80af451cc98687",
+  "methodology": "Build examiner_100_phrasing.json: harder phrasing variants per scenario.\n\nEach scenario keeps its main question, expected facts, checks and sources.\nIts variants are replaced by three deterministic perturbations:\n  1. typo  - common misspellings / swapped letters, lower case, no '?'\n  2. short - casual compressed form (filler words dropped, lower case)\n  3. ar-typo - the Arabic variant with everyday spelling slips\nFacts and rubric are unchanged, so any failure is phrasing sensitivity.",
+  "results": [
+    {
+      "turns": [
+        "ما رؤيه جامعه الامارات"
+      ],
+      "expected": "UAEU’s published vision emphasizes leadership and innovation in higher education, research and community service at national and international levels.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/vision-mission-values.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "innovat(?:ion|or|ive)|ابتكار|مبتكر"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "research|بحث"
+          ]
+        }
+      ],
+      "id": "EX006-V3",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما رؤية جامعة الإمارات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what is uaue’s vision",
+        "uaeu’s vision?",
+        "ما رؤيه جامعه الامارات"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "bb2091ee1383b950521076ca740545e2a89e10887e8a6a986dc548dcecef0d7e"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX006",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما رؤيه جامعه الامارات",
+          "status": 200,
+          "seconds": 2.848,
+          "payload": {
+            "role": "assistant",
+            "content": "رؤية جامعة الإمارات هي الريادة والابتكار في التعليم العالي، البحث العلمي وخدمة المجتمع على الصعيدين المحلي والدولي.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "عن جامعة الإمارات",
+                "url": "https://www.uaeu.ac.ae/ar/about/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "عن جامعة الإمارات > الرؤية والرسالة > الرؤية"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:9df968b295d599bf4b6f:2#E7S1"
+            ],
+            "claims": [
+              {
+                "text": "رؤية جامعة الإمارات هي الريادة والابتكار في التعليم العالي، البحث العلمي وخدمة المجتمع على الصعيدين المحلي والدولي.",
+                "evidenceIds": [
+                  "corpus:9df968b295d599bf4b6f:2#E7S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2833,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 15,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4659,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 53,
+                  "estimatedUsd": 0.0013724000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1351,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00059
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6025,
+              "outputTokens": 84,
+              "knownUsageUsd": 0.0019627000000000004,
+              "estimatedUsd": 0.0019627000000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "innovat(?:ion|or|ive)|ابتكار|مبتكر"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "research|بحث"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "how contact uaeu general enquiry?"
+      ],
+      "expected": "The general Contact page publishes servicedesk@uaeu.ac.ae, UAE toll-free number 800 8238, and international number +971 3 701 7111. These are general contact channels, not proof of an individual office’s booking or application procedure.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "servicedesk@uaeu\\.ac\\.ae"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "800[ -]?8238"
+          ]
+        }
+      ],
+      "id": "EX009-V2",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف أتواصل مع جامعة الإمارات للاستفسارات العامة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how can i contact uaue for a general enquiry",
+        "how contact uaeu general enquiry?",
+        "كيف اتواصل مع جامعه الامارات للاستفسارات العامه"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "478af09ef05fd5ecd65d818bb3b2813c9bb2d65008649ba8b6a024f105c6a6e1"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX009",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "how contact uaeu general enquiry?",
+          "status": 200,
+          "seconds": 2.197,
+          "payload": {
+            "role": "assistant",
+            "content": "You can contact UAEU general enquiry by emailing servicedesk@uaeu.ac.ae, calling the UAE toll-free number 800 8238, or the international number +971 3 701 7111.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Contact Us",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Public page accessed 2026-11-04; verification date is not an effective date",
+                "sourceSection": "Stay In Touch",
+                "evidenceText": "The general Contact page publishes servicedesk@uaeu.ac.ae, UAE toll-free number 800 8238, and international number +971 3 701 7111. These are general contact channels, not proof of an individual office’s booking or application procedure."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:university-general-contact#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can contact UAEU general enquiry by emailing servicedesk@uaeu.ac.ae, calling the UAE toll-free number 800 8238, or the international number +971 3 701 7111.",
+                "evidenceIds": [
+                  "answer:university-general-contact#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2185,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3264,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 70,
+                  "estimatedUsd": 0.0008416000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1338,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005848000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4602,
+              "outputTokens": 101,
+              "knownUsageUsd": 0.0014264000000000002,
+              "estimatedUsd": 0.0014264000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "servicedesk@uaeu\\.ac\\.ae"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "800[ -]?8238"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "what working hourse does uaue’s general contact page publish"
+      ],
+      "expected": "The general Contact page publishes Monday–Thursday 8:00 AM–5:00 PM and Friday 8:00 AM–3:00 PM. These published general contact hours do not establish the timetable of every college, clinic or library.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/contact/index.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "8|٨"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5|٥"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "3|٣"
+          ]
+        }
+      ],
+      "id": "EX010-V1",
+      "category": "Basics",
+      "focus": "Examiner",
+      "arabicQuestion": "ما ساعات العمل في صفحة التواصل العامة للجامعة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what working hourse does uaue’s general contact page publish",
+        "working hours uaeu’s general contact page publish?",
+        "ما ساعات العمل في صفحه التواصل العامه للجامعه"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "59fa7b99d7c09531f33719f33303d34eeeb493fa93f53ea37849c7fa887ee788"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX010",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "what working hourse does uaue’s general contact page publish",
+          "status": 200,
+          "seconds": 2.662,
+          "payload": {
+            "role": "assistant",
+            "content": "The UAEU general contact page provides a general service email (servicedesk@uaeu.ac.ae), a UAE toll-free phone number (800 8238), an international phone number (+971 3 701 7111), and a Message Us form for routing enquiries, but it does not publish any working course information.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU general enquiries — official contacts",
+                "url": "https://www.uaeu.ac.ae/en/contact/index.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "57-general-contact.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The UAEU general contact page provides a general service email (servicedesk@uaeu.ac.ae), a UAE toll-free phone number (800 8238), an international phone number (+971 3 701 7111), and a Message Us form for routing enquiries, but it does not publish any working course information.",
+                "evidenceIds": [
+                  "57-general-contact.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2648,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3317,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 99,
+                  "estimatedUsd": 0.0009092000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1410,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006136000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4727,
+              "outputTokens": 130,
+              "knownUsageUsd": 0.0015228000000000002,
+              "estimatedUsd": 0.0015228000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "8|٨"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "5|٥"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "3|٣"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "هل بكالوريوس تقنيه المعلومات في الجامعه معتمد من ABET"
+      ],
+      "expected": "The college’s accreditation page specifically states that the BSc in Information Technology is accredited by the Computing Accreditation Commission of ABET. This is a program-specific statement, not a claim about every university degree.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/about/accreditation.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "ABET"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Computing|الحوسبة|الحاسوبي",
+            "حوسب"
+          ]
+        }
+      ],
+      "id": "EX013-V3",
+      "category": "Programs and accreditation",
+      "focus": "Examiner",
+      "arabicQuestion": "هل بكالوريوس تقنية المعلومات في الجامعة معتمد من ABET؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "is uaue’s bsc infomation technology accredited by abet",
+        "uaeu’s bsc information technology accredited by abet?",
+        "هل بكالوريوس تقنيه المعلومات في الجامعه معتمد من ABET"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "4486717118e32ab0292798195445e8eb8d0d551b6e6cd24f75b5036d2b2cd184"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX013",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "هل بكالوريوس تقنيه المعلومات في الجامعه معتمد من ABET",
+          "status": 200,
+          "seconds": 5.931,
+          "payload": {
+            "role": "assistant",
+            "content": "برنامج بكالوريوس العلوم في تقنية المعلومات في جامعة الإمارات العربية المتحدة معتمد من قبل مجلس الاعتماد للحوسبة التابع لـ ABET، وهو مجلس اعتماد أمريكي معترف به من قبل مجلس اعتماد التعليم العالي (CHEA) ويضمن توافق البرنامج مع معايير جودة التعليم والتدريب.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "كلية كلية الحوسبة والذكاء الاصطناعي",
+                "url": "https://www.uaeu.ac.ae/ar/cit/about.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "كلية كلية الحوسبة والذكاء الاصطناعي > الإعتماد الأكاديمي"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-technology",
+            "evidenceIds": [
+              "corpus:b0db36ad8fed53d1a972:3#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "برنامج بكالوريوس العلوم في تقنية المعلومات في جامعة الإمارات العربية المتحدة معتمد من قبل مجلس الاعتماد للحوسبة التابع لـ ABET، وهو مجلس اعتماد أمريكي معترف به من قبل مجلس اعتماد التعليم العالي (CHEA) ويضمن توافق البرنامج مع معايير جودة التعليم والتدريب.",
+                "evidenceIds": [
+                  "corpus:b0db36ad8fed53d1a972:3#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5921,
+              "attemptedCalls": 6,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 34,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 6.800000000000001e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7086,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 135,
+                  "estimatedUsd": 0.0024744000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1621,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006980000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1452,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 75,
+                  "estimatedUsd": 0.0007008000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7640,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 87,
+                  "estimatedUsd": 0.0026192
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1665,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007156
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 19498,
+              "outputTokens": 359,
+              "knownUsageUsd": 0.00720868,
+              "estimatedUsd": 0.00720868,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "ABET"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing|الحوسبة|الحاسوبي",
+              "حوسب"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "When can I apply for internal college transfer for Spring 2027?"
+      ],
+      "expected": "The New Students registration page publishes the electronic internal-transfer application window for Spring 2027 as 16–27 November 2026. The window alone does not establish transfer approval or a fixed processing time.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/new_students.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "16"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "27"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "2026"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "2027"
+          ]
+        }
+      ],
+      "id": "EX018",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "متى أقدم للتحويل الداخلي بين الكليات لفصل ربيع 2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "when can i aply for internal collage transfer for spring 2027",
+        "when apply internal college transfer spring 2027?",
+        "متي اقدم للتحويل الداخلي بين الكليات لفصل ربيع 2027"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "5eb56dc8e3ef7198cb0bef8d8714629533315063f889b3d148dbe94b29404d81"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX018",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "When can I apply for internal college transfer for Spring 2027?",
+          "status": 200,
+          "seconds": 2.021,
+          "payload": {
+            "role": "assistant",
+            "content": "You can apply for the internal college transfer for Spring 2027 electronically between 16 and 27 November 2026.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "New students",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/new_students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Spring 2027 application window, published for 16–27 November 2026",
+                "sourceSection": "Dates of applying for Internal Transfer",
+                "evidenceText": "The New Students registration page publishes the electronic internal-transfer application window for Spring 2027 as 16–27 November 2026. The window alone does not establish transfer approval or a fixed processing time."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:undergraduate-internal-transfer-spring2027#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can apply for the internal college transfer for Spring 2027 electronically between 16 and 27 November 2026.",
+                "evidenceIds": [
+                  "answer:undergraduate-internal-transfer-spring2027#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2012,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3285,
+                  "cachedInputTokens": 3072,
+                  "outputTokens": 51,
+                  "estimatedUsd": 0.0004740000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1317,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005764000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4602,
+              "outputTokens": 82,
+              "knownUsageUsd": 0.0010504000000000002,
+              "estimatedUsd": 0.0010504000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "16"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "27"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "2027"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "when can i aply for internal collage transfer for spring 2027"
+      ],
+      "expected": "The New Students registration page publishes the electronic internal-transfer application window for Spring 2027 as 16–27 November 2026. The window alone does not establish transfer approval or a fixed processing time.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/new_students.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "16"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "27"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "2026"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "2027"
+          ]
+        }
+      ],
+      "id": "EX018-V1",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "متى أقدم للتحويل الداخلي بين الكليات لفصل ربيع 2027؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "when can i aply for internal collage transfer for spring 2027",
+        "when apply internal college transfer spring 2027?",
+        "متي اقدم للتحويل الداخلي بين الكليات لفصل ربيع 2027"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "5eb56dc8e3ef7198cb0bef8d8714629533315063f889b3d148dbe94b29404d81"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX018",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "when can i aply for internal collage transfer for spring 2027",
+          "status": 200,
+          "seconds": 1.993,
+          "payload": {
+            "role": "assistant",
+            "content": "You can apply for the internal college transfer for Spring 2027 during the electronic application window from 16 to 27 November 2026.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "New students",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/new_students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Spring 2027 application window, published for 16–27 November 2026",
+                "sourceSection": "Dates of applying for Internal Transfer",
+                "evidenceText": "The New Students registration page publishes the electronic internal-transfer application window for Spring 2027 as 16–27 November 2026. The window alone does not establish transfer approval or a fixed processing time."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:undergraduate-internal-transfer-spring2027#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can apply for the internal college transfer for Spring 2027 during the electronic application window from 16 to 27 November 2026.",
+                "evidenceIds": [
+                  "answer:undergraduate-internal-transfer-spring2027#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 1981,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3286,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 55,
+                  "estimatedUsd": 0.0008264
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1321,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000578
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4607,
+              "outputTokens": 86,
+              "knownUsageUsd": 0.0014044,
+              "estimatedUsd": 0.0014044,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "16"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "27"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "2026"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "2027"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "cs-elective",
+      "turns": [
+        "What are the Computer Science major electives at UAEU?"
+      ],
+      "expected": "Four courses/12 credits from current catalog list; CSBP411 is not one of the electives.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Major-elective requirement four courses or equivalent 12 credits",
+          "any": [
+            "\\b12\\b",
+            "four",
+            "\\b4\\b",
+            "أربع",
+            "اربع"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "four",
+            "\\b4\\b",
+            "أربع",
+            "اربع"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*320"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "CSBP\\s*477"
+          ]
+        },
+        {
+          "name": "elective credit total or faithful course-count equivalent",
+          "any": [
+            "12",
+            "four.{0,30}(?:three|3)|(?:four|أربع|4).{0,50}(?:courses|مساق|مقرر)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX047",
+      "category": "Programs and courses",
+      "arabicQuestion": "ما المساقات الاختيارية للتخصص في علوم الحاسوب وكم مساقاً أختار؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what are the computr sceince major electives at uaeu",
+        "computer science major electives uaeu?",
+        "ما المساقات الاختياريه للتخصص في علوم الحاسوب وكم مساقاً اختار"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "0ab5101766c1a7786ad2a89f21eab8967d62acd39e394865296bb2098f8414da"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX047",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What are the Computer Science major electives at UAEU?",
+          "status": 200,
+          "seconds": 2.248,
+          "payload": {
+            "role": "assistant",
+            "content": "The Computer Science major electives at UAEU include CSBP320 Data Mining, CSBP431 Bioinformatics, CSBP476 Robotics and Intelligent Systems, CSBP483 Mobile Web Content and Development, CSBP487 Computer Animation and Visualization, CSBP491 Computational Intelligence for Data Management, CSBP499 Special Topics in Computer Science, SWEB451 Game Development, CSBP441 Applied Computer Vision, and CSBP477 Natural Language Processing. Each elective is 3 credits, and students choose four of these to fulfill 12 credit hours as major electives.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science degree requirements and major electives",
+                "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science internship and major electives"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "28-computer-science-degree-requirements.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "The Computer Science major electives at UAEU include CSBP320 Data Mining, CSBP431 Bioinformatics, CSBP476 Robotics and Intelligent Systems, CSBP483 Mobile Web Content and Development, CSBP487 Computer Animation and Visualization, CSBP491 Computational Intelligence for Data Management, CSBP499 Special Topics in Computer Science, SWEB451 Game Development, CSBP441 Applied Computer Vision, and CSBP477 Natural Language Processing. Each elective is 3 credits, and students choose four of these to fulfill 12 credit hours as major electives.",
+                "evidenceIds": [
+                  "28-computer-science-degree-requirements.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2239,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3389,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 134,
+                  "estimatedUsd": 0.000994
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1502,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006504000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4891,
+              "outputTokens": 165,
+              "knownUsageUsd": 0.0016444000000000003,
+              "estimatedUsd": 0.0016444000000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Major-elective requirement four courses or equivalent 12 credits",
+            "passed": true,
+            "patterns": [
+              "\\b12\\b",
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "four",
+              "\\b4\\b",
+              "أربع",
+              "اربع"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*320"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*477"
+            ]
+          },
+          {
+            "name": "elective credit total or faithful course-count equivalent",
+            "passed": true,
+            "patterns": [
+              "12",
+              "four.{0,30}(?:three|3)|(?:four|أربع|4).{0,50}(?:courses|مساق|مقرر)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "category": "Registration and policies",
+      "language": "ar",
+      "focus": "Examiner",
+      "turns": [
+        "اجب بالعربيه عن هذا السؤال المتعلق بجامعه الامارات: What is an academic grievance versus an academic appeal in UAEU AE-09?"
+      ],
+      "expected": "Grievance=mistreatment/unfairtreatmentinacademicorenrollmentmatter; appeal=incorrectapplicationofpolicyorrequestforexception.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/9_student_academic_grievances_and_appeals-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "grievance",
+          "any": [
+            "unfair|mistreatment",
+            "(?:الشكوى|التظلم).{0,100}(?:غير عادلة|سوء معاملة)"
+          ]
+        },
+        {
+          "name": "appeal",
+          "any": [
+            "incorrect|erroneous|exception",
+            "(?:الاستئناف|استئناف).{0,100}(?:خاطئ|خطأ|استثناء)"
+          ]
+        }
+      ],
+      "sourceQuote": "- student academic grievances and appeals 1. grievances and appeals a) an academic grievance is a claim by a student of mistreatment or unfair treatment in an academic or enrollment matter. b) an academic appeal is a claim by a student of incorrect or erroneous application of a university academic policy or a request for an exception to a university academic policy. 2. student academic gri",
+      "sourceBodySha256": "5560e9486ad15fcfb4b350b98097bb032e8af69b7b5ceccd8654c84f212746cd",
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "id": "EX073-V3",
+      "arabicQuestion": "",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what is an academic grievance versus an academic appeal in uaue ae-09",
+        "academic grievance versus academic appeal uaeu ae-09?",
+        "اجب بالعربيه عن هذا السؤال المتعلق بجامعه الامارات: What is an academic grievance versus an academic appeal in UAEU AE-09?"
+      ],
+      "followUpQuestion": null,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "d01f920701d16b0c0467fd451c965f4e5ef7d9b20ee3d2877383518b61e15d45"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX073",
+      "conversation": [
+        {
+          "user": "اجب بالعربيه عن هذا السؤال المتعلق بجامعه الامارات: What is an academic grievance versus an academic appeal in UAEU AE-09?",
+          "status": 200,
+          "seconds": 4.931,
+          "payload": {
+            "role": "assistant",
+            "content": "الشكوى الأكاديمية هي مطالبة الطالب بمعاملة غير عادلة أو سوء معاملة في مسألة أكاديمية أو تسجيلية.\n\nالاستئناف الأكاديمي هو مطالبة بوجود تطبيق خاطئ أو خطأ في تطبيق سياسة أكاديمية للجامعة، أو طلب استثناء من تلك السياسة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU AE-09 Student Academic Grievances and Appeals",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/registration/policies/undergraduate/9_student_academic_grievances_and_appeals-en.pdf",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Procedures1 Definitions;2 SAGAC",
+                "evidenceText": "Under the published UAEU AE-09 Student Academic Grievances and Appeals procedures, effective12August2018, an Academic Grievance is a student claim of mistreatment or unfair treatment in an academic or enrollment matter. An Academic Appeal is a claim of incorrect or erroneous application of a University Academic Policy, or a request for an exception to such a policy. Student Academic Grievances and Appeals Committee(SAGAC) is the standing university committee appointed by the Vice Chancellor to review and decide these matters, representing undergraduate and graduate affairs; the procedures separately list jurisdiction exceptions and escalation channels. These definitions do not decide an individual case."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "academic grievance versus academic appeal under UAEU AE-09",
+            "evidenceIds": [
+              "answer:academic-grievance-appeal-sagac#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "الشكوى الأكاديمية هي مطالبة الطالب بمعاملة غير عادلة أو سوء معاملة في مسألة أكاديمية أو تسجيلية.\n\nالاستئناف الأكاديمي هو مطالبة بوجود تطبيق خاطئ أو خطأ في تطبيق سياسة أكاديمية للجامعة، أو طلب استثناء من تلك السياسة.",
+                "evidenceIds": [
+                  "answer:academic-grievance-appeal-sagac#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4920,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23123,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 84,
+                  "estimatedUsd": 0.0025100000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3429,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 99,
+                  "estimatedUsd": 0.000954
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1442,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006264
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 27994,
+              "outputTokens": 214,
+              "knownUsageUsd": 0.004090400000000001,
+              "estimatedUsd": 0.004090400000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "grievance",
+            "passed": true,
+            "patterns": [
+              "unfair|mistreatment",
+              "(?:الشكوى|التظلم).{0,100}(?:غير عادلة|سوء معاملة)"
+            ]
+          },
+          {
+            "name": "appeal",
+            "passed": true,
+            "patterns": [
+              "incorrect|erroneous|exception",
+              "(?:الاستئناف|استئناف).{0,100}(?:خاطئ|خطأ|استثناء)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "ما قاعده الغياب المنشوره للبكالوريوس باستثناء كليه الطب والعلوم الصحيه"
+      ],
+      "expected": "15% absence gives FA; accepted valid circumstances can give AW; waived absence may not exceed12.5%; preserve the non-CMHS undergraduate scope.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/pdfs/policies/3_undergraduate_registration_and_enrollment-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "15"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "FA"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "AW"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "12\\.5"
+          ]
+        }
+      ],
+      "id": "EX077-V3",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "ما قاعدة الغياب المنشورة للبكالوريوس باستثناء كلية الطب والعلوم الصحية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "what is the published undergraduate attendance rule, excluding medecine and health sciences",
+        "published undergraduate attendance rule excluding medicine and health sciences?",
+        "ما قاعده الغياب المنشوره للبكالوريوس باستثناء كليه الطب والعلوم الصحيه"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "56179e0b4d4b23639545a2945db217a94dcfdf25085b7de664a519a56eb605a0"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX077",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما قاعده الغياب المنشوره للبكالوريوس باستثناء كليه الطب والعلوم الصحيه",
+          "status": 200,
+          "seconds": 2.496,
+          "payload": {
+            "role": "assistant",
+            "content": "لا توجد معلومات منشورة في المصادر المتاحة حول قاعدة الغياب للبكالوريوس باستثناء كلية الطب والعلوم الصحية.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "كلية الطب والعلوم الصحية",
+                "url": "https://www.uaeu.ac.ae/ar/cmhs/",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "كلية الطب والعلوم الصحية > التعلم > الأقسام الأكاديمية"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:138deb5b31c0b0cec9c3:5#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "لا توجد معلومات منشورة في المصادر المتاحة حول قاعدة الغياب للبكالوريوس باستثناء كلية الطب والعلوم الصحية.",
+                "evidenceIds": [
+                  "corpus:138deb5b31c0b0cec9c3:5#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2488,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 47,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 9.400000000000001e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4769,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 57,
+                  "estimatedUsd": 0.0019988000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1338,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005848000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6154,
+              "outputTokens": 88,
+              "knownUsageUsd": 0.0025845400000000006,
+              "estimatedUsd": 0.0025845400000000006,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "15"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "FA"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": false,
+            "patterns": [
+              "AW"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": false,
+            "patterns": [
+              "12\\.5"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2",
+          "Required fact 3",
+          "Required fact 4"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "If I fail a compulsory undergraduate course, must I repeat it, and are the old attempts erased from my transcript?"
+      ],
+      "expected": "Under the published non-CMHS undergraduate procedure, a failed compulsory course must be repeated. Attempts and grades remain on the transcript even when a failing grade is excluded from GPA after successful repeat.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "repeat|يعاد|إعاد|اعاد"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "transcript|كشف"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "remain|not erased|لا.{0,25}(?:تحذف|تمحى)|تظل|تبقى"
+          ]
+        }
+      ],
+      "id": "EX078",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "إذا رسبت في مساق بكالوريوس إجباري فهل أعيده وهل تُحذف المحاولات القديمة من كشف الدرجات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "if i fail a compulsory undergraduate cours, must i repeat it, and are the old attempts erased from my transcript",
+        "if fail compulsory undergraduate course must repeat and old attempts erased from my transcript?",
+        "اذا رسبت في مساق بكالوريوس اجباري فهل اعيده وهل تُحذف المحاولات القديمه من كشف الدرجات"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "b426d979e1dfe5480c3613d2c02fd3c132561b4a2bc01454fa220a15d3d0ccbf"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX078",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "If I fail a compulsory undergraduate course, must I repeat it, and are the old attempts erased from my transcript?",
+          "status": 200,
+          "seconds": 4.705,
+          "payload": {
+            "role": "assistant",
+            "content": "If you fail a compulsory undergraduate course at UAEU (excluding Medicine and Health Sciences), you must repeat it.\n\nFor undergraduates, excluding the College of Medicine and Health Sciences: After you successfully repeat the failed course, the failing grades are excluded from your GPA, but all attempts and grades remain on your transcript, marked as excluded; they are not erased.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Grades and Grading — Repeated Courses",
+                "url": "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "Effective2018-08-12; review due2021-09-01; no supersession certification",
+                "sourceSection": "Procedure6(a)–(g), printed procedure page 3/PDF page 4; non-CMHS undergraduate scope"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "transcript",
+            "evidenceIds": [
+              "answer:course-repeat-grades#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "If you fail a compulsory undergraduate course at UAEU (excluding Medicine and Health Sciences), you must repeat it.\n\nFor undergraduates, excluding the College of Medicine and Health Sciences: After you successfully repeat the failed course, the failing grades are excluded from your GPA, but all attempts and grades remain on your transcript, marked as excluded; they are not erased.",
+                "evidenceIds": [
+                  "answer:course-repeat-grades#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4695,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23110,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 67,
+                  "estimatedUsd": 0.0093512
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3831,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 96,
+                  "estimatedUsd": 0.00111
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1904,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008112000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 28845,
+              "outputTokens": 194,
+              "knownUsageUsd": 0.0112724,
+              "estimatedUsd": 0.0112724,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "repeat|يعاد|إعاد|اعاد"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "transcript|كشف"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "remain|not erased|لا.{0,25}(?:تحذف|تمحى)|تظل|تبقى"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "if i fail a compulsory undergraduate cours, must i repeat it, and are the old attempts erased from my transcript"
+      ],
+      "expected": "Under the published non-CMHS undergraduate procedure, a failed compulsory course must be repeated. Attempts and grades remain on the transcript even when a failing grade is excluded from GPA after successful repeat.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "repeat|يعاد|إعاد|اعاد"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "transcript|كشف"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "remain|not erased|لا.{0,25}(?:تحذف|تمحى)|تظل|تبقى"
+          ]
+        }
+      ],
+      "id": "EX078-V1",
+      "category": "Registration and policies",
+      "focus": "Examiner",
+      "arabicQuestion": "إذا رسبت في مساق بكالوريوس إجباري فهل أعيده وهل تُحذف المحاولات القديمة من كشف الدرجات؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "if i fail a compulsory undergraduate cours, must i repeat it, and are the old attempts erased from my transcript",
+        "if fail compulsory undergraduate course must repeat and old attempts erased from my transcript?",
+        "اذا رسبت في مساق بكالوريوس اجباري فهل اعيده وهل تُحذف المحاولات القديمه من كشف الدرجات"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "b426d979e1dfe5480c3613d2c02fd3c132561b4a2bc01454fa220a15d3d0ccbf"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX078",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "if i fail a compulsory undergraduate cours, must i repeat it, and are the old attempts erased from my transcript",
+          "status": 200,
+          "seconds": 4.5,
+          "payload": {
+            "role": "assistant",
+            "content": "If you fail a compulsory undergraduate course (excluding Medicine and Health Sciences), you must repeat it; after passing the repeat, the failing grades are excluded from the GPA but all attempts and grades remain on your transcript marked accordingly—they are not erased.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Grades and Grading — Repeated Courses",
+                "url": "https://www.uaeu.ac.ae/en/about/policies/pdf/admission/4_grades_and_grading-en.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "Effective2018-08-12; review due2021-09-01; no supersession certification",
+                "sourceSection": "Procedure6(a)–(g), printed procedure page 3/PDF page 4; non-CMHS undergraduate scope"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "transcript",
+            "evidenceIds": [
+              "answer:course-repeat-grades#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "If you fail a compulsory undergraduate course (excluding Medicine and Health Sciences), you must repeat it; after passing the repeat, the failing grades are excluded from the GPA but all attempts and grades remain on your transcript marked accordingly—they are not erased.",
+                "evidenceIds": [
+                  "answer:course-repeat-grades#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4491,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23108,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 68,
+                  "estimatedUsd": 0.0024784000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3830,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 74,
+                  "estimatedUsd": 0.0010744
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1879,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008012000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 28817,
+              "outputTokens": 173,
+              "knownUsageUsd": 0.004354,
+              "estimatedUsd": 0.004354,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "repeat|يعاد|إعاد|اعاد"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "transcript|كشف"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "remain|not erased|لا.{0,25}(?:تحذف|تمحى)|تظل|تبقى"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "how currently enrolled student request official transcript arabic or english?"
+      ],
+      "expected": "Use Current Students Documents in UAEU portal/app; select Arabic or English Academic Transcript and submit. Free service with published10minute delivery target; completed document is sent by university email, not a private lookup by this bot.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+        "https://www.uaeu.ac.ae/en/pdf/current-students-docs.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "transcript|كشف"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Arabic|العربية"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "English|الإنجليزية|الانجليزية"
+          ]
+        }
+      ],
+      "id": "EX079-V2",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربية أو الإنجليزية؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how can a currently enrolled studnet request an official transcript in arabic or english",
+        "how currently enrolled student request official transcript arabic or english?",
+        "كيف يطلب طالب مسجل حالياً كشف درجات رسمياً بالعربيه او الانجليزيه"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "ba94ecd975d2f0bf0604b662c2cf8562e1e75265c2ac4a0edb17df4160a3c12f"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX079",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "how currently enrolled student request official transcript arabic or english?",
+          "status": 200,
+          "seconds": 2.276,
+          "payload": {
+            "role": "assistant",
+            "content": "Currently enrolled UAEU students can request official documents such as the To Whom It May Concern letter through the Current Students Documents service available on the UAEU portal or mobile app, where the request is free and normally processed within about 10 minutes, with the document sent by email.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "guide": {
+              "id": "to-whom-it-may-concern",
+              "title": "To Whom It May Concern Letter / Student Document Request",
+              "titleAr": "طلب شهادة لمن يهمه الأمر / وثائق الطالب",
+              "description": "Enrolled UAEU students can request a To Whom It May Concern letter through the Current Students Documents service in the UAEU portal or mobile app. The official service lists it as free, normally processed in 10 minutes, and valid for three months.",
+              "descriptionAr": "يمكن للطلبة المسجلين في جامعة الإمارات طلب رسالة إلى من يهمه الأمر عبر خدمة وثائق الطلبة الحاليين في بوابة الجامعة أو تطبيق الهاتف. الخدمة مجانية، ومدة الإنجاز المعتادة 10 دقائق، وتظل الرسالة صالحة لمدة ثلاثة أشهر.",
+              "officialUrl": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+              "lastVerified": "2026-09-16",
+              "audience": [
+                "current-student",
+                "continuing-student"
+              ],
+              "keywords": [
+                "to whom it may concern",
+                "student document",
+                "document request",
+                "certificate",
+                "letter",
+                "enrolled student",
+                "continuing student",
+                "official letter",
+                "transcript",
+                "شهادة",
+                "خطاب",
+                "إفادة",
+                "وثيقة",
+                "وثيقة طالب",
+                "طلب وثيقة",
+                "طلب شهادة",
+                "لمن يهمه الأمر",
+                "لمن يهمه الامر",
+                "شهادة لمن يهمه الأمر",
+                "شهادة لمن يهمه الامر",
+                "ابا شهادة",
+                "أبغى شهادة",
+                "اريد شهادة"
+              ],
+              "excludeKeywords": [
+                "alumni",
+                "alumnus",
+                "graduated",
+                "graduate transcript",
+                "recommendation letter",
+                "reference letter",
+                "letter grade",
+                "visa document",
+                "visa documents"
+              ],
+              "requiresVerification": false,
+              "steps": [
+                {
+                  "title": "Open the Current Students Documents service",
+                  "titleAr": "افتح خدمة وثائق الطلبة الحاليين",
+                  "instruction": "Open the official UAEU service page, then use the UAEU portal or mobile application to start the request.",
+                  "instructionAr": "افتح صفحة الخدمة الرسمية لجامعة الإمارات، ثم استخدم بوابة الجامعة أو تطبيق الهاتف لبدء الطلب.",
+                  "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92"
+                },
+                {
+                  "title": "Sign in with your UAEU account",
+                  "titleAr": "سجّل الدخول بحساب جامعة الإمارات",
+                  "instruction": "Authenticate only on an official UAEU portal or in the official mobile application. The service is for enrolled students.",
+                  "instructionAr": "سجّل الدخول فقط عبر بوابة رسمية لجامعة الإمارات أو تطبيقها الرسمي. هذه الخدمة مخصصة للطلبة المسجلين."
+                },
+                {
+                  "title": "Choose the document request",
+                  "titleAr": "اختر طلب الوثيقة",
+                  "instruction": "Select the Current Students Documents service and choose the To Whom It May Concern letter option.",
+                  "instructionAr": "اختر خدمة وثائق الطلبة الحاليين، ثم اختر رسالة إلى من يهمه الأمر."
+                },
+                {
+                  "title": "Review and submit",
+                  "titleAr": "راجع الطلب وأرسله",
+                  "instruction": "Review the request details and submit them through the official portal or app. The service is listed as free.",
+                  "instructionAr": "راجع تفاصيل الطلب ثم أرسله عبر البوابة أو التطبيق الرسمي. الخدمة مدرجة بوصفها مجانية."
+                },
+                {
+                  "title": "Receive and check the letter",
+                  "titleAr": "استلم الرسالة وتحقق منها",
+                  "instruction": "UAEU says the document is sent by email and normally takes about 10 minutes. Check the details when it arrives; a To Whom It May Concern letter is valid for three months.",
+                  "instructionAr": "توضح جامعة الإمارات أن الوثيقة تُرسل بالبريد الإلكتروني وتستغرق عادةً نحو 10 دقائق. تحقق من بياناتها عند وصولها؛ وتظل رسالة إلى من يهمه الأمر صالحة لمدة ثلاثة أشهر."
+                }
+              ]
+            },
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "To Whom It May Concern Letter / Student Document Request",
+                "url": "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=92",
+                "lastVerified": "2026-09-16"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "transcript",
+            "evidenceIds": [
+              "guide:to-whom-it-may-concern#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "Currently enrolled UAEU students can request official documents such as the To Whom It May Concern letter through the Current Students Documents service available on the UAEU portal or mobile app, where the request is free and normally processed within about 10 minutes, with the document sent by email.",
+                "evidenceIds": [
+                  "guide:to-whom-it-may-concern#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2267,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3375,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 86,
+                  "estimatedUsd": 0.0009116
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1452,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006304000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4827,
+              "outputTokens": 117,
+              "knownUsageUsd": 0.0015420000000000002,
+              "estimatedUsd": 0.0015420000000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "transcript|كشف"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "Arabic|العربية"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": false,
+            "patterns": [
+              "English|الإنجليزية|الانجليزية"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2",
+          "Required fact 3"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "How do I open Blackboard Learning, and can this chatbot see my course content?"
+      ],
+      "expected": "Official UAEU website > Sign In > Blackboard Learning. The chatbot cannot inspect the private Blackboard account or certify course access.",
+      "sources": [
+        "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+        "https://www.uaeu.ac.ae/en/admission/orientation/",
+        "https://jobnavigator.uaeu.ac.ae/login.jsp"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Blackboard|بلاك"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Sign In|تسجيل الدخول"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+            "لا أستطيع",
+            "لا يمكنني",
+            "لا تعطي.*المساعد",
+            "لا.*(?:رؤية|الوصول).*محتوى"
+          ]
+        }
+      ],
+      "id": "EX080",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف أدخل Blackboard Learning وهل يستطيع هذا المساعد رؤية محتوى مساقاتي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how do i open blackboard learning, and can this chatbot see my cours content",
+        "how open blackboard learning and chatbot see my course content?",
+        "كيف ادخل Blackboard Learning وهل يستطيع هذا المساعد رؤيه محتوي مساقاتي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "f07f8333f2efafa9d3524e7bbb920e6a2bd27ad67dbf1451bb4e4f0654f25fb1"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX080",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "How do I open Blackboard Learning, and can this chatbot see my course content?",
+          "status": 200,
+          "seconds": 4.812,
+          "payload": {
+            "role": "assistant",
+            "content": "To open Blackboard Learning at UAEU, go to the official UAEU website, then select 'Sign In' followed by 'Blackboard Learning'.\n\nBlackboard Learning is the online platform where you can access your course materials, announcements, and communicate with instructors and classmates.\n\nThis chatbot cannot see your course content or access your Blackboard account.\n\nI cannot access your Blackboard account or read your private course content. I can explain public information; check your course content after signing in or with your instructor.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU New Student Next Steps Guide — Blackboard Learning",
+                "url": "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "2025 bilingual guide",
+                "sourceSection": "Page4 Blackboard Learning: UAEU website, Sign In, Blackboard Learning",
+                "evidenceText": "UAEU's bilingual 2025 next-steps guide, page4, directs students to the official website > Sign In > Blackboard Learning."
+              },
+              {
+                "title": "UAEU New Students Orientation",
+                "url": "https://www.uaeu.ac.ae/en/admission/orientation/",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "Blackboard Learning description",
+                "evidenceText": "The UAEU orientation page describes Blackboard Learning as the online course platform for course material, announcements and communication with instructors/classmates. It does not establish access to any particular student's course."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "Blackboard Learning access and chatbot content visibility",
+            "evidenceIds": [
+              "answer:blackboard-course-access#E1S1",
+              "answer:blackboard-course-access#E1S2"
+            ],
+            "claims": [
+              {
+                "text": "To open Blackboard Learning at UAEU, go to the official UAEU website, then select 'Sign In' followed by 'Blackboard Learning'.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S1"
+                ]
+              },
+              {
+                "text": "Blackboard Learning is the online platform where you can access your course materials, announcements, and communicate with instructors and classmates.\n\nThis chatbot cannot see your course content or access your Blackboard account.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S2"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4802,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23091,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 99,
+                  "estimatedUsd": 0.0025212000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3613,
+                  "cachedInputTokens": 3456,
+                  "outputTokens": 117,
+                  "estimatedUsd": 0.0005956000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1294,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005672
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1300,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005696000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 29298,
+              "outputTokens": 278,
+              "knownUsageUsd": 0.004253600000000001,
+              "estimatedUsd": 0.004253600000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Blackboard|بلاك"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Sign In|تسجيل الدخول"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+              "لا أستطيع",
+              "لا يمكنني",
+              "لا تعطي.*المساعد",
+              "لا.*(?:رؤية|الوصول).*محتوى"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "how do i open blackboard learning, and can this chatbot see my cours content"
+      ],
+      "expected": "Official UAEU website > Sign In > Blackboard Learning. The chatbot cannot inspect the private Blackboard account or certify course access.",
+      "sources": [
+        "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+        "https://www.uaeu.ac.ae/en/admission/orientation/",
+        "https://jobnavigator.uaeu.ac.ae/login.jsp"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Blackboard|بلاك"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Sign In|تسجيل الدخول"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+            "لا أستطيع",
+            "لا يمكنني",
+            "لا تعطي.*المساعد",
+            "لا.*(?:رؤية|الوصول).*محتوى"
+          ]
+        }
+      ],
+      "id": "EX080-V1",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف أدخل Blackboard Learning وهل يستطيع هذا المساعد رؤية محتوى مساقاتي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how do i open blackboard learning, and can this chatbot see my cours content",
+        "how open blackboard learning and chatbot see my course content?",
+        "كيف ادخل Blackboard Learning وهل يستطيع هذا المساعد رؤيه محتوي مساقاتي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "f07f8333f2efafa9d3524e7bbb920e6a2bd27ad67dbf1451bb4e4f0654f25fb1"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX080",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "how do i open blackboard learning, and can this chatbot see my cours content",
+          "status": 200,
+          "seconds": 4.396,
+          "payload": {
+            "role": "assistant",
+            "content": "To open Blackboard Learning at UAEU, go to the official UAEU website, click on 'Sign In', and then select 'Blackboard Learning'.\n\nBlackboard Learning is the online platform for course materials, announcements, and communication with instructors and classmates.\n\nThis chatbot cannot see your course content or access your personal Blackboard courses.\n\nI cannot access your Blackboard account or read your private course content. I can explain public information; check your course content after signing in or with your instructor.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU New Student Next Steps Guide — Blackboard Learning",
+                "url": "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "2025 bilingual guide",
+                "sourceSection": "Page4 Blackboard Learning: UAEU website, Sign In, Blackboard Learning",
+                "evidenceText": "UAEU's bilingual 2025 next-steps guide, page4, directs students to the official website > Sign In > Blackboard Learning."
+              },
+              {
+                "title": "UAEU New Students Orientation",
+                "url": "https://www.uaeu.ac.ae/en/admission/orientation/",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "Blackboard Learning description",
+                "evidenceText": "The UAEU orientation page describes Blackboard Learning as the online course platform for course material, announcements and communication with instructors/classmates. It does not establish access to any particular student's course."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "Blackboard Learning access and chatbot content visibility",
+            "evidenceIds": [
+              "answer:blackboard-course-access#E1S1",
+              "answer:blackboard-course-access#E1S2"
+            ],
+            "claims": [
+              {
+                "text": "To open Blackboard Learning at UAEU, go to the official UAEU website, click on 'Sign In', and then select 'Blackboard Learning'.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S1"
+                ]
+              },
+              {
+                "text": "Blackboard Learning is the online platform for course materials, announcements, and communication with instructors and classmates.\n\nThis chatbot cannot see your course content or access your personal Blackboard courses.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S2"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4388,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23091,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 67,
+                  "estimatedUsd": 0.00247
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3614,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 115,
+                  "estimatedUsd": 0.0010535999999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1291,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000566
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1301,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.00057
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 29297,
+              "outputTokens": 244,
+              "knownUsageUsd": 0.0046596,
+              "estimatedUsd": 0.0046596,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Blackboard|بلاك"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Sign In|تسجيل الدخول"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+              "لا أستطيع",
+              "لا يمكنني",
+              "لا تعطي.*المساعد",
+              "لا.*(?:رؤية|الوصول).*محتوى"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "how open blackboard learning and chatbot see my course content?"
+      ],
+      "expected": "Official UAEU website > Sign In > Blackboard Learning. The chatbot cannot inspect the private Blackboard account or certify course access.",
+      "sources": [
+        "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+        "https://www.uaeu.ac.ae/en/admission/orientation/",
+        "https://jobnavigator.uaeu.ac.ae/login.jsp"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Blackboard|بلاك"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Sign In|تسجيل الدخول"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+            "لا أستطيع",
+            "لا يمكنني",
+            "لا تعطي.*المساعد",
+            "لا.*(?:رؤية|الوصول).*محتوى"
+          ]
+        }
+      ],
+      "id": "EX080-V2",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف أدخل Blackboard Learning وهل يستطيع هذا المساعد رؤية محتوى مساقاتي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how do i open blackboard learning, and can this chatbot see my cours content",
+        "how open blackboard learning and chatbot see my course content?",
+        "كيف ادخل Blackboard Learning وهل يستطيع هذا المساعد رؤيه محتوي مساقاتي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "f07f8333f2efafa9d3524e7bbb920e6a2bd27ad67dbf1451bb4e4f0654f25fb1"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX080",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "how open blackboard learning and chatbot see my course content?",
+          "status": 200,
+          "seconds": 8.128,
+          "payload": {
+            "role": "assistant",
+            "content": "To open Blackboard Learning, go to the UAEU official website, select Sign In, and then choose Blackboard Learning to access your course materials and announcements.\n\nBlackboard Learning is the online course platform at UAEU where students find course materials, announcements, and communicate with instructors and classmates.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU New Student Next Steps Guide — Blackboard Learning",
+                "url": "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "2025 bilingual guide",
+                "sourceSection": "Page4 Blackboard Learning: UAEU website, Sign In, Blackboard Learning",
+                "evidenceText": "UAEU's bilingual 2025 next-steps guide, page4, directs students to the official website > Sign In > Blackboard Learning."
+              },
+              {
+                "title": "UAEU New Students Orientation",
+                "url": "https://www.uaeu.ac.ae/en/admission/orientation/",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "Blackboard Learning description",
+                "evidenceText": "The UAEU orientation page describes Blackboard Learning as the online course platform for course material, announcements and communication with instructors/classmates. It does not establish access to any particular student's course."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "Blackboard Learning access and chatbot course content visibility",
+            "evidenceIds": [
+              "answer:blackboard-course-access#E1S1",
+              "answer:blackboard-course-access#E1S2"
+            ],
+            "claims": [
+              {
+                "text": "To open Blackboard Learning, go to the UAEU official website, select Sign In, and then choose Blackboard Learning to access your course materials and announcements.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S1"
+                ]
+              },
+              {
+                "text": "Blackboard Learning is the online course platform at UAEU where students find course materials, announcements, and communicate with instructors and classmates.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S2"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8120,
+              "attemptedCalls": 8,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23083,
+                  "cachedInputTokens": 22912,
+                  "outputTokens": 99,
+                  "estimatedUsd": 0.0025180000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3605,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 134,
+                  "estimatedUsd": 0.0010804
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1300,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005696000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1280,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005616
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1317,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 54,
+                  "estimatedUsd": 0.0006132
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4109,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 100,
+                  "estimatedUsd": 0.0012276
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1300,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005696000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1281,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000562
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 37275,
+              "outputTokens": 511,
+              "knownUsageUsd": 0.0077020000000000005,
+              "estimatedUsd": 0.0077020000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Blackboard|بلاك"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Sign In|تسجيل الدخول"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": false,
+            "patterns": [
+              "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+              "لا أستطيع",
+              "لا يمكنني",
+              "لا تعطي.*المساعد",
+              "لا.*(?:رؤية|الوصول).*محتوى"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 3"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "كيف ادخل Blackboard Learning وهل يستطيع هذا المساعد رؤيه محتوي مساقاتي"
+      ],
+      "expected": "Official UAEU website > Sign In > Blackboard Learning. The chatbot cannot inspect the private Blackboard account or certify course access.",
+      "sources": [
+        "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+        "https://www.uaeu.ac.ae/en/admission/orientation/",
+        "https://jobnavigator.uaeu.ac.ae/login.jsp"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Blackboard|بلاك"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Sign In|تسجيل الدخول"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+            "لا أستطيع",
+            "لا يمكنني",
+            "لا تعطي.*المساعد",
+            "لا.*(?:رؤية|الوصول).*محتوى"
+          ]
+        }
+      ],
+      "id": "EX080-V3",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "كيف أدخل Blackboard Learning وهل يستطيع هذا المساعد رؤية محتوى مساقاتي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "how do i open blackboard learning, and can this chatbot see my cours content",
+        "how open blackboard learning and chatbot see my course content?",
+        "كيف ادخل Blackboard Learning وهل يستطيع هذا المساعد رؤيه محتوي مساقاتي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "f07f8333f2efafa9d3524e7bbb920e6a2bd27ad67dbf1451bb4e4f0654f25fb1"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX080",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "كيف ادخل Blackboard Learning وهل يستطيع هذا المساعد رؤيه محتوي مساقاتي",
+          "status": 200,
+          "seconds": 5.722,
+          "payload": {
+            "role": "assistant",
+            "content": "يمكنك الدخول إلى منصة Blackboard Learning عبر موقع الجامعة الرسمي من خلال اختيار 'تسجيل الدخول' ثم اختيار 'Blackboard Learning'.\n\nمنصة Blackboard Learning هي المكان الذي يمكنك من خلاله الاطلاع على مواد المساقات والإعلانات والتواصل مع المدرسين والزملاء، لكن هذا المساعد لا يستطيع رؤية محتوى مساقك أو بياناتك الخاصة على المنصة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU New Student Next Steps Guide — Blackboard Learning",
+                "url": "https://www.uaeu.ac.ae/ar/dvcsae/registration/pdf/next-step-2025.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "2025 bilingual guide",
+                "sourceSection": "Page4 Blackboard Learning: UAEU website, Sign In, Blackboard Learning",
+                "evidenceText": "UAEU's bilingual 2025 next-steps guide, page4, directs students to the official website > Sign In > Blackboard Learning."
+              },
+              {
+                "title": "UAEU New Students Orientation",
+                "url": "https://www.uaeu.ac.ae/en/admission/orientation/",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "Blackboard Learning description",
+                "evidenceText": "The UAEU orientation page describes Blackboard Learning as the online course platform for course material, announcements and communication with instructors/classmates. It does not establish access to any particular student's course."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "Blackboard course access",
+            "evidenceIds": [
+              "answer:blackboard-course-access#E1S1",
+              "answer:blackboard-course-access#E1S2"
+            ],
+            "claims": [
+              {
+                "text": "يمكنك الدخول إلى منصة Blackboard Learning عبر موقع الجامعة الرسمي من خلال اختيار 'تسجيل الدخول' ثم اختيار 'Blackboard Learning'.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S1"
+                ]
+              },
+              {
+                "text": "منصة Blackboard Learning هي المكان الذي يمكنك من خلاله الاطلاع على مواد المساقات والإعلانات والتواصل مع المدرسين والزملاء، لكن هذا المساعد لا يستطيع رؤية محتوى مساقك أو بياناتك الخاصة على المنصة.",
+                "evidenceIds": [
+                  "answer:blackboard-course-access#E1S2"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5715,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 23093,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 103,
+                  "estimatedUsd": 0.009402
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3663,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 113,
+                  "estimatedUsd": 0.00107
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1297,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005684
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1303,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005708000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 29356,
+              "outputTokens": 278,
+              "knownUsageUsd": 0.0116112,
+              "estimatedUsd": 0.0116112,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "Blackboard|بلاك"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "Sign In|تسجيل الدخول"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "cannot|can.t|لا أستطيع|لا يستطيع|لا يمكن",
+              "لا أستطيع",
+              "لا يمكنني",
+              "لا تعطي.*المساعد",
+              "لا.*(?:رؤية|الوصول).*محتوى"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "نسيت كلمه مرور حساب الجامعة، اين بوابه الاستعاده الرسميه وكيف اتواصل مع UITS للمساعده"
+      ],
+      "expected": "Use the official UAEU Password Self-Service portal. Public UITS support information gives Helpdesk@uaeu.ac.ae and +9713 7136111; the assistant does not reset credentials or request a password/OTP.",
+      "sources": [
+        "https://selfservice.uaeu.ac.ae/",
+        "https://jobnavigator.uaeu.ac.ae/login.jsp",
+        "https://uaeu.ac.ae/en/vc/doit/contact-us.shtml",
+        "https://www.uaeu.ac.ae/en/vc/doit/contact-us.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Self[ .-]?Service|selfservice\\.uaeu\\.ac\\.ae|استعادة|كلمة المرور|كلمة مرور"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Helpdesk@uaeu\\.ac\\.ae"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "6111"
+          ]
+        }
+      ],
+      "id": "EX081-V3",
+      "category": "Student services",
+      "focus": "Examiner",
+      "arabicQuestion": "نسيت كلمة مرور حساب الجامعة، أين بوابة الاستعادة الرسمية وكيف أتواصل مع UITS للمساعدة؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ Main API passed; five variants or their fixes still pending",
+      "variants": [
+        "i forgot my uaue password. where is the official recovery portal, and how can i contact uits for help",
+        "forgot my uaeu password. where official recovery portal and how contact uits help?",
+        "نسيت كلمه مرور حساب الجامعة، اين بوابه الاستعاده الرسميه وكيف اتواصل مع UITS للمساعده"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://selfservice.uaeu.ac.ae/"
+        ],
+        [
+          "https://jobnavigator.uaeu.ac.ae/login.jsp",
+          "https://uaeu.ac.ae/en/vc/doit/contact-us.shtml",
+          "https://www.uaeu.ac.ae/en/vc/doit/contact-us.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "114d7356ad746942293158c0f11f4a8ea171471ab42201c971636da494197ae1"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX081",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "نسيت كلمه مرور حساب الجامعة، اين بوابه الاستعاده الرسميه وكيف اتواصل مع UITS للمساعده",
+          "status": 502,
+          "seconds": 6.593,
+          "payload": {
+            "role": "assistant",
+            "content": "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة أو مراجعة مصدر الجامعة الرسمي مباشرة.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "unsupported_detail"
+              ]
+            },
+            "clarificationReason": "unsupported_detail",
+            "usage": {
+              "elapsedMs": 6590,
+              "attemptedCalls": 7,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3559,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 108,
+                  "estimatedUsd": 0.0015964
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1326,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 73,
+                  "estimatedUsd": 0.0006472
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1290,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005656
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4091,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 90,
+                  "estimatedUsd": 0.0012044
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4075,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 109,
+                  "estimatedUsd": 0.0018044
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1290,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005656
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1327,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 74,
+                  "estimatedUsd": 0.0006492000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 16958,
+              "outputTokens": 516,
+              "knownUsageUsd": 0.0070328000000000005,
+              "estimatedUsd": 0.0070328000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": false,
+            "patterns": [
+              "Self[ .-]?Service|selfservice\\.uaeu\\.ac\\.ae|استعادة|كلمة المرور|كلمة مرور"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": false,
+            "patterns": [
+              "Helpdesk@uaeu\\.ac\\.ae"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": false,
+            "patterns": [
+              "6111"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": false
+          },
+          {
+            "name": "Final source group 2",
+            "passed": false
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Required fact 1",
+          "Required fact 2",
+          "Required fact 3",
+          "Final source group 1",
+          "Final source group 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?"
+      ],
+      "expected": "Suggest a relevant published full degree, such as Computer Science, Data Science and Artificial Intelligence, or Computer and Artificial Intelligence Engineering, explaining its published AI/programming focus conditionally. A suggestion is not personal admission approval; do not substitute a minor for a major.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "relevant full-degree option",
+          "any": [
+            "Computer Science",
+            "Data Science",
+            "Computer and Artificial Intelligence Engineering",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر",
+            "علم البيانات",
+            "علوم البيانات",
+            "هندسة الحاسوب"
+          ]
+        },
+        {
+          "name": "published fit with interest",
+          "any": [
+            "programming",
+            "artificial intelligence",
+            "machine learning",
+            "intelligent",
+            "البرمجة",
+            "الذكاء الاصطناعي",
+            "تعلم الآلة"
+          ]
+        }
+      ],
+      "id": "EX099",
+      "category": "Tricky and conversational",
+      "focus": "Examiner",
+      "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "i like ai and programming. which uaue major might fit, and does that guarantee i will be admitted",
+        "like ai and programming. uaeu major might fit and guarantee will admitted?",
+        "احب الذكاء الاصطناعي والبرمجة، اي تخصص قد يناسبني وهل هذا يضمن قبولي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "583319ac0c51a989fa751c235fe3cd21f0afe0ca888f2ab705b127d7238b040f"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX099",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "I like AI and programming. Which UAEU major might fit, and does that guarantee I will be admitted?",
+          "status": 200,
+          "seconds": 6.647,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Data Science and Artificial Intelligence at UAEU is designed for students interested in AI and programming, focusing on data science, AI concepts, machine learning, and programming skills within an interdisciplinary curriculum.\n\nThe Bachelor of Science in Computer and Artificial Intelligence Engineering prepares students for designing and developing intelligent computing systems with a focus on AI and programming, including specializations in AI Systems Engineering and Robotics and Autonomous Systems.\n\nThe Bachelor of Science in Information Technology includes courses in programming and artificial intelligence, making it suitable for students interested in programming and IT applications of AI.\n\nThe Bachelor of Science in the Mathematics of Data Science also covers foundational programming and AI courses, suitable for students interested in the mathematical aspects of data science and AI.\n\nA program suggestion from this chat does not guarantee admission or constitute an admission decision or a check of your personal eligibility.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — bilingual catalog data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Data Science and Artificial Intelligence — published program-finder record"
+              },
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in Information Technology > Degree Requirements > Major Requirement"
+              },
+              {
+                "title": "Bachelor of Science in the Mathematics of Data Science",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-the-mathematics-of-data-science.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in the Mathematics of Data Science > Degree Requirements > Foundation Requirements (54 CH)"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:2cbd9a1819b5702cb87d:138#E1S1",
+              "corpus:dd8d7e01ab4e8dfaf940:10#E4S1",
+              "corpus:80f351c86999abd2b448:9#E7S1",
+              "corpus:2cbd9a1819b5702cb87d:121#E8S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Data Science and Artificial Intelligence at UAEU is designed for students interested in AI and programming, focusing on data science, AI concepts, machine learning, and programming skills within an interdisciplinary curriculum.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:138#E1S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Computer and Artificial Intelligence Engineering prepares students for designing and developing intelligent computing systems with a focus on AI and programming, including specializations in AI Systems Engineering and Robotics and Autonomous Systems.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:121#E8S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Information Technology includes courses in programming and artificial intelligence, making it suitable for students interested in programming and IT applications of AI.",
+                "evidenceIds": [
+                  "corpus:dd8d7e01ab4e8dfaf940:10#E4S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in the Mathematics of Data Science also covers foundational programming and AI courses, suitable for students interested in the mathematical aspects of data science and AI.",
+                "evidenceIds": [
+                  "corpus:80f351c86999abd2b448:9#E7S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6639,
+              "attemptedCalls": 8,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 22,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7424,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 150,
+                  "estimatedUsd": 0.0032096000000000004
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2098,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 62,
+                  "estimatedUsd": 0.0009384
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7860,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 211,
+                  "estimatedUsd": 0.0034816
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1648,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007088000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1565,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006756
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1493,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006468000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1997,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008484000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 24107,
+              "outputTokens": 547,
+              "knownUsageUsd": 0.010509640000000002,
+              "estimatedUsd": 0.010509640000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "relevant full-degree option",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "Data Science",
+              "Computer and Artificial Intelligence Engineering",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر",
+              "علم البيانات",
+              "علوم البيانات",
+              "هندسة الحاسوب"
+            ]
+          },
+          {
+            "name": "published fit with interest",
+            "passed": true,
+            "patterns": [
+              "programming",
+              "artificial intelligence",
+              "machine learning",
+              "intelligent",
+              "البرمجة",
+              "الذكاء الاصطناعي",
+              "تعلم الآلة"
+            ]
+          },
+          {
+            "name": "Positively suggests a full major, rather than naming it only in a minor exclusion",
+            "passed": true
+          },
+          {
+            "name": "Recommendation is not an admission guarantee",
+            "passed": true
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "i like ai and programming. which uaue major might fit, and does that guarantee i will be admitted"
+      ],
+      "expected": "Suggest a relevant published full degree, such as Computer Science, Data Science and Artificial Intelligence, or Computer and Artificial Intelligence Engineering, explaining its published AI/programming focus conditionally. A suggestion is not personal admission approval; do not substitute a minor for a major.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "relevant full-degree option",
+          "any": [
+            "Computer Science",
+            "Data Science",
+            "Computer and Artificial Intelligence Engineering",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر",
+            "علم البيانات",
+            "علوم البيانات",
+            "هندسة الحاسوب"
+          ]
+        },
+        {
+          "name": "published fit with interest",
+          "any": [
+            "programming",
+            "artificial intelligence",
+            "machine learning",
+            "intelligent",
+            "البرمجة",
+            "الذكاء الاصطناعي",
+            "تعلم الآلة"
+          ]
+        }
+      ],
+      "id": "EX099-V1",
+      "category": "Tricky and conversational",
+      "focus": "Examiner",
+      "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "i like ai and programming. which uaue major might fit, and does that guarantee i will be admitted",
+        "like ai and programming. uaeu major might fit and guarantee will admitted?",
+        "احب الذكاء الاصطناعي والبرمجة، اي تخصص قد يناسبني وهل هذا يضمن قبولي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "583319ac0c51a989fa751c235fe3cd21f0afe0ca888f2ab705b127d7238b040f"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX099",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "i like ai and programming. which uaue major might fit, and does that guarantee i will be admitted",
+          "status": 200,
+          "seconds": 6.47,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Data Science and Artificial Intelligence at UAEU focuses on AI and programming, preparing students with skills in machine learning, data mining, and predictive analytics for roles in data science and AI across industries.\n\nThe Bachelor of Science in Computer and Artificial Intelligence Engineering at UAEU trains students to design intelligent computing systems combining hardware, software, and AI, with options to specialize in AI Systems Engineering or Robotics and Autonomous Systems.\n\nThe Bachelor of Science in Information Technology includes courses in Artificial Intelligence, programming labs, and other IT skills relevant to AI and programming.\n\nA program suggestion from this chat does not guarantee admission or constitute an admission decision or a check of your personal eligibility.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — bilingual catalog data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Data Science and Artificial Intelligence — published program-finder record"
+              },
+              {
+                "title": "Bachelor of Science in Information Technology",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-technology.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Undergraduate Programs > Bachelor of Science in Information Technology > Degree Requirements > Major Requirement"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:2cbd9a1819b5702cb87d:138#E1S1",
+              "corpus:dd8d7e01ab4e8dfaf940:10#E4S1",
+              "corpus:2cbd9a1819b5702cb87d:121#E8S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Data Science and Artificial Intelligence at UAEU focuses on AI and programming, preparing students with skills in machine learning, data mining, and predictive analytics for roles in data science and AI across industries.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:138#E1S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Computer and Artificial Intelligence Engineering at UAEU trains students to design intelligent computing systems combining hardware, software, and AI, with options to specialize in AI Systems Engineering or Robotics and Autonomous Systems.",
+                "evidenceIds": [
+                  "corpus:2cbd9a1819b5702cb87d:121#E8S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Information Technology includes courses in Artificial Intelligence, programming labs, and other IT skills relevant to AI and programming.",
+                "evidenceIds": [
+                  "corpus:dd8d7e01ab4e8dfaf940:10#E4S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6463,
+              "attemptedCalls": 7,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 22,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.4e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7425,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 136,
+                  "estimatedUsd": 0.0026116
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 2084,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 63,
+                  "estimatedUsd": 0.0009344
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7848,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 165,
+                  "estimatedUsd": 0.0034032000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1650,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007096
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1998,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0008488
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1490,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006456
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 22517,
+              "outputTokens": 457,
+              "knownUsageUsd": 0.00915364,
+              "estimatedUsd": 0.00915364,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "relevant full-degree option",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "Data Science",
+              "Computer and Artificial Intelligence Engineering",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر",
+              "علم البيانات",
+              "علوم البيانات",
+              "هندسة الحاسوب"
+            ]
+          },
+          {
+            "name": "published fit with interest",
+            "passed": true,
+            "patterns": [
+              "programming",
+              "artificial intelligence",
+              "machine learning",
+              "intelligent",
+              "البرمجة",
+              "الذكاء الاصطناعي",
+              "تعلم الآلة"
+            ]
+          },
+          {
+            "name": "Positively suggests a full major, rather than naming it only in a minor exclusion",
+            "passed": true
+          },
+          {
+            "name": "Recommendation is not an admission guarantee",
+            "passed": true
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "like ai and programming. uaeu major might fit and guarantee will admitted?"
+      ],
+      "expected": "Suggest a relevant published full degree, such as Computer Science, Data Science and Artificial Intelligence, or Computer and Artificial Intelligence Engineering, explaining its published AI/programming focus conditionally. A suggestion is not personal admission approval; do not substitute a minor for a major.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-and-artificial-intelligence-engineering.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "relevant full-degree option",
+          "any": [
+            "Computer Science",
+            "Data Science",
+            "Computer and Artificial Intelligence Engineering",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر",
+            "علم البيانات",
+            "علوم البيانات",
+            "هندسة الحاسوب"
+          ]
+        },
+        {
+          "name": "published fit with interest",
+          "any": [
+            "programming",
+            "artificial intelligence",
+            "machine learning",
+            "intelligent",
+            "البرمجة",
+            "الذكاء الاصطناعي",
+            "تعلم الآلة"
+          ]
+        }
+      ],
+      "id": "EX099-V2",
+      "category": "Tricky and conversational",
+      "focus": "Examiner",
+      "arabicQuestion": "أحب الذكاء الاصطناعي والبرمجة، أي تخصص قد يناسبني وهل هذا يضمن قبولي؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ All six automated checks passed; independent review pending",
+      "variants": [
+        "i like ai and programming. which uaue major might fit, and does that guarantee i will be admitted",
+        "like ai and programming. uaeu major might fit and guarantee will admitted?",
+        "احب الذكاء الاصطناعي والبرمجة، اي تخصص قد يناسبني وهل هذا يضمن قبولي"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v43.json",
+        "build": "knowledge-v43",
+        "mainResult": "correct",
+        "testedAt": "2026-11-05T08:55:33.542Z",
+        "variantsTested": 5,
+        "conversationSha256": "583319ac0c51a989fa751c235fe3cd21f0afe0ca888f2ab705b127d7238b040f"
+      },
+      "variantKinds": [
+        "typo",
+        "short-casual",
+        "arabic-typo"
+      ],
+      "parentId": "EX099",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "like ai and programming. uaeu major might fit and guarantee will admitted?",
+          "status": 200,
+          "seconds": 3.064,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers a Minor in Artificial Intelligence designed for undergraduate students from all majors except Computer Science, Data Science and AI, and Mathematics in Data Science; admission requires a minimum GPA of 3.0 and a prerequisite course CSBP119 with at least a B+ grade, but admission is subject to capacity conditions and is not guaranteed.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "undergraduate_programs_2025_2026.pdf",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/undergraduate_programs_2025_2026.pdf#page=267",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PDF page 267"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:a8f25c0e909449d2e0d7:338#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers a Minor in Artificial Intelligence designed for undergraduate students from all majors except Computer Science, Data Science and AI, and Mathematics in Data Science; admission requires a minimum GPA of 3.0 and a prerequisite course CSBP119 with at least a B+ grade, but admission is subject to capacity conditions and is not guaranteed.",
+                "evidenceIds": [
+                  "corpus:a8f25c0e909449d2e0d7:338#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 3059,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 16,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 6961,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 98,
+                  "estimatedUsd": 0.0029412
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1864,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0007952
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 8841,
+              "outputTokens": 129,
+              "knownUsageUsd": 0.00373672,
+              "estimatedUsd": 0.00373672,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "partial",
+        "checks": [
+          {
+            "name": "relevant full-degree option",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "Data Science",
+              "Computer and Artificial Intelligence Engineering",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر",
+              "علم البيانات",
+              "علوم البيانات",
+              "هندسة الحاسوب"
+            ]
+          },
+          {
+            "name": "published fit with interest",
+            "passed": true,
+            "patterns": [
+              "programming",
+              "artificial intelligence",
+              "machine learning",
+              "intelligent",
+              "البرمجة",
+              "الذكاء الاصطناعي",
+              "تعلم الآلة"
+            ]
+          },
+          {
+            "name": "Positively suggests a full major, rather than naming it only in a minor exclusion",
+            "passed": false
+          },
+          {
+            "name": "Recommendation is not an admission guarantee",
+            "passed": true
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Positively suggests a full major, rather than naming it only in a minor exclusion"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "01342fc0c082948291d2d1225cdb94f53ec1b8aec8d9301fbc9d9abeda90871e",
+    "files": 8465,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v10"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/examiner-phrasing-mem10-rerun-fixture.json",
+  "gradingBefore": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 1,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 12,
+    "partial": 5,
+    "incorrect": 3
+  },
+  "finishedAt": "2026-11-07T11:36:50.841Z",
+  "runtimeAfter": {
+    "sha256": "01342fc0c082948291d2d1225cdb94f53ec1b8aec8d9301fbc9d9abeda90871e",
+    "files": 8465,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "memory-v10"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "scheme": "jwt-access-plus-rotating-refresh",
+      "secretConfigured": true
+    },
+    "memory": {
+      "enabled": true,
+      "ttlHours": 24,
+      "durableStore": true
+    },
+    "knowledge": {
+      "contentFingerprint": "9397d181bafcbf4fa41ba046cbfd71c327aa10bdfca41dfde0377887e04b8dc8",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "b88026792c65b07ce3ac6f12a5942742771ceab0eee7d201e878303107a8c71f",
+        "generatedAt": "2026-11-05T08:16:02.897Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 158,
+      "sourceEvidence": {
+        "mappedReferences": 208,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-05",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "e682ae4c114fcd37640cfa0f56806489c05efa90307e4fc17d755c35a4f4490c",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 4.5,
+    "p95": 8.128,
+    "max": 8.128
+  },
+  "usage": {
+    "measuredAnswers": 20,
+    "totalAnswers": 20,
+    "estimatedUsd": 0.09872232000000002,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": []
+}

@@ -1,0 +1,51 @@
+{
+  "at": "2026-11-04T08:47:52.169885+00:00",
+  "priorFixtureSha256": "c46284405487e26e03523a67effc95c8fd1a6a51cd447e4a54b804b67159ff9e",
+  "revisedFixtureSha256": "1897354dc040ee3ffaef8abb5dbce5263e0d3331c1dc8b07f4e2897f1fe2e209",
+  "changes": [
+    {
+      "id": "EX081",
+      "reason": "The verified portal title is SelfService Plus without a mandatory separating character; the original regular expression incorrectly rejected that official spelling and its correct URL.",
+      "before": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Self.Service|استعادة|كلمة المرور"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Helpdesk@uaeu\\.ac\\.ae"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "6111"
+          ]
+        }
+      ],
+      "after": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "Self[ .-]?Service|selfservice\\.uaeu\\.ac\\.ae|استعادة|كلمة المرور|كلمة مرور"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "Helpdesk@uaeu\\.ac\\.ae"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "6111"
+          ]
+        }
+      ]
+    }
+  ]
+}

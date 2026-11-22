@@ -1,0 +1,3800 @@
+{
+  "startedAt": "2026-11-05T06:54:07.358Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "examiner-focused-v38",
+  "fixture": "examiner-scenarios/examiner_100.json",
+  "fixtureSha256": "817c7d5f73983ac1b52cedfbc5657eca713983194a95c12fe50489442f68f772",
+  "methodology": "100 distinct examiner scenarios, each with five alternate phrasings. Ground truth uses official UAEU primary sources and previously independently reviewed source fixtures; source-fetch and semantic-review states are tracked explicitly. HTTP200 and a matching number alone are not proof. A single-cohort calculus question is not required to explain an unrequested earlier cohort. Boundary notices are measured separately from factual-answer FAQ similarity.",
+  "results": [
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?"
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f279b96ee5a0d9b86defc8554196949f2f2384444afdb2753cd44d2cd924749"
+      },
+      "parentId": "EX051",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+          "status": 200,
+          "seconds": 9.937,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Computer Science requires a minimum of 120 credit hours, consisting of 21 credit hours of general education, 41 credit hours of college requirements, 38 credit hours of major requirements, 6 credit hours of internship, 12 credit hours of major electives, and 2 credit hours of free electives.\n\nThe Bachelor of Science in Information Security requires a minimum of 120 credit hours, consisting of 21 credit hours of general education, 41 credit hours of college requirements, 46 credit hours of major requirements, 6 credit hours of internship, and 6 credit hours of major electives.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science degree requirements and major electives",
+                "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science degree credit breakdown"
+              },
+              {
+                "title": "UAEU BSc Information Security — Published Degree Requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "# Bachelor of Science in Information Security"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-security",
+            "evidenceIds": [
+              "28-computer-science-degree-requirements.md#E1S1",
+              "12-information-security-curriculum.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Computer Science requires a minimum of 120 credit hours, consisting of 21 credit hours of general education, 41 credit hours of college requirements, 38 credit hours of major requirements, 6 credit hours of internship, 12 credit hours of major electives, and 2 credit hours of free electives.",
+                "evidenceIds": [
+                  "28-computer-science-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Information Security requires a minimum of 120 credit hours, consisting of 21 credit hours of general education, 41 credit hours of college requirements, 46 credit hours of major requirements, 6 credit hours of internship, and 6 credit hours of major electives.",
+                "evidenceIds": [
+                  "12-information-security-curriculum.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 1,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 9929,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3391,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 91,
+                  "estimatedUsd": 0.001502
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3831,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 162,
+                  "estimatedUsd": 0.0017916000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1364,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005952
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1378,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006008000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9964,
+              "outputTokens": 315,
+              "knownUsageUsd": 0.004489600000000001,
+              "estimatedUsd": 0.004489600000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": true
+          },
+          {
+            "name": "Final source group 2",
+            "passed": true
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?"
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051-V1",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f279b96ee5a0d9b86defc8554196949f2f2384444afdb2753cd44d2cd924749"
+      },
+      "parentId": "EX051",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+          "status": 200,
+          "seconds": 2.955,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Computer Science at UAEU requires a minimum of 120 credit hours in total, including 12 credit hours of major electives.\n\nThe Bachelor of Science in Information Security at UAEU also requires a minimum of 120 credit hours in total, but includes only 6 credit hours of major electives.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science degree requirements and major electives",
+                "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science degree credit breakdown"
+              },
+              {
+                "title": "UAEU BSc Information Security — Published Degree Requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "# Bachelor of Science in Information Security"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-security",
+            "evidenceIds": [
+              "28-computer-science-degree-requirements.md#E1S1",
+              "12-information-security-curriculum.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Computer Science at UAEU requires a minimum of 120 credit hours in total, including 12 credit hours of major electives.",
+                "evidenceIds": [
+                  "28-computer-science-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Information Security at UAEU also requires a minimum of 120 credit hours in total, but includes only 6 credit hours of major electives.",
+                "evidenceIds": [
+                  "12-information-security-curriculum.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2942,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3393,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 101,
+                  "estimatedUsd": 0.0015188000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1342,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005864
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1339,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005852
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6074,
+              "outputTokens": 163,
+              "knownUsageUsd": 0.0026904000000000003,
+              "estimatedUsd": 0.0026904000000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": true
+          },
+          {
+            "name": "Final source group 2",
+            "passed": true
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?"
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051-V2",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f279b96ee5a0d9b86defc8554196949f2f2384444afdb2753cd44d2cd924749"
+      },
+      "parentId": "EX051",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+          "status": 200,
+          "seconds": 2.726,
+          "payload": {
+            "role": "assistant",
+            "content": "The Bachelor of Science in Computer Science at UAEU requires a minimum of 120 credit hours in total, including 12 credit hours of major electives.\n\nThe Bachelor of Science in Information Security at UAEU also requires a minimum of 120 credit hours in total, but includes only 6 credit hours of major electives.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science degree requirements and major electives",
+                "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science degree credit breakdown"
+              },
+              {
+                "title": "UAEU BSc Information Security — Published Degree Requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "# Bachelor of Science in Information Security"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-security",
+            "evidenceIds": [
+              "28-computer-science-degree-requirements.md#E1S1",
+              "12-information-security-curriculum.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The Bachelor of Science in Computer Science at UAEU requires a minimum of 120 credit hours in total, including 12 credit hours of major electives.",
+                "evidenceIds": [
+                  "28-computer-science-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "The Bachelor of Science in Information Security at UAEU also requires a minimum of 120 credit hours in total, but includes only 6 credit hours of major electives.",
+                "evidenceIds": [
+                  "12-information-security-curriculum.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2718,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3431,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 101,
+                  "estimatedUsd": 0.001534
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1339,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005852
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1342,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005864
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6112,
+              "outputTokens": 163,
+              "knownUsageUsd": 0.0027056,
+              "estimatedUsd": 0.0027056,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": true
+          },
+          {
+            "name": "Final source group 2",
+            "passed": true
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?"
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051-V3",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f279b96ee5a0d9b86defc8554196949f2f2384444afdb2753cd44d2cd924749"
+      },
+      "parentId": "EX051",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+          "status": 502,
+          "seconds": 5.361,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 5355,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4324,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 88,
+                  "estimatedUsd": 0.0018704000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4767,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 203,
+                  "estimatedUsd": 0.0022316000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5036,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 133,
+                  "estimatedUsd": 0.0022272000000000004
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 14127,
+              "outputTokens": 424,
+              "knownUsageUsd": 0.006329200000000001,
+              "estimatedUsd": 0.006329200000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": false,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": false,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": false
+          },
+          {
+            "name": "Final source group 2",
+            "passed": false
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3",
+          "Expected fact 4",
+          "Expected fact 5",
+          "Final source group 1",
+          "Final source group 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051-V4",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f279b96ee5a0d9b86defc8554196949f2f2384444afdb2753cd44d2cd924749"
+      },
+      "parentId": "EX051",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+          "status": 200,
+          "seconds": 2.721,
+          "payload": {
+            "role": "assistant",
+            "content": "برنامج بكالوريوس علوم الحاسوب يتطلب 120 ساعة معتمدة كحد أدنى، منها 38 ساعة لمتطلبات التخصص و12 ساعة لمساقات التخصص الاختيارية.\n\nبرنامج بكالوريوس أمن المعلومات يتطلب 120 ساعة معتمدة كحد أدنى، منها 46 ساعة لمتطلبات التخصص و6 ساعات لمساقات التخصص الاختيارية.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science degree requirements and major electives",
+                "url": "https://www.uaeu.ac.ae/en/cit/programs/undergraduate/bachelor-of-science-in-computer-science.shtml",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science degree credit breakdown"
+              },
+              {
+                "title": "UAEU BSc Information Security — Published Degree Requirements",
+                "url": "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml",
+                "lastVerified": "2026-09-29",
+                "sourceSection": "# Bachelor of Science in Information Security"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "information-security",
+            "evidenceIds": [
+              "28-computer-science-degree-requirements.md#E1S1",
+              "12-information-security-curriculum.md#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "برنامج بكالوريوس علوم الحاسوب يتطلب 120 ساعة معتمدة كحد أدنى، منها 38 ساعة لمتطلبات التخصص و12 ساعة لمساقات التخصص الاختيارية.",
+                "evidenceIds": [
+                  "28-computer-science-degree-requirements.md#E1S1"
+                ]
+              },
+              {
+                "text": "برنامج بكالوريوس أمن المعلومات يتطلب 120 ساعة معتمدة كحد أدنى، منها 46 ساعة لمتطلبات التخصص و6 ساعات لمساقات التخصص الاختيارية.",
+                "evidenceIds": [
+                  "12-information-security-curriculum.md#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2715,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3390,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 120,
+                  "estimatedUsd": 0.001548
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1354,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005912000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1346,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.000588
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6090,
+              "outputTokens": 182,
+              "knownUsageUsd": 0.0027272,
+              "estimatedUsd": 0.0027272,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": true
+          },
+          {
+            "name": "Final source group 2",
+            "passed": true
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "compare-cs-is",
+      "turns": [
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "expected": "Both published catalogs total120; CS major electives12; Information Security major electives6; keep programs separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "\\b120\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b12\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "\\b6\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "Computer Science",
+            "علوم الحاسوب",
+            "علوم الكمبيوتر"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "Information Security",
+            "أمن المعلومات",
+            "امن المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX051-V5",
+      "category": "Programs and courses",
+      "arabicQuestion": "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, What is the difference between UAEU CS and Information Security in total credits and major-elective credits?",
+        "Please explain to a new UAEU student: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "Give a concise advisor checklist: What is the difference between UAEU Computer Science and Information Security in total credits and major-elective credits?",
+        "قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+        "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما."
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "requiredSourceGroups": [
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-computer-science.shtml"
+        ],
+        [
+          "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-information-security.shtml"
+        ]
+      ],
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "8f279b96ee5a0d9b86defc8554196949f2f2384444afdb2753cd44d2cd924749"
+      },
+      "parentId": "EX051",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "UAEU — قارن مجموع ساعات علوم الحاسوب وأمن المعلومات وساعات المساقات الاختيارية للتخصص فيهما.",
+          "status": 502,
+          "seconds": 5.32,
+          "payload": {
+            "role": "assistant",
+            "content": "لم تجتز الإجابة المولدة فحص دعم المصادر، لذلك لم أعرض ادعاءات غير موثقة. يمكنك إعادة المحاولة أو مراجعة مصدر الجامعة الرسمي مباشرة.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 2,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 5315,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3423,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 108,
+                  "estimatedUsd": 0.001542
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3886,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 166,
+                  "estimatedUsd": 0.00182
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3944,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 207,
+                  "estimatedUsd": 0.0019088000000000002
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 11253,
+              "outputTokens": 481,
+              "knownUsageUsd": 0.0052708,
+              "estimatedUsd": 0.0052708,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "\\b120\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "\\b12\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "\\b6\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": false,
+            "patterns": [
+              "Computer Science",
+              "علوم الحاسوب",
+              "علوم الكمبيوتر"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": false,
+            "patterns": [
+              "Information Security",
+              "أمن المعلومات",
+              "امن المعلومات"
+            ]
+          },
+          {
+            "name": "Final source group 1",
+            "passed": false
+          },
+          {
+            "name": "Final source group 2",
+            "passed": false
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3",
+          "Expected fact 4",
+          "Expected fact 5",
+          "Final source group 1",
+          "Final source group 2"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "75bc2bfd1f37c5b030949f87b79945aef1131fe0e2379ebd07079f08cb20260a"
+      },
+      "parentId": "EX052",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+          "status": 200,
+          "seconds": 2.232,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers a Bachelor of Science in Data Science and Artificial Intelligence, which is provided by the College of Information Technology.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Program title: Bachelor of Science in Data Science and Artificial Intelligence | Arabic title: بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي | College: College of Information Technology | Arabic college: كلية تقنية المعلومات"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers a Bachelor of Science in Data Science and Artificial Intelligence, which is provided by the College of Information Technology.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2224,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3007,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 51,
+                  "estimatedUsd": 0.0012843999999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1349,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005892
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4356,
+              "outputTokens": 82,
+              "knownUsageUsd": 0.0018735999999999998,
+              "estimatedUsd": 0.0018735999999999998,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052-V1",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "75bc2bfd1f37c5b030949f87b79945aef1131fe0e2379ebd07079f08cb20260a"
+      },
+      "parentId": "EX052",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+          "status": 200,
+          "seconds": 2.252,
+          "payload": {
+            "role": "assistant",
+            "content": "UAEU offers a Bachelor of Science in Data Science and Artificial Intelligence, which is provided by the College of Information Technology.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Program title: Bachelor of Science in Data Science and Artificial Intelligence | Arabic title: بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي | College: College of Information Technology | Arabic college: كلية تقنية المعلومات"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAEU offers a Bachelor of Science in Data Science and Artificial Intelligence, which is provided by the College of Information Technology.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2246,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3016,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 51,
+                  "estimatedUsd": 0.001288
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1349,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005892
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4365,
+              "outputTokens": 82,
+              "knownUsageUsd": 0.0018772,
+              "estimatedUsd": 0.0018772,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052-V2",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "75bc2bfd1f37c5b030949f87b79945aef1131fe0e2379ebd07079f08cb20260a"
+      },
+      "parentId": "EX052",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+          "status": 200,
+          "seconds": 2.22,
+          "payload": {
+            "role": "assistant",
+            "content": "UAE University offers a Bachelor of Science in Data Science and Artificial Intelligence.\n\nThis program is offered by the College of Information Technology.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Program title: Bachelor of Science in Data Science and Artificial Intelligence | Arabic title: بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي | College: College of Information Technology | Arabic college: كلية تقنية المعلومات"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAE University offers a Bachelor of Science in Data Science and Artificial Intelligence.\n\nThis program is offered by the College of Information Technology.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2212,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3052,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 64,
+                  "estimatedUsd": 0.0013232
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1352,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005904
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4404,
+              "outputTokens": 95,
+              "knownUsageUsd": 0.0019136000000000001,
+              "estimatedUsd": 0.0019136000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052-V3",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "75bc2bfd1f37c5b030949f87b79945aef1131fe0e2379ebd07079f08cb20260a"
+      },
+      "parentId": "EX052",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+          "status": 200,
+          "seconds": 2.402,
+          "payload": {
+            "role": "assistant",
+            "content": "UAE University offers a Bachelor of Science in Data Science and Artificial Intelligence.\n\nThis program is offered by the College of Information Technology.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Program title: Bachelor of Science in Data Science and Artificial Intelligence | Arabic title: بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي | College: College of Information Technology | Arabic college: كلية تقنية المعلومات"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "UAE University offers a Bachelor of Science in Data Science and Artificial Intelligence.\n\nThis program is offered by the College of Information Technology.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2399,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3028,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 64,
+                  "estimatedUsd": 0.0013136
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1352,
+                  "cachedInputTokens": 1152,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0002448
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4380,
+              "outputTokens": 95,
+              "knownUsageUsd": 0.0015584000000000001,
+              "estimatedUsd": 0.0015584000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052-V4",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "75bc2bfd1f37c5b030949f87b79945aef1131fe0e2379ebd07079f08cb20260a"
+      },
+      "parentId": "EX052",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+          "status": 200,
+          "seconds": 2.427,
+          "payload": {
+            "role": "assistant",
+            "content": "نعم، يوجد برنامج بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي في جامعة الإمارات العربية المتحدة، ويُدرس في كلية تقنية المعلومات.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Program title: Bachelor of Science in Data Science and Artificial Intelligence | Arabic title: بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي | College: College of Information Technology | Arabic college: كلية تقنية المعلومات"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "نعم، يوجد برنامج بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي في جامعة الإمارات العربية المتحدة، ويُدرس في كلية تقنية المعلومات.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2420,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3007,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 60,
+                  "estimatedUsd": 0.0012988
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1358,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005928000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4365,
+              "outputTokens": 91,
+              "knownUsageUsd": 0.0018916,
+              "estimatedUsd": 0.0018916,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "focus": "Examiner",
+      "group": "new-degree",
+      "turns": [
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "expected": "Yes, catalog lists this degree under the computing/IT college (current site also uses College of Computing and Artificial Intelligence); acknowledge naming differences if needed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/catalog/undergraduate/programs/bachelor-of-science-in-data-science-and-artificial-intelligence.shtml",
+        "https://www.uaeu.ac.ae/en/catalog/summary/search.xml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "Data Science",
+            "علم البيانات"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "Computing",
+            "Information Technology",
+            "الحوسبة",
+            "تقنية المعلومات"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "EX052-V5",
+      "category": "Programs and courses",
+      "arabicQuestion": "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+      "groundTruthBasis": "Previously independently source-reviewed QA fixture; fresh source audit is recorded separately",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Please explain to a new UAEU student: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "Give a concise advisor checklist: Does UAEU offer a Bachelor of Science in Data Science and Artificial Intelligence? Which college offers it?",
+        "هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+        "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "75bc2bfd1f37c5b030949f87b79945aef1131fe0e2379ebd07079f08cb20260a"
+      },
+      "parentId": "EX052",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "UAEU — هل يوجد بكالوريوس علم البيانات والذكاء الاصطناعي، وفي أي كلية؟",
+          "status": 200,
+          "seconds": 2.13,
+          "payload": {
+            "role": "assistant",
+            "content": "نعم، يوجد في جامعة الإمارات العربية المتحدة برنامج بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي، ويُدرس في كلية تقنية المعلومات.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Official Program Finder — Published Catalog Data",
+                "url": "https://www.uaeu.ac.ae/en/catalog/summary/search.xml",
+                "lastVerified": "2026-11-04",
+                "sourceVersion": "Official XML Last-Modified2026-10-27; fetched2026-11-04",
+                "sourceSection": "PROGRAM records: LEVEL=Undergraduate; Bachelor titles or Doctor of Medicine; minors/micro-credentials/general education excluded",
+                "evidenceText": "Program title: Bachelor of Science in Data Science and Artificial Intelligence | Arabic title: بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي | College: College of Information Technology | Arabic college: كلية تقنية المعلومات"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "answer:admissions-programs-new-students#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "نعم، يوجد في جامعة الإمارات العربية المتحدة برنامج بكالوريوس العلوم في علم البيانات والذكاء الاصطناعي، ويُدرس في كلية تقنية المعلومات.",
+                "evidenceIds": [
+                  "answer:admissions-programs-new-students#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 2122,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3040,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 60,
+                  "estimatedUsd": 0.001312
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1358,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0005928000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4398,
+              "outputTokens": 91,
+              "knownUsageUsd": 0.0019048000000000001,
+              "estimatedUsd": 0.0019048000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "Data Science",
+              "علم البيانات"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "Computing",
+              "Information Technology",
+              "الحوسبة",
+              "تقنية المعلومات"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d9c32107b7ceddba412a5b982af296c520de1b313b7aed72389d406ba6b79767"
+      },
+      "parentId": "EX075",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+          "status": 200,
+          "seconds": 6.164,
+          "payload": {
+            "role": "assistant",
+            "content": "For international undergraduate applicants to the College of Computing and Artificial Intelligence (Computer Science) at UAEU, the published high-school average requirement is 90% or its equivalent.\n\nThe English language requirement alternatives include high-school English with 90%, IELTS Academic score of 5.5, TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nThe mathematics requirement alternatives include high-school Math with 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade B.\n\nFor science, one subject is required: either Physics or Computer Science with a high-school score of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade B.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU International Undergraduate Admission Requirements",
+                "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Computing and Artificial Intelligence requirements table",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For international undergraduate applicants and children of UAEU employees, the College of Computing and Artificial Intelligence row lists a high-school average of90% or its equivalent. English alternatives are high-school English90%, IELTS Academic5.5, TOEFL ITP525 or iBT70. Mathematics alternatives are high-school Math90%, SAT Math590, AP Math4, IB Higher-Level Math5 or GCE A-Level gradeB. One science subject, Physics OR Computer Science, requires high-school90%, AP4, IB Higher-Level5 or GCE A-LevelB. Admission is competitive and these published category-specific requirements do not guarantee a seat or verify an individual application."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "answer:admission-international-computing-subjects#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For international undergraduate applicants to the College of Computing and Artificial Intelligence (Computer Science) at UAEU, the published high-school average requirement is 90% or its equivalent.\n\nThe English language requirement alternatives include high-school English with 90%, IELTS Academic score of 5.5, TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nThe mathematics requirement alternatives include high-school Math with 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade B.\n\nFor science, one subject is required: either Physics or Computer Science with a high-school score of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade B.",
+                "evidenceIds": [
+                  "answer:admission-international-computing-subjects#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6158,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22298,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 89,
+                  "estimatedUsd": 0.0090616
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3072,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 224,
+                  "estimatedUsd": 0.0015872000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1567,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006764000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26937,
+              "outputTokens": 344,
+              "knownUsageUsd": 0.0113252,
+              "estimatedUsd": 0.0113252,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075-V1",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d9c32107b7ceddba412a5b982af296c520de1b313b7aed72389d406ba6b79767"
+      },
+      "parentId": "EX075",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+          "status": 200,
+          "seconds": 6.477,
+          "payload": {
+            "role": "assistant",
+            "content": "For international undergraduate applicants to the College of Computing and Artificial Intelligence at UAEU, the required high-school average is 90% or its equivalent.\n\nThe English requirement can be met by a high-school English score of 90%, IELTS Academic score of 5.5, TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nMathematics requirements include a high-school Math score of 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade B.\n\nFor science, one subject is required: Physics or Computer Science with a high-school score of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade B.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU International Undergraduate Admission Requirements",
+                "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Computing and Artificial Intelligence requirements table",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For international undergraduate applicants and children of UAEU employees, the College of Computing and Artificial Intelligence row lists a high-school average of90% or its equivalent. English alternatives are high-school English90%, IELTS Academic5.5, TOEFL ITP525 or iBT70. Mathematics alternatives are high-school Math90%, SAT Math590, AP Math4, IB Higher-Level Math5 or GCE A-Level gradeB. One science subject, Physics OR Computer Science, requires high-school90%, AP4, IB Higher-Level5 or GCE A-LevelB. Admission is competitive and these published category-specific requirements do not guarantee a seat or verify an individual application."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "answer:admission-international-computing-subjects#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For international undergraduate applicants to the College of Computing and Artificial Intelligence at UAEU, the required high-school average is 90% or its equivalent.\n\nThe English requirement can be met by a high-school English score of 90%, IELTS Academic score of 5.5, TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nMathematics requirements include a high-school Math score of 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade B.\n\nFor science, one subject is required: Physics or Computer Science with a high-school score of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade B.",
+                "evidenceIds": [
+                  "answer:admission-international-computing-subjects#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6472,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22300,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 88,
+                  "estimatedUsd": 0.009060799999999999
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3079,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 223,
+                  "estimatedUsd": 0.0015884
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1566,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006760000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26945,
+              "outputTokens": 342,
+              "knownUsageUsd": 0.011325199999999999,
+              "estimatedUsd": 0.011325199999999999,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075-V2",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d9c32107b7ceddba412a5b982af296c520de1b313b7aed72389d406ba6b79767"
+      },
+      "parentId": "EX075",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+          "status": 200,
+          "seconds": 6.192,
+          "payload": {
+            "role": "assistant",
+            "content": "For international undergraduate applicants to the College of Computing and Artificial Intelligence (Computer Science), UAEU requires a high-school average of 90% or its equivalent.\n\nEnglish proficiency alternatives include high-school English at 90%, IELTS Academic score of 5.5, TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nMathematics requirements include high-school Math at 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade B.\n\nFor science, one subject is required: either Physics or Computer Science with a high-school score of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade B.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU International Undergraduate Admission Requirements",
+                "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Computing and Artificial Intelligence requirements table",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For international undergraduate applicants and children of UAEU employees, the College of Computing and Artificial Intelligence row lists a high-school average of90% or its equivalent. English alternatives are high-school English90%, IELTS Academic5.5, TOEFL ITP525 or iBT70. Mathematics alternatives are high-school Math90%, SAT Math590, AP Math4, IB Higher-Level Math5 or GCE A-Level gradeB. One science subject, Physics OR Computer Science, requires high-school90%, AP4, IB Higher-Level5 or GCE A-LevelB. Admission is competitive and these published category-specific requirements do not guarantee a seat or verify an individual application."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "answer:admission-international-computing-subjects#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For international undergraduate applicants to the College of Computing and Artificial Intelligence (Computer Science), UAEU requires a high-school average of 90% or its equivalent.\n\nEnglish proficiency alternatives include high-school English at 90%, IELTS Academic score of 5.5, TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nMathematics requirements include high-school Math at 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade B.\n\nFor science, one subject is required: either Physics or Computer Science with a high-school score of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade B.",
+                "evidenceIds": [
+                  "answer:admission-international-computing-subjects#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6187,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22316,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 83,
+                  "estimatedUsd": 0.009059199999999998
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3117,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 219,
+                  "estimatedUsd": 0.0015972000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1562,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006744000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26995,
+              "outputTokens": 333,
+              "knownUsageUsd": 0.011330799999999999,
+              "estimatedUsd": 0.011330799999999999,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075-V3",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d9c32107b7ceddba412a5b982af296c520de1b313b7aed72389d406ba6b79767"
+      },
+      "parentId": "EX075",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+          "status": 200,
+          "seconds": 10.106,
+          "payload": {
+            "role": "assistant",
+            "content": "For international undergraduate applicants to Computer Science at UAEU, the required high-school average is 90% or its equivalent.\n\nEnglish requirements include a high-school English grade of 90%, or IELTS Academic score of 5.5, or TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nMathematics requirements include a high-school Math grade of 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade of B.\n\nScience requirement is one subject: Physics or Computer Science with a high-school grade of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade of B.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU International Undergraduate Admission Requirements",
+                "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Computing and Artificial Intelligence requirements table",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For international undergraduate applicants and children of UAEU employees, the College of Computing and Artificial Intelligence row lists a high-school average of90% or its equivalent. English alternatives are high-school English90%, IELTS Academic5.5, TOEFL ITP525 or iBT70. Mathematics alternatives are high-school Math90%, SAT Math590, AP Math4, IB Higher-Level Math5 or GCE A-Level gradeB. One science subject, Physics OR Computer Science, requires high-school90%, AP4, IB Higher-Level5 or GCE A-LevelB. Admission is competitive and these published category-specific requirements do not guarantee a seat or verify an individual application."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "answer:admission-international-computing-subjects#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For international undergraduate applicants to Computer Science at UAEU, the required high-school average is 90% or its equivalent.\n\nEnglish requirements include a high-school English grade of 90%, or IELTS Academic score of 5.5, or TOEFL ITP score of 525, or TOEFL iBT score of 70.\n\nMathematics requirements include a high-school Math grade of 90%, SAT Math score of 590, AP Math score of 4, IB Higher-Level Math score of 5, or GCE A-Level grade of B.\n\nScience requirement is one subject: Physics or Computer Science with a high-school grade of 90%, AP score of 4, IB Higher-Level score of 5, or GCE A-Level grade of B.",
+                "evidenceIds": [
+                  "answer:admission-international-computing-subjects#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 10100,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22310,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 85,
+                  "estimatedUsd": 0.00906
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3093,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 216,
+                  "estimatedUsd": 0.0015828
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1559,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006732
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26962,
+              "outputTokens": 332,
+              "knownUsageUsd": 0.011316000000000001,
+              "estimatedUsd": 0.011316000000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075-V4",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d9c32107b7ceddba412a5b982af296c520de1b313b7aed72389d406ba6b79767"
+      },
+      "parentId": "EX075",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+          "status": 200,
+          "seconds": 5.757,
+          "payload": {
+            "role": "assistant",
+            "content": "لمتقدمين البكالوريوس الدوليين في علوم الحاسوب بجامعة الإمارات، يجب أن يكون متوسط الثانوية 90% أو ما يعادله.\n\nمتطلبات اللغة الإنجليزية تشمل الحصول على 90% في الإنجليزية بالثانوية، أو 5.5 في اختبار IELTS الأكاديمي، أو 525 في TOEFL ITP، أو 70 في TOEFL iBT.\n\nمتطلبات الرياضيات تتطلب 90% في الرياضيات بالثانوية، أو 590 في SAT Math، أو 4 في AP Math، أو 5 في IB Higher-Level Math، أو درجة B في GCE A-Level.\n\nيجب تحقيق 90% في أحد مواد العلوم: الفيزياء أو علوم الحاسوب في الثانوية، أو 4 في AP، أو 5 في IB Higher-Level، أو درجة B في GCE A-Level.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU International Undergraduate Admission Requirements",
+                "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Computing and Artificial Intelligence requirements table",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For international undergraduate applicants and children of UAEU employees, the College of Computing and Artificial Intelligence row lists a high-school average of90% or its equivalent. English alternatives are high-school English90%, IELTS Academic5.5, TOEFL ITP525 or iBT70. Mathematics alternatives are high-school Math90%, SAT Math590, AP Math4, IB Higher-Level Math5 or GCE A-Level gradeB. One science subject, Physics OR Computer Science, requires high-school90%, AP4, IB Higher-Level5 or GCE A-LevelB. Admission is competitive and these published category-specific requirements do not guarantee a seat or verify an individual application."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "admissions",
+            "evidenceIds": [
+              "answer:admission-international-computing-subjects#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "لمتقدمين البكالوريوس الدوليين في علوم الحاسوب بجامعة الإمارات، يجب أن يكون متوسط الثانوية 90% أو ما يعادله.\n\nمتطلبات اللغة الإنجليزية تشمل الحصول على 90% في الإنجليزية بالثانوية، أو 5.5 في اختبار IELTS الأكاديمي، أو 525 في TOEFL ITP، أو 70 في TOEFL iBT.\n\nمتطلبات الرياضيات تتطلب 90% في الرياضيات بالثانوية، أو 590 في SAT Math، أو 4 في AP Math، أو 5 في IB Higher-Level Math، أو درجة B في GCE A-Level.\n\nيجب تحقيق 90% في أحد مواد العلوم: الفيزياء أو علوم الحاسوب في الثانوية، أو 4 في AP، أو 5 في IB Higher-Level، أو درجة B في GCE A-Level.",
+                "evidenceIds": [
+                  "answer:admission-international-computing-subjects#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 5753,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22304,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 92,
+                  "estimatedUsd": 0.009068800000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3080,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 233,
+                  "estimatedUsd": 0.0016048
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1576,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006800000000000002
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26960,
+              "outputTokens": 356,
+              "knownUsageUsd": 0.011353600000000002,
+              "estimatedUsd": 0.011353600000000002,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "turns": [
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "expected": "For international applicants/children of UAEU employees, the Computing and AI table gives overall90%, English HS90% or IELTS5.5/TOEFL equivalents, mathematics HS90% or equivalents, and physics OR computer-science HS90% or equivalents; competitive admission is not guaranteed.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+        "https://www.uaeu.ac.ae/ar/admission/international-students-and-children-of-uaeu-employees.shtml"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "Required fact 1",
+          "any": [
+            "90"
+          ]
+        },
+        {
+          "name": "Required fact 2",
+          "any": [
+            "5\\.5"
+          ]
+        },
+        {
+          "name": "Required fact 3",
+          "any": [
+            "math|رياضيات"
+          ]
+        },
+        {
+          "name": "Required fact 4",
+          "any": [
+            "physics|computer science|الفيزياء|الحاسوب"
+          ]
+        }
+      ],
+      "id": "EX075-V5",
+      "category": "Admissions and money",
+      "focus": "Examiner",
+      "arabicQuestion": "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+      "groundTruthBasis": "Official primary source text inspected before creating this scenario; source checksum audit accompanies the fixture",
+      "lastResult": "⚠️ v38 live verification pending; historical v34 main: correct",
+      "variants": [
+        "hey, For an international undergraduate applicant to CS, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Please explain to a new UAEU student: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "Give a concise advisor checklist: For an international undergraduate applicant to Computer Science, what school average and English, mathematics and science requirements does UAEU publish?",
+        "ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+        "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟"
+      ],
+      "followUpQuestion": null,
+      "reviewRequired": true,
+      "lastRun": {
+        "artifact": "reports/knowledge-expansion-2026-11-04/examiner-all-v34.json",
+        "build": "feat-uaeu-knowledge-expansion-v34-main",
+        "mainResult": "correct",
+        "testedAt": "2026-11-04T18:31:11.263Z",
+        "variantsTested": 5,
+        "conversationSha256": "d9c32107b7ceddba412a5b982af296c520de1b313b7aed72389d406ba6b79767"
+      },
+      "parentId": "EX075",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "UAEU — ما متوسط الثانوية ومتطلبات الإنجليزية والرياضيات والعلوم المنشورة لطالب دولي يتقدم لبكالوريوس علوم الحاسوب؟",
+          "status": 200,
+          "seconds": 6.868,
+          "payload": {
+            "role": "assistant",
+            "content": "لمتقدمين البكالوريوس الدوليين في علوم الحاسوب بجامعة الإمارات، يجب أن يكون متوسط الثانوية 90% أو ما يعادله.\n\nمتطلبات اللغة الإنجليزية تشمل 90% في اللغة الإنجليزية بالثانوية أو 5.5 في اختبار IELTS الأكاديمي أو 525 في اختبار TOEFL ITP أو 70 في اختبار TOEFL iBT.\n\nمتطلبات الرياضيات تشمل 90% في الرياضيات بالثانوية أو 590 في SAT Math أو 4 في AP Math أو 5 في IB Higher-Level Math أو درجة B في GCE A-Level.\n\nيجب أن يكون لدى المتقدم مادة علمية واحدة إما الفيزياء أو علوم الحاسوب بنسبة 90% في الثانوية أو 4 في AP أو 5 في IB Higher-Level أو درجة B في GCE A-Level.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU International Undergraduate Admission Requirements",
+                "url": "https://www.uaeu.ac.ae/en/admission/international-students-and-children-of-uaeu-employees.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "College of Computing and Artificial Intelligence requirements table",
+                "sourceVersion": "Official public source accessed 2026-11-04; access date is not policy effective date",
+                "evidenceText": "For international undergraduate applicants and children of UAEU employees, the College of Computing and Artificial Intelligence row lists a high-school average of90% or its equivalent. English alternatives are high-school English90%, IELTS Academic5.5, TOEFL ITP525 or iBT70. Mathematics alternatives are high-school Math90%, SAT Math590, AP Math4, IB Higher-Level Math5 or GCE A-Level gradeB. One science subject, Physics OR Computer Science, requires high-school90%, AP4, IB Higher-Level5 or GCE A-LevelB. Admission is competitive and these published category-specific requirements do not guarantee a seat or verify an individual application."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "admissions",
+            "evidenceIds": [
+              "answer:admission-international-computing-subjects#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "لمتقدمين البكالوريوس الدوليين في علوم الحاسوب بجامعة الإمارات، يجب أن يكون متوسط الثانوية 90% أو ما يعادله.\n\nمتطلبات اللغة الإنجليزية تشمل 90% في اللغة الإنجليزية بالثانوية أو 5.5 في اختبار IELTS الأكاديمي أو 525 في اختبار TOEFL ITP أو 70 في اختبار TOEFL iBT.\n\nمتطلبات الرياضيات تشمل 90% في الرياضيات بالثانوية أو 590 في SAT Math أو 4 في AP Math أو 5 في IB Higher-Level Math أو درجة B في GCE A-Level.\n\nيجب أن يكون لدى المتقدم مادة علمية واحدة إما الفيزياء أو علوم الحاسوب بنسبة 90% في الثانوية أو 4 في AP أو 5 في IB Higher-Level أو درجة B في GCE A-Level.",
+                "evidenceIds": [
+                  "answer:admission-international-computing-subjects#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6860,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 22312,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 94,
+                  "estimatedUsd": 0.0090752
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3113,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 229,
+                  "estimatedUsd": 0.0010356000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1572,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006784000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 26997,
+              "outputTokens": 354,
+              "knownUsageUsd": 0.0107892,
+              "estimatedUsd": 0.0107892,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Required fact 1",
+            "passed": true,
+            "patterns": [
+              "90"
+            ]
+          },
+          {
+            "name": "Required fact 2",
+            "passed": true,
+            "patterns": [
+              "5\\.5"
+            ]
+          },
+          {
+            "name": "Required fact 3",
+            "passed": true,
+            "patterns": [
+              "math|رياضيات"
+            ]
+          },
+          {
+            "name": "Required fact 4",
+            "passed": true,
+            "patterns": [
+              "physics|computer science|الفيزياء|الحاسوب"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "7b2570abd3c1a912c6e11766a5ae0b8771a180eb25253a91e52740106f467478",
+    "files": 8453,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat-uaeu-knowledge-expansion-v38-awaiting-live-retest"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "8946e1b15f80d9d57a86b7b81a1bda26775a5f0e3d918e7fca836809e6ee5a7c",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "3984dc514f13b7288bd77765b128524c837be2e2bd03b0c55193fe8447a511ac",
+        "generatedAt": "2026-11-04T16:56:55.674Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 154,
+      "sourceEvidence": {
+        "mappedReferences": 204,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "fixtureSnapshotFile": "reports/knowledge-expansion-2026-11-04/examiner-focused-v38-fixture.json",
+  "gradingBefore": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "connectionPolicy": "Fresh localhost HTTP connections; failed attempts remain failures, without automatic transport retries.",
+  "timingPolicy": "Elapsed time includes reading and decoding the complete response body.",
+  "concurrency": 3,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 16,
+    "partial": 0,
+    "incorrect": 2
+  },
+  "finishedAt": "2026-11-05T06:54:57.789Z",
+  "runtimeAfter": {
+    "sha256": "7b2570abd3c1a912c6e11766a5ae0b8771a180eb25253a91e52740106f467478",
+    "files": 8453,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat-uaeu-knowledge-expansion-v38-awaiting-live-retest"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "8946e1b15f80d9d57a86b7b81a1bda26775a5f0e3d918e7fca836809e6ee5a7c",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers, workflow evidence and retrieved excerpts feed tailored source-checked generation; structured checklist UI and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; up to two checked rewrites; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 143834,
+        "vectors": 143834,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "3984dc514f13b7288bd77765b128524c837be2e2bd03b0c55193fe8447a511ac",
+        "generatedAt": "2026-11-04T16:56:55.674Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 67,
+      "verifiedAnswers": 154,
+      "sourceEvidence": {
+        "mappedReferences": 204,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 45,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-04",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 11,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "7821dc259e81b2e2db2211bc91545ae61667dac5e5f87a2b5fbf98c9d681e72e"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "gradingAfter": {
+    "sha256": "5bc1def018b779b1d0a08804a50987b95f5c322ffc53c1c4cc8f827a5b218e93",
+    "files": [
+      "evals/run-knowledge-expansion.mjs",
+      "evals/run-qa-audit.mjs",
+      "evals/examiner-rubric.mjs",
+      "evals/source-equivalences.mjs",
+      "reports/knowledge-expansion-2026-11-04/source-equivalences.json"
+    ]
+  },
+  "gradingUnchanged": true,
+  "servingContractUnchanged": true,
+  "runtimeFileUnchanged": true,
+  "latency": {
+    "median": 5.32,
+    "p95": 10.106,
+    "max": 10.106
+  },
+  "usage": {
+    "measuredAnswers": 18,
+    "totalAnswers": 18,
+    "estimatedUsd": 0.10267200000000001,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "EX051-V1",
+      "EX051-V2"
+    ],
+    [
+      "EX052",
+      "EX052-V1"
+    ],
+    [
+      "EX052-V2",
+      "EX052-V3"
+    ]
+  ]
+}

@@ -1,0 +1,93 @@
+{
+  "startedAt": "2026-11-04T21:48:31.657Z",
+  "finishedAt": "2026-11-04T21:48:40.680Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "preflight-grad-v37",
+  "results": [
+    {
+      "id": "preflight-generic-graduation",
+      "turns": [
+        "What are the graduation requirements for my program?"
+      ],
+      "conversation": [
+        {
+          "user": "What are the graduation requirements for my program?",
+          "status": 200,
+          "seconds": 9.021382459,
+          "payload": {
+            "role": "assistant",
+            "content": "For undergraduate programs at UAEU (excluding the College of Medicine and Health Sciences), graduation requires completion of the approved degree structure with at least 120 semester credits, a cumulative GPA of at least 2.00, no outstanding Incomplete grades, and satisfaction of required components including general education, college requirements, major requirements, electives, minors, and exit proficiency. Program-specific requirements may also apply.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Degree Completion and Graduation Procedures",
+                "url": "https://www.uaeu.ac.ae/en/about/pdfs/policies/6_degree_completion_and_graduation-en.pdf",
+                "lastVerified": "2026-09-29",
+                "sourceVersion": "Effective 2018-08-12; review due 2021-09-01; no supersession certification",
+                "sourceSection": "Degree completion procedures sections 2 and 3",
+                "evidenceText": "Published effective-2018 undergraduate policy excludes the College of Medicine and Health Sciences; later supersession not established. AE-06 procedure 2: complete approved degree structure, at least 120 semester credits, cumulative GPA at least 2.00 and no outstanding Incomplete (I); satisfy required general-education/college/major/elective/minor and exit-proficiency components. Program-specific structures may add requirements. CMHS is expressly excluded."
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "graduation",
+            "evidenceIds": [
+              "answer:graduation-requirements-program#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For undergraduate programs at UAEU (excluding the College of Medicine and Health Sciences), graduation requires completion of the approved degree structure with at least 120 semester credits, a cumulative GPA of at least 2.00, no outstanding Incomplete grades, and satisfaction of required components including general education, college requirements, major requirements, electives, minors, and exit proficiency. Program-specific requirements may also apply.",
+                "evidenceIds": [
+                  "answer:graduation-requirements-program#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8935,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 3024,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 111,
+                  "estimatedUsd": 0.0013872000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1437,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 31,
+                  "estimatedUsd": 0.0006244000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4461,
+              "outputTokens": 142,
+              "knownUsageUsd": 0.0020116000000000005,
+              "estimatedUsd": 0.0020116000000000005,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

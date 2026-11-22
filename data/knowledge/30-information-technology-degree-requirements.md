@@ -11,7 +11,7 @@ curriculum: true
 
 ## Information Technology degree credit breakdown
 
-The published catalog page specifies a minimum of 120 credit hours: 21 general education, 41 college requirements, 37 major requirements, 6 internship, 9 major electives (three courses), and 6 free electives. The separate 2025–26 cohort model plan PDF is labeled 130 total credit hours, so do not apply the catalog's 120-credit total to that cohort without a degree-audit confirmation.
+The published catalog page specifies a minimum of 120 credit hours: 21 general education, 41 college requirements, 37 major requirements, 6 internship, 9 major electives (three courses), and 6 free electives. Audience: the published undergraduate catalog curriculum, not an individual assigned cohort. Consult the separately sourced cohort model before applying this catalog total to a student's plan.
 
 ## Information Technology required-course classification
 

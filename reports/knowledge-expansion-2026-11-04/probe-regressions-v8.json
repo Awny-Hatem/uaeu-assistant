@@ -1,0 +1,2781 @@
+{
+  "startedAt": "2026-11-04T06:34:16.853Z",
+  "base": "http://127.0.0.1:3000",
+  "label": "probe-regressions-v8",
+  "fixture": "reports/knowledge-expansion-2026-11-04/fixture-combined-candidate71k.json",
+  "fixtureSha256": "e48b865fa40a1b3c1dcdff8a08214618a61d184c0b9bee7990db02a5e5da7def",
+  "methodology": "One shared 2.3-second request-start limiter, at most3 in flight. Original195 plus329 new scenarios; all alternate phrasings. Automated official-source rubric, then semantic review. Candidate71k snapshot, not full crawl completion.",
+  "results": [
+    {
+      "id": "CQ019",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "cs-first",
+      "turns": [
+        "what should a CS student take in his first semister"
+      ],
+      "expected": "For the Fall 2025 CS model plan: 16 credits comprising GEAE101 (3), MATH105 (3), CSBP119 (3), PHYS105 (3), Culture Elective 1 (3), CSBP121 (1). State cohort; do not substitute second semester.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MATH\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*119"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "CSBP\\s*121"
+          ]
+        },
+        {
+          "name": "Expected fact 6",
+          "any": [
+            "\\b16\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 7",
+          "any": [
+            "first semester",
+            "semester 1",
+            "semester one",
+            "الفصل.*(?:اول|أول)",
+            "اول فصل",
+            "أول فصل",
+            "first[ -]term",
+            "first[ -]semester",
+            "begin with",
+            "start with"
+          ]
+        },
+        {
+          "name": "Applicable model cohort",
+          "any": [
+            "2025"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "suite": "legacy",
+      "parentId": "CQ019",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "what should a CS student take in his first semister",
+          "status": 200,
+          "seconds": 8.781,
+          "payload": {
+            "role": "assistant",
+            "content": "For a Bachelor of Science in Computer Science student entering in Fall 2025, the recommended first semester courses total 16 credit hours and include GEAE101 Academic English for Humanities and STEM (3 credits), MATH105 Calculus I (3 credits), CSBP119 Algorithms and Problem Solving (3 credits), PHYS105 General Physics I (3 credits), one Culture Elective 1 (3 credits, chosen from approved options), and CSBP121 Programming Lab I (1 credit).",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science Fall 2025 first-semester model plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science first semester — Fall 2025 entry"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "29-computer-science-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For a Bachelor of Science in Computer Science student entering in Fall 2025, the recommended first semester courses total 16 credit hours and include GEAE101 Academic English for Humanities and STEM (3 credits), MATH105 Calculus I (3 credits), CSBP119 Algorithms and Problem Solving (3 credits), PHYS105 General Physics I (3 credits), one Culture Elective 1 (3 credits, chosen from approved options), and CSBP121 Programming Lab I (1 credit).",
+                "evidenceIds": [
+                  "29-computer-science-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8761,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2659,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 126,
+                  "estimatedUsd": 0.0012652000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1168,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005088000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3827,
+              "outputTokens": 152,
+              "knownUsageUsd": 0.0017740000000000004,
+              "estimatedUsd": 0.0017740000000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*119"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*121"
+            ]
+          },
+          {
+            "name": "Expected fact 6",
+            "passed": true,
+            "patterns": [
+              "\\b16\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 7",
+            "passed": true,
+            "patterns": [
+              "first semester",
+              "semester 1",
+              "semester one",
+              "الفصل.*(?:اول|أول)",
+              "اول فصل",
+              "أول فصل",
+              "first[ -]term",
+              "first[ -]semester",
+              "begin with",
+              "start with"
+            ]
+          },
+          {
+            "name": "Applicable model cohort",
+            "passed": true,
+            "patterns": [
+              "2025"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ022",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "cs-first",
+      "turns": [
+        "انا طالب علوم حاسوب دفعة خريف 2025، شو آخذ أول فصل؟"
+      ],
+      "expected": "For the Fall 2025 CS model plan: 16 credits comprising GEAE101 (3), MATH105 (3), CSBP119 (3), PHYS105 (3), Culture Elective 1 (3), CSBP121 (1). State cohort; do not substitute second semester.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MATH\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*119"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "CSBP\\s*121"
+          ]
+        },
+        {
+          "name": "Expected fact 6",
+          "any": [
+            "\\b16\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 7",
+          "any": [
+            "first semester",
+            "semester 1",
+            "semester one",
+            "الفصل.*(?:اول|أول)",
+            "اول فصل",
+            "أول فصل",
+            "first[ -]term",
+            "first[ -]semester",
+            "begin with",
+            "start with"
+          ]
+        },
+        {
+          "name": "Applicable model cohort",
+          "any": [
+            "2025"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "suite": "legacy",
+      "parentId": "CQ022",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "انا طالب علوم حاسوب دفعة خريف 2025، شو آخذ أول فصل؟",
+          "status": 200,
+          "seconds": 8.021,
+          "payload": {
+            "role": "assistant",
+            "content": "في أول فصل دراسي لطلاب علوم الحاسوب دفعة خريف 2025، تأخذ 16 ساعة معتمدة تشمل: GEAE101 (الإنجليزية الأكاديمية للعلوم الإنسانية والعلوم التطبيقية) 3 ساعات، MATH105 (التفاضل والتكامل 1) 3 ساعات، CSBP119 (الخوارزميات وحل المشكلات) 3 ساعات، PHYS105 (الفيزياء العامة 1) 3 ساعات، مقرر ثقافي اختياري 3 ساعات، وCSBP121 (مختبر البرمجة 1) ساعة واحدة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science Fall 2025 first-semester model plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science first semester — Fall 2025 entry"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "29-computer-science-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "في أول فصل دراسي لطلاب علوم الحاسوب دفعة خريف 2025، تأخذ 16 ساعة معتمدة تشمل: GEAE101 (الإنجليزية الأكاديمية للعلوم الإنسانية والعلوم التطبيقية) 3 ساعات، MATH105 (التفاضل والتكامل 1) 3 ساعات، CSBP119 (الخوارزميات وحل المشكلات) 3 ساعات، PHYS105 (الفيزياء العامة 1) 3 ساعات، مقرر ثقافي اختياري 3 ساعات، وCSBP121 (مختبر البرمجة 1) ساعة واحدة.",
+                "evidenceIds": [
+                  "29-computer-science-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 8017,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2676,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 152,
+                  "estimatedUsd": 0.0013136
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1194,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005192
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3870,
+              "outputTokens": 178,
+              "knownUsageUsd": 0.0018328,
+              "estimatedUsd": 0.0018328,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*119"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*121"
+            ]
+          },
+          {
+            "name": "Expected fact 6",
+            "passed": true,
+            "patterns": [
+              "\\b16\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 7",
+            "passed": true,
+            "patterns": [
+              "first semester",
+              "semester 1",
+              "semester one",
+              "الفصل.*(?:اول|أول)",
+              "اول فصل",
+              "أول فصل",
+              "first[ -]term",
+              "first[ -]semester",
+              "begin with",
+              "start with"
+            ]
+          },
+          {
+            "name": "Applicable model cohort",
+            "passed": true,
+            "patterns": [
+              "2025"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ023",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "cs-first",
+      "turns": [
+        "CS major Fall 2025: شو مواد first semester؟"
+      ],
+      "expected": "For the Fall 2025 CS model plan: 16 credits comprising GEAE101 (3), MATH105 (3), CSBP119 (3), PHYS105 (3), Culture Elective 1 (3), CSBP121 (1). State cohort; do not substitute second semester.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "GEAE\\s*101"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MATH\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "CSBP\\s*119"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "PHYS\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 5",
+          "any": [
+            "CSBP\\s*121"
+          ]
+        },
+        {
+          "name": "Expected fact 6",
+          "any": [
+            "\\b16\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 7",
+          "any": [
+            "first semester",
+            "semester 1",
+            "semester one",
+            "الفصل.*(?:اول|أول)",
+            "اول فصل",
+            "أول فصل",
+            "first[ -]term",
+            "first[ -]semester",
+            "begin with",
+            "start with"
+          ]
+        },
+        {
+          "name": "Applicable model cohort",
+          "any": [
+            "2025"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "✅ Correct",
+      "suite": "legacy",
+      "parentId": "CQ023",
+      "language": "ar",
+      "conversation": [
+        {
+          "user": "CS major Fall 2025: شو مواد first semester؟",
+          "status": 200,
+          "seconds": 7.965,
+          "payload": {
+            "role": "assistant",
+            "content": "مواد الفصل الأول لتخصص علوم الحاسب في خريف 2025 تشمل: GEAE101 (الإنجليزية الأكاديمية للعلوم الإنسانية والعلوم التطبيقية) 3 ساعات معتمدة، MATH105 (التفاضل والتكامل 1) 3 ساعات، CSBP119 (الخوارزميات وحل المشكلات) 3 ساعات، PHYS105 (الفيزياء العامة 1) 3 ساعات، مادة اختيارية ثقافية 3 ساعات، وCSBP121 (مختبر البرمجة 1) ساعة معتمدة واحدة، بإجمالي 16 ساعة معتمدة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Computer Science Fall 2025 first-semester model plan",
+                "url": "https://www.uaeu.ac.ae/en/cit/undergraduate-students-affairs/bscs_study_plan_fall_2025.pdf",
+                "lastVerified": "2026-10-06",
+                "sourceSection": "Computer Science first semester — Fall 2025 entry"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "computer-science",
+            "evidenceIds": [
+              "29-computer-science-first-semester.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "مواد الفصل الأول لتخصص علوم الحاسب في خريف 2025 تشمل: GEAE101 (الإنجليزية الأكاديمية للعلوم الإنسانية والعلوم التطبيقية) 3 ساعات معتمدة، MATH105 (التفاضل والتكامل 1) 3 ساعات، CSBP119 (الخوارزميات وحل المشكلات) 3 ساعات، PHYS105 (الفيزياء العامة 1) 3 ساعات، مادة اختيارية ثقافية 3 ساعات، وCSBP121 (مختبر البرمجة 1) ساعة معتمدة واحدة، بإجمالي 16 ساعة معتمدة.",
+                "evidenceIds": [
+                  "29-computer-science-first-semester.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7962,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2665,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 154,
+                  "estimatedUsd": 0.0013124
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1196,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00052
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3861,
+              "outputTokens": 180,
+              "knownUsageUsd": 0.0018324,
+              "estimatedUsd": 0.0018324,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "GEAE\\s*101"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MATH\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*119"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": true,
+            "patterns": [
+              "PHYS\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 5",
+            "passed": true,
+            "patterns": [
+              "CSBP\\s*121"
+            ]
+          },
+          {
+            "name": "Expected fact 6",
+            "passed": true,
+            "patterns": [
+              "\\b16\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 7",
+            "passed": true,
+            "patterns": [
+              "first semester",
+              "semester 1",
+              "semester one",
+              "الفصل.*(?:اول|أول)",
+              "اول فصل",
+              "أول فصل",
+              "first[ -]term",
+              "first[ -]semester",
+              "begin with",
+              "start with"
+            ]
+          },
+          {
+            "name": "Applicable model cohort",
+            "passed": true,
+            "patterns": [
+              "2025"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ042",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "mech348",
+      "turns": [
+        "Can I take MECH 348 alongside MECH 340?"
+      ],
+      "expected": "MECH340 is Pre/Co; concurrent may be permitted; MECH210 prerequisite minimum D remains.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml?id=MECH348"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MECH\\s*210"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "MECH\\s*340"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "concurrent",
+            "Pre.?Co",
+            "متزامن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "suite": "legacy",
+      "parentId": "CQ042",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "Can I take MECH 348 alongside MECH 340?",
+          "status": 200,
+          "seconds": 6.774,
+          "payload": {
+            "role": "assistant",
+            "content": "You can take MECH348 Fluid Mechanics Lab alongside MECH340 Fluid Mechanics, as MECH340 is listed as a pre/corequisite that may be completed before or concurrently with MECH348, both requiring a minimum grade of D.\n\nHowever, you must have completed MECH210 Measurement and Instrumentation Lab with a minimum grade of D before taking MECH348, as it is a prerequisite that cannot be taken concurrently.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Mechanical Engineering course prerequisites and pre/corequisites",
+                "url": "https://www.uaeu.ac.ae/en/eng/courses/course_2945.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "MECH348",
+            "evidenceIds": [
+              "33-mechanical-engineering-course-prerequisites.md#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "You can take MECH348 Fluid Mechanics Lab alongside MECH340 Fluid Mechanics, as MECH340 is listed as a pre/corequisite that may be completed before or concurrently with MECH348, both requiring a minimum grade of D.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              },
+              {
+                "text": "However, you must have completed MECH210 Measurement and Instrumentation Lab with a minimum grade of D before taking MECH348, as it is a prerequisite that cannot be taken concurrently.",
+                "evidenceIds": [
+                  "33-mechanical-engineering-course-prerequisites.md#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 6771,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2647,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 122,
+                  "estimatedUsd": 0.001254
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1178,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005128000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1168,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005088000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 4993,
+              "outputTokens": 174,
+              "knownUsageUsd": 0.0022756,
+              "estimatedUsd": 0.0022756,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*210"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "MECH\\s*340"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "concurrent",
+              "Pre.?Co",
+              "متزامن"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ060",
+      "original": true,
+      "focus": "Weird Case",
+      "group": "me-cohort",
+      "turns": [
+        "For the UAEU Fall 2026-2027 Mechanical Engineering model, is the first calculus course MATH105 or MATH130?"
+      ],
+      "expected": "Official model PDF page2: Fall2026–27 model uses MATH130 Calculus I for Engineering(3); Fall2025–26 uses MATH105. Keep cohort and entry term separate.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_mechanical_engineering_study_plan.pdf"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "MATH\\s*130"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "2026"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "MATH\\s*105"
+          ]
+        },
+        {
+          "name": "Expected fact 4",
+          "any": [
+            "2025"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "suite": "legacy",
+      "parentId": "CQ060",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For the UAEU Fall 2026-2027 Mechanical Engineering model, is the first calculus course MATH105 or MATH130?",
+          "status": 502,
+          "seconds": 6.993,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 1,
+              "reasonCodes": [
+                "scope_drift"
+              ]
+            },
+            "clarificationReason": "scope_drift",
+            "usage": {
+              "elapsedMs": 6990,
+              "attemptedCalls": 2,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2619,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 60,
+                  "estimatedUsd": 0.0011436
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2867,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 60,
+                  "estimatedUsd": 0.0012427999999999999
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 5486,
+              "outputTokens": 120,
+              "knownUsageUsd": 0.0023864,
+              "estimatedUsd": 0.0023864,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": false,
+            "patterns": [
+              "MATH\\s*130"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": false,
+            "patterns": [
+              "2026"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": false,
+            "patterns": [
+              "MATH\\s*105"
+            ]
+          },
+          {
+            "name": "Expected fact 4",
+            "passed": false,
+            "patterns": [
+              "2025"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Expected fact 1",
+          "Expected fact 2",
+          "Expected fact 3",
+          "Expected fact 4"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ069",
+      "original": true,
+      "focus": "Missing Knowledge",
+      "group": "mpa-fee",
+      "turns": [
+        "What is the UAEU Master of Professional Accounting tuition per credit and application fee?"
+      ],
+      "expected": "The published graduate fee table, expressly valid only throughAY2025–26, lists MPA36credits,AED2750percredit and AED200application fee excludingVAT. Do not claim these rates are certified for2026–27.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "suite": "legacy",
+      "parentId": "CQ069",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What is the UAEU Master of Professional Accounting tuition per credit and application fee?",
+          "status": 200,
+          "seconds": 7.913,
+          "payload": {
+            "role": "assistant",
+            "content": "The tuition fee per credit hour for the Master of Professional Accounting at UAEU is 2750 AED, and the application fee is 200 AED for the academic year 2025-2026.\n\nAn official certificate states the application fee as 210 AED and the fee per credit hour as 2750 AED for the Master of Professional Accounting program.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master Programs",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Master Programs"
+              },
+              {
+                "title": "to-whom-it-may-concern-professional-accounting.pdf",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/pdf/graduate-students/to-whom-it-may-concern-professional-accounting.pdf#page=1",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "PDF page 1"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "tuition",
+            "evidenceIds": [
+              "corpus:943aeb8b89768581d18f:2#E1S1",
+              "corpus:a09752cea84b1b043207:0#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The tuition fee per credit hour for the Master of Professional Accounting at UAEU is 2750 AED, and the application fee is 200 AED for the academic year 2025-2026.",
+                "evidenceIds": [
+                  "corpus:943aeb8b89768581d18f:2#E1S1"
+                ]
+              },
+              {
+                "text": "An official certificate states the application fee as 210 AED and the fee per credit hour as 2750 AED for the Master of Professional Accounting program.",
+                "evidenceIds": [
+                  "corpus:a09752cea84b1b043207:0#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7910,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 16,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7151,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 108,
+                  "estimatedUsd": 0.0030332000000000002
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1896,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0008000000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1714,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0007272
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 10777,
+              "outputTokens": 160,
+              "knownUsageUsd": 0.00456072,
+              "estimatedUsd": 0.00456072,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "CQ094",
+      "original": true,
+      "focus": "Phrasing Sensitivity",
+      "group": "mpa-fee",
+      "turns": [
+        "For 2025-2026, what are the published per-credit tuition and application fee for the Master of Professional Accounting?"
+      ],
+      "expected": "Published table AED2750/credit,AED200application,36credits; validity endsAY2025-2026.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml"
+      ],
+      "checks": [
+        {
+          "name": "Expected fact 1",
+          "any": [
+            "2,?750"
+          ]
+        },
+        {
+          "name": "Expected fact 2",
+          "any": [
+            "\\b200\\b"
+          ]
+        },
+        {
+          "name": "Expected fact 3",
+          "any": [
+            "2025.{0,8}(?:2026|26)"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "auditResult": "❌ Incorrect",
+      "suite": "legacy",
+      "parentId": "CQ094",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "For 2025-2026, what are the published per-credit tuition and application fee for the Master of Professional Accounting?",
+          "status": 200,
+          "seconds": 9.094,
+          "payload": {
+            "role": "assistant",
+            "content": "For the academic year 2025-2026, the Master of Professional Accounting program at UAEU requires 36 credit hours and has a tuition fee of 2750 AED per credit hour, with an application fee of 200 AED.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Master Programs",
+                "url": "https://www.uaeu.ac.ae/en/dvcsae/student_account_office/program-and-housing-rates-graduate-students.shtml",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Master Programs"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "tuition",
+            "evidenceIds": [
+              "corpus:943aeb8b89768581d18f:2#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "For the academic year 2025-2026, the Master of Professional Accounting program at UAEU requires 36 credit hours and has a tuition fee of 2750 AED per credit hour, with an application fee of 200 AED.",
+                "evidenceIds": [
+                  "corpus:943aeb8b89768581d18f:2#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 9092,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 26,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 5.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 7608,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 74,
+                  "estimatedUsd": 0.0031616000000000005
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1939,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0008172
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 9573,
+              "outputTokens": 100,
+              "knownUsageUsd": 0.003979320000000001,
+              "estimatedUsd": 0.003979320000000001,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "Expected fact 1",
+            "passed": true,
+            "patterns": [
+              "2,?750"
+            ]
+          },
+          {
+            "name": "Expected fact 2",
+            "passed": true,
+            "patterns": [
+              "\\b200\\b"
+            ]
+          },
+          {
+            "name": "Expected fact 3",
+            "passed": true,
+            "patterns": [
+              "2025.{0,8}(?:2026|26)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE313-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Phrasing Sensitivity",
+      "turns": [
+        "BSc Electrical Engineering2026–2027 Fall entry: first-semester course list and credits?"
+      ],
+      "expected": "GEAE1013,CHEM1113,CHEM1751,PHYS1053,PHYS1351,MATH1053,GEEM1103; published semester subtotal17; totaldegree132. This is a model, not live registration eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "GEAE101",
+          "any": [
+            "GEAE101"
+          ]
+        },
+        {
+          "name": "CHEM111",
+          "any": [
+            "CHEM111"
+          ]
+        },
+        {
+          "name": "CHEM175",
+          "any": [
+            "CHEM175"
+          ]
+        },
+        {
+          "name": "PHYS105",
+          "any": [
+            "PHYS105"
+          ]
+        },
+        {
+          "name": "PHYS135",
+          "any": [
+            "PHYS135"
+          ]
+        },
+        {
+          "name": "MATH105",
+          "any": [
+            "MATH105"
+          ]
+        },
+        {
+          "name": "GEEM110",
+          "any": [
+            "GEEM110"
+          ]
+        },
+        {
+          "name": "semester subtotal",
+          "any": [
+            "17"
+          ]
+        }
+      ],
+      "variants": [
+        "BSc Electrical Engineering2026–2027 Fall entry: first-semester course list and credits?",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج بكالوريوس الهندسة الكهربائية لخريف 2026–2027؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE313",
+      "conversation": [
+        {
+          "user": "BSc Electrical Engineering2026–2027 Fall entry: first-semester course list and credits?",
+          "status": 200,
+          "seconds": 7.044,
+          "payload": {
+            "role": "assistant",
+            "content": "The first-semester courses for the Bachelor of Science in Electrical Engineering 2026-2027 Fall entry total 17 credit hours and include: GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), MATH105 Calculus I (3 credits), and GEEM110 Contemporary Emirati Studies (3 credits).",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Electrical Engineering — official model study plan",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf#page=2",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Electrical Engineering Model Study Plan (2026-2027 Cohort onwards) For Students Admitted to the University from the Fall Semester Total Degree Credit hours: 132 — Semester 1 (Fall) course list"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:feb44cf752431126c15c:316#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The first-semester courses for the Bachelor of Science in Electrical Engineering 2026-2027 Fall entry total 17 credit hours and include: GEAE101 Academic English for Humanities and STEM (3 credits), CHEM111 General Chemistry I (3 credits), CHEM175 Chemistry Lab I for Engineering (1 credit), PHYS105 General Physics I (3 credits), PHYS135 General Physics Lab I (1 credit), MATH105 Calculus I (3 credits), and GEEM110 Contemporary Emirati Studies (3 credits).",
+                "evidenceIds": [
+                  "corpus:feb44cf752431126c15c:316#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7041,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 21,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5698,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 134,
+                  "estimatedUsd": 0.0024936000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1391,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.000598
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7110,
+              "outputTokens": 160,
+              "knownUsageUsd": 0.0030920200000000004,
+              "estimatedUsd": 0.0030920200000000004,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "GEAE101",
+            "passed": true,
+            "patterns": [
+              "GEAE101"
+            ]
+          },
+          {
+            "name": "CHEM111",
+            "passed": true,
+            "patterns": [
+              "CHEM111"
+            ]
+          },
+          {
+            "name": "CHEM175",
+            "passed": true,
+            "patterns": [
+              "CHEM175"
+            ]
+          },
+          {
+            "name": "PHYS105",
+            "passed": true,
+            "patterns": [
+              "PHYS105"
+            ]
+          },
+          {
+            "name": "PHYS135",
+            "passed": true,
+            "patterns": [
+              "PHYS135"
+            ]
+          },
+          {
+            "name": "MATH105",
+            "passed": true,
+            "patterns": [
+              "MATH105"
+            ]
+          },
+          {
+            "name": "GEEM110",
+            "passed": true,
+            "patterns": [
+              "GEEM110"
+            ]
+          },
+          {
+            "name": "semester subtotal",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE313-V2",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Phrasing Sensitivity",
+      "turns": [
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج بكالوريوس الهندسة الكهربائية لخريف 2026–2027؟"
+      ],
+      "expected": "GEAE1013,CHEM1113,CHEM1751,PHYS1053,PHYS1351,MATH1053,GEEM1103; published semester subtotal17; totaldegree132. This is a model, not live registration eligibility.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "GEAE101",
+          "any": [
+            "GEAE101"
+          ]
+        },
+        {
+          "name": "CHEM111",
+          "any": [
+            "CHEM111"
+          ]
+        },
+        {
+          "name": "CHEM175",
+          "any": [
+            "CHEM175"
+          ]
+        },
+        {
+          "name": "PHYS105",
+          "any": [
+            "PHYS105"
+          ]
+        },
+        {
+          "name": "PHYS135",
+          "any": [
+            "PHYS135"
+          ]
+        },
+        {
+          "name": "MATH105",
+          "any": [
+            "MATH105"
+          ]
+        },
+        {
+          "name": "GEEM110",
+          "any": [
+            "GEEM110"
+          ]
+        },
+        {
+          "name": "semester subtotal",
+          "any": [
+            "17"
+          ]
+        }
+      ],
+      "variants": [
+        "BSc Electrical Engineering2026–2027 Fall entry: first-semester course list and credits?",
+        "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج بكالوريوس الهندسة الكهربائية لخريف 2026–2027؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE313",
+      "conversation": [
+        {
+          "user": "ما مساقات الفصل الأول ومجموع ساعاتها في نموذج بكالوريوس الهندسة الكهربائية لخريف 2026–2027؟",
+          "status": 200,
+          "seconds": 7.224,
+          "payload": {
+            "role": "assistant",
+            "content": "مساقات الفصل الأول في نموذج بكالوريوس الهندسة الكهربائية لخريف 2026-2027 هي: GEAE101 (الإنجليزية الأكاديمية للعلوم الإنسانية والهندسة) 3 ساعات معتمدة، CHEM111 (الكيمياء العامة I) 3 ساعات معتمدة، CHEM175 (مختبر الكيمياء I للهندسة) 1 ساعة معتمدة، PHYS105 (الفيزياء العامة I) 3 ساعات معتمدة، PHYS135 (مختبر الفيزياء العامة I) 1 ساعة معتمدة، MATH105 (التفاضل والتكامل I) 3 ساعات معتمدة، وGEEM110 (الدراسات الإماراتية المعاصرة) 3 ساعات معتمدة.\n\nمجموع الساعات المعتمدة لمساقات الفصل الأول هو 17 ساعة معتمدة.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Electrical Engineering — official model study plan",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf#page=2",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Electrical Engineering Model Study Plan (2026-2027 Cohort onwards) For Students Admitted to the University from the Fall Semester Total Degree Credit hours: 132 — Semester 1 (Fall) course list"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:feb44cf752431126c15c:316#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "مساقات الفصل الأول في نموذج بكالوريوس الهندسة الكهربائية لخريف 2026-2027 هي: GEAE101 (الإنجليزية الأكاديمية للعلوم الإنسانية والهندسة) 3 ساعات معتمدة، CHEM111 (الكيمياء العامة I) 3 ساعات معتمدة، CHEM175 (مختبر الكيمياء I للهندسة) 1 ساعة معتمدة، PHYS105 (الفيزياء العامة I) 3 ساعات معتمدة، PHYS135 (مختبر الفيزياء العامة I) 1 ساعة معتمدة، MATH105 (التفاضل والتكامل I) 3 ساعات معتمدة، وGEEM110 (الدراسات الإماراتية المعاصرة) 3 ساعات معتمدة.",
+                "evidenceIds": [
+                  "corpus:feb44cf752431126c15c:316#E1S1"
+                ]
+              },
+              {
+                "text": "مجموع الساعات المعتمدة لمساقات الفصل الأول هو 17 ساعة معتمدة.",
+                "evidenceIds": [
+                  "corpus:feb44cf752431126c15c:316#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7221,
+              "attemptedCalls": 4,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 66,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 0.00000132
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5596,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 216,
+                  "estimatedUsd": 0.002584
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1267,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005484
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1407,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0006044000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 8336,
+              "outputTokens": 268,
+              "knownUsageUsd": 0.00373812,
+              "estimatedUsd": 0.00373812,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "GEAE101",
+            "passed": true,
+            "patterns": [
+              "GEAE101"
+            ]
+          },
+          {
+            "name": "CHEM111",
+            "passed": true,
+            "patterns": [
+              "CHEM111"
+            ]
+          },
+          {
+            "name": "CHEM175",
+            "passed": true,
+            "patterns": [
+              "CHEM175"
+            ]
+          },
+          {
+            "name": "PHYS105",
+            "passed": true,
+            "patterns": [
+              "PHYS105"
+            ]
+          },
+          {
+            "name": "PHYS135",
+            "passed": true,
+            "patterns": [
+              "PHYS135"
+            ]
+          },
+          {
+            "name": "MATH105",
+            "passed": true,
+            "patterns": [
+              "MATH105"
+            ]
+          },
+          {
+            "name": "GEEM110",
+            "passed": true,
+            "patterns": [
+              "GEEM110"
+            ]
+          },
+          {
+            "name": "semester subtotal",
+            "passed": true,
+            "patterns": [
+              "17"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE314-V1",
+      "category": "academics",
+      "language": "en",
+      "focus": "Phrasing Sensitivity",
+      "turns": [
+        "Which labs are in semester one of the BSc Electrical Engineering2026–2027 Fall model?"
+      ],
+      "expected": "CHEM175ChemistryLabforEngineering1credit and PHYS135GeneralPhysicsLabI1credit; limit to that semester model.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "chemistry lab",
+          "any": [
+            "CHEM175"
+          ]
+        },
+        {
+          "name": "physics lab",
+          "any": [
+            "PHYS135"
+          ]
+        }
+      ],
+      "variants": [
+        "Which labs are in semester one of the BSc Electrical Engineering2026–2027 Fall model?",
+        "ما مختبرا الفصل الأول في نموذج الهندسة الكهربائية2026–2027 لخريف الدخول؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE314",
+      "conversation": [
+        {
+          "user": "Which labs are in semester one of the BSc Electrical Engineering2026–2027 Fall model?",
+          "status": 200,
+          "seconds": 7.663,
+          "payload": {
+            "role": "assistant",
+            "content": "The labs in semester one of the Bachelor of Science in Electrical Engineering 2026-2027 Fall model are Chemistry Lab I for Engineering (CHEM175) and General Physics Lab I (PHYS135).",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Electrical Engineering — official model study plan",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf#page=2",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Electrical Engineering Model Study Plan (2026-2027 Cohort onwards) For Students Admitted to the University from the Fall Semester Total Degree Credit hours: 132 — Semester 1 (Fall) course list"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:feb44cf752431126c15c:316#E2S1"
+            ],
+            "claims": [
+              {
+                "text": "The labs in semester one of the Bachelor of Science in Electrical Engineering 2026-2027 Fall model are Chemistry Lab I for Engineering (CHEM175) and General Physics Lab I (PHYS135).",
+                "evidenceIds": [
+                  "corpus:feb44cf752431126c15c:316#E2S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7661,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 21,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.2e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5530,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 69,
+                  "estimatedUsd": 0.0023224
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1326,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.000572
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 6877,
+              "outputTokens": 95,
+              "knownUsageUsd": 0.00289482,
+              "estimatedUsd": 0.00289482,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "chemistry lab",
+            "passed": true,
+            "patterns": [
+              "CHEM175"
+            ]
+          },
+          {
+            "name": "physics lab",
+            "passed": true,
+            "patterns": [
+              "PHYS135"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE314-V2",
+      "category": "academics",
+      "language": "ar",
+      "focus": "Phrasing Sensitivity",
+      "turns": [
+        "ما مختبرا الفصل الأول في نموذج الهندسة الكهربائية2026–2027 لخريف الدخول؟"
+      ],
+      "expected": "CHEM175ChemistryLabforEngineering1credit and PHYS135GeneralPhysicsLabI1credit; limit to that semester model.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "chemistry lab",
+          "any": [
+            "CHEM175"
+          ]
+        },
+        {
+          "name": "physics lab",
+          "any": [
+            "PHYS135"
+          ]
+        }
+      ],
+      "variants": [
+        "Which labs are in semester one of the BSc Electrical Engineering2026–2027 Fall model?",
+        "ما مختبرا الفصل الأول في نموذج الهندسة الكهربائية2026–2027 لخريف الدخول؟"
+      ],
+      "forbidden": [],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE314",
+      "conversation": [
+        {
+          "user": "ما مختبرا الفصل الأول في نموذج الهندسة الكهربائية2026–2027 لخريف الدخول؟",
+          "status": 200,
+          "seconds": 7.139,
+          "payload": {
+            "role": "assistant",
+            "content": "مختبرا الفصل الأول في نموذج الهندسة الكهربائية 2026-2027 لخريف الدخول هما: CHEM175 Chemistry Lab I for Engineering و PHYS135 General Physics Lab I.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "Bachelor of Science in Electrical Engineering — official model study plan",
+                "url": "https://www.uaeu.ac.ae/en/eng/pdf/coe_bsc_electrical_engineering_study_plan.pdf#page=2",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "Bachelor of Science in Electrical Engineering Model Study Plan (2026-2027 Cohort onwards) For Students Admitted to the University from the Fall Semester Total Degree Credit hours: 132 — Semester 1 (Fall) course list"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "evidenceIds": [
+              "corpus:feb44cf752431126c15c:316#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "مختبرا الفصل الأول في نموذج الهندسة الكهربائية 2026-2027 لخريف الدخول هما: CHEM175 Chemistry Lab I for Engineering و PHYS135 General Physics Lab I.",
+                "evidenceIds": [
+                  "corpus:feb44cf752431126c15c:316#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 7137,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 51,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 0.00000102
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5689,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 63,
+                  "estimatedUsd": 0.0023764000000000003
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1320,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0005696000000000001
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 7060,
+              "outputTokens": 89,
+              "knownUsageUsd": 0.0029470200000000003,
+              "estimatedUsd": 0.0029470200000000003,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "chemistry lab",
+            "passed": true,
+            "patterns": [
+              "CHEM175"
+            ]
+          },
+          {
+            "name": "physics lab",
+            "passed": true,
+            "patterns": [
+              "PHYS135"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE328",
+      "category": "academics",
+      "language": "en",
+      "focus": "Missing Knowledge",
+      "college": "College of Business and Economics",
+      "turns": [
+        "In 2015–2016, what was the prerequisite for ACCT 334 Governmental Accounting?"
+      ],
+      "expected": "The 2015–2016 course catalog page2 lists ACCT334 Governmental Accounting,3.00CH, prerequisite ACCT225. No minimum letter grade is printed in that course record; do not import a current prerequisite/grade rule.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": true,
+      "checks": [
+        {
+          "name": "historical prerequisite",
+          "any": [
+            "ACCT\\s*225"
+          ]
+        },
+        {
+          "name": "year retained",
+          "any": [
+            "2015"
+          ]
+        }
+      ],
+      "variants": [
+        "What did the 2015-2016 UAEU record require before acct-334?",
+        "acct334 in2015–2016: prerequisits plz?",
+        "ما المتطلب السابق لمساق ACCT 334 وفق إصدار 2015–2016؟"
+      ],
+      "sourceQuote": "ACCT334 Governmental Accounting (3.00 CH) ... Prerequisites ACCT225",
+      "sourcePage": 2,
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE328",
+      "conversation": [
+        {
+          "user": "In 2015–2016, what was the prerequisite for ACCT 334 Governmental Accounting?",
+          "status": 200,
+          "seconds": 4.612,
+          "payload": {
+            "role": "assistant",
+            "content": "In the academic year 2015–2016, the prerequisite for ACCT334 Governmental Accounting was ACCT225.",
+            "source": "rag",
+            "responseMode": "grounded_generation",
+            "stateLabel": "local_db",
+            "citations": [
+              {
+                "title": "UAEU Catalog — ACCT334 Governmental Accounting",
+                "url": "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf#page=2",
+                "lastVerified": "2026-11-04",
+                "sourceSection": "ACCT334 Governmental Accounting"
+              }
+            ],
+            "disposition": "answer",
+            "communications": [],
+            "provider": "openai",
+            "model": "gpt-4.1-mini",
+            "topic": "ACCT334",
+            "evidenceIds": [
+              "corpus:73f6c3c38fbdddef1912:8#E1S1"
+            ],
+            "claims": [
+              {
+                "text": "In the academic year 2015–2016, the prerequisite for ACCT334 Governmental Accounting was ACCT225.",
+                "evidenceIds": [
+                  "corpus:73f6c3c38fbdddef1912:8#E1S1"
+                ]
+              }
+            ],
+            "grounding": {
+              "status": "checked",
+              "rewriteCount": 0,
+              "reasonCodes": []
+            },
+            "usage": {
+              "elapsedMs": 4610,
+              "attemptedCalls": 3,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 20,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 4.0000000000000003e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 2536,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 51,
+                  "estimatedUsd": 0.001096
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1062,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.00046640000000000006
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 3618,
+              "outputTokens": 77,
+              "knownUsageUsd": 0.0015628,
+              "estimatedUsd": 0.0015628,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "historical prerequisite",
+            "passed": true,
+            "patterns": [
+              "ACCT\\s*225"
+            ]
+          },
+          {
+            "name": "year retained",
+            "passed": true,
+            "patterns": [
+              "2015"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "id": "KE329",
+      "category": "academics",
+      "language": "en",
+      "focus": "Weird Case",
+      "turns": [
+        "What were the prerequisites for CSBP219 in 2015?"
+      ],
+      "expected": "No verified2015CSBP219record was found in the inspected source. Do not silently apply the undated/current CSBP219 prerequisite to2015 or claim universal nonexistence. Acknowledge the specific historical evidence gap.",
+      "sources": [
+        "https://www.uaeu.ac.ae/en/dvcaa/aau/pdf/coursecatalog2015_2016.pdf"
+      ],
+      "needsCitation": false,
+      "checks": [
+        {
+          "name": "historical evidence limitation",
+          "any": [
+            "do not have.*matching",
+            "cannot verify",
+            "could not verify",
+            "no.*verified",
+            "not.*record",
+            "not.*2015",
+            "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+            "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+          ]
+        }
+      ],
+      "forbidden": [
+        "CSBP119"
+      ],
+      "variants": [
+        "CSBP 219: show me its2015 prerequisite rule.",
+        "What was required before csbp-219 back in2015?",
+        "ما المتطلبات السابقة للمساق CSBP219 في عام 2015؟"
+      ],
+      "sourceVerified": "2026-11-04",
+      "reviewRequired": true,
+      "suite": "expansion",
+      "parentId": "KE329",
+      "conversation": [
+        {
+          "user": "What were the prerequisites for CSBP219 in 2015?",
+          "status": 200,
+          "seconds": 1.414,
+          "payload": {
+            "role": "assistant",
+            "content": "I don't know a verified answer to this request (CSBP219) from the available official evidence. I could not find a matching course record for this identifier; I will not substitute another course. Check the linked official page.",
+            "source": "escalated",
+            "stateLabel": "no_verified_context",
+            "disposition": "clarify",
+            "citations": [
+              {
+                "title": "UAEU official course catalog",
+                "url": "https://www.uaeu.ac.ae/en/catalog/courses/course_2968.shtml",
+                "lastVerified": "2026-11-03"
+              }
+            ],
+            "clarificationReason": "unverified_course",
+            "communications": [],
+            "usage": {
+              "elapsedMs": 1412,
+              "attemptedCalls": 0,
+              "unmeteredAttempts": 0,
+              "calls": [],
+              "embeddingCacheHits": 0,
+              "inputTokens": 0,
+              "outputTokens": 0,
+              "knownUsageUsd": 0,
+              "estimatedUsd": 0,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "correct",
+        "checks": [
+          {
+            "name": "historical evidence limitation",
+            "passed": true,
+            "patterns": [
+              "do not have.*matching",
+              "cannot verify",
+              "could not verify",
+              "no.*verified",
+              "not.*record",
+              "not.*2015",
+              "لا.*(?:أملك|املك|تتوفر|يتوفر|يمكن|التحقق)",
+              "لم.*(?:أجد|اجد|أتمكن|اتمكن)"
+            ]
+          }
+        ],
+        "sourcePass": true,
+        "httpPass": true,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    },
+    {
+      "original": false,
+      "auditResult": null,
+      "focus": "Weakness",
+      "group": "housing",
+      "turns": [
+        "What are the student housing options at UAEU and how do I apply?"
+      ],
+      "expected": "Explain the official Rooms Assignment service and its applicable eligibility/payment/availability limits.",
+      "sources": [
+        "https://coreservices.uaeu.ac.ae/ServiceCatalog/details?serviceId=106"
+      ],
+      "checks": [
+        {
+          "name": "Requested fact or honest scope",
+          "any": [
+            "room|housing|سكن"
+          ]
+        }
+      ],
+      "needsCitation": true,
+      "id": "NQ188",
+      "suite": "legacy",
+      "parentId": "NQ188",
+      "language": "en",
+      "conversation": [
+        {
+          "user": "What are the student housing options at UAEU and how do I apply?",
+          "status": 502,
+          "seconds": 16.386,
+          "payload": {
+            "role": "assistant",
+            "content": "The generated answer did not pass the source-support check, so I withheld its unsupported claims. Please try again or consult the official UAEU source directly.",
+            "source": "error",
+            "stateLabel": "grounding_rejected",
+            "citations": [],
+            "grounding": {
+              "status": "rejected",
+              "rewriteCount": 1,
+              "reasonCodes": [
+                "unsupported_detail"
+              ]
+            },
+            "clarificationReason": "unsupported_detail",
+            "usage": {
+              "elapsedMs": 16384,
+              "attemptedCalls": 9,
+              "unmeteredAttempts": 0,
+              "calls": [
+                {
+                  "model": "text-embedding-3-small",
+                  "purpose": "query-embedding",
+                  "inputTokens": 15,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 0,
+                  "estimatedUsd": 3e-7
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 4633,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 210,
+                  "estimatedUsd": 0.0021891999999999997
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1081,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0004740000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1080,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 27,
+                  "estimatedUsd": 0.0004752
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1529,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0006532
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "answer-writer",
+                  "inputTokens": 5006,
+                  "cachedInputTokens": 1920,
+                  "outputTokens": 208,
+                  "estimatedUsd": 0.0017592
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1080,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 27,
+                  "estimatedUsd": 0.0004752
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1081,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0004740000000000001
+                },
+                {
+                  "model": "gpt-4.1-mini",
+                  "purpose": "selection-or-verification",
+                  "inputTokens": 1529,
+                  "cachedInputTokens": 0,
+                  "outputTokens": 26,
+                  "estimatedUsd": 0.0006532
+                }
+              ],
+              "embeddingCacheHits": 0,
+              "inputTokens": 17034,
+              "outputTokens": 576,
+              "knownUsageUsd": 0.0071535,
+              "estimatedUsd": 0.0071535,
+              "priceSource": {
+                "verified": "2026-11-04",
+                "generation": "https://developers.openai.com/api/docs/models/gpt-4.1-mini",
+                "embedding": "https://developers.openai.com/api/docs/models/text-embedding-3-small"
+              },
+              "limitation": "Only successful provider responses returning usage are counted; transport failures and provider billing adjustments are unknown."
+            }
+          }
+        }
+      ],
+      "assessment": {
+        "result": "incorrect",
+        "checks": [
+          {
+            "name": "Requested fact or honest scope",
+            "passed": false,
+            "patterns": [
+              "room|housing|سكن"
+            ]
+          }
+        ],
+        "sourcePass": false,
+        "httpPass": false,
+        "officialOnly": true,
+        "unrelated": [],
+        "missing": [
+          "Requested fact or honest scope"
+        ],
+        "requiresHumanReview": true,
+        "languagePass": true
+      }
+    }
+  ],
+  "runtimeBefore": {
+    "sha256": "8a3ad181c5c46ad2032bebf509ec6a07b36480977455bab71d8e1058855e0bb3",
+    "files": 4294,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "healthBefore": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat/uaeu-knowledge-expansion-v8"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "fd312494647f13d8273b10ef82cc21190cf1b15d8b7a17195484bb740e9101e7",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 82102,
+        "vectors": 82102,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "96504ede09183deccea657fe0d46e57ab2d03cb8e9b377e9b0e56187b3e54e60",
+        "generatedAt": "2026-11-04T06:21:56.453Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "concurrency": 3,
+  "minimumRequestStartIntervalMs": 2300,
+  "counts": {
+    "correct": 12,
+    "partial": 0,
+    "incorrect": 2
+  },
+  "finishedAt": "2026-11-04T06:34:59.004Z",
+  "runtimeAfter": {
+    "sha256": "8a3ad181c5c46ad2032bebf509ec6a07b36480977455bab71d8e1058855e0bb3",
+    "files": 4294,
+    "servingSnapshot": "/Users/aliabdullah/Documents/uaeu-assistant"
+  },
+  "runtimeUnchanged": true,
+  "healthAfter": {
+    "ok": true,
+    "live": true,
+    "build": {
+      "revision": "feat/uaeu-knowledge-expansion-v8"
+    },
+    "readiness": {
+      "knowledge": true,
+      "accounts": true,
+      "generation": true,
+      "configuration": true
+    },
+    "deployment": {
+      "mode": "prototype",
+      "durableStore": false,
+      "storageConfigurationValid": true,
+      "sessionMode": "device-local-prototype",
+      "identity": "self-reported-unverified",
+      "quotas": "browser-local",
+      "rateLimits": "instance-local",
+      "productionReady": false,
+      "allowed": true,
+      "productionBlockers": [
+        "Managed university identity is not integrated",
+        "Shared server-side quotas and rate limits are not integrated"
+      ]
+    },
+    "provider": {
+      "name": "openai",
+      "configured": true,
+      "model": "gpt-4.1-mini",
+      "crossProviderFallback": false
+    },
+    "auth": {
+      "encryptedCookies": true,
+      "dedicatedSecretConfigured": true
+    },
+    "knowledge": {
+      "contentFingerprint": "fd312494647f13d8273b10ef82cc21190cf1b15d8b7a17195484bb740e9101e7",
+      "retrieval": {
+        "primary": "scoped-academic-retrieval-and-source-checked-generation",
+        "curriculumExtract": "bilingual-program-degree-year-and-facet-planning-from-approved-markdown",
+        "embedding": "ready-openai-hybrid",
+        "semanticCatalog": "enabled-same-configured-provider-closed-record-ids",
+        "canonicalRendering": "prepared answers and retrieved excerpts feed tailored source-checked generation; explicit service-guide workflows and system notices remain deterministic",
+        "generationEvidence": "source-specific-reviewed-summaries-and-provenance-linked-official-excerpts; unmapped-multisource-references-excluded",
+        "groundingChecks": "source-id-and-critical-token-validation plus same-provider per-claim source-support review; one rewrite; not-formal-entailment-proof",
+        "groundingIsolation": {
+          "claimsPerRequest": 1,
+          "concurrency": 4,
+          "maxClaims": 16,
+          "totalAnswerBudgetMs": 54000,
+          "routeMaxDurationSeconds": 60
+        },
+        "activePath": "scoped-academic-then-hybrid-or-reviewed-evidence-and-grounded-generation"
+      },
+      "hybridCorpus": {
+        "ready": true,
+        "chunks": 82102,
+        "vectors": 82102,
+        "model": "text-embedding-3-small",
+        "dimensions": 512,
+        "fingerprint": "96504ede09183deccea657fe0d46e57ab2d03cb8e9b377e9b0e56187b3e54e60",
+        "generatedAt": "2026-11-04T06:21:56.453Z",
+        "mode": "SQLite FTS5 BM25 + dense cosine + reciprocal rank fusion + deterministic metadata/facet/diversity reranking"
+      },
+      "approvedMarkdownFiles": 55,
+      "verifiedAnswers": 121,
+      "sourceEvidence": {
+        "mappedReferences": 171,
+        "unmappedMultiSourceReferences": 0,
+        "singleSourceFallbackRecords": 29
+      },
+      "answerPacks": {
+        "complete": true,
+        "freshnessDays": 180,
+        "packs": [
+          {
+            "filename": "academic.json",
+            "minimumEntries": 62,
+            "validEntries": 71,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-11-03",
+            "error": null
+          },
+          {
+            "filename": "student-services.json",
+            "minimumEntries": 43,
+            "validEntries": 44,
+            "invalidEntries": 0,
+            "staleCitations": 0,
+            "latestVerification": "2026-09-29",
+            "error": null
+          }
+        ]
+      },
+      "serviceGuides": 1,
+      "embeddingIndex": {
+        "ready": false,
+        "chunks": 0,
+        "model": "gemini-embedding-001",
+        "sourceFingerprint": "d37c7ba1d7b0127bc8af49628c96628f922ad80ab7dc9e130e6c0206504f4f9d"
+      }
+    },
+    "privacy": {
+      "serverChatHistory": "disabled",
+      "rawQueryLogs": "disabled",
+      "serverHistoryRetentionDays": 30,
+      "serverHistoryMaxMessages": 80
+    }
+  },
+  "latency": {
+    "median": 7.663,
+    "p95": 16.386,
+    "max": 16.386
+  },
+  "usage": {
+    "measuredAnswers": 14,
+    "totalAnswers": 14,
+    "estimatedUsd": 0.040029520000000006,
+    "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+  },
+  "identicalAnswerGroups": [
+    [
+      "CQ060",
+      "NQ188"
+    ]
+  ]
+}

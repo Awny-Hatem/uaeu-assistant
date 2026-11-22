@@ -1,0 +1,192 @@
+{
+  "summary": {
+    "artifact": "reports/knowledge-expansion-2026-11-04/examiner-focused-v38.json",
+    "completed": true,
+    "runtimeUnchanged": true,
+    "gradingUnchanged": true,
+    "servingContractUnchanged": true,
+    "scenariosSeen": 3,
+    "primaryQuestions": {
+      "correct": 3,
+      "partial": 0,
+      "incorrect": 0
+    },
+    "allSubmissions": {
+      "correct": 16,
+      "partial": 0,
+      "incorrect": 2
+    },
+    "scenariosAllVariantsFactuallyPassing": 2,
+    "scenariosWithoutExactFactualReuseAndAllFactsPassing": 1,
+    "exactFactualReusePairs": 3,
+    "nearIdenticalFactualPairs": 3,
+    "latency": {
+      "mean": 4.6803888888888885,
+      "median": 5.32,
+      "p95": 10.106,
+      "max": 10.106,
+      "over20Seconds": 0
+    },
+    "usage": {
+      "measuredAnswers": 18,
+      "totalAnswers": 18,
+      "estimatedUsd": 0.10267200000000001,
+      "limitation": "Missing diagnostics are not zero cost. Only provider-returned usage is measurable."
+    },
+    "limitations": [
+      "These automated scores are provisional, not independent proof of every statement.",
+      "Source relevance and material omissions require semantic review.",
+      "Similarity flags identify possible FAQ-like behavior; they are not hidden by formatting changes.",
+      "Deterministic safety/clarification notices are reported separately from factual RAG reuse; this does not claim their wording varies.",
+      "A finite100-scenario pass cannot guarantee all future examiner questions."
+    ]
+  },
+  "scenarios": [
+    {
+      "id": "EX051",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX051-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V3",
+          "result": "incorrect"
+        },
+        {
+          "id": "EX051-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX051-V5",
+          "result": "incorrect"
+        }
+      ],
+      "allFactsPass": false,
+      "similarityFlags": [
+        {
+          "a": "EX051-V1",
+          "b": "EX051-V2",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX051": "47f6f061640620213e9ec85776562c37d946fee8d699a81d24a6868c5f7d4e53",
+        "EX051-V1": "372cbaa2531c178aab2086fb0d37358eb617f500207a28d24a127ead895dd2a3",
+        "EX051-V2": "eaabaf25568d19345ca2de7d7138578e6f5b061ecddbdea2c421243ffa50eadb",
+        "EX051-V3": "433a64f1f2c54a12ee0c164d1d0acec116a47f8088e8f1bce95445454c6e59e7",
+        "EX051-V4": "c0cda662ceda23fafe285664bcb62ba48bbc35aea0fc0ad0d8f301e0d2169d84",
+        "EX051-V5": "01b3ca1bacf87ab45d3140d34b97815cc6a0e7259b365232ca4b5a89bbd25347"
+      }
+    },
+    {
+      "id": "EX052",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX052-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX052-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [
+        {
+          "a": "EX052",
+          "b": "EX052-V1",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        },
+        {
+          "a": "EX052-V2",
+          "b": "EX052-V3",
+          "normalizedIdentical": true,
+          "literalIdentical": true,
+          "similarity": 1,
+          "sameLanguage": true,
+          "sameLatestQuestion": false
+        }
+      ],
+      "automatedFactsAndNoExactReuse": false,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX052": "56fd2994fbeb58c13785232495dacf76b7c15695f7dcf7aab1e70a3dff15c8b8",
+        "EX052-V1": "97a118348fd43ae7ad7dbe4357e33788e387180c002531152c2b7db2b33bae48",
+        "EX052-V2": "e8bd96f23343a7bb9b5546d8a5034d26d3773c409d7c5d65ab88f461bdceb340",
+        "EX052-V3": "1be30524c4d6a10e947bb889d6a769f8a8f3ed6e7a33bf4a1300080c90672720",
+        "EX052-V4": "4422ec3273507d4c09f0f14f2d9a97015bbb6f71e10e0a6711b037c67a4eaa70",
+        "EX052-V5": "beb570db12a5ede4c344d7a621e0d5caedd5bbdb0c78d2a5489212fe849b4812"
+      }
+    },
+    {
+      "id": "EX075",
+      "main": "correct",
+      "submissions": 6,
+      "variants": [
+        {
+          "id": "EX075-V1",
+          "result": "correct"
+        },
+        {
+          "id": "EX075-V2",
+          "result": "correct"
+        },
+        {
+          "id": "EX075-V3",
+          "result": "correct"
+        },
+        {
+          "id": "EX075-V4",
+          "result": "correct"
+        },
+        {
+          "id": "EX075-V5",
+          "result": "correct"
+        }
+      ],
+      "allFactsPass": true,
+      "similarityFlags": [],
+      "automatedFactsAndNoExactReuse": true,
+      "reviewStatus": "Automated official-source rubric; independent semantic/source review is still required",
+      "responseHashes": {
+        "EX075": "bbb6f702148af2779337f5d6246ba0e453666010908ce82b399ea8fdfd16fa1b",
+        "EX075-V1": "30801c0e9070c355046eac52be5a2686cf39c4cfd129be581be01cd80b11087f",
+        "EX075-V2": "f0a2a704ec766b5b9b7e6d9a5982a517e2abf674bb142388a8510ada65817522",
+        "EX075-V3": "4c00dc6c062aeb56085e2eb14aed41a63edebfeb7b4ba1ea8185718b8eb33414",
+        "EX075-V4": "96a6cee8d532356a951a64f05e6aa66313c6c7b78f827b54f86f80bdd9d36e00",
+        "EX075-V5": "3a0ce34fe1a877dce89da0e0670c5a55e84d06237d6341347bc105200888659d"
+      }
+    }
+  ]
+}
